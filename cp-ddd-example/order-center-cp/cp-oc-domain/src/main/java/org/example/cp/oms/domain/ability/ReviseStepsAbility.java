@@ -1,7 +1,7 @@
 package org.example.cp.oms.domain.ability;
 
-import org.x.cp.ddd.annotation.DomainAbility;
-import org.x.cp.ddd.model.BaseDomainAbility;
+import org.ddd.cp.ddd.annotation.DomainAbility;
+import org.ddd.cp.ddd.model.BaseDomainAbility;
 import org.example.cp.oms.domain.CoreDomain;
 import org.example.cp.oms.domain.model.OrderModel;
 import org.example.cp.oms.spec.ext.IReviseStepsExt;

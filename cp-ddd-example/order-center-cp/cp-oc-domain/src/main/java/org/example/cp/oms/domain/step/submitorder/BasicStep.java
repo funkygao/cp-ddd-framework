@@ -1,7 +1,7 @@
 package org.example.cp.oms.domain.step.submitorder;
 
-import org.x.cp.ddd.annotation.Step;
-import org.x.cp.ddd.runtime.DDD;
+import org.ddd.cp.ddd.annotation.Step;
+import org.ddd.cp.ddd.runtime.DDD;
 import lombok.extern.slf4j.Slf4j;
 import org.example.cp.oms.domain.ability.ReviseStepsAbility;
 import org.example.cp.oms.domain.exception.OrderException;
