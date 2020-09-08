@@ -5,6 +5,7 @@
 cp stands for `Central Platform`：中台。
 
 * [What is cp-ddd-framework](#what-is-cp-ddd-framework)
+* [Target audience](#target-audience)
 * [Requirements](#requirements)
 * [Using cp-ddd-framework](#using-cp-ddd-framework)
 * [Building from Source](#building-from-source)
@@ -16,6 +17,8 @@ cp stands for `Central Platform`：中台。
 ### 中台与前台
 
 ![](doc/assets/img/bp-cp.png)
+
+## Target audience
 
 ## Requirements
 
