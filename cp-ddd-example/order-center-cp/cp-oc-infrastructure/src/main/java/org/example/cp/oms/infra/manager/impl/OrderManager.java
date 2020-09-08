@@ -17,6 +17,6 @@ public class OrderManager implements IOrderManager {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void insert(OrderMainData orderMainData) {
-
+        orderMainDao.insert(orderMainData);
     }
 }

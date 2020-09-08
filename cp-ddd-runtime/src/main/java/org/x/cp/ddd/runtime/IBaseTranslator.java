@@ -1,7 +1,7 @@
 package org.x.cp.ddd.runtime;
 
 /**
- * 分层模型的JavaBean类型转换，DTO -> Creator <-> PO.
+ * DDD分层模型的JavaBean类型转换，DTO -> Creator <-> PO.
  * <p>
  * <p>使用{@code MapStruct}或{@code Selma}进行声明式类型转换</p>
  *

@@ -6,6 +6,8 @@ import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.x.cp.ddd.annotation.*;
+import org.x.cp.ddd.ext.IDomainExtension;
+import org.x.cp.ddd.ext.IIdentityResolver;
 import org.x.cp.ddd.model.*;
 
 import java.util.LinkedList;
@@ -106,8 +108,8 @@ public class ArchitectureEnforcer {
     public static final ArchRule patternRule() {
         return classes()
                 .that().haveNameMatching(".*Pattern")
-                .and().doNotHaveModifier(JavaModifier.ABSTRACT) // 排除具体领域下的XxxBasePattern
-                .should().beAssignableTo(BasePattern.class)
+                .and().doNotHaveModifier(JavaModifier.ABSTRACT)
+                .should().beAssignableTo(IIdentityResolver.class)
                 .andShould().beAnnotatedWith(Pattern.class)
                 .as("Pattern的使用规范");
     }

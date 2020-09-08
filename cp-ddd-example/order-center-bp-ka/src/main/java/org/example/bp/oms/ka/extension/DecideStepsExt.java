@@ -1,6 +1,6 @@
 package org.example.bp.oms.ka.extension;
 
-import org.example.bp.oms.ka.KaPartner;
+import org.example.cp.oms.spec.partner.KaPartner;
 import org.example.cp.oms.spec.Steps;
 import org.x.cp.ddd.annotation.Extension;
 import org.x.cp.ddd.ext.IDecideStepsExt;

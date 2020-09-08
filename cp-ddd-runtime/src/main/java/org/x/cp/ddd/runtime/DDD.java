@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * DDD框架的核心支撑类.
+ * DDD框架的核心类.
  */
 public final class DDD {
     private DDD() {
@@ -22,15 +22,21 @@ public final class DDD {
      * 紧急下线某一个业务前台.
      * <p>
      * <p>典型场景：A/B两个业务前台在中台里部署在一个容器，A在线上出现严重错误，可能会影响B，这时候可以紧急下线A</p>
-     * <p>紧急下线后，A的所有扩展点会强制抛出{@link org.x.cp.ddd.runtime.registry.PartnerKilledException}</p>
+     * <p>紧急下线后，A的所有扩展点会强制抛出{@code PartnerKilledException}</p>
      *
      * @param code  {@link Partner#code()}
-     * @param token 验证kill权限的token，以防止业务前台恶意调用
+     * @param token 验证权限的token，以防止业务前台恶意调用
      */
     public static void killPartner(String code, String token) {
         InternalIndexer.killPartner(code);
     }
 
+    /**
+     * 恢复某一个被紧急下线的业务前台.
+     *
+     * @param code  {@link Partner#code()}
+     * @param token 验证权限的token，以防止业务前台恶意调用
+     */
     public static void recoverPartner(String code, String token) {
         InternalIndexer.recoverPartner(code);
     }

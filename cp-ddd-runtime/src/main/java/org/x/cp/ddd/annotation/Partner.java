@@ -1,6 +1,5 @@
 package org.x.cp.ddd.annotation;
 
-import org.x.cp.ddd.model.IPartnerResolver;
 import org.springframework.stereotype.Component;
 
 import java.lang.annotation.*;
@@ -27,9 +26,4 @@ public @interface Partner {
      * 前台垂直业务名称.
      */
     String name();
-
-    /**
-     * 垂直业务解析器.
-     */
-    Class<? extends IPartnerResolver> resolverClass();
 }

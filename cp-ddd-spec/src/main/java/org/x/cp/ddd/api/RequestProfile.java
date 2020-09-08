@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 
 /**
- * 统一的系统入参，注意与业务入参分开.
+ * 统一的API系统入参，注意与业务入参分开.
  */
 @ToString
 @Getter

@@ -16,12 +16,6 @@
             <artifactId>cp-oc-spec</artifactId>
             <version>${project.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>org.x.cp</groupId>
-            <artifactId>cp-ddd-runtime</artifactId>
-            <version>${project.version}</version>
-        </dependency>
     </dependencies>
 
 </project>

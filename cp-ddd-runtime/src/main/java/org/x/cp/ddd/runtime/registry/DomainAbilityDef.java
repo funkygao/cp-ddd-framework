@@ -2,7 +2,7 @@ package org.x.cp.ddd.runtime.registry;
 
 import org.x.cp.ddd.annotation.DomainAbility;
 import org.x.cp.ddd.model.BaseDomainAbility;
-import org.x.cp.ddd.model.IDomainExtension;
+import org.x.cp.ddd.ext.IDomainExtension;
 import org.x.cp.ddd.model.IDomainModel;
 import lombok.Getter;
 import lombok.ToString;

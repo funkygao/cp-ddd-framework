@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.x.cp.ddd.annotation.Extension;
-import org.x.cp.ddd.model.IDomainExtension;
+import org.x.cp.ddd.ext.IDomainExtension;
 
 import javax.validation.constraints.NotNull;
 

@@ -7,6 +7,11 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 统一的API返回结果包装类.
+ *
+ * @param <T> 携带的返回结果类型
+ */
 @Getter
 @Setter
 public class ApiResult<T> implements Serializable {
