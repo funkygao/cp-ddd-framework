@@ -3,7 +3,7 @@ package org.x.cp.ddd.runtime;
 import java.util.List;
 
 /**
- * 扩展点执行的归约器.
+ * 扩展点执行的归约器，控制扩展点多个实例的叠加.
  *
  * @param <R> 扩展点方法的返回值类型
  */

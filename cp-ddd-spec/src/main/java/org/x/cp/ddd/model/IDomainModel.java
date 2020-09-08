@@ -1,7 +1,7 @@
 package org.x.cp.ddd.model;
 
 /**
- * 领域模型.
+ * 领域模型，对应DDD的聚合根.
  * <p>
  * <p>世界由客体组成，主体认识客体的过程也是主体改造客体的过程</p>
  * <p>{@code IDomainModel}是客体，{@code IDomainService}是主体</p>
