@@ -25,19 +25,4 @@
         </dependency>
     </dependencies>
 
-    <profiles>
-        <profile>
-            <id>release</id>
-        </profile>
-        <profile>
-            <id>test</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <modules>
-                <module>order-center-test</module>
-            </modules>
-        </profile>
-    </profiles>
-
 </project>
