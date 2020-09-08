@@ -7,6 +7,7 @@ cp stands for `Central Platform`：中台。
 * [Requirements](#requirements)
 * [Using cp-ddd-framework](#using-cp-ddd-framework)
 * [Building from Source](#building-from-source)
+* [FAQ](#faq)
 
 ## What is cp-ddd-framework?
 
@@ -20,8 +21,12 @@ Requires Java 1.8+ and Spring 4.3.12.RELEASE or later.
 
 ## Using cp-ddd-framework
 
+See the [cp-ddd-example](cp-ddd-example).
+
 ## Building from Source
 
 ``` bash
 mvn clean install
 ```
+
+## FAQ
