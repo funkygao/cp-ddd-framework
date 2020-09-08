@@ -4,23 +4,24 @@
     <parent>
         <groupId>org.x.cp</groupId>
         <artifactId>cp-ddd-example</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.0.1</version>
     </parent>
 
     <artifactId>order-center-bp-ka</artifactId>
     <name>DDD :: Example :: BP :: KA</name>
 
     <dependencies>
+        <!-- 业务前台依赖中台的spec jar进行能力复用和扩展 -->
         <dependency>
             <groupId>org.x.cp</groupId>
             <artifactId>cp-oc-spec</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.x.cp</groupId>
             <artifactId>cp-ddd-runtime</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 

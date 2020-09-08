@@ -5,7 +5,7 @@
     <groupId>org.x.cp</groupId>
     <artifactId>ddd-core</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>Central Platform DDD Framework</name>
     <description>业务中台开发框架</description>
     <url>https://github.com/funkygao/cp-ddd-framework</url>

@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.x.cp</groupId>
         <artifactId>order-center-cp</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.0.1</version>
     </parent>
 
     <artifactId>cp-oc-application</artifactId>
@@ -14,12 +14,12 @@
         <dependency>
             <groupId>org.x.cp</groupId>
             <artifactId>cp-oc-client</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.x.cp</groupId>
             <artifactId>cp-oc-infrastructure</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 

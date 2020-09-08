@@ -1,5 +1,8 @@
 package org.example.cp.oms.spec;
 
+/**
+ * 订单中台统一定义所有的活动和步骤.
+ */
 public abstract class Steps {
 
     public static abstract class SubmitOrder {

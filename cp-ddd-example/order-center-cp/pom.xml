@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.x.cp</groupId>
         <artifactId>cp-ddd-example</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.0.1</version>
     </parent>
 
     <artifactId>order-center-cp</artifactId>

@@ -4,6 +4,9 @@ import org.example.cp.oms.spec.model.vo.IProductDelegate;
 import org.x.cp.ddd.model.IDomainModel;
 import lombok.NonNull;
 
+/**
+ * 中台为业务前台输出的领域模型：以接口的方式控制visibility.
+ */
 public interface IOrderModel extends IDomainModel {
 
     /**
