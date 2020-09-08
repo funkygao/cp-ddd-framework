@@ -1,8 +1,8 @@
 package org.example.cp.oms.pattern;
 
-import org.x.cp.ddd.annotation.Pattern;
+import org.ddd.cp.ddd.annotation.Pattern;
 import org.example.cp.oms.spec.model.IOrderModel;
-import org.x.cp.ddd.ext.IIdentityResolver;
+import org.ddd.cp.ddd.ext.IIdentityResolver;
 
 import javax.validation.constraints.NotNull;
 

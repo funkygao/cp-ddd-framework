@@ -2,9 +2,9 @@ package org.example.cp.oms.domain.ability;
 
 import org.example.cp.oms.domain.CoreDomain;
 import org.example.cp.oms.spec.model.IOrderModel;
-import org.x.cp.ddd.annotation.DomainAbility;
-import org.x.cp.ddd.ext.IDecideStepsExt;
-import org.x.cp.ddd.model.BaseDomainAbility;
+import org.ddd.cp.ddd.annotation.DomainAbility;
+import org.ddd.cp.ddd.ext.IDecideStepsExt;
+import org.ddd.cp.ddd.model.BaseDomainAbility;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;

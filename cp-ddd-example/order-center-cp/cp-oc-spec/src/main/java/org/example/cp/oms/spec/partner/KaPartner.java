@@ -1,8 +1,8 @@
 package org.example.cp.oms.spec.partner;
 
 import org.example.cp.oms.spec.model.IOrderModel;
-import org.x.cp.ddd.annotation.Partner;
-import org.x.cp.ddd.ext.IIdentityResolver;
+import org.ddd.cp.ddd.annotation.Partner;
+import org.ddd.cp.ddd.ext.IIdentityResolver;
 
 @Partner(code = KaPartner.CODE, name = "KA业务前台")
 public class KaPartner implements IIdentityResolver<IOrderModel> {

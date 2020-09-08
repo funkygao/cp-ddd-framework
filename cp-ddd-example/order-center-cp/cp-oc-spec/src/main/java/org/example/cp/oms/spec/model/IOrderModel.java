@@ -1,7 +1,7 @@
 package org.example.cp.oms.spec.model;
 
 import org.example.cp.oms.spec.model.vo.IProductDelegate;
-import org.x.cp.ddd.model.IDomainModel;
+import org.ddd.cp.ddd.model.IDomainModel;
 import lombok.NonNull;
 
 /**
