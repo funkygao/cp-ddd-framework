@@ -8,6 +8,7 @@ cp stands for `Central Platform`：中台。
 * [Requirements](#requirements)
 * [Using cp-ddd-framework](#using-cp-ddd-framework)
 * [Building from Source](#building-from-source)
+# [Roadmap](#roadmap)
 * [FAQ](#faq)
 
 ## What is cp-ddd-framework?
@@ -29,5 +30,7 @@ See the [cp-ddd-example](cp-ddd-example).
 ``` bash
 mvn clean install
 ```
+
+## Roadmap
 
 ## FAQ
