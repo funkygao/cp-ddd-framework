@@ -16,7 +16,6 @@
         <module>cp-oc-application</module>
         <module>cp-oc-domain</module>
         <module>cp-oc-infrastructure</module>
-        <module>cp-oc-pattern</module>
         <module>cp-oc-spec</module>
         <module>cp-oc-main</module>
     </modules>

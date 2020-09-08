@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.x.cp</groupId>
-        <artifactId>order-center-cp</artifactId>
+        <artifactId>cp-ddd-example</artifactId>
         <version>0.0.1</version>
     </parent>
 
-    <artifactId>cp-oc-pattern</artifactId>
+    <artifactId>order-center-pattern</artifactId>
     <name>DDD :: Example :: CP :: Pattern</name>
 
     <dependencies>

@@ -9,6 +9,10 @@
 
 订单中心的中台，通过[spec jar](order-center-cp/cp-oc-spec)为业务前台赋能并提供扩展机制。
 
+## [order-center-pattern](order-center-pattern)
+
+订单中心的中台本身的个性化业务。
+
 ## 订单中心的多个业务前台
 
 #### [order-center-bp-ka](order-center-bp-ka)

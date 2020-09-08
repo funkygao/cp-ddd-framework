@@ -9,10 +9,11 @@
 
     <artifactId>cp-ddd-example</artifactId>
     <packaging>pom</packaging>
-    <name>DDD :: Example :: CP + BP</name>
+    <name>DDD :: Example :: CP + Pattern + BP</name>
 
     <modules>
         <module>order-center-cp</module>
+        <module>order-center-pattern</module>
         <module>order-center-bp-ka</module>
         <module>order-center-bp-isv</module>
     </modules>
