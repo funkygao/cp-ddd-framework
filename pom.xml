@@ -107,6 +107,7 @@
                 <configuration>
                     <aggregate>true</aggregate>
                     <encoding>${project.build.sourceEncoding}</encoding>
+                    <excludePackageNames>org.example*</excludePackageNames>
                     <additionalJOption>-Xdoclint:none</additionalJOption>
                 </configuration>
                 <executions>
