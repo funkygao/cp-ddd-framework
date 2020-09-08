@@ -1,4 +1,6 @@
-package org.x.cp.ddd.model;
+package org.x.cp.ddd.ext;
+
+import org.x.cp.ddd.model.IDomainModel;
 
 import javax.validation.constraints.NotNull;
 

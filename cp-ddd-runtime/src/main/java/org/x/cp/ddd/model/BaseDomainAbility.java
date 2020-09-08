@@ -1,5 +1,6 @@
 package org.x.cp.ddd.model;
 
+import org.x.cp.ddd.ext.IDomainExtension;
 import org.x.cp.ddd.runtime.IReducer;
 import org.x.cp.ddd.runtime.registry.InternalIndexer;
 

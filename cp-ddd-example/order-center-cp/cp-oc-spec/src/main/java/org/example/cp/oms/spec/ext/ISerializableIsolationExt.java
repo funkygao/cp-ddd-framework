@@ -2,7 +2,7 @@ package org.example.cp.oms.spec.ext;
 
 import org.example.cp.oms.spec.model.IOrderModel;
 import org.example.cp.oms.spec.model.vo.LockEntry;
-import org.x.cp.ddd.model.IDomainExtension;
+import org.x.cp.ddd.ext.IDomainExtension;
 
 import javax.validation.constraints.NotNull;
 

@@ -2,7 +2,7 @@ package org.example.cp.oms.pattern;
 
 import org.x.cp.ddd.annotation.Pattern;
 import org.example.cp.oms.spec.model.IOrderModel;
-import org.x.cp.ddd.model.IDomainModelMatcher;
+import org.x.cp.ddd.ext.IDomainModelMatcher;
 
 import javax.validation.constraints.NotNull;
 

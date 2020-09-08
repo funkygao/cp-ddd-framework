@@ -2,28 +2,27 @@ package org.x.cp.ddd.ext;
 
 import org.x.cp.ddd.api.ApiResult;
 import org.x.cp.ddd.api.RequestProfile;
-import org.x.cp.ddd.model.IDomainExtension;
 import org.x.cp.ddd.model.IDomainModel;
 
 import javax.validation.constraints.NotNull;
 
 /**
- * 领域模型扩展属性的解析、落库和执行扩展点.
+ * 领域模型扩展属性的解析、落库和渲染扩展点.
  * <p>
  * <p>中台作为中间环节负责控制扩展属性的传递和持久化，而前台作为中台调用方和扩展点执行方，负责两侧的扩展属性解释和业务处理</p>
  * <pre>
  * +-------------+     +----+      +---------------+
- * | BP consumer |-----| CP |------| BP extensions |
+ * | BP client   |-----| CP |------| BP extensions |
  * +-------------+     +----+      +---------------+
  *                       |
  *                   +----------+
  *                   | Database |
  *                   +----------+
  *                       |
- *  | id   | order_no          | ... | x1 varchar(100)                                | x2
- *  | ---- | ----------------- | --- | --------------------------------------------------------
- *  | 1    | ESL22010391388764 |     | jfs/t46/244/263047481/97/8ea46fa3b6b40832Y     | 12,abc
- *  | 2    | ESL22010397315689 |     | {"foo":1, "bar":"egg", "baz":{"a":1, "b":2}}   |
+ *  | id   | order_no       | ... | x1 varchar(100)                                | x2     | x3
+ *  | ---- | -------------- | --- | ---------------------------------------------- | ------ | ---------
+ *  | 1    | 22010391388764 |     | 10.9                                           | 12,abc |
+ *  | 2    | 22010397315689 |     | {"foo":1, "bar":"egg", "baz":{"a":1, "b":2}}   |        | 2020-01-09
  * </pre>
  */
 public interface IModelAttachmentExt extends IDomainExtension {

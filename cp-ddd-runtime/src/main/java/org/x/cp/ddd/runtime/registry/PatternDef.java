@@ -1,9 +1,9 @@
 package org.x.cp.ddd.runtime.registry;
 
 import org.x.cp.ddd.annotation.Pattern;
-import org.x.cp.ddd.model.IDomainExtension;
+import org.x.cp.ddd.ext.IDomainExtension;
 import org.x.cp.ddd.model.IDomainModel;
-import org.x.cp.ddd.model.IDomainModelMatcher;
+import org.x.cp.ddd.ext.IDomainModelMatcher;
 import lombok.Getter;
 import lombok.ToString;
 

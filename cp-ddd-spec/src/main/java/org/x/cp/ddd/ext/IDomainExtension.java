@@ -1,4 +1,4 @@
-package org.x.cp.ddd.model;
+package org.x.cp.ddd.ext;
 
 /**
  * 领域扩展点接口.

@@ -2,7 +2,7 @@ package org.example.cp.oms.spec.partner;
 
 import org.example.cp.oms.spec.model.IOrderModel;
 import org.x.cp.ddd.annotation.Partner;
-import org.x.cp.ddd.model.IDomainModelMatcher;
+import org.x.cp.ddd.ext.IDomainModelMatcher;
 
 @Partner(code = KaPartner.CODE, name = "KA业务前台")
 public class KaPartner implements IDomainModelMatcher<IOrderModel> {
