@@ -106,8 +106,8 @@ public class ArchitectureEnforcer {
     public static final ArchRule patternRule() {
         return classes()
                 .that().haveNameMatching(".*Pattern")
-                .and().doNotHaveModifier(JavaModifier.ABSTRACT) // 排除具体领域下的XxxBasePattern
-                .should().beAssignableTo(BasePattern.class)
+                .and().doNotHaveModifier(JavaModifier.ABSTRACT)
+                .should().beAssignableTo(IDomainModelMatcher.class)
                 .andShould().beAnnotatedWith(Pattern.class)
                 .as("Pattern的使用规范");
     }

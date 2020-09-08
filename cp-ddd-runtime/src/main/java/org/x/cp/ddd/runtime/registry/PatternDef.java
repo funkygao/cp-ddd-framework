@@ -1,7 +1,6 @@
 package org.x.cp.ddd.runtime.registry;
 
 import org.x.cp.ddd.annotation.Pattern;
-import org.x.cp.ddd.model.BasePattern;
 import org.x.cp.ddd.model.IDomainExtension;
 import org.x.cp.ddd.model.IDomainModel;
 import org.x.cp.ddd.model.IDomainModelMatcher;
@@ -25,7 +24,7 @@ class PatternDef implements IRegistryAware, IDomainModelMatcher {
     @Getter
     private int priority;
 
-    private BasePattern patternBean;
+    private IDomainModelMatcher patternBean;
 
     private Map<Class<? extends IDomainExtension>, ExtensionDef> extensionDefMap = new HashMap<>();
 
@@ -38,10 +37,10 @@ class PatternDef implements IRegistryAware, IDomainModelMatcher {
         if (this.priority < 0) {
             throw BootstrapException.ofMessage("Patter.priority must be zero or positive");
         }
-        if (!(bean instanceof BasePattern)) {
-            throw BootstrapException.ofMessage(bean.getClass().getCanonicalName(), " MUST extend BasePattern");
+        if (!(bean instanceof IDomainModelMatcher)) {
+            throw BootstrapException.ofMessage(bean.getClass().getCanonicalName(), " MUST implements IDomainModelMatcher");
         }
-        this.patternBean = (BasePattern) bean;
+        this.patternBean = (IDomainModelMatcher) bean;
 
         InternalIndexer.indexPattern(this);
     }

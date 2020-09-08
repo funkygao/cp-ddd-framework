@@ -1,26 +1,21 @@
 package org.example.cp.oms.pattern;
 
 import org.x.cp.ddd.annotation.Pattern;
-import org.x.cp.ddd.model.BasePattern;
-import org.x.cp.ddd.model.IDomainModel;
 import org.example.cp.oms.spec.model.IOrderModel;
+import org.x.cp.ddd.model.IDomainModelMatcher;
 
 import javax.validation.constraints.NotNull;
 
 @Pattern(code = AmwayPattern.CODE, name = "安利业务模式")
-public class AmwayPattern extends BasePattern {
+public class AmwayPattern implements IDomainModelMatcher<IOrderModel> {
     public static final String CODE = "amway";
 
     @Override
-    public boolean match(@NotNull IDomainModel model) {
-        if (!(model instanceof IOrderModel)) {
+    public boolean match(@NotNull IOrderModel model) {
+        if (model.getCustomerNo() == null) {
             return false;
         }
 
-        IOrderModel orderModel = (IOrderModel) model;
-        if (orderModel.getCustomerNo() == null) {
-            return false;
-        }
-        return orderModel.getCustomerNo().equals("amway");
+        return model.getCustomerNo().equals("amway");
     }
 }
