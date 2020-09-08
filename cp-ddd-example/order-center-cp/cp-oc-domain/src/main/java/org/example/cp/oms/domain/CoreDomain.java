@@ -49,14 +49,6 @@ public class CoreDomain {
             STOPPED
         }
 
-        public State getState() {
-            return state;
-        }
-
-        public void start() {
-            state = State.STARTING;
-        }
-
         /**
          * 启动应用完毕
          */
@@ -76,24 +68,6 @@ public class CoreDomain {
          */
         public void stopped() {
             state = State.STOPPED;
-        }
-
-        /**
-         * 是否启动中
-         *
-         * @return true or false
-         */
-        public boolean isStarting() {
-            return state == State.STARTING;
-        }
-
-        /**
-         * 是否启动完毕
-         *
-         * @return true or false
-         */
-        public boolean isStarted() {
-            return state == State.STARTED;
         }
 
         /**

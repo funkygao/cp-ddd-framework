@@ -11,11 +11,13 @@
     <name>DDD :: Example :: CP :: Application</name>
 
     <dependencies>
+        <!-- application layer implements client layer -->
         <dependency>
             <groupId>org.ddd.cp</groupId>
             <artifactId>cp-oc-client</artifactId>
             <version>${project.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.ddd.cp</groupId>
             <artifactId>cp-oc-infrastructure</artifactId>

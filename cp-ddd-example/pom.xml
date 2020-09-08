@@ -9,9 +9,10 @@
 
     <artifactId>cp-ddd-example</artifactId>
     <packaging>pom</packaging>
-    <name>DDD :: Example :: CP + Pattern + BP</name>
+    <name>DDD :: Example :: Pattern + BP + CP</name>
 
     <modules>
+        <!-- All the following modules could be a separated source repo -->
         <module>order-center-cp</module>
         <module>order-center-pattern</module>
         <module>order-center-bp-ka</module>

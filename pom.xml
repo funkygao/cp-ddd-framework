@@ -16,7 +16,7 @@
         <module>cp-ddd-runtime</module>
         <module>cp-ddd-enforce</module>
         <module>cp-ddd-example</module>
-        <!--
+        <!-- TODO
         <module>cp-ddd-test</module>
         -->
     </modules>
@@ -29,20 +29,14 @@
     <properties>
         <!-- build configs -->
         <jdk.version>1.8</jdk.version>
-        <mvn.source.skip>true</mvn.source.skip>
-        <maven.test.skip>false</maven.test.skip>
         <maven.compiler.failOnError>true</maven.compiler.failOnError>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
         <maven.jacoco.version>0.8.5</maven.jacoco.version>
 
-        <!-- unified 3rd party dependency version -->
+        <!-- unified 3rd party dependencies version -->
         <lombok.version>1.18.8</lombok.version>
         <javax.validation.version>1.1.0.Final</javax.validation.version>
         <slf4j.version>1.7.25</slf4j.version>
-        <junit.version>4.12</junit.version>
-        <log4j.core.version>2.9.1</log4j.core.version>
         <archunit.version>0.13.1</archunit.version>
         <spring.version>4.3.12.RELEASE</spring.version>
     </properties>
@@ -86,22 +80,6 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>2.2.1</version>
-                <configuration>
-                    <skipSource>${mvn.source.skip}</skipSource>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>2.10.4</version>
                 <configuration>
@@ -121,5 +99,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

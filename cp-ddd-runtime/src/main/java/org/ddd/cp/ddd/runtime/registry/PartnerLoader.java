@@ -65,7 +65,7 @@ public class PartnerLoader {
      * @throws Exception
      */
     private void reload() throws Exception {
-        // TODO
+        // the java hotswap
     }
 
     /**
