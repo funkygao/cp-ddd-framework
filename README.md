@@ -12,7 +12,7 @@ cp stands for `Central Platform`：中台。
 
 ### 中台与前台
 
-![](doc/assets/img/bp-cp.jpg)
+![](doc/assets/img/bp-cp.png)
 
 ## Requirements
 
