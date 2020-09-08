@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.x.cp</groupId>
+        <artifactId>order-center-cp</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>cp-oc-spec</artifactId>
+    <name>DDD :: Example :: CP :: Spec</name>
+
+    <dependencies>
+        <!-- 中台为业务前台提供的spec包，不依赖domain层，只定义接口：domain model和扩展点，以及步骤的声明 -->
+        <dependency>
+            <groupId>org.x.cp</groupId>
+            <artifactId>cp-ddd-spec</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
+</project>
