@@ -1,9 +1,17 @@
 # cp-ddd-example
-以订单中台为例，展示如何使用`cp-ddd`框架组织自己的业务代码。
 
-本案例，一个[订单中台代码库](order-center-cp) + 两个业务前台代码库：[KA业务前台](order-center-bp-ka)和[ISV业务前台](order-center-bp-isv)
+以订单中台为例，展示如何使用`cp-ddd-framework`框架组织自己的业务代码，以应对业务不确定的个性化需求。
 
-`oc` stands for Order Center.
+一套订单中台，作为“企业级能力复用平台”，需要支撑企业级的多场景不确定需求，How?
+
+本示例组成：
+- 一个[订单中台代码库](order-center-cp)
+- [个性化业务包](order-center-pattern)
+- 两个业务前台代码库
+   - [KA业务前台](order-center-bp-ka)
+   - [ISV业务前台](order-center-bp-isv)
+
+>`oc` stands for Order Center.
 
 ## [order-center-cp](order-center-cp)
 
@@ -11,7 +19,7 @@
 
 ## [order-center-pattern](order-center-pattern)
 
-订单中心的中台本身的个性化业务。
+订单中心的中台本身的个性化业务，即个性化的业务模式包。
 
 ## 订单中心的多个业务前台
 
