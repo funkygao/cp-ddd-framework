@@ -1,5 +1,6 @@
 # cp-ddd-framework
-以DDD思想构建业务中台框架。
+
+以DDD思想为基础，融合多层扩展点机制打造业务不确定条件下的业务中台：企业级能力复用平台。
 
 cp stands for `Central Platform`：中台。
 
