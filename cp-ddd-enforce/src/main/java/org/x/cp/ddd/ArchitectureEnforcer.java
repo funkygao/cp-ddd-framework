@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.x.cp.ddd.annotation.*;
 import org.x.cp.ddd.ext.IDomainExtension;
-import org.x.cp.ddd.ext.IDomainModelMatcher;
+import org.x.cp.ddd.ext.IIdentityResolver;
 import org.x.cp.ddd.model.*;
 
 import java.util.LinkedList;
@@ -109,7 +109,7 @@ public class ArchitectureEnforcer {
         return classes()
                 .that().haveNameMatching(".*Pattern")
                 .and().doNotHaveModifier(JavaModifier.ABSTRACT)
-                .should().beAssignableTo(IDomainModelMatcher.class)
+                .should().beAssignableTo(IIdentityResolver.class)
                 .andShould().beAnnotatedWith(Pattern.class)
                 .as("Pattern的使用规范");
     }

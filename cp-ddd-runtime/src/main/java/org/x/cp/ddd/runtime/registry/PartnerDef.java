@@ -2,8 +2,8 @@ package org.x.cp.ddd.runtime.registry;
 
 import org.x.cp.ddd.annotation.Partner;
 import org.x.cp.ddd.ext.IDomainExtension;
+import org.x.cp.ddd.ext.IIdentityResolver;
 import org.x.cp.ddd.model.IDomainModel;
-import org.x.cp.ddd.ext.IDomainModelMatcher;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @ToString
-class PartnerDef implements IRegistryAware, IDomainModelMatcher {
+class PartnerDef implements IRegistryAware, IIdentityResolver {
 
     @Getter
     private String code;
@@ -21,7 +21,7 @@ class PartnerDef implements IRegistryAware, IDomainModelMatcher {
     private String name;
 
     @Getter
-    private IDomainModelMatcher partnerBean;
+    private IIdentityResolver partnerBean;
 
     private Map<Class<? extends IDomainExtension>, ExtensionDef> extensionDefMap = new HashMap<>();
 
@@ -31,10 +31,10 @@ class PartnerDef implements IRegistryAware, IDomainModelMatcher {
         this.code = partner.code();
         this.name = partner.name();
 
-        if (!(bean instanceof IDomainModelMatcher)) {
-            throw BootstrapException.ofMessage(bean.getClass().getCanonicalName(), " MUST implements IDomainModelMatcher");
+        if (!(bean instanceof IIdentityResolver)) {
+            throw BootstrapException.ofMessage(bean.getClass().getCanonicalName(), " MUST implements IIdentityResolver");
         }
-        this.partnerBean = (IDomainModelMatcher) bean;
+        this.partnerBean = (IIdentityResolver) bean;
 
         InternalIndexer.indexPartner(this);
     }

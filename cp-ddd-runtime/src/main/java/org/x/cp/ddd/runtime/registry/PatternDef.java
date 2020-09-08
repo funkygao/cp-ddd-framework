@@ -2,8 +2,8 @@ package org.x.cp.ddd.runtime.registry;
 
 import org.x.cp.ddd.annotation.Pattern;
 import org.x.cp.ddd.ext.IDomainExtension;
+import org.x.cp.ddd.ext.IIdentityResolver;
 import org.x.cp.ddd.model.IDomainModel;
-import org.x.cp.ddd.ext.IDomainModelMatcher;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.Set;
 
 @ToString
-class PatternDef implements IRegistryAware, IDomainModelMatcher {
+class PatternDef implements IRegistryAware, IIdentityResolver {
 
     @Getter
     private String code;
@@ -24,7 +24,7 @@ class PatternDef implements IRegistryAware, IDomainModelMatcher {
     @Getter
     private int priority;
 
-    private IDomainModelMatcher patternBean;
+    private IIdentityResolver patternBean;
 
     private Map<Class<? extends IDomainExtension>, ExtensionDef> extensionDefMap = new HashMap<>();
 
@@ -37,10 +37,10 @@ class PatternDef implements IRegistryAware, IDomainModelMatcher {
         if (this.priority < 0) {
             throw BootstrapException.ofMessage("Patter.priority must be zero or positive");
         }
-        if (!(bean instanceof IDomainModelMatcher)) {
-            throw BootstrapException.ofMessage(bean.getClass().getCanonicalName(), " MUST implements IDomainModelMatcher");
+        if (!(bean instanceof IIdentityResolver)) {
+            throw BootstrapException.ofMessage(bean.getClass().getCanonicalName(), " MUST implements IIdentityResolver");
         }
-        this.patternBean = (IDomainModelMatcher) bean;
+        this.patternBean = (IIdentityResolver) bean;
 
         InternalIndexer.indexPattern(this);
     }

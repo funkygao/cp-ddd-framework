@@ -2,12 +2,12 @@ package org.example.cp.oms.pattern;
 
 import org.x.cp.ddd.annotation.Pattern;
 import org.example.cp.oms.spec.model.IOrderModel;
-import org.x.cp.ddd.ext.IDomainModelMatcher;
+import org.x.cp.ddd.ext.IIdentityResolver;
 
 import javax.validation.constraints.NotNull;
 
 @Pattern(code = AmwayPattern.CODE, name = "安利业务模式")
-public class AmwayPattern implements IDomainModelMatcher<IOrderModel> {
+public class AmwayPattern implements IIdentityResolver<IOrderModel> {
     public static final String CODE = "amway";
 
     @Override
