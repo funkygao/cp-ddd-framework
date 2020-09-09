@@ -11,8 +11,6 @@
    - [KA业务前台](order-center-bp-ka)
    - [ISV业务前台](order-center-bp-isv)
 
->`oc` stands for Order Center.
-
 ## [order-center-cp](order-center-cp)
 
 订单中心的中台，通过[spec jar](order-center-cp/cp-oc-spec)为业务前台赋能，输出中台标准，并提供扩展机制。
