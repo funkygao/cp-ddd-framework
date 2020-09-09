@@ -1,7 +1,7 @@
 # cp-ddd-framework (Central Platform：中台)
 
 * [What is cp-ddd-framework](#what-is-cp-ddd-framework)
-   * [What problems does it solve](what-problems-does-it-solve)
+   * [What problems does it solve](#what-problems-does-it-solve)
    * [Key components](#key-components)
    * [BP vs CP](#bp-vs-cp)
 * [Requirements](#requirements)
