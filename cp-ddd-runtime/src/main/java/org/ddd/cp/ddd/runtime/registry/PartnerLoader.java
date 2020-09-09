@@ -43,7 +43,9 @@ public class PartnerLoader {
         log.info("loading with {}", label());
 
         List<Class<? extends Annotation>> annotations = new ArrayList<>(2);
-        // 只加载业务前台的扩展点，通过java ClassLoader的全盘负责机制自动加载相关引用类
+        // 只加载业务前台的扩展点和Partner注解类，通过java ClassLoader的全盘负责机制自动加载相关引用类
+        // TODO Spring注入的bean还没有处理，不想为每个业务前台启动一个单独的Spring容器
+        annotations.add(Partner.class);
         annotations.add(Extension.class);
 
         initPartnerClassLoaderIfNec();
@@ -52,6 +54,11 @@ public class PartnerLoader {
                 annotations, null, this.partnerClassLoader);
 
         // 实例化该业务前台的所有扩展点，并注册到索引
+        List<Class> partners = resultMap.get(Partner.class);
+        if (partners != null && !partners.isEmpty()) {
+            // 该业务前台包自己定义了Partner，1个业务前台包只能有1个Partner实现
+            this.registerPartner(partners.get(0));
+        }
         this.registerExtensions(resultMap.get(Extension.class));
 
         log.info("loaded with {} ok, cost {}ms", label(), (System.nanoTime() - t0) / 1000_000);
@@ -95,6 +102,10 @@ public class PartnerLoader {
             this.partnerClassLoader = new PartnerClassLoader(new URL[]{new File(this.jarPath).toURI().toURL()});
             log.info("PartnerClassLoader created");
         }
+    }
+
+    private void registerPartner(@NotNull Class partner) throws Exception {
+        RegistryFactory.lazyRegister(Partner.class, partner.newInstance());
     }
 
     private void registerExtensions(List<Class> extensions) throws Exception {
