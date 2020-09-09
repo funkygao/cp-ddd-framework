@@ -1,12 +1,12 @@
 # cp-ddd-example
 
-以订单中台为例，展示如何使用`cp-ddd-framework`框架组织自己的业务代码，以应对业务不确定的个性化需求。
+以订单中台为例，演示如何使用`cp-ddd-framework`框架组织自己的业务代码，以应对业务不确定的个性化需求。
 
 一套订单中台，作为“企业级能力复用平台”，需要支撑企业级的多场景不确定需求，How?
 
 本示例组成：
 - 一个[订单中台代码库](order-center-cp)
-- [个性化业务包](order-center-pattern)
+- [中台的个性化业务包](order-center-pattern)
 - 两个业务前台代码库
    - [KA业务前台](order-center-bp-ka)
    - [ISV业务前台](order-center-bp-isv)
@@ -15,7 +15,7 @@
 
 ## [order-center-cp](order-center-cp)
 
-订单中心的中台，通过[spec jar](order-center-cp/cp-oc-spec)为业务前台赋能并提供扩展机制。
+订单中心的中台，通过[spec jar](order-center-cp/cp-oc-spec)为业务前台赋能，输出中台标准，并提供扩展机制。
 
 #### [order-center-pattern](order-center-pattern)
 
