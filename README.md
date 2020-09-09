@@ -29,6 +29,7 @@
 - dynamic loading business extension jar
 - isolation of business runtime
 - best practice of DDD
+- and more
 
 ## Requirements
 
