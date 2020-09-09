@@ -16,9 +16,6 @@
         <module>cp-ddd-runtime</module>
         <module>cp-ddd-enforce</module>
         <module>cp-ddd-example</module>
-        <!-- TODO
-        <module>cp-ddd-test</module>
-        -->
     </modules>
 
     <issueManagement>
@@ -84,4 +81,32 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>test</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>${maven.jacoco.version}</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>prepare-agent</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <modules>
+                <module>cp-ddd-test</module>
+            </modules>
+        </profile>
+    </profiles>
 </project>
