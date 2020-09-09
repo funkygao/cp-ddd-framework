@@ -110,8 +110,6 @@ class ExtensionInvocationHandler<Ext extends IDomainExtension, R> implements Inv
     private R invokeExtensionMethod(ExtensionDef extensionDef, Method method, Object[] args) throws Throwable {
         IDomainExtension extInstance = extensionDef.getExtensionBean();
         if (timeoutInMs > 0) {
-            // JSF扩展点超时使用JSF自带的，没必要浪费线程池资源
-            // 即：cp-core的扩展点超时与JSF超时不叠加使用
             return invokeExtensionMethodWithTimeout(extInstance, method, args, timeoutInMs);
         }
 
