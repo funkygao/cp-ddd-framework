@@ -1,7 +1,7 @@
 package org.example.cp.oms.infra.translator;
 
 import org.example.cp.oms.infra.po.OrderMainData;
-import org.ddd.cp.ddd.runtime.IBaseTranslator;
+import org.ddd.cp.ddd.IBaseTranslator;
 import org.example.cp.oms.domain.model.OrderModel;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;

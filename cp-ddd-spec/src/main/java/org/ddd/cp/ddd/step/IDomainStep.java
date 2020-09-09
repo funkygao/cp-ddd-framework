@@ -1,11 +1,14 @@
-package org.ddd.cp.ddd.model;
+package org.ddd.cp.ddd.step;
+
+import org.ddd.cp.ddd.model.IDomainModel;
+import org.ddd.cp.ddd.model.IDomainService;
 
 import javax.validation.constraints.NotNull;
 
 /**
  * 领域活动(业务活动)的步骤，一种可以被编排的领域服务.
  * <p>
- * <p>一个领域活动(例如：接单是一个领域活动，Activity)是由多个步骤组成的.</p>
+ * <p>一个领域活动(例如：接单是一个领域活动)是由多个步骤组成的.</p>
  * <p>步骤，相当于隐藏业务细节，宏观对业务活动的抽象.</p>
  * <p>
  * <p>普通的领域服务是业务系统主动声明接口并实现的，相当于主动提供服务.</p>

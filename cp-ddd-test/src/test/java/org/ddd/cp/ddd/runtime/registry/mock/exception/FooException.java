@@ -1,6 +1,6 @@
 package org.ddd.cp.ddd.runtime.registry.mock.exception;
 
-import org.ddd.cp.ddd.model.IReviseStepsException;
+import org.ddd.cp.ddd.step.IReviseStepsException;
 import lombok.Setter;
 
 import java.util.List;

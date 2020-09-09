@@ -1,6 +1,6 @@
 package org.ddd.cp.ddd.runtime.registry.mock.step;
 
-import org.ddd.cp.ddd.model.IDomainRevokableStep;
+import org.ddd.cp.ddd.step.IDomainRevokableStep;
 import org.ddd.cp.ddd.runtime.registry.mock.exception.FooException;
 import org.ddd.cp.ddd.runtime.registry.mock.model.FooModel;
 

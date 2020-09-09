@@ -1,7 +1,7 @@
 package org.ddd.cp.ddd.runtime.registry;
 
 import org.ddd.cp.ddd.annotation.Step;
-import org.ddd.cp.ddd.model.IDomainStep;
+import org.ddd.cp.ddd.step.IDomainStep;
 import lombok.Getter;
 import lombok.ToString;
 

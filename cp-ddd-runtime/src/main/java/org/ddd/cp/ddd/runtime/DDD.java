@@ -1,7 +1,7 @@
 package org.ddd.cp.ddd.runtime;
 
 import org.ddd.cp.ddd.model.BaseDomainAbility;
-import org.ddd.cp.ddd.model.IDomainStep;
+import org.ddd.cp.ddd.step.IDomainStep;
 import org.ddd.cp.ddd.runtime.registry.InternalIndexer;
 import org.ddd.cp.ddd.runtime.registry.StepDef;
 

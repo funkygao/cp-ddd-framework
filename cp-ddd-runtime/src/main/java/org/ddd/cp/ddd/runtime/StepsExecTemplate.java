@@ -1,9 +1,9 @@
 package org.ddd.cp.ddd.runtime;
 
 import org.ddd.cp.ddd.model.IDomainModel;
-import org.ddd.cp.ddd.model.IDomainRevokableStep;
-import org.ddd.cp.ddd.model.IDomainStep;
-import org.ddd.cp.ddd.model.IReviseStepsException;
+import org.ddd.cp.ddd.step.IDomainRevokableStep;
+import org.ddd.cp.ddd.step.IDomainStep;
+import org.ddd.cp.ddd.step.IReviseStepsException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collections;

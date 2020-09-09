@@ -1,6 +1,6 @@
 package org.example.cp.oms.domain.exception;
 
-import org.ddd.cp.ddd.model.IReviseStepsException;
+import org.ddd.cp.ddd.step.IReviseStepsException;
 
 import java.util.List;
 
