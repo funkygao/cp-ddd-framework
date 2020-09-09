@@ -11,7 +11,7 @@ test:package
 	@mvn test -Ptest
 
 coverage:test
-	@mvn clean verify -Pjacoco
+	@mvn clean verify -Ptest
 	@open cp-ddd-test/target/site/jacoco-aggregate/index.html
 
 javadoc:install

@@ -9,7 +9,7 @@ import org.ddd.cp.ddd.runtime.registry.mock.model.FooModel;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-@DomainAbility(domain = FooDomain.CODE)
+@DomainAbility(domain = FooDomain.CODE, value = "mockDecideStepsAbility")
 public class DecideStepsAbility extends BaseDomainAbility<FooModel, IDecideStepsExt> {
 
     public List<String> decideSteps(@NotNull FooModel model, String activityCode) {

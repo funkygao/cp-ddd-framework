@@ -12,7 +12,7 @@ public class PartnerLoaderTest {
     @Test
     @Ignore
     public void start() throws Exception {
-        AbstractApplicationContext context = new ClassPathXmlApplicationContext("spring-test.xml");
+        AbstractApplicationContext context = new ClassPathXmlApplicationContext("ddd-example-test.xml");
         context.start();
         PartnerLoader fooJar = new PartnerLoader("../cp-ddd-example/order-center-bp-isv/target/order-center-bp-isv-0.0.1.jar");
         fooJar.load();
