@@ -2,6 +2,8 @@ package org.ddd.cp.ddd.runtime.registry;
 
 import org.junit.Ignore;
 import org.junit.Test;
+import org.springframework.context.support.AbstractApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import static org.junit.Assert.assertEquals;
 
@@ -10,9 +12,12 @@ public class PartnerLoaderTest {
     @Test
     @Ignore
     public void start() throws Exception {
-        PartnerLoader fooJar = new PartnerLoader("");
+        AbstractApplicationContext context = new ClassPathXmlApplicationContext("spring-test.xml");
+        context.start();
+        PartnerLoader fooJar = new PartnerLoader("../cp-ddd-example/order-center-bp-isv/target/order-center-bp-isv-0.0.1.jar");
         fooJar.load();
         fooJar.unload();
+        context.stop();
     }
 
     @Test
