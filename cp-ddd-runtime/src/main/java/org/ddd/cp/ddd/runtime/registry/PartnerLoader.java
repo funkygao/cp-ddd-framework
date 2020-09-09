@@ -43,8 +43,7 @@ public class PartnerLoader {
         log.info("loading with {}", label());
 
         List<Class<? extends Annotation>> annotations = new ArrayList<>(2);
-        // 只加载业务前台的扩展点和Partner注解类，通过java ClassLoader的全盘负责机制自动加载相关引用类
-        annotations.add(Partner.class);
+        // 只加载业务前台的扩展点，通过java ClassLoader的全盘负责机制自动加载相关引用类
         annotations.add(Extension.class);
 
         initPartnerClassLoaderIfNec();
@@ -53,7 +52,6 @@ public class PartnerLoader {
                 annotations, null, this.partnerClassLoader);
 
         // 实例化该业务前台的所有扩展点，并注册到索引
-        this.registerPartner(resultMap.get(Partner.class).get(0)); // 1个业务前台包必须且只能有1个Partner注解的类
         this.registerExtensions(resultMap.get(Extension.class));
 
         log.info("loaded with {} ok, cost {}ms", label(), (System.nanoTime() - t0) / 1000_000);
@@ -108,10 +106,6 @@ public class PartnerLoader {
         for (Class extensionClazz : extensions) {
             RegistryFactory.lazyRegister(Extension.class, extensionClazz.newInstance());
         }
-    }
-
-    private void registerPartner(@NotNull Class project) throws Exception {
-        RegistryFactory.lazyRegister(Partner.class, project.newInstance());
     }
 
     public String label() {
