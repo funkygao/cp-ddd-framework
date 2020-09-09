@@ -22,7 +22,7 @@ class RegistryFactory implements InitializingBean {
             log.info("register {}'s ...", entry.annotation.getSimpleName());
 
             for (Object springBean : applicationContext.getBeansWithAnnotation(entry.annotation).values()) {
-                entry.createRegistry().registerBean(CoreAopUtils.getTarget(springBean));
+                entry.createRegistry().registerBean(springBean);
             }
         }
 
@@ -33,7 +33,7 @@ class RegistryFactory implements InitializingBean {
         for (RegistryEntry entry : supportedRegisters) {
             if (entry.annotation.equals(annotation)) {
                 // bingo!
-                entry.createRegistry().registerBean(CoreAopUtils.getTarget(bean));
+                entry.createRegistry().registerBean(bean);
                 return true;
             }
         }
