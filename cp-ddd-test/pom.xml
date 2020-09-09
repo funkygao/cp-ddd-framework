@@ -12,6 +12,17 @@
 
     <dependencies>
         <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.ddd.cp</groupId>
             <artifactId>cp-ddd-spec</artifactId>
             <version>${project.version}</version>
@@ -37,6 +48,11 @@
             <groupId>org.apache.logging.log4j</groupId>
             <version>2.9.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <version>2.9.1</version>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework</groupId>
@@ -47,6 +63,11 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
             <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>1.9.1</version>
         </dependency>
     </dependencies>
 
