@@ -6,9 +6,9 @@ import org.ddd.cp.ddd.ext.IIdentityResolver;
 
 import javax.validation.constraints.NotNull;
 
-@Pattern(code = SkyworthPattern.CODE, name = "创维业务模式")
-public class SkyworthPattern implements IIdentityResolver<IOrderModel> {
-    public static final String CODE = "skyworth";
+@Pattern(code = HairPattern.CODE, name = "海尔业务模式")
+public class HairPattern implements IIdentityResolver<IOrderModel> {
+    public static final String CODE = "hair";
 
     @Override
     public boolean match(@NotNull IOrderModel model) {
@@ -16,6 +16,6 @@ public class SkyworthPattern implements IIdentityResolver<IOrderModel> {
             return false;
         }
 
-        return model.getCustomerNo().equals("skyworth");
+        return model.getCustomerNo().equals(CODE);
     }
 }

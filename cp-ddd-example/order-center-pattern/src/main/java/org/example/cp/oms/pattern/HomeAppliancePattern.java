@@ -6,9 +6,9 @@ import org.ddd.cp.ddd.ext.IIdentityResolver;
 
 import javax.validation.constraints.NotNull;
 
-@Pattern(code = AmwayPattern.CODE, name = "安利业务模式")
-public class AmwayPattern implements IIdentityResolver<IOrderModel> {
-    public static final String CODE = "amway";
+@Pattern(code = HomeAppliancePattern.CODE, name = "家用电器行业模式")
+public class HomeAppliancePattern implements IIdentityResolver<IOrderModel> {
+    public static final String CODE = "home";
 
     @Override
     public boolean match(@NotNull IOrderModel model) {
@@ -16,6 +16,6 @@ public class AmwayPattern implements IIdentityResolver<IOrderModel> {
             return false;
         }
 
-        return model.getCustomerNo().equals("amway");
+        return model.getCustomerNo().equals(CODE);
     }
 }
