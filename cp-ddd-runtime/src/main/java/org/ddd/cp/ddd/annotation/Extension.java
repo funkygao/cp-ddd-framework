@@ -24,7 +24,7 @@ public @interface Extension {
     @AliasFor(annotation = Component.class, attribute = "value") String value() default "";
 
     /**
-     * 扩展点编号.
+     * 扩展点编号，bind to {@link Pattern#code()} or {@link Partner#code()}.
      */
     String code();
 
