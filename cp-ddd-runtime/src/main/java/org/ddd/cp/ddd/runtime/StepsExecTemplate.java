@@ -3,7 +3,7 @@ package org.ddd.cp.ddd.runtime;
 import org.ddd.cp.ddd.model.IDomainModel;
 import org.ddd.cp.ddd.step.IDomainRevokableStep;
 import org.ddd.cp.ddd.step.IDomainStep;
-import org.ddd.cp.ddd.step.IReviseStepsException;
+import org.ddd.cp.ddd.step.IDecideStepsException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collections;
@@ -30,7 +30,7 @@ public abstract class StepsExecTemplate<Step extends IDomainStep, Model extends 
     /**
      * 执行编排好的步骤.
      * <p>
-     * <p>步骤的实现里，可以通过{@link IReviseStepsException}来进行后续步骤修订，即动态的步骤编排</p>
+     * <p>步骤的实现里，可以通过{@link IDecideStepsException}来进行后续步骤修订，即动态的步骤编排</p>
      * <p>如果步骤实现了{@link IDomainRevokableStep}，在步骤抛出异常后会自动触发步骤回滚</p>
      *
      * @param activityCode 领域活动
@@ -73,9 +73,9 @@ public abstract class StepsExecTemplate<Step extends IDomainStep, Model extends 
                 }
             }
         } catch (Exception cause) {
-            if (cause instanceof IReviseStepsException) {
+            if (cause instanceof IDecideStepsException) {
                 // 重新编排(修订)了后续步骤
-                return ((IReviseStepsException) cause).subsequentSteps();
+                return ((IDecideStepsException) cause).subsequentSteps();
             }
 
             // 其他异常，best effort rollback后直接抛出

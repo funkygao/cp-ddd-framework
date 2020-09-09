@@ -5,7 +5,7 @@ import org.ddd.cp.ddd.runtime.DDD;
 import lombok.extern.slf4j.Slf4j;
 import org.example.cp.oms.domain.ability.ReviseStepsAbility;
 import org.example.cp.oms.domain.exception.OrderException;
-import org.example.cp.oms.domain.exception.OrderReviseStepsException;
+import org.example.cp.oms.domain.exception.OrderDecideStepsException;
 import org.example.cp.oms.domain.model.OrderModel;
 import org.example.cp.oms.domain.step.SubmitOrderStep;
 import org.example.cp.oms.spec.Steps;
@@ -25,7 +25,7 @@ public class BasicStep extends SubmitOrderStep {
             log.info("重新编排步骤：{}", revisedSteps);
 
             // 通过异常，来改变后续步骤
-            throw new OrderReviseStepsException().withSubsequentSteps(revisedSteps);
+            throw new OrderDecideStepsException().withSubsequentSteps(revisedSteps);
         }
     }
 

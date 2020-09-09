@@ -11,7 +11,7 @@ import java.util.List;
  * <p>配合{@link IDomainStep#execute(IDomainModel)}的异常使用，在某一步骤抛出该异常来修订后续步骤</p>
  * <p>可能产生的死循环(a -> b(revise) -> a)，由使用者负责，暂时不提供dead loop检测：因为即使检测到也不知道如何处理，它本身就是bug</p>
  */
-public interface IReviseStepsException {
+public interface IDecideStepsException {
 
     /**
      * 修订后的后续步骤编号.

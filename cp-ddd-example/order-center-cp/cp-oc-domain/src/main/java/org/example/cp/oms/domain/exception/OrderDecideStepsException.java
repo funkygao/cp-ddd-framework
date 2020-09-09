@@ -1,14 +1,14 @@
 package org.example.cp.oms.domain.exception;
 
-import org.ddd.cp.ddd.step.IReviseStepsException;
+import org.ddd.cp.ddd.step.IDecideStepsException;
 
 import java.util.List;
 
-public class OrderReviseStepsException extends OrderException implements IReviseStepsException {
+public class OrderDecideStepsException extends OrderException implements IDecideStepsException {
 
     private List<String> subsequentSteps;
 
-    public OrderReviseStepsException withSubsequentSteps(List<String> subsequentSteps) {
+    public OrderDecideStepsException withSubsequentSteps(List<String> subsequentSteps) {
         this.subsequentSteps = subsequentSteps;
         return this;
     }
