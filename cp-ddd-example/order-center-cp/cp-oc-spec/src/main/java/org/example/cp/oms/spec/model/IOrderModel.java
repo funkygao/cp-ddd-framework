@@ -40,4 +40,11 @@ public interface IOrderModel extends IDomainModel {
     String currentStep();
 
     String currentActivity();
+
+    /**
+     * 是否冷链业务.
+     */
+    boolean isColdChain();
+
+    boolean isB2B();
 }

@@ -60,6 +60,16 @@ public class OrderModel implements IOrderModel {
     }
 
     @Override
+    public boolean isColdChain() {
+        return false;
+    }
+
+    @Override
+    public boolean isB2B() {
+        return false;
+    }
+
+    @Override
     public IProductDelegate productDelegate() {
         return null;
     }
