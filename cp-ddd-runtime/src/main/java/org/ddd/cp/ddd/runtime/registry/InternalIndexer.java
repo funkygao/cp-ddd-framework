@@ -1,11 +1,9 @@
 package org.ddd.cp.ddd.runtime.registry;
 
-import org.ddd.cp.ddd.annotation.Partner;
-import org.ddd.cp.ddd.ext.IDomainExtension;
-import org.ddd.cp.ddd.model.IDomainModel;
-import org.ddd.cp.ddd.model.BaseDomainAbility;
-import org.ddd.cp.ddd.runtime.DDD;
 import lombok.extern.slf4j.Slf4j;
+import org.ddd.cp.ddd.ext.IDomainExtension;
+import org.ddd.cp.ddd.model.BaseDomainAbility;
+import org.ddd.cp.ddd.model.IDomainModel;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;
@@ -28,32 +26,6 @@ public class InternalIndexer {
     static final Map<String, PatternDef> patternDefMap = new HashMap<>();
     static final Map<Class<? extends IDomainExtension>, List<PatternDef>> sortedPatternMap = new HashMap<>();
     static final Map<String, PartnerDef> partnerDefMap = new HashMap<>();
-
-    private static String killedPartnerCode;
-
-    /**
-     * 把一个{@link Partner}紧急下线, internal usage only.
-     *
-     * @param code {@link Partner#code()}
-     */
-    public static void killPartner(String code) {
-        Class caller = org.slf4j.helpers.Util.getCallingClass();
-        if (!caller.equals(DDD.class)) {
-            // 只允许DDD里调用，否则被恶意前台调用就毁了
-            throw new RuntimeException("killPartner caller can only be DDD! Bye hacker!");
-        }
-
-        killedPartnerCode = code;
-    }
-
-    public static void recoverPartner(String code) {
-        Class caller = org.slf4j.helpers.Util.getCallingClass();
-        if (!caller.equals(DDD.class)) {
-            throw new RuntimeException("recoverPartner caller can only be DDD! Bye hacker!");
-        }
-
-        killedPartnerCode = null;
-    }
 
     /**
      * 根据业务能力类找到一个业务能力实例, internal usage only.
@@ -134,10 +106,6 @@ public class InternalIndexer {
         for (PartnerDef partnerDef : partnerDefMap.values()) {
             if (!partnerDef.match(model)) {
                 continue;
-            }
-
-            if (partnerDef.getCode().equals(killedPartnerCode)) {
-                throw new PartnerKilledException(partnerDef.getCode());
             }
 
             ExtensionDef extensionDef = partnerDef.getExtension(extClazz);

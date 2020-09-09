@@ -1,10 +1,9 @@
 package org.ddd.cp.ddd.runtime;
 
-import org.ddd.cp.ddd.annotation.Partner;
+import org.ddd.cp.ddd.model.BaseDomainAbility;
 import org.ddd.cp.ddd.model.IDomainStep;
 import org.ddd.cp.ddd.runtime.registry.InternalIndexer;
 import org.ddd.cp.ddd.runtime.registry.StepDef;
-import org.ddd.cp.ddd.model.BaseDomainAbility;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -16,29 +15,6 @@ import java.util.List;
  */
 public final class DDD {
     private DDD() {
-    }
-
-    /**
-     * 紧急下线某一个业务前台.
-     * <p>
-     * <p>典型场景：A/B两个业务前台在中台里部署在一个容器，A在线上出现严重错误，可能会影响B，这时候可以紧急下线A</p>
-     * <p>紧急下线后，A的所有扩展点会强制抛出{@code PartnerKilledException}</p>
-     *
-     * @param code  {@link Partner#code()}
-     * @param token 验证权限的token，以防止业务前台恶意调用
-     */
-    public static void killPartner(String code, String token) {
-        InternalIndexer.killPartner(code);
-    }
-
-    /**
-     * 恢复某一个被紧急下线的业务前台.
-     *
-     * @param code  {@link Partner#code()}
-     * @param token 验证权限的token，以防止业务前台恶意调用
-     */
-    public static void recoverPartner(String code, String token) {
-        InternalIndexer.recoverPartner(code);
     }
 
     /**
