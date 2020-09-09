@@ -17,10 +17,10 @@
 
 ### What problems does it solve
 
-解决了如下问题：
-- 业务逻辑的个性化
-- 业务流程的个性化
-- 业务模型的个性化
+- 业务逻辑的个性化：uncertain biz logic
+- 业务流程的个性化：uncertain biz flow
+- 业务模型的个性化：uncertain biz model
+- and more
 
 ### Key components
 
