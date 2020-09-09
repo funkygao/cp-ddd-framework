@@ -3,12 +3,10 @@
 * [What is cp-ddd-framework](#what-is-cp-ddd-framework)
    * [What problems does it solve](#what-problems-does-it-solve)
    * [Key components](#key-components)
-   * [BP vs CP](#bp-vs-cp)
 * [Requirements](#requirements)
 * [Using cp-ddd-framework](#using-cp-ddd-framework)
 * [Building from Source](#building-from-source)
 * [Roadmap](#roadmap)
-* [FAQ](#faq)
 * [Licensing](#licensing)
 
 ## What is cp-ddd-framework?
@@ -31,12 +29,6 @@
 - isolation of business runtime
 - best practice of DDD
 
-### BP vs CP
-
-业务前台与业务中台：
-
-![](doc/assets/img/bp-cp.png)
-
 ## Requirements
 
 Requires Java 1.8+ and Spring 4.3.12.RELEASE or later.
@@ -52,8 +44,6 @@ mvn clean install
 ```
 
 ## Roadmap
-
-## FAQ
 
 ## Licensing
 
