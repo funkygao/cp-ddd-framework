@@ -1,4 +1,4 @@
-# cp-ddd-framework (cp stands for `Central Platform`：中台)
+# cp-ddd-framework (Central Platform：中台)
 
 * [What is cp-ddd-framework](#what-is-cp-ddd-framework)
    * [What problems does it solve](what-problems-does-it-solve)
