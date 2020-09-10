@@ -2,7 +2,8 @@
 
 * [What is cp-ddd-framework](#what-is-cp-ddd-framework)
    * [What problems does it solve](#what-problems-does-it-solve)
-   * [Key components](#key-components)
+   * [Key features](#key-components)
+   * [Key abstractions](#key-abstractions)
    * [Modules](#modules)
    * [Landscape](#landscape)
 * [Requirements](#requirements)
@@ -36,6 +37,59 @@ cp-ddd-framework is a lightweight development framework for complex business arc
 - isolation of business runtime
 - best practice of DDD
 - and more
+
+### Key abstractions
+
+``` plantuml
+@startuml
+skinparam handwritten true
+skinparam backgroundColor #EEEBDC
+skinparam shadowing<<with_shadow>> true
+left to right direction
+
+interface IDomainService
+interface IDomainStep
+IDomainStep : execute()
+interface IDecideStepsExt
+interface IDomainRevokableStep
+IDomainRevokableStep : rollback()
+interface IDomainExtension
+interface IIdentityResolver
+interface IModelAttachmentExt
+IModelAttachmentExt : explain()
+IModelAttachmentExt : render()
+abstract StepsExecTemplate
+StepsExecTemplate : execute()
+DDD : {static} findAbility()
+DDD : {static} findSteps()
+IDecideStepsExt : decideSteps()
+IIdentityResolver : match(IDomainModel)
+
+IDomainService <|-- IDomainStep
+IDomainStep <|-- IDomainRevokableStep
+IDomainService <|-- BaseDomainAbility
+
+IDomainExtension <|-- IDecideStepsExt
+IDomainExtension <|-- IModelAttachmentExt
+
+IIdentityResolver <|-- Pattern
+IIdentityResolver <|-- Partner
+
+BaseDomainAbility <-- DDD
+IDomainStep <-- DDD
+
+IDomainExtension <-- BaseDomainAbility: locate
+
+IDomainExtension --> Pattern: bind
+IDomainExtension --> Partner: bind
+
+Partner : code
+Pattern : code
+IDomainExtension : code
+
+StepsExecTemplate --> IDomainStep: orchestration
+@enduml
+```
 
 ### Modules
 
