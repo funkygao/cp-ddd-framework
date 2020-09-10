@@ -7,7 +7,7 @@
    * [Key features](#key-features)
    * [Key abstractions](#key-abstractions)
    * [Modules](#modules)
-   * [Landscape](#landscape)
+* [Landscape of Central Platform](#landscape-of-central-platform)
 * [Requirements](#requirements)
 * [Using cp-ddd-framework](#using-cp-ddd-framework)
 * [Building from Source](#building-from-source)
@@ -77,7 +77,7 @@ Runtime implementation of the framework.
 
 Enforce expected evolvement of the business architecture based upon ArchUnit.
 
-### Landscape
+## Landscape of Central Platform
 
 ![](doc/assets/img/landscape.png)
 
