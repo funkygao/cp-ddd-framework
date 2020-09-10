@@ -2,7 +2,7 @@
 
 * [What is cp-ddd-framework](#what-is-cp-ddd-framework)
    * [What problems does it solve](#what-problems-does-it-solve)
-   * [What problems it does not solve](what-problems-it-does-not-solve)
+   * [What problems it does not solve](#what-problems-it-does-not-solve)
    * [Design philosophy](#design-philosophy)
    * [Key features](#key-features)
    * [Key abstractions](#key-abstractions)
