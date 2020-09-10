@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * DDD框架的核心类.
+ * DDD框架的核心类，定位核心对象.
  */
 public final class DDD {
     private DDD() {
