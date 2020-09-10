@@ -2,6 +2,8 @@
 
 * [What is cp-ddd-framework](#what-is-cp-ddd-framework)
    * [What problems does it solve](#what-problems-does-it-solve)
+   * [What problems it does not solve](what-problems-it-does-not-solve)
+   * [Design philosophy](#design-philosophy)
    * [Key features](#key-features)
    * [Key abstractions](#key-abstractions)
    * [Modules](#modules)
@@ -22,11 +24,32 @@ cp-ddd-framework is a lightweight development framework for complex business arc
 
 ### What problems does it solve
 
+- born for biz extension, the OCP
+- help evolve the system without corruption
 - 业务逻辑的个性化：uncertain biz logic
 - 业务流程的个性化：uncertain biz flow
 - 业务模型的个性化：uncertain biz model
 - 业务前台与中台如何协同：synergy between BP and CP teams
+- 如何让DDD平稳落地：DDD seamlessly landing in code
+- 如何降低系统实现的复杂度：reduce entropy of the system
+- 普通研发如何编写出优雅的业务代码：low threshold for average developer to build elegant biz code
 - and more
+
+### What problems it does not solve
+
+cp-ddd-framework is a business architecture framework instead of a system architecture framework.
+
+So the following problems are out of cp-ddd-framework scope:
+- how to shard my large dataset?
+- how to maintain consistency of the cache?
+- how to implement distributed transaction?
+
+### Design philosophy
+
+- design for simplicity, design for ops, design for extension
+- total abstraction, cover most business scenarios
+- less is more
+- code itself is documentation
 
 ### Key features
 
@@ -46,9 +69,15 @@ cp-ddd-framework is a lightweight development framework for complex business arc
 
 #### cp-ddd-spec
 
+Specification of the framework.
+
 #### cp-ddd-runtime
 
+Runtime implementation of the framework.
+
 #### cp-ddd-enforce
+
+Enforce expected evolvement of the business architecture based upon ArchUnit.
 
 ### Landscape
 
@@ -79,8 +108,6 @@ mvn clean install
 - 什么是扩展点?
    - 业务语义一致，但执行逻辑不同的业务功能点
    - 在cp-ddd-framework里，就是一个java interface
-- Where to find the detailed documentation?
-   - We have the belief: code itself is documentation.
 
 ## Licensing
 
