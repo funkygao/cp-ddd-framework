@@ -18,3 +18,10 @@ javadoc:install
 	@mvn javadoc:javadoc
 	@open target/site/apidocs/index.html
 
+release-javadoc:install
+	@git checkout javadoc
+	@mvn javadoc:javadoc
+	@mv -f target/site/apidocs/ doc/
+	@git add doc/apidocs
+	@git commit -m 'Javadoc updated' doc/apidocs
+	@git push
