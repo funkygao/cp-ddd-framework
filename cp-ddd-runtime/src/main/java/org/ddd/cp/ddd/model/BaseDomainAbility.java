@@ -12,16 +12,14 @@ import org.ddd.cp.ddd.runtime.registry.InternalIndexer;
 import javax.validation.constraints.NotNull;
 
 /**
- * 领域能力点，是扩展点调用的唯一入口，是一种业务语义不变而执行逻辑可变的能力.
+ * 领域能力，是一种业务语义不变而执行逻辑可变的能力.
  * <p>
- * <p>实现对扩展点的定位和编排.</p>
- * <p>提供默认的扩展点实现</p>
- * <p>可以根据扩展点的执行结果进行额外业务处理</p>
+ * <p>{@code BaseDomainAbility}是最小粒度的{@link IDomainService}，只负责一个扩展点的编排</p>
  *
  * @param <Model> 领域模型
  * @param <Ext>   领域能力扩展点
  */
-public abstract class BaseDomainAbility<Model extends IDomainModel, Ext extends IDomainExtension> {
+public abstract class BaseDomainAbility<Model extends IDomainModel, Ext extends IDomainExtension> implements IDomainService {
     public BaseDomainAbility() {
     }
 
