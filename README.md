@@ -9,7 +9,7 @@
    * [Modules](#modules)
 * [Landscape of Central Platform](#landscape-of-central-platform)
 * [Requirements](#requirements)
-* [Using cp-ddd-framework](#using-cp-ddd-framework)
+* [Example using cp-ddd-framework](#example-using-cp-ddd-framework)
 * [Building from Source](#building-from-source)
 * [Documentaion](#documentation)
 * [Licensing](#licensing)
@@ -85,7 +85,7 @@ Enforce expected evolvement of the business architecture based upon ArchUnit.
 
 Requires Java 1.8+ and Spring 4.3.12.RELEASE or later.
 
-## Using cp-ddd-framework
+## Example using cp-ddd-framework
 
 See the [cp-ddd-example](cp-ddd-example).
 
