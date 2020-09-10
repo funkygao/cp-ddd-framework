@@ -19,7 +19,7 @@ javadoc:install
 	@open target/site/apidocs/index.html
 
 release-javadoc:install
-	@git checkout javadoc
+	@git checkout gh-pages
 	@mvn javadoc:javadoc
 	@mv -f target/site/apidocs/ doc/
 	@git add doc/apidocs
