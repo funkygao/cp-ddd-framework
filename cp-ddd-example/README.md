@@ -7,11 +7,11 @@
 一套订单中台，作为“企业级能力复用平台”，需要支撑企业级的多场景不确定需求，How?
 
 本示例组成：
-- 一个[订单中台代码库](order-center-cp)
-- [中台的个性化业务包](order-center-pattern)
+- 一个[订单中台代码库](#order-center-cp)
+- [中台的个性化业务包](#order-center-pattern)
 - 两个业务前台代码库
-   - [KA业务前台](order-center-bp-ka)
-   - [ISV业务前台](order-center-bp-isv)
+   - [KA业务前台](#order-center-bp-ka)
+   - [ISV业务前台](#order-center-bp-isv)
 
 ## [order-center-cp](order-center-cp)
 
