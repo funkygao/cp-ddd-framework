@@ -53,7 +53,7 @@ So the following problems are out of cp-ddd-framework scope:
 
 - layered extension point
 - model schema extension
-- business steps orchestration
+- business flows orchestration
 - dynamic loading business extension jar
 - isolation of business runtime
 - best practice of DDD
