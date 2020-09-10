@@ -3,15 +3,20 @@
 * [What is cp-ddd-framework](#what-is-cp-ddd-framework)
    * [What problems does it solve](#what-problems-does-it-solve)
    * [Key components](#key-components)
+   * [Modules](#modules)
+   * [Landscape](#landscape)
 * [Requirements](#requirements)
 * [Using cp-ddd-framework](#using-cp-ddd-framework)
 * [Building from Source](#building-from-source)
 * [Roadmap](#roadmap)
+* [FAQ](#faq)
 * [Licensing](#licensing)
 
 ## What is cp-ddd-framework?
 
-以DDD思想为基础，打造业务不确定的业务中台：企业级能力复用平台。
+cp-ddd-framework is a lightweight development framework for complex business architecture.
+
+轻量级业务中台开发框架，以DDD思想为基础，打造业务不确定的业务中台：企业级能力复用平台。
 
 ### What problems does it solve
 
@@ -31,6 +36,18 @@
 - best practice of DDD
 - and more
 
+### Modules
+
+#### cp-ddd-spec
+
+#### cp-ddd-runtime
+
+#### cp-ddd-enforce
+
+### Landscape
+
+![](doc/assets/img/landscape.png)
+
 ## Requirements
 
 Requires Java 1.8+ and Spring 4.3.12.RELEASE or later.
@@ -46,6 +63,14 @@ mvn clean install
 ```
 
 ## Roadmap
+
+## FAQ
+
+- 什么是扩展点?
+   - 业务语义一致，但执行逻辑不同的业务功能点
+   - 在cp-ddd-framework里，就是一个java interface
+- Where to find the detailed documentation?
+   - We have the belief: code itself is documentation.
 
 ## Licensing
 
