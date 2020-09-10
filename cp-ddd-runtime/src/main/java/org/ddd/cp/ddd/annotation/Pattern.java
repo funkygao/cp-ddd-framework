@@ -13,6 +13,12 @@ import java.lang.annotation.*;
  * 业务模式，用于定位扩展点实例.
  * <p>
  * <p>横向视角把扩展点进行聚合，属于水平业务，可以叠加</p>
+ * <p>所谓横向视角，相当于AOP里的Aspect</p>
+ * <p>每个业务模式需要实现{@link org.ddd.cp.ddd.ext.IIdentityResolver}，来判断该业务是否属于自己</p>
+ * <ul>如何理解{@code Pattern}与{@code IDomainExtension}？
+ * <li>{@code Pattern}，相当于把散落在各处的某个业务逻辑{@code if} 判断条件，收敛到{@code Pattern}里，使得这些业务判断显式化，有形化，并有了个名字</li>
+ * <li>扩展点，相当于把if后面的code block显式化，有形化</li>
+ * </ul>
  */
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
