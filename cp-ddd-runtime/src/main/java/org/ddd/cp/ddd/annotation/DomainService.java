@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.lang.annotation.*;
 
 /**
- * 领域服务.
+ * 领域服务，注解在{@link org.ddd.cp.ddd.model.IDomainService}之上.
  */
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import java.lang.annotation.*;
 
 /**
- * 扩展点.
+ * 扩展点，注解在{@link org.ddd.cp.ddd.ext.IDomainExtension}之上.
  */
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import java.lang.annotation.*;
 
 /**
- * 领域能力点，用于封装扩展点.
+ * 领域能力，注解在{@link org.ddd.cp.ddd.model.BaseDomainAbility}之上.
  */
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)

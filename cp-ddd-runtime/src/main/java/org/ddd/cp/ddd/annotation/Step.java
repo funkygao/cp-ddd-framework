@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.lang.annotation.*;
 
 /**
- * 领域活动步骤.
+ * 领域活动步骤，注解在{@link IDomainStep}之上.
  * <p>
  * <p>一个步骤属于一个领域活动，用于被编排</p>
  */
