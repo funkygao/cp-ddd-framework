@@ -45,13 +45,6 @@ public @interface Step {
     String[] groups() default {};
 
     /**
-     * 是否可见，可以被编排.
-     * <p>
-     * <p>不可见的活动步骤，是builtin steps</p>
-     */
-    boolean visible() default true;
-
-    /**
      * 该步骤依赖哪些其他步骤.
      * <p>
      * <p>即，被依赖的步骤先执行，才能执行本步骤</p>
