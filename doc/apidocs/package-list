@@ -1,0 +1,8 @@
+org.ddd.cp.ddd
+org.ddd.cp.ddd.annotation
+org.ddd.cp.ddd.api
+org.ddd.cp.ddd.ext
+org.ddd.cp.ddd.model
+org.ddd.cp.ddd.runtime
+org.ddd.cp.ddd.runtime.registry
+org.ddd.cp.ddd.step
