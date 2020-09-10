@@ -12,7 +12,6 @@
 * [Using cp-ddd-framework](#using-cp-ddd-framework)
 * [Building from Source](#building-from-source)
 * [Documentaion](#documentation)
-* [Roadmap](#roadmap)
 * [FAQ](#faq)
 * [Licensing](#licensing)
 
@@ -100,8 +99,6 @@ mvn clean install
 ## Documentation
 
 [cp-ddd-framework Javadoc](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/).
-
-## Roadmap
 
 ## FAQ
 
