@@ -30,9 +30,9 @@ public class PartnerLoader {
     private PartnerClassLoader partnerClassLoader;
 
     /**
-     * Constructor of project container.
+     * Constructor of partner loader.
      *
-     * @param jarPath project jar jarPath
+     * @param jarPath partner jar path
      */
     public PartnerLoader(@NotNull String jarPath) {
         this.jarPath = jarPath;

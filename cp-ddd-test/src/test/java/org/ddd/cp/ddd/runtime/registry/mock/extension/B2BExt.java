@@ -1,4 +1,4 @@
-package org.ddd.cp.ddd.runtime.registry.mock;
+package org.ddd.cp.ddd.runtime.registry.mock.extension;
 
 import org.ddd.cp.ddd.annotation.Extension;
 import org.ddd.cp.ddd.runtime.registry.mock.ext.IFooExt;

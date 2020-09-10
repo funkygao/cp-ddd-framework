@@ -226,9 +226,9 @@ public class InternalIndexer {
             throw BootstrapException.ofMessage("duplicated pattern code: ", patternDef.getCode());
         }
 
-        // pattern.code不能与project.code冲突
+        // pattern.code不能与partner.code冲突
         if (partnerDefMap.containsKey(patternDef.getCode())) {
-            throw BootstrapException.ofMessage("pattern: ", patternDef.getCode(), " conflicts with project code");
+            throw BootstrapException.ofMessage("pattern: ", patternDef.getCode(), " conflicts with partner code");
         }
 
         patternDefMap.put(patternDef.getCode(), patternDef);

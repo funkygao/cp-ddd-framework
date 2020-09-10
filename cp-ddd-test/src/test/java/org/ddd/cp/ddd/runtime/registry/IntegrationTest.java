@@ -7,7 +7,7 @@ import org.ddd.cp.ddd.runtime.registry.mock.ability.*;
 import org.ddd.cp.ddd.runtime.registry.mock.ext.IMultiMatchExt;
 import org.ddd.cp.ddd.runtime.registry.mock.model.FooModel;
 import org.ddd.cp.ddd.runtime.registry.mock.pattern.extension.B2BMultiMatchExt;
-import org.ddd.cp.ddd.runtime.registry.mock.project.FooProject;
+import org.ddd.cp.ddd.runtime.registry.mock.partner.FooPartner;
 import org.ddd.cp.ddd.runtime.registry.mock.service.FooDomainService;
 import org.ddd.cp.ddd.runtime.registry.mock.step.*;
 import lombok.extern.slf4j.Slf4j;
@@ -47,19 +47,13 @@ public class IntegrationTest {
     @Before
     public void setUp() {
         fooModel = new FooModel();
-        fooModel.setProjectCode(FooProject.CODE);
+        fooModel.setProjectCode(FooPartner.CODE);
         fooModel.setB2c(true);
     }
 
     @Test
     public void startupListener() {
         assertTrue(startupListener.isCalled());
-    }
-
-    @Test
-    public void parsePropertiesKey() {
-        String jsfAlias = "${foo.bar}";
-        assertEquals("foo.bar", jsfAlias.substring(2, jsfAlias.length() - 1));
     }
 
     @Test
@@ -203,15 +197,6 @@ public class IntegrationTest {
         } catch (ExtTimeoutException expected) {
             assertEquals("timeout:5ms", expected.getMessage());
         }
-    }
-
-    // Ext和JSF方式的超时机制叠加场景：只使用JSF的超时机制，Ext的超时被忽略
-    @Test
-    public void extTimeoutMixedWithJsfTimeout() {
-        fooModel.setProjectCode("");
-        fooModel.setB2c(true); // BarExt
-        fooModel.setWillSleepLong(true);
-        DDD.findAbility(FooDomainAbility.class).submit(fooModel); // 会走JSF的超时机制，测试用例的实现没有超时，因此不会产生ExtTimeoutException
     }
 
     @Test(expected = RuntimeException.class)

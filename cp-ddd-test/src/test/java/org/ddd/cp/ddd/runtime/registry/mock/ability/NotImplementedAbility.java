@@ -3,7 +3,7 @@ package org.ddd.cp.ddd.runtime.registry.mock.ability;
 import lombok.extern.slf4j.Slf4j;
 import org.ddd.cp.ddd.annotation.DomainAbility;
 import org.ddd.cp.ddd.model.BaseDomainAbility;
-import org.ddd.cp.ddd.runtime.registry.mock.INotImplementedExt;
+import org.ddd.cp.ddd.runtime.registry.mock.ext.INotImplementedExt;
 import org.ddd.cp.ddd.runtime.registry.mock.domain.FooDomain;
 import org.ddd.cp.ddd.runtime.registry.mock.model.FooModel;
 
