@@ -28,7 +28,7 @@ cp-ddd-framework is a lightweight development framework for complex business arc
 - 业务前台与中台如何协同：synergy between BP and CP teams
 - and more
 
-### Key components
+### Key features
 
 - layered extension point
 - model schema extension
@@ -40,56 +40,7 @@ cp-ddd-framework is a lightweight development framework for complex business arc
 
 ### Key abstractions
 
-``` plantuml
-@startuml
-skinparam handwritten true
-skinparam backgroundColor #EEEBDC
-skinparam shadowing<<with_shadow>> true
-left to right direction
-
-interface IDomainService
-interface IDomainStep
-IDomainStep : execute()
-interface IDecideStepsExt
-interface IDomainRevokableStep
-IDomainRevokableStep : rollback()
-interface IDomainExtension
-interface IIdentityResolver
-interface IModelAttachmentExt
-IModelAttachmentExt : explain()
-IModelAttachmentExt : render()
-abstract StepsExecTemplate
-StepsExecTemplate : execute()
-DDD : {static} findAbility()
-DDD : {static} findSteps()
-IDecideStepsExt : decideSteps()
-IIdentityResolver : match(IDomainModel)
-
-IDomainService <|-- IDomainStep
-IDomainStep <|-- IDomainRevokableStep
-IDomainService <|-- BaseDomainAbility
-
-IDomainExtension <|-- IDecideStepsExt
-IDomainExtension <|-- IModelAttachmentExt
-
-IIdentityResolver <|-- Pattern
-IIdentityResolver <|-- Partner
-
-BaseDomainAbility <-- DDD
-IDomainStep <-- DDD
-
-IDomainExtension <-- BaseDomainAbility: locate
-
-IDomainExtension --> Pattern: bind
-IDomainExtension --> Partner: bind
-
-Partner : code
-Pattern : code
-IDomainExtension : code
-
-StepsExecTemplate --> IDomainStep: orchestration
-@enduml
-```
+![](http://www.plantuml.com/plantuml/png/TLBBZjim3BphAmZqidl83nX1i0_di8S2nRRtWfQOM8Wi1HITRD7stwiaB637sbiuCvhCa7xAWYpZ44m--7X4nW5wZExCNeGY28yqeJgqXpsdCRhN51B3b-rs-zA-JXIvHvVEFkxNwxEN_kTjtcnkJe5s0fA0_RuNS9x9Ya_H61-5U8UMuArD0_hudVZaBLK8eQEP_8O6w8FiAFJmE5EJzOukYhpzaANFEvtI0Rj0QZW7rPbJ29VECslL5bUAkQIVKc-EedZvzKuvXHFnbFkQ78Ld4RJzK5INL1NiskSOqCVoftMUAJhYGcENXT4AQ4soFsWeRuNC0fdjgMtRCl_EWkBjNzZvw9ux7qhmEdbrAzJTLelCAQ3yVV-Y651i_w1Bk_PvD6P-PLZ_MQq-Ex2IrQjLN5umqmtMHiRS7qmTvrtggkhLbZLlscyeGXm_fraYiJ6BYB0kT5dxhBPYjVYrcWs4P56eeb-jDl-pDT3vwEeIpQSIeoCqO9CZemOwBXqKhtnu5-z9iGOIsvwoC4fvQ9uekd48_m00)
 
 ### Modules
 
