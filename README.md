@@ -12,7 +12,6 @@
 * [Using cp-ddd-framework](#using-cp-ddd-framework)
 * [Building from Source](#building-from-source)
 * [Documentaion](#documentation)
-* [FAQ](#faq)
 * [Licensing](#licensing)
 
 ## What is cp-ddd-framework?
@@ -99,12 +98,6 @@ mvn clean install
 ## Documentation
 
 [cp-ddd-framework Javadoc](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/).
-
-## FAQ
-
-- 什么是扩展点?
-   - 业务语义一致，但执行逻辑不同的业务功能点
-   - 在cp-ddd-framework里，就是一个java interface
 
 ## Licensing
 
