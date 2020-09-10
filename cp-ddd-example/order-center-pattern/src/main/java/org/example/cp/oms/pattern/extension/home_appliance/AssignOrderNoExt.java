@@ -1,4 +1,4 @@
-package org.example.cp.oms.pattern.extension.skyworth;
+package org.example.cp.oms.pattern.extension.home_appliance;
 
 import org.example.cp.oms.pattern.HomeAppliancePattern;
 import org.ddd.cp.ddd.annotation.Extension;
@@ -7,12 +7,12 @@ import org.example.cp.oms.spec.model.IOrderModel;
 
 import javax.validation.constraints.NotNull;
 
-@Extension(code = HomeAppliancePattern.CODE, value = "skyworthAssignOrderNoExt")
+@Extension(code = HomeAppliancePattern.CODE, value = "homeAssignOrderNoExt")
 public class AssignOrderNoExt implements IAssignOrderNoExt {
-    public static final String SKYWORTH_ORDER_NO = "sky9987012";
+    public static final String HOME_ORDER_NO = "SO9987012";
 
     @Override
     public void assignOrderNo(@NotNull IOrderModel model) {
-        model.assignOrderNo(this, SKYWORTH_ORDER_NO);
+        model.assignOrderNo(this, HOME_ORDER_NO);
     }
 }

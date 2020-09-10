@@ -1,4 +1,4 @@
-package org.example.cp.oms.pattern.extension.amway;
+package org.example.cp.oms.pattern.extension.hair;
 
 import org.ddd.cp.ddd.annotation.Extension;
 import org.example.cp.oms.pattern.HairPattern;
@@ -9,7 +9,7 @@ import org.example.cp.oms.spec.model.IOrderModel;
 import java.util.ArrayList;
 import java.util.List;
 
-@Extension(code = HairPattern.CODE, value = "amwayReviseStepsExt")
+@Extension(code = HairPattern.CODE, value = "hairReviseStepsExt")
 public class ReviseStepsExt implements IReviseStepsExt {
 
     @Override

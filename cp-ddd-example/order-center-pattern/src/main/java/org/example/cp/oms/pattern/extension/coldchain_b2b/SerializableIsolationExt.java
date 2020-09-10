@@ -1,6 +1,7 @@
-package org.example.cp.oms.pattern.extension.skyworth;
+package org.example.cp.oms.pattern.extension.coldchain_b2b;
 
 import org.ddd.cp.ddd.annotation.Extension;
+import org.example.cp.oms.pattern.ColdChainB2BPattern;
 import org.example.cp.oms.pattern.HomeAppliancePattern;
 import org.example.cp.oms.spec.ext.ISerializableIsolationExt;
 import org.example.cp.oms.spec.model.IOrderModel;
@@ -9,11 +10,11 @@ import org.example.cp.oms.spec.model.vo.LockEntry;
 import javax.validation.constraints.NotNull;
 import java.util.concurrent.TimeUnit;
 
-@Extension(code = HomeAppliancePattern.CODE, value = "skyworthSerializableIsolationExt")
+@Extension(code = ColdChainB2BPattern.CODE, value = "ccb2bSerializableIsolationExt")
 public class SerializableIsolationExt implements ISerializableIsolationExt {
 
     @Override
     public LockEntry createLockEntry(@NotNull IOrderModel model) {
-        return new LockEntry(model.customerProvidedOrderNo(), 5, TimeUnit.MINUTES);
+        return new LockEntry(model.customerProvidedOrderNo(), 19, TimeUnit.MINUTES);
     }
 }
