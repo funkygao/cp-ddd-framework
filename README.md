@@ -2,7 +2,7 @@
 
 * [What is cp-ddd-framework](#what-is-cp-ddd-framework)
    * [What problems does it solve](#what-problems-does-it-solve)
-   * [Key features](#key-components)
+   * [Key features](#key-features)
    * [Key abstractions](#key-abstractions)
    * [Modules](#modules)
    * [Landscape](#landscape)
