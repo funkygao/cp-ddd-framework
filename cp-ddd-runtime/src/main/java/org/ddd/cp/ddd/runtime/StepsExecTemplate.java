@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Stack;
 
 /**
- * 步骤执行的模板方法类.
+ * 步骤编排的模板方法类.
  *
  * @param <Step>  领域步骤
  * @param <Model> 领域模型
