@@ -5,14 +5,25 @@
  */
 package org.ddd.cp.ddd.runtime.registry;
 
+import lombok.extern.slf4j.Slf4j;
 import org.ddd.cp.ddd.annotation.Extension;
 import org.ddd.cp.ddd.annotation.Partner;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
+import org.springframework.context.support.AbstractRefreshableApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.support.FileSystemXmlApplicationContext;
+import org.springframework.core.env.Environment;
+import org.springframework.core.env.EnvironmentCapable;
+import org.springframework.core.env.StandardEnvironment;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.util.Assert;
 
 import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.lang.annotation.Annotation;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -20,22 +31,27 @@ import java.util.Map;
 /**
  * 业务前台jar包动态加载器.
  * <p>
- * <p>对某一个{@link Partner}的所有扩展点实例通过单独的{@link ClassLoader}进行加载，从而实现业务前台隔离.</p>
+ * <ul>限制条件:
+ * <li>统一使用中台的spring xml</li>
+ * <li>jar里只能使用中台spring bean，不能自己定义依赖</li>
+ * <li>不支持卸载，不支持hot swap</li>
+ * </ul>
  * <p>如果使用本动态加载，就不要maven里静态引入业务前台jar包依赖了.</p>
  */
 @Slf4j
 public class PartnerLoader {
     private final String jarPath;
-
-    private PartnerClassLoader partnerClassLoader;
+    private final String basePackage;
 
     /**
      * Constructor of partner loader.
      *
-     * @param jarPath partner jar path
+     * @param jarPath 业务前台的jarPath
+     * @param basePackage Spring component-scan base-package值，但不支持逗号分隔
      */
-    public PartnerLoader(@NotNull String jarPath) {
+    public PartnerLoader(@NotNull String jarPath, @NotNull String basePackage) {
         this.jarPath = jarPath;
+        this.basePackage = basePackage;
     }
 
     /**
@@ -45,28 +61,30 @@ public class PartnerLoader {
      */
     public void load() throws Exception {
         long t0 = System.nanoTime();
-        log.info("loading with {}", label());
+        log.warn("loading with {}", label());
 
         List<Class<? extends Annotation>> annotations = new ArrayList<>(2);
         // 只加载业务前台的扩展点和Partner注解类，通过java ClassLoader的全盘负责机制自动加载相关引用类
-        // TODO Spring注入的bean还没有处理，不想为每个业务前台启动一个单独的Spring容器
         annotations.add(Partner.class);
         annotations.add(Extension.class);
 
-        initPartnerClassLoaderIfNec();
+        PartnerClassLoader.getInstance().addUrl(new File(this.jarPath).toURI().toURL());
+
+        // 先扫spring，然后初始化所有的basePackage bean，包括已经在中台里加载完的bean
+        // TODO 10个bean，扫描到第8个出现异常，需要把PartnerClassLoader里已经addUrl的摘除
+        springScanComponent(DDDBootstrap.applicationContext(), PartnerClassLoader.getInstance(), basePackage);
 
         Map<Class<? extends Annotation>, List<Class>> resultMap = JarUtils.loadClassWithAnnotations(this.jarPath,
-                annotations, null, this.partnerClassLoader);
+                annotations, null, PartnerClassLoader.getInstance());
 
         // 实例化该业务前台的所有扩展点，并注册到索引
         List<Class> partners = resultMap.get(Partner.class);
         if (partners != null && !partners.isEmpty()) {
-            // 该业务前台包自己定义了Partner，1个业务前台包只能有1个Partner实现
-            this.registerPartner(partners.get(0));
+            this.registerPartner(partners.get(0), DDDBootstrap.applicationContext());
         }
-        this.registerExtensions(resultMap.get(Extension.class));
+        this.registerExtensions(resultMap.get(Extension.class), DDDBootstrap.applicationContext());
 
-        log.info("loaded with {} ok, cost {}ms", label(), (System.nanoTime() - t0) / 1000_000);
+        log.warn("loaded with {} ok, cost {}ms", label(), (System.nanoTime() - t0) / 1000_000);
     }
 
     /**
@@ -74,8 +92,7 @@ public class PartnerLoader {
      *
      * @throws Exception
      */
-    private void reload() throws Exception {
-        // the java hotswap
+    void reload() throws Exception {
     }
 
     /**
@@ -84,44 +101,50 @@ public class PartnerLoader {
      * @throws Exception
      */
     void unload() throws Exception {
-        if (this.partnerClassLoader == null) {
-            log.warn("{} not loaded yet! Really want to unload it?", label());
-            return;
-        }
-
-        log.info("unloading {}", label());
-        this.partnerClassLoader.close();
-        log.info("unloaded {} ok", label());
     }
 
-    private void initPartnerClassLoaderIfNec() throws Exception {
-        if (this.partnerClassLoader != null) {
-            return;
-        }
-
-        synchronized (this) {
-            if (this.partnerClassLoader != null) {
-                return;
-            }
-
-            this.partnerClassLoader = new PartnerClassLoader(new URL[]{new File(this.jarPath).toURI().toURL()});
-            log.info("PartnerClassLoader created");
-        }
-    }
-
-    private void registerPartner(@NotNull Class partner) throws Exception {
-        RegistryFactory.lazyRegister(Partner.class, partner.newInstance());
-    }
-
-    private void registerExtensions(List<Class> extensions) throws Exception {
+    private void registerExtensions(List<Class> extensions, ApplicationContext applicationContext) throws Exception {
         if (extensions == null || extensions.isEmpty()) {
             log.warn("Empty extensions found on {}", this.label());
             return;
         }
 
         for (Class extensionClazz : extensions) {
-            RegistryFactory.lazyRegister(Extension.class, extensionClazz.newInstance());
+            // 扩展点实例，Spring里获取的
+            RegistryFactory.lazyRegister(Extension.class, applicationContext.getBean(extensionClazz));
         }
+    }
+
+    private void registerPartner(@NotNull Class partner, ApplicationContext applicationContext) throws Exception {
+        RegistryFactory.lazyRegister(Partner.class, applicationContext.getBean(partner));
+    }
+
+    // manual <context:component-scan>
+    private void springScanComponent(@NotNull ApplicationContext context, @NotNull ClassLoader classLoader, @NotNull String... basePackages) throws Exception {
+        AbstractRefreshableApplicationContext realContext;
+        if (context instanceof ClassPathXmlApplicationContext) {
+            realContext = (ClassPathXmlApplicationContext) context;
+        } else {
+            realContext = (FileSystemXmlApplicationContext) context;
+        }
+        realContext.getBeanFactory().setBeanClassLoader(classLoader);
+
+        BeanDefinitionRegistry beanDefinitionRegistry = (BeanDefinitionRegistry) realContext.getBeanFactory();
+        new ClassPathBeanDefinitionScanner(
+                beanDefinitionRegistry,
+                true,
+                getOrCreateEnvironment(beanDefinitionRegistry),
+                new PathMatchingResourcePatternResolver(new DefaultResourceLoader(PartnerClassLoader.getInstance()))
+        ).scan(basePackages);
+    }
+
+    private static Environment getOrCreateEnvironment(BeanDefinitionRegistry registry) {
+        Assert.notNull(registry, "BeanDefinitionRegistry must not be null");
+        if (registry instanceof EnvironmentCapable) {
+            return ((EnvironmentCapable) registry).getEnvironment();
+        }
+
+        return new StandardEnvironment();
     }
 
     public String label() {

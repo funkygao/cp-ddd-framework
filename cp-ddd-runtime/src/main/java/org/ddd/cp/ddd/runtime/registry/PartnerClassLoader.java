@@ -24,8 +24,22 @@ class PartnerClassLoader extends URLClassLoader {
     private static ClassLoader platformClassLoader; // 中台类加载器
     private static Object mutex = new Object();
 
+    private static PartnerClassLoader instance = new PartnerClassLoader(new URL[]{});
+
     PartnerClassLoader(URL[] urls) {
         super(urls);
+
+        for (URL url : urls) {
+            getInstance().addURL(url);
+        }
+    }
+
+    static PartnerClassLoader getInstance() {
+        return instance;
+    }
+
+    void addUrl(URL url) {
+        super.addURL(url);
     }
 
     @Override
@@ -41,7 +55,7 @@ class PartnerClassLoader extends URLClassLoader {
             result = jdkClassLoader().loadClass(className);
             if (result != null) {
                 // 说明该类是JRE的类
-                log.info("jdkClassLoader loaded {}", className);
+                log.debug("jdkClassLoader loaded {}", className);
                 return result;
             }
         } catch (ClassNotFoundException ignored) {
@@ -51,7 +65,7 @@ class PartnerClassLoader extends URLClassLoader {
         if (platformFirstClass(className)) {
             result = platformClassLoader().loadClass(className); // might throw ClassNotFoundException，中台无法加载
             if (result != null) {
-                log.info("platformClassLoader loaded {}", className);
+                log.debug("platformClassLoader loaded {}", className);
                 return result;
             }
         }
@@ -60,7 +74,7 @@ class PartnerClassLoader extends URLClassLoader {
         try {
             result = this.findClass(className);
             if (result != null) {
-                log.info("projectClassLoader loaded {}", className);
+                log.debug("projectClassLoader loaded {}", className);
             }
         } catch (ClassNotFoundException ignored) {
         }
@@ -68,7 +82,7 @@ class PartnerClassLoader extends URLClassLoader {
         // 如果前台无法加载，fallback to 中台加载器
         if (result == null) {
             result = platformClassLoader().loadClass(className); // might throw ClassNotFoundException
-            log.info("platformClassLoader loaded {}", className);
+            log.debug("platformClassLoader loaded {}", className);
         }
 
         return result;
@@ -85,7 +99,7 @@ class PartnerClassLoader extends URLClassLoader {
                 if (platformClassLoader == null) {
                     // 中台类加载器加载了前台的类加载器
                     platformClassLoader = PartnerClassLoader.class.getClassLoader();
-                    log.info("platformClassLoader created");
+                    log.debug("platformClassLoader created");
                 }
             }
         }
@@ -121,7 +135,7 @@ class PartnerClassLoader extends URLClassLoader {
                 }
 
                 jdkClassLoader = new URLClassLoader(jdkUrls.toArray(new URL[0]), parent);
-                log.info("jdkClassLoader created");
+                log.debug("jdkClassLoader created");
             }
         }
 
