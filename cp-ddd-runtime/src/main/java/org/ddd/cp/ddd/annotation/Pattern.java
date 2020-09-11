@@ -17,7 +17,7 @@ import java.lang.annotation.*;
  * <p>每个业务模式需要实现{@link org.ddd.cp.ddd.ext.IIdentityResolver}，来判断该业务是否属于自己</p>
  * <ul>如何理解{@code Pattern}与{@code IDomainExtension}？
  * <li>{@code Pattern}，相当于把散落在各处的某个业务逻辑{@code if} 判断条件，收敛到{@code Pattern}里，使得这些业务判断显式化，有形化，并有了个名字</li>
- * <li>扩展点，相当于把if后面的code block显式化，有形化</li>
+ * <li>扩展点，相当于把{@code if} 后面的code block显式化，有形化</li>
  * </ul>
  */
 @Target({ElementType.TYPE})

@@ -20,9 +20,7 @@ import javax.validation.constraints.NotNull;
  * @param <Ext>   领域能力扩展点
  */
 public abstract class BaseDomainAbility<Model extends IDomainModel, Ext extends IDomainExtension> implements IDomainService {
-    public BaseDomainAbility() {
-    }
-
+    
     /**
      * 定位指定的扩展点实例.
      * <p>
