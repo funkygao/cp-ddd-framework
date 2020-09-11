@@ -21,7 +21,7 @@ class JarUtils {
         List<String> classes = filter(getAllClasses(path), startWith);
         for (String className : classes) {
             // 把.class文件中的二进制数据读入堆里的Class对象
-            log.info("loading class {}", className);
+            log.info("loading {} with {}", className, loader);
             Class clazz = loader.loadClass(className);
             for (Class<? extends Annotation> annotation : annotations) {
                 Annotation clazzAnnotation = clazz.getAnnotation(annotation);
