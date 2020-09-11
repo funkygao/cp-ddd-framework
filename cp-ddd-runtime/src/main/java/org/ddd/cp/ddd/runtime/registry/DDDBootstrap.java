@@ -32,6 +32,8 @@ class DDDBootstrap implements ApplicationListener<ContextRefreshedEvent>, Applic
     @Autowired(required = false)
     private IStartupListener startupListener;
 
+    private static ApplicationContext applicationContext;
+
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         if (!once.compareAndSet(false, true)) {
@@ -43,6 +45,8 @@ class DDDBootstrap implements ApplicationListener<ContextRefreshedEvent>, Applic
         log.info("starting Spring, register DDD beans...");
         registryFactory.register(applicationContext);
         log.info("all DDD beans registered, cost {}ms", (System.nanoTime() - t0) / 1000000);
+
+        this.applicationContext = applicationContext;
     }
 
     @Override
@@ -58,6 +62,10 @@ class DDDBootstrap implements ApplicationListener<ContextRefreshedEvent>, Applic
             startupListener.onStartComplete();
             log.info("called IStartupListener: {}", startupListener.getClass().getCanonicalName());
         }
+    }
+
+    static ApplicationContext applicationContext() {
+        return applicationContext;
     }
 
 }
