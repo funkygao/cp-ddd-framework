@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 业务前台jar包动态加载器.
+ * 业务前台jar包热加载器.
  * <p>
  * <ul>限制条件:
  * <li>统一使用中台的spring xml</li>
