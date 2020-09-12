@@ -22,6 +22,8 @@
 
 DDD实践、业务中台建设中的研发人员和架构师。
 
+Hope it can help.
+
 ## What is cp-ddd-framework?
 
 cp-ddd-framework is a lightweight development framework for complex business architecture.
