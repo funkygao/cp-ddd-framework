@@ -1,6 +1,6 @@
 # cp-ddd-framework (Central Platform：中台)
 
-![Java CI with Maven](https://github.com/funkygao/cp-ddd-framework/workflows/Java%20CI%20with%20Maven/badge.svg?branch=master)
+![CI](https://github.com/funkygao/cp-ddd-framework/workflows/CI/badge.svg?branch=master)
 
 * [What is cp-ddd-framework](#what-is-cp-ddd-framework)
    * [What problems does it solve](#what-problems-does-it-solve)
