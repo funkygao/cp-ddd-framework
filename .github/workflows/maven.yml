@@ -9,6 +9,9 @@ on:
   pull_request:
     branches: [ master ]
 
+env:
+  CODECOV_TOKEN:: ${{ secrets.CODECOV_TOKEN }}
+
 jobs:
   build:
 
@@ -22,3 +25,7 @@ jobs:
         java-version: 1.8
     - name: Build with Maven
       run: mvn -B package --file pom.xml
+    - name: 'Generate coverage report'
+      run: mvn clean verify -Ptest
+    - name: 'Upload coverage to Codecov'
+      uses: codecov/codecov-action@v1
