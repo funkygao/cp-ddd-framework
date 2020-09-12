@@ -5,9 +5,9 @@
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/funkygao/cp-ddd-framework.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/funkygao/cp-ddd-framework/alerts/)
 [![Coverage Status](https://img.shields.io/codecov/c/github/funkygao/cp-ddd-framework.svg)](https://codecov.io/gh/funkygao/cp-ddd-framework)
 
+* [Target audience](#target-audience)
 * [What is cp-ddd-framework](#what-is-cp-ddd-framework)
    * [What problems does it solve](#what-problems-does-it-solve)
-   * [What problems it does not solve](#what-problems-it-does-not-solve)
    * [Design philosophy](#design-philosophy)
    * [Key features](#key-features)
    * [Key abstractions](#key-abstractions)
@@ -19,11 +19,15 @@
 * [Reference documentaion](#reference-documentation)
 * [Licensing](#licensing)
 
+## Target audience
+
+DDD实践、业务中台建设中的研发人员和架构师。
+
 ## What is cp-ddd-framework?
 
 cp-ddd-framework is a lightweight development framework for complex business architecture.
 
-轻量级业务中台开发框架，以DDD思想为基础，助力打造业务中台：企业级能力复用平台。
+轻量级业务中台开发框架，以DDD思想为基础，融合业务中台核心要素，赋能业务中台建设。
 
 [业务中台的本质和构建方法](https://github.com/funkygao/cp-ddd-framework/wiki/%E4%B8%9A%E5%8A%A1%E4%B8%AD%E5%8F%B0%E7%9A%84%E6%9C%AC%E8%B4%A8%E5%92%8C%E6%9E%84%E5%BB%BA%E6%96%B9%E6%B3%95).
 
@@ -39,15 +43,6 @@ cp-ddd-framework is a lightweight development framework for complex business arc
 - 如何降低系统实现的复杂度：reduce entropy of the system
 - 普通研发如何编写出优雅的业务代码：low threshold for average developer to build elegant biz code
 - and more
-
-### What problems it does not solve
-
-cp-ddd-framework is a business architecture framework instead of a system architecture framework.
-
-So the following problems are out of cp-ddd-framework scope:
-- how to shard my large dataset?
-- how to maintain consistency of the cache?
-- how to implement distributed transaction?
 
 ### Design philosophy
 
@@ -91,6 +86,8 @@ Enforce expected evolvement of the business architecture based upon ArchUnit.
 ## Example using cp-ddd-framework
 
 See the [cp-ddd-example](cp-ddd-example).
+
+完整的使用该框架搭建`订单中台`的例子。
 
 ## Building from Source
 
