@@ -28,8 +28,6 @@ cp-ddd-framework is a lightweight development framework for complex business arc
 
 轻量级业务中台开发框架，以DDD思想为基础，融合业务中台核心要素，赋能业务中台建设。
 
-[业务中台的本质和构建方法](https://github.com/funkygao/cp-ddd-framework/wiki/%E4%B8%9A%E5%8A%A1%E4%B8%AD%E5%8F%B0%E7%9A%84%E6%9C%AC%E8%B4%A8%E5%92%8C%E6%9E%84%E5%BB%BA%E6%96%B9%E6%B3%95).
-
 ### What problems does it solve
 
 - born for biz extension, the OCP
