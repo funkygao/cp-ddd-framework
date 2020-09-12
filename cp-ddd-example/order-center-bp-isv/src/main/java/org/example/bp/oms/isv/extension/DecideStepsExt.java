@@ -2,9 +2,9 @@ package org.example.bp.oms.isv.extension;
 
 import org.example.cp.oms.spec.partner.IsvPartner;
 import org.example.cp.oms.spec.Steps;
-import org.ddd.cp.ddd.annotation.Extension;
-import org.ddd.cp.ddd.ext.IDecideStepsExt;
-import org.ddd.cp.ddd.model.IDomainModel;
+import org.cdf.ddd.annotation.Extension;
+import org.cdf.ddd.ext.IDecideStepsExt;
+import org.cdf.ddd.model.IDomainModel;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;

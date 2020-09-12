@@ -6,7 +6,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.ddd.cp</groupId>
+        <groupId>org.cdf</groupId>
         <artifactId>cp-ddd-framework</artifactId>
         <version>0.0.1</version>
     </parent>
@@ -17,39 +17,39 @@
     <dependencies>
         <!-- cp-ddd-frameowrk -->
         <dependency>
-            <groupId>org.ddd.cp</groupId>
+            <groupId>org.cdf</groupId>
             <artifactId>cp-ddd-spec</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.ddd.cp</groupId>
+            <groupId>org.cdf</groupId>
             <artifactId>cp-ddd-runtime</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.ddd.cp</groupId>
+            <groupId>org.cdf</groupId>
             <artifactId>cp-ddd-enforce</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <!-- cp-ddd-example -->
         <dependency>
-            <groupId>org.ddd.cp</groupId>
+            <groupId>org.cdf</groupId>
             <artifactId>cp-oc-spec</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.ddd.cp</groupId>
+            <groupId>org.cdf</groupId>
             <artifactId>cp-oc-domain</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.ddd.cp</groupId>
+            <groupId>org.cdf</groupId>
             <artifactId>cp-oc-infrastructure</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.ddd.cp</groupId>
+            <groupId>org.cdf</groupId>
             <artifactId>order-center-pattern</artifactId>
             <version>${project.version}</version>
         </dependency>

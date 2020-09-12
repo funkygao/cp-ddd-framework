@@ -6,9 +6,9 @@ import org.example.cp.oms.domain.ability.SerializableIsolationAbility;
 import org.example.cp.oms.domain.exception.OrderException;
 import org.example.cp.oms.domain.model.OrderModel;
 import org.example.cp.oms.domain.step.CancelOrderStepsExec;
-import org.ddd.cp.ddd.annotation.DomainService;
-import org.ddd.cp.ddd.model.IDomainService;
-import org.ddd.cp.ddd.runtime.DDD;
+import org.cdf.ddd.annotation.DomainService;
+import org.cdf.ddd.model.IDomainService;
+import org.cdf.ddd.runtime.DDD;
 import lombok.extern.slf4j.Slf4j;
 import org.example.cp.oms.spec.Steps;
 

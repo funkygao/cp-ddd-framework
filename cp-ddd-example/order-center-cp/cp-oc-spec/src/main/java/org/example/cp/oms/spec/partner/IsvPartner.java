@@ -1,8 +1,8 @@
 package org.example.cp.oms.spec.partner;
 
 import org.example.cp.oms.spec.model.IOrderModel;
-import org.ddd.cp.ddd.annotation.Partner;
-import org.ddd.cp.ddd.ext.IIdentityResolver;
+import org.cdf.ddd.annotation.Partner;
+import org.cdf.ddd.ext.IIdentityResolver;
 
 @Partner(code = IsvPartner.CODE, name = "ISV业务前台")
 public class IsvPartner implements IIdentityResolver<IOrderModel> {

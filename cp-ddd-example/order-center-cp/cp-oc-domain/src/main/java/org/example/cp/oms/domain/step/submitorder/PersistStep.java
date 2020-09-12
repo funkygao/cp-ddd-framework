@@ -6,8 +6,8 @@ import org.example.cp.oms.domain.facade.repository.IOrderRepository;
 import org.example.cp.oms.domain.model.OrderModel;
 import org.example.cp.oms.domain.step.SubmitOrderStep;
 import org.example.cp.oms.spec.Steps;
-import org.ddd.cp.ddd.annotation.Step;
-import org.ddd.cp.ddd.runtime.DDD;
+import org.cdf.ddd.annotation.Step;
+import org.cdf.ddd.runtime.DDD;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;

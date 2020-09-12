@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.ddd.cp</groupId>
+        <groupId>org.cdf</groupId>
         <artifactId>order-center-cp</artifactId>
         <version>0.0.1</version>
     </parent>
@@ -13,7 +13,7 @@
     <dependencies>
         <!-- 中台为业务前台提供的spec包，不依赖domain层，只定义接口：domain model和扩展点，以及步骤的声明 -->
         <dependency>
-            <groupId>org.ddd.cp</groupId>
+            <groupId>org.cdf</groupId>
             <artifactId>cp-ddd-runtime</artifactId>
             <version>${project.version}</version>
         </dependency>

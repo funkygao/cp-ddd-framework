@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.ddd.cp</groupId>
+        <groupId>org.cdf</groupId>
         <artifactId>order-center-cp</artifactId>
         <version>0.0.1</version>
     </parent>
@@ -12,27 +12,27 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.ddd.cp</groupId>
+            <groupId>org.cdf</groupId>
             <artifactId>cp-oc-application</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <!-- 把pattern包静态打进来 -->
         <dependency>
-            <groupId>org.ddd.cp</groupId>
+            <groupId>org.cdf</groupId>
             <artifactId>order-center-pattern</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <!-- 把pattern和业务前台包按profile进行动态打包 -->
         <dependency>
-            <groupId>org.ddd.cp</groupId>
+            <groupId>org.cdf</groupId>
             <artifactId>order-center-bp-isv</artifactId>
             <version>${project.version}</version>
             <scope>${bp.jar.scope.isv}</scope>
         </dependency>
         <dependency>
-            <groupId>org.ddd.cp</groupId>
+            <groupId>org.cdf</groupId>
             <artifactId>order-center-bp-ka</artifactId>
             <version>${project.version}</version>
             <scope>${bp.jar.scope.ka}</scope>

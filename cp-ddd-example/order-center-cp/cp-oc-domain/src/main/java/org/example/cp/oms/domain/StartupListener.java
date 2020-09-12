@@ -2,7 +2,7 @@ package org.example.cp.oms.domain;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.ddd.cp.ddd.runtime.IStartupListener;
+import org.cdf.ddd.runtime.IStartupListener;
 
 @Component
 @Slf4j

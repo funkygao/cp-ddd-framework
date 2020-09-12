@@ -3,7 +3,7 @@ package org.example.bp.oms.ka.extension;
 import org.example.cp.oms.spec.partner.KaPartner;
 import org.example.cp.oms.spec.ext.IAssignOrderNoExt;
 import org.example.cp.oms.spec.model.IOrderModel;
-import org.ddd.cp.ddd.annotation.Extension;
+import org.cdf.ddd.annotation.Extension;
 
 import javax.validation.constraints.NotNull;
 

@@ -1,6 +1,6 @@
 package org.example.cp.oms.domain;
 
-import org.ddd.cp.ddd.annotation.Domain;
+import org.cdf.ddd.annotation.Domain;
 
 @Domain(code = CoreDomain.CODE, name = "订单核心域")
 public class CoreDomain {

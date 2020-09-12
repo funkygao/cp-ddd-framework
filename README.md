@@ -28,7 +28,7 @@ cp-ddd-framework is a lightweight development framework for complex business arc
 - 业务流程的个性化：uncertain biz flow
 - 业务模型的个性化：uncertain biz model
 - 业务前台与中台如何协同：synergy between BP and CP teams
-- 如何让DDD稳稳当当落地：DDD seamlessly landing in code
+- 如何让中台架构特色的DDD稳稳当当落地：DDD seamlessly landing in code
 - 如何降低系统实现的复杂度：reduce entropy of the system
 - 普通研发如何编写出优雅的业务代码：low threshold for average developer to build elegant biz code
 - and more

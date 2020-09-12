@@ -1,6 +1,6 @@
 package org.example.cp.oms.domain.model;
 
-import org.ddd.cp.ddd.model.IDomainModelCreator;
+import org.cdf.ddd.model.IDomainModelCreator;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
