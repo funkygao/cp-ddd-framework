@@ -1,8 +1,8 @@
-org.ddd.cp.ddd
-org.ddd.cp.ddd.annotation
-org.ddd.cp.ddd.api
-org.ddd.cp.ddd.ext
-org.ddd.cp.ddd.model
-org.ddd.cp.ddd.runtime
-org.ddd.cp.ddd.runtime.registry
-org.ddd.cp.ddd.step
+org.cdf.ddd
+org.cdf.ddd.annotation
+org.cdf.ddd.api
+org.cdf.ddd.ext
+org.cdf.ddd.model
+org.cdf.ddd.runtime
+org.cdf.ddd.runtime.registry
+org.cdf.ddd.step
