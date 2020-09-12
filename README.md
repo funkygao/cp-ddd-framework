@@ -11,11 +11,11 @@
    * [Design philosophy](#design-philosophy)
    * [Key features](#key-features)
    * [Key abstractions](#key-abstractions)
-   * [Modules](#modules)
-* [Landscape of Central Platform](#landscape-of-central-platform)
 * [Requirements](#requirements)
+* [Modules](#modules)
 * [Example using cp-ddd-framework](#example-using-cp-ddd-framework)
 * [Building from Source](#building-from-source)
+* [Landscape of Central Platform](#landscape-of-central-platform)
 * [Documentaion](#documentation)
 * [Licensing](#licensing)
 
@@ -68,27 +68,23 @@ So the following problems are out of cp-ddd-framework scope:
 
 ![](http://www.plantuml.com/plantuml/png/TLBBZjim3BphAmZqidl83nX1i0_di8S2nRRtWfQOM8Wi1HITRD7stwiaB637sbiuCvhCa7xAWYpZ44m--7X4nW5wZExCNeGY28yqeJgqXpsdCRhN51B3b-rs-zA-JXIvHvVEFkxNwxEN_kTjtcnkJe5s0fA0_RuNS9x9Ya_H61-5U8UMuArD0_hudVZaBLK8eQEP_8O6w8FiAFJmE5EJzOukYhpzaANFEvtI0Rj0QZW7rPbJ29VECslL5bUAkQIVKc-EedZvzKuvXHFnbFkQ78Ld4RJzK5INL1NiskSOqCVoftMUAJhYGcENXT4AQ4soFsWeRuNC0fdjgMtRCl_EWkBjNzZvw9ux7qhmEdbrAzJTLelCAQ3yVV-Y651i_w1Bk_PvD6P-PLZ_MQq-Ex2IrQjLN5umqmtMHiRS7qmTvrtggkhLbZLlscyeGXm_fraYiJ6BYB0kT5dxhBPYjVYrcWs4P56eeb-jDl-pDT3vwEeIpQSIeoCqO9CZemOwBXqKhtnu5-z9iGOIsvwoC4fvQ9uekd48_m00)
 
-### Modules
-
-#### cp-ddd-spec
-
-Specification of the framework.
-
-#### cp-ddd-runtime
-
-Runtime implementation of the framework.
-
-#### cp-ddd-enforce
-
-Enforce expected evolvement of the business architecture based upon ArchUnit.
-
-## Landscape of Central Platform
-
-![](doc/assets/img/landscape.png)
-
 ## Requirements
 
 Requires Java 1.8+ and Spring 4.3.12.RELEASE or later.
+
+## Modules
+
+### cp-ddd-spec
+
+Specification of the framework.
+
+### cp-ddd-runtime
+
+Runtime implementation of the framework.
+
+### cp-ddd-enforce
+
+Enforce expected evolvement of the business architecture based upon ArchUnit.
 
 ## Example using cp-ddd-framework
 
@@ -99,6 +95,10 @@ See the [cp-ddd-example](cp-ddd-example).
 ``` bash
 mvn clean install
 ```
+
+## Landscape of Central Platform
+
+![](doc/assets/img/landscape.png)
 
 ## Documentation
 
