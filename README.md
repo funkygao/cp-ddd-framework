@@ -14,7 +14,6 @@
 * [Requirements](#requirements)
 * [Modules](#modules)
 * [Example using cp-ddd-framework](#example-using-cp-ddd-framework)
-* [Building from Source](#building-from-source)
 * [Landscape of Central Platform](#landscape-of-central-platform)
 * [Reference documentaion](#reference-documentation)
 * [Licensing](#licensing)
@@ -88,12 +87,6 @@ Enforce expected evolvement of the business architecture based upon ArchUnit.
 See the [cp-ddd-example](cp-ddd-example).
 
 完整的使用该框架搭建`订单中台`的例子。
-
-## Building from Source
-
-``` bash
-mvn clean install
-```
 
 ## Landscape of Central Platform
 
