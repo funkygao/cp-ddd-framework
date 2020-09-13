@@ -5,7 +5,6 @@
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/funkygao/cp-ddd-framework.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/funkygao/cp-ddd-framework/alerts/)
 [![Coverage Status](https://img.shields.io/codecov/c/github/funkygao/cp-ddd-framework.svg)](https://codecov.io/gh/funkygao/cp-ddd-framework)
 
-* [Target audience](#target-audience)
 * [What is cp-ddd-framework](#what-is-cp-ddd-framework)
    * [What problems does it solve](#what-problems-does-it-solve)
    * [Design philosophy](#design-philosophy)
@@ -17,12 +16,6 @@
 * [Landscape of Central Platform](#landscape-of-central-platform)
 * [Reference documentaion](#reference-documentation)
 * [Licensing](#licensing)
-
-## Target audience
-
-DDD实践、业务中台建设中的研发人员和架构师。
-
-Hope it can help.
 
 ## What is cp-ddd-framework?
 
