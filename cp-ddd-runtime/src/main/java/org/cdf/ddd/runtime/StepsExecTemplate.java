@@ -101,7 +101,7 @@ public abstract class StepsExecTemplate<Step extends IDomainStep, Model extends 
             try {
                 executedStep.rollback(model, cause);
             } catch (Throwable ignored) {
-                log.error("{} step:{} rollback err ignored", model, executedStep.stepCode(), ignored);
+                log.error("step:{} rollback err ignored, model:{}", executedStep.stepCode(), model, ignored);
             }
         }
     }

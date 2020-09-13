@@ -1,17 +1,12 @@
 package org.cdf.ddd.runtime.registry.mock.exception;
 
-import org.cdf.ddd.step.IDecideStepsException;
-import lombok.Setter;
+public class FooException extends RuntimeException {
 
-import java.util.List;
+    public FooException() {
+        super();
+    }
 
-public class FooException extends RuntimeException implements IDecideStepsException {
-
-    @Setter
-    private List<String> steps;
-
-    @Override
-    public List<String> subsequentSteps() {
-        return steps;
+    public FooException(String message) {
+        super(message);
     }
 }

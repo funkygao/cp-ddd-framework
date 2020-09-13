@@ -1,6 +1,7 @@
 package org.cdf.ddd.runtime.registry;
 
 import org.cdf.ddd.runtime.registry.mock.ability.*;
+import org.cdf.ddd.runtime.registry.mock.exception.FooException;
 import org.cdf.ddd.runtime.registry.mock.partner.FooPartner;
 import org.cdf.ddd.runtime.registry.mock.service.FooDomainService;
 import org.cdf.ddd.model.ExtTimeoutException;
@@ -253,6 +254,21 @@ public class IntegrationTest {
         // B2BDecideStepsExt: FooStep -> BarStep(if redecide then add Baz & Ham) -> BazStep -> HamStep
         submitStepsExec.execute(Steps.Submit.Activity, steps, fooModel);
         assertTrue(fooModel.isStepsRevised());
+    }
+
+    @Test
+    public void stepsExecTemplateWithRollback() {
+        fooModel.setB2c(false);
+        fooModel.setWillRollback(true);
+        List<String> steps = DDD.findAbility(DecideStepsAbility.class).decideSteps(fooModel, Steps.Submit.Activity);
+        log.info("steps: {}", steps);
+        try {
+            submitStepsExec.execute(Steps.Submit.Activity, steps, fooModel);
+            fail();
+        } catch (FooException expected) {
+            assertEquals(BarStep.rollbackReason, expected.getMessage());
+        }
+
     }
 
 }

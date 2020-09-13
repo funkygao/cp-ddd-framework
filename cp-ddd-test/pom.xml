@@ -18,42 +18,11 @@
         <!-- cp-ddd-frameowrk -->
         <dependency>
             <groupId>org.cdf</groupId>
-            <artifactId>cp-ddd-spec</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.cdf</groupId>
             <artifactId>cp-ddd-runtime</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.cdf</groupId>
-            <artifactId>cp-ddd-enforce</artifactId>
-            <version>${project.version}</version>
-        </dependency>
 
-        <!-- cp-ddd-example -->
-        <dependency>
-            <groupId>org.cdf</groupId>
-            <artifactId>cp-oc-spec</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.cdf</groupId>
-            <artifactId>cp-oc-domain</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.cdf</groupId>
-            <artifactId>cp-oc-infrastructure</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.cdf</groupId>
-            <artifactId>order-center-pattern</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
+        <!-- logging -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
