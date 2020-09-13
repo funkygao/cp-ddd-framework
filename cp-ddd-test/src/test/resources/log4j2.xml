@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="error" monitorInterval="3600">
     <properties>
-        <property name="patternLayout">[%X{_tid}.%X{_tenant}] %d [%t] %-5p [%c] [%L] - %m%n</property>
-        <property name="root.log.level">debug</property>
+        <property name="patternLayout">%d [%t] %-5p [%c] [%L] - %m%n</property>
+        <property name="root.log.level">info</property>
     </properties>
     <Appenders>
         <Console name="console" target="SYSTEM_OUT" follow="true">
