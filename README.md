@@ -7,14 +7,13 @@
 
 * [What is cp-ddd-framework](#what-is-cp-ddd-framework)
    * [What problems does it solve](#what-problems-does-it-solve)
-   * [Design philosophy](#design-philosophy)
    * [Key features](#key-features)
    * [Key abstractions](#key-abstractions)
 * [Requirements](#requirements)
 * [Modules](#modules)
 * [Example using cp-ddd-framework](#example-using-cp-ddd-framework)
 * [Landscape of Central Platform](#landscape-of-central-platform)
-* [Reference documentaion](#reference-documentation)
+* [Reference guide](#reference-guide)
 * [Licensing](#licensing)
 
 ## What is cp-ddd-framework?
@@ -35,13 +34,6 @@ cp-ddd-framework is a lightweight development framework for complex business arc
 - 如何降低系统实现的复杂度：reduce entropy of the system
 - 普通研发如何编写出优雅的业务代码：low threshold for average developer to build elegant biz code
 - and more
-
-### Design philosophy
-
-- design for simplicity, design for ops, design for extension
-- total abstraction, cover most business scenarios
-- less is more
-- code itself is documentation
 
 ### Key features
 
@@ -85,7 +77,7 @@ See the [cp-ddd-example](cp-ddd-example).
 
 ![](doc/assets/img/landscape.png)
 
-## Reference documentation
+## Reference guide
 
 Please go to [cp-ddd-framework Javadoc](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/).
 
