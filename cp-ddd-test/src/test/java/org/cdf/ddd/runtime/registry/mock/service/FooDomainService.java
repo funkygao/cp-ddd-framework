@@ -13,7 +13,6 @@ import org.cdf.ddd.runtime.registry.mock.model.FooModel;
 public class FooDomainService implements IDomainService {
 
     public void submitOrder(FooModel model) {
-        log.debug("submitOrder");
         FooDomainAbility ability = DDD.findAbility(FooDomainAbility.class);
         log.info(ability.submit(model));
     }
