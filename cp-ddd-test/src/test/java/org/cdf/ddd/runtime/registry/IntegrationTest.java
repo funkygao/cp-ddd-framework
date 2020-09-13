@@ -24,6 +24,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.RejectedExecutionException;
 
 import static org.junit.Assert.*;
 
@@ -51,6 +53,9 @@ public class IntegrationTest {
         fooModel = new FooModel();
         fooModel.setProjectCode(FooPartner.CODE);
         fooModel.setB2c(true);
+
+        // ExtensionInvocationHandler.extInvokeTimerExecutor的线程池缩小到10，方便并发测试
+        System.setProperty("invokeExtMaxPoolSize", "10");
     }
 
     @Test
@@ -197,7 +202,7 @@ public class IntegrationTest {
             fooDomainService.submitOrder(fooModel);
             fail();
         } catch (ExtTimeoutException expected) {
-            assertEquals("timeout:5ms", expected.getMessage());
+            assertEquals("timeout:500ms", expected.getMessage());
         }
     }
 
@@ -209,6 +214,73 @@ public class IntegrationTest {
         fooModel.setWillSleepLong(true);
         fooModel.setWillThrowRuntimeException(true);
         fooDomainService.submitOrder(fooModel);
+    }
+
+    @Test
+    public void extensionInvokeTimeoutThreadPoolExhausted() throws InterruptedException {
+        final int threadCount = 12;
+        CountDownLatch latch = new CountDownLatch(threadCount);
+
+        fooModel = new FooModel();
+        fooModel.setProjectCode("");
+        fooModel.setB2c(false); // B2BExt
+        fooModel.setWillSleepLong(true);
+
+        log.info("WILL exhaust the timer pool...");
+
+        List<SubmitOrderTask> tasks = new ArrayList<>(threadCount);
+
+        // will trigger RejectedExecutionException
+        for (int i = 0; i < threadCount; i++) {
+            tasks.add(new SubmitOrderTask(i, latch, fooModel, fooDomainService));
+        }
+
+        for (SubmitOrderTask task : tasks) {
+            Thread thread = new Thread(task);
+            thread.setName("SubmitOrderTask-" + task.idx);
+            thread.start();
+        }
+
+        latch.await();
+
+        int rejectN = 0;
+        for (SubmitOrderTask task : tasks) {
+            if (task.rejected) {
+                rejectN++;
+            }
+        }
+
+        assertEquals(threadCount - 10, rejectN);
+    }
+
+    private static class SubmitOrderTask implements Runnable {
+        public int idx;
+        private CountDownLatch latch;
+        private FooModel fooModel;
+        private FooDomainService fooDomainService;
+        public boolean rejected;
+
+        SubmitOrderTask(int idx, CountDownLatch latch, FooModel fooModel, FooDomainService fooDomainService) {
+            this.idx = idx;
+            this.latch = latch;
+            this.fooModel = fooModel;
+            this.fooDomainService = fooDomainService;
+        }
+
+        @Override
+        public void run() {
+            try {
+
+                fooDomainService.submitOrder(fooModel);
+            } catch (RejectedExecutionException expected) {
+                log.info("as expected, thread pool full: {}", expected.getMessage());
+                rejected = true;
+            } catch (ExtTimeoutException expected) {
+                assertEquals("timeout:500ms", expected.getMessage());
+            }
+
+            latch.countDown();
+        }
     }
 
     @Test
@@ -268,7 +340,6 @@ public class IntegrationTest {
         } catch (FooException expected) {
             assertEquals(BarStep.rollbackReason, expected.getMessage());
         }
-
     }
 
 }

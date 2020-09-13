@@ -13,7 +13,7 @@ public class FooDomainAbility extends BaseDomainAbility<FooModel, IFooExt> {
 
     public String submit(FooModel model) {
         if (model.isWillSleepLong() || model.isWillThrowRuntimeException()) {
-            firstExtension(model, 5).execute(model); // 5ms
+            firstExtension(model, 500).execute(model); // 500ms
             return "";
         }
 
