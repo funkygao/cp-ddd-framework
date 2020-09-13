@@ -1,6 +1,5 @@
 @startuml
 skinparam handwritten true
-skinparam backgroundColor #EEEBDC
 skinparam shadowing<<with_shadow>> true
 left to right direction
 
