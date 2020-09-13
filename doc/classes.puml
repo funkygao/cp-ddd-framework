@@ -16,24 +16,25 @@ interface IModelAttachmentExt
 IModelAttachmentExt : explain()
 IModelAttachmentExt : render()
 abstract StepsExecTemplate
+abstract BaseDomainAbility
 StepsExecTemplate : execute()
 DDD : {static} findAbility()
 DDD : {static} findSteps()
 IDecideStepsExt : decideSteps()
 IIdentityResolver : match(IDomainModel)
 
-IDomainService <|-- IDomainStep
-IDomainStep <|-- IDomainRevokableStep
-IDomainService <|-- BaseDomainAbility
+IDomainService <|-- IDomainStep: extend
+IDomainStep <|-- IDomainRevokableStep: extend
+IDomainService <|-- BaseDomainAbility: implements
 
-IDomainExtension <|-- IDecideStepsExt
-IDomainExtension <|-- IModelAttachmentExt
+IDomainExtension <|-- IDecideStepsExt: extend
+IDomainExtension <|-- IModelAttachmentExt: extend
 
 IIdentityResolver <|-- Pattern
 IIdentityResolver <|-- Partner
 
-BaseDomainAbility <-- DDD
-IDomainStep <-- DDD
+BaseDomainAbility <-- DDD: find
+IDomainStep <-- DDD: find
 
 IDomainExtension <-- BaseDomainAbility: locate
 
