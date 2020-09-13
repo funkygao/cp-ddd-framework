@@ -15,7 +15,7 @@ public class B2BExt implements IFooExt {
 
         if (model.isWillSleepLong()) {
             try {
-                Thread.sleep(100 << 10); // 100s
+                Thread.sleep(2 << 10); // 2s
             } catch (InterruptedException e) {
             }
         }
