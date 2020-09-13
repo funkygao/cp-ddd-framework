@@ -15,6 +15,7 @@
 * [Example using cp-ddd-framework](#example-using-cp-ddd-framework)
 * [Landscape of Central Platform](#landscape-of-central-platform)
 * [Reference guide](#reference-guide)
+* [Building from Source](#building-from-source)
 * [Licensing](#licensing)
 
 ## What is cp-ddd-framework?
@@ -81,6 +82,12 @@ See the [cp-ddd-example](cp-ddd-example).
 ## Reference guide
 
 Please go to [cp-ddd-framework Javadoc](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/).
+
+## Building from Source
+
+``` bash
+mvn clean install
+```
 
 ## Licensing
 
