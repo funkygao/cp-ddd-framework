@@ -17,4 +17,6 @@ public class FooModel implements IDomainModel {
 
     private boolean stepsRevised;
 
+    private boolean willRollback;
+
 }

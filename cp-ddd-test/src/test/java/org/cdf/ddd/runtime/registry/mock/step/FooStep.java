@@ -17,6 +17,18 @@ public class FooStep extends SubmitStep {
     }
 
     @Override
+    public void rollback(@NotNull FooModel model, @NotNull FooException cause) {
+        log.warn("rollback, cause: {}", cause.getMessage());
+
+        if (!cause.getMessage().equals(BarStep.rollbackReason)) {
+            throw new RuntimeException("assert fails");
+        }
+
+        // rollback里抛出的异常统统被吃掉
+        throw new RuntimeException("this exception will be ignored by StepsExecTemplate");
+    }
+
+    @Override
     public String stepCode() {
         return Steps.Submit.FooStep;
     }
