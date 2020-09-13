@@ -17,6 +17,9 @@ IModelAttachmentExt : explain()
 IModelAttachmentExt : render()
 abstract StepsExecTemplate
 abstract BaseDomainAbility
+BaseDomainAbility : getExtension()
+BaseDomainAbility : firstExtension()
+BaseDomainAbility : defaultExtension()
 StepsExecTemplate : execute()
 DDD : {static} findAbility()
 DDD : {static} findSteps()
