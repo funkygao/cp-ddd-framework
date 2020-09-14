@@ -17,6 +17,8 @@ public class FooModel implements IDomainModel {
 
     private boolean redecide;
 
+    private boolean redecideDeadLoop;
+
     private boolean stepsRevised;
 
     private boolean willRollback;

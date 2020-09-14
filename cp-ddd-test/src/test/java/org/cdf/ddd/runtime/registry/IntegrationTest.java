@@ -324,14 +324,6 @@ public class IntegrationTest {
     }
 
     @Test
-    public void javaWhileLoop() {
-        int loops = 0;
-        while (++loops < 10) {
-        }
-        assertEquals(10, loops);
-    }
-
-    @Test
     public void stepsExecTemplate() {
         fooModel.setB2c(false);
         fooModel.setRedecide(true);
@@ -340,6 +332,17 @@ public class IntegrationTest {
         // B2BDecideStepsExt: FooStep -> BarStep(if redecide then add Baz & Ham) -> BazStep -> HamStep
         submitStepsExec.execute(Steps.Submit.Activity, steps, fooModel);
         assertTrue(fooModel.isStepsRevised());
+    }
+
+    @Test
+    public void stepsRevisionDeadLoop() {
+        fooModel.setB2c(false);
+        fooModel.setRedecideDeadLoop(true); // dead loop on purpose
+        fooModel.setStepsRevised(false);
+        List<String> steps = DDD.findAbility(DecideStepsAbility.class).decideSteps(fooModel, Steps.Submit.Activity);
+        // B2BDecideStepsExt: FooStep -> BarStep(if redecideDeadLoop then add BarStep)
+        submitStepsExec.execute(Steps.Submit.Activity, steps, fooModel);
+        // 不会抛出异常，只会打印err log: Steps revision seem to encounter dead loop TODO reasonable?
     }
 
     @Test
