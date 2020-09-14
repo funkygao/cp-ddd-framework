@@ -13,6 +13,8 @@ public class FooModel implements IDomainModel {
 
     private boolean willThrowRuntimeException;
 
+    private boolean willThrowOOM;
+
     private boolean redecide;
 
     private boolean stepsRevised;

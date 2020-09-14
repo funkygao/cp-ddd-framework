@@ -10,11 +10,6 @@ import org.springframework.stereotype.Component;
 public class SubmitStepsExec extends StepsExecTemplate<SubmitStep, FooModel> {
 
     @Override
-    protected void beforeStep(SubmitStep step, FooModel model) {
-        log.info("before: {} {}", step.stepCode(), model);
-    }
-
-    @Override
     protected void afterStep(SubmitStep step, FooModel model) {
         log.info("after:{} {}", step.stepCode(), model);
     }

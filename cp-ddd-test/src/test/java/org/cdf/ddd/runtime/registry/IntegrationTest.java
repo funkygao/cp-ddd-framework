@@ -217,6 +217,20 @@ public class IntegrationTest {
     }
 
     @Test
+    public void callExtThrownUnexpectedException() {
+        // B2BExt
+        fooModel.setProjectCode("");
+        fooModel.setB2c(false);
+        fooModel.setWillThrowOOM(true);
+        try {
+            fooDomainService.submitOrder(fooModel);
+            fail();
+        } catch (OutOfMemoryError expected) {
+            assertEquals("OOM on purpose", expected.getMessage());
+        }
+    }
+
+    @Test
     public void extensionInvokeTimeoutThreadPoolExhausted() throws InterruptedException {
         final int threadCount = 12;
         CountDownLatch latch = new CountDownLatch(threadCount);

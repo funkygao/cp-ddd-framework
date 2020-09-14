@@ -107,6 +107,7 @@ class ExtensionInvocationHandler<Ext extends IDomainExtension, R> implements Inv
             log.error("ExtInvokeTimer thread pool FULL:{}", e.getMessage()); // 需要加日志报警
             throw e;
         } catch (Throwable e) {
+            // should never happen
             log.error("{} code:{} unexpected", this.extInterface.getCanonicalName(), extensionDef.getCode(), e);
             throw e;
         }
