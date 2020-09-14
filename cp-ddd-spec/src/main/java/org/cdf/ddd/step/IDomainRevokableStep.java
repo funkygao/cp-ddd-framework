@@ -12,14 +12,14 @@ import javax.validation.constraints.NotNull;
 /**
  * 可以回滚的活动步骤.
  * <p>
- * <p>Saga模式</p>
+ * <p>Sagas模式</p>
  */
 public interface IDomainRevokableStep<Model extends IDomainModel, Ex extends RuntimeException> extends IDomainStep<Model, Ex> {
 
     /**
      * 执行本步骤的回滚操作，进行冲正.
      * <p>
-     * <p>Best effort就好，Saga模式并不能严格保证一致性</p>
+     * <p>Best effort就好，Sagas模式并不能严格保证一致性</p>
      *
      * @param model 领域模型
      * @param cause {@link IDomainStep#execute(IDomainModel)}执行过程中抛出的异常，即回滚原因
