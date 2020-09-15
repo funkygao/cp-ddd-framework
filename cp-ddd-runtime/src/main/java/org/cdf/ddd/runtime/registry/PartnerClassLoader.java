@@ -94,49 +94,57 @@ class PartnerClassLoader extends URLClassLoader {
     }
 
     static ClassLoader platformClassLoader() {
-        if (platformClassLoader == null) {
-            synchronized (mutex) {
-                if (platformClassLoader == null) {
-                    // 中台类加载器加载了前台的类加载器
-                    platformClassLoader = PartnerClassLoader.class.getClassLoader();
-                    log.debug("platformClassLoader created");
-                }
+        if (platformClassLoader != null) {
+            return platformClassLoader;
+        }
+
+        synchronized (mutex) {
+            // double check
+            if (platformClassLoader != null) {
+                return platformClassLoader;
             }
+
+            // 中台类加载器加载了前台的类加载器
+            platformClassLoader = PartnerClassLoader.class.getClassLoader();
+            log.debug("platformClassLoader created");
         }
 
         return platformClassLoader;
     }
 
     static ClassLoader jdkClassLoader() {
-        if (jdkClassLoader == null) {
-            synchronized (mutex) {
-                if (jdkClassLoader != null) {
-                    return jdkClassLoader;
-                }
+        if (jdkClassLoader != null) {
+            return jdkClassLoader;
+        }
 
-                ClassLoader parent;
-                for (parent = ClassLoader.getSystemClassLoader(); parent.getParent() != null; parent = parent.getParent()) {
-                }
-
-                List<URL> jdkUrls = new ArrayList<>(100);
-                try {
-                    // javaHome: /Library/Java/JavaVirtualMachines/jdk1.8.0_40.jdk/Contents/Home
-                    String javaHome = System.getProperty("java.home").replace(File.separator + "jre", "");
-                    // search path of URLs for loading classes and resources
-                    URL[] urls = ((URLClassLoader) ClassLoader.getSystemClassLoader()).getURLs();
-                    for (URL url : urls) {
-                        if (url.getPath().startsWith(javaHome)) {
-                            // 只找JDK本身的
-                            jdkUrls.add(url);
-                        }
-                    }
-                } catch (Throwable shouldNeverHappen) {
-                    log.error("jdkClassLoader", shouldNeverHappen);
-                }
-
-                jdkClassLoader = new URLClassLoader(jdkUrls.toArray(new URL[0]), parent);
-                log.debug("jdkClassLoader created");
+        synchronized (mutex) {
+            // double check
+            if (jdkClassLoader != null) {
+                return jdkClassLoader;
             }
+
+            ClassLoader parent;
+            for (parent = ClassLoader.getSystemClassLoader(); parent.getParent() != null; parent = parent.getParent()) {
+            }
+
+            List<URL> jdkUrls = new ArrayList<>(100);
+            try {
+                // javaHome: /Library/Java/JavaVirtualMachines/jdk1.8.0_40.jdk/Contents/Home
+                String javaHome = System.getProperty("java.home").replace(File.separator + "jre", "");
+                // search path of URLs for loading classes and resources
+                URL[] urls = ((URLClassLoader) ClassLoader.getSystemClassLoader()).getURLs();
+                for (URL url : urls) {
+                    if (url.getPath().startsWith(javaHome)) {
+                        // 只找JDK本身的
+                        jdkUrls.add(url);
+                    }
+                }
+            } catch (Throwable shouldNeverHappen) {
+                log.error("jdkClassLoader", shouldNeverHappen);
+            }
+
+            jdkClassLoader = new URLClassLoader(jdkUrls.toArray(new URL[0]), parent);
+            log.debug("jdkClassLoader created");
         }
 
         return jdkClassLoader;
