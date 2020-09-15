@@ -24,7 +24,7 @@ cp-ddd-framework is a lightweight development framework for complex business arc
 
 轻量级业务中台开发框架，以DDD思想为基础，融合业务中台核心要素，赋能业务中台建设。
 
-如果你还不知道如何构建中台，或者建设中台遇到困惑，建议了解一下这个框架：**可立即落地的中台方案**。
+如果你还不知道如何构建中台，或者建设中台遇到困惑，建议了解一下这个框架：**可运行的中台方案**。
 
 ### What problems does it solve
 
@@ -51,7 +51,7 @@ cp-ddd-framework is a lightweight development framework for complex business arc
 
 ### Key abstractions
 
-这些概念抽象，勾勒出业务中台的骨架，具体的业务中台在此基础上填空式开发具体的业务。
+这些概念抽象，勾勒出业务中台的骨架。
 
 ![](http://www.plantuml.com/plantuml/svg/XLBBRjim4BppAtXC3lu1mp2ImZtaKA18UozMvCeYJ976ScMdQFllNLbiAveiSfDsXhEFcQV4G3oDNgMJ2sSW6FK0mLx9CMFGJ1Eke3I0ZLSNZhlTrV7mRVdVxnUUnvurHqtkEB2sZj2mYq4f5nYf1uFwvH17SE4BqiKPR02CPxNwrbkDRsWcneV7Wet6MPmPwUCRrpglU8adw3ncmReeoXIzxy2S2kdC5LKCIQPVGoyM0pl-_eef-WlI6liKBVfdPZ33AAnvgaRjji_PImDfsiO9WqKI6Bh418PrNXFDLnpbBUC_w0CaN0P-xfoNqLHL4SaZyjzzHBX5wHsbTqaMUvXyGQjcAnmx70xo_oCni3E_f4cmMQqDtjG4klDtRfqB2ruv8OmHs0mFsRxRPH-LAlEcTpytctNKvbaPWoqYbqbbP6fsgLexiTLEBeApiKcf-rZbBkMUHOEANMLi_Q8-oVBcCp0ZXV_3n059DUpU2ImMpT4e3rGYhTNQv_3H06E3lzdi_yovrPrejYbvranH-LUSDz6YoWBvjrR8zKPWHRlCH2GpO682beVg2OETHlyR)
 

@@ -46,10 +46,10 @@ public class PartnerLoader {
     /**
      * Constructor of partner loader.
      *
-     * @param jarPath 业务前台的jarPath
-     * @param basePackage Spring component-scan base-package值，但不支持逗号分隔
+     * @param jarPath     业务前台的jarPath
+     * @param basePackage Spring component-scan base-package值，但不支持逗号分隔. if null, will not scan Spring
      */
-    public PartnerLoader(@NotNull String jarPath, @NotNull String basePackage) {
+    public PartnerLoader(@NotNull String jarPath, String basePackage) {
         this.jarPath = jarPath;
         this.basePackage = basePackage;
     }
@@ -70,9 +70,11 @@ public class PartnerLoader {
 
         PartnerClassLoader.getInstance().addUrl(new File(this.jarPath).toURI().toURL());
 
-        // 先扫spring，然后初始化所有的basePackage bean，包括已经在中台里加载完的bean
-        // TODO 10个bean，扫描到第8个出现异常，需要把PartnerClassLoader里已经addUrl的摘除
-        springScanComponent(DDDBootstrap.applicationContext(), PartnerClassLoader.getInstance(), basePackage);
+        if (basePackage != null) {
+            // TODO 10个bean，扫描到第8个出现异常，需要把PartnerClassLoader里已经addUrl的摘除
+            // 先扫spring，然后初始化所有的basePackage bean，包括已经在中台里加载完的bean
+            springScanComponent(DDDBootstrap.applicationContext(), PartnerClassLoader.getInstance(), basePackage);
+        }
 
         Map<Class<? extends Annotation>, List<Class>> resultMap = JarUtils.loadClassWithAnnotations(this.jarPath,
                 annotations, null, PartnerClassLoader.getInstance());
