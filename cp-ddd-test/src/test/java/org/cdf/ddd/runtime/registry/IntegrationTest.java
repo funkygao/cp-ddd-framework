@@ -341,8 +341,12 @@ public class IntegrationTest {
         fooModel.setStepsRevised(false);
         List<String> steps = DDD.findAbility(DecideStepsAbility.class).decideSteps(fooModel, Steps.Submit.Activity);
         // B2BDecideStepsExt: FooStep -> BarStep(if redecideDeadLoop then add BarStep)
-        submitStepsExec.execute(Steps.Submit.Activity, steps, fooModel);
-        // 不会抛出异常，只会打印err log: Steps revision seem to encounter dead loop TODO reasonable?
+        try {
+            submitStepsExec.execute(Steps.Submit.Activity, steps, fooModel);
+            fail();
+        } catch (RuntimeException expected) {
+            assertEquals("Seems steps dead loop, abort after 100", expected.getMessage());
+        }
     }
 
     @Test
