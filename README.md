@@ -77,7 +77,7 @@ Enforce expected evolvement of the business architecture based upon ArchUnit.
 
 See the [cp-ddd-example](cp-ddd-example).
 
-完整的使用该框架搭建`订单中台`的例子。
+使用该框架搭建`订单中台`的例子。
 
 ## Landscape of Central Platform
 
