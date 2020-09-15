@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import java.lang.annotation.*;
 
 /**
- * 前台垂直业务实例，需要实现{@link IIdentityResolver}接口.
+ * 前台垂直业务，需要实现{@link IIdentityResolver}接口.
  * <p>
  * <p>垂直业务是不会叠加的，而是互斥的，他们比较的维度是单一的、固定的</p>
  */
