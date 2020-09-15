@@ -81,7 +81,7 @@ See the [cp-ddd-example](cp-ddd-example).
 
 ## Landscape of Central Platform
 
-企业级业务中台建设全景图。
+业务中台建设全景图。
 
 ![](doc/assets/img/landscape.png)
 
