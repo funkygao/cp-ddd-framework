@@ -37,6 +37,10 @@ public class BarStep extends SubmitStep {
             throw new FooDecideStepsException().withSubsequentSteps(revisedSteps);
         }
 
+        if (model.isWillRollbackInvalid()) {
+            throw new RuntimeException("Will not rollback");
+        }
+
         if (model.isWillRollback()) {
             // 必须抛出FooException，如果抛出RuntimeException，会抛出: java.lang.ClassCastException: java.lang.RuntimeException cannot be cast to org.cdf.ddd.runtime.registry.mock.exception.FooException
             throw new FooException(rollbackReason);

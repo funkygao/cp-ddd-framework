@@ -23,4 +23,6 @@ public class FooModel implements IDomainModel {
 
     private boolean willRollback;
 
+    private boolean willRollbackInvalid;
+
 }

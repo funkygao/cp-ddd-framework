@@ -5,11 +5,12 @@
  */
 package org.cdf.ddd.runtime;
 
+import lombok.extern.slf4j.Slf4j;
 import org.cdf.ddd.model.IDomainModel;
 import org.cdf.ddd.step.IDecideStepsException;
 import org.cdf.ddd.step.IDomainRevokableStep;
 import org.cdf.ddd.step.IDomainStep;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.ResolvableType;
 
 import java.util.Collections;
 import java.util.List;
@@ -84,15 +85,45 @@ public abstract class StepsExecTemplate<Step extends IDomainStep, Model extends 
                 return ((IDecideStepsException) cause).subsequentSteps();
             }
 
-            // 其他异常，best effort rollback后直接抛出
-            if (cause instanceof RuntimeException) {
-                rollbackExecutedSteps(model, (RuntimeException) cause, executedSteps);
+            // 其他异常，best effort rollback if necessary
+            if (!executedSteps.empty() && cause instanceof RuntimeException) {
+                if (cause.getClass() == getStepExType()) { // Step必定是同一个ClassLoader加载的：中台统一加载
+                    // 如果是Step的泛型里定义的异常，则回滚
+                    rollbackExecutedSteps(model, (RuntimeException) cause, executedSteps);
+                } else {
+                    // 其他类异常不回滚
+                    log.debug("will not rollback, {} thrown", cause.getClass().getCanonicalName());
+                }
             }
 
+            // cause thrown as it is
             throw cause;
         }
 
         return emptyRevisedSteps;
+    }
+
+    private Class getStepExType() {
+        ResolvableType stepsExecType = ResolvableType.forClass(this.getClass());
+        ResolvableType templateType = stepsExecType.getSuperType();
+        // 处理StepsExecTemplate的多层继承
+        while (templateType.getGenerics().length == 0) {
+            templateType = templateType.getSuperType();
+        }
+
+        // 找到了Step的泛型定义，然后找Step的Ex泛型的具体类型
+        ResolvableType stepType = templateType.getGeneric(0);
+
+        // Step实现多个接口的场景
+        for (ResolvableType stepInterfaceType : stepType.getInterfaces()) {
+            if (IDomainStep.class.isAssignableFrom(stepInterfaceType.resolve())) {
+                return stepInterfaceType.getGeneric(1).resolve();
+            }
+        }
+
+        // should never happen
+        log.error("Cannot tell Step.Ex type for {}", this.getClass());
+        return null;
     }
 
     private void rollbackExecutedSteps(Model model, RuntimeException cause, Stack<IDomainRevokableStep> executedSteps) {

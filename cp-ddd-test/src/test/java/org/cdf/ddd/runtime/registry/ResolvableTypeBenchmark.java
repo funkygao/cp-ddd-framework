@@ -4,6 +4,7 @@ import com.google.caliper.Benchmark;
 import com.google.caliper.api.VmOptions;
 import com.google.caliper.runner.CaliperMain;
 import org.cdf.ddd.runtime.registry.mock.step.SubmitStepsExec;
+import org.cdf.ddd.step.IDomainStep;
 import org.springframework.core.ResolvableType;
 
 @VmOptions({"-Xms4g", "-Xmx4g", "-XX:-TieredCompilation"})
@@ -13,7 +14,7 @@ public class ResolvableTypeBenchmark {
         CaliperMain.main(ResolvableTypeBenchmark.class, args);
     }
 
-    // 300 ns
+    // 400 ns
     @Benchmark
     public void stepExecTemplateResolveStepExType(int N) throws Exception {
         ChildStepsExec stepsExec = new ChildStepsExec();
@@ -24,10 +25,22 @@ public class ResolvableTypeBenchmark {
 
     static class ChildStepsExec extends SubmitStepsExec {
         Class resolve() {
-            ResolvableType stepsExecTemplateT = ResolvableType.forClass(this.getClass());
-            ResolvableType stepT = stepsExecTemplateT.getSuperType().getSuperType().getGeneric(0); // 父类的父类，才能拿到泛型声明
-            Class stepExType = stepT.getInterfaces()[0].getGeneric(1).resolve(); // will be FooException
-            return stepExType;
+            ResolvableType stepsExecType = ResolvableType.forClass(this.getClass());
+            ResolvableType templateType = stepsExecType.getSuperType();
+            while (templateType.getGenerics().length == 0) {
+                templateType = templateType.getSuperType();
+            }
+            ResolvableType stepType = templateType.getGeneric(0);
+
+            // Step实现多个接口的场景
+            for (ResolvableType stepInterfaceType : stepType.getInterfaces()) {
+                if (IDomainStep.class.isAssignableFrom(stepInterfaceType.resolve())) {
+                    return stepInterfaceType.getGeneric(1).resolve();
+                }
+            }
+
+            // should never happen
+            return null;
         }
     }
 }
