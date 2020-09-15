@@ -363,4 +363,20 @@ public class IntegrationTest {
         }
     }
 
+    // Step抛出它IDomainRevokableStep定义的异常类型，才会触发rollback。抛出其他异常，不会回滚
+    @Test
+    public void stepsExecTemplateWithInvalidRollback() {
+        fooModel.setB2c(false);
+        fooModel.setWillRollbackInvalid(true);
+        List<String> steps = DDD.findAbility(DecideStepsAbility.class).decideSteps(fooModel, Steps.Submit.Activity);
+        log.info("steps: {}", steps);
+        try {
+            submitStepsExec.execute(Steps.Submit.Activity, steps, fooModel);
+            fail();
+        } catch (RuntimeException expected) {
+            assertFalse(expected instanceof FooException);
+            assertEquals("Will not rollback", expected.getMessage());
+        }
+    }
+
 }
