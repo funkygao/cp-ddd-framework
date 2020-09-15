@@ -178,7 +178,7 @@ public class InternalIndexer {
 
     static void indexDomainAbility(DomainAbilityDef domainAbilityDef) {
         if (!domainDefMap.containsKey(domainAbilityDef.getDomain())) {
-            throw BootstrapException.ofMessage("activity domain not found: ", domainAbilityDef.getDomain());
+            throw BootstrapException.ofMessage("DomainAbility domain not found: ", domainAbilityDef.getDomain());
         }
 
         if (domainAbilityDefMap.containsKey(domainAbilityDef.getDomainAbilityClass())) {
@@ -191,7 +191,7 @@ public class InternalIndexer {
 
     static void indexDomainService(DomainServiceDef domainServiceDef) {
         if (!domainDefMap.containsKey(domainServiceDef.getDomain())) {
-            throw BootstrapException.ofMessage("activity domain not found: ", domainServiceDef.getDomain());
+            throw BootstrapException.ofMessage("DomainService domain not found: ", domainServiceDef.getDomain());
         }
         log.info("indexed {}", domainServiceDef);
     }
