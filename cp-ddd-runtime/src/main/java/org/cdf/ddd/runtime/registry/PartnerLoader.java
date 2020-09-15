@@ -24,9 +24,8 @@ import org.springframework.util.Assert;
 import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 /**
  * 业务前台jar包热加载器.
@@ -43,15 +42,31 @@ public class PartnerLoader {
     private final String jarPath;
     private final String basePackage;
 
+    private static final Set<String> loadedJars = new ConcurrentSkipListSet<>();
+
     /**
      * Constructor of partner loader.
      *
      * @param jarPath     业务前台的jarPath
      * @param basePackage Spring component-scan base-package值，但不支持逗号分隔. if null, will not scan Spring
+     * @throws IllegalArgumentException
      */
-    public PartnerLoader(@NotNull String jarPath, String basePackage) {
+    public PartnerLoader(@NotNull String jarPath, String basePackage) throws IllegalArgumentException {
+        if (!jarPath.endsWith(".jar")) {
+            throw new IllegalArgumentException("Invalid jarPath: " + jarPath);
+        }
+
         this.jarPath = jarPath;
         this.basePackage = basePackage;
+    }
+
+    String jarName() {
+        int lastSlash = jarPath.lastIndexOf(File.separator);
+        if (lastSlash == -1) {
+            return jarPath;
+        }
+
+        return jarPath.substring(lastSlash + 1);
     }
 
     /**
@@ -60,6 +75,11 @@ public class PartnerLoader {
      * @throws Exception
      */
     public void load() throws Exception {
+        final String jar = jarName();
+        if (loadedJars.contains(jar)) {
+            throw new RuntimeException(jar + " cannot load twice");
+        }
+
         long t0 = System.nanoTime();
         log.warn("loading with {}", label());
 
@@ -86,6 +106,7 @@ public class PartnerLoader {
         }
         this.registerExtensions(resultMap.get(Extension.class), DDDBootstrap.applicationContext());
 
+        loadedJars.add(jar);
         log.warn("loaded with {} ok, cost {}ms", label(), (System.nanoTime() - t0) / 1000_000);
     }
 
