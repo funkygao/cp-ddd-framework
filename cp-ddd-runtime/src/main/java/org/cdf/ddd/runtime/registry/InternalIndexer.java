@@ -55,7 +55,6 @@ public class InternalIndexer {
      * 给定一个领域能力，找到它定义的扩展点接口, internal usage only.
      *
      * @param clazz
-     * @return
      */
     public static Class<? extends IDomainExtension> getDomainAbilityExtDeclaration(@NotNull Class<? extends BaseDomainAbility> clazz) {
         DomainAbilityDef domainAbilityDef = domainAbilityDefMap.get(clazz);
