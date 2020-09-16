@@ -20,13 +20,12 @@
 
 中台要实现一套`订单中台`(OMS)，以订单为线索解决销售订单的物流履约全周期。
 
-该系统对接的上游，即业务前台BP有近10个，每个BP的团队规模和经营规模不同，对功能交付速度的要求也不同。本示例仅列举
-两个典型的BP部门：
-- KA(Key Account)，即关键客户，支持各个行业
-   - KA的话语权大，他们往往把内部生产和管理的形态传递(污染)到这套`订单中台`，要求支持
-   - KA的需求是无法预测的，不确定的，无法自顶向下设计
+该系统对接的上游，即业务前台BP有近10个，每个BP的团队规模和经营规模不同，对新功能交付速度的要求也不同。本示例仅列举两个典型的BP部门：
+- KA(Key Account)，即关键客户，全行业覆盖
+   - KA的话语权大，他们往往把内部生产和管理的形态传递(污染)到这套`订单中台`
+   - KA的需求是无法预测的，不确定的，无法自顶向下设计；即使同一个行业的KA，需求也千差万别
    - 每个KA都有一系列的个性化业务，字段要求不同，流程不同，业务逻辑不同
-   - 例如，仓储出库打印面单不同，目标出库仓算法不同，库存预占模式不同，生产状态回传节点不同等
+      - 例如，仓储出库打印面单不同，目标出库仓算法不同，库存预占模式不同，生产状态回传节点不同等
 - ISV，独立软件开发商
 
 相对于普通的平台化，中台不仅要解决烟囱式架构问题，还要解决前台、中台组织的问题，本质上它是一个复杂生态下的协作问题。
@@ -37,7 +36,7 @@
 
 中台是业务的入口和驱动者，业务模型和数据模型沉淀在中台。
 
-在业务执行过程中，`cp-dddframework`自动识别出业务扩展点的具体实现者，并把控制权交给相应的前台；扩展点方法执行完成后，回到中台继续执行。可以类别OS的上下文切换。
+在业务执行过程中，`cp-dddframework`自动识别出业务扩展点的具体实现者，并把控制权交给相应的前台；扩展点方法执行完成后，回到中台继续执行。可以类比OS的上下文切换。
 
 ### 已解决的问题
 
@@ -54,7 +53,20 @@
    - 前台如何复用、编排中台能力，如何扩展中台能力来实现自助式发展
    - 支持前台、中台协同开发，前台可以方便地使用和扩展中台能力，独立实现市场需求
 
-### 快速入门
+### 代码快速入门
+
+- [中台的分层架构](order-center-cp)
+   - 相对DDD，多了[spec](order-center-cp/cp-oc-spec)一层
+   - 该层用于前台、中台解耦
+- [中台对前台输出的能力和标准](order-center-cp/cp-oc-spec/src/main/java/org/example/cp/oms/spec)
+- [如何识别该业务属于KA业务前台](order-center-cp/cp-oc-spec/src/main/java/org/example/cp/oms/spec/KaPartner.java)
+- 订单的防并发机制扩展点
+   - [扩展点声明](order-center-cp/cp-oc-spec/src/main/java/org/example/cp/oms/spec/ext/ISerializableIsolationExt.java)
+   - [KA业务前台的实现](order-center-bp-ka/src/main/java/org/example/bp/oms/ka/extension/SerializableIsolationExt.java)
+   - [ISV业务前台的实现](order-center-bp-isv/src/main/java/org/example/bp/oms/isv/extension/SerializableIsolationExt.java)
+- [前台对中台的步骤编排](order-center-bp-ka/src/main/java/org/example/bp/oms/ka/extension/DecideStepsExt.java)
+- [动态的步骤编排](order-center-cp/cp-oc-domain/src/main/java/org/example/cp/oms/domain/step/submitorder/BasicStep.java)
+- [动态打包部署](order-center-cp/cp-oc-main/pom.xml)
 
 ## 代码结构
 
@@ -74,7 +86,7 @@
 
 #### [order-center-bp-ka](order-center-bp-ka)
 
-订单中心的业务前台：KA(Key Account)，关键客户的个性化业务通过扩展点的实现完成。
+订单中心的业务前台：KA，关键客户的个性化业务通过扩展点的实现完成。
 
 #### [order-center-bp-isv](order-center-bp-isv)
 

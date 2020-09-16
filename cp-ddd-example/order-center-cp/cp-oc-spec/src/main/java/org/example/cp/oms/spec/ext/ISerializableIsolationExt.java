@@ -7,10 +7,9 @@ import org.cdf.ddd.ext.IDomainExtension;
 import javax.validation.constraints.NotNull;
 
 /**
- * 订单串行化隔离的扩展点声明.
+ * 订单串行化隔离的扩展点声明，即防并发锁.
  */
 public interface ISerializableIsolationExt extends IDomainExtension {
-
 
     /**
      * 获取防并发锁的信息.
