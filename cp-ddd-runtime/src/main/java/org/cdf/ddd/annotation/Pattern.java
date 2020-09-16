@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import java.lang.annotation.*;
 
 /**
- * 业务模式，需要实现{@link IIdentityResolver}接口.
+ * 业务模式身份，需要实现{@link IIdentityResolver}接口.
  * <p>
  * <p>{@link Pattern}通常属于中台CP自己要处理的个性化业务，前台BP往往不会参与</p>
  * <p>横向视角把扩展点进行聚合，属于水平业务，可以叠加</p>
