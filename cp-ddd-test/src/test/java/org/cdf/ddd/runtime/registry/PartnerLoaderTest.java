@@ -15,16 +15,15 @@ public class PartnerLoaderTest {
     public void start() throws Exception {
         AbstractApplicationContext context = new ClassPathXmlApplicationContext("ddd-example-test.xml");
         context.start();
-        PartnerLoader fooJar = new PartnerLoader("../cp-ddd-example/order-center-bp-isv/target/order-center-bp-isv-0.0.1.jar", "org.example.bp");
-        fooJar.load();
-        fooJar.unload();
+        PartnerLoader fooJar = new PartnerLoader();
+        fooJar.load("../cp-ddd-example/order-center-bp-isv/target/order-center-bp-isv-0.0.1.jar", "org.example.bp");
         context.stop();
     }
 
     @Test
-    public void jarPath() {
+    public void jarPath() throws Exception {
         try {
-            new PartnerLoader("a/b", null);
+            new PartnerLoader().load("a/b", null);
             fail();
         } catch (IllegalArgumentException expected) {
             assertEquals("Invalid jarPath: a/b", expected.getMessage());
@@ -33,17 +32,11 @@ public class PartnerLoaderTest {
 
     @Test
     public void jarName() {
-        PartnerLoader loader = new PartnerLoader("../cp-ddd-example/order-center-bp-isv/target/order-center-bp-isv-0.0.1.jar", null);
-        assertEquals("order-center-bp-isv-0.0.1.jar", loader.jarName());
+        PartnerLoader loader = new PartnerLoader();
+        assertEquals("order-center-bp-isv-0.0.1.jar", loader.jarName("../cp-ddd-example/order-center-bp-isv/target/order-center-bp-isv-0.0.1.jar"));
 
-        loader = new PartnerLoader("a.jar", null);
-        assertEquals("a.jar", loader.jarName());
-    }
-
-    @Test
-    public void label() {
-        PartnerLoader foo = new PartnerLoader("a/b/c.jar", "");
-        assertEquals("PartnerLoader(jarPath=a/b/c.jar)", foo.label());
+        loader = new PartnerLoader();
+        assertEquals("a.jar", loader.jarName("a.jar"));
     }
 
 }

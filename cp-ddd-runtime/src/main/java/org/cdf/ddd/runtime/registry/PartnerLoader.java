@@ -39,56 +39,34 @@ import java.util.concurrent.ConcurrentSkipListSet;
  */
 @Slf4j
 public class PartnerLoader {
-    private final String jarPath;
-    private final String basePackage;
-
     private static final Set<String> loadedJars = new ConcurrentSkipListSet<>();
-
-    /**
-     * Constructor of partner loader.
-     *
-     * @param jarPath     业务前台的jarPath
-     * @param basePackage Spring component-scan base-package值，但不支持逗号分隔. if null, will not scan Spring
-     * @throws IllegalArgumentException
-     */
-    public PartnerLoader(@NotNull String jarPath, String basePackage) throws IllegalArgumentException {
-        if (!jarPath.endsWith(".jar")) {
-            throw new IllegalArgumentException("Invalid jarPath: " + jarPath);
-        }
-
-        this.jarPath = jarPath;
-        this.basePackage = basePackage;
-    }
-
-    String jarName() {
-        int lastSlash = jarPath.lastIndexOf(File.separator);
-        if (lastSlash == -1) {
-            return jarPath;
-        }
-
-        return jarPath.substring(lastSlash + 1);
-    }
 
     /**
      * 加载业务前台模块.
      *
+     * @param jarPath     业务前台的jarPath
+     * @param basePackage Spring component-scan base-package值，但不支持逗号分隔. if null, will not scan Spring
      * @throws Exception
      */
-    public void load() throws Exception {
-        final String jar = jarName();
+    public void load(@NotNull String jarPath, String basePackage) throws Exception {
+        if (!jarPath.endsWith(".jar")) {
+            throw new IllegalArgumentException("Invalid jarPath: " + jarPath);
+        }
+
+        final String jar = jarName(jarPath);
         if (loadedJars.contains(jar)) {
             throw new RuntimeException(jar + " cannot load twice");
         }
 
         long t0 = System.nanoTime();
-        log.warn("loading with {}", label());
+        log.warn("loading {}, basePackage:{}", jarPath, basePackage);
 
         List<Class<? extends Annotation>> annotations = new ArrayList<>(2);
         // 只加载业务前台的扩展点和Partner注解类，通过java ClassLoader的全盘负责机制自动加载相关引用类
         annotations.add(Partner.class);
         annotations.add(Extension.class);
 
-        PartnerClassLoader.getInstance().addUrl(new File(this.jarPath).toURI().toURL());
+        PartnerClassLoader.getInstance().addUrl(new File(jarPath).toURI().toURL());
 
         if (basePackage != null) {
             // TODO 10个bean，扫描到第8个出现异常，需要把PartnerClassLoader里已经addUrl的摘除
@@ -96,7 +74,7 @@ public class PartnerLoader {
             springScanComponent(DDDBootstrap.applicationContext(), PartnerClassLoader.getInstance(), basePackage);
         }
 
-        Map<Class<? extends Annotation>, List<Class>> resultMap = JarUtils.loadClassWithAnnotations(this.jarPath,
+        Map<Class<? extends Annotation>, List<Class>> resultMap = JarUtils.loadClassWithAnnotations(jarPath,
                 annotations, null, PartnerClassLoader.getInstance());
 
         // 实例化该业务前台的所有扩展点，并注册到索引
@@ -107,28 +85,20 @@ public class PartnerLoader {
         this.registerExtensions(resultMap.get(Extension.class), DDDBootstrap.applicationContext());
 
         loadedJars.add(jar);
-        log.warn("loaded with {} ok, cost {}ms", label(), (System.nanoTime() - t0) / 1000_000);
+        log.warn("loaded ok, cost {}ms", (System.nanoTime() - t0) / 1000_000);
     }
 
-    /**
-     * 重新加载业务前台模块.
-     *
-     * @throws Exception
-     */
-    void reload() throws Exception {
+    String jarName(String jarPath) {
+        int lastSlash = jarPath.lastIndexOf(File.separator);
+        if (lastSlash == -1) {
+            return jarPath;
+        }
+
+        return jarPath.substring(lastSlash + 1);
     }
 
-    /**
-     * 卸载业务前台模块.
-     *
-     * @throws Exception
-     */
-    void unload() throws Exception {
-    }
-
-    private void registerExtensions(List<Class> extensions, ApplicationContext applicationContext) throws Exception {
+    private void registerExtensions(List<Class> extensions, ApplicationContext applicationContext) {
         if (extensions == null || extensions.isEmpty()) {
-            log.warn("Empty extensions found on {}", this.label());
             return;
         }
 
@@ -170,7 +140,4 @@ public class PartnerLoader {
         return new StandardEnvironment();
     }
 
-    public String label() {
-        return "PartnerLoader(jarPath=" + this.jarPath + ")";
-    }
 }
