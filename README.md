@@ -94,6 +94,8 @@ Please go to [cp-ddd-framework Javadoc](https://funkygao.github.io/cp-ddd-framew
 ## Building from Source
 
 ``` bash
+git clone https://github.com/funkygao/cp-ddd-framework.git
+cd cp-ddd-framework
 mvn clean install
 ```
 
