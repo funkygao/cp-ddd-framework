@@ -18,6 +18,10 @@ public class OrderRepository implements IOrderRepository {
 
     @Override
     public void persist(@NotNull OrderModel orderModel) {
+        if (true) {
+            return;
+        }
+
         OrderMainData orderMainData = OrderTranslator.instance.translate(orderModel);
         orderManager.insert(orderMainData);
     }

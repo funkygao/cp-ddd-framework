@@ -7,7 +7,7 @@ clean:
 install:clean
 	@mvn install
 
-test:package
+test:prepare-jar
 	@mvn test -Ptest
 
 coverage:test
