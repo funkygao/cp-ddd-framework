@@ -18,6 +18,8 @@ import java.io.File;
 public class Container {
     private static final Container instance = new Container();
 
+    private Container() {}
+
     public static Container getInstance() {
         return instance;
     }
