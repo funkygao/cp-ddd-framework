@@ -5,12 +5,14 @@ import org.cdf.ddd.runtime.DDD;
 import org.example.cp.oms.domain.model.OrderModel;
 import org.example.cp.oms.domain.model.OrderModelCreator;
 import org.example.cp.oms.domain.service.SubmitOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.File;
 
 @Slf4j
+@Ignore
 public class ExampleTest {
 
     private String home = System.getProperty("user.home") + File.separator;
