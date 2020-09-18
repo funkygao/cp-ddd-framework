@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.cdf.ddd.annotation.Extension;
 import org.cdf.ddd.annotation.Partner;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
 import org.springframework.context.support.AbstractRefreshableApplicationContext;
@@ -17,6 +18,7 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.EnvironmentCapable;
 import org.springframework.core.env.StandardEnvironment;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.util.Assert;
@@ -86,6 +88,7 @@ class PartnerLoader {
 
     private void registerExtensions(List<Class> extensions, ApplicationContext applicationContext) {
         if (extensions == null || extensions.isEmpty()) {
+            log.warn("Hard to tell, found NO extensions!");
             return;
         }
 
@@ -118,6 +121,12 @@ class PartnerLoader {
                 getOrCreateEnvironment(beanDefinitionRegistry),
                 new PathMatchingResourcePatternResolver(new DefaultResourceLoader(partnerClassLoader))
         ).scan(basePackages);
+
+        if (false) {
+            // 加载业务前台的spring xml
+            XmlBeanDefinitionReader xmlReader = new XmlBeanDefinitionReader(beanDefinitionRegistry);
+            xmlReader.loadBeanDefinitions(new ClassPathResource("spring-main.xml"));
+        }
     }
 
     private static Environment getOrCreateEnvironment(BeanDefinitionRegistry registry) {
