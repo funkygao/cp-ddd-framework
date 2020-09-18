@@ -74,7 +74,7 @@ class PartnerClassLoader extends URLClassLoader {
         try {
             result = this.findClass(className);
             if (result != null) {
-                log.debug("projectClassLoader loaded {}", className);
+                log.debug("PartnerClassLoader loaded {}", className);
             }
         } catch (ClassNotFoundException ignored) {
         }

@@ -8,21 +8,21 @@ package org.cdf.ddd.plugin;
 /**
  * 插件的启动、关闭监听器，是插件包加载卸载的入口.
  */
-public interface PluginListener {
+public interface IPluginListener {
 
     /**
      * 加载插件包时触发.
      *
-     * @param context 容器上下文
+     * @param ctx 容器上下文
      * @throws Exception
      */
-    void onLoad(ContainerContext context) throws Exception;
+    void onLoad(IContainerContext ctx) throws Exception;
 
     /**
      * 卸载插件包时触发.
      *
-     * @param context 容器上下文
+     * @param ctx 容器上下文
      * @throws Exception
      */
-    void onUnload(ContainerContext context) throws Exception;
+    void onUnload(IContainerContext ctx) throws Exception;
 }

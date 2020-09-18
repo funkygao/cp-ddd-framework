@@ -52,7 +52,7 @@ public class ExtensionDef implements IRegistryAware {
             if (extensionBeanInterfaceClazz.isInstance(extensionBean)) {
                 this.extClazz = extensionBeanInterfaceClazz;
 
-                log.info("{} has ext instance:{}", this.extClazz.getCanonicalName(), this);
+                log.debug("{} has ext instance:{}", this.extClazz.getCanonicalName(), this);
                 break;
             }
         }

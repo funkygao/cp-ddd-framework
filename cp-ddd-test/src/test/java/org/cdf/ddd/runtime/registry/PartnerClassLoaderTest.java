@@ -1,14 +1,13 @@
 package org.cdf.ddd.runtime.registry;
 
-import org.cdf.ddd.runtime.DDD;
 import lombok.extern.slf4j.Slf4j;
+import org.cdf.ddd.runtime.DDD;
 import org.junit.Test;
 
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -45,11 +44,4 @@ public class PartnerClassLoaderTest {
         assertFalse(loader.platformFirstClass("com.jdl.bp.oms.doo.j.extension.JAntiConcurrentLockExt"));
     }
 
-    @Test
-    public void playWithClassLoader() {
-        log.info("ClassLoader\nthis={} log={} ArrayList={}",
-                PartnerLoaderTest.class.getClassLoader(),
-                log.getClass().getClassLoader(),
-                ArrayList.class.getClassLoader());
-    }
 }
