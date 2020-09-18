@@ -30,7 +30,6 @@ class NamedThreadFactory implements ThreadFactory {
     public Thread newThread(Runnable r) {
         Thread t = new Thread(group, r, namePrefix + threadCount.getAndIncrement(), 0);
         t.setDaemon(daemon);
-
         return t;
     }
 }
