@@ -12,7 +12,7 @@ import org.cdf.ddd.annotation.Pattern;
 import javax.validation.constraints.NotNull;
 
 /**
- * 业务容器.
+ * 业务容器，用于动态加载个性化业务包.
  */
 @Slf4j
 public class Container {
@@ -45,9 +45,8 @@ public class Container {
 
         long t0 = System.nanoTime();
         log.warn("loading partner:{} basePackage:{}", jarPath, basePackage);
-
         try {
-            new PartnerLoader().load(jarPath, basePackage, new ContainerContext());
+            new DynamicJarLoader().load(jarPath, basePackage, Partner.class, new ContainerContext());
         } catch (Exception ex) {
             log.error("load partner:{}, cost {}ms", jarPath, (System.nanoTime() - t0) / 1000_000, ex);
 
@@ -74,7 +73,21 @@ public class Container {
      * @throws Exception
      */
     public void loadPattern(@NotNull String jarPath, String basePackage) throws Exception {
+        if (!jarPath.endsWith(".jar")) {
+            throw new IllegalArgumentException("Invalid jarPath: " + jarPath);
+        }
 
+        long t0 = System.nanoTime();
+        log.warn("loading pattern:{} basePackage:{}", jarPath, basePackage);
+        try {
+            new DynamicJarLoader().load(jarPath, basePackage, Pattern.class, new ContainerContext());
+        } catch (Exception ex) {
+            log.error("load pattern:{}, cost {}ms", jarPath, (System.nanoTime() - t0) / 1000_000, ex);
+
+            throw ex;
+        }
+
+        log.warn("loaded pattern:{}, cost {}ms", jarPath, (System.nanoTime() - t0) / 1000_000);
     }
 
     /**

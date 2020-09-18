@@ -8,6 +8,7 @@ package org.cdf.ddd.runtime.registry;
 import lombok.extern.slf4j.Slf4j;
 import org.cdf.ddd.annotation.Extension;
 import org.cdf.ddd.annotation.Partner;
+import org.cdf.ddd.annotation.Pattern;
 import org.cdf.ddd.plugin.IContainerContext;
 import org.cdf.ddd.plugin.IPluginListener;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
@@ -33,14 +34,16 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
-class PartnerLoader {
+class DynamicJarLoader {
 
-    void load(@NotNull String jarPath, String basePackage, IContainerContext ctx) throws Exception {
+    void load(@NotNull String jarPath, String basePackage, Class<? extends Annotation> identityResolverClass, IContainerContext ctx) throws Exception {
+        if (identityResolverClass != Pattern.class && identityResolverClass != Partner.class) {
+            throw new IllegalArgumentException("Must be Pattern or Partner");
+        }
+
         long t0 = System.nanoTime();
-
         List<Class<? extends Annotation>> annotations = new ArrayList<>(2);
-        // 只加载业务前台的扩展点和Partner注解类，通过java ClassLoader的全盘负责机制自动加载相关引用类
-        annotations.add(Partner.class);
+        annotations.add(identityResolverClass);
         annotations.add(Extension.class);
 
         // 业务前台的ClassLoader，目前是所有业务前台共享一个 TODO 每个业务前台单独一个
@@ -60,13 +63,27 @@ class PartnerLoader {
         Map<Class<? extends Annotation>, List<Class>> resultMap = JarUtils.loadClassWithAnnotations(
                 jarPath, annotations, null, partnerClassLoader);
 
-        // 实例化该业务前台的所有扩展点，并注册到索引
-        log.info("register and index extensions...");
-        List<Class> partners = resultMap.get(Partner.class);
-        if (partners != null && !partners.isEmpty()) {
-            this.registerPartner(partners.get(0), applicationContext);
+        log.info("register and index IIdentityResolver...");
+        List<Class> identityResolverClasses = resultMap.get(identityResolverClass);
+        if (identityResolverClasses != null && !identityResolverClasses.isEmpty()) {
+            if (identityResolverClass == Partner.class && identityResolverClasses.size() > 1) {
+                throw new RuntimeException("One Partner jar can have at most 1 Partner instance!");
+            }
+
+            for (Class irc : identityResolverClasses) {
+                // 业务身份实例，Spring里获取的
+                RegistryFactory.lazyRegister(identityResolverClass, applicationContext.getBean(irc));
+            }
         }
-        this.registerExtensions(resultMap.get(Extension.class), applicationContext);
+
+        log.info("register and index extensions...");
+        List<Class> extensions = resultMap.get(Extension.class);
+        if (extensions != null && !extensions.isEmpty()) {
+            for (Class extensionClazz : extensions) {
+                // 扩展点实例，Spring里获取的
+                RegistryFactory.lazyRegister(Extension.class, applicationContext.getBean(extensionClazz));
+            }
+        }
 
         IPluginListener pluginListener = JarUtils.loadBeanWithType(partnerClassLoader, jarPath, IPluginListener.class);
         if (pluginListener != null) {
@@ -76,22 +93,6 @@ class PartnerLoader {
         }
 
         log.warn("loaded ok, cost {}ms", (System.nanoTime() - t0) / 1000_000);
-    }
-
-    private void registerExtensions(List<Class> extensions, ApplicationContext applicationContext) {
-        if (extensions == null || extensions.isEmpty()) {
-            log.warn("Hard to tell, found NO extensions!");
-            return;
-        }
-
-        for (Class extensionClazz : extensions) {
-            // 扩展点实例，Spring里获取的
-            RegistryFactory.lazyRegister(Extension.class, applicationContext.getBean(extensionClazz));
-        }
-    }
-
-    private void registerPartner(@NotNull Class partner, ApplicationContext applicationContext) throws Exception {
-        RegistryFactory.lazyRegister(Partner.class, applicationContext.getBean(partner));
     }
 
     // manual <context:component-scan>
@@ -121,7 +122,7 @@ class PartnerLoader {
         }
     }
 
-    private static Environment getOrCreateEnvironment(BeanDefinitionRegistry registry) {
+    private Environment getOrCreateEnvironment(BeanDefinitionRegistry registry) {
         Assert.notNull(registry, "BeanDefinitionRegistry must not be null");
         if (registry instanceof EnvironmentCapable) {
             return ((EnvironmentCapable) registry).getEnvironment();
@@ -129,5 +130,4 @@ class PartnerLoader {
 
         return new StandardEnvironment();
     }
-
 }
