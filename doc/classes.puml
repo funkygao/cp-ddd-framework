@@ -44,6 +44,10 @@ IDomainExtension <-- BaseDomainAbility: locate
 IDomainExtension --> Pattern: bind
 IDomainExtension --> Partner: bind
 
+DDD -- Container
+Container : loadPartner()
+Container : loadPattern()
+
 Partner : code
 Pattern : code
 IDomainExtension : code
