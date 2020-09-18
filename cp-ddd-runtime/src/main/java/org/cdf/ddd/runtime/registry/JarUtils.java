@@ -16,13 +16,14 @@ import java.util.jar.JarFile;
 @Slf4j
 class JarUtils {
 
-    static Map<Class<? extends Annotation>, List<Class>> loadClassWithAnnotations(String path, List<Class<? extends Annotation>> annotations, String startWith, ClassLoader loader) throws Exception {
+    static Map<Class<? extends Annotation>, List<Class>> loadClassWithAnnotations(
+            String path, List<Class<? extends Annotation>> annotations, String startWith, ClassLoader classLoader) throws Exception {
         Map<Class<? extends Annotation>, List<Class>> result = new HashMap<>();
         List<String> classes = filter(getAllClasses(path), startWith);
         for (String className : classes) {
             // 把.class文件中的二进制数据读入堆里的Class对象
-            log.info("loading {} with {}", className, loader);
-            Class clazz = loader.loadClass(className);
+            log.info("loading {} with {}", className, classLoader);
+            Class clazz = classLoader.loadClass(className);
             for (Class<? extends Annotation> annotation : annotations) {
                 Annotation clazzAnnotation = clazz.getAnnotation(annotation);
                 if (clazzAnnotation == null) {
