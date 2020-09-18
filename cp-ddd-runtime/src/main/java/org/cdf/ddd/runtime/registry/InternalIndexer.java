@@ -234,6 +234,11 @@ public class InternalIndexer {
         log.info("indexed {}", patternDef);
     }
 
+    static void removePattern(@NotNull String code) {
+        patternDefMap.remove(code); // TODO thread safety
+        log.info("removed Pattern:{}", code);
+    }
+
     static void indexPartner(PartnerDef partnerDef) {
         if (partnerDefMap.containsKey(partnerDef.getCode())) {
             throw BootstrapException.ofMessage("duplicated partner code: ", partnerDef.getCode());
@@ -245,6 +250,13 @@ public class InternalIndexer {
 
         partnerDefMap.put(partnerDef.getCode(), partnerDef);
         log.info("indexed {}", partnerDef);
+    }
+
+    static void removePartner(String code) {
+        // TODO 暂时不做扩展点的卸载：无法保证Partner的卸载和该Partner下所有扩展点卸载的原子性
+        // 不卸载扩展点 side effect: 业务逻辑上正确，但已经不再调用了，而且无法GC，orphan objects
+        partnerDefMap.remove(code); // TODO thread safety
+        log.info("removed Partner:{}", code);
     }
 
     static void postIndexing() {

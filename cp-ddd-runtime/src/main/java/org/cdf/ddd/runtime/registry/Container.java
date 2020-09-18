@@ -6,6 +6,8 @@
 package org.cdf.ddd.runtime.registry;
 
 import lombok.extern.slf4j.Slf4j;
+import org.cdf.ddd.annotation.Partner;
+import org.cdf.ddd.annotation.Pattern;
 import org.cdf.ddd.plugin.IPluginListener;
 
 import javax.validation.constraints.NotNull;
@@ -18,8 +20,13 @@ import java.io.File;
 public class Container {
     private static final Container instance = new Container();
 
-    private Container() {}
+    private Container() {
+    }
 
+    /**
+     * 获取业务容器单例.
+     */
+    @NotNull
     public static Container getInstance() {
         return instance;
     }
@@ -54,6 +61,15 @@ public class Container {
     }
 
     /**
+     * 注销一个业务前台身份.
+     *
+     * @param code {@link Partner#code()}
+     */
+    public void unloadPartner(@NotNull String code) {
+        InternalIndexer.removePartner(code);
+    }
+
+    /**
      * 加载业务模式jar包.
      *
      * @param jarPath     jar path
@@ -62,6 +78,15 @@ public class Container {
      */
     public void loadPattern(@NotNull String jarPath, String basePackage) throws Exception {
 
+    }
+
+    /**
+     * 卸载业务模式.
+     *
+     * @param code {@link Pattern#code()}
+     */
+    public void unloadPattern(@NotNull String code) {
+        InternalIndexer.removePattern(code);
     }
 
     String jarName(String jarPath) {
@@ -74,7 +99,7 @@ public class Container {
     }
 
     private IPluginListener getListener() {
-        // FIXME 多个业务jar，会报错
+        // TODO 多个业务jar，会报错
         return DDDBootstrap.applicationContext().getBean(IPluginListener.class);
     }
 }

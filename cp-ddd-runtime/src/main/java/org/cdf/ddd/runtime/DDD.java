@@ -5,6 +5,7 @@
  */
 package org.cdf.ddd.runtime;
 
+import org.cdf.ddd.runtime.registry.Container;
 import org.cdf.ddd.runtime.registry.InternalIndexer;
 import org.cdf.ddd.runtime.registry.StepDef;
 import org.cdf.ddd.step.IDomainStep;
@@ -20,6 +21,14 @@ import java.util.List;
  */
 public final class DDD {
     private DDD() {
+    }
+
+    /**
+     * 获取业务容器单例.
+     */
+    @NotNull
+    public static Container getContainer() {
+        return Container.getInstance();
     }
 
     /**
