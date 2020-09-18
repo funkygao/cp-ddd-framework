@@ -48,7 +48,7 @@ public class Container {
         }
 
         // bingo!
-        getListener().onLoad(new ContainerContext(DDDBootstrap.applicationContext()));
+        getListener().onLoad(new ContainerContext());
 
         log.warn("loaded partner:{}, cost {}ms", jarPath, (System.nanoTime() - t0) / 1000_000);
     }
