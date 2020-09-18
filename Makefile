@@ -17,6 +17,7 @@ coverage:test
 prepare-jar:install
 	@cp -f cp-ddd-example/order-center-bp-ka/target/order-center-bp-ka-0.0.1.jar ~
 	@cp -f cp-ddd-example/order-center-bp-isv/target/order-center-bp-isv-0.0.1.jar ~
+	@cp -f cp-ddd-example/order-center-pattern/target/order-center-pattern-0.0.1.jar ~
 
 javadoc:install
 	@mvn javadoc:javadoc
