@@ -32,6 +32,8 @@ public class Container {
 
     /**
      * 加载业务前台jar包.
+     * <p>
+     * <p>如果使用本动态加载，就不要maven里静态引入业务前台jar包依赖了.</p>
      *
      * @param jarPath     jar path
      * @param basePackage Spring component-scan base-package值，但不支持逗号分隔. if null, will not scan Spring

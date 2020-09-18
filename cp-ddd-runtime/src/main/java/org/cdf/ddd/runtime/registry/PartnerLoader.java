@@ -30,16 +30,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-/**
- * 业务前台jar包热加载器.
- * <p>
- * <ul>限制条件:
- * <li>统一使用中台的spring xml</li>
- * <li>jar里只能使用中台spring bean，不能自己定义依赖</li>
- * <li>不支持卸载，不支持hot swap</li>
- * </ul>
- * <p>如果使用本动态加载，就不要maven里静态引入业务前台jar包依赖了.</p>
- */
 @Slf4j
 class PartnerLoader {
 
