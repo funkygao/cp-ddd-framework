@@ -14,6 +14,10 @@ coverage:test
 	@mvn clean verify -Ptest
 	@open cp-ddd-test/target/site/jacoco-aggregate/index.html
 
+prepare-jar:package
+	@cp -f cp-ddd-example/order-center-bp-ka/target/order-center-bp-ka-0.0.1.jar ~
+	@cp -f cp-ddd-example/order-center-bp-isv/target/order-center-bp-isv-0.0.1.jar ~
+
 javadoc:install
 	@mvn javadoc:javadoc
 	@open target/site/apidocs/index.html
