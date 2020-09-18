@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 前台类加载器.
+ * 前台类加载器. TODO rename
  */
 @Slf4j
 class PartnerClassLoader extends URLClassLoader {

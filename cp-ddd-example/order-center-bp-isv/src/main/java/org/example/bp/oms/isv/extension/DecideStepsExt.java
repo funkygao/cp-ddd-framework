@@ -1,6 +1,6 @@
 package org.example.bp.oms.isv.extension;
 
-import org.example.cp.oms.spec.partner.IsvPartner;
+import org.example.bp.oms.isv.IsvPartner;
 import org.example.cp.oms.spec.Steps;
 import org.cdf.ddd.annotation.Extension;
 import org.cdf.ddd.ext.IDecideStepsExt;

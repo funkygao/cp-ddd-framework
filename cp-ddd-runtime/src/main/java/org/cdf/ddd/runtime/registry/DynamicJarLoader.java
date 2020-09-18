@@ -41,7 +41,6 @@ class DynamicJarLoader {
             throw new IllegalArgumentException("Must be Pattern or Partner");
         }
 
-        long t0 = System.nanoTime();
         List<Class<? extends Annotation>> annotations = new ArrayList<>(2);
         annotations.add(identityResolverClass);
         annotations.add(Extension.class);
@@ -72,6 +71,7 @@ class DynamicJarLoader {
 
             for (Class irc : identityResolverClasses) {
                 // 业务身份实例，Spring里获取的
+                log.info("lazy register {}", irc.getCanonicalName());
                 RegistryFactory.lazyRegister(identityResolverClass, applicationContext.getBean(irc));
             }
         }
@@ -81,6 +81,7 @@ class DynamicJarLoader {
         if (extensions != null && !extensions.isEmpty()) {
             for (Class extensionClazz : extensions) {
                 // 扩展点实例，Spring里获取的
+                log.info("lazy register {}", extensionClazz.getCanonicalName());
                 RegistryFactory.lazyRegister(Extension.class, applicationContext.getBean(extensionClazz));
             }
         }
@@ -91,8 +92,6 @@ class DynamicJarLoader {
             pluginListener.onLoad(ctx);
             log.info("called plugin listener");
         }
-
-        log.warn("loaded ok, cost {}ms", (System.nanoTime() - t0) / 1000_000);
     }
 
     // manual <context:component-scan>

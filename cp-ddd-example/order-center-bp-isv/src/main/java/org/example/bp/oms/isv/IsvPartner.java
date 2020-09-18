@@ -1,4 +1,4 @@
-package org.example.cp.oms.spec.partner;
+package org.example.bp.oms.isv;
 
 import org.example.cp.oms.spec.model.IOrderModel;
 import org.cdf.ddd.annotation.Partner;

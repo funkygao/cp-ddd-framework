@@ -4,7 +4,7 @@ import org.cdf.ddd.annotation.Extension;
 import org.example.cp.oms.spec.ext.ISerializableIsolationExt;
 import org.example.cp.oms.spec.model.IOrderModel;
 import org.example.cp.oms.spec.model.vo.LockEntry;
-import org.example.cp.oms.spec.partner.IsvPartner;
+import org.example.bp.oms.isv.IsvPartner;
 
 import javax.validation.constraints.NotNull;
 import java.util.concurrent.TimeUnit;
