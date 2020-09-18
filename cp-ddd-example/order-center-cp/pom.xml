@@ -18,6 +18,7 @@
         <module>cp-oc-infrastructure</module>
         <module>cp-oc-spec</module>
         <module>cp-oc-main</module>
+        <module>cp-oc-test</module>
     </modules>
 
 </project>
