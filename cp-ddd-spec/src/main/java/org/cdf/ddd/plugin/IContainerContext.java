@@ -15,7 +15,7 @@ public interface IContainerContext {
     /**
      * 注册.
      *
-     * @param annotation 注解类型，目前只支持{@code Project, Pattern, Extension}
+     * @param annotation 注解类型，目前只支持{@code Partner, Pattern, Extension}
      * @param object     对象实例
      * @throws Exception
      */
@@ -24,7 +24,7 @@ public interface IContainerContext {
     /**
      * 注销.
      *
-     * @param annotation 注解类型，目前只支持{@code Project, Pattern, Extension}
+     * @param annotation 注解类型，目前只支持{@code Partner, Pattern, Extension}
      * @param object     对象实例
      * @throws Exception
      */
