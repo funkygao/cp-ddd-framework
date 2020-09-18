@@ -17,7 +17,7 @@ public class ExampleTest {
     private String home = System.getProperty("user.home") + File.separator;
 
     @Test
-    public void loadPattern() throws Exception {
+    public void dynamicLoadPatternAndParter() throws Exception {
         ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("spring-test.xml");
         applicationContext.start();
 
