@@ -8,6 +8,8 @@ package org.cdf.ddd.runtime.registry;
 import lombok.extern.slf4j.Slf4j;
 import org.cdf.ddd.annotation.Extension;
 import org.cdf.ddd.annotation.Partner;
+import org.cdf.ddd.plugin.IContainerContext;
+import org.cdf.ddd.plugin.IPluginListener;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.ApplicationContext;
@@ -33,14 +35,7 @@ import java.util.Map;
 @Slf4j
 class PartnerLoader {
 
-    /**
-     * 加载业务前台模块.
-     *
-     * @param jarPath     业务前台的jarPath
-     * @param basePackage Spring component-scan base-package值，但不支持逗号分隔. if null, will not scan Spring
-     * @throws Exception
-     */
-    public void load(@NotNull String jarPath, String basePackage) throws Exception {
+    void load(@NotNull String jarPath, String basePackage, IContainerContext ctx) throws Exception {
         long t0 = System.nanoTime();
 
         List<Class<? extends Annotation>> annotations = new ArrayList<>(2);
@@ -72,6 +67,13 @@ class PartnerLoader {
             this.registerPartner(partners.get(0), applicationContext);
         }
         this.registerExtensions(resultMap.get(Extension.class), applicationContext);
+
+        IPluginListener pluginListener = JarUtils.loadBeanWithType(partnerClassLoader, jarPath, IPluginListener.class);
+        if (pluginListener != null) {
+            log.info("calling plugin listener...");
+            pluginListener.onLoad(ctx);
+            log.info("called plugin listener");
+        }
 
         log.warn("loaded ok, cost {}ms", (System.nanoTime() - t0) / 1000_000);
     }

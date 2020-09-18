@@ -7,20 +7,15 @@ import org.cdf.ddd.plugin.IPluginListener;
 import org.example.cp.oms.spec.ext.ISensitiveWordsExt;
 import org.example.cp.oms.spec.model.IOrderModel;
 import org.example.cp.oms.spec.partner.KaPartner;
-import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotNull;
 
 @Slf4j
-@Component(value = "kaPluginListener")
 public class PluginListener implements IPluginListener {
 
     @Override
     public void onLoad(IContainerContext ctx) throws Exception {
         log.info("KA Jar loaded, ctx:{}", ctx);
-
-        // 手工注册扩展点实例
-        //ctx.registerBean(Extension.class, new SensitiveWordsExt());
     }
 
     @Override

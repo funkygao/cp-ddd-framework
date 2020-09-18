@@ -8,7 +8,6 @@ package org.cdf.ddd.runtime.registry;
 import lombok.extern.slf4j.Slf4j;
 import org.cdf.ddd.annotation.Partner;
 import org.cdf.ddd.annotation.Pattern;
-import org.cdf.ddd.plugin.IPluginListener;
 
 import javax.validation.constraints.NotNull;
 
@@ -48,15 +47,12 @@ public class Container {
         log.warn("loading partner:{} basePackage:{}", jarPath, basePackage);
 
         try {
-            new PartnerLoader().load(jarPath, basePackage);
+            new PartnerLoader().load(jarPath, basePackage, new ContainerContext());
         } catch (Exception ex) {
             log.error("load partner:{}, cost {}ms", jarPath, (System.nanoTime() - t0) / 1000_000, ex);
 
             throw ex;
         }
-
-        // bingo!
-        getListener().onLoad(new ContainerContext());
 
         log.warn("loaded partner:{}, cost {}ms", jarPath, (System.nanoTime() - t0) / 1000_000);
     }
@@ -90,8 +86,4 @@ public class Container {
         InternalIndexer.removePattern(code);
     }
 
-    private IPluginListener getListener() {
-        // TODO 多个业务jar，会报错
-        return DDDBootstrap.applicationContext().getBean(IPluginListener.class);
-    }
 }

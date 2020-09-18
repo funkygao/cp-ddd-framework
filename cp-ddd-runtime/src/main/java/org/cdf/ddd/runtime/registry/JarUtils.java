@@ -44,6 +44,29 @@ class JarUtils {
         return result;
     }
 
+    static <T> T loadBeanWithType(ClassLoader classLoader, String path, Class<T> beanType) throws Exception {
+        JarFile jar = new JarFile(new File(path));
+        Enumeration entries = jar.entries();
+        while (entries.hasMoreElements()) {
+            JarEntry entry = (JarEntry) entries.nextElement();
+            String className = getClassName(entry);
+            if (className == null || className.isEmpty()) {
+                // not a class. e,g. META-INF
+                continue;
+            }
+
+            Class clazz = classLoader.loadClass(className);
+            if (!beanType.isAssignableFrom(clazz)) {
+                continue;
+            }
+
+            return (T) clazz.newInstance();
+        }
+
+        // not found
+        return null;
+    }
+
     private static String getClassName(JarEntry jarEntry) {
         String jarName = jarEntry.getName();
         if (!jarName.endsWith(".class")) {
