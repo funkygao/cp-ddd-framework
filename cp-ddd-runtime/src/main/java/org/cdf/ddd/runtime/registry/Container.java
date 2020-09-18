@@ -11,7 +11,6 @@ import org.cdf.ddd.annotation.Pattern;
 import org.cdf.ddd.plugin.IPluginListener;
 
 import javax.validation.constraints.NotNull;
-import java.io.File;
 
 /**
  * 业务容器.
@@ -87,15 +86,6 @@ public class Container {
      */
     public void unloadPattern(@NotNull String code) {
         InternalIndexer.removePattern(code);
-    }
-
-    String jarName(String jarPath) {
-        int lastSlash = jarPath.lastIndexOf(File.separator);
-        if (lastSlash == -1) {
-            return jarPath;
-        }
-
-        return jarPath.substring(lastSlash + 1);
     }
 
     private IPluginListener getListener() {
