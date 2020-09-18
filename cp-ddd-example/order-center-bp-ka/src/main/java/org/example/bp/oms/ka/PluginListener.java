@@ -20,7 +20,7 @@ public class PluginListener implements IPluginListener {
         log.info("KA Jar loaded, ctx:{}", ctx);
 
         // 手工注册扩展点实例
-        ctx.registerBean(Extension.class, new SensitiveWordsExt());
+        //ctx.registerBean(Extension.class, new SensitiveWordsExt());
     }
 
     @Override

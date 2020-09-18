@@ -10,4 +10,12 @@
     <artifactId>cp-oc-client</artifactId>
     <name>DDD :: Example :: CP :: Client</name>
 
+    <dependencies>
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>${javax.validation.version}</version>
+        </dependency>
+    </dependencies>
+
 </project>
