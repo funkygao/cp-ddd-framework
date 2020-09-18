@@ -58,7 +58,6 @@ class DynamicJarLoader {
             springScanComponent(applicationContext, partnerClassLoader, basePackage);
         }
 
-        log.info("loading extensions with {} ...", partnerClassLoader);
         Map<Class<? extends Annotation>, List<Class>> resultMap = JarUtils.loadClassWithAnnotations(
                 jarPath, annotations, null, partnerClassLoader);
 
