@@ -255,7 +255,7 @@ public class InternalIndexer {
     static void removePartner(String code) {
         // TODO 暂时不做扩展点的卸载：无法保证Partner的卸载和该Partner下所有扩展点卸载的原子性
         // 不卸载扩展点 side effect: 业务逻辑上正确，但已经不再调用了，而且无法GC，orphan objects
-        partnerDefMap.remove(code); // TODO thread safety
+        partnerDefMap.remove(code); // thread safety
         log.info("removed Partner:{}", code);
     }
 

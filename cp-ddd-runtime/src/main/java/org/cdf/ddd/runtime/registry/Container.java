@@ -13,11 +13,19 @@ import javax.validation.constraints.NotNull;
 
 /**
  * 业务容器，用于动态加载个性化业务包.
+ *
+ * <pre>
+ * Container -> JarDynamicLoader -> CustomBizClassLoader
+ *                                          |
+ *                                +---------------------+
+ *                                |                     |
+ *                          (Partner | Pattern)      Extension
+ * </pre>
  */
 @Slf4j
 public class Container {
     private static final Container instance = new Container();
-    private static final DynamicJarLoader dynamicJarLoader = new DynamicJarLoader();
+    private static final JarDynamicLoader jarDynamicLoader = new JarDynamicLoader();
 
     private Container() {
     }
@@ -47,7 +55,7 @@ public class Container {
         long t0 = System.nanoTime();
         log.warn("loading partner:{} basePackage:{}", jarPath, basePackage);
         try {
-            dynamicJarLoader.load(jarPath, basePackage, Partner.class, new ContainerContext());
+            jarDynamicLoader.load(jarPath, basePackage, Partner.class, new ContainerContext());
         } catch (Exception ex) {
             log.error("load partner:{}, cost {}ms", jarPath, (System.nanoTime() - t0) / 1000_000, ex);
 
@@ -81,7 +89,7 @@ public class Container {
         long t0 = System.nanoTime();
         log.warn("loading pattern:{} basePackage:{}", jarPath, basePackage);
         try {
-            dynamicJarLoader.load(jarPath, basePackage, Pattern.class, new ContainerContext());
+            jarDynamicLoader.load(jarPath, basePackage, Pattern.class, new ContainerContext());
         } catch (Exception ex) {
             log.error("load pattern:{}, cost {}ms", jarPath, (System.nanoTime() - t0) / 1000_000, ex);
 
