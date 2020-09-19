@@ -83,7 +83,9 @@
                 <configuration>
                     <excludes>
                         <exclude>**/*JarUtils.class</exclude>
-                        <exclude>**/*PartnerLoader.class</exclude>
+                        <exclude>**/*Container.class</exclude>
+                        <exclude>**/*JarDynamicLoader.class</exclude>
+                        <exclude>**/*CustomBizClassLoader.class</exclude>
                     </excludes>
                 </configuration>
                 <executions>
