@@ -235,7 +235,7 @@ public class InternalIndexer {
     }
 
     static void removePattern(@NotNull String code) {
-        patternDefMap.remove(code); // TODO thread safety
+        patternDefMap.remove(code);
         log.info("removed Pattern:{}", code);
     }
 

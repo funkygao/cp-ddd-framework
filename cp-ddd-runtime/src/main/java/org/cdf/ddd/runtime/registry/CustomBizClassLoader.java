@@ -14,19 +14,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 前台类加载器. TODO rename
+ * 个性化业务类加载器.
  */
 @Slf4j
-class PartnerClassLoader extends URLClassLoader {
+class CustomBizClassLoader extends URLClassLoader {
     private static final String dddPackage = "org.cdf.ddd";
 
     private static ClassLoader jdkClassLoader; // JDK本身的类加载器
     private static ClassLoader platformClassLoader; // 中台类加载器
     private static Object mutex = new Object();
 
-    private static PartnerClassLoader instance = new PartnerClassLoader(new URL[]{});
+    private static CustomBizClassLoader instance = new CustomBizClassLoader(new URL[]{});
 
-    PartnerClassLoader(URL[] urls) {
+    CustomBizClassLoader(URL[] urls) {
         super(urls);
 
         for (URL url : urls) {
@@ -34,7 +34,7 @@ class PartnerClassLoader extends URLClassLoader {
         }
     }
 
-    static PartnerClassLoader getInstance() {
+    static CustomBizClassLoader getInstance() {
         return instance;
     }
 
@@ -70,16 +70,16 @@ class PartnerClassLoader extends URLClassLoader {
             }
         }
 
-        // 前台加载器加载
+        // 个性化业务加载器加载
         try {
             result = this.findClass(className);
             if (result != null) {
-                log.debug("PartnerClassLoader loaded {}", className);
+                log.debug("CustomBizClassLoader loaded {}", className);
             }
         } catch (ClassNotFoundException ignored) {
         }
 
-        // 如果前台无法加载，fallback to 中台加载器
+        // 如果个性化业务无法加载，fallback to 中台加载器
         if (result == null) {
             result = platformClassLoader().loadClass(className); // might throw ClassNotFoundException
             log.debug("platformClassLoader loaded {}", className);
@@ -104,8 +104,8 @@ class PartnerClassLoader extends URLClassLoader {
                 return platformClassLoader;
             }
 
-            // 中台类加载器加载了前台的类加载器
-            platformClassLoader = PartnerClassLoader.class.getClassLoader();
+            // 中台类加载器加载了个性化业务的类加载器
+            platformClassLoader = CustomBizClassLoader.class.getClassLoader();
             log.debug("platformClassLoader created");
         }
 
