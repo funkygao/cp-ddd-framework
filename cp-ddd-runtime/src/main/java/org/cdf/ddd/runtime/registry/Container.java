@@ -71,7 +71,9 @@ public class Container {
      * @param code {@link Partner#code()}
      */
     public void unloadPartner(@NotNull String code) {
+        log.warn("unloading partner:{}", code);
         InternalIndexer.removePartner(code);
+        log.warn("unloaded partner:{}", code);
     }
 
     /**
@@ -105,7 +107,9 @@ public class Container {
      * @param code {@link Pattern#code()}
      */
     public void unloadPattern(@NotNull String code) {
+        log.warn("unloading pattern:{}", code);
         InternalIndexer.removePattern(code);
+        log.warn("unloaded pattern:{}", code);
     }
 
 }

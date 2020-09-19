@@ -1,6 +1,9 @@
 package org.cdf.ddd.runtime.registry;
 
 import org.cdf.ddd.runtime.DDD;
+import org.cdf.ddd.runtime.registry.mock.partner.FooPartner;
+import org.cdf.ddd.runtime.registry.mock.pattern.B2BPattern;
+import org.cdf.ddd.runtime.registry.mock.pattern.FooPattern;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -21,6 +24,12 @@ public class ContainerTest {
         } catch (Exception unexpected) {
             fail();
         }
+    }
+
+    @Test
+    public void unload() {
+        DDD.getContainer().unloadPattern(B2BPattern.CODE);
+        DDD.getContainer().unloadPartner(FooPartner.CODE);
     }
 
 }
