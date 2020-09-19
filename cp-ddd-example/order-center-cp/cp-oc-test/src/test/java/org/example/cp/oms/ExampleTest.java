@@ -15,10 +15,10 @@ import java.io.File;
 @Ignore
 public class ExampleTest {
 
-    private String home = System.getProperty("user.home") + File.separator;
+    private static final String home = System.getProperty("user.home") + File.separator;
 
     @Test
-    public void dynamicLoadPatternAndParter() throws Exception {
+    public void dynamicLoadPatternAndPartner() throws Exception {
         ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("spring-test.xml");
         applicationContext.start();
 
