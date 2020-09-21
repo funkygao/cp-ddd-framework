@@ -1,5 +1,5 @@
 @startuml
-skinparam handwritten true
+skinparam handwritten false
 skinparam shadowing<<with_shadow>> true
 left to right direction
 
@@ -45,8 +45,13 @@ IDomainExtension --> Pattern: bind
 IDomainExtension --> Partner: bind
 
 DDD -- Container
-Container : loadPartner()
-Container : loadPattern()
+Container : {static} PluginLoader
+
+Container --> Plugin : load
+
+note bottom of Plugin
+   IIdentityResolver + IDomainExtension
+end note
 
 Partner : code
 Pattern : code
