@@ -21,7 +21,7 @@ class CustomBizClassLoader extends URLClassLoader {
     private static final String dddPackage = "org.cdf.ddd";
 
     private static ClassLoader jdkClassLoader; // JDK本身的类加载器
-    private static ClassLoader platformClassLoader; // 中台类加载器
+    private static ClassLoader containerClassLoader; // 中台类加载器
     private static Object mutex = new Object();
 
     private static CustomBizClassLoader instance = new CustomBizClassLoader(new URL[]{});
@@ -62,10 +62,10 @@ class CustomBizClassLoader extends URLClassLoader {
         }
 
         // 不是JDK本身的类
-        if (platformFirstClass(className)) {
-            result = platformClassLoader().loadClass(className); // might throw ClassNotFoundException，中台无法加载
+        if (containerFirstClass(className)) {
+            result = containerClassLoader().loadClass(className); // might throw ClassNotFoundException，中台无法加载
             if (result != null) {
-                log.debug("platformClassLoader loaded {}", className);
+                log.debug("containerClassLoader loaded {}", className);
                 return result;
             }
         }
@@ -81,35 +81,35 @@ class CustomBizClassLoader extends URLClassLoader {
 
         // 如果个性化业务无法加载，fallback to 中台加载器
         if (result == null) {
-            result = platformClassLoader().loadClass(className); // might throw ClassNotFoundException
-            log.debug("platformClassLoader loaded {}", className);
+            result = containerClassLoader().loadClass(className); // might throw ClassNotFoundException
+            log.debug("containerClassLoader loaded {}", className);
         }
 
         return result;
     }
 
     // 中台优先加载的类
-    boolean platformFirstClass(String className) {
+    boolean containerFirstClass(String className) {
         return className != null && className.startsWith(dddPackage);
     }
 
-    static ClassLoader platformClassLoader() {
-        if (platformClassLoader != null) {
-            return platformClassLoader;
+    static ClassLoader containerClassLoader() {
+        if (containerClassLoader != null) {
+            return containerClassLoader;
         }
 
         synchronized (mutex) {
             // double check
-            if (platformClassLoader != null) {
-                return platformClassLoader;
+            if (containerClassLoader != null) {
+                return containerClassLoader;
             }
 
             // 中台类加载器加载了个性化业务的类加载器
-            platformClassLoader = CustomBizClassLoader.class.getClassLoader();
-            log.debug("platformClassLoader created");
+            containerClassLoader = CustomBizClassLoader.class.getClassLoader();
+            log.debug("containerClassLoader created");
         }
 
-        return platformClassLoader;
+        return containerClassLoader;
     }
 
     static ClassLoader jdkClassLoader() {

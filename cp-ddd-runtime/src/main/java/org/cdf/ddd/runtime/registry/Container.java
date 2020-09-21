@@ -12,11 +12,12 @@ import org.cdf.ddd.annotation.Pattern;
 import javax.validation.constraints.NotNull;
 
 /**
- * 业务容器，用于动态加载个性化业务包.
+ * 业务容器，用于动态加载个性化业务包：Plugin.
  * <p>
  * <pre>
- * Container -> JarDynamicLoader -> CustomBizClassLoader
- *                                          |
+ *                                                          +- JDKClassLoader 1
+ * Container -> JarDynamicLoader -> CustomBizClassLoader ---|- ContainerClassLoader 1
+ *                                          | loadClass     +- CustomBizClassLoader N
  *                                +---------------------+
  *                                |                     |
  *                          (Partner | Pattern)      Extension

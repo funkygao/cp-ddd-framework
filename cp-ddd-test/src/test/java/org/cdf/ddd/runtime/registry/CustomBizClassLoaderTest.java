@@ -30,18 +30,18 @@ public class CustomBizClassLoaderTest {
     }
 
     @Test
-    public void platformClassLoader() {
-        ClassLoader classLoader = CustomBizClassLoader.platformClassLoader();
+    public void containerClassLoader() {
+        ClassLoader classLoader = CustomBizClassLoader.containerClassLoader();
         assertNotNull(classLoader);
         assertEquals("sun.misc.Launcher.AppClassLoader", classLoader.getClass().getCanonicalName());
     }
 
     @Test
-    public void platformFirstClass() throws MalformedURLException {
+    public void containerFirstClass() throws MalformedURLException {
         CustomBizClassLoader loader = new CustomBizClassLoader(new URL[]{new File("").toURI().toURL()});
-        assertTrue(loader.platformFirstClass(DDD.class.getName()));
-        assertFalse(loader.platformFirstClass(List.class.getName()));
-        assertFalse(loader.platformFirstClass("com.jdl.bp.oms.doo.j.extension.JAntiConcurrentLockExt"));
+        assertTrue(loader.containerFirstClass(DDD.class.getName()));
+        assertFalse(loader.containerFirstClass(List.class.getName()));
+        assertFalse(loader.containerFirstClass("com.jdl.bp.oms.doo.j.extension.JAntiConcurrentLockExt"));
     }
 
 }
