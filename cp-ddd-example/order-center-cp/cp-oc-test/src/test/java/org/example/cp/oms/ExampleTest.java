@@ -16,14 +16,14 @@ import java.net.URL;
 public class ExampleTest {
 
     @Test
-    public void dynamicLoadPatternAndPartner() throws Exception {
+    public void dynamicLoadPlugins() throws Exception {
         ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("spring-test.xml");
         applicationContext.start();
 
-        DDD.getContainer().loadPartnerPlugin(new URL("https://github.com/funkygao/cp-ddd-framework/raw/loader/doc/assets/jar/order-center-bp-isv-0.0.1.jar"), "org.example.bp");
-        DDD.getContainer().loadPartnerPlugin(new URL("https://github.com/funkygao/cp-ddd-framework/raw/loader/doc/assets/jar/order-center-bp-ka-0.0.1.jar"), "org.example.bp");
+        DDD.getContainer().loadPartnerPlugin(new URL("https://github.com/funkygao/cp-ddd-framework/blob/master/doc/assets/jar/order-center-bp-isv-0.0.1.jar?raw=true"), "org.example.bp");
+        DDD.getContainer().loadPartnerPlugin(new URL("https://github.com/funkygao/cp-ddd-framework/blob/master/doc/assets/jar/order-center-bp-ka-0.0.1.jar?raw=true"), "org.example.bp");
 
-        DDD.getContainer().loadPatternPlugin(new URL("https://github.com/funkygao/cp-ddd-framework/raw/loader/doc/assets/jar/order-center-pattern-0.0.1.jar"), "org.example.cp");
+        DDD.getContainer().loadPatternPlugin(new URL("https://github.com/funkygao/cp-ddd-framework/blob/master/doc/assets/jar/order-center-pattern-0.0.1.jar?raw=true"), "org.example.cp");
 
         DDD.getContainer().unloadPatternPlugin("hair");
 
