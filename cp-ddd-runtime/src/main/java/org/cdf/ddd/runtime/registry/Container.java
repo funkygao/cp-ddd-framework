@@ -6,10 +6,16 @@
 package org.cdf.ddd.runtime.registry;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.cdf.ddd.annotation.Partner;
 import org.cdf.ddd.annotation.Pattern;
 
 import javax.validation.constraints.NotNull;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * 业务容器，用于动态加载个性化业务包：Plugin.
@@ -47,6 +53,21 @@ public class Container {
 
     /**
      * 加载业务前台jar包.
+     *
+     * @param jarUrl      Plugin jar URL
+     * @param basePackage Spring component-scan base-package值，但不支持逗号分隔. if null, will not scan Spring
+     * @throws Exception
+     */
+    public void loadPartnerPlugin(@NotNull URL jarUrl, String basePackage) throws Exception {
+        File localJar = jarTempLocalFile(jarUrl);
+        localJar.deleteOnExit();
+
+        FileUtils.copyInputStreamToFile(jarUrl.openStream(), localJar);
+        loadPartnerPlugin(localJar.getAbsolutePath(), basePackage);
+    }
+
+    /**
+     * 加载业务前台jar包.
      * <p>
      * <p>如果使用本动态加载，就不要maven里静态引入业务前台jar包依赖了.</p>
      *
@@ -54,7 +75,7 @@ public class Container {
      * @param basePackage Spring component-scan base-package值，但不支持逗号分隔. if null, will not scan Spring
      * @throws Exception
      */
-    public void loadPartner(@NotNull String jarPath, String basePackage) throws Exception {
+    public void loadPartnerPlugin(@NotNull String jarPath, String basePackage) throws Exception {
         if (!jarPath.endsWith(".jar")) {
             throw new IllegalArgumentException("Invalid jarPath: " + jarPath);
         }
@@ -77,10 +98,25 @@ public class Container {
      *
      * @param code {@link Partner#code()}
      */
-    public void unloadPartner(@NotNull String code) {
+    public void unloadPartnerPlugin(@NotNull String code) {
         log.warn("unloading partner:{}", code);
         InternalIndexer.removePartner(code);
         log.warn("unloaded partner:{}", code);
+    }
+
+    /**
+     * 加载业务模式jar包.
+     *
+     * @param jarUrl      Plugin jar URL
+     * @param basePackage Spring component-scan base-package值，但不支持逗号分隔. if null, will not scan Spring
+     * @throws Exception
+     */
+    public void loadPatternPlugin(@NotNull URL jarUrl, String basePackage) throws Exception {
+        File localJar = jarTempLocalFile(jarUrl);
+        localJar.deleteOnExit();
+
+        org.apache.commons.io.FileUtils.copyInputStreamToFile(jarUrl.openStream(), localJar);
+        loadPatternPlugin(localJar.getAbsolutePath(), basePackage);
     }
 
     /**
@@ -90,7 +126,7 @@ public class Container {
      * @param basePackage Spring component-scan base-package值，但不支持逗号分隔. if null, will not scan Spring
      * @throws Exception
      */
-    public void loadPattern(@NotNull String jarPath, String basePackage) throws Exception {
+    public void loadPatternPlugin(@NotNull String jarPath, String basePackage) throws Exception {
         if (!jarPath.endsWith(".jar")) {
             throw new IllegalArgumentException("Invalid jarPath: " + jarPath);
         }
@@ -113,10 +149,15 @@ public class Container {
      *
      * @param code {@link Pattern#code()}
      */
-    public void unloadPattern(@NotNull String code) {
+    public void unloadPatternPlugin(@NotNull String code) {
         log.warn("unloading pattern:{}", code);
         InternalIndexer.removePattern(code);
         log.warn("unloaded pattern:{}", code);
     }
 
+    File jarTempLocalFile(@NotNull URL jarUrl) throws IOException {
+        String prefix = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date());
+        String suffix = jarUrl.getFile().substring(jarUrl.getFile().lastIndexOf("/") + 1);
+        return File.createTempFile(prefix, "." + suffix);
+    }
 }
