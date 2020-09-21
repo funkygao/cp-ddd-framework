@@ -12,6 +12,7 @@
    * [What problems does it solve](#what-problems-does-it-solve)
    * [Key features](#key-features)
    * [Key abstractions](#key-abstractions)
+   * [Why it stands out](why-it-stands-out)
 * [Requirements](#requirements)
 * [Modules](#modules)
 * [Example using cp-ddd-framework](#example-using-cp-ddd-framework)
@@ -57,6 +58,12 @@ cp-ddd-framework is a lightweight development framework for complex business arc
 这14个核心抽象，勾勒出业务中台的骨架，以不变应万变。
 
 ![](http://www.plantuml.com/plantuml/svg/XLJ1RXiX4Btp5HpjWt_0Mbb9wrQAr4fHsdirXbalCWiMpDgfqlnxPzTqknYgvfA5ztZpPdZc8H846dehuicuCmJePGTENuCXGYTRi14NMEn0-wjnnwQv6kf-tDQxdQGmeB3OaYGlWpbs9BK9gCXu9uHnXA45XV9fxtimxXk6Yr5O0GZFOl4jjn9VKGs4gtN6HcKqZepuwPLAdHUy-1CSB2R1SfELWxVs0Eh4qcV-1qUKptOu6YURvZEtYzpOcv3yjz1_qkZ8qCyNZDvUC4nuKPzDeOjZy-zBSr-zHlj81AhhMMQqNjcRcZvRbc5dTJoWqnWOXaEa08facWMgxzZpMSA_q0U8UBFrU32MlOjYXoMFIBDh5gvHMXFYVqaQMnXiHYkyPTUwt-zv_HO9oAZtqST7xuWrCPHeQvnEjUhWL8kXkuXCnkODnekBP4OFfBfLki9fxciXyiZAvjTciqphs0cXqrbg4wb8NS7EL8jfRgNXUU5uxL68-sYbAdcVUO6INQPfFb6Ev7Rc6OWmk7_3WHm6KGb3mp1VqHYSV40vKckjFWxh5H1M-9lDxe_FhJomPfsIl2RA51ykDCTDp5-BLAKtuOi7VSUml9KKL-i2INOOMK1i8kabbX19WTVAQnJfM5gMRQJzoc-AjVDW-g0wZ1HWUeKVqEdnfVyD)
+
+### Why it stands out
+
+- Simple design and implementation
+- Light weight
+- Flexibility as result of total abstraction
 
 ## Requirements
 
