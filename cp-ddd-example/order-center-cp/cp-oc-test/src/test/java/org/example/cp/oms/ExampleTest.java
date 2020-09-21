@@ -9,25 +9,23 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import java.io.File;
+import java.net.URL;
 
 @Slf4j
 @Ignore
 public class ExampleTest {
-
-    private static final String home = System.getProperty("user.home") + File.separator;
 
     @Test
     public void dynamicLoadPatternAndPartner() throws Exception {
         ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("spring-test.xml");
         applicationContext.start();
 
-        DDD.getContainer().loadPartner(home + "order-center-bp-isv-0.0.1.jar", "org.example.bp");
-        DDD.getContainer().loadPartner(home + "order-center-bp-ka-0.0.1.jar", "org.example.bp");
+        DDD.getContainer().loadPartnerPlugin(new URL("https://github.com/funkygao/cp-ddd-framework/raw/loader/doc/assets/jar/order-center-bp-isv-0.0.1.jar"), "org.example.bp");
+        DDD.getContainer().loadPartnerPlugin(new URL("https://github.com/funkygao/cp-ddd-framework/raw/loader/doc/assets/jar/order-center-bp-ka-0.0.1.jar"), "org.example.bp");
 
-        DDD.getContainer().loadPattern(home + "order-center-pattern-0.0.1.jar", "org.example.cp");
+        DDD.getContainer().loadPatternPlugin(new URL("https://github.com/funkygao/cp-ddd-framework/raw/loader/doc/assets/jar/order-center-pattern-0.0.1.jar"), "org.example.cp");
 
-        DDD.getContainer().unloadPattern("hair");
+        DDD.getContainer().unloadPatternPlugin("hair");
 
         // prepare the domain model
         OrderModelCreator creator = new OrderModelCreator();

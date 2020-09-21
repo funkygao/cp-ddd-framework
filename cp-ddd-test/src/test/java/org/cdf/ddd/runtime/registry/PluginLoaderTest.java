@@ -5,11 +5,11 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class JarDynamicLoaderTest {
+public class PluginLoaderTest {
 
     @Test
     public void loadNonPatternNorPartner() throws Exception {
-        JarDynamicLoader loader = new JarDynamicLoader();
+        PluginLoader loader = new PluginLoader();
         try {
             loader.load("", "", Domain.class, null);
             fail();

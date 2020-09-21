@@ -14,19 +14,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 个性化业务类加载器.
+ * Plugin类加载器.
  */
 @Slf4j
-class CustomBizClassLoader extends URLClassLoader {
+class PluginClassLoader extends URLClassLoader {
     private static final String dddPackage = "org.cdf.ddd";
 
     private static ClassLoader jdkClassLoader; // JDK本身的类加载器
-    private static ClassLoader platformClassLoader; // 中台类加载器
+    private static ClassLoader containerClassLoader; // 中台容器类加载器
     private static Object mutex = new Object();
 
-    private static CustomBizClassLoader instance = new CustomBizClassLoader(new URL[]{});
+    private static PluginClassLoader instance = new PluginClassLoader(new URL[]{});
 
-    CustomBizClassLoader(URL[] urls) {
+    PluginClassLoader(URL[] urls) {
         super(urls);
 
         for (URL url : urls) {
@@ -34,7 +34,7 @@ class CustomBizClassLoader extends URLClassLoader {
         }
     }
 
-    static CustomBizClassLoader getInstance() {
+    static PluginClassLoader getInstance() {
         return instance;
     }
 
@@ -62,54 +62,53 @@ class CustomBizClassLoader extends URLClassLoader {
         }
 
         // 不是JDK本身的类
-        if (platformFirstClass(className)) {
-            result = platformClassLoader().loadClass(className); // might throw ClassNotFoundException，中台无法加载
+        if (containerFirstClass(className)) {
+            result = containerClassLoader().loadClass(className); // might throw ClassNotFoundException，中台无法加载
             if (result != null) {
-                log.debug("platformClassLoader loaded {}", className);
+                log.debug("containerClassLoader loaded {}", className);
                 return result;
             }
         }
 
-        // 个性化业务加载器加载
+        // Plugin加载器加载
         try {
             result = this.findClass(className);
             if (result != null) {
-                log.debug("CustomBizClassLoader loaded {}", className);
+                log.debug("PluginClassLoader loaded {}", className);
             }
         } catch (ClassNotFoundException ignored) {
         }
 
-        // 如果个性化业务无法加载，fallback to 中台加载器
+        // 如果Plugin加载器无法加载，fallback to 中台Container加载器
         if (result == null) {
-            result = platformClassLoader().loadClass(className); // might throw ClassNotFoundException
-            log.debug("platformClassLoader loaded {}", className);
+            result = containerClassLoader().loadClass(className); // might throw ClassNotFoundException
+            log.debug("containerClassLoader loaded {}", className);
         }
 
         return result;
     }
 
-    // 中台优先加载的类
-    boolean platformFirstClass(String className) {
+    // 中台Container优先加载的类
+    boolean containerFirstClass(String className) {
         return className != null && className.startsWith(dddPackage);
     }
 
-    static ClassLoader platformClassLoader() {
-        if (platformClassLoader != null) {
-            return platformClassLoader;
+    static ClassLoader containerClassLoader() {
+        if (containerClassLoader != null) {
+            return containerClassLoader;
         }
 
         synchronized (mutex) {
             // double check
-            if (platformClassLoader != null) {
-                return platformClassLoader;
+            if (containerClassLoader != null) {
+                return containerClassLoader;
             }
 
-            // 中台类加载器加载了个性化业务的类加载器
-            platformClassLoader = CustomBizClassLoader.class.getClassLoader();
-            log.debug("platformClassLoader created");
+            containerClassLoader = PluginClassLoader.class.getClassLoader();
+            log.debug("containerClassLoader created as parent of PluginClassLoader");
         }
 
-        return platformClassLoader;
+        return containerClassLoader;
     }
 
     static ClassLoader jdkClassLoader() {
@@ -149,5 +148,4 @@ class CustomBizClassLoader extends URLClassLoader {
 
         return jdkClassLoader;
     }
-
 }

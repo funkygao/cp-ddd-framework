@@ -15,11 +15,11 @@ public class ConfigApiProvider implements ConfigApi {
     @Override
     public void signalPartner(@NotNull ConfigRequest request) {
         // 先卸载
-        DDD.getContainer().unloadPartner(request.getPartnerCode());
+        DDD.getContainer().unloadPartnerPlugin(request.getPartnerCode());
 
         // 再加载
         try {
-            DDD.getContainer().loadPartner(request.getJarURL().toString(), "org.example.bp.oms");
+            DDD.getContainer().loadPartnerPlugin(request.getJarURL().toString(), "org.example.bp.oms");
         } catch (Exception ex) {
             log.error("load:{}", request, ex);
         }
