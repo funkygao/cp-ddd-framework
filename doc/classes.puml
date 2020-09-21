@@ -9,8 +9,10 @@ IDomainStep : execute()
 interface IDecideStepsExt
 interface IDomainRevokableStep
 IDomainRevokableStep : rollback()
-interface IDomainExtension
-interface IIdentityResolver
+package Plugin <<Frame>> {
+    interface IIdentityResolver
+    interface IDomainExtension
+}
 interface IModelAttachmentExt
 IModelAttachmentExt : explain()
 IModelAttachmentExt : render()
@@ -46,12 +48,10 @@ IDomainExtension --> Partner: bind
 
 DDD -- Container
 Container : {static} PluginLoader
+Container : loadPartner()
+Container : loadPattern()
 
 Container --> Plugin : load
-
-note bottom of Plugin
-   IIdentityResolver + IDomainExtension
-end note
 
 Partner : code
 Pattern : code
