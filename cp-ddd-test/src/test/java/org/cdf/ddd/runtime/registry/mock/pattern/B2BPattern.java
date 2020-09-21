@@ -7,7 +7,7 @@ import org.cdf.ddd.runtime.registry.mock.model.FooModel;
 
 import javax.validation.constraints.NotNull;
 
-@Pattern(code = B2BPattern.CODE, name = "B2B模式", priority = 90)
+@Pattern(code = B2BPattern.CODE, name = "B2B模式", tags = PatternTags.B2B, priority = 90)
 public class B2BPattern implements IIdentityResolver<IDomainModel> {
     public static final String CODE = "b2b";
 

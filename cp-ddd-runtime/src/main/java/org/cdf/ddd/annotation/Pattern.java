@@ -39,6 +39,11 @@ public @interface Pattern {
     String name();
 
     /**
+     * 该业务模式的业务标签.
+     */
+    String[] tags() default {};
+
+    /**
      * 优先级，越小表示优先级越高.
      * <p>
      * <p>用于解决业务模式匹配的顺序问题</p>
