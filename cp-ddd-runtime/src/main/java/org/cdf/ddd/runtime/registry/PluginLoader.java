@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
-class JarDynamicLoader {
+class PluginLoader {
 
     void load(@NotNull String jarPath, String basePackage, Class<? extends Annotation> identityResolverClass, IContainerContext ctx) throws Exception {
         if (identityResolverClass != Pattern.class && identityResolverClass != Partner.class) {

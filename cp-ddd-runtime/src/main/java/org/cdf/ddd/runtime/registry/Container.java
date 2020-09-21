@@ -15,9 +15,9 @@ import javax.validation.constraints.NotNull;
  * 业务容器，用于动态加载个性化业务包：Plugin.
  * <p>
  * <pre>
- *                                                          +- JDKClassLoader 1
- * Container -> JarDynamicLoader -> CustomBizClassLoader ---|- ContainerClassLoader 1
- *                                          | loadClass     +- CustomBizClassLoader N
+ *                                                        +- 1 JDKClassLoader
+ * Container -> PluginLoader -> CustomBizClassLoader -----|- 1 ContainerClassLoader
+ *                                        | loadClass     +- N CustomBizClassLoader
  *                                +---------------------+
  *                                |                     |
  *                          (Partner | Pattern)      Extension
@@ -26,7 +26,7 @@ import javax.validation.constraints.NotNull;
 @Slf4j
 public class Container {
     private static final Container instance = new Container();
-    private static final JarDynamicLoader jarDynamicLoader = new JarDynamicLoader();
+    private static final PluginLoader pluginLoader = new PluginLoader();
 
     private Container() {
     }
@@ -56,7 +56,7 @@ public class Container {
         long t0 = System.nanoTime();
         log.warn("loading partner:{} basePackage:{}", jarPath, basePackage);
         try {
-            jarDynamicLoader.load(jarPath, basePackage, Partner.class, new ContainerContext());
+            pluginLoader.load(jarPath, basePackage, Partner.class, new ContainerContext());
         } catch (Exception ex) {
             log.error("load partner:{}, cost {}ms", jarPath, (System.nanoTime() - t0) / 1000_000, ex);
 
@@ -92,7 +92,7 @@ public class Container {
         long t0 = System.nanoTime();
         log.warn("loading pattern:{} basePackage:{}", jarPath, basePackage);
         try {
-            jarDynamicLoader.load(jarPath, basePackage, Pattern.class, new ContainerContext());
+            pluginLoader.load(jarPath, basePackage, Pattern.class, new ContainerContext());
         } catch (Exception ex) {
             log.error("load pattern:{}, cost {}ms", jarPath, (System.nanoTime() - t0) / 1000_000, ex);
 
