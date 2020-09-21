@@ -59,6 +59,7 @@
    - 相对DDD，多了[spec](order-center-cp/cp-oc-spec)一层
    - 该层用于前台、中台解耦
 - [中台对前台输出的能力和标准](order-center-cp/cp-oc-spec/src/main/java/org/example/cp/oms/spec)
+    - [中台给前台输出的资源](order-center-cp/cp-oc-spec/src/main/java/org/example/cp/oms/spec/resource/IStockService.java)
 - [如何识别该业务属于KA业务前台](order-center-cp/cp-oc-spec/src/main/java/org/example/cp/oms/spec/partner/KaPartner.java)
 - 订单的防并发机制扩展点
    - [扩展点声明](order-center-cp/cp-oc-spec/src/main/java/org/example/cp/oms/spec/ext/ISerializableIsolationExt.java)
