@@ -12,7 +12,7 @@
    * [What problems does it solve](#what-problems-does-it-solve)
    * [Key features](#key-features)
    * [Key abstractions](#key-abstractions)
-   * [Why it stands out](why-it-stands-out)
+   * [Why it stands out](#why-it-stands-out)
 * [Requirements](#requirements)
 * [Modules](#modules)
 * [Example using cp-ddd-framework](#example-using-cp-ddd-framework)
