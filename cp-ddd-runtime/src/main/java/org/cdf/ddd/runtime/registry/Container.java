@@ -22,8 +22,8 @@ import javax.validation.constraints.NotNull;
  * </ul>
  * <pre>
  *                                                        +- 1 JDKClassLoader
- * Container -> PluginLoader -> CustomBizClassLoader -----|- 1 ContainerClassLoader
- *                                        | loadClass     +- N CustomBizClassLoader
+ * Container -> PluginLoader -> PluginClassLoader --------|- 1 ContainerClassLoader
+ *                                        | loadClass     +- N PluginClassLoader
  *                                +---------------------+
  *                                |                     |
  *                          (Partner | Pattern)      Extension

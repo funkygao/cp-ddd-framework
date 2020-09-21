@@ -46,20 +46,20 @@ class PluginLoader {
         annotations.add(Extension.class);
 
         // 个性化业务的ClassLoader，目前是所有业务共享一个 TODO 每个业务单独一个
-        CustomBizClassLoader customBizClassLoader = CustomBizClassLoader.getInstance();
-        customBizClassLoader.addUrl(new File(jarPath).toURI().toURL());
+        PluginClassLoader pluginClassLoader = PluginClassLoader.getInstance();
+        pluginClassLoader.addUrl(new File(jarPath).toURI().toURL());
 
         ApplicationContext applicationContext = DDDBootstrap.applicationContext();
 
         if (basePackage != null) {
             // TODO 10个bean，扫描到第8个出现异常，需要把PartnerClassLoader里已经addUrl的摘除
             // 先扫spring，然后初始化所有的basePackage bean，包括已经在中台里加载完的bean
-            log.info("Spring scan with {} ...", customBizClassLoader);
-            springScanComponent(applicationContext, customBizClassLoader, basePackage);
+            log.info("Spring scan with {} ...", pluginClassLoader);
+            springScanComponent(applicationContext, pluginClassLoader, basePackage);
         }
 
         Map<Class<? extends Annotation>, List<Class>> resultMap = JarUtils.loadClassWithAnnotations(
-                jarPath, annotations, null, customBizClassLoader);
+                jarPath, annotations, null, pluginClassLoader);
 
         log.info("register and index IIdentityResolver...");
         List<Class> identityResolverClasses = resultMap.get(identityResolverClass);
@@ -85,7 +85,7 @@ class PluginLoader {
             }
         }
 
-        IPluginListener pluginListener = JarUtils.loadBeanWithType(customBizClassLoader, jarPath, IPluginListener.class);
+        IPluginListener pluginListener = JarUtils.loadBeanWithType(pluginClassLoader, jarPath, IPluginListener.class);
         if (pluginListener != null) {
             log.info("calling plugin listener...");
             pluginListener.onLoad(ctx);
