@@ -21,6 +21,7 @@
 * [Landscape of Central Platform](#landscape-of-central-platform)
 * [Reference guide](#reference-guide)
 * [Building from Source](#building-from-source)
+* [Total solution](#total-solution)
 * [Contribution](#contribution)
 * [FAQ](#faq)
 * [Licensing](#licensing)
@@ -43,7 +44,7 @@ cp-ddd-framework is a lightweight development framework for complex business arc
 
 **Tip**：使用该框架，需要对`DDD`的分层架构有基本了解：该框架面向的是`DDD`的domain层开发，即面向业务沉淀层的开发框架。
 
-`IDomainService`，领域服务，在`DDD`里是facade，完成一个完整的业务活动，例如接单。
+[`IDomainService`](cp-ddd-spec/src/main/java/org/cdf/ddd/model/IDomainService.java)，领域服务，在`DDD`里是facade，完成一个完整的业务活动，例如接单。
 
 接单在订单履约系统里，是非常复杂的过程，包括：服务产品校验，客户校验，供应商校验，店铺校验，承运商校验，增值服务校验，价格校验，促销规则校验，券抵扣，订单商品项校验，冷链的温层校验，目标仓寻源，承运商分单，库存预占，订单拆分，预分拣，地址解析等数十个(复杂场景甚至百个)的步骤，对应`IDomainStep`：一个业务活动是由多个步骤组成的。步骤，相当于隐藏业务细节而把业务活动进行拆解的抽象。
 
@@ -51,9 +52,11 @@ cp-ddd-framework is a lightweight development framework for complex business arc
 
 步骤的编排，有些是可以预先计算的，有些是完全动态决定的，例如：在D步骤需要调用预分拣API，根据返回结果才能决定后续步骤。步骤执行过程中，可能抛出异常，为了保证一致性，之前已经成功执行的步骤需要回滚，实现了`IDomainStep`的子类`IDomainRevokableStep`就需要实现业务回滚操作。这些机制，是模板方法类`StepsExecTemplate`实现的。
 
-如何实现不同场景下对步骤的不同编排？同一个业务语义，不同场景的执行逻辑可能不同，例如：库存预占，有的商家要求零库存预占，有的要求缺量出库，有的要求预占失败要有冲正动作，有的要求预占成功后给商家回传状态等等。
+如何实现不同场景下对步骤的不同编排？同一个业务语义，不同场景的执行逻辑可能不同，例如：库存预占，有的商家要求零库存预占，有的要求缺量出库，有的要求预占失败要有冲正动作，有的要求预占成功后给商家回传状态等等，这如何解决？
 
-这引出了`IDomainExtension`，扩展点：业务语义确定，但不同业务场景执行逻辑不同的业务功能点，即业务的多态。定义一个扩展点，不同业务场景有不同的实现。
+这引出了`IDomainExtension`，扩展点：业务语义确定，但不同业务场景执行逻辑不同的业务功能点，即业务的多态。
+
+定义一个扩展点，不同业务场景有不同的实现。
 
 这里，扩展点机制是分层的：
 - IDomainExtension，最基础的扩展点，解决业务逻辑的不确定性
@@ -66,12 +69,12 @@ cp-ddd-framework is a lightweight development framework for complex business arc
 
 `IIdentityResolver`有2个机制：
 
-- `Pattern`：中台部门内部的个性化
-- `Partner`：前台部门的个性化，来扩展中台能力
+- `Pattern`：业务模式，可以任意维度叠加的水平业务，解决中台部门内部的个性化
+- `Partner`：前台合作伙伴，维度唯一不可叠加的垂直业务，解决前台部门的个性化，来扩展中台能力
 
 本质上，`IIdentityResolver`，相当于把之前散落在各处的某个业务逻辑的**if**判断条件进行收敛，使得这些业务判断显式化，有形化，并有了个名字(统一语言)`；IDomainExtension`，相当于把**if**后面的code block显式化，有形化，并可以进行组织分工：前台部门开发前台的逻辑，中台部门开发中台的逻辑，协同建设一套企业级能力复用平台。
 
-什么是业务场景？在中台下，它是不确定的。它可能是任意维度，我们想象不到的维度。
+什么是业务场景？在中台下，它是不确定的。它可能是任意维度，甚至我们想象不到的维度。
 
 即使凭经验定义了一些维度，在2B业务下也不堪一击，很难保证它的稳定。下面列举一些业务场景的维度：
 
@@ -96,7 +99,7 @@ cp-ddd-framework is a lightweight development framework for complex business arc
 
 需要提醒的是，这是个**业务中台**的**开发框架**，它勾勒出了业务中台的骨架，如何建设业务中台，研发拿它就知道如何组织自己的代码，遇到个性化业务如何解决，如何让业务开发变得优雅。但它无法替代业务梳理、业务抽象、业务建模。It is not silver bullet.
 
-此外，这也不是一个万能的业务开发框架，它主要针对的是复杂、个性化特征明显、重业务逻辑的目标系统建设。如果你的系统很简单，CRUD特征明显，不建议使用。
+此外，这也不是一个万能的业务开发框架，它主要针对的是复杂、个性化特征明显、重业务逻辑的目标系统。如果你的系统很简单，CRUD特征明显，不建议使用。
 
 ### What problems does it solve
 
@@ -175,6 +178,12 @@ cd cp-ddd-framework
 mvn clean install
 ```
 
+## Total solution
+
+- 如何低成本地对业务进行单元测试
+- 如何防止业务架构腐化
+- 如何让DDD思想落实到代码
+
 ## Contribution
 
 You are welcome to contribute to the project with pull requests on GitHub.
@@ -184,6 +193,9 @@ If you find a bug or want to request a feature, please use the [issue tracker](h
 For any question, you can use [Gitter](https://gitter.im/cp-ddd-framework/community).
 
 ## FAQ
+
+- 看了你的`IDomainModel`，就是一个空接口，如何与我的领域模型结合的？
+   - 通过Java的泛型实现的，你可以看到大部分抽象都提供了泛型，方便使用
 
 ## Licensing
 
