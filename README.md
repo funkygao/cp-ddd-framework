@@ -37,7 +37,7 @@ cp-ddd-framework is a lightweight development framework for complex business arc
 
 目前在多个复杂的中台项目生产环境下使用近一年时间。
 
-**ATTENTION**：Container对Plugin的动态加载，目前仅支持一次性动态加载，热更新机制还在积极开发中，请暂时不要使用。
+**ATTENTION**：Container对Plugin的动态加载，目前仅支持一次性动态加载，热更新机制还在积极开发中，请暂时不要使用。Plugin hotswap mechanism is not production ready yet, please don't use it.
 
 ### Quickstart
 
