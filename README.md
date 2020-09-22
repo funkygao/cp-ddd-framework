@@ -22,6 +22,7 @@
 * [Reference guide](#reference-guide)
 * [Building from Source](#building-from-source)
 * [Contribution](#contribution)
+* [FAQ](#faq)
 * [Licensing](#licensing)
 
 ## What is cp-ddd-framework?
@@ -181,6 +182,8 @@ You are welcome to contribute to the project with pull requests on GitHub.
 If you find a bug or want to request a feature, please use the [issue tracker](https://github.com/funkygao/cp-ddd-framework/issues).
 
 For any question, you can use [Gitter](https://gitter.im/cp-ddd-framework/community).
+
+## FAQ
 
 ## Licensing
 
