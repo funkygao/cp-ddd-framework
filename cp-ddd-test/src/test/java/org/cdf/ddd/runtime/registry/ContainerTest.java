@@ -49,12 +49,18 @@ public class ContainerTest {
 
     @Test
     public void jarTempLocalFile() throws Exception {
-        URL jarUrl = new URL("https://github.com/funkygao/cp-ddd-framework/raw/loader/doc/assets/jar/order-center-bp-isv-0.0.1.jar");
-        assertEquals("/funkygao/cp-ddd-framework/raw/loader/doc/assets/jar/order-center-bp-isv-0.0.1.jar", jarUrl.getFile());
+        URL jarUrl = new URL("https://github.com/funkygao/cp-ddd-framework/blob/master/doc/assets/jar/order-center-bp-isv-0.0.1.jar");
         File file = Container.getInstance().jarTempLocalFile(jarUrl);
         file.deleteOnExit();
         log.info("{}", file.getCanonicalFile());
         assertTrue(file.getCanonicalPath().endsWith(".jar"));
+        file.delete();
+
+        jarUrl = new URL("https://github.com/funkygao/cp-ddd-framework/blob/master/doc/assets/jar/order-center-bp-isv-0.0.1.jar?raw=true");
+        file = Container.getInstance().jarTempLocalFile(jarUrl);
+        file.deleteOnExit();
+        assertTrue(file.getCanonicalPath().endsWith(".jar"));
+        file.delete();
     }
 
 }

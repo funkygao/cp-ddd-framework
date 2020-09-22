@@ -59,6 +59,7 @@ public class Container {
      */
     public void loadPartnerPlugin(@NotNull URL jarUrl, String basePackage) throws Exception {
         File localJar = jarTempLocalFile(jarUrl);
+        log.info("jar:{} -> {}", jarUrl, localJar.getCanonicalPath());
         try {
             FileUtils.copyInputStreamToFile(jarUrl.openStream(), localJar);
             loadPartnerPlugin(localJar.getAbsolutePath(), basePackage);
@@ -114,6 +115,7 @@ public class Container {
      */
     public void loadPatternPlugin(@NotNull URL jarUrl, String basePackage) throws Exception {
         File localJar = jarTempLocalFile(jarUrl);
+        log.info("jar:{} -> {}", jarUrl, localJar.getCanonicalPath());
         try {
             FileUtils.copyInputStreamToFile(jarUrl.openStream(), localJar);
             loadPatternPlugin(localJar.getAbsolutePath(), basePackage);
@@ -160,7 +162,7 @@ public class Container {
 
     File jarTempLocalFile(@NotNull URL jarUrl) throws IOException {
         String prefix = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date());
-        String suffix = jarUrl.getFile().substring(jarUrl.getFile().lastIndexOf("/") + 1);
+        String suffix = jarUrl.getPath().substring(jarUrl.getPath().lastIndexOf("/") + 1);
         return File.createTempFile(prefix, "." + suffix);
     }
 }
