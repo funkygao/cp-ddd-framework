@@ -2,7 +2,7 @@
 <Configuration status="error" monitorInterval="3600">
     <properties>
         <property name="patternLayout">%d [%t] %-5p [%c] [%L] - %m%n</property>
-        <property name="root.log.level">info</property>
+        <property name="root.log.level">debug</property>
     </properties>
     <Appenders>
         <Console name="console" target="SYSTEM_OUT" follow="true">
