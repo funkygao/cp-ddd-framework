@@ -55,7 +55,7 @@ cp-ddd-framework is a lightweight development framework for complex business arc
 
 这引出了`IDomainExtension`，扩展点：业务语义确定，但不同业务场景执行逻辑不同的业务功能点，即业务的多态。定义一个扩展点，不同业务场景有不同的实现。
 
-这里，扩展点机制，是分层的：
+这里，扩展点机制是分层的：
 - IDomainExtension，最基础的扩展点，解决业务逻辑的不确定性
 - IDecideStepsExt，步骤编排扩展点，解决业务流程的不确定性
 - IModelAttachmentExt，解决业务模型的不确定性，可以简单理解为如何解决多业务场景下数据库字段的问题
