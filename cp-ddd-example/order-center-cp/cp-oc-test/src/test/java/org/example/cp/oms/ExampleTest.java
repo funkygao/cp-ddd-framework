@@ -5,14 +5,12 @@ import org.cdf.ddd.runtime.DDD;
 import org.example.cp.oms.domain.model.OrderModel;
 import org.example.cp.oms.domain.model.OrderModelCreator;
 import org.example.cp.oms.domain.service.SubmitOrder;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.net.URL;
 
 @Slf4j
-@Ignore
 public class ExampleTest {
 
     @Test
@@ -38,6 +36,10 @@ public class ExampleTest {
         SubmitOrder submitOrder = (SubmitOrder) applicationContext.getBean("submitOrder");
         // 会触发 ISV的步骤编排：basic, persist, broadcast
         // 相关的Pattern：IPresortExt
+        submitOrder.submit(orderModel);
+
+        // 去掉ISV Partner，再提交订单，接单步骤会变空的
+        DDD.getContainer().unloadPartnerPlugin("ISV");
         submitOrder.submit(orderModel);
 
         applicationContext.stop();
