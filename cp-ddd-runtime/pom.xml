@@ -33,12 +33,6 @@ under the License.
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <!-- TODO do I need this apache commons-io dependency? -->
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.4</version>
-        </dependency>
-        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j.version}</version>
