@@ -44,48 +44,48 @@ class PluginClassLoader extends URLClassLoader {
 
     @Override
     protected Class<?> loadClass(String className, boolean resolve) throws ClassNotFoundException {
-        Class result = this.findLoadedClass(className);
-        if (result != null) {
-            // 如果该类已经被加载，不重新加载
-            return result;
+        Class clazz = this.findLoadedClass(className);
+        if (clazz != null) {
+            // 如果类已经加载过，就返回那个已经加载好的类
+            return clazz;
         }
 
-        // 先用JDK加载
+        // 如果这个类是JDK自己的，就用 JDKClassLoader 加载
         try {
-            result = jdkClassLoader().loadClass(className);
-            if (result != null) {
+            clazz = jdkClassLoader().loadClass(className);
+            if (clazz != null) {
                 // 说明该类是JRE的类
                 log.debug("jdkClassLoader loaded {}", className);
-                return result;
+                return clazz;
             }
         } catch (ClassNotFoundException ignored) {
         }
 
         // 不是JDK本身的类
         if (containerFirstClass(className)) {
-            result = containerClassLoader().loadClass(className); // might throw ClassNotFoundException，中台无法加载
-            if (result != null) {
+            clazz = containerClassLoader().loadClass(className); // might throw ClassNotFoundException，中台无法加载
+            if (clazz != null) {
                 log.debug("containerClassLoader loaded {}", className);
-                return result;
+                return clazz;
             }
         }
 
         // Plugin加载器加载
         try {
-            result = this.findClass(className);
-            if (result != null) {
+            clazz = this.findClass(className);
+            if (clazz != null) {
                 log.debug("PluginClassLoader loaded {}", className);
             }
         } catch (ClassNotFoundException ignored) {
         }
 
         // 如果Plugin加载器无法加载，fallback to 中台Container加载器
-        if (result == null) {
-            result = containerClassLoader().loadClass(className); // might throw ClassNotFoundException
+        if (clazz == null) {
+            clazz = containerClassLoader().loadClass(className); // might throw ClassNotFoundException
             log.debug("containerClassLoader loaded {}", className);
         }
 
-        return result;
+        return clazz;
     }
 
     // 中台Container优先加载的类
