@@ -88,7 +88,7 @@ public class Container {
         try {
             pluginLoader.load(jarPath, basePackage, Partner.class, new ContainerContext());
         } catch (Exception ex) {
-            log.error("load partner:{}, cost {}ms", jarPath, (System.nanoTime() - t0) / 1000_000, ex);
+            log.error("fails to load partner:{}, cost {}ms", jarPath, (System.nanoTime() - t0) / 1000_000, ex);
 
             throw ex;
         }
@@ -140,7 +140,7 @@ public class Container {
         try {
             pluginLoader.load(jarPath, basePackage, Pattern.class, new ContainerContext());
         } catch (Exception ex) {
-            log.error("load pattern:{}, cost {}ms", jarPath, (System.nanoTime() - t0) / 1000_000, ex);
+            log.error("fails to load pattern:{}, cost {}ms", jarPath, (System.nanoTime() - t0) / 1000_000, ex);
 
             throw ex;
         }
