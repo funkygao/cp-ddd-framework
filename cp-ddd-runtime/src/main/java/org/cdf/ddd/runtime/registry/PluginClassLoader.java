@@ -6,6 +6,7 @@
 package org.cdf.ddd.runtime.registry;
 
 import lombok.extern.slf4j.Slf4j;
+import org.cdf.ddd.annotation.UnderDevelopment;
 
 import java.io.File;
 import java.net.URL;
@@ -17,6 +18,7 @@ import java.util.List;
  * Plugin类加载器.
  */
 @Slf4j
+@UnderDevelopment
 class PluginClassLoader extends URLClassLoader {
     private static final String dddPackage = "org.cdf.ddd";
 

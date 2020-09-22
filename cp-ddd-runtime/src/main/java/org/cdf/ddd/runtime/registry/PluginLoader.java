@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.cdf.ddd.annotation.Extension;
 import org.cdf.ddd.annotation.Partner;
 import org.cdf.ddd.annotation.Pattern;
+import org.cdf.ddd.annotation.UnderDevelopment;
 import org.cdf.ddd.plugin.IContainerContext;
 import org.cdf.ddd.plugin.IPluginListener;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
@@ -34,6 +35,7 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
+@UnderDevelopment
 class PluginLoader {
 
     void load(@NotNull String jarPath, String basePackage, Class<? extends Annotation> identityResolverClass, IContainerContext ctx) throws Exception {

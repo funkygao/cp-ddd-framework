@@ -8,6 +8,7 @@ package org.cdf.ddd.runtime.registry;
 import lombok.extern.slf4j.Slf4j;
 import org.cdf.ddd.annotation.Partner;
 import org.cdf.ddd.annotation.Pattern;
+import org.cdf.ddd.annotation.UnderDevelopment;
 
 import javax.validation.constraints.NotNull;
 import java.io.File;
@@ -37,6 +38,7 @@ import java.util.Date;
  * </pre>
  */
 @Slf4j
+@UnderDevelopment
 public class Container {
     private static final Container instance = new Container();
     private static final PluginLoader pluginLoader = new PluginLoader();
