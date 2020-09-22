@@ -88,7 +88,7 @@ cp-ddd-framework is a lightweight development framework for complex business arc
 
 以上，是整体框架的最基本逻辑。
 
-更详细的内容，可以参考
+更详细的内容，可以参考：
 - [单元测试用例](cp-ddd-test)
 - [示例：订单履约中台](cp-ddd-example)
 - [javadoc](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/)
