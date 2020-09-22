@@ -72,7 +72,7 @@ cp-ddd-framework is a lightweight development framework for complex business arc
 - [`Pattern`](cp-ddd-runtime/src/main/java/org/cdf/ddd/annotation/Pattern.java)：业务模式，可以任意维度叠加的水平业务，解决中台部门内部的个性化
 - [`Partner`](cp-ddd-runtime/src/main/java/org/cdf/ddd/annotation/Partner.java)：前台合作伙伴，维度唯一不可叠加的垂直业务，解决前台部门的个性化，来扩展中台能力
 
-本质上，[`IIdentityResolver`](cp-ddd-spec/src/main/java/org/cdf/ddd/ext/IIdentityResolver.java)，相当于把之前散落在各处的某个业务逻辑的**if**判断条件进行收敛，使得这些业务判断显式化，有形化，并有了个名字(统一语言)`；IDomainExtension`，相当于把**if**后面的code block显式化，有形化，并可以进行组织分工：前台部门开发前台的逻辑，中台部门开发中台的逻辑，协同建设一套企业级能力复用平台。
+本质上，[`IIdentityResolver`](cp-ddd-spec/src/main/java/org/cdf/ddd/ext/IIdentityResolver.java)，相当于把之前散落在各处的某个业务逻辑的**if**判断条件进行收敛，使得这些业务判断显式化，有形化，并有了个名字(统一语言)；[`IDomainExtension`](cp-ddd-spec/src/main/java/org/cdf/ddd/ext/IDomainExtension.java)，相当于把**if**后面的code block显式化，有形化，并可以进行组织分工：前台部门开发前台的逻辑，中台部门开发中台的逻辑，协同建设一套企业级能力复用平台。
 
 什么是业务场景？在中台下，它是不确定的。它可能是任意维度，甚至我们想象不到的维度。
 
