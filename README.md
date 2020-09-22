@@ -86,7 +86,7 @@ cp-ddd-framework is a lightweight development framework for complex business arc
 - 订单项是否包含违禁品
 - etc
 
-以上，是整体框架的最基本逻辑。
+以上，是该框架的最基本逻辑。
 
 更详细的内容，可以参考：
 - [单元测试用例](cp-ddd-test)
@@ -94,7 +94,7 @@ cp-ddd-framework is a lightweight development framework for complex business arc
 - [javadoc](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/)
 - source code
 
-需要提醒的是，这是个业务中台**开发框架**，它勾勒出了业务中台的骨架，如何建设业务中台，研发拿它就知道如何组织自己的代码，遇到个性化业务如何解决，如何让业务开发变得优雅。但它无法替代业务梳理、业务抽象、业务建模。It is not silver bullet.
+需要提醒的是，这是个**业务中台**的**开发框架**，它勾勒出了业务中台的骨架，如何建设业务中台，研发拿它就知道如何组织自己的代码，遇到个性化业务如何解决，如何让业务开发变得优雅。但它无法替代业务梳理、业务抽象、业务建模。It is not silver bullet.
 
 此外，这也不是一个万能的业务开发框架，它主要针对的是复杂、个性化特征明显、重业务逻辑的目标系统建设。如果你的系统很简单，CRUD特征明显，不建议使用。
 
