@@ -14,7 +14,7 @@ import java.net.URL;
 public class ExampleTest {
 
     @Test
-    public void dynamicLoadPlugins() throws Exception {
+    public void dynamicLoadPlugins() throws Throwable {
         ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("spring-test.xml");
         applicationContext.start();
 

@@ -27,7 +27,7 @@ public class ContainerTest {
             fail();
         } catch (IllegalArgumentException expected) {
             assertEquals("Invalid jarPath: a/b", expected.getMessage());
-        } catch (Exception unexpected) {
+        } catch (Throwable unexpected) {
             fail();
         }
     }
@@ -73,7 +73,7 @@ public class ContainerTest {
             // 由于没有加载示例的中台jar，肯定会抛出 NoClassDefFoundError
             // java.lang.NoClassDefFoundError: org/example/cp/oms/spec/ext/ISerializableIsolationExt
             // Caused by: java.lang.ClassNotFoundException: org.example.cp.oms.spec.ext.ISerializableIsolationExt
-        } catch (Exception unexpected) {
+        } catch (Throwable unexpected) {
             fail();
         }
     }
@@ -84,7 +84,7 @@ public class ContainerTest {
             DDD.getContainer().loadPatternPlugin(new URL("https://github.com/funkygao/cp-ddd-framework/blob/master/doc/assets/jar/order-center-pattern-0.0.1.jar?raw=true"), null);
             fail();
         } catch (NoClassDefFoundError expected) {
-        } catch (Exception unexpected) {
+        } catch (Throwable unexpected) {
             fail();
         }
     }

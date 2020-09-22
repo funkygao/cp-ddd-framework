@@ -57,9 +57,9 @@ public class Container {
      *
      * @param jarUrl      Plugin jar URL
      * @param basePackage Spring component-scan base-package值，但不支持逗号分隔. if null, will not scan Spring
-     * @throws Exception
+     * @throws Throwable
      */
-    public void loadPartnerPlugin(@NotNull URL jarUrl, String basePackage) throws Exception {
+    public void loadPartnerPlugin(@NotNull URL jarUrl, String basePackage) throws Throwable {
         File localJar = jarTempLocalFile(jarUrl);
         localJar.deleteOnExit();
         log.info("loadPartnerPlugin {} -> {}", jarUrl, localJar.getCanonicalPath());
@@ -74,9 +74,9 @@ public class Container {
      *
      * @param jarPath     jar path
      * @param basePackage Spring component-scan base-package值，但不支持逗号分隔. if null, will not scan Spring
-     * @throws Exception
+     * @throws Throwable
      */
-    public void loadPartnerPlugin(@NotNull String jarPath, String basePackage) throws Exception {
+    public void loadPartnerPlugin(@NotNull String jarPath, String basePackage) throws Throwable {
         if (!jarPath.endsWith(".jar")) {
             throw new IllegalArgumentException("Invalid jarPath: " + jarPath);
         }
@@ -110,9 +110,9 @@ public class Container {
      *
      * @param jarUrl      Plugin jar URL
      * @param basePackage Spring component-scan base-package值，但不支持逗号分隔. if null, will not scan Spring
-     * @throws Exception
+     * @throws Throwable
      */
-    public void loadPatternPlugin(@NotNull URL jarUrl, String basePackage) throws Exception {
+    public void loadPatternPlugin(@NotNull URL jarUrl, String basePackage) throws Throwable {
         File localJar = jarTempLocalFile(jarUrl);
         localJar.deleteOnExit();
 
@@ -126,9 +126,9 @@ public class Container {
      *
      * @param jarPath     jar path
      * @param basePackage Spring component-scan base-package值，但不支持逗号分隔. if null, will not scan Spring
-     * @throws Exception
+     * @throws Throwable
      */
-    public void loadPatternPlugin(@NotNull String jarPath, String basePackage) throws Exception {
+    public void loadPatternPlugin(@NotNull String jarPath, String basePackage) throws Throwable {
         if (!jarPath.endsWith(".jar")) {
             throw new IllegalArgumentException("Invalid jarPath: " + jarPath);
         }
