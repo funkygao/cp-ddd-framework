@@ -44,6 +44,11 @@ public abstract class StepsExecTemplate<Step extends IDomainStep, Model extends 
      * @param model        领域模型
      */
     public final void execute(String activityCode, List<String> stepCodes, Model model) {
+        if (stepCodes == null || stepCodes.isEmpty()) {
+            log.warn("Empty steps on {}", model);
+            return;
+        }
+
         Stack<IDomainRevokableStep> executedSteps = new Stack<>();
         int stepRevisions = 0;
         while (++stepRevisions < MAX_STEP_REVISIONS) {
