@@ -3,6 +3,7 @@ package org.example.cp.oms.domain.step.submitorder;
 import org.cdf.ddd.annotation.Step;
 import org.cdf.ddd.runtime.DDD;
 import lombok.extern.slf4j.Slf4j;
+import org.example.cp.oms.domain.ability.PresortAbility;
 import org.example.cp.oms.domain.ability.ReviseStepsAbility;
 import org.example.cp.oms.domain.exception.OrderException;
 import org.example.cp.oms.domain.exception.OrderDecideStepsException;
@@ -27,6 +28,9 @@ public class BasicStep extends SubmitOrderStep {
             // 通过异常，来改变后续步骤
             throw new OrderDecideStepsException().withSubsequentSteps(revisedSteps);
         }
+
+        log.info("presorting...");
+        DDD.findAbility(PresortAbility.class).presort(model);
     }
 
     @Override

@@ -19,4 +19,9 @@ public class OrderModelCreator implements IDomainModelCreator {
      * 客户编号.
      */
     private String customerNo;
+
+    /**
+     * 客户携带的外部单号.
+     */
+    private String externalNo;
 }

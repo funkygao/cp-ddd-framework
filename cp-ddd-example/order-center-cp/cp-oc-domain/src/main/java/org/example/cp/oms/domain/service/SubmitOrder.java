@@ -32,6 +32,9 @@ public class SubmitOrder implements IDomainService {
         }
 
         List<String> steps = DDD.findAbility(DecideStepsAbility.class).decideSteps(orderModel, Steps.SubmitOrder.Activity);
+        log.info("steps {}", steps);
         submitOrderStepsExec.execute(Steps.SubmitOrder.Activity, steps, orderModel);
+
+        log.info("接单完毕！");
     }
 }

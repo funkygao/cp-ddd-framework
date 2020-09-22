@@ -1,5 +1,6 @@
 package org.example.cp.oms.infra.repository;
 
+import lombok.extern.slf4j.Slf4j;
 import org.example.cp.oms.domain.facade.repository.IOrderRepository;
 import org.example.cp.oms.domain.model.OrderModel;
 import org.example.cp.oms.infra.manager.IOrderManager;
@@ -11,6 +12,7 @@ import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
 
 @Repository
+@Slf4j
 public class OrderRepository implements IOrderRepository {
 
     @Resource
@@ -18,6 +20,8 @@ public class OrderRepository implements IOrderRepository {
 
     @Override
     public void persist(@NotNull OrderModel orderModel) {
+        log.info("落库：{}", orderModel);
+
         if (true) {
             return;
         }

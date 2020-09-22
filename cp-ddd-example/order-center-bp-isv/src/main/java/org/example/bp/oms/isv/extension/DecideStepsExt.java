@@ -5,7 +5,9 @@ import org.example.cp.oms.spec.Steps;
 import org.cdf.ddd.annotation.Extension;
 import org.cdf.ddd.ext.IDecideStepsExt;
 import org.cdf.ddd.model.IDomainModel;
+import org.example.cp.oms.spec.resource.IStockService;
 
+import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
 import java.util.*;
 
@@ -13,8 +15,13 @@ import java.util.*;
 public class DecideStepsExt implements IDecideStepsExt {
     private static final List<String> emptySteps = Collections.emptyList();
 
+    @Resource
+    private IStockService stockService;
+
     @Override
     public List<String> decideSteps(@NotNull IDomainModel model, @NotNull String activityCode) {
+        stockService.preOccupyStock("SKU From ISV"); // 测试Plugin的Spring注入功能
+
         List<String> steps = stepsRegistry.get(activityCode);
         if (steps == null) {
             return emptySteps;
@@ -30,6 +37,7 @@ public class DecideStepsExt implements IDecideStepsExt {
         stepsRegistry.put(Steps.SubmitOrder.Activity, submitOrderSteps);
         submitOrderSteps.add(Steps.SubmitOrder.BasicStep);
         submitOrderSteps.add(Steps.SubmitOrder.PersistStep);
+        submitOrderSteps.add(Steps.SubmitOrder.BroadcastStep);
 
         List<String> cancelOrderSteps = new ArrayList<>();
         stepsRegistry.put(Steps.CancelOrder.Activity, cancelOrderSteps);

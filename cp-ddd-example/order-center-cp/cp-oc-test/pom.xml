@@ -17,6 +17,8 @@
             <version>${project.version}</version>
         </dependency>
 
+        <!-- pattern, partner jar，都通过Container动态加载 -->
+
         <!-- logging -->
         <dependency>
             <groupId>org.slf4j</groupId>

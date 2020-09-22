@@ -29,12 +29,15 @@ public class ExampleTest {
 
         // prepare the domain model
         OrderModelCreator creator = new OrderModelCreator();
-        creator.setSource("ISV");
-        creator.setCustomerNo("hair");
+        creator.setSource("ISV"); // IsvPartner
+        creator.setCustomerNo("home"); // HomeAppliancePattern
+        creator.setExternalNo("20200987655");
         OrderModel orderModel = OrderModel.createWith(creator);
 
         // call the domain service
         SubmitOrder submitOrder = (SubmitOrder) applicationContext.getBean("submitOrder");
+        // 会触发 ISV的步骤编排：basic, persist, broadcast
+        // 相关的Pattern：IPresortExt
         submitOrder.submit(orderModel);
 
         applicationContext.stop();

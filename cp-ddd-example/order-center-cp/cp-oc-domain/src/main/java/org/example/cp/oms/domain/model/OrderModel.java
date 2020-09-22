@@ -19,6 +19,8 @@ public class OrderModel implements IOrderModel {
 
     private String orderNo;
 
+    private String externNo;
+
     @Setter
     private String activity;
 
@@ -35,6 +37,7 @@ public class OrderModel implements IOrderModel {
     private OrderModel(OrderModelCreator creator) {
         this.source = creator.getSource();
         this.customerNo = creator.getCustomerNo();
+        this.externNo = creator.getExternalNo();
 
         this.productDelegate = ProductDelegate.createWith(creator);
     }
@@ -76,7 +79,7 @@ public class OrderModel implements IOrderModel {
 
     @Override
     public String customerProvidedOrderNo() {
-        return null;
+        return externNo;
     }
 
     public String label() {

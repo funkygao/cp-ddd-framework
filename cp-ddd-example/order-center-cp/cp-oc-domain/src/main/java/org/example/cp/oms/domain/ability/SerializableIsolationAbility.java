@@ -24,7 +24,7 @@ public class SerializableIsolationAbility extends BaseDomainAbility<IOrderModel,
 
         // 为了避免前台锁key冲突，中台统一加锁前缀，隔离不同的业务前台
         lockEntry.withPrefix(model.getCustomerNo());
-        log.debug("key:{} expires:{} {}", lockEntry.lockKey(), lockEntry.getLeaseTime(), lockEntry.getTimeUnit());
+        log.info("key:{} expires:{} {}", lockEntry.lockKey(), lockEntry.getLeaseTime(), lockEntry.getTimeUnit());
         return null;
     }
 
