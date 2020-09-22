@@ -194,7 +194,7 @@ For any question, you can use [Gitter](https://gitter.im/cp-ddd-framework/commun
 
 ## FAQ
 
-- 看了你的`IDomainModel`，就是一个空接口，如何与我的领域模型结合的？
+- 看了你的[`IDomainModel`](cp-ddd-spec/src/main/java/org/cdf/ddd/model/IDomainModel.java)，就是一个空接口，完全抽象，是如何与我的具体领域模型结合的？
    - 通过Java的泛型实现的，你可以看到大部分抽象都提供了泛型，方便使用
 
 ## Licensing
