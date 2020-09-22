@@ -20,7 +20,8 @@ import java.util.Date;
 /**
  * 业务容器，用于动态加载个性化业务包：Plugin.
  * <p>
- * <p>Plugin = (Pattern + Extension) | (Partner + Extension)</p>
+ * <p>Plugin是可以被动态加载的jar = (Pattern + Extension) | (Partner + Extension)</p>
+ * <p>{@code Container}常驻内存，{@code Plugin}动态加载</p>
  * <ul><b>Plugin可以被动态加载的限制条件和side effect：</b>
  * <li>处于安全和效率考虑，不能自己定义Spring xml，必须由中台容器统一配置：Spring容器大家共享，不隔离</li>
  * <li>所有的资源(RPC/Redis/JDBC/etc)由中台统一配置，并通过<b>spec jar</b>输出给Plugin使用</li>
