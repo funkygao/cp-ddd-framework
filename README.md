@@ -9,6 +9,8 @@
 # cp-ddd-framework (Central Platform：中台)
 
 * [What is cp-ddd-framework](#what-is-cp-ddd-framework)
+   * [Current status](#current-status)
+   * [Quickstart](#quickstart)
    * [What problems does it solve](#what-problems-does-it-solve)
    * [Key features](#key-features)
    * [Key abstractions](#key-abstractions)
@@ -30,7 +32,15 @@ cp-ddd-framework is a lightweight development framework for complex business arc
 
 融合了DDD、前中台复杂生态协作方法论，同时充分考虑组织、历史债、运维和落地成本以及风险而开发的，面向复杂业务场景架构设计，是**业务中台架构的整体解决方案**。
 
-目前在多个中台项目生产环境下使用。
+### Current status
+
+目前在多个核心中台项目生产环境下使用。
+
+**ATTENTION**：Container对Plugin的动态加载，目前仅支持一次性动态加载，热更新机制还在开发中，请不要使用。
+
+### Quickstart
+
+**Tip**：使用该框架，需要对`DDD`的分层架构有基本了解。
 
 ### What problems does it solve
 
