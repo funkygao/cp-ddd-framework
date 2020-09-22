@@ -59,8 +59,10 @@ class PluginLoader {
             springScanComponent(applicationContext, pluginClassLoader, basePackage);
         }
 
+        log.info("loading classes with annotations: {}", annotations);
         Map<Class<? extends Annotation>, List<Class>> resultMap = JarUtils.loadClassWithAnnotations(
                 jarPath, annotations, null, pluginClassLoader);
+        log.debug("loaded classes: {}", resultMap);
 
         IPluginListener pluginListener = JarUtils.loadBeanWithType(pluginClassLoader, jarPath, IPluginListener.class);
         if (pluginListener != null) {
