@@ -1,7 +1,6 @@
 @startuml
 skinparam handwritten false
 skinparam shadowing<<with_shadow>> true
-left to right direction
 
 interface IDomainService
 interface IDomainStep
@@ -9,10 +8,11 @@ IDomainStep : execute()
 interface IDecideStepsExt
 interface IDomainRevokableStep
 IDomainRevokableStep : rollback()
-package Plugin <<Frame>> {
-    interface IIdentityResolver
-    interface IDomainExtension
-}
+interface IIdentityResolver
+interface IDomainExtension
+interface IPlugable
+IPlugable <|-- IDomainExtension: extend
+IPlugable <|-- IIdentityResolver: extend
 interface IModelAttachmentExt
 IModelAttachmentExt : explain()
 IModelAttachmentExt : render()
@@ -28,9 +28,9 @@ DDD : {static} findSteps()
 IDecideStepsExt : decideSteps()
 IIdentityResolver : match(IDomainModel)
 
-IDomainService <|-- IDomainStep: extend
-IDomainStep <|-- IDomainRevokableStep: extend
-IDomainService <|-- BaseDomainAbility: implements
+IDomainService <|-- IDomainStep
+IDomainStep <|-- IDomainRevokableStep
+IDomainService <|-- BaseDomainAbility
 
 IDomainExtension <|-- IDecideStepsExt: extend
 IDomainExtension <|-- IModelAttachmentExt: extend
@@ -46,12 +46,10 @@ IDomainExtension <-- BaseDomainAbility: locate
 IDomainExtension --> Pattern: bind
 IDomainExtension --> Partner: bind
 
-DDD -- Container
+DDD --> Container : get
 Container : {static} PluginLoader
-Container : loadPartner()
-Container : loadPattern()
 
-Container --> Plugin : load
+Container --> IPlugable : load
 
 Partner : code
 Pattern : code

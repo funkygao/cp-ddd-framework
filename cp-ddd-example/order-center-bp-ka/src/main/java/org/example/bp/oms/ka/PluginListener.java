@@ -14,12 +14,12 @@ import javax.validation.constraints.NotNull;
 public class PluginListener implements IPluginListener {
 
     @Override
-    public void onLoad(IContainerContext ctx) throws Exception {
+    public void afterLoad(IContainerContext ctx) throws Exception {
         log.info("KA Jar loaded, ctx:{}", ctx);
     }
 
     @Override
-    public void onUnload(IContainerContext ctx) throws Exception {
+    public void beforeUnload(IContainerContext ctx) throws Exception {
 
     }
 

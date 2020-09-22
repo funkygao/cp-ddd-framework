@@ -16,7 +16,7 @@ public interface IPluginListener {
      * @param ctx 容器上下文
      * @throws Exception
      */
-    void onLoad(IContainerContext ctx) throws Exception;
+    void afterLoad(IContainerContext ctx) throws Exception;
 
     /**
      * 卸载插件包时触发.
@@ -24,5 +24,5 @@ public interface IPluginListener {
      * @param ctx 容器上下文
      * @throws Exception
      */
-    void onUnload(IContainerContext ctx) throws Exception;
+    void beforeUnload(IContainerContext ctx) throws Exception;
 }

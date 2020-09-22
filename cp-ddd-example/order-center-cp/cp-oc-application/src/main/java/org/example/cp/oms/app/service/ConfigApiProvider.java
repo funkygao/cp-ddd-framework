@@ -20,7 +20,7 @@ public class ConfigApiProvider implements ConfigApi {
         // 再加载
         try {
             DDD.getContainer().loadPartnerPlugin(request.getJarURL().toString(), "org.example.bp.oms");
-        } catch (Exception ex) {
+        } catch (Throwable ex) {
             log.error("load:{}", request, ex);
         }
     }

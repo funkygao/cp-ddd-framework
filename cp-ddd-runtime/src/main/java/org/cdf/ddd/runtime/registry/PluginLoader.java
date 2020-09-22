@@ -52,7 +52,6 @@ class PluginLoader {
         ApplicationContext applicationContext = DDDBootstrap.applicationContext();
 
         if (basePackage != null) {
-            // TODO 10个bean，扫描到第8个出现异常，需要把PartnerClassLoader里已经addUrl的摘除
             // 先扫spring，然后初始化所有的basePackage bean，包括已经在中台里加载完的bean
             log.info("Spring scan with {} ...", pluginClassLoader);
             springScanComponent(applicationContext, pluginClassLoader, basePackage);
@@ -60,6 +59,16 @@ class PluginLoader {
 
         Map<Class<? extends Annotation>, List<Class>> resultMap = JarUtils.loadClassWithAnnotations(
                 jarPath, annotations, null, pluginClassLoader);
+
+        IPluginListener pluginListener = JarUtils.loadBeanWithType(pluginClassLoader, jarPath, IPluginListener.class);
+        if (pluginListener != null) {
+            pluginListener.beforeUnload(ctx);
+        }
+
+        // 现在，新jar里的类已经被新的ClassLoader加载到内存了，同时旧jar里的类仍然在工作
+        // 新jar里的类被IIdentityResolver切换后，新的请求就会发过来；旧的类在in-flight job完成后就不再调用了，最终被GC
+        // 注册和切换是在RegistryFactory一并完成的
+        // TODO 需要把Extension、IIdentityResolver 的切换过程变成原子的：一个Plugin里可以有多个Pattern，他们的切换可以不必atomic
 
         log.info("register and index IIdentityResolver...");
         List<Class> identityResolverClasses = resultMap.get(identityResolverClass);
@@ -69,7 +78,6 @@ class PluginLoader {
             }
 
             for (Class irc : identityResolverClasses) {
-                // 业务身份实例，Spring里获取的
                 log.info("lazy register {}", irc.getCanonicalName());
                 RegistryFactory.lazyRegister(identityResolverClass, applicationContext.getBean(irc));
             }
@@ -79,22 +87,18 @@ class PluginLoader {
         List<Class> extensions = resultMap.get(Extension.class);
         if (extensions != null && !extensions.isEmpty()) {
             for (Class extensionClazz : extensions) {
-                // 扩展点实例，Spring里获取的
                 log.info("lazy register {}", extensionClazz.getCanonicalName());
                 RegistryFactory.lazyRegister(Extension.class, applicationContext.getBean(extensionClazz));
             }
         }
 
-        IPluginListener pluginListener = JarUtils.loadBeanWithType(pluginClassLoader, jarPath, IPluginListener.class);
         if (pluginListener != null) {
-            log.info("calling plugin listener...");
-            pluginListener.onLoad(ctx);
-            log.info("called plugin listener");
+            pluginListener.afterLoad(ctx);
         }
     }
 
     // manual <context:component-scan>
-    private void springScanComponent(@NotNull ApplicationContext context, @NotNull ClassLoader partnerClassLoader, @NotNull String... basePackages) throws Exception {
+    private void springScanComponent(@NotNull ApplicationContext context, @NotNull ClassLoader pluginClassLoader, @NotNull String... basePackages) throws Exception {
         AbstractRefreshableApplicationContext realContext;
         if (context instanceof ClassPathXmlApplicationContext) {
             realContext = (ClassPathXmlApplicationContext) context;
@@ -103,14 +107,14 @@ class PluginLoader {
         }
 
         // 加载该jar包里的Spring bean时，使用该ClassLoader
-        realContext.getBeanFactory().setBeanClassLoader(partnerClassLoader);
+        realContext.getBeanFactory().setBeanClassLoader(pluginClassLoader);
 
         BeanDefinitionRegistry beanDefinitionRegistry = (BeanDefinitionRegistry) realContext.getBeanFactory();
         new ClassPathBeanDefinitionScanner(
                 beanDefinitionRegistry,
                 true,
                 getOrCreateEnvironment(beanDefinitionRegistry),
-                new PathMatchingResourcePatternResolver(new DefaultResourceLoader(partnerClassLoader))
+                new PathMatchingResourcePatternResolver(new DefaultResourceLoader(pluginClassLoader))
         ).scan(basePackages);
 
         if (false) {

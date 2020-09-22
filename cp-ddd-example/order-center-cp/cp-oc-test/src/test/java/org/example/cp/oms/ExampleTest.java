@@ -5,6 +5,7 @@ import org.cdf.ddd.runtime.DDD;
 import org.example.cp.oms.domain.model.OrderModel;
 import org.example.cp.oms.domain.model.OrderModelCreator;
 import org.example.cp.oms.domain.service.SubmitOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -14,7 +15,8 @@ import java.net.URL;
 public class ExampleTest {
 
     @Test
-    public void dynamicLoadPlugins() throws Exception {
+    @Ignore
+    public void dynamicLoadPlugins() throws Throwable {
         ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("spring-test.xml");
         applicationContext.start();
 

@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 /**
  * 业务身份解析器.
  */
-public interface IIdentityResolver<Model extends IDomainModel> {
+public interface IIdentityResolver<Model extends IDomainModel> extends IPlugable {
 
     /**
      * 根据领域模型判断是否属于我的业务.
