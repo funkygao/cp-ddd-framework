@@ -23,7 +23,7 @@ public class ExampleTest {
 
         for (int i = 0; i < 2; i++) {
             // 同一个jar，load多次
-            log.info("N:{}", i);
+            log.info("n={}", i + 1);
             DDD.getContainer().loadPartnerPlugin(new URL("https://github.com/funkygao/cp-ddd-framework/blob/master/doc/assets/jar/order-center-bp-isv-0.0.1.jar?raw=true"), "org.example.bp");
         }
 
