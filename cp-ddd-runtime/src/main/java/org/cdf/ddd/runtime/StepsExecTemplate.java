@@ -45,7 +45,7 @@ public abstract class StepsExecTemplate<Step extends IDomainStep, Model extends 
      */
     public final void execute(String activityCode, List<String> stepCodes, Model model) {
         if (stepCodes == null || stepCodes.isEmpty()) {
-            log.warn("Empty steps on {}", model);
+            log.warn("Empty steps of activity:{} on {}", activityCode, model);
             return;
         }
 
