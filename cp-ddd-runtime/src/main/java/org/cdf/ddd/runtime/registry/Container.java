@@ -60,10 +60,12 @@ public class Container {
      */
     public void loadPartnerPlugin(@NotNull URL jarUrl, String basePackage) throws Exception {
         File localJar = jarTempLocalFile(jarUrl);
-        localJar.deleteOnExit();
-
-        FileUtils.copyInputStreamToFile(jarUrl.openStream(), localJar);
-        loadPartnerPlugin(localJar.getAbsolutePath(), basePackage);
+        try {
+            FileUtils.copyInputStreamToFile(jarUrl.openStream(), localJar);
+            loadPartnerPlugin(localJar.getAbsolutePath(), basePackage);
+        } finally {
+            localJar.delete();
+        }
     }
 
     /**
@@ -113,10 +115,12 @@ public class Container {
      */
     public void loadPatternPlugin(@NotNull URL jarUrl, String basePackage) throws Exception {
         File localJar = jarTempLocalFile(jarUrl);
-        localJar.deleteOnExit();
-
-        org.apache.commons.io.FileUtils.copyInputStreamToFile(jarUrl.openStream(), localJar);
-        loadPatternPlugin(localJar.getAbsolutePath(), basePackage);
+        try {
+            FileUtils.copyInputStreamToFile(jarUrl.openStream(), localJar);
+            loadPatternPlugin(localJar.getAbsolutePath(), basePackage);
+        } finally {
+            localJar.delete();
+        }
     }
 
     /**
