@@ -69,7 +69,7 @@ cp-ddd-framework is a lightweight development framework for complex business arc
 - `Pattern`：中台部门内部的个性化
 - `Partner`：前台部门的个性化，来扩展中台能力
 
-本质上，`IIdentityResolver`，相当于把之前散落在各处的某个业务逻辑的**if**判断条件进行收敛，使得这些业务判断显式化，有形化，并有了个名字(统一语言)`；IDomainExtension`，相当于把**if**后面的code block显式化，有形化，并可以进行组织分工：前台部门开发前台的逻辑，中台部门开发中台的逻辑，共同建设一套能力。
+本质上，`IIdentityResolver`，相当于把之前散落在各处的某个业务逻辑的**if**判断条件进行收敛，使得这些业务判断显式化，有形化，并有了个名字(统一语言)`；IDomainExtension`，相当于把**if**后面的code block显式化，有形化，并可以进行组织分工：前台部门开发前台的逻辑，中台部门开发中台的逻辑，协同建设一套企业级能力复用平台。
 
 什么是业务场景？在中台下，它是不确定的。它可能是任意维度，我们想象不到的维度。
 
