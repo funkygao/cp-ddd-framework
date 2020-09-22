@@ -24,6 +24,6 @@ public class B2BExt implements IFooExt {
             }
         }
 
-        throw new RuntimeException("b2b error");
+        throw new RuntimeException("b2b error on purpose");
     }
 }

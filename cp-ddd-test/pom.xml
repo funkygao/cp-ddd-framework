@@ -83,6 +83,7 @@
                 <configuration>
                     <excludes>
                         <exclude>**/*JarUtils.class</exclude>
+                        <exclude>**/*FileUtils.class</exclude>
                         <exclude>**/*Container.class</exclude>
                         <exclude>**/*PluginLoader.class</exclude>
                         <exclude>**/*PluginClassLoader.class</exclude>
