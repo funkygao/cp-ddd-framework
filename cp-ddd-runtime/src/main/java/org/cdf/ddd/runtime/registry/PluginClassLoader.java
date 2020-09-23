@@ -82,15 +82,16 @@ class PluginClassLoader extends URLClassLoader {
 
         // 不是JDK本身的类
         if (containerFirstClass(className)) {
-            clazz = containerClassLoader.loadClass(className); // might throw ClassNotFoundException，中台无法加载
+            clazz = containerClassLoader.loadClass(className); // parent.loadClass
             if (clazz != null) {
                 log.debug("ContainerClassLoader loaded {}", className);
                 return clazz;
             }
         }
 
-        // Plugin加载器加载
+        // Plugin加载器自己加载
         try {
+            // look for classes in the file system(jar)
             clazz = this.findClass(className);
             if (clazz != null) {
                 log.info("PluginClassLoader loaded {}", className);
