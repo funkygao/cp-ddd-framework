@@ -19,6 +19,7 @@ public class ExampleTest {
     @Resource
     private SubmitOrder submitOrder;
 
+    // 演示的入口，展示如何把这个例子完整地跑起来
     @Test
     public void demoSubmitOrder() throws Throwable {
         // prepare the domain model
