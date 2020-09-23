@@ -65,7 +65,7 @@ public abstract class StepsExecTemplate<Step extends IDomainStep, Model extends 
 
         if (stepRevisions == MAX_STEP_REVISIONS) {
             // e,g. (a -> b(revise) -> a)
-            log.error("Steps revision seem to encounter dead loop, abort after {} mode:{}", stepRevisions, model);
+            log.error("Steps revision seem to encounter dead loop, abort after {} model:{}", stepRevisions, model);
             throw new RuntimeException("Seems steps dead loop, abort after " + MAX_STEP_REVISIONS);
         }
     }
