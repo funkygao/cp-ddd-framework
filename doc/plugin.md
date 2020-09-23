@@ -33,4 +33,5 @@ Plugin有2种：
 
 - 可以自己 AOP 吗
 - 打印日志
+- 引入guava等第三方包，都必须是provided吗
 - fat jar, lazy load

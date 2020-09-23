@@ -16,6 +16,14 @@
             <groupId>org.cdf</groupId>
             <artifactId>cp-oc-spec</artifactId>
             <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- 演示对第三方包的依赖 -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>19.0</version>
         </dependency>
     </dependencies>
 
