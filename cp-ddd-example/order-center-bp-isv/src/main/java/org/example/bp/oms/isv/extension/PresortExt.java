@@ -14,6 +14,12 @@ public class PresortExt implements IPresortExt {
 
     @Override
     public void presort(@NotNull IOrderModel model) {
-        log.info("ISV里预分拣的结果：1");
+        log.info("ISV里预分拣的结果：{}", new MockInnerClass().getResult());
+    }
+
+    private static class MockInnerClass {
+        int getResult() {
+            return 1;
+        }
     }
 }
