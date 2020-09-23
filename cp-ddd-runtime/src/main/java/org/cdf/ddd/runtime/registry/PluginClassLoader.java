@@ -57,7 +57,7 @@ class PluginClassLoader extends URLClassLoader {
             clazz = jdkClassLoader().loadClass(className);
             if (clazz != null) {
                 // 说明该类是JRE的类
-                log.debug("jdkClassLoader loaded {}", className);
+                log.debug("JDKClassLoader loaded {}", className);
                 return clazz;
             }
         } catch (ClassNotFoundException ignored) {
@@ -67,7 +67,7 @@ class PluginClassLoader extends URLClassLoader {
         if (containerFirstClass(className)) {
             clazz = containerClassLoader().loadClass(className); // might throw ClassNotFoundException，中台无法加载
             if (clazz != null) {
-                log.debug("containerClassLoader loaded {}", className);
+                log.debug("ContainerClassLoader loaded {}", className);
                 return clazz;
             }
         }
@@ -76,7 +76,8 @@ class PluginClassLoader extends URLClassLoader {
         try {
             clazz = this.findClass(className);
             if (clazz != null) {
-                log.debug("PluginClassLoader loaded {}", className);
+                log.info("PluginClassLoader loaded {}", className);
+                return clazz;
             }
         } catch (ClassNotFoundException ignored) {
         }
@@ -84,9 +85,13 @@ class PluginClassLoader extends URLClassLoader {
         // 如果Plugin加载器无法加载，fallback to 中台Container加载器
         if (clazz == null) {
             clazz = containerClassLoader().loadClass(className); // might throw ClassNotFoundException
-            log.debug("containerClassLoader loaded {}", className);
+            if (clazz != null) {
+                log.debug("ContainerClassLoader loaded {}", className);
+                return clazz;
+            }
         }
 
+        // null
         return clazz;
     }
 
