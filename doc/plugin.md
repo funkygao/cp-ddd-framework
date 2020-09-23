@@ -20,8 +20,17 @@ Plugin有2种：
 | Java Agent(Arthas) |                                                    | 只能修改方法体，不能增加类：redefine                         |
 | 脚本语言           |                                                    |                                                              |
 
+### Pandora
+
+
+
+## 风险
+
+- java.lang.ClassNotFoundException, NoClassDefFoundError, NoSuchMethodError
+- canary release, rollback, rolling upgrade
 
 ## Scenarios
 
 - 可以自己 AOP 吗
 - 打印日志
+- fat jar, lazy load

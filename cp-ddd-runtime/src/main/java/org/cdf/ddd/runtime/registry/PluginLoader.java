@@ -49,12 +49,12 @@ class PluginLoader {
         annotations.add(Extension.class);
 
         // 个性化业务的ClassLoader，目前是所有业务共享一个 TODO 每个业务单独一个
-        PluginClassLoader pluginClassLoader = PluginClassLoader.getInstance();
+        PluginClassLoader pluginClassLoader = PluginClassLoader.getInstance().inject(Container.jdkClassLoader(), Container.containerClassLoader());
         pluginClassLoader.addUrl(new File(jarPath).toURI().toURL());
 
         ApplicationContext applicationContext = DDDBootstrap.applicationContext();
 
-        if (basePackage != null) {
+        if (basePackage != null && !basePackage.isEmpty()) {
             // 先扫spring，然后初始化所有的basePackage bean，包括已经在中台里加载完的bean
             log.info("Spring scan with {} ...", pluginClassLoader);
             springScanComponent(applicationContext, pluginClassLoader, basePackage);

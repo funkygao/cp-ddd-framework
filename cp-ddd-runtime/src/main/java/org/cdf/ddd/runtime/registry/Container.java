@@ -14,8 +14,11 @@ import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.net.URLClassLoader;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 业务容器，用于动态加载个性化业务包：Plugin.
@@ -40,8 +43,11 @@ import java.util.Date;
  */
 @Slf4j
 @UnderDevelopment
-public class Container {
+public final class Container {
     private static final Container instance = new Container();
+
+    private static ClassLoader jdkClassLoader = initJDKClassLoader();
+    private static ClassLoader containerClassLoader = Container.class.getClassLoader();
 
     private Container() {
     }
@@ -52,6 +58,20 @@ public class Container {
     @NotNull
     public static Container getInstance() {
         return instance;
+    }
+
+    /**
+     * JDK本身的类加载器，全局唯一.
+     */
+    public static ClassLoader jdkClassLoader() {
+        return jdkClassLoader;
+    }
+
+    /**
+     * 中台容器类加载器，全局唯一.
+     */
+    public static ClassLoader containerClassLoader() {
+        return containerClassLoader;
     }
 
     /**
@@ -163,5 +183,29 @@ public class Container {
         String prefix = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date());
         String suffix = jarUrl.getPath().substring(jarUrl.getPath().lastIndexOf("/") + 1);
         return File.createTempFile(prefix, "." + suffix);
+    }
+
+    private static ClassLoader initJDKClassLoader() {
+        ClassLoader parent;
+        for (parent = ClassLoader.getSystemClassLoader(); parent.getParent() != null; parent = parent.getParent()) {
+        }
+
+        List<URL> jdkUrls = new ArrayList<>(100);
+        try {
+            // javaHome: /Library/Java/JavaVirtualMachines/jdk1.8.0_40.jdk/Contents/Home
+            String javaHome = System.getProperty("java.home").replace(File.separator + "jre", "");
+            // search path of URLs for loading classes and resources
+            URL[] urls = ((URLClassLoader) ClassLoader.getSystemClassLoader()).getURLs();
+            for (URL url : urls) {
+                if (url.getPath().startsWith(javaHome)) {
+                    // 只找JDK本身的
+                    jdkUrls.add(url);
+                }
+            }
+        } catch (Throwable shouldNeverHappen) {
+            log.error("JDKClassLoader", shouldNeverHappen);
+        }
+
+        return new URLClassLoader(jdkUrls.toArray(new URL[0]), parent);
     }
 }
