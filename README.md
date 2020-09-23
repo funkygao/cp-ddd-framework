@@ -23,7 +23,6 @@
 * [Building from Source](#building-from-source)
 * [Total solution](#total-solution)
 * [Contribution](#contribution)
-* [FAQ](#faq)
 * [Licensing](#licensing)
 
 ## What is cp-ddd-framework?
@@ -191,11 +190,6 @@ You are welcome to contribute to the project with pull requests on GitHub.
 If you find a bug or want to request a feature, please use the [issue tracker](https://github.com/funkygao/cp-ddd-framework/issues).
 
 For any question, you can use [Gitter](https://gitter.im/cp-ddd-framework/community).
-
-## FAQ
-
-- 看了你的[`IDomainModel`](cp-ddd-spec/src/main/java/org/cdf/ddd/model/IDomainModel.java)，就是一个空接口，完全抽象，是如何与我的具体领域模型结合的？
-   - 通过Java的泛型实现的，你可以看到大部分抽象都提供了泛型，方便使用
 
 ## Licensing
 
