@@ -22,8 +22,8 @@ import java.util.List;
 class PluginClassLoader extends URLClassLoader {
     private static final String dddPackage = "org.cdf.ddd";
 
-    private static ClassLoader jdkClassLoader; // JDK本身的类加载器
-    private static ClassLoader containerClassLoader; // 中台容器类加载器
+    private static ClassLoader jdkClassLoader; // JDK本身的类加载器，全局唯一
+    private static ClassLoader containerClassLoader; // 中台容器类加载器，全局唯一
     private static Object mutex = new Object();
 
     private static PluginClassLoader instance = new PluginClassLoader(new URL[]{});
@@ -32,7 +32,7 @@ class PluginClassLoader extends URLClassLoader {
         super(urls);
 
         for (URL url : urls) {
-            getInstance().addURL(url);
+            addUrl(url);
         }
     }
 

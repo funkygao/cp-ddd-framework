@@ -38,11 +38,12 @@ import java.util.Map;
 @UnderDevelopment
 class PluginLoader {
 
-    void load(@NotNull String jarPath, String basePackage, Class<? extends Annotation> identityResolverClass, IContainerContext ctx) throws Exception {
+    PluginLoader load(@NotNull String jarPath, String basePackage, Class<? extends Annotation> identityResolverClass, IContainerContext ctx) throws Throwable {
         if (identityResolverClass != Pattern.class && identityResolverClass != Partner.class) {
             throw new IllegalArgumentException("Must be Pattern or Partner");
         }
 
+        // eager load IPlugable classes，通过Java类加载的全盘负责机制自动加载相关引用类
         List<Class<? extends Annotation>> annotations = new ArrayList<>(2);
         annotations.add(identityResolverClass);
         annotations.add(Extension.class);
@@ -99,6 +100,8 @@ class PluginLoader {
         if (pluginListener != null) {
             pluginListener.afterLoad(ctx);
         }
+
+        return this;
     }
 
     // manual <context:component-scan>

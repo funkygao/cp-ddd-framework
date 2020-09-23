@@ -42,7 +42,6 @@ import java.util.Date;
 @UnderDevelopment
 public class Container {
     private static final Container instance = new Container();
-    private static final PluginLoader pluginLoader = new PluginLoader();
 
     private Container() {
     }
@@ -87,8 +86,8 @@ public class Container {
         long t0 = System.nanoTime();
         log.warn("loading partner:{} basePackage:{}", jarPath, basePackage);
         try {
-            pluginLoader.load(jarPath, basePackage, Partner.class, new ContainerContext());
-        } catch (Exception ex) {
+            new PluginLoader().load(jarPath, basePackage, Partner.class, new ContainerContext());
+        } catch (Throwable ex) {
             log.error("fails to load partner:{}, cost {}ms", jarPath, (System.nanoTime() - t0) / 1000_000, ex);
 
             throw ex;
@@ -139,8 +138,8 @@ public class Container {
         long t0 = System.nanoTime();
         log.warn("loading pattern:{} basePackage:{}", jarPath, basePackage);
         try {
-            pluginLoader.load(jarPath, basePackage, Pattern.class, new ContainerContext());
-        } catch (Exception ex) {
+            new PluginLoader().load(jarPath, basePackage, Pattern.class, new ContainerContext());
+        } catch (Throwable ex) {
             log.error("fails to load pattern:{}, cost {}ms", jarPath, (System.nanoTime() - t0) / 1000_000, ex);
 
             throw ex;
