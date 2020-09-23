@@ -15,6 +15,7 @@
             <groupId>org.cdf</groupId>
             <artifactId>cp-oc-spec</artifactId>
             <version>${project.version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
