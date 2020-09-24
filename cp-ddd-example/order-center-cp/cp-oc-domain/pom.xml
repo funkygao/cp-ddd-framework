@@ -20,7 +20,7 @@
         <dependency>
             <groupId>org.cdf</groupId>
             <artifactId>cp-ddd-runtime</artifactId>
-            <version>${project.version}</version>
+            <version>${cp.ddd.framework.version}</version>
         </dependency>
     </dependencies>
 

@@ -23,6 +23,8 @@
         <maven.jacoco.version>0.8.5</maven.jacoco.version>
         <maven.deploy.skip>true</maven.deploy.skip>
 
+        <cp.ddd.framework.version>0.0.1-SNAPSHOT</cp.ddd.framework.version>
+
         <!-- unified 3rd party dependencies version -->
         <lombok.version>1.18.8</lombok.version>
         <javax.validation.version>1.1.0.Final</javax.validation.version>

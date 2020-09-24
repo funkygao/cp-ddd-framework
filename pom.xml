@@ -21,7 +21,7 @@ under the License.
     <groupId>org.cdf</groupId>
     <artifactId>cp-ddd-framework</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.1</version>
+    <version>0.0.1-SNAPSHOT</version>
     <name>Central Platform DDD Framework</name>
     <description>Central Platform DDD Framework</description>
     <url>https://github.com/funkygao/cp-ddd-framework</url>
