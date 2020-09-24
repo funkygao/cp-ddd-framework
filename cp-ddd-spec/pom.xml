@@ -25,6 +25,7 @@ under the License.
 
     <artifactId>cp-ddd-spec</artifactId>
     <name>DDD :: Spec</name>
+    <description>Central Platform DDD Framework Specifications</description>
 
     <properties>
         <maven.deploy.skip>false</maven.deploy.skip>

@@ -23,7 +23,7 @@ under the License.
     <packaging>pom</packaging>
     <version>0.0.1</version>
     <name>Central Platform DDD Framework</name>
-    <description>业务中台开发框架</description>
+    <description>Central Platform DDD Framework</description>
     <url>https://github.com/funkygao/cp-ddd-framework</url>
     <inceptionYear>2020</inceptionYear>
 

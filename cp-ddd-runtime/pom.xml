@@ -25,6 +25,7 @@ under the License.
 
     <artifactId>cp-ddd-runtime</artifactId>
     <name>DDD :: Runtime</name>
+    <description>Central Platform DDD Framework Runtime Support</description>
 
     <properties>
         <maven.deploy.skip>false</maven.deploy.skip>

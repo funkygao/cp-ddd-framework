@@ -25,6 +25,7 @@ under the License.
 
     <artifactId>cp-ddd-enforce</artifactId>
     <name>DDD :: Enforce</name>
+    <description>Central Platform DDD Framework Enforcement</description>
 
     <properties>
         <maven.deploy.skip>false</maven.deploy.skip>
