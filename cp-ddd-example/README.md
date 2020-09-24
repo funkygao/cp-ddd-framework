@@ -1,6 +1,6 @@
 # cp-ddd-example
 
-演示如何使用`cp-ddd-framework`框架实现一套`订单中台`。
+演示如何使用`cp-ddd-framework`框架实现一套`订单履约中台`。
 
 ## 目录
 

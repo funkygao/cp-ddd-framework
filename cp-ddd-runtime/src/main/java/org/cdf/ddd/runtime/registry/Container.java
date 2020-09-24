@@ -14,17 +14,22 @@ import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.net.URLClassLoader;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 业务容器，用于动态加载个性化业务包：Plugin.
  * <p>
- * <p>Plugin = (Pattern + Extension) | (Partner + Extension)</p>
+ * <p>Plugin是可以被动态加载的jar = (Pattern + Extension) | (Partner + Extension)</p>
+ * <p>{@code Container}常驻内存，{@code Plugin}动态加载</p>
  * <ul><b>Plugin可以被动态加载的限制条件和side effect：</b>
- * <li>处于安全和效率考虑，不能自己定义Spring xml，必须由中台容器统一配置：Spring容器大家共享，不隔离</li>
- * <li>所有的资源(RPC/Redis/JDBC/etc)由中台统一配置，并通过<b>spec jar</b>输出给Plugin使用</li>
- * <li>Plugin不是FatJar，是利用中台提供的能力(spec jar)，进行有限扩展的jar：不能自行定义外部依赖</li>
+ * <li>处于安全和效率考虑，不能自己定义Spring xml，必须由中台容器统一配置：Spring容器大家共享，不隔离，一份</li>
+ * <li>所有中间件资源(RPC/Redis/JDBC/MQ/etc)由中台统一配置，并通过<b>spec jar</b>输出给Plugin使用</li>
+ * <li>TODO Plugin不是FatJar，是利用中台提供的能力(spec jar)，进行有限扩展的jar：不能自行定义外部依赖</li>
+ * <li>Plugin可以引用外部jar包，但需要{@code scope=provided}</li>
  * <li>热更新依靠的是使用新ClassLoader重新加载jar，但之前已经加载的class和ClassLoader无法控制卸载时机，可能会短时间内Perm区增大</li>
  * </ul>
  * <p>
@@ -39,9 +44,11 @@ import java.util.Date;
  */
 @Slf4j
 @UnderDevelopment
-public class Container {
+public final class Container {
     private static final Container instance = new Container();
-    private static final PluginLoader pluginLoader = new PluginLoader();
+
+    private static ClassLoader jdkClassLoader = initJDKClassLoader();
+    private static ClassLoader containerClassLoader = Container.class.getClassLoader();
 
     private Container() {
     }
@@ -52,6 +59,20 @@ public class Container {
     @NotNull
     public static Container getInstance() {
         return instance;
+    }
+
+    /**
+     * JDK本身的类加载器，全局唯一.
+     */
+    public static ClassLoader jdkClassLoader() {
+        return jdkClassLoader;
+    }
+
+    /**
+     * 中台容器类加载器，全局唯一.
+     */
+    public static ClassLoader containerClassLoader() {
+        return containerClassLoader;
     }
 
     /**
@@ -86,9 +107,9 @@ public class Container {
         long t0 = System.nanoTime();
         log.warn("loading partner:{} basePackage:{}", jarPath, basePackage);
         try {
-            pluginLoader.load(jarPath, basePackage, Partner.class, new ContainerContext());
-        } catch (Exception ex) {
-            log.error("load partner:{}, cost {}ms", jarPath, (System.nanoTime() - t0) / 1000_000, ex);
+            new PluginLoader().load(jarPath, basePackage, Partner.class, new ContainerContext());
+        } catch (Throwable ex) {
+            log.error("fails to load partner:{}, cost {}ms", jarPath, (System.nanoTime() - t0) / 1000_000, ex);
 
             throw ex;
         }
@@ -138,9 +159,9 @@ public class Container {
         long t0 = System.nanoTime();
         log.warn("loading pattern:{} basePackage:{}", jarPath, basePackage);
         try {
-            pluginLoader.load(jarPath, basePackage, Pattern.class, new ContainerContext());
-        } catch (Exception ex) {
-            log.error("load pattern:{}, cost {}ms", jarPath, (System.nanoTime() - t0) / 1000_000, ex);
+            new PluginLoader().load(jarPath, basePackage, Pattern.class, new ContainerContext());
+        } catch (Throwable ex) {
+            log.error("fails to load pattern:{}, cost {}ms", jarPath, (System.nanoTime() - t0) / 1000_000, ex);
 
             throw ex;
         }
@@ -163,5 +184,29 @@ public class Container {
         String prefix = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date());
         String suffix = jarUrl.getPath().substring(jarUrl.getPath().lastIndexOf("/") + 1);
         return File.createTempFile(prefix, "." + suffix);
+    }
+
+    private static ClassLoader initJDKClassLoader() {
+        ClassLoader parent;
+        for (parent = ClassLoader.getSystemClassLoader(); parent.getParent() != null; parent = parent.getParent()) {
+        }
+
+        List<URL> jdkUrls = new ArrayList<>(100);
+        try {
+            // javaHome: /Library/Java/JavaVirtualMachines/jdk1.8.0_40.jdk/Contents/Home
+            String javaHome = System.getProperty("java.home").replace(File.separator + "jre", "");
+            // search path of URLs for loading classes and resources
+            URL[] urls = ((URLClassLoader) ClassLoader.getSystemClassLoader()).getURLs();
+            for (URL url : urls) {
+                if (url.getPath().startsWith(javaHome)) {
+                    // 只找JDK本身的
+                    jdkUrls.add(url);
+                }
+            }
+        } catch (Throwable shouldNeverHappen) {
+            log.error("JDKClassLoader", shouldNeverHappen);
+        }
+
+        return new URLClassLoader(jdkUrls.toArray(new URL[0]), parent);
     }
 }

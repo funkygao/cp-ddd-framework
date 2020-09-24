@@ -20,11 +20,16 @@ under the License.
     <parent>
         <groupId>org.cdf</groupId>
         <artifactId>cp-ddd-framework</artifactId>
-        <version>0.0.1</version>
+        <version>0.0.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>cp-ddd-enforce</artifactId>
     <name>DDD :: Enforce</name>
+    <description>Central Platform DDD Framework Enforcement</description>
+
+    <properties>
+        <maven.deploy.skip>false</maven.deploy.skip>
+    </properties>
 
     <dependencies>
         <dependency>

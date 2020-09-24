@@ -20,11 +20,16 @@ under the License.
     <parent>
         <groupId>org.cdf</groupId>
         <artifactId>cp-ddd-framework</artifactId>
-        <version>0.0.1</version>
+        <version>0.0.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>cp-ddd-runtime</artifactId>
     <name>DDD :: Runtime</name>
+    <description>Central Platform DDD Framework Runtime Support</description>
+
+    <properties>
+        <maven.deploy.skip>false</maven.deploy.skip>
+    </properties>
 
     <dependencies>
         <dependency>

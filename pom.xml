@@ -21,9 +21,9 @@ under the License.
     <groupId>org.cdf</groupId>
     <artifactId>cp-ddd-framework</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.1</version>
+    <version>0.0.1-SNAPSHOT</version>
     <name>Central Platform DDD Framework</name>
-    <description>业务中台开发框架</description>
+    <description>Central Platform DDD Framework</description>
     <url>https://github.com/funkygao/cp-ddd-framework</url>
     <inceptionYear>2020</inceptionYear>
 
@@ -31,7 +31,6 @@ under the License.
         <module>cp-ddd-spec</module>
         <module>cp-ddd-runtime</module>
         <module>cp-ddd-enforce</module>
-        <module>cp-ddd-example</module>
     </modules>
 
     <issueManagement>
@@ -45,6 +44,7 @@ under the License.
         <maven.compiler.failOnError>true</maven.compiler.failOnError>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.jacoco.version>0.8.5</maven.jacoco.version>
+        <maven.deploy.skip>true</maven.deploy.skip>
 
         <!-- unified 3rd party dependencies version -->
         <lombok.version>1.18.8</lombok.version>
@@ -103,10 +103,19 @@ under the License.
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.8.2</version>
+                <configuration>
+                    <skip>${maven.deploy.skip}</skip>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
     <profiles>
+        <!-- 单元测试 profile：把cp-ddd-test module引入，准备jacoco -->
         <profile>
             <id>test</id>
             <activation>
@@ -131,6 +140,23 @@ under the License.
             <modules>
                 <module>cp-ddd-test</module>
             </modules>
+        </profile>
+
+        <!-- 本地安装profile，不安装cp-ddd-test -->
+        <profile>
+            <id>install</id>
+        </profile>
+
+        <!-- 发布到github maven package -->
+        <profile>
+            <id>release</id>
+            <distributionManagement>
+                <repository>
+                    <id>github</id>
+                    <name>GitHub funkygao Apache Maven Packages</name>
+                    <url>https://maven.pkg.github.com/funkygao/cp-ddd-framework</url>
+                </repository>
+            </distributionManagement>
         </profile>
     </profiles>
 </project>

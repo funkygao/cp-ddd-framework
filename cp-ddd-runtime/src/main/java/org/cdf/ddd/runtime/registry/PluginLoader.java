@@ -36,29 +36,32 @@ import java.util.Map;
 @Slf4j
 class PluginLoader {
 
-    void load(@NotNull String jarPath, String basePackage, Class<? extends Annotation> identityResolverClass, IContainerContext ctx) throws Exception {
+    PluginLoader load(@NotNull String jarPath, String basePackage, Class<? extends Annotation> identityResolverClass, IContainerContext ctx) throws Throwable {
         if (identityResolverClass != Pattern.class && identityResolverClass != Partner.class) {
             throw new IllegalArgumentException("Must be Pattern or Partner");
         }
 
+        // eager load IPlugable classes，通过Java类加载的全盘负责机制自动加载相关引用类
         List<Class<? extends Annotation>> annotations = new ArrayList<>(2);
         annotations.add(identityResolverClass);
         annotations.add(Extension.class);
 
         // 个性化业务的ClassLoader，目前是所有业务共享一个 TODO 每个业务单独一个
-        PluginClassLoader pluginClassLoader = PluginClassLoader.getInstance();
+        PluginClassLoader pluginClassLoader = PluginClassLoader.getInstance().inject(Container.jdkClassLoader(), Container.containerClassLoader());
         pluginClassLoader.addUrl(new File(jarPath).toURI().toURL());
 
         ApplicationContext applicationContext = DDDBootstrap.applicationContext();
 
-        if (basePackage != null) {
+        if (basePackage != null && !basePackage.isEmpty()) {
             // 先扫spring，然后初始化所有的basePackage bean，包括已经在中台里加载完的bean
             log.info("Spring scan with {} ...", pluginClassLoader);
             springScanComponent(applicationContext, pluginClassLoader, basePackage);
         }
 
+        log.info("loading classes with annotations: {}", annotations);
         Map<Class<? extends Annotation>, List<Class>> resultMap = JarUtils.loadClassWithAnnotations(
                 jarPath, annotations, null, pluginClassLoader);
+        log.debug("loaded classes: {}", resultMap);
 
         IPluginListener pluginListener = JarUtils.loadBeanWithType(pluginClassLoader, jarPath, IPluginListener.class);
         if (pluginListener != null) {
@@ -95,6 +98,8 @@ class PluginLoader {
         if (pluginListener != null) {
             pluginListener.afterLoad(ctx);
         }
+
+        return this;
     }
 
     // manual <context:component-scan>

@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.cdf.ddd.runtime.DDD;
 import org.cdf.ddd.runtime.registry.mock.partner.FooPartner;
 import org.cdf.ddd.runtime.registry.mock.pattern.B2BPattern;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -14,6 +15,7 @@ import java.net.URL;
 import static org.junit.Assert.*;
 
 @Slf4j
+@Ignore
 public class ContainerTest {
 
     @Test

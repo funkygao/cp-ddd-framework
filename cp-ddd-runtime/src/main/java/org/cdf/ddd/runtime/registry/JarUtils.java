@@ -8,6 +8,7 @@ package org.cdf.ddd.runtime.registry;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.util.*;
 import java.util.jar.JarEntry;
@@ -17,7 +18,7 @@ import java.util.jar.JarFile;
 class JarUtils {
 
     static Map<Class<? extends Annotation>, List<Class>> loadClassWithAnnotations(
-            String path, List<Class<? extends Annotation>> annotations, String startWith, ClassLoader classLoader) throws Exception {
+            String path, List<Class<? extends Annotation>> annotations, String startWith, ClassLoader classLoader) throws Throwable {
         Map<Class<? extends Annotation>, List<Class>> result = new HashMap<>();
         List<String> classes = filter(getAllClasses(path), startWith);
         for (String className : classes) {
@@ -44,7 +45,7 @@ class JarUtils {
         return result;
     }
 
-    static <T> T loadBeanWithType(ClassLoader classLoader, String path, Class<T> beanType) throws Exception {
+    static <T> T loadBeanWithType(ClassLoader classLoader, String path, Class<T> beanType) throws Throwable {
         JarFile jar = new JarFile(new File(path));
         Enumeration entries = jar.entries();
         while (entries.hasMoreElements()) {
@@ -60,6 +61,7 @@ class JarUtils {
                 continue;
             }
 
+            // 自己创建实例，而不通过Spring BeanFactory创建
             return (T) clazz.newInstance();
         }
 
@@ -81,7 +83,7 @@ class JarUtils {
         }
     }
 
-    private static List<String> getAllClasses(String path) throws Exception {
+    private static List<String> getAllClasses(String path) throws IOException {
         ArrayList classNames = new ArrayList();
         JarFile jar = new JarFile(new File(path)); // might throw FileNotFoundException
 
