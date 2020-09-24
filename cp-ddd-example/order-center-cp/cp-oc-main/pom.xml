@@ -37,6 +37,17 @@
             <version>${project.version}</version>
             <scope>${bp.jar.scope.ka}</scope>
         </dependency>
+
+        <dependency>
+            <artifactId>log4j-core</artifactId>
+            <groupId>org.apache.logging.log4j</groupId>
+            <version>2.9.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <version>2.9.1</version>
+        </dependency>
     </dependencies>
 
     <profiles>

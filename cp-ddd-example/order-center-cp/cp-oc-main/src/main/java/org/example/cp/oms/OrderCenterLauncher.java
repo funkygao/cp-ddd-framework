@@ -21,7 +21,7 @@ public class OrderCenterLauncher {
 
         CountDownLatch latch = new CountDownLatch(1);
         try {
-            log.info("DooLauncher launched successfully!");
+            log.info("OrderCenterLauncher launched successfully!");
 
             latch.await();
         } catch (InterruptedException e) {
