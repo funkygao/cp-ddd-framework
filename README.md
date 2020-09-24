@@ -12,7 +12,6 @@
    * [Current status](#current-status)
    * [Quickstart](#quickstart)
    * [What problems does it solve](#what-problems-does-it-solve)
-   * [Key features](#key-features)
    * [Key abstractions](#key-abstractions)
    * [Why it stands out](#why-it-stands-out)
 * [Requirements](#requirements)
@@ -56,16 +55,6 @@ Please visit [Quickstart wiki](https://github.com/funkygao/cp-ddd-framework/wiki
 - 如何让中台架构特色的DDD稳稳当当落地：DDD seamlessly landing in code
 - 如何降低系统实现的复杂度：reduce entropy of the system
 - 普通研发如何编写出优雅的业务代码：low threshold for average developer to build elegant biz code
-- and more
-
-### Key features
-
-- layered extension point
-- model schema extension
-- business flows orchestration
-- dynamic loading business extension jar
-- isolation of business runtime
-- best practice of DDD
 - and more
 
 ### Key abstractions
