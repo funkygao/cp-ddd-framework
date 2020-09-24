@@ -41,64 +41,7 @@ cp-ddd-framework is a lightweight development framework for complex business arc
 
 ### Quickstart
 
-**Tip**：使用该框架，需要对`DDD`的分层架构有基本了解：该框架面向的是`DDD`的domain层开发，即面向业务沉淀层的开发框架。
-
-[`IDomainService`](cp-ddd-spec/src/main/java/org/cdf/ddd/model/IDomainService.java)，领域服务，在`DDD`里是facade，完成一个完整的业务活动，例如接单。
-
-接单在订单履约系统里，是非常复杂的过程，包括：服务产品校验，客户校验，供应商校验，店铺校验，承运商校验，增值服务校验，价格校验，促销规则校验，券抵扣，订单商品项校验，冷链的温层校验，目标仓寻源，承运商分单，库存预占，订单拆分，预分拣，地址解析等数十个(复杂场景甚至百个)的步骤，对应[`IDomainStep`](cp-ddd-spec/src/main/java/org/cdf/ddd/step/IDomainStep.java)：一个业务活动是由多个步骤组成的。步骤，相当于隐藏业务细节而把业务活动进行拆解的抽象。
-
-不同的业务场景下，步骤的顺序不同，步骤项不同，例如：B2B场景，接单是由步骤(A, B, D, F)完成的，而B2C场景，接单是由步骤(C, D, E, M, N)组成的。[`IDomainStep`](cp-ddd-spec/src/main/java/org/cdf/ddd/step/IDomainStep.java)就是一种可以被编排的领域服务。
-
-步骤的编排，有些是可以预先计算的，有些是完全动态决定的，例如：在D步骤需要调用预分拣API，根据返回结果才能决定后续步骤。步骤执行过程中，可能抛出异常，为了保证一致性，之前已经成功执行的步骤需要回滚，实现了`IDomainStep`的子类[`IDomainRevokableStep`](cp-ddd-spec/src/main/java/org/cdf/ddd/step/IDomainRevokableStep.java)就需要实现业务回滚操作。这些机制，是模板方法类[`StepsExecTemplate`](cp-ddd-runtime/src/main/java/org/cdf/ddd/runtime/StepsExecTemplate.java)实现的。
-
-如何实现不同场景下对步骤的不同编排？同一个业务语义，不同场景的执行逻辑可能不同，例如：库存预占，有的商家要求零库存预占，有的要求缺量出库，有的要求预占失败要有冲正动作，有的要求预占成功后给商家回传状态等等，这如何解决？
-
-这引出了[`IDomainExtension`](cp-ddd-spec/src/main/java/org/cdf/ddd/ext/IDomainExtension.java)，扩展点：业务语义确定，但不同业务场景执行逻辑不同的业务功能点，即业务的多态。
-
-定义一个扩展点，不同业务场景有不同的实现。
-
-这里，扩展点机制是分层的：
-- [IDomainExtension](cp-ddd-spec/src/main/java/org/cdf/ddd/ext/IDomainExtension.java)，最基础的扩展点，解决业务逻辑的不确定性
-- [IDecideStepsExt](cp-ddd-spec/src/main/java/org/cdf/ddd/ext/IDecideStepsExt.java)，步骤编排扩展点，解决业务流程的不确定性
-- [IModelAttachmentExt](cp-ddd-spec/src/main/java/org/cdf/ddd/ext/IModelAttachmentExt.java)，解决业务模型的不确定性，可以简单理解为如何解决多业务场景下数据库字段的问题
-
-扩展点机制，实现了业务多态，但运行时一项业务到底是哪一个扩展点的实现来执行？这引出了[`IIdentityResolver`](cp-ddd-spec/src/main/java/org/cdf/ddd/ext/IIdentityResolver.java)：业务身份解析器，根据[`IDomainModel`](cp-ddd-spec/src/main/java/org/cdf/ddd/model/IDomainModel.java)判断该业务是否属于自己，同时与某一个扩展点实现进行绑定，从而完成扩展点的路由机制。
-
-这里的业务身份是完全动态的，支持任意场景，满足业务不确定性的需求，而不是基于经验进行建模编码的机制。
-
-`IIdentityResolver`有2个机制：
-
-- [`Pattern`](cp-ddd-runtime/src/main/java/org/cdf/ddd/annotation/Pattern.java)：业务模式，可以任意维度叠加的水平业务，解决中台部门内部的个性化
-- [`Partner`](cp-ddd-runtime/src/main/java/org/cdf/ddd/annotation/Partner.java)：前台合作伙伴，维度唯一不可叠加的垂直业务，解决前台部门的个性化，来扩展中台能力
-
-本质上，[`IIdentityResolver`](cp-ddd-spec/src/main/java/org/cdf/ddd/ext/IIdentityResolver.java)，相当于把之前散落在各处的某个业务逻辑的**if**判断条件进行收敛，使得这些业务判断显式化，有形化，并有了个名字(统一语言)；[`IDomainExtension`](cp-ddd-spec/src/main/java/org/cdf/ddd/ext/IDomainExtension.java)，相当于把**if**后面的code block显式化，有形化，并可以进行组织分工：前台部门开发前台的逻辑，中台部门开发中台的逻辑，协同建设一套企业级能力复用平台。
-
-什么是业务场景？在中台下，它是不确定的。它可能是任意维度，甚至我们想象不到的维度。
-
-即使凭经验定义了一些维度，在2B业务下也不堪一击，很难保证它的稳定。下面列举一些业务场景的维度：
-
-- 冷链的订单
-- 大件的订单/中小件订单
-- 某个商家的订单
-- 某个行业的订单
-- 出库仓库类型
-- 出库时是否越库
-- 配送是是否自提，到哪里自提
-- 业务模式
-- 订单项是否包含违禁品
-- etc
-
-以上，是该框架的最基本逻辑。
-
-更详细的内容，可以参考：
-- [单元测试用例](cp-ddd-test)
-- [示例：订单履约中台](cp-ddd-example)
-- [javadoc](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/)
-- source code
-
-需要提醒的是，这是个**业务中台**的**开发框架**，它勾勒出了业务中台的骨架，如何建设业务中台，研发拿它就知道如何组织自己的代码，遇到个性化业务如何解决，如何让业务开发变得优雅。但它无法替代业务梳理、业务抽象、业务建模。It is not silver bullet.
-
-此外，这也不是一个万能的业务开发框架，它主要针对的是复杂、个性化特征明显、重业务逻辑的目标系统。如果你的系统很简单，CRUD特征明显，不建议使用。
+Go to the [Quickstart wiki](https://github.com/funkygao/cp-ddd-framework/wiki/Quickstart-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8).
 
 ### What problems does it solve
 
