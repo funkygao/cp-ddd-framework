@@ -66,8 +66,8 @@ Please visit [Quickstart wiki](https://github.com/funkygao/cp-ddd-framework/wiki
 ### Why it stands out
 
 - Simple design and implementation: simplicity is the 1st requirement and less is more
-- Totally proven in production environment for complex business requirements
 - Flexibility as result of total abstraction
+- Totally proven in production environment for complex business requirements
 
 ## Requirements
 
