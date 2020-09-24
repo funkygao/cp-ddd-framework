@@ -2,11 +2,13 @@
 
 ## 目标
 
-以jar包为单位管理扩展业务，扩展业务包，此处称为Plugin。
+以jar包为单位管理扩展业务，扩展业务包，此处称为Plugin，Plugin jar可以引用外部jar包。
 
 Plugin有2种：
 - `Pattern` + `Extension`
 - `Partner` + `Extension`
+
+一个Spring application context，每个Plugin jar有独立的class loader隔离、热部署，热更新。
 
 ## 现有解决方案
 
@@ -32,9 +34,11 @@ Plugin有2种：
 - PandoraBoot则将SpringBoot和Pandora进行了整合
    - convention over configuration
 
+### SOFAArk
+
 ## 风险
 
-- java.lang.ClassNotFoundException, NoClassDefFoundError, NoSuchMethodError
+- java.lang.ClassNotFoundException, NoClassDefFoundError, NoSuchMethodError, ClassFormatError, ClassCastException
 - canary release, rollback, rolling upgrade
 
 ## Scenarios
@@ -43,4 +47,12 @@ Plugin有2种：
 - 打印日志
 - 引入guava等第三方包，都必须是provided吗
 - fat jar, lazy load
+   - 不同Plugin会引入很多重复的包，导致最终的jar很大
+   - Container提供provide，Plugin通过scope=provided引用
 - 自己带properties file
+
+## Knowledge
+
+### Class Loader
+
+**Loading Java classes during runtime dynamically to the JVM**.
