@@ -86,7 +86,7 @@ Requires Java 1.8+ and Spring 4.3.12.RELEASE or later.
 
 ## Demo
 
-**Tip**: The entry point of the demo is [ExampleTest](cp-ddd-framework/blob/master/cp-ddd-example/order-center-cp/cp-oc-test/src/test/java/org/example/cp/oms/ExampleTest.java).
+**Tip**: The entry point of the demo is [ExampleTest](cp-ddd-example/order-center-cp/cp-oc-test/src/test/java/org/example/cp/oms/ExampleTest.java).
 
 How to run the demo?
 
@@ -97,7 +97,7 @@ cd cp-ddd-example/
 mvn test -Pdemo
 ```
 
-你也可以在IDE下手工执行[ExampleTest](cp-ddd-framework/blob/master/cp-ddd-example/order-center-cp/cp-oc-test/src/test/java/org/example/cp/oms/ExampleTest.java)：这是演示的入口。
+你也可以在IDE下手工执行[ExampleTest](cp-ddd-example/order-center-cp/cp-oc-test/src/test/java/org/example/cp/oms/ExampleTest.java)：这是演示的入口。
 
 For more please visit [使用该框架搭建`订单履约中台`的例子](cp-ddd-example).
 
