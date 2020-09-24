@@ -21,7 +21,7 @@
 * [Landscape of Central Platform](#landscape-of-central-platform)
 * [Reference guide](#reference-guide)
 * [Building from Source](#building-from-source)
-* [Total solution](#total-solution)
+* [Total solutions](#total-solutions)
 * [Contribution](#contribution)
 * [Licensing](#licensing)
 
@@ -133,11 +133,9 @@ cd cp-ddd-framework
 mvn clean install
 ```
 
-## Total solution
+## Total solutions
 
-- 如何低成本地对业务进行单元测试
-- 如何防止业务架构腐化
-- 如何让DDD思想落实到代码
+Please visit [wiki](https://github.com/funkygao/cp-ddd-framework/wiki/Total-solutions-%E6%95%B4%E4%BD%93%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88)
 
 ## Contribution
 
