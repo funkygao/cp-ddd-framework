@@ -31,7 +31,6 @@ under the License.
         <module>cp-ddd-spec</module>
         <module>cp-ddd-runtime</module>
         <module>cp-ddd-enforce</module>
-        <module>cp-ddd-example</module>
     </modules>
 
     <issueManagement>
