@@ -5,17 +5,32 @@ import org.cdf.ddd.runtime.DDD;
 import org.example.cp.oms.domain.model.OrderModel;
 import org.example.cp.oms.domain.model.OrderModelCreator;
 import org.example.cp.oms.domain.service.SubmitOrder;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Ignore
 public class PluginMechanismTest {
+    private URL remoteKaJar;
+    private URL remoteIsvJar;
+    private URL remotePatternJar;
+
+    private static final String localKaJar = "../../order-center-bp-ka/target/order-center-bp-ka-0.0.1.jar";
+    private static final String localIsvJar = "../../order-center-bp-isv/target/order-center-bp-isv-0.0.1.jar";
+
+    @Before
+    public void setUp() throws MalformedURLException {
+        remoteIsvJar = new URL("https://github.com/funkygao/cp-ddd-framework/blob/master/doc/assets/jar/order-center-bp-isv-0.0.1.jar?raw=true");
+        remoteKaJar = new URL("https://github.com/funkygao/cp-ddd-framework/blob/master/doc/assets/jar/order-center-bp-ka-0.0.1.jar?raw=true");
+        remotePatternJar = new URL("https://github.com/funkygao/cp-ddd-framework/blob/master/doc/assets/jar/order-center-pattern-0.0.1.jar?raw=true");
+    }
 
     @Test
     public void dynamicLoadPlugins() throws Throwable {
@@ -24,7 +39,7 @@ public class PluginMechanismTest {
         ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("spring-test.xml");
         applicationContext.start();
 
-        DDD.getContainer().loadPartnerPlugin("../../order-center-bp-isv/target/order-center-bp-isv-0.0.1.jar", "org.example.bp");
+        DDD.getContainer().loadPartnerPlugin(localIsvJar, "org.example.bp");
         submitOrder(applicationContext);
         if (true) {
             return;
@@ -33,12 +48,12 @@ public class PluginMechanismTest {
         for (int i = 0; i < 2; i++) {
             // 同一个jar，load多次
             log.info("n={}", i + 1);
-            DDD.getContainer().loadPartnerPlugin(new URL("https://github.com/funkygao/cp-ddd-framework/blob/master/doc/assets/jar/order-center-bp-isv-0.0.1.jar?raw=true"), "org.example.bp");
+            DDD.getContainer().loadPartnerPlugin(remoteIsvJar, "org.example.bp");
         }
 
-        DDD.getContainer().loadPartnerPlugin(new URL("https://github.com/funkygao/cp-ddd-framework/blob/master/doc/assets/jar/order-center-bp-ka-0.0.1.jar?raw=true"), "org.example.bp");
+        DDD.getContainer().loadPartnerPlugin(remoteKaJar, "org.example.bp");
 
-        DDD.getContainer().loadPatternPlugin(new URL("https://github.com/funkygao/cp-ddd-framework/blob/master/doc/assets/jar/order-center-pattern-0.0.1.jar?raw=true"), "org.example.cp");
+        DDD.getContainer().loadPatternPlugin(remotePatternJar, "org.example.cp");
 
         DDD.getContainer().unloadPatternPlugin("hair");
 
@@ -46,7 +61,7 @@ public class PluginMechanismTest {
             log.info("sleeping 2m，等待修改bp-isv里逻辑后发布新jar...");
             TimeUnit.MINUTES.sleep(2); // 等待手工发布新jar
             log.info("2m is up, go!");
-            DDD.getContainer().loadPartnerPlugin(new URL("https://github.com/funkygao/cp-ddd-framework/blob/master/doc/assets/jar/order-center-bp-isv-0.0.1.jar?raw=true"), "org.example.bp");
+            DDD.getContainer().loadPartnerPlugin(remoteIsvJar, "org.example.bp");
             submitOrder(applicationContext); // 重新提交订单，看看是否新jar逻辑生效
         }
 
