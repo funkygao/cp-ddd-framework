@@ -30,9 +30,9 @@ import static com.tngtech.archunit.library.GeneralCodingRules.NO_CLASSES_SHOULD_
 import static com.tngtech.archunit.library.dependencies.SlicesRuleDefinition.slices;
 
 /**
- * 架构守护神规则库.
+ * 架构守护神规则库，based upon ArchUnit.
  * <p>
- * <p>业务中台DDD框架的架构守护神，为架构演进保驾护航，拒绝架构腐化.</p>
+ * <p>cp-ddd-frame 的架构守护神，为架构演进保驾护航，拒绝架构腐化.</p>
  * <p>https://www.archunit.org/motivation</p>
  * <p>
  * <pre>
