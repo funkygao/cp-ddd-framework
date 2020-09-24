@@ -8,6 +8,7 @@
 
 # cp-ddd-framework (Central Platform：中台)
 
+* [Building from Source](#building-from-source)
 * [What is cp-ddd-framework](#what-is-cp-ddd-framework)
    * [Current status](#current-status)
    * [Quickstart](#quickstart)
@@ -19,10 +20,17 @@
 * [Modules](#modules)
 * [Landscape of Central Platform](#landscape-of-central-platform)
 * [Reference guide](#reference-guide)
-* [Building from Source](#building-from-source)
 * [Total solutions](#total-solutions)
 * [Contribution](#contribution)
 * [Licensing](#licensing)
+
+## Building from Source
+
+``` bash
+git clone https://github.com/funkygao/cp-ddd-framework.git
+cd cp-ddd-framework
+mvn clean install
+```
 
 ## What is cp-ddd-framework?
 
@@ -77,7 +85,7 @@ Requires Java 1.8+ and Spring 4.3.12.RELEASE or later.
 
 **Tip**: The entry point of the demo is [ExampleTest](cp-ddd-example/order-center-cp/cp-oc-test/src/test/java/org/example/cp/oms/ExampleTest.java).
 
-How to run the demo?
+#### How to run the demo?
 
 ``` bash
 mvn test -Ptest
@@ -104,6 +112,10 @@ Runtime implementation of the framework.
 
 Enforce expected evolvement of the business architecture based upon ArchUnit.
 
+### cp-ddd-test
+
+The complete unit tests.
+
 ## Landscape of Central Platform
 
 业务中台建设全景图。
@@ -113,14 +125,6 @@ Enforce expected evolvement of the business architecture based upon ArchUnit.
 ## Reference guide
 
 Please go to [cp-ddd-framework Javadoc](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/).
-
-## Building from Source
-
-``` bash
-git clone https://github.com/funkygao/cp-ddd-framework.git
-cd cp-ddd-framework
-mvn clean install
-```
 
 ## Total solutions
 
