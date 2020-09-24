@@ -16,8 +16,8 @@
    * [Key abstractions](#key-abstractions)
    * [Why it stands out](#why-it-stands-out)
 * [Requirements](#requirements)
+* [Demo](#demo)
 * [Modules](#modules)
-* [Example using cp-ddd-framework](#example-using-cp-ddd-framework)
 * [Landscape of Central Platform](#landscape-of-central-platform)
 * [Reference guide](#reference-guide)
 * [Building from Source](#building-from-source)
@@ -41,7 +41,9 @@ cp-ddd-framework is a lightweight development framework for complex business arc
 
 ### Quickstart
 
-Go to the [Quickstart wiki](https://github.com/funkygao/cp-ddd-framework/wiki/Quickstart-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8).
+[快速入门](https://github.com/funkygao/cp-ddd-framework/wiki/Quickstart-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8)。
+
+Please visit [Quickstart wiki](https://github.com/funkygao/cp-ddd-framework/wiki/Quickstart-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8).
 
 ### What problems does it solve
 
@@ -74,13 +76,30 @@ Go to the [Quickstart wiki](https://github.com/funkygao/cp-ddd-framework/wiki/Qu
 
 ### Why it stands out
 
-- Simple design and implementation
-- Light weight
+- Simple design and implementation: simplicity is the 1st requirement and less is more
+- Totally proven in production environment for complex business requirements
 - Flexibility as result of total abstraction
 
 ## Requirements
 
 Requires Java 1.8+ and Spring 4.3.12.RELEASE or later.
+
+## Demo
+
+**Tip**: The entry point of the demo is [ExampleTest](cp-ddd-framework/blob/master/cp-ddd-example/order-center-cp/cp-oc-test/src/test/java/org/example/cp/oms/ExampleTest.java).
+
+How to run the demo?
+
+``` bash
+mvn test -Ptest
+mvn install -Pinstall
+cd cp-ddd-example/
+mvn test -Pdemo
+```
+
+你也可以在IDE下手工执行[ExampleTest](cp-ddd-framework/blob/master/cp-ddd-example/order-center-cp/cp-oc-test/src/test/java/org/example/cp/oms/ExampleTest.java)：这是演示的入口。
+
+For more please visit [使用该框架搭建`订单履约中台`的例子](cp-ddd-example).
 
 ## Modules
 
@@ -95,12 +114,6 @@ Runtime implementation of the framework.
 ### cp-ddd-enforce
 
 Enforce expected evolvement of the business architecture based upon ArchUnit.
-
-## Example using cp-ddd-framework
-
-See the [cp-ddd-example](cp-ddd-example).
-
-使用该框架搭建`订单中台`的例子。
 
 ## Landscape of Central Platform
 
