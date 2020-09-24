@@ -12,8 +12,8 @@
    * [Current status](#current-status)
    * [Quickstart](#quickstart)
    * [What problems does it solve](#what-problems-does-it-solve)
-   * [Key abstractions](#key-abstractions)
    * [Why it stands out](#why-it-stands-out)
+   * [Key abstractions](#key-abstractions)
 * [Requirements](#requirements)
 * [Demo](#demo)
 * [Modules](#modules)
@@ -57,17 +57,17 @@ Please visit [Quickstart wiki](https://github.com/funkygao/cp-ddd-framework/wiki
 - 普通研发如何编写出优雅的业务代码：low threshold for average developer to build elegant biz code
 - and more
 
-### Key abstractions
-
-这14个核心抽象，勾勒出业务中台的骨架，以不变应万变。
-
-![](http://www.plantuml.com/plantuml/svg/XLHDZziW4BtpApZk7l87h2ZQRTF3IgsqslPUZM4Ses28O9nirVQ_Tt2eOmUgtioynvkFUVWf4WGQ1olYqRWJ11Xa3qvVWY529pkm4HTOx47xYt67xVPYgFz-FUzsaiA8GXX763fGA5_sVW3Zlc8u6uKLWF0a5j-oaVYEQYHyU5onKHcDYH4_lLEfyuPdVuJMOXOiWwmSlBKjgEDQ-aMZ8qC_tZ1wUyPGYdD6TD5ujuHUxNX8scB-ajjVcqrnXnjAd_gUL-ITYOiaNxn6-qm4gX-OdLglnAQXdIndvSxgU61X30n36oc08fbdYUeR3doNy0PzW8ZNBfvROxb4KKHOye0qDyd2DKfdGlmlIMC7ertHYjfMjjZlztp-6Gd8gD-fZe_U4MjYAD7EE9rprS4f5qDt5ak5tGAC5_jYnW2a-eUyyMdkZqAiBRyoHU7s3DOjNAYKUn7tRikAwrvk5gopIyVCDofjJtTUWGY3-pSSo64GbOLl6UOrDDFmryDO8PLYQoDefFKA22lypMRtjyv6jgnPf-HQCsMoI0hFdhfQNIpFiu7IapRkimUDGImeIU3stbEDmD8v4v-LroXoRVbO5fVZvMj8yajBDT87rMDwlSGNnHCwdVxbVm00)
-
 ### Why it stands out
 
 - Simple design and implementation: simplicity is the 1st requirement and less is more
 - Flexibility as result of total abstraction
 - Totally proven in production environment for complex business requirements
+
+### Key abstractions
+
+这14个核心抽象，勾勒出业务中台的骨架，以不变应万变。
+
+![](http://www.plantuml.com/plantuml/svg/XLHDZziW4BtpApZk7l87h2ZQRTF3IgsqslPUZM4Ses28O9nirVQ_Tt2eOmUgtioynvkFUVWf4WGQ1olYqRWJ11Xa3qvVWY529pkm4HTOx47xYt67xVPYgFz-FUzsaiA8GXX763fGA5_sVW3Zlc8u6uKLWF0a5j-oaVYEQYHyU5onKHcDYH4_lLEfyuPdVuJMOXOiWwmSlBKjgEDQ-aMZ8qC_tZ1wUyPGYdD6TD5ujuHUxNX8scB-ajjVcqrnXnjAd_gUL-ITYOiaNxn6-qm4gX-OdLglnAQXdIndvSxgU61X30n36oc08fbdYUeR3doNy0PzW8ZNBfvROxb4KKHOye0qDyd2DKfdGlmlIMC7ertHYjfMjjZlztp-6Gd8gD-fZe_U4MjYAD7EE9rprS4f5qDt5ak5tGAC5_jYnW2a-eUyyMdkZqAiBRyoHU7s3DOjNAYKUn7tRikAwrvk5gopIyVCDofjJtTUWGY3-pSSo64GbOLl6UOrDDFmryDO8PLYQoDefFKA22lypMRtjyv6jgnPf-HQCsMoI0hFdhfQNIpFiu7IapRkimUDGImeIU3stbEDmD8v4v-LroXoRVbO5fVZvMj8yajBDT87rMDwlSGNnHCwdVxbVm00)
 
 ## Requirements
 
