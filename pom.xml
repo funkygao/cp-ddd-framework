@@ -115,6 +115,7 @@ under the License.
     </build>
 
     <profiles>
+        <!-- 单元测试 profile：把cp-ddd-test module引入，准备jacoco -->
         <profile>
             <id>test</id>
             <activation>
@@ -140,6 +141,13 @@ under the License.
                 <module>cp-ddd-test</module>
             </modules>
         </profile>
+
+        <!-- 本地安装profile，不安装cp-ddd-test -->
+        <profile>
+            <id>install</id>
+        </profile>
+
+        <!-- 发布到github maven package -->
         <profile>
             <id>release</id>
             <distributionManagement>
