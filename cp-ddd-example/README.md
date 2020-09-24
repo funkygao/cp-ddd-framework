@@ -25,7 +25,7 @@
    - [扩展点被封装到DomainAbility](order-center-cp/cp-oc-domain/src/main/java/org/example/cp/oms/domain/ability/SerializableIsolationAbility.java)
    - [扩展点被调用](order-center-cp/cp-oc-domain/src/main/java/org/example/cp/oms/domain/service/SubmitOrder.java)
    - [前台对中台的步骤编排](order-center-bp-ka/src/main/java/org/example/bp/oms/ka/extension/DecideStepsExt.java)
-   - [扩展属性通过扩展点的实现](cp-ddd-example/order-center-bp-isv/src/main/java/org/example/bp/oms/isv/extension/CustomModel.java)
+   - [扩展属性通过扩展点的实现](order-center-bp-isv/src/main/java/org/example/bp/oms/isv/extension/CustomModel.java)
 - [动态的步骤编排](order-center-cp/cp-oc-domain/src/main/java/org/example/cp/oms/domain/step/submitorder/BasicStep.java)
 - [按需打包](order-center-cp/cp-oc-main/pom.xml)
 
