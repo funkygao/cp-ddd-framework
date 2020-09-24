@@ -29,8 +29,10 @@ import javax.validation.constraints.NotNull;
  *  | 1    | 22010391388764 |     | 10.9                                           | 12,abc |
  *  | 2    | 22010397315689 |     | {"foo":1, "bar":"egg", "baz":{"a":1, "b":2}}   |        | 2020-01-09
  * </pre>
+ *
+ * @param <Model> 领域模型
  */
-public interface IModelAttachmentExt extends IDomainExtension {
+public interface IModelAttachmentExt<Model extends IDomainModel> extends IDomainExtension {
 
     /**
      * 扩展属性数据的解析和处理.
@@ -40,7 +42,7 @@ public interface IModelAttachmentExt extends IDomainExtension {
      * @param source 扩展属性数据的来源，从系统入参里获取 {@link RequestProfile#ext}
      * @param target 把扩展信息传递到的目标领域模型
      */
-    void explain(@NotNull RequestProfile source, @NotNull IDomainModel target);
+    void explain(@NotNull RequestProfile source, @NotNull Model target);
 
     /**
      * 扩展属性数据的解析和处理.
@@ -49,7 +51,8 @@ public interface IModelAttachmentExt extends IDomainExtension {
      *
      * @param model 对模型里的扩展属性进行解析和处理
      */
-    default void explain(@NotNull IDomainModel model) { }
+    default void explain(@NotNull Model model) {
+    }
 
     /**
      * 扩展属性数据的API显示.
@@ -59,6 +62,7 @@ public interface IModelAttachmentExt extends IDomainExtension {
      * @param source 扩展属性数据的来源
      * @param target 把扩展信息传递到的目标 {@link ApiResult#ext}
      */
-    default void render(@NotNull IDomainModel source, @NotNull ApiResult target) { }
+    default void render(@NotNull Model source, @NotNull ApiResult target) {
+    }
 
 }
