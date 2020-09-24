@@ -1,6 +1,7 @@
 package org.example.cp.oms;
 
 import lombok.extern.slf4j.Slf4j;
+import org.cdf.ddd.annotation.UnderDevelopment;
 import org.cdf.ddd.runtime.DDD;
 import org.example.cp.oms.domain.model.OrderModel;
 import org.example.cp.oms.domain.model.OrderModelCreator;
@@ -32,10 +33,9 @@ public class PluginMechanismTest {
         remotePatternJar = new URL("https://github.com/funkygao/cp-ddd-framework/blob/master/doc/assets/jar/order-center-pattern-0.0.1.jar?raw=true");
     }
 
+    @UnderDevelopment // 需要运行在 profile:plugin 下，运行前需要mvn package为Plugin打包
     @Test
     public void dynamicLoadPlugins() throws Throwable {
-        log.info("CWD: {}", System.getProperty("user.dir")); // cp-ddd-framework/cp-ddd-example/order-center-cp/cp-oc-test
-
         ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("spring-test.xml");
         applicationContext.start();
 
@@ -82,8 +82,10 @@ public class PluginMechanismTest {
 
         // call the domain service
         SubmitOrder submitOrder = (SubmitOrder) applicationContext.getBean("submitOrder");
-        // 会触发 ISV的步骤编排：basic, persist, broadcast
-        // 相关的Pattern：IPresortExt
+        // Partner(ISV)的下单执行：
+        //     SerializableIsolationExt -> DecideStepsExt -> BasicStep(PresortExt) -> PersistStep(AssignOrderNoExt) -> BroadcastStep
+        // Partner(KA)的下单执行：
+        //     SerializableIsolationExt -> DecideStepsExt -> BasicStep -> PersistStep(AssignOrderNoExt)
         submitOrder.submit(orderModel);
     }
 }

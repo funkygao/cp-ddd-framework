@@ -19,11 +19,12 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- 演示对第三方包的依赖 -->
+        <!-- 演示对第三方包的依赖，需要事先到中台申请，由中台打包进去；Plugin jar通过scope=provided使用 -->
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>19.0</version>
+            <version>${guava.version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

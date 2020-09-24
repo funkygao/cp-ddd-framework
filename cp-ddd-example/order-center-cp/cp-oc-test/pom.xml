@@ -17,6 +17,13 @@
             <version>${project.version}</version>
         </dependency>
 
+        <!-- -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
+        </dependency>
+
         <!-- pattern, partner jar，都通过Container动态加载 -->
 
         <!-- logging -->

@@ -5,6 +5,7 @@ import com.google.common.collect.Multiset;
 import lombok.extern.slf4j.Slf4j;
 import org.cdf.ddd.annotation.Extension;
 import org.example.bp.oms.isv.IsvPartner;
+import org.example.bp.oms.isv.extension.util.WarehouseUtil;
 import org.example.cp.oms.spec.ext.IPresortExt;
 import org.example.cp.oms.spec.model.IOrderModel;
 
@@ -24,6 +25,7 @@ public class PresortExt implements IPresortExt {
         multiset.add("a");
         multiset.add("b");
         log.info("count(a): {}", multiset.count("a"));
+        log.info("仓库号：{}", WarehouseUtil.getWarehouseNo());
     }
 
     // 演示内部类的使用

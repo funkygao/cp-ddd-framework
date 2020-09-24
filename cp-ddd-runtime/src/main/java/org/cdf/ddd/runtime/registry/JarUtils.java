@@ -61,6 +61,7 @@ class JarUtils {
                 continue;
             }
 
+            // 自己创建实例，而不通过Spring BeanFactory创建
             return (T) clazz.newInstance();
         }
 

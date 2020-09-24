@@ -41,7 +41,7 @@
 
     <profiles>
         <profile>
-            <id>home</id>
+            <id>demo</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>

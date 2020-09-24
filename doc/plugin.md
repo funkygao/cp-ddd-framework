@@ -1,5 +1,13 @@
 # Plugin Design
 
+## Roadmap
+
+### Iteration 1
+
+- Plugin jar先不支持FatJar：所有的依赖中台提供，plugin的pom通过scope=provided来引用
+   - 像spring boot那样统一管理依赖第三方包的版本
+- 1个 Spring 容器，N个 PluginClassLoader
+
 ## 目标
 
 以jar包为单位管理扩展业务，扩展业务包，此处称为Plugin，Plugin jar可以引用外部jar包。
@@ -39,7 +47,7 @@ Plugin有2种：
 ## 风险
 
 - java.lang.ClassNotFoundException, NoClassDefFoundError, NoSuchMethodError, ClassFormatError, ClassCastException
-- canary release, rollback, rolling upgrade
+- canary release, rollback, rolling upgrade, jar deployment platform
 
 ## Scenarios
 
