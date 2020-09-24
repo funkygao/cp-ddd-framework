@@ -26,6 +26,10 @@ under the License.
     <artifactId>cp-ddd-enforce</artifactId>
     <name>DDD :: Enforce</name>
 
+    <properties>
+        <maven.deploy.skip>false</maven.deploy.skip>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.tngtech.archunit</groupId>

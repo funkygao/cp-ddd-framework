@@ -26,6 +26,10 @@ under the License.
     <artifactId>cp-ddd-spec</artifactId>
     <name>DDD :: Spec</name>
 
+    <properties>
+        <maven.deploy.skip>false</maven.deploy.skip>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>javax.validation</groupId>

@@ -26,6 +26,10 @@ under the License.
     <artifactId>cp-ddd-runtime</artifactId>
     <name>DDD :: Runtime</name>
 
+    <properties>
+        <maven.deploy.skip>false</maven.deploy.skip>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.cdf</groupId>
