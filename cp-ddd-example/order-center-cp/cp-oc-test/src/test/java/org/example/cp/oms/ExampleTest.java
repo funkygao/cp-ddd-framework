@@ -1,6 +1,7 @@
 package org.example.cp.oms;
 
 import lombok.extern.slf4j.Slf4j;
+import org.example.cp.oms.domain.exception.OrderException;
 import org.example.cp.oms.domain.model.OrderModel;
 import org.example.cp.oms.domain.model.OrderModelCreator;
 import org.example.cp.oms.domain.service.SubmitOrder;
@@ -20,16 +21,18 @@ public class ExampleTest {
     private SubmitOrder submitOrder;
 
     // 演示的入口，展示如何把这个例子完整地跑起来
+    // 需要运行在 maven profile:demo 下
     @Test
-    public void demoSubmitOrder() throws Throwable {
+    public void demoSubmitOrder() throws OrderException {
         // prepare the domain model
         OrderModelCreator creator = new OrderModelCreator();
-        creator.setSource("ISV"); // IsvPartner
-        creator.setCustomerNo("home"); // HomeAppliancePattern
+        creator.setSource("ISV"); // IsvPartner 会触发ISV前台相关的扩展点
+        creator.setCustomerNo("home"); // HomeAppliancePattern 会触发家电相关的扩展点
         creator.setExternalNo("20200987655");
         OrderModel orderModel = OrderModel.createWith(creator);
 
-        // 会触发 ISV的步骤编排：basic, persist, broadcast
+        // ISV业务前台的下单执行：
+        //   SerializableIsolationExt -> DecideStepsExt -> BasicStep(PresortExt) -> PersistStep(AssignOrderNoExt) -> BroadcastStep
         // 查看日志，了解具体执行情况
         submitOrder.submit(orderModel);
     }
