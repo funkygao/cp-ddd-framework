@@ -40,4 +40,11 @@ public @interface DomainAbility {
      * 能力名称.
      */
     String name() default "";
+
+    /**
+     * 该领域能力的业务标签.
+     * <p>
+     * <p>通过标签，把众多的扩展点管理起来，结构化</p>
+     */
+    String[] tags() default {};
 }
