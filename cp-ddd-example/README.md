@@ -8,17 +8,17 @@
 - [代码快速入门](#代码快速入门)
 - [代码结构](#代码结构)
    - [依赖关系](#依赖关系)
-   - 一个[订单中台代码库](#order-center-cp)
+   - 一个[订单履约中台代码库](#order-center-cp)
    - [中台的个性化业务包](#order-center-pattern)
-   - 两个业务前台代码库
+   - [两个业务前台代码库](#订单履约中台的多个业务前台)
       - [KA业务前台](#order-center-bp-ka)
       - [ISV业务前台](#order-center-bp-isv)
 
 ## 代码快速入门
 
 - [中台架构特色的DDD分层架构](order-center-cp)
-- [如何识别该业务属于KA业务前台](order-center-cp/cp-oc-spec/src/main/java/org/example/cp/oms/spec/partner/KaPartner.java)
-- 订单的防并发机制扩展点
+- 扩展点：订单的防并发
+   - [如何识别该业务属于KA业务前台](order-center-cp/cp-oc-spec/src/main/java/org/example/cp/oms/spec/partner/KaPartner.java)
    - [扩展点声明](order-center-cp/cp-oc-spec/src/main/java/org/example/cp/oms/spec/ext/ISerializableIsolationExt.java)
    - [KA业务前台的实现](order-center-bp-ka/src/main/java/org/example/bp/oms/ka/extension/SerializableIsolationExt.java)
    - [ISV业务前台的实现](order-center-bp-isv/src/main/java/org/example/bp/oms/isv/extension/SerializableIsolationExt.java)
@@ -36,19 +36,18 @@
 
 ### [order-center-cp](order-center-cp)
 
-订单中心的中台，通过[spec jar](order-center-cp/cp-oc-spec)为业务前台赋能，输出中台标准，并提供扩展机制。
+订单履约中台，通过[spec jar](order-center-cp/cp-oc-spec)为业务前台赋能，输出中台标准，并提供扩展机制。
 
 #### [order-center-pattern](order-center-pattern)
 
-订单中台本身的个性化业务，即个性化的业务模式包。
+订单履约中台本身的个性化业务，即个性化的业务模式包。
 
-### 订单中心的多个业务前台
+### 订单履约中台的多个业务前台
 
 #### [order-center-bp-ka](order-center-bp-ka)
 
-订单中心的业务前台：KA，关键客户的个性化业务通过扩展点的实现完成。
+KA，关键客户的个性化业务通过扩展点的实现完成。
 
 #### [order-center-bp-isv](order-center-bp-isv)
 
-订单中心的业务前台：ISV，独立软件开发商的个性化业务通过扩展点的实现完成。
-
+ISV，独立软件开发商的个性化业务通过扩展点的实现完成。
