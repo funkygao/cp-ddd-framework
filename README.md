@@ -124,6 +124,8 @@ mvn clean install
 
 ## Total solutions
 
+[业务中台架构的整体解决方案](https://github.com/funkygao/cp-ddd-framework/wiki/Total-solutions-%E6%95%B4%E4%BD%93%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88)。
+
 Please visit [wiki](https://github.com/funkygao/cp-ddd-framework/wiki/Total-solutions-%E6%95%B4%E4%BD%93%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88)
 
 ## Contribution
