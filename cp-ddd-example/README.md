@@ -8,7 +8,7 @@
 - [代码快速入门](#代码快速入门)
 - [代码结构](#代码结构)
    - [依赖关系](#依赖关系)
-   - 一个[订单履约中台代码库](#order-center-cp)
+   - 一套[订单履约中台代码库](#order-center-cp)
    - [中台的个性化业务包](#order-center-pattern)
    - [两个业务前台代码库](#订单履约中台的多个业务前台)
       - [KA业务前台](#order-center-bp-ka)
@@ -24,9 +24,10 @@
    - [ISV业务前台的实现](order-center-bp-isv/src/main/java/org/example/bp/oms/isv/extension/SerializableIsolationExt.java)
    - [扩展点被封装到DomainAbility](order-center-cp/cp-oc-domain/src/main/java/org/example/cp/oms/domain/ability/SerializableIsolationAbility.java)
    - [扩展点被调用](order-center-cp/cp-oc-domain/src/main/java/org/example/cp/oms/domain/service/SubmitOrder.java)
-- [前台对中台的步骤编排](order-center-bp-ka/src/main/java/org/example/bp/oms/ka/extension/DecideStepsExt.java)
+   - [前台对中台的步骤编排](order-center-bp-ka/src/main/java/org/example/bp/oms/ka/extension/DecideStepsExt.java)
+   - [扩展属性通过扩展点的实现](cp-ddd-example/order-center-bp-isv/src/main/java/org/example/bp/oms/isv/extension/CustomModel.java)
 - [动态的步骤编排](order-center-cp/cp-oc-domain/src/main/java/org/example/cp/oms/domain/step/submitorder/BasicStep.java)
-- [动态打包部署](order-center-cp/cp-oc-main/pom.xml)
+- [按需打包](order-center-cp/cp-oc-main/pom.xml)
 
 ## 代码结构
 
