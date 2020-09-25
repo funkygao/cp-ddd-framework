@@ -21,4 +21,11 @@ public interface Steps {
         String StateStep = "state";
         String PersistStep = "persist";
     }
+
+    /**
+     * 所有步骤标签，统一在此定义.
+     */
+    interface Tags {
+        String Product = "产品相关";
+    }
 }

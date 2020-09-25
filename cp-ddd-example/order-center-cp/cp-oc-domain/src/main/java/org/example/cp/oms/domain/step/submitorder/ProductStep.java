@@ -9,7 +9,7 @@ import org.cdf.ddd.annotation.Step;
 
 import javax.validation.constraints.NotNull;
 
-@Step(value = "submitProductStep", name = "订单里产品校验")
+@Step(value = "submitProductStep", name = "订单里产品校验", tags = Steps.Tags.Product)
 @Slf4j
 public class ProductStep extends SubmitOrderStep {
 

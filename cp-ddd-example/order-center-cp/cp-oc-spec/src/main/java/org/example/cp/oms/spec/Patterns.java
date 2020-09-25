@@ -24,4 +24,12 @@ public interface Patterns {
      * 冷链B2C模式.
      */
     String ColdChainB2C = "ccb2c";
+
+    /**
+     * 业务模式标签在此统一定义.
+     */
+    interface Tags {
+        String B2B = "B2B";
+        String B2C = "B2C";
+    }
 }
