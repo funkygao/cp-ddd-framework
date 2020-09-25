@@ -36,15 +36,15 @@ mvn clean install
 
 cp-ddd-framework is a lightweight development framework for complex business architecture.
 
-轻量级业务中台开发框架，以DDD思想为基础，融合业务中台核心要素，赋能业务中台建设。
+轻量级中台开发框架，以DDD思想为基础，融合中台核心要素，赋能中台建设。
 
-融合了DDD、前中台复杂生态协作方法论，同时充分考虑组织、历史债、运维和落地成本以及风险而开发的，面向复杂业务场景架构设计，是**业务中台架构的整体解决方案**。
+融合了DDD、前中台复杂生态协作方法论，同时充分考虑组织、历史债、运维和落地成本以及风险而开发的，面向复杂业务场景架构设计，是**中台架构的整体解决方案**。
 
 ### Current status
 
-目前在多个复杂的中台项目生产环境下使用，保持稳定的前提下积极开发新特性。
+目前在多个复杂的中台项目生产环境下使用。
 
-**ATTENTION**：Container对Plugin的动态加载，目前仅支持一次性动态加载，热更新机制还在积极开发中，`Container`类已经`@UnderDevelopment`注解，请暂时不要使用。Plugin hotswap mechanism is not production ready yet, please don't use it.
+**ATTENTION**：`Container`对Plugin的动态加载，目前仅支持一次性动态加载，热更新机制还在积极开发中，`Container`类已经`@UnderDevelopment`注解，请暂时不要使用。Plugin hotswap mechanism is not production ready yet, please don't use it.
 
 ### Quickstart
 
@@ -111,10 +111,6 @@ Runtime implementation of the framework.
 ### cp-ddd-enforce
 
 Enforce expected evolvement of the business architecture based upon ArchUnit.
-
-### cp-ddd-test
-
-The complete unit tests.
 
 ## Landscape of Central Platform
 
