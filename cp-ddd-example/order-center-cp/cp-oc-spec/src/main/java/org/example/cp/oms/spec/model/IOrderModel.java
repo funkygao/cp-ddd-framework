@@ -1,5 +1,6 @@
 package org.example.cp.oms.spec.model;
 
+import org.cdf.ddd.api.RequestProfile;
 import org.example.cp.oms.spec.model.vo.IProductDelegate;
 import org.cdf.ddd.model.IDomainModel;
 import lombok.NonNull;
@@ -13,6 +14,11 @@ public interface IOrderModel extends IDomainModel {
      * 获取订单里包含的产品信息.
      */
     IProductDelegate productDelegate();
+
+    /**
+     * 获取当前的请求参数.
+     */
+    RequestProfile requestProfile();
 
     /**
      * 获取订单来源.
@@ -47,4 +53,14 @@ public interface IOrderModel extends IDomainModel {
     boolean isColdChain();
 
     boolean isB2B();
+
+    /**
+     * 为预留字段x1赋值.
+     */
+    void setX1(String x1);
+
+    /**
+     * 为预留字段x2赋值.
+     */
+    void setX2(String x2);
 }

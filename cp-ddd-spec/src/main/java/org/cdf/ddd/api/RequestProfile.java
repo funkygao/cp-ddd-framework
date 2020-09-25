@@ -11,6 +11,7 @@ import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 统一的API系统入参，注意与业务入参分开.
@@ -51,6 +52,6 @@ public class RequestProfile implements Serializable {
      * <p>
      * <p>由consumer/provider自行约定扩展属性的内容</p>
      */
-    private HashMap<String, String> ext = new HashMap<>();
+    private Map<String, String> ext = new HashMap<>();
 
 }

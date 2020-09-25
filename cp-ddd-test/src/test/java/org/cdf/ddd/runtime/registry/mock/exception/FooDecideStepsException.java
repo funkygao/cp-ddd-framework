@@ -5,7 +5,7 @@ import org.cdf.ddd.step.IDecideStepsException;
 
 import java.util.List;
 
-public class FooDecideStepsException extends FooException implements IDecideStepsException {
+public class FooDecideStepsException extends RuntimeException implements IDecideStepsException {
 
     public FooDecideStepsException() {
         super();

@@ -3,7 +3,8 @@ package org.example.cp.oms.domain.model;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.example.cp.oms.domain.exception.OrderException;
+import org.cdf.ddd.api.RequestProfile;
+import org.example.cp.oms.spec.exception.OrderException;
 import org.example.cp.oms.domain.model.vo.ProductDelegate;
 import org.example.cp.oms.spec.model.IOrderModel;
 import org.example.cp.oms.spec.model.vo.IProductDelegate;
@@ -19,7 +20,9 @@ public class OrderModel implements IOrderModel {
 
     private String orderNo;
 
-    private String externNo;
+    private String externalNo;
+
+    private RequestProfile requestProfile;
 
     @Setter
     private String activity;
@@ -29,6 +32,9 @@ public class OrderModel implements IOrderModel {
 
     private ProductDelegate productDelegate;
 
+    @Getter
+    private String x1, x2;
+
     public static OrderModel createWith(@NotNull OrderModelCreator creator) throws OrderException {
         log.debug("creating with {}", creator);
         return new OrderModel(creator).validate();
@@ -37,7 +43,8 @@ public class OrderModel implements IOrderModel {
     private OrderModel(OrderModelCreator creator) {
         this.source = creator.getSource();
         this.customerNo = creator.getCustomerNo();
-        this.externNo = creator.getExternalNo();
+        this.externalNo = creator.getExternalNo();
+        this.requestProfile = creator.getRequestProfile();
 
         this.productDelegate = ProductDelegate.createWith(creator);
     }
@@ -73,13 +80,28 @@ public class OrderModel implements IOrderModel {
     }
 
     @Override
+    public void setX1(String x1) {
+        this.x1 = x1;
+    }
+
+    @Override
+    public void setX2(String x2) {
+        this.x2 = x2;
+    }
+
+    @Override
     public IProductDelegate productDelegate() {
         return null;
     }
 
     @Override
+    public RequestProfile requestProfile() {
+        return requestProfile;
+    }
+
+    @Override
     public String customerProvidedOrderNo() {
-        return externNo;
+        return externalNo;
     }
 
     public String label() {

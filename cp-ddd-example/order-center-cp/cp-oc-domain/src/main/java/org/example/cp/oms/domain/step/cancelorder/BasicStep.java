@@ -1,7 +1,7 @@
 package org.example.cp.oms.domain.step.cancelorder;
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.cp.oms.domain.exception.OrderException;
+import org.example.cp.oms.spec.exception.OrderException;
 import org.example.cp.oms.domain.model.OrderModel;
 import org.example.cp.oms.domain.step.CancelOrderStep;
 import org.example.cp.oms.spec.Steps;

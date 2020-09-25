@@ -2,7 +2,7 @@ package org.example.cp.oms.domain.step;
 
 import org.example.cp.oms.domain.model.OrderModel;
 import org.cdf.ddd.step.IDomainRevokableStep;
-import org.example.cp.oms.domain.exception.OrderException;
+import org.example.cp.oms.spec.exception.OrderException;
 import org.example.cp.oms.spec.Steps;
 
 import javax.validation.constraints.NotNull;

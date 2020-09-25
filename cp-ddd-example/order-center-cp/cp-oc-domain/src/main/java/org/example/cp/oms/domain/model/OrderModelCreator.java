@@ -1,5 +1,6 @@
 package org.example.cp.oms.domain.model;
 
+import org.cdf.ddd.api.RequestProfile;
 import org.cdf.ddd.model.IDomainModelCreator;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,6 +10,8 @@ import lombok.ToString;
 @Setter
 @ToString
 public class OrderModelCreator implements IDomainModelCreator {
+
+    private RequestProfile requestProfile;
 
     /**
      * 订单来源

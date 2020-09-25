@@ -12,6 +12,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.cdf</groupId>
+            <artifactId>cp-ddd-spec</artifactId>
+            <version>${cp.ddd.framework.version}</version>
+        </dependency>
+        <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>
             <version>${javax.validation.version}</version>

@@ -3,7 +3,7 @@ package org.example.cp.oms.domain.service;
 import org.example.cp.oms.domain.CoreDomain;
 import org.example.cp.oms.domain.ability.DecideStepsAbility;
 import org.example.cp.oms.domain.ability.SerializableIsolationAbility;
-import org.example.cp.oms.domain.exception.OrderException;
+import org.example.cp.oms.spec.exception.OrderException;
 import org.example.cp.oms.domain.model.OrderModel;
 import org.example.cp.oms.domain.step.CancelOrderStepsExec;
 import org.cdf.ddd.annotation.DomainService;
@@ -28,7 +28,7 @@ public class CancelOrder implements IDomainService {
         Lock lock = DDD.findAbility(SerializableIsolationAbility.class).acquireLock(orderModel);
         if (SerializableIsolationAbility.useLock(lock) && !lock.tryLock()) {
             // 存在并发
-            throw new OrderException();
+            throw new OrderException("210");
         }
 
         List<String> steps = DDD.findAbility(DecideStepsAbility.class).decideSteps(orderModel, Steps.CancelOrder.Activity);

@@ -1,6 +1,6 @@
 package org.example.cp.oms.domain.step.submitorder;
 
-import org.example.cp.oms.domain.exception.OrderException;
+import org.example.cp.oms.spec.exception.OrderException;
 import org.example.cp.oms.domain.facade.mq.IMessageProducer;
 import org.example.cp.oms.domain.model.OrderModel;
 import org.example.cp.oms.domain.step.SubmitOrderStep;

@@ -1,10 +1,10 @@
-package org.example.cp.oms.domain.exception;
+package org.example.cp.oms.spec.exception;
 
 import org.cdf.ddd.step.IDecideStepsException;
 
 import java.util.List;
 
-public class OrderDecideStepsException extends OrderException implements IDecideStepsException {
+public class OrderDecideStepsException extends RuntimeException implements IDecideStepsException {
 
     private List<String> subsequentSteps;
 
