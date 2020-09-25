@@ -7,7 +7,7 @@ import org.cdf.ddd.runtime.registry.mock.model.FooModel;
 
 import javax.validation.constraints.NotNull;
 
-@Step(name = "foo活动", groups = Steps.Submit.GoodsValidationGroup)
+@Step(name = "foo活动", tags = Steps.Submit.GoodsValidationGroup)
 @Slf4j
 public class FooStep extends SubmitStep {
 

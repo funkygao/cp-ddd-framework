@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-@Step(groups = Steps.Submit.GoodsValidationGroup, dependsOn = FooStep.class)
+@Step(tags = Steps.Submit.GoodsValidationGroup, dependsOn = FooStep.class)
 @Slf4j
 public class BarStep extends SubmitStep {
     public static final String rollbackReason = "rollback on purpose";

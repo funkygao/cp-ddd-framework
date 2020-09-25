@@ -40,7 +40,7 @@ public @interface Step {
      * <p>这时候可以把它拆成多个步骤，但统一到“商品校验”分组里</p>
      * <p>分组，可以理解为标签：tag</p>
      */
-    String[] groups() default {};
+    String[] tags() default {};
 
     /**
      * 该步骤依赖哪些其他步骤.

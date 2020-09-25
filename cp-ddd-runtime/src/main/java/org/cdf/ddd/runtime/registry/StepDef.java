@@ -28,7 +28,7 @@ public class StepDef implements IRegistryAware {
     private String name;
 
     @Getter
-    private String[] groups;
+    private String[] tags;
 
     @Getter
     private IDomainStep stepBean;
@@ -37,7 +37,7 @@ public class StepDef implements IRegistryAware {
     public void registerBean(@NotNull Object bean) {
         Step domainStep = CoreAopUtils.getAnnotation(bean, Step.class);
         this.name = domainStep.name();
-        this.groups = domainStep.groups();
+        this.tags = domainStep.tags();
 
         if (!(bean instanceof IDomainStep)) {
             throw BootstrapException.ofMessage(bean.getClass().getCanonicalName(), " MUST implement IDomainStep");
