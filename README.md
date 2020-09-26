@@ -36,17 +36,13 @@ mvn clean install
 
 cp-ddd-framework is a lightweight development framework for complex business architecture.
 
-轻量级中台开发框架，以DDD思想为基础，融合中台核心要素，赋能中台建设。
+轻量级业务中台开发框架，以DDD思想为基础，融合中台核心要素，赋能中台建设。
 
 融合了DDD、前中台复杂生态协作方法论，同时充分考虑组织、历史债、运维和落地成本以及风险而开发的，面向复杂业务场景架构设计，是**中台架构的整体解决方案**。
 
 ### Current status
 
-目前在多个复杂的中台项目生产环境下使用。
-
-**ATTENTION**：
->`Container`对Plugin的动态加载，目前仅支持一次性动态加载，热更新机制还在积极开发中。
->`Container`类已经`@UnderDevelopment`注解，请暂时不要使用。Plugin hotswap mechanism is not production ready yet, please don't use it.
+目前在多个复杂的中台项目生产环境下使用，是中台建设的根基。
 
 ### Quickstart
 
@@ -62,6 +58,7 @@ Please visit [Quickstart wiki](https://github.com/funkygao/cp-ddd-framework/wiki
 - 业务流程的个性化：uncertain biz flow
 - 业务模型的个性化：uncertain biz model
 - 业务前台与中台如何协同：synergy between BP and CP teams
+- 业务的多态：polymorphic business
 - 如何让中台架构特色的DDD稳稳当当落地：DDD seamlessly landing in code
 - 如何降低系统实现的复杂度：reduce entropy of the system
 - 普通研发如何编写出优雅的业务代码：low threshold for average developer to build elegant biz code
