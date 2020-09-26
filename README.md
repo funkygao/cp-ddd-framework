@@ -42,7 +42,9 @@ cp-ddd-framework is a lightweight development framework for complex business arc
 
 ### Current status
 
-目前在多个复杂的中台项目生产环境下使用，是中台建设的根基。
+Used for several complex critical central platform projects in production environment.
+
+目前在多个复杂的中台核心项目生产环境下使用，是中台建设的根基。
 
 ### Quickstart
 
