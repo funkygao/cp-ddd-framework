@@ -6,6 +6,7 @@ import org.cdf.ddd.api.ApiResult;
 import org.cdf.ddd.api.RequestProfile;
 import org.cdf.ddd.ext.IModelAttachmentExt;
 import org.example.bp.oms.isv.IsvPartner;
+import org.example.cp.oms.spec.exception.OrderErrorReason;
 import org.example.cp.oms.spec.exception.OrderException;
 import org.example.cp.oms.spec.model.IOrderModel;
 
@@ -25,7 +26,7 @@ public class CustomModel implements IModelAttachmentExt<IOrderModel> {
         String stationContactNo = ext.get(KEY_STATION_NO);
         if (stationContactNo == null || stationContactNo.length() < 5) {
             // ISV针对该字段的特有业务逻辑
-            throw new OrderException("109");
+            throw new OrderException(OrderErrorReason.Custom.Custom).withCustom("109");
         }
 
         // 落到预留字段上，ISV想把它保存到x2字段

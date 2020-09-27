@@ -13,6 +13,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import javax.annotation.Resource;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -49,8 +50,8 @@ public class ExampleTest {
             submitOrder.submit(orderModel);
             fail();
         } catch (OrderException expected) {
-            assertEquals("109", expected.getCode());
+            assertEquals("109", expected.getCustom());
+            assertTrue(expected.hasCustom());
         }
-
     }
 }

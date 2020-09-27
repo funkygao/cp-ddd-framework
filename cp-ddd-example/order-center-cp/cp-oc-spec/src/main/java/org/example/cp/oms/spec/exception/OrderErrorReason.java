@@ -38,4 +38,22 @@ public interface OrderErrorReason {
             return code;
         }
     }
+
+    enum Custom implements OrderErrorSpec {
+        Custom("999", "前台自定义"),
+        ;
+
+        private final String code;
+        private final String message;
+
+        Custom(String code, String message) {
+            this.code = code;
+            this.message = message;
+        }
+
+        @Override
+        public String code() {
+            return code;
+        }
+    }
 }

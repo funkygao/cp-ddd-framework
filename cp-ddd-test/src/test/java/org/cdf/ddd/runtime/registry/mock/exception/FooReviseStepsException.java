@@ -1,24 +1,24 @@
 package org.cdf.ddd.runtime.registry.mock.exception;
 
 import lombok.Setter;
-import org.cdf.ddd.step.IDecideStepsException;
+import org.cdf.ddd.step.IReviseStepsException;
 
 import java.util.List;
 
-public class FooDecideStepsException extends RuntimeException implements IDecideStepsException {
+public class FooReviseStepsException extends RuntimeException implements IReviseStepsException {
 
-    public FooDecideStepsException() {
+    public FooReviseStepsException() {
         super();
     }
 
-    public FooDecideStepsException(String message) {
+    public FooReviseStepsException(String message) {
         super(message);
     }
 
     @Setter
     private List<String> steps;
 
-    public FooDecideStepsException withSubsequentSteps(List<String> subsequentSteps) {
+    public FooReviseStepsException withSubsequentSteps(List<String> subsequentSteps) {
         this.steps = subsequentSteps;
         return this;
     }

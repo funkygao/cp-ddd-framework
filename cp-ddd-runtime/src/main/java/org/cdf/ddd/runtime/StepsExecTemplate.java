@@ -7,7 +7,7 @@ package org.cdf.ddd.runtime;
 
 import lombok.extern.slf4j.Slf4j;
 import org.cdf.ddd.model.IDomainModel;
-import org.cdf.ddd.step.IDecideStepsException;
+import org.cdf.ddd.step.IReviseStepsException;
 import org.cdf.ddd.step.IDomainRevokableStep;
 import org.cdf.ddd.step.IDomainStep;
 import org.springframework.core.ResolvableType;
@@ -36,7 +36,7 @@ public abstract class StepsExecTemplate<Step extends IDomainStep, Model extends 
     /**
      * 执行编排好的步骤.
      * <p>
-     * <p>步骤的实现里，可以通过{@link IDecideStepsException}来进行后续步骤修订，即动态的步骤编排</p>
+     * <p>步骤的实现里，可以通过{@link IReviseStepsException}来进行后续步骤修订，即动态的步骤编排</p>
      * <p>如果步骤实现了{@link IDomainRevokableStep}，在步骤抛出异常后会自动触发步骤回滚</p>
      *
      * @param activityCode 领域活动
@@ -85,9 +85,9 @@ public abstract class StepsExecTemplate<Step extends IDomainStep, Model extends 
                 }
             }
         } catch (Exception cause) {
-            if (cause instanceof IDecideStepsException) {
+            if (cause instanceof IReviseStepsException) {
                 // 重新编排(修订)了后续步骤
-                return ((IDecideStepsException) cause).subsequentSteps();
+                return ((IReviseStepsException) cause).subsequentSteps();
             }
 
             // 其他异常，best effort rollback if necessary

@@ -1,15 +1,15 @@
 package org.example.cp.oms.domain.step.submitorder;
 
+import lombok.extern.slf4j.Slf4j;
 import org.cdf.ddd.annotation.Step;
 import org.cdf.ddd.runtime.DDD;
-import lombok.extern.slf4j.Slf4j;
+import org.cdf.ddd.step.ReviseStepsException;
 import org.example.cp.oms.domain.ability.PresortAbility;
 import org.example.cp.oms.domain.ability.ReviseStepsAbility;
-import org.example.cp.oms.spec.exception.OrderException;
-import org.example.cp.oms.spec.exception.OrderDecideStepsException;
 import org.example.cp.oms.domain.model.OrderModel;
 import org.example.cp.oms.domain.step.SubmitOrderStep;
 import org.example.cp.oms.spec.Steps;
+import org.example.cp.oms.spec.exception.OrderException;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -26,7 +26,7 @@ public class BasicStep extends SubmitOrderStep {
             log.info("重新编排步骤：{}", revisedSteps);
 
             // 通过异常，来改变后续步骤
-            throw new OrderDecideStepsException().withSubsequentSteps(revisedSteps);
+            throw new ReviseStepsException().withSubsequentSteps(revisedSteps);
         }
 
         log.info("presorting...");
