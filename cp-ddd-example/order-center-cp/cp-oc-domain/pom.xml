@@ -19,7 +19,7 @@
 
         <dependency>
             <groupId>org.cdf</groupId>
-            <artifactId>cp-ddd-runtime</artifactId>
+            <artifactId>cp-ddd-plugin</artifactId>
             <version>${cp.ddd.framework.version}</version>
         </dependency>
     </dependencies>

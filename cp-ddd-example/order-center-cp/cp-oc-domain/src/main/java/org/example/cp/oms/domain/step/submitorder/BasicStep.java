@@ -3,7 +3,7 @@ package org.example.cp.oms.domain.step.submitorder;
 import lombok.extern.slf4j.Slf4j;
 import org.cdf.ddd.annotation.Step;
 import org.cdf.ddd.runtime.DDD;
-import org.cdf.ddd.step.ReviseStepsException;
+import org.cdf.ddd.runtime.ReviseStepsException;
 import org.example.cp.oms.domain.ability.PresortAbility;
 import org.example.cp.oms.domain.ability.ReviseStepsAbility;
 import org.example.cp.oms.domain.model.OrderModel;
