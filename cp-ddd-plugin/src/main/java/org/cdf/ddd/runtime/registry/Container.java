@@ -61,20 +61,6 @@ public final class Container {
     }
 
     /**
-     * JDK本身的类加载器，全局唯一.
-     */
-    public static ClassLoader jdkClassLoader() {
-        return jdkClassLoader;
-    }
-
-    /**
-     * 中台容器类加载器，全局唯一.
-     */
-    public static ClassLoader containerClassLoader() {
-        return containerClassLoader;
-    }
-
-    /**
      * 加载业务前台jar包.
      *
      * @param jarUrl      Plugin jar URL
@@ -106,7 +92,8 @@ public final class Container {
         long t0 = System.nanoTime();
         log.warn("loading partner:{} basePackage:{}", jarPath, basePackage);
         try {
-            new PluginLoader().load(jarPath, basePackage, Partner.class, new ContainerContext());
+            new PluginLoader(jdkClassLoader, containerClassLoader).
+                    load(jarPath, basePackage, Partner.class, new ContainerContext());
         } catch (Throwable ex) {
             log.error("fails to load partner:{}, cost {}ms", jarPath, (System.nanoTime() - t0) / 1000_000, ex);
 
@@ -158,7 +145,8 @@ public final class Container {
         long t0 = System.nanoTime();
         log.warn("loading pattern:{} basePackage:{}", jarPath, basePackage);
         try {
-            new PluginLoader().load(jarPath, basePackage, Pattern.class, new ContainerContext());
+            new PluginLoader(jdkClassLoader, containerClassLoader).
+                    load(jarPath, basePackage, Pattern.class, new ContainerContext());
         } catch (Throwable ex) {
             log.error("fails to load pattern:{}, cost {}ms", jarPath, (System.nanoTime() - t0) / 1000_000, ex);
 

@@ -34,7 +34,15 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
-class PluginLoader {
+final class PluginLoader {
+
+    private final ClassLoader jdkClassLoader;
+    private final ClassLoader containerClassLoader;
+
+    PluginLoader(ClassLoader jdkClassLoader, ClassLoader containerClassLoader) {
+        this.jdkClassLoader = jdkClassLoader;
+        this.containerClassLoader = containerClassLoader;
+    }
 
     PluginLoader load(@NotNull String jarPath, String basePackage, Class<? extends Annotation> identityResolverClass, IContainerContext ctx) throws Throwable {
         if (identityResolverClass != Pattern.class && identityResolverClass != Partner.class) {
@@ -46,8 +54,8 @@ class PluginLoader {
         annotations.add(identityResolverClass);
         annotations.add(Extension.class);
 
-        // 个性化业务的ClassLoader，目前是所有业务共享一个 TODO 每个业务单独一个
-        PluginClassLoader pluginClassLoader = PluginClassLoader.getInstance().inject(Container.jdkClassLoader(), Container.containerClassLoader());
+        // 个性化业务的ClassLoader，目前是所有业务共享一个
+        PluginClassLoader pluginClassLoader = PluginClassLoader.getInstance().inject(jdkClassLoader, containerClassLoader);
         pluginClassLoader.addUrl(new File(jarPath).toURI().toURL());
 
         ApplicationContext applicationContext = DDDBootstrap.applicationContext();

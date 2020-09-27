@@ -28,7 +28,7 @@ import java.net.URLClassLoader;
  * </pre>
  */
 @Slf4j
-class PluginClassLoader extends URLClassLoader {
+final class PluginClassLoader extends URLClassLoader {
     private static final String dddPackage = "org.cdf.ddd";
 
     private ClassLoader jdkClassLoader; // TODO final
