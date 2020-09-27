@@ -8,6 +8,7 @@ import org.cdf.ddd.runtime.DDD;
 import lombok.extern.slf4j.Slf4j;
 import org.example.cp.oms.domain.CoreDomain;
 import org.example.cp.oms.domain.ability.DecideStepsAbility;
+import org.example.cp.oms.spec.exception.OrderErrorReason;
 import org.example.cp.oms.spec.exception.OrderException;
 import org.example.cp.oms.domain.model.OrderModel;
 import org.example.cp.oms.spec.Steps;
@@ -28,7 +29,7 @@ public class SubmitOrder implements IDomainService {
         Lock lock = DDD.findAbility(SerializableIsolationAbility.class).acquireLock(orderModel);
         if (SerializableIsolationAbility.useLock(lock) && !lock.tryLock()) {
             // 存在并发
-            throw new OrderException("187");
+            throw new OrderException(OrderErrorReason.SubmitOrder.OrderConcurrentNotAllowed);
         }
 
         List<String> steps = DDD.findAbility(DecideStepsAbility.class).decideSteps(orderModel, Steps.SubmitOrder.Activity);

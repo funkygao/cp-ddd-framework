@@ -1,18 +1,22 @@
 package org.example.cp.oms.spec.exception;
 
-import lombok.Getter;
+import javax.validation.constraints.NotNull;
 
 public class OrderException extends RuntimeException {
+    protected OrderErrorSpec errorReason;
 
-    /**
-     * 异常码.
-     */
-    @Getter
-    private final String code;
+    public OrderException(@NotNull OrderErrorSpec errorReason) {
+        super();
+        this.errorReason = errorReason;
+    }
 
-    public OrderException(String code) {
-        super(code);
-        this.code = code;
+    public String code() {
+        return errorReason.code();
+    }
+
+    @Override
+    public String getMessage() {
+        return code();
     }
 
 }
