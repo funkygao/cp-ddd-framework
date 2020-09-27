@@ -59,8 +59,8 @@ Plugin有2种：
    - Container提供provide，Plugin通过scope=provided引用
 - 自己带properties file
 
-## Knowledge
+## TODO
 
-### Class Loader
+### P0
 
-**Loading Java classes during runtime dynamically to the JVM**.
+- AOP不生效

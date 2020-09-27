@@ -22,6 +22,11 @@
             <artifactId>cp-ddd-plugin</artifactId>
             <version>${cp.ddd.framework.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>${aspectjweaver.version}</version>
+        </dependency>
     </dependencies>
 
 </project>
