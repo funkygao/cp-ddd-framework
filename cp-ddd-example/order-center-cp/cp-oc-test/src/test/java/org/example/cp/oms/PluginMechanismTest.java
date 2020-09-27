@@ -40,16 +40,18 @@ public class PluginMechanismTest {
         ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("spring-test.xml");
         applicationContext.start();
 
-        Container.getInstance().loadPartnerPlugin(localIsvJar, "org.example.bp");
-        submitOrder(applicationContext);
-        if (true) {
-            return;
+        // 目前的问题：第二次循环时抛出异常
+        // org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type 'org.example.bp.oms.isv.IsvPartner' available
+        for (int i = 0; i < 2; i++) {
+            // 同一个jar，load多次，模拟热更新
+            log.info("n={}", i + 1);
+            Container.getInstance().loadPartnerPlugin(localIsvJar, "org.example.bp");
+            submitOrder(applicationContext, true);
+            log.info("===============================================");
         }
 
-        for (int i = 0; i < 2; i++) {
-            // 同一个jar，load多次
-            log.info("n={}", i + 1);
-            Container.getInstance().loadPartnerPlugin(remoteIsvJar, "org.example.bp");
+        if (true) {
+            return;
         }
 
         Container.getInstance().loadPartnerPlugin(remoteKaJar, "org.example.bp");
@@ -63,23 +65,27 @@ public class PluginMechanismTest {
             TimeUnit.MINUTES.sleep(2); // 等待手工发布新jar
             log.info("2m is up, go!");
             Container.getInstance().loadPartnerPlugin(remoteIsvJar, "org.example.bp");
-            submitOrder(applicationContext); // 重新提交订单，看看是否新jar逻辑生效
+            submitOrder(applicationContext, true); // 重新提交订单，看看是否新jar逻辑生效
         }
 
         // 去掉ISV Partner，再提交订单，接单步骤会变空的
         Container.getInstance().unloadPartnerPlugin("ISV");
-        submitOrder(applicationContext);
+        submitOrder(applicationContext, false);
 
         applicationContext.stop();
     }
 
-    private void submitOrder(ApplicationContext applicationContext) {
+    private void submitOrder(ApplicationContext applicationContext, boolean useIsvPartner) {
         // prepare the domain model
         RequestProfile requestProfile = new RequestProfile();
         requestProfile.getExt().put("_station_contact_", "139100988343");
         OrderModelCreator creator = new OrderModelCreator();
         creator.setRequestProfile(requestProfile);
-        creator.setSource("ISV"); // IsvPartner
+        if (useIsvPartner) {
+            creator.setSource("ISV"); // IsvPartner
+        } else {
+            creator.setSource("KA"); // KaPartner
+        }
         creator.setCustomerNo("home"); // HomeAppliancePattern
         creator.setExternalNo("20200987655");
         OrderModel orderModel = OrderModel.createWith(creator);

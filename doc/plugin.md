@@ -64,3 +64,7 @@ Plugin有2种：
 ### P0
 
 - AOP不生效
+- log `JDKClassLoader loaded java.lang.annotation.Target`出现多次
+- resolve of PluginClassLoader
+- 第二次加载isv jar，org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type 'org.example.bp.oms.isv.IsvPartner' available
+
