@@ -49,7 +49,7 @@ final class PluginClassLoader extends URLClassLoader {
         super.addURL(url);
     }
 
-    @Override // TODO resolve
+    @Override
     protected Class<?> loadClass(String className, boolean resolve) throws ClassNotFoundException {
         Class clazz = this.findLoadedClass(className);
         if (clazz != null) {
@@ -70,7 +70,7 @@ final class PluginClassLoader extends URLClassLoader {
 
         // 不是JDK本身的类
         if (containerFirstClass(className)) {
-            clazz = containerClassLoader.loadClass(className); // parent.loadClass
+            clazz = containerClassLoader.loadClass(className);
             if (clazz != null) {
                 log.debug("ContainerClassLoader loaded {}", className);
                 return clazz;
@@ -83,6 +83,9 @@ final class PluginClassLoader extends URLClassLoader {
             clazz = this.findClass(className);
             if (clazz != null) {
                 log.info("PluginClassLoader loaded {}", className);
+                if (resolve) {
+                    resolveClass(clazz); // TODO 之前没有调用resolve，也没发现问题
+                }
                 return clazz;
             }
         } catch (ClassNotFoundException ignored) {
