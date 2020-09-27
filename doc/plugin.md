@@ -49,16 +49,6 @@ Plugin有2种：
 - java.lang.ClassNotFoundException, NoClassDefFoundError, NoSuchMethodError, ClassFormatError, ClassCastException
 - canary release, rollback, rolling upgrade, jar deployment platform
 
-## Scenarios
-
-- 可以自己 AOP 吗
-- 打印日志
-- 引入guava等第三方包，都必须是provided吗
-- fat jar, lazy load
-   - 不同Plugin会引入很多重复的包，导致最终的jar很大
-   - Container提供provide，Plugin通过scope=provided引用
-- 自己带properties file
-
 ## TODO
 
 ### P0
@@ -67,4 +57,6 @@ Plugin有2种：
 - log `JDKClassLoader loaded java.lang.annotation.Target`出现多次
 - resolve of PluginClassLoader
 - 第二次加载isv jar，org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type 'org.example.bp.oms.isv.IsvPartner' available
-
+- 静态加载后，再热替换
+- Spring的懒加载
+- 自己带properties file
