@@ -30,6 +30,7 @@ under the License.
     <modules>
         <module>cp-ddd-spec</module>
         <module>cp-ddd-runtime</module>
+        <module>cp-ddd-plugin</module>
         <module>cp-ddd-enforce</module>
     </modules>
 

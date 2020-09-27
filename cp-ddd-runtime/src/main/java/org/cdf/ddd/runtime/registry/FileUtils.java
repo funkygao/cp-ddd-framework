@@ -8,7 +8,7 @@ package org.cdf.ddd.runtime.registry;
 import java.io.*;
 
 // copied from apache commons-io
-class FileUtils {
+final class FileUtils {
 
     static void copyInputStreamToFile(InputStream source, File destination) throws IOException {
         try {

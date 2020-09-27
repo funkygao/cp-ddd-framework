@@ -42,10 +42,19 @@ public class ExampleTest {
         //   SerializableIsolationExt -> DecideStepsExt -> BasicStep(PresortExt) -> PersistStep(AssignOrderNoExt, CustomModelAbility) -> BroadcastStep
         // 查看日志，了解具体执行情况
         submitOrder.submit(orderModel);
+    }
 
-        // 下面是验证失败的场景：ISV前台入参里没有传递必填的“站点联系人号码”
-        requestProfile.getExt().clear();
-        orderModel = OrderModel.createWith(creator);
+    // 下面是验证失败的场景：ISV前台入参里没有传递必填的“站点联系人号码”
+    @Test
+    public void failureCase() {
+        // prepare the domain model
+        RequestProfile requestProfile = new RequestProfile();
+        OrderModelCreator creator = new OrderModelCreator();
+        creator.setSource("ISV"); // IsvPartner 会触发ISV前台相关的扩展点
+        creator.setCustomerNo("home"); // HomeAppliancePattern 会触发家电相关的扩展点
+        creator.setExternalNo("20200987655");
+        creator.setRequestProfile(requestProfile);
+        OrderModel orderModel = OrderModel.createWith(creator);
         try {
             submitOrder.submit(orderModel);
             fail();

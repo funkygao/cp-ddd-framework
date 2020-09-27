@@ -28,35 +28,25 @@ import java.net.URLClassLoader;
  * </pre>
  */
 @Slf4j
-class PluginClassLoader extends URLClassLoader {
+final class PluginClassLoader extends URLClassLoader {
     private static final String dddPackage = "org.cdf.ddd";
 
-    private ClassLoader jdkClassLoader; // TODO final
-    private ClassLoader containerClassLoader;
+    private final ClassLoader jdkClassLoader;
+    private final ClassLoader containerClassLoader;
 
-    private static PluginClassLoader instance = new PluginClassLoader(new URL[]{});
-
-    PluginClassLoader(URL[] urls) {
+    PluginClassLoader(URL[] urls, ClassLoader jdkClassLoader, ClassLoader containerClassLoader) {
         super(urls);
 
         for (URL url : urls) {
             addUrl(url);
         }
-    }
 
-    @Deprecated
-    static PluginClassLoader getInstance() {
-        return instance;
+        this.jdkClassLoader = jdkClassLoader;
+        this.containerClassLoader = containerClassLoader;
     }
 
     void addUrl(URL url) {
         super.addURL(url);
-    }
-
-    PluginClassLoader inject(ClassLoader jdkClassLoader, ClassLoader containerClassLoader) {
-        this.jdkClassLoader = jdkClassLoader;
-        this.containerClassLoader = containerClassLoader;
-        return this;
     }
 
     @Override // TODO resolve

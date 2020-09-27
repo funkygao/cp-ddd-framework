@@ -7,6 +7,9 @@ package org.cdf.ddd.runtime.registry;
 
 import org.cdf.ddd.plugin.IContainerContext;
 
-class ContainerContext implements IContainerContext {
+/**
+ * 默认的容器上下文实现.
+ */
+final class ContainerContext implements IContainerContext {
 
 }

@@ -28,8 +28,7 @@ import java.util.List;
  * <ul><b>Plugin可以被动态加载的限制条件和side effect：</b>
  * <li>处于安全和效率考虑，不能自己定义Spring xml，必须由中台容器统一配置：Spring容器大家共享，不隔离，一份</li>
  * <li>所有中间件资源(RPC/Redis/JDBC/MQ/etc)由中台统一配置，并通过<b>spec jar</b>输出给Plugin使用</li>
- * <li>TODO Plugin不是FatJar，是利用中台提供的能力(spec jar)，进行有限扩展的jar：不能自行定义外部依赖</li>
- * <li>Plugin可以引用外部jar包，但需要{@code scope=provided}</li>
+ * <li>Plugin可以引用外部jar包，但需要{@code scope=provided}, Plugin不是FatJar</li>
  * <li>热更新依靠的是使用新ClassLoader重新加载jar，但之前已经加载的class和ClassLoader无法控制卸载时机，可能会短时间内Perm区增大</li>
  * </ul>
  * <p>
@@ -59,20 +58,6 @@ public final class Container {
     @NotNull
     public static Container getInstance() {
         return instance;
-    }
-
-    /**
-     * JDK本身的类加载器，全局唯一.
-     */
-    public static ClassLoader jdkClassLoader() {
-        return jdkClassLoader;
-    }
-
-    /**
-     * 中台容器类加载器，全局唯一.
-     */
-    public static ClassLoader containerClassLoader() {
-        return containerClassLoader;
     }
 
     /**
@@ -107,7 +92,8 @@ public final class Container {
         long t0 = System.nanoTime();
         log.warn("loading partner:{} basePackage:{}", jarPath, basePackage);
         try {
-            new PluginLoader().load(jarPath, basePackage, Partner.class, new ContainerContext());
+            new PluginLoader(jdkClassLoader, containerClassLoader).
+                    load(jarPath, basePackage, Partner.class, new ContainerContext());
         } catch (Throwable ex) {
             log.error("fails to load partner:{}, cost {}ms", jarPath, (System.nanoTime() - t0) / 1000_000, ex);
 
@@ -159,7 +145,8 @@ public final class Container {
         long t0 = System.nanoTime();
         log.warn("loading pattern:{} basePackage:{}", jarPath, basePackage);
         try {
-            new PluginLoader().load(jarPath, basePackage, Pattern.class, new ContainerContext());
+            new PluginLoader(jdkClassLoader, containerClassLoader).
+                    load(jarPath, basePackage, Pattern.class, new ContainerContext());
         } catch (Throwable ex) {
             log.error("fails to load pattern:{}, cost {}ms", jarPath, (System.nanoTime() - t0) / 1000_000, ex);
 
@@ -208,5 +195,13 @@ public final class Container {
         }
 
         return new URLClassLoader(jdkUrls.toArray(new URL[0]), parent);
+    }
+
+    ClassLoader getJdkClassLoader() {
+        return jdkClassLoader;
+    }
+
+    ClassLoader getContainerClassLoader() {
+        return containerClassLoader;
     }
 }

@@ -19,7 +19,7 @@ public class CustomModel implements IModelAttachmentExt<IOrderModel> {
     private static final String KEY_STATION_NO = "_station_contact_";
 
     @Override
-    public void explain(RequestProfile source, IOrderModel target) {
+    public void explain(@NotNull RequestProfile source, @NotNull IOrderModel target) {
         // 入参里预留了扩展属性
         Map<String, String> ext = source.getExt();
         // 站点联系人号码，是个性化字段，中台只存储，不负责逻辑：前台来处理逻辑，并告诉中台存储到哪些已预留的字段

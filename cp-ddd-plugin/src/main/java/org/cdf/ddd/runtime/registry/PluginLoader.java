@@ -29,12 +29,21 @@ import org.springframework.util.Assert;
 import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.lang.annotation.Annotation;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 @Slf4j
-class PluginLoader {
+final class PluginLoader {
+
+    private final ClassLoader jdkClassLoader;
+    private final ClassLoader containerClassLoader;
+
+    PluginLoader(ClassLoader jdkClassLoader, ClassLoader containerClassLoader) {
+        this.jdkClassLoader = jdkClassLoader;
+        this.containerClassLoader = containerClassLoader;
+    }
 
     PluginLoader load(@NotNull String jarPath, String basePackage, Class<? extends Annotation> identityResolverClass, IContainerContext ctx) throws Throwable {
         if (identityResolverClass != Pattern.class && identityResolverClass != Partner.class) {
@@ -46,12 +55,12 @@ class PluginLoader {
         annotations.add(identityResolverClass);
         annotations.add(Extension.class);
 
-        // 个性化业务的ClassLoader，目前是所有业务共享一个 TODO 每个业务单独一个
-        PluginClassLoader pluginClassLoader = PluginClassLoader.getInstance().inject(Container.jdkClassLoader(), Container.containerClassLoader());
-        pluginClassLoader.addUrl(new File(jarPath).toURI().toURL());
+        // each Plugin Jar has a dedicated PluginClassLoader
+        PluginClassLoader pluginClassLoader = new PluginClassLoader(new URL[]{new File(jarPath).toURI().toURL()},
+                jdkClassLoader, containerClassLoader);
 
+        // the shared Spring application context
         ApplicationContext applicationContext = DDDBootstrap.applicationContext();
-
         if (basePackage != null && !basePackage.isEmpty()) {
             // 先扫spring，然后初始化所有的basePackage bean，包括已经在中台里加载完的bean
             log.info("Spring scan with {} ...", pluginClassLoader);
