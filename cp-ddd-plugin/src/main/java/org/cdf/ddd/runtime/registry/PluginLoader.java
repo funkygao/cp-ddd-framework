@@ -67,7 +67,7 @@ final class PluginLoader {
             springScanComponent(applicationContext, pluginClassLoader, basePackage);
         }
 
-        log.info("loading classes with annotations: {}", annotations);
+        log.info("Spring components scanned. loading classes with annotations: {}", annotations);
         Map<Class<? extends Annotation>, List<Class>> resultMap = JarUtils.loadClassWithAnnotations(
                 jarPath, annotations, null, pluginClassLoader);
         log.debug("loaded classes: {}", resultMap);
@@ -124,6 +124,7 @@ final class PluginLoader {
         realContext.getBeanFactory().setBeanClassLoader(pluginClassLoader);
 
         BeanDefinitionRegistry beanDefinitionRegistry = (BeanDefinitionRegistry) realContext.getBeanFactory();
+        // basePackages下的Class包装成BeanDefinition，并注册到IoC容器
         new ClassPathBeanDefinitionScanner(
                 beanDefinitionRegistry,
                 true,
