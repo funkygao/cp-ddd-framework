@@ -11,6 +11,10 @@ import org.example.cp.oms.spec.ext.IPresortExt;
 import org.example.cp.oms.spec.model.IOrderModel;
 
 import javax.validation.constraints.NotNull;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Properties;
 
 @Extension(code = IsvPartner.CODE, value = "isvPresort")
 @Slf4j
@@ -28,6 +32,8 @@ public class PresortExt implements IPresortExt {
         multiset.add("b");
         log.info("count(a): {}", multiset.count("a"));
         log.info("仓库号：{}", WarehouseUtil.getWarehouseNo());
+
+        loadProperties();
     }
 
     // 演示内部类的使用
@@ -35,5 +41,27 @@ public class PresortExt implements IPresortExt {
         int getResult() {
             return 1;
         }
+    }
+
+    // 演示Plugin自带资源文件的场景
+    private void loadProperties() {
+        InputStream is = this.getClass().getResourceAsStream("/config.properties");
+        InputStreamReader inputStreamReader = null;
+        Properties properties = new Properties();
+        try {
+            inputStreamReader = new InputStreamReader(is, "UTF-8");
+            properties.load(inputStreamReader);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (inputStreamReader != null) {
+                try {
+                    inputStreamReader.close();
+                } catch (IOException ignored) {
+                }
+            }
+        }
+
+        log.info("加载资源文件成功！站点名称：{}", properties.getProperty("site_name"));
     }
 }
