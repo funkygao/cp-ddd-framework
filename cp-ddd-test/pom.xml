@@ -18,6 +18,11 @@
         <!-- cp-ddd-frameowrk -->
         <dependency>
             <groupId>org.cdf</groupId>
+            <artifactId>cp-ddd-runtime</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.cdf</groupId>
             <artifactId>cp-ddd-plugin</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -87,6 +92,7 @@
                         <exclude>**/*Container.class</exclude>
                         <exclude>**/*PluginLoader.class</exclude>
                         <exclude>**/*PluginClassLoader.class</exclude>
+                        <exclude>**/*ContainerContext.class</exclude>
                     </excludes>
                 </configuration>
                 <executions>
