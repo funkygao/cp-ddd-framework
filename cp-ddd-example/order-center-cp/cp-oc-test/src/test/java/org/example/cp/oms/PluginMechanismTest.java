@@ -2,6 +2,7 @@ package org.example.cp.oms;
 
 import lombok.extern.slf4j.Slf4j;
 import org.cdf.ddd.annotation.UnderDevelopment;
+import org.cdf.ddd.api.RequestProfile;
 import org.cdf.ddd.runtime.registry.Container;
 import org.example.cp.oms.domain.model.OrderModel;
 import org.example.cp.oms.domain.model.OrderModelCreator;
@@ -74,7 +75,10 @@ public class PluginMechanismTest {
 
     private void submitOrder(ApplicationContext applicationContext) {
         // prepare the domain model
+        RequestProfile requestProfile = new RequestProfile();
+        requestProfile.getExt().put("_station_contact_", "139100988343");
         OrderModelCreator creator = new OrderModelCreator();
+        creator.setRequestProfile(requestProfile);
         creator.setSource("ISV"); // IsvPartner
         creator.setCustomerNo("home"); // HomeAppliancePattern
         creator.setExternalNo("20200987655");
