@@ -17,5 +17,8 @@
         <logger name="org.springframework" level="error" additivity="false" includeLocation="true">
             <AppenderRef ref="console"/>
         </logger>
+        <logger name="org.springframework.beans.factory" level="debug" additivity="false" includeLocation="true">
+            <AppenderRef ref="console"/>
+        </logger>
     </Loggers>
 </Configuration>
