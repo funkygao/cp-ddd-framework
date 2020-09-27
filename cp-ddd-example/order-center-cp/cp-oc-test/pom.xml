@@ -17,6 +17,12 @@
             <version>${project.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.cdf</groupId>
+            <artifactId>cp-ddd-plugin</artifactId>
+            <version>${cp.ddd.framework.version}</version>
+        </dependency>
+
         <!-- 中台把Plugin需要的第三方都准备好，Plugin pom以provided scope引入 -->
         <dependency>
             <groupId>com.google.guava</groupId>

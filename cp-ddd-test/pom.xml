@@ -18,7 +18,7 @@
         <!-- cp-ddd-frameowrk -->
         <dependency>
             <groupId>org.cdf</groupId>
-            <artifactId>cp-ddd-runtime</artifactId>
+            <artifactId>cp-ddd-plugin</artifactId>
             <version>${project.version}</version>
         </dependency>
 

@@ -5,11 +5,10 @@
  */
 package org.cdf.ddd.runtime;
 
-import org.cdf.ddd.runtime.registry.Container;
+import org.cdf.ddd.model.BaseDomainAbility;
 import org.cdf.ddd.runtime.registry.InternalIndexer;
 import org.cdf.ddd.runtime.registry.StepDef;
 import org.cdf.ddd.step.IDomainStep;
-import org.cdf.ddd.model.BaseDomainAbility;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -21,14 +20,6 @@ import java.util.List;
  */
 public final class DDD {
     private DDD() {
-    }
-
-    /**
-     * 获取业务容器单例.
-     */
-    @NotNull
-    public static Container getContainer() {
-        return Container.getInstance();
     }
 
     /**

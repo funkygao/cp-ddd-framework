@@ -22,7 +22,6 @@ public class ContainerTest {
     public void basic() {
         Container container = Container.getInstance();
         assertSame(container, Container.getInstance());
-        assertSame(container, DDD.getContainer());
 
         try {
             Container.getInstance().loadPartnerPlugin("a/b", null);
@@ -36,8 +35,8 @@ public class ContainerTest {
 
     @Test
     public void unload() {
-        DDD.getContainer().unloadPatternPlugin(B2BPattern.CODE);
-        DDD.getContainer().unloadPartnerPlugin(FooPartner.CODE);
+        Container.getInstance().unloadPatternPlugin(B2BPattern.CODE);
+        Container.getInstance().unloadPartnerPlugin(FooPartner.CODE);
     }
 
     @Test
@@ -69,7 +68,7 @@ public class ContainerTest {
     @Test
     public void loadPartnerPluginSmokeTest() throws MalformedURLException {
         try {
-            DDD.getContainer().loadPartnerPlugin(new URL("https://github.com/funkygao/cp-ddd-framework/blob/master/doc/assets/jar/order-center-bp-isv-0.0.1.jar?raw=true"), null);
+            Container.getInstance().loadPartnerPlugin(new URL("https://github.com/funkygao/cp-ddd-framework/blob/master/doc/assets/jar/order-center-bp-isv-0.0.1.jar?raw=true"), null);
             fail();
         } catch (NoClassDefFoundError expected) {
             // 由于没有加载示例的中台jar，肯定会抛出 NoClassDefFoundError
@@ -83,7 +82,7 @@ public class ContainerTest {
     @Test
     public void loadPatternPluginSmokeTest() throws MalformedURLException {
         try {
-            DDD.getContainer().loadPatternPlugin(new URL("https://github.com/funkygao/cp-ddd-framework/blob/master/doc/assets/jar/order-center-pattern-0.0.1.jar?raw=true"), null);
+            Container.getInstance().loadPatternPlugin(new URL("https://github.com/funkygao/cp-ddd-framework/blob/master/doc/assets/jar/order-center-pattern-0.0.1.jar?raw=true"), null);
             fail();
         } catch (NoClassDefFoundError expected) {
         } catch (Throwable unexpected) {

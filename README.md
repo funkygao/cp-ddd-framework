@@ -109,6 +109,10 @@ Specification of the framework.
 
 Runtime implementation of the framework.
 
+### cp-ddd-plugin
+
+Plugin dynamic loading implementation.
+
 ### cp-ddd-enforce
 
 Enforce expected evolvement of the business architecture based upon ArchUnit.
