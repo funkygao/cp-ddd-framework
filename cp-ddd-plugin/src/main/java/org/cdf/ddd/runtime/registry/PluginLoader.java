@@ -90,7 +90,7 @@ final class PluginLoader {
             }
 
             for (Class irc : identityResolverClasses) {
-                log.info("lazy register {}", irc.getCanonicalName());
+                log.info("lazy register {} cl:{}", irc.getCanonicalName(), irc.getClassLoader());
                 // 每次加载，由于 PluginClassLoader 是不同的，irc也是不同的
                 RegistryFactory.lazyRegister(identityResolverClass, applicationContext.getBean(irc));
             }
@@ -100,7 +100,7 @@ final class PluginLoader {
         List<Class> extensions = resultMap.get(Extension.class);
         if (extensions != null && !extensions.isEmpty()) {
             for (Class extensionClazz : extensions) {
-                log.info("lazy register {}", extensionClazz.getCanonicalName());
+                log.info("lazy register {} cl:{}", extensionClazz.getCanonicalName(), extensionClazz.getClassLoader());
                 // 每次加载，由于 PluginClassLoader 是不同的，extensionClazz也是不同的
                 RegistryFactory.lazyRegister(Extension.class, applicationContext.getBean(extensionClazz));
             }
