@@ -4,6 +4,7 @@
 
 ## 目录
 
+- [如何使用该演示](#如何使用该演示)
 - [项目基本介绍](https://github.com/funkygao/cp-ddd-framework/wiki/Demo-explained-%E7%A4%BA%E4%BE%8B%E8%AF%B4%E6%98%8E)
 - [代码快速入门](#代码快速入门)
 - [代码结构](#代码结构)
@@ -13,6 +14,18 @@
    - [两个业务前台代码库](#订单履约中台的多个业务前台)
       - [KA业务前台](#order-center-bp-ka)
       - [ISV业务前台](#order-center-bp-isv)
+
+## 如何使用该演示
+
+``` bash
+git clone https://github.com/funkygao/cp-ddd-framework.git
+cd cp-ddd-framework
+mvn clean install
+cd cp-ddd-example
+mvn package
+```
+
+运行演示的入口：[ExampleTest](order-center-cp/cp-oc-test/src/test/java/org/example/cp/oms/ExampleTest.java)，也可以在IDE里手工执行。
 
 ## 代码快速入门
 
