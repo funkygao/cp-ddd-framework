@@ -196,4 +196,12 @@ public final class Container {
 
         return new URLClassLoader(jdkUrls.toArray(new URL[0]), parent);
     }
+
+    ClassLoader getJdkClassLoader() {
+        return jdkClassLoader;
+    }
+
+    ClassLoader getContainerClassLoader() {
+        return containerClassLoader;
+    }
 }
