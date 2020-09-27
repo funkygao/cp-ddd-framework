@@ -92,7 +92,6 @@
                         <exclude>**/*Container.class</exclude>
                         <exclude>**/*PluginLoader.class</exclude>
                         <exclude>**/*PluginClassLoader.class</exclude>
-                        <exclude>**/*ContainerContext.class</exclude>
                     </excludes>
                 </configuration>
                 <executions>
