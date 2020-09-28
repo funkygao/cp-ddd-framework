@@ -58,9 +58,9 @@ final class DDDBootstrap implements ApplicationListener<ContextRefreshedEvent>, 
         }
 
         if (startupListener != null) {
-            log.info("calling IStartupListener: {}", startupListener.getClass().getCanonicalName());
+            log.debug("calling IStartupListener: {}", startupListener.getClass().getCanonicalName());
             startupListener.onStartComplete();
-            log.info("called IStartupListener: {}", startupListener.getClass().getCanonicalName());
+            log.debug("called IStartupListener: {}", startupListener.getClass().getCanonicalName());
         }
     }
 
