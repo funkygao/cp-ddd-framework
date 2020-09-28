@@ -8,7 +8,7 @@
     </parent>
 
     <artifactId>order-center-pattern</artifactId>
-    <name>DDD :: Example :: Pattern</name>
+    <name>DDD :: Example :: CP :: Patterns</name>
 
     <dependencies>
         <dependency>
