@@ -13,6 +13,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class AutoLoggerAspect implements InitializingBean {
 
+    public AutoLoggerAspect() {
+        log.info("Spring created instance AutoLoggerAspect!");
+    }
+
     @Override
     public void afterPropertiesSet() throws Exception {
         log.info("注册 Spring lifecycle ok");

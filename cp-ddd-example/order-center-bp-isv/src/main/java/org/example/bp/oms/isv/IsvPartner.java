@@ -1,12 +1,19 @@
 package org.example.bp.oms.isv;
 
+import lombok.extern.slf4j.Slf4j;
 import org.example.cp.oms.spec.model.IOrderModel;
 import org.cdf.ddd.annotation.Partner;
 import org.cdf.ddd.ext.IIdentityResolver;
 
 @Partner(code = IsvPartner.CODE, name = "ISV业务前台")
+@Slf4j
 public class IsvPartner implements IIdentityResolver<IOrderModel> {
     public static final String CODE = "ISV";
+
+    public IsvPartner() {
+        // hook how Spring create bean instance
+        log.info("ISV {}", this.getClass().getClassLoader());
+    }
 
     @Override
     public boolean match(IOrderModel model) {
