@@ -20,10 +20,12 @@ final class JarUtils {
     static Map<Class<? extends Annotation>, List<Class>> loadClassWithAnnotations(
             String path, List<Class<? extends Annotation>> annotations, String startWith, ClassLoader classLoader) throws Throwable {
         Map<Class<? extends Annotation>, List<Class>> result = new HashMap<>();
-        List<String> classes = filter(getAllClasses(path), startWith);
-        for (String className : classes) {
+        List<String> filteredClassNames = filter(getAllClasses(path), startWith);
+        for (String className : filteredClassNames) {
+            log.debug("loading {} with {}", className, classLoader);
             // 把.class文件中的二进制数据读入堆里的Class对象
             Class clazz = classLoader.loadClass(className);
+            // 先load class才能获取其注解
             for (Class<? extends Annotation> annotation : annotations) {
                 Annotation clazzAnnotation = clazz.getAnnotation(annotation);
                 if (clazzAnnotation == null) {
@@ -31,7 +33,7 @@ final class JarUtils {
                     continue;
                 }
 
-                log.info("loaded {} of {} with {}", annotation, className, classLoader);
+                log.debug("{} has class of {}", annotation, className);
                 List<Class> annotationClassList = result.get(annotation);
                 if (annotationClassList == null) {
                     annotationClassList = new ArrayList<>();
