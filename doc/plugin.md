@@ -1,22 +1,16 @@
 # Plugin Design
 
-## Roadmap
-
-### Iteration 1
-
-- Plugin jar先不支持FatJar：所有的依赖中台提供，plugin的pom通过scope=provided来引用
-   - 像spring boot那样统一管理依赖第三方包的版本
-- 1个 Spring 容器，N个 PluginClassLoader
-
 ## 目标
 
-以jar包为单位管理扩展业务，扩展业务包，此处称为Plugin，Plugin jar可以引用外部jar包。
+以jar包为单位管理扩展业务，扩展业务包，此处称为Plugin Jar。
 
 Plugin有2种：
 - `Pattern` + `Extension`
 - `Partner` + `Extension`
 
-一个Spring application context，每个Plugin jar有独立的class loader隔离、热部署，热更新。
+一个Spring application context，每个Plugin Jar有独立的class loader隔离、热部署，热更新。
+
+Plugin Jar可以通过maven pom静态加载，也可以事后动态加载(热更新)，支持多次热更新。
 
 ## 现有解决方案
 
@@ -49,7 +43,13 @@ Plugin有2种：
 - java.lang.ClassNotFoundException, NoClassDefFoundError, NoSuchMethodError, ClassFormatError, ClassCastException
 - canary release, rollback, rolling upgrade, jar deployment platform
 
-## TODO
+## Roadmap
+
+### Iteration 1
+
+- Plugin jar先不支持FatJar：所有的依赖中台提供，plugin的pom通过scope=provided来引用
+   - 像spring boot那样统一管理依赖第三方包的版本
+- 1个 Spring 容器，N个 PluginClassLoader
 
 ### P0
 
