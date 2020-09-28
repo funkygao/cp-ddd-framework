@@ -1,10 +1,12 @@
 package org.example.cp.oms.spec.model.vo;
 
 import lombok.Getter;
+import lombok.ToString;
 
 import javax.validation.constraints.NotNull;
 import java.util.concurrent.TimeUnit;
 
+@ToString
 public class LockEntry {
 
     private final String key;
