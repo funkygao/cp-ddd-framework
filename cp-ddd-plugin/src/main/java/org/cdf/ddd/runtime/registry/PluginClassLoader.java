@@ -54,6 +54,7 @@ final class PluginClassLoader extends URLClassLoader {
         Class clazz = this.findLoadedClass(className);
         if (clazz != null) {
             // 如果类已经加载过，就返回那个已经加载好的类
+            log.debug("already loaded {}", className);
             return clazz;
         }
 
