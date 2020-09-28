@@ -29,7 +29,7 @@
 ``` bash
 git clone https://github.com/funkygao/cp-ddd-framework.git
 cd cp-ddd-framework
-mvn clean install
+mvn install
 ```
 
 ## What is cp-ddd-framework?
@@ -84,16 +84,17 @@ Requires Java 1.8+ and Spring 4.3.12.RELEASE or later.
 
 ## Demo
 
-**Tip**: The entry point of the demo is [ExampleTest](cp-ddd-example/order-center-cp/cp-oc-test/src/test/java/org/example/cp/oms/ExampleTest.java).
-
 #### How to run the demo?
 
 ``` bash
-mvn test -Ptest
+git clone https://github.com/funkygao/cp-ddd-framework.git
+cd cp-ddd-framework
 mvn install -Pinstall
 cd cp-ddd-example/
 mvn test -Pdemo
 ```
+
+**Tip**: The entry point of the demo is [ExampleTest](cp-ddd-example/order-center-cp/cp-oc-test/src/test/java/org/example/cp/oms/ExampleTest.java).
 
 你也可以在IDE下手工执行[ExampleTest](cp-ddd-example/order-center-cp/cp-oc-test/src/test/java/org/example/cp/oms/ExampleTest.java)：这是演示的入口。
 
@@ -131,7 +132,7 @@ Please go to [cp-ddd-framework Javadoc](https://funkygao.github.io/cp-ddd-framew
 
 [业务中台架构的整体解决方案](https://github.com/funkygao/cp-ddd-framework/wiki/Total-solutions-%E6%95%B4%E4%BD%93%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88)。
 
-Please visit [wiki](https://github.com/funkygao/cp-ddd-framework/wiki/Total-solutions-%E6%95%B4%E4%BD%93%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88)
+Please visit [wiki](https://github.com/funkygao/cp-ddd-framework/wiki/Total-solutions-%E6%95%B4%E4%BD%93%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88).
 
 ## Contribution
 

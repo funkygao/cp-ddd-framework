@@ -122,7 +122,7 @@ final class PluginLoader {
             realContext = (FileSystemXmlApplicationContext) context;
         }
 
-        // 加载该jar包里的Spring bean时，使用该ClassLoader
+        // 加载该jar包里的Spring bean时，使用该PluginClassLoader
         realContext.getBeanFactory().setBeanClassLoader(pluginClassLoader);
 
         BeanDefinitionRegistry beanDefinitionRegistry = (BeanDefinitionRegistry) realContext.getBeanFactory();
@@ -131,6 +131,7 @@ final class PluginLoader {
                 beanDefinitionRegistry,
                 true,
                 getOrCreateEnvironment(beanDefinitionRegistry),
+                // ResourceLoader，使用该PluginClassLoader
                 new PathMatchingResourcePatternResolver(new DefaultResourceLoader(pluginClassLoader))
         ).scan(basePackages);
 
