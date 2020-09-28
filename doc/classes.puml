@@ -1,6 +1,7 @@
 @startuml
 skinparam handwritten false
 skinparam shadowing<<with_shadow>> true
+' left to right direction
 
 interface IDomainService
 interface IDomainStep
