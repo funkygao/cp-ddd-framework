@@ -13,7 +13,7 @@ public class IsvPartner implements IIdentityResolver<IOrderModel>, DisposableBea
 
     public IsvPartner() {
         // hook how Spring create bean instance
-        log.info("ISV {}", this.getClass().getClassLoader());
+        log.info("ISV new instanced, cl:{}", this.getClass().getClassLoader());
     }
 
     @Override
