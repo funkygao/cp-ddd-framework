@@ -20,9 +20,9 @@
 ``` bash
 git clone https://github.com/funkygao/cp-ddd-framework.git
 cd cp-ddd-framework
-mvn clean install
+mvn install
 cd cp-ddd-example
-mvn test -Pdemo
+mvn test
 ```
 
 运行演示的入口：[ExampleTest](order-center-cp/cp-oc-test/src/test/java/org/example/cp/oms/ExampleTest.java)，也可以在IDE里手工执行。

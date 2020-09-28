@@ -89,9 +89,9 @@ Requires Java 1.8+ and Spring 4.3.12.RELEASE or later.
 ``` bash
 git clone https://github.com/funkygao/cp-ddd-framework.git
 cd cp-ddd-framework
-mvn install -Pinstall
+mvn install
 cd cp-ddd-example/
-mvn test -Pdemo
+mvn test
 ```
 
 **Tip**: The entry point of the demo is [ExampleTest](cp-ddd-example/order-center-cp/cp-oc-test/src/test/java/org/example/cp/oms/ExampleTest.java).
