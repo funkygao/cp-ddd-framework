@@ -63,7 +63,7 @@ final class PluginLoader {
         ApplicationContext applicationContext = DDDBootstrap.applicationContext();
         if (basePackage != null && !basePackage.isEmpty()) {
             // 先扫spring，然后初始化所有的basePackage bean，包括已经在中台里加载完的bean
-            log.info("Spring scan with {} ...", pluginClassLoader);
+            log.info("Spring scan with {}, {}, {} ...", jdkClassLoader, containerClassLoader, pluginClassLoader);
             springScanComponent(applicationContext, pluginClassLoader, basePackage);
         }
 
