@@ -1,4 +1,4 @@
-package org.example.bp.oms.ka;
+package org.example.bp.oms.isv;
 
 import lombok.extern.slf4j.Slf4j;
 import org.cdf.ddd.annotation.Extension;
@@ -15,7 +15,7 @@ public class PluginListener implements IPluginListener {
 
     @Override
     public void afterLoad(IContainerContext ctx) throws Exception {
-        log.info("KA Jar loaded, ctx:{}", ctx);
+        log.info("ISV Jar loaded, ctx:{}", ctx);
     }
 
     @Override
