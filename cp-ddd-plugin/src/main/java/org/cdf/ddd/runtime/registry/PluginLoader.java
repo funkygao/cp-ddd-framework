@@ -11,20 +11,9 @@ import org.cdf.ddd.annotation.Partner;
 import org.cdf.ddd.annotation.Pattern;
 import org.cdf.ddd.plugin.IContainerContext;
 import org.cdf.ddd.plugin.IPluginListener;
-import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
-import org.springframework.context.support.AbstractRefreshableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.context.support.FileSystemXmlApplicationContext;
-import org.springframework.core.env.Environment;
-import org.springframework.core.env.EnvironmentCapable;
-import org.springframework.core.env.StandardEnvironment;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.DefaultResourceLoader;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.util.Assert;
 
 import javax.validation.constraints.NotNull;
 import java.io.File;
@@ -36,9 +25,13 @@ import java.util.Map;
 
 @Slf4j
 final class PluginLoader {
+    private static final String pluginXml = "/plugin.xml";
 
     private final ClassLoader jdkClassLoader;
     private final ClassLoader containerClassLoader;
+    private ClassLoader pluginClassLoader;
+
+    private ApplicationContext applicationContext;
 
     PluginLoader(ClassLoader jdkClassLoader, ClassLoader containerClassLoader) {
         this.jdkClassLoader = jdkClassLoader;
@@ -56,22 +49,22 @@ final class PluginLoader {
         annotations.add(Extension.class);
 
         // each Plugin Jar has a dedicated PluginClassLoader
-        PluginClassLoader pluginClassLoader = new PluginClassLoader(new URL[]{new File(jarPath).toURI().toURL()},
+        pluginClassLoader = new PluginClassLoader(new URL[]{new File(jarPath).toURI().toURL()},
                 jdkClassLoader, containerClassLoader);
 
-        // the shared Spring application context
-        ApplicationContext applicationContext = DDDBootstrap.applicationContext();
         if (basePackage != null && !basePackage.isEmpty()) {
-            // 先扫spring，然后初始化所有的basePackage bean，包括已经在中台里加载完的bean
-            log.info("Spring scan with {}, {}, {} ...", jdkClassLoader, containerClassLoader, pluginClassLoader);
-            springScanComponent(applicationContext, pluginClassLoader, basePackage);
+            log.info("Spring loading Plugin with {}, {}, {} ...", jdkClassLoader, containerClassLoader, pluginClassLoader);
+            long t0 = System.nanoTime();
+            applicationContext = loadSpringApplicationContext(pluginClassLoader);
+            log.info("Spring loading cost {}ms", (System.nanoTime() - t0) / 1000_000);
         }
 
-        log.info("Spring components scanned. loading classes with annotations: {}", annotations);
+        log.info("prepare Plugin for registry: {}", annotations);
         Map<Class<? extends Annotation>, List<Class>> resultMap = JarUtils.loadClassWithAnnotations(
                 jarPath, annotations, null, pluginClassLoader);
-        log.debug("loaded classes: {}", resultMap);
+        log.debug("prepared: {}", resultMap);
 
+        // IPluginListener 不通过Spring加载
         IPluginListener pluginListener = JarUtils.loadBeanWithType(pluginClassLoader, jarPath, IPluginListener.class);
         if (pluginListener != null) {
             pluginListener.beforeUnload(ctx);
@@ -82,7 +75,7 @@ final class PluginLoader {
         // 注册和切换是在RegistryFactory一并完成的
         // TODO 需要把Extension、IIdentityResolver 的切换过程变成原子的：一个Plugin里可以有多个Pattern，他们的切换可以不必atomic
 
-        log.info("register and index IIdentityResolver...");
+        log.info("register IIdentityResolver");
         List<Class> identityResolverClasses = resultMap.get(identityResolverClass);
         if (identityResolverClasses != null && !identityResolverClasses.isEmpty()) {
             if (identityResolverClass == Partner.class && identityResolverClasses.size() > 1) {
@@ -90,19 +83,20 @@ final class PluginLoader {
             }
 
             for (Class irc : identityResolverClasses) {
-                log.info("lazy register {} cl:{}", irc.getCanonicalName(), irc.getClassLoader());
+                log.info("Indexing {}", irc.getCanonicalName());
                 // 每次加载，由于 PluginClassLoader 是不同的，irc也是不同的
-                RegistryFactory.lazyRegister(identityResolverClass, applicationContext.getBean(irc));
+                Object partnerOrPattern = applicationContext.getBean(irc);
+                RegistryFactory.lazyRegister(identityResolverClass, partnerOrPattern);
             }
         }
 
-        log.info("register and index extensions...");
+        log.info("register Extension");
         List<Class> extensions = resultMap.get(Extension.class);
         if (extensions != null && !extensions.isEmpty()) {
             for (Class extensionClazz : extensions) {
-                log.info("lazy register {} cl:{}", extensionClazz.getCanonicalName(), extensionClazz.getClassLoader());
-                // 每次加载，由于 PluginClassLoader 是不同的，extensionClazz也是不同的
-                RegistryFactory.lazyRegister(Extension.class, applicationContext.getBean(extensionClazz));
+                log.info("Indexing {}", extensionClazz.getCanonicalName());
+                Object extension = applicationContext.getBean(extensionClazz);
+                RegistryFactory.lazyRegister(Extension.class, extension);
             }
         }
 
@@ -113,41 +107,14 @@ final class PluginLoader {
         return this;
     }
 
-    // manual <context:component-scan>
-    private void springScanComponent(@NotNull ApplicationContext context, @NotNull ClassLoader pluginClassLoader, @NotNull String... basePackages) throws Exception {
-        AbstractRefreshableApplicationContext realContext;
-        if (context instanceof ClassPathXmlApplicationContext) {
-            realContext = (ClassPathXmlApplicationContext) context;
-        } else {
-            realContext = (FileSystemXmlApplicationContext) context;
-        }
+    private ApplicationContext loadSpringApplicationContext(@NotNull ClassLoader pluginClassLoader) throws Exception {
+        return new ClassPathXmlApplicationContext(new String[]{pluginXml}, DDDBootstrap.applicationContext()) {
+            protected void initBeanDefinitionReader(XmlBeanDefinitionReader reader) {
+                super.initBeanDefinitionReader(reader);
+                reader.setBeanClassLoader(pluginClassLoader);
 
-        // 加载该jar包里的Spring bean时，使用该PluginClassLoader
-        realContext.getBeanFactory().setBeanClassLoader(pluginClassLoader);
-
-        BeanDefinitionRegistry beanDefinitionRegistry = (BeanDefinitionRegistry) realContext.getBeanFactory();
-        // basePackages下的Class包装成BeanDefinition，并注册到IoC容器
-        new ClassPathBeanDefinitionScanner(
-                beanDefinitionRegistry,
-                true,
-                getOrCreateEnvironment(beanDefinitionRegistry),
-                // ResourceLoader，使用该PluginClassLoader
-                new PathMatchingResourcePatternResolver(new DefaultResourceLoader(pluginClassLoader))
-        ).scan(basePackages);
-
-        if (false) {
-            // 加载业务前台的spring xml
-            XmlBeanDefinitionReader xmlReader = new XmlBeanDefinitionReader(beanDefinitionRegistry);
-            xmlReader.loadBeanDefinitions(new ClassPathResource("spring-main.xml"));
-        }
-    }
-
-    private Environment getOrCreateEnvironment(BeanDefinitionRegistry registry) {
-        Assert.notNull(registry, "BeanDefinitionRegistry must not be null");
-        if (registry instanceof EnvironmentCapable) {
-            return ((EnvironmentCapable) registry).getEnvironment();
-        }
-
-        return new StandardEnvironment();
+                setClassLoader(pluginClassLoader); // so that it can find the pluginXml
+            }
+        };
     }
 }
