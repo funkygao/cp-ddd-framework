@@ -106,7 +106,7 @@ public final class Container {
         log.warn("loading partner:{} useSpring:{}", jarPath, useSpring);
         try {
             Plugin plugin = new Plugin(code, jdkClassLoader, containerClassLoader).
-                    load(jarPath, useSpring, Partner.class, new ContainerContext());
+                    load(jarPath, useSpring, Partner.class, new ContainerContext(DDDBootstrap.applicationContext()));
             activePlugins.put(plugin.getCode(), plugin); // old plugin will be GC'ed
         } catch (Throwable ex) {
             log.error("fails to load partner:{}, cost {}ms", jarPath, (System.nanoTime() - t0) / 1000_000, ex);
@@ -155,7 +155,7 @@ public final class Container {
         log.warn("loading pattern:{} useSpring:{}", jarPath, useSpring);
         try {
             Plugin plugin = new Plugin(code, jdkClassLoader, containerClassLoader).
-                    load(jarPath, useSpring, Pattern.class, new ContainerContext());
+                    load(jarPath, useSpring, Pattern.class, new ContainerContext(DDDBootstrap.applicationContext()));
             activePlugins.put(plugin.getCode(), plugin); // old plugin will be GC'ed
         } catch (Throwable ex) {
             log.error("fails to load pattern:{}, cost {}ms", jarPath, (System.nanoTime() - t0) / 1000_000, ex);
