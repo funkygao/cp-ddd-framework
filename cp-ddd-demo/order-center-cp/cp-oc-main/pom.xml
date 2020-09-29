@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.example</groupId>
+        <artifactId>order-center-cp</artifactId>
+        <version>0.0.1</version>
+    </parent>
+
+    <artifactId>cp-oc-main</artifactId>
+    <name>DDD :: Demo :: CP :: Main</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.example</groupId>
+            <artifactId>cp-oc-controller</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- 把pattern包静态打进来 -->
+        <dependency>
+            <groupId>org.example</groupId>
+            <artifactId>order-center-pattern</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- 把pattern和业务前台包按profile进行动态打包 -->
+        <dependency>
+            <groupId>org.example</groupId>
+            <artifactId>order-center-bp-isv</artifactId>
+            <version>${project.version}</version>
+            <scope>${bp.jar.scope.isv}</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.example</groupId>
+            <artifactId>order-center-bp-ka</artifactId>
+            <version>${project.version}</version>
+            <scope>${bp.jar.scope.ka}</scope>
+        </dependency>
+
+        <!-- 常规第三方依赖 -->
+        <dependency>
+            <artifactId>log4j-core</artifactId>
+            <groupId>org.apache.logging.log4j</groupId>
+            <version>2.9.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <version>2.9.1</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>cp-ddd-framework-demo</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <execution>
+                        <id>main-class-placement</id>
+                        <phase>prepare-package</phase>
+                        <configuration>
+                            <tasks>
+                                <copy todir="${project.build.directory}/${project.artifactId}/">
+                                    <fileset dir="${project.build.directory}/classes/">
+                                        <include name="**/*/OrderCenterLauncher.class"/>
+                                    </fileset>
+                                </copy>
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <transformers>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>org.example.cp.oms.OrderCenterLauncher</mainClass>
+                                </transformer>
+                            </transformers>
+                            <artifactSet>
+                                <includes>
+                                    <include>org.eclipse.jetty:*</include>
+                                    <include>*:javax.servlet*</include>
+                                    <include>org.glassfish:javax.el*</include>
+                                </includes>
+                            </artifactSet>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <descriptors>
+                        <descriptor>src/main/assembly/assembly.xml</descriptor>
+                    </descriptors>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>demo</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <!-- 通过 (profile + properties) 实现不同环境下的打包：例如，打泰国包，打欧洲包，一套代码支持出海 -->
+            <properties>
+                <bp.jar.scope.isv>provided</bp.jar.scope.isv>
+                <bp.jar.scope.ka>compile</bp.jar.scope.ka>
+            </properties>
+        </profile>
+    </profiles>
+
+</project>
