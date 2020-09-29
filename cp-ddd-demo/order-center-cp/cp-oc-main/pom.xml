@@ -25,7 +25,7 @@
             <version>${project.version}</version>
         </dependency>
 
-        <!-- 把pattern和业务前台包按profile进行动态打包 -->
+        <!-- 把pattern和业务前台包按profile进行动态打包，例如：国际包，主站包 -->
         <dependency>
             <groupId>org.example</groupId>
             <artifactId>order-center-bp-isv</artifactId>
@@ -49,6 +49,18 @@
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-slf4j-impl</artifactId>
             <version>2.9.1</version>
+        </dependency>
+
+        <!-- the web container -->
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-server</artifactId>
+            <version>${jetty.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-webapp</artifactId>
+            <version>${jetty.version}</version>
         </dependency>
     </dependencies>
 

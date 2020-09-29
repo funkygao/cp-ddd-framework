@@ -20,6 +20,7 @@ public class OrderCenterLauncher {
     private static final String DEFAULT_CONTEXT_PATH = "/ddd-demo";
 
     public static void main(String[] args) {
+        new ClassPathXmlApplicationContext("/webapp/WEB-INF/applicationContext.xml");
         Server server = createJettyServer(DEFAULT_PORT, DEFAULT_CONTEXT_PATH);
         try {
             server.start();

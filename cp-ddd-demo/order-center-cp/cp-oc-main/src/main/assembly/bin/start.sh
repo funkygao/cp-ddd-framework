@@ -3,4 +3,4 @@
 # startup script
 #===============
 
-java -jar cp-ddd-framework-demo.war
+java -jar ../cp-ddd-framework-demo.war
