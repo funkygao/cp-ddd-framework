@@ -14,10 +14,6 @@ public class ConfigApiProvider implements ConfigApi {
 
     @Override
     public void signalPartner(@NotNull ConfigRequest request) {
-        // 先卸载
-        Container.getInstance().unloadPartnerPlugin(request.getPartnerCode());
-
-        // 再加载
         try {
             Container.getInstance().loadPartnerPlugin("isv", request.getJarURL().toString(), true);
         } catch (Throwable ex) {

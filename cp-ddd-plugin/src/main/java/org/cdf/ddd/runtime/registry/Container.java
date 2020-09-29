@@ -118,23 +118,6 @@ public final class Container {
     }
 
     /**
-     * 注销一个业务前台身份.
-     *
-     * @param code {@link Partner#code()}
-     */
-    public void unloadPartnerPlugin(@NotNull String code) {
-        if (!activePlugins.containsKey(code)) {
-            log.warn("Unloading non-active Plugin:{}", code);
-            return;
-        }
-
-        log.warn("unloading partner:{}", code);
-        InternalIndexer.removePartner(code);
-        activePlugins.remove(code);
-        log.warn("unloaded partner:{}", code);
-    }
-
-    /**
      * 加载业务模式jar包.
      *
      * @param code      Plugin code
@@ -183,23 +166,6 @@ public final class Container {
         log.warn("loaded pattern:{}, cost {}ms", jarPath, (System.nanoTime() - t0) / 1000_000);
     }
 
-    /**
-     * 卸载业务模式.
-     *
-     * @param code {@link Pattern#code()}
-     */
-    public void unloadPatternPlugin(@NotNull String code) {
-        if (!activePlugins.containsKey(code)) {
-            log.warn("Unloading non-active Plugin:{}", code);
-            return;
-        }
-
-        log.warn("unloading pattern:{}", code);
-        InternalIndexer.removePattern(code);
-        activePlugins.remove(code);
-        log.warn("unloaded pattern:{}", code);
-    }
-
     File jarTempLocalFile(@NotNull URL jarUrl) throws IOException {
         String prefix = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date());
         String suffix = jarUrl.getPath().substring(jarUrl.getPath().lastIndexOf("/") + 1);
@@ -230,11 +196,4 @@ public final class Container {
         return new URLClassLoader(jdkUrls.toArray(new URL[0]), parent);
     }
 
-    ClassLoader getJdkClassLoader() {
-        return jdkClassLoader;
-    }
-
-    ClassLoader getContainerClassLoader() {
-        return containerClassLoader;
-    }
 }

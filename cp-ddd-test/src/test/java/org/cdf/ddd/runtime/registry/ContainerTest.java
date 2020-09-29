@@ -1,8 +1,6 @@
 package org.cdf.ddd.runtime.registry;
 
 import lombok.extern.slf4j.Slf4j;
-import org.cdf.ddd.runtime.registry.mock.partner.FooPartner;
-import org.cdf.ddd.runtime.registry.mock.pattern.B2BPattern;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -30,12 +28,6 @@ public class ContainerTest {
         } catch (Throwable unexpected) {
             fail();
         }
-    }
-
-    @Test
-    public void unload() {
-        Container.getInstance().unloadPatternPlugin(B2BPattern.CODE);
-        Container.getInstance().unloadPartnerPlugin(FooPartner.CODE);
     }
 
     @Test

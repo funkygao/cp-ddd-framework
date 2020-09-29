@@ -68,8 +68,6 @@ public class PluginMechanismTest {
 
         Container.getInstance().loadPatternPlugin("pattern", remotePatternJar, true);
 
-        Container.getInstance().unloadPatternPlugin("hair");
-
         if (true) {
             log.info("sleeping 2m，等待修改bp-isv里逻辑后发布新jar...");
             TimeUnit.MINUTES.sleep(2); // 等待手工发布新jar
@@ -77,10 +75,6 @@ public class PluginMechanismTest {
             Container.getInstance().loadPartnerPlugin("isv", remoteIsvJar, true);
             submitOrder(applicationContext, true); // 重新提交订单，看看是否新jar逻辑生效
         }
-
-        // 去掉ISV Partner，再提交订单，接单步骤会变空的
-        Container.getInstance().unloadPartnerPlugin("ISV");
-        submitOrder(applicationContext, false);
 
         applicationContext.stop();
     }
