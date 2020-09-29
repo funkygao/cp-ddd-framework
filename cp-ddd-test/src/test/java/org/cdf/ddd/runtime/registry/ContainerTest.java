@@ -23,7 +23,7 @@ public class ContainerTest {
         assertSame(container, Container.getInstance());
 
         try {
-            Container.getInstance().loadPartnerPlugin("a/b", true);
+            Container.getInstance().loadPartnerPlugin("foo", "a/b", true);
             fail();
         } catch (IllegalArgumentException expected) {
             assertEquals("Invalid jarPath: a/b", expected.getMessage());
@@ -67,7 +67,7 @@ public class ContainerTest {
     @Test
     public void loadPartnerPluginSmokeTest() throws MalformedURLException {
         try {
-            Container.getInstance().loadPartnerPlugin(new URL("https://github.com/funkygao/cp-ddd-framework/blob/master/doc/assets/jar/order-center-bp-isv-0.0.1.jar?raw=true"), true);
+            Container.getInstance().loadPartnerPlugin("isv", new URL("https://github.com/funkygao/cp-ddd-framework/blob/master/doc/assets/jar/order-center-bp-isv-0.0.1.jar?raw=true"), true);
             fail();
         } catch (NoClassDefFoundError expected) {
             // 由于没有加载示例的中台jar，肯定会抛出 NoClassDefFoundError
@@ -81,7 +81,7 @@ public class ContainerTest {
     @Test
     public void loadPatternPluginSmokeTest() throws MalformedURLException {
         try {
-            Container.getInstance().loadPatternPlugin(new URL("https://github.com/funkygao/cp-ddd-framework/blob/master/doc/assets/jar/order-center-pattern-0.0.1.jar?raw=true"), false);
+            Container.getInstance().loadPatternPlugin("patterns", new URL("https://github.com/funkygao/cp-ddd-framework/blob/master/doc/assets/jar/order-center-pattern-0.0.1.jar?raw=true"), false);
             fail();
         } catch (NoClassDefFoundError expected) {
         } catch (Throwable unexpected) {

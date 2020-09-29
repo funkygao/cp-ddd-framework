@@ -19,11 +19,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 业务容器，用于动态加载个性化业务包：Plugin Jar.
  * <p>
- * <p>Plugin Jar是可以被动态加载的Jar = (Pattern + Extension) | (Partner + Extension)</p>
  * <p>{@code Container}常驻内存，{@code PluginJar}动态加载：动静分离</p>
  * <p>
  * <pre>
@@ -43,6 +44,8 @@ public final class Container {
     private static ClassLoader jdkClassLoader = initJDKClassLoader();
     private static ClassLoader containerClassLoader = Container.class.getClassLoader();
 
+    private static final Map<String, Plugin> activePlugins = new ConcurrentHashMap<>();
+
     private Container() {
     }
 
@@ -55,18 +58,29 @@ public final class Container {
     }
 
     /**
+     * 获取当前所有活跃的{@code Plugin}.
+     *
+     * @return key: Plugin code
+     */
+    @NotNull
+    public Map<String, Plugin> getActivePlugins() {
+        return activePlugins;
+    }
+
+    /**
      * 加载业务前台jar包.
      *
+     * @param code      Plugin code
      * @param jarUrl    Plugin jar URL
      * @param useSpring jar包里是否需要Spring机制
      * @throws Throwable
      */
-    public void loadPartnerPlugin(@NotNull URL jarUrl, boolean useSpring) throws Throwable {
+    public void loadPartnerPlugin(@NotNull String code, @NotNull URL jarUrl, boolean useSpring) throws Throwable {
         File localJar = jarTempLocalFile(jarUrl);
         localJar.deleteOnExit();
         log.info("loadPartnerPlugin {} -> {}", jarUrl, localJar.getCanonicalPath());
         FileUtils.copyInputStreamToFile(jarUrl.openStream(), localJar);
-        loadPartnerPlugin(localJar.getAbsolutePath(), useSpring);
+        loadPartnerPlugin(code, localJar.getAbsolutePath(), useSpring);
     }
 
     /**
@@ -74,20 +88,26 @@ public final class Container {
      * <p>
      * <p>如果使用本动态加载，就不要maven里静态引入业务前台jar包依赖了.</p>
      *
+     * @param code      Plugin code
      * @param jarPath   jar path
      * @param useSpring jar包里是否需要Spring机制
      * @throws Throwable
      */
-    public void loadPartnerPlugin(@NotNull String jarPath, boolean useSpring) throws Throwable {
+    public void loadPartnerPlugin(@NotNull String code, @NotNull String jarPath, boolean useSpring) throws Throwable {
         if (!jarPath.endsWith(".jar")) {
             throw new IllegalArgumentException("Invalid jarPath: " + jarPath);
+        }
+
+        if (activePlugins.containsKey(code)) {
+            log.warn("Hotswap Plugin: {}", code);
         }
 
         long t0 = System.nanoTime();
         log.warn("loading partner:{} useSpring:{}", jarPath, useSpring);
         try {
-            new Plugin(jdkClassLoader, containerClassLoader).
+            Plugin plugin = new Plugin(code, jdkClassLoader, containerClassLoader).
                     load(jarPath, useSpring, Partner.class, new ContainerContext());
+            activePlugins.put(plugin.getCode(), plugin); // old plugin will be GC'ed
         } catch (Throwable ex) {
             log.error("fails to load partner:{}, cost {}ms", jarPath, (System.nanoTime() - t0) / 1000_000, ex);
 
@@ -103,44 +123,57 @@ public final class Container {
      * @param code {@link Partner#code()}
      */
     public void unloadPartnerPlugin(@NotNull String code) {
+        if (!activePlugins.containsKey(code)) {
+            log.warn("Unloading non-active Plugin:{}", code);
+            return;
+        }
+
         log.warn("unloading partner:{}", code);
         InternalIndexer.removePartner(code);
+        activePlugins.remove(code);
         log.warn("unloaded partner:{}", code);
     }
 
     /**
      * 加载业务模式jar包.
      *
+     * @param code      Plugin code
      * @param jarUrl    Plugin jar URL
      * @param useSpring jar包里是否需要Spring机制
      * @throws Throwable
      */
-    public void loadPatternPlugin(@NotNull URL jarUrl, boolean useSpring) throws Throwable {
+    public void loadPatternPlugin(@NotNull String code, @NotNull URL jarUrl, boolean useSpring) throws Throwable {
         File localJar = jarTempLocalFile(jarUrl);
         localJar.deleteOnExit();
 
         log.info("loadPatternPlugin {} -> {}", jarUrl, localJar.getCanonicalPath());
         FileUtils.copyInputStreamToFile(jarUrl.openStream(), localJar);
-        loadPatternPlugin(localJar.getAbsolutePath(), useSpring);
+        loadPatternPlugin(code, localJar.getAbsolutePath(), useSpring);
     }
 
     /**
      * 加载业务模式jar包.
      *
+     * @param code      Plugin code
      * @param jarPath   jar path
      * @param useSpring jar包里是否需要Spring机制
      * @throws Throwable
      */
-    public void loadPatternPlugin(@NotNull String jarPath, boolean useSpring) throws Throwable {
+    public void loadPatternPlugin(@NotNull String code, @NotNull String jarPath, boolean useSpring) throws Throwable {
         if (!jarPath.endsWith(".jar")) {
             throw new IllegalArgumentException("Invalid jarPath: " + jarPath);
+        }
+
+        if (activePlugins.containsKey(code)) {
+            log.warn("Hotswap Plugin: {}", code);
         }
 
         long t0 = System.nanoTime();
         log.warn("loading pattern:{} useSpring:{}", jarPath, useSpring);
         try {
-            new Plugin(jdkClassLoader, containerClassLoader).
+            Plugin plugin = new Plugin(code, jdkClassLoader, containerClassLoader).
                     load(jarPath, useSpring, Pattern.class, new ContainerContext());
+            activePlugins.put(plugin.getCode(), plugin); // old plugin will be GC'ed
         } catch (Throwable ex) {
             log.error("fails to load pattern:{}, cost {}ms", jarPath, (System.nanoTime() - t0) / 1000_000, ex);
 
@@ -156,8 +189,14 @@ public final class Container {
      * @param code {@link Pattern#code()}
      */
     public void unloadPatternPlugin(@NotNull String code) {
+        if (!activePlugins.containsKey(code)) {
+            log.warn("Unloading non-active Plugin:{}", code);
+            return;
+        }
+
         log.warn("unloading pattern:{}", code);
         InternalIndexer.removePattern(code);
+        activePlugins.remove(code);
         log.warn("unloaded pattern:{}", code);
     }
 

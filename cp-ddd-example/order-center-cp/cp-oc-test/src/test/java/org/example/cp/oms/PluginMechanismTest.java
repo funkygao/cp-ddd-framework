@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.cdf.ddd.annotation.UnderDevelopment;
 import org.cdf.ddd.api.RequestProfile;
 import org.cdf.ddd.runtime.registry.Container;
+import org.cdf.ddd.runtime.registry.Plugin;
 import org.example.cp.oms.domain.model.OrderModel;
 import org.example.cp.oms.domain.model.OrderModelCreator;
 import org.example.cp.oms.domain.service.SubmitOrder;
@@ -48,20 +49,24 @@ public class PluginMechanismTest {
         for (int i = 0; i < 1; i++) {
             // 同一个jar，load多次，模拟热更新
             log.info("n={}", i + 1);
-            Container.getInstance().loadPartnerPlugin(localIsvJar, true);
+            Container.getInstance().loadPartnerPlugin("isv", localIsvJar, true);
             submitOrder(applicationContext, true);
             log.info(String.join("", Collections.nCopies(50, "=")));
         }
 
-        Container.getInstance().loadPartnerPlugin(localKaJar, true);
+        Container.getInstance().loadPartnerPlugin("ka", localKaJar, true);
+
+        for (Plugin plugin : Container.getInstance().getActivePlugins().values()) {
+            log.info("Plugin: {}", plugin.getCode());
+        }
 
         if (true) {
             return;
         }
 
-        Container.getInstance().loadPartnerPlugin(remoteKaJar, true);
+        Container.getInstance().loadPartnerPlugin("ka", remoteKaJar, true);
 
-        Container.getInstance().loadPatternPlugin(remotePatternJar, true);
+        Container.getInstance().loadPatternPlugin("pattern", remotePatternJar, true);
 
         Container.getInstance().unloadPatternPlugin("hair");
 
@@ -69,7 +74,7 @@ public class PluginMechanismTest {
             log.info("sleeping 2m，等待修改bp-isv里逻辑后发布新jar...");
             TimeUnit.MINUTES.sleep(2); // 等待手工发布新jar
             log.info("2m is up, go!");
-            Container.getInstance().loadPartnerPlugin(remoteIsvJar, true);
+            Container.getInstance().loadPartnerPlugin("isv", remoteIsvJar, true);
             submitOrder(applicationContext, true); // 重新提交订单，看看是否新jar逻辑生效
         }
 

@@ -5,6 +5,7 @@
  */
 package org.cdf.ddd.runtime.registry;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.cdf.ddd.annotation.Extension;
 import org.cdf.ddd.annotation.Partner;
@@ -23,9 +24,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * A Plugin is a dynamic loadable Jar that has a dedicated class loader.
+ * <p>
+ * <p>Plugin Jar是可以被动态加载的Jar = (Pattern + Extension) | (Partner + Extension)</p>
+ */
 @Slf4j
-final class Plugin {
+public class Plugin {
     private static final String pluginXml = "/plugin.xml";
+
+    @Getter
+    private final String code;
 
     private final ClassLoader jdkClassLoader;
     private final ClassLoader containerClassLoader;
@@ -33,7 +42,8 @@ final class Plugin {
 
     private ApplicationContext applicationContext;
 
-    Plugin(ClassLoader jdkClassLoader, ClassLoader containerClassLoader) {
+    Plugin(String code, ClassLoader jdkClassLoader, ClassLoader containerClassLoader) {
+        this.code = code;
         this.jdkClassLoader = jdkClassLoader;
         this.containerClassLoader = containerClassLoader;
     }
