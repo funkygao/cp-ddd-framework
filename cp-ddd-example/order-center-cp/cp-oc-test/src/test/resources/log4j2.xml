@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="error" monitorInterval="3600">
     <properties>
-        <property name="patternLayout">%d [%t] %-5p [%c] [%L] - %m%n</property>
+        <property name="patternLayout">%d [%t] %-5p [%c] [%L] %m%n</property>
         <property name="root.log.level">debug</property>
     </properties>
     <Appenders>
@@ -17,7 +17,7 @@
         <logger name="org.springframework" level="error" additivity="false" includeLocation="true">
             <AppenderRef ref="console"/>
         </logger>
-        <logger name="org.springframework.beans.factory" level="debug" additivity="false" includeLocation="true">
+        <logger name="org.springframework.beans.factory" level="info" additivity="false" includeLocation="true">
             <AppenderRef ref="console"/>
         </logger>
     </Loggers>
