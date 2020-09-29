@@ -15,6 +15,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -40,23 +41,27 @@ public class PluginMechanismTest {
         ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("spring-test.xml");
         applicationContext.start();
 
+        log.info(String.join("", Collections.nCopies(50, "*")));
+
         // 目前的问题：第二次循环时抛出异常
         // org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type 'org.example.bp.oms.isv.IsvPartner' available
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 1; i++) {
             // 同一个jar，load多次，模拟热更新
             log.info("n={}", i + 1);
-            Container.getInstance().loadPartnerPlugin(localIsvJar, "org.example.bp");
+            Container.getInstance().loadPartnerPlugin(localIsvJar, true);
             submitOrder(applicationContext, true);
-            log.info("===============================================");
+            log.info(String.join("", Collections.nCopies(50, "=")));
         }
+
+        Container.getInstance().loadPartnerPlugin(localKaJar, true);
 
         if (true) {
             return;
         }
 
-        Container.getInstance().loadPartnerPlugin(remoteKaJar, "org.example.bp");
+        Container.getInstance().loadPartnerPlugin(remoteKaJar, true);
 
-        Container.getInstance().loadPatternPlugin(remotePatternJar, "org.example.cp");
+        Container.getInstance().loadPatternPlugin(remotePatternJar, true);
 
         Container.getInstance().unloadPatternPlugin("hair");
 
@@ -64,7 +69,7 @@ public class PluginMechanismTest {
             log.info("sleeping 2m，等待修改bp-isv里逻辑后发布新jar...");
             TimeUnit.MINUTES.sleep(2); // 等待手工发布新jar
             log.info("2m is up, go!");
-            Container.getInstance().loadPartnerPlugin(remoteIsvJar, "org.example.bp");
+            Container.getInstance().loadPartnerPlugin(remoteIsvJar, true);
             submitOrder(applicationContext, true); // 重新提交订单，看看是否新jar逻辑生效
         }
 

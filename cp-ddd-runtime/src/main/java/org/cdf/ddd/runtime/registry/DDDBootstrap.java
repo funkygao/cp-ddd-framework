@@ -44,7 +44,7 @@ final class DDDBootstrap implements ApplicationListener<ContextRefreshedEvent>, 
         long t0 = System.nanoTime();
         log.info("starting Spring, register DDD beans...");
         registryFactory.register(applicationContext);
-        log.info("all DDD beans registered, cost {}ms", (System.nanoTime() - t0) / 1000000);
+        log.info("all DDD beans registered, cost {}ms", (System.nanoTime() - t0) / 1000_000);
 
         this.applicationContext = applicationContext;
     }
@@ -53,14 +53,14 @@ final class DDDBootstrap implements ApplicationListener<ContextRefreshedEvent>, 
     public void onApplicationEvent(ContextRefreshedEvent event) {
         if (event.getApplicationContext().getParent() == null) {
             log.info("Spring started complete!");
+
+            if (startupListener != null) {
+                log.debug("calling IStartupListener: {}", startupListener.getClass().getCanonicalName());
+                startupListener.onStartComplete();
+                log.debug("called IStartupListener: {}", startupListener.getClass().getCanonicalName());
+            }
         } else {
             log.info("Spring reloaded complete!");
-        }
-
-        if (startupListener != null) {
-            log.debug("calling IStartupListener: {}", startupListener.getClass().getCanonicalName());
-            startupListener.onStartComplete();
-            log.debug("called IStartupListener: {}", startupListener.getClass().getCanonicalName());
         }
     }
 
