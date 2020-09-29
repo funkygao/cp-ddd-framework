@@ -109,6 +109,8 @@ final class Plugin {
 
     private ApplicationContext loadSpringApplicationContext(@NotNull ClassLoader pluginClassLoader) throws Exception {
         return new ClassPathXmlApplicationContext(new String[]{pluginXml}, DDDBootstrap.applicationContext()) {
+
+            @Override
             protected void initBeanDefinitionReader(XmlBeanDefinitionReader reader) {
                 super.initBeanDefinitionReader(reader);
                 reader.setBeanClassLoader(pluginClassLoader);
