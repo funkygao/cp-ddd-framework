@@ -148,6 +148,25 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>9.3.10.v20160621</version>
+                <configuration>
+                    <scanTargetPatterns>
+                        <directory>src/main/webapp/WEB-INF</directory>
+                        <includes>
+                            <include>**/*.xml</include>
+                        </includes>
+                    </scanTargetPatterns>
+                    <connectors>
+                        <connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
+                            <port>9090</port>
+                            <maxIdleTime>60000</maxIdleTime>
+                        </connector>
+                    </connectors>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
