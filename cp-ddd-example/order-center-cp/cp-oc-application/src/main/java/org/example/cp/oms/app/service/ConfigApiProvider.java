@@ -19,7 +19,7 @@ public class ConfigApiProvider implements ConfigApi {
 
         // 再加载
         try {
-            Container.getInstance().loadPartnerPlugin(request.getJarURL().toString(), "org.example.bp.oms");
+            Container.getInstance().loadPartnerPlugin(request.getJarURL().toString(), true);
         } catch (Throwable ex) {
             log.error("load:{}", request, ex);
         }

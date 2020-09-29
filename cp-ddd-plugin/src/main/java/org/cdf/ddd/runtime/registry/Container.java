@@ -57,16 +57,16 @@ public final class Container {
     /**
      * 加载业务前台jar包.
      *
-     * @param jarUrl      Plugin jar URL
-     * @param basePackage Spring component-scan base-package值，但不支持逗号分隔. if null, will not scan Spring
+     * @param jarUrl    Plugin jar URL
+     * @param useSpring jar包里是否需要Spring机制
      * @throws Throwable
      */
-    public void loadPartnerPlugin(@NotNull URL jarUrl, String basePackage) throws Throwable {
+    public void loadPartnerPlugin(@NotNull URL jarUrl, boolean useSpring) throws Throwable {
         File localJar = jarTempLocalFile(jarUrl);
         localJar.deleteOnExit();
         log.info("loadPartnerPlugin {} -> {}", jarUrl, localJar.getCanonicalPath());
         FileUtils.copyInputStreamToFile(jarUrl.openStream(), localJar);
-        loadPartnerPlugin(localJar.getAbsolutePath(), basePackage);
+        loadPartnerPlugin(localJar.getAbsolutePath(), useSpring);
     }
 
     /**
@@ -74,20 +74,20 @@ public final class Container {
      * <p>
      * <p>如果使用本动态加载，就不要maven里静态引入业务前台jar包依赖了.</p>
      *
-     * @param jarPath     jar path
-     * @param basePackage Spring component-scan base-package值，但不支持逗号分隔. if null, will not scan Spring
+     * @param jarPath   jar path
+     * @param useSpring jar包里是否需要Spring机制
      * @throws Throwable
      */
-    public void loadPartnerPlugin(@NotNull String jarPath, String basePackage) throws Throwable {
+    public void loadPartnerPlugin(@NotNull String jarPath, boolean useSpring) throws Throwable {
         if (!jarPath.endsWith(".jar")) {
             throw new IllegalArgumentException("Invalid jarPath: " + jarPath);
         }
 
         long t0 = System.nanoTime();
-        log.warn("loading partner:{} basePackage:{}", jarPath, basePackage);
+        log.warn("loading partner:{} useSpring:{}", jarPath, useSpring);
         try {
             new Plugin(jdkClassLoader, containerClassLoader).
-                    load(jarPath, basePackage, Partner.class, new ContainerContext());
+                    load(jarPath, useSpring, Partner.class, new ContainerContext());
         } catch (Throwable ex) {
             log.error("fails to load partner:{}, cost {}ms", jarPath, (System.nanoTime() - t0) / 1000_000, ex);
 
@@ -111,36 +111,36 @@ public final class Container {
     /**
      * 加载业务模式jar包.
      *
-     * @param jarUrl      Plugin jar URL
-     * @param basePackage Spring component-scan base-package值，但不支持逗号分隔. if null, will not scan Spring
+     * @param jarUrl    Plugin jar URL
+     * @param useSpring jar包里是否需要Spring机制
      * @throws Throwable
      */
-    public void loadPatternPlugin(@NotNull URL jarUrl, String basePackage) throws Throwable {
+    public void loadPatternPlugin(@NotNull URL jarUrl, boolean useSpring) throws Throwable {
         File localJar = jarTempLocalFile(jarUrl);
         localJar.deleteOnExit();
 
         log.info("loadPatternPlugin {} -> {}", jarUrl, localJar.getCanonicalPath());
         FileUtils.copyInputStreamToFile(jarUrl.openStream(), localJar);
-        loadPatternPlugin(localJar.getAbsolutePath(), basePackage);
+        loadPatternPlugin(localJar.getAbsolutePath(), useSpring);
     }
 
     /**
      * 加载业务模式jar包.
      *
-     * @param jarPath     jar path
-     * @param basePackage Spring component-scan base-package值，但不支持逗号分隔. if null, will not scan Spring
+     * @param jarPath   jar path
+     * @param useSpring jar包里是否需要Spring机制
      * @throws Throwable
      */
-    public void loadPatternPlugin(@NotNull String jarPath, String basePackage) throws Throwable {
+    public void loadPatternPlugin(@NotNull String jarPath, boolean useSpring) throws Throwable {
         if (!jarPath.endsWith(".jar")) {
             throw new IllegalArgumentException("Invalid jarPath: " + jarPath);
         }
 
         long t0 = System.nanoTime();
-        log.warn("loading pattern:{} basePackage:{}", jarPath, basePackage);
+        log.warn("loading pattern:{} useSpring:{}", jarPath, useSpring);
         try {
             new Plugin(jdkClassLoader, containerClassLoader).
-                    load(jarPath, basePackage, Pattern.class, new ContainerContext());
+                    load(jarPath, useSpring, Pattern.class, new ContainerContext());
         } catch (Throwable ex) {
             log.error("fails to load pattern:{}, cost {}ms", jarPath, (System.nanoTime() - t0) / 1000_000, ex);
 

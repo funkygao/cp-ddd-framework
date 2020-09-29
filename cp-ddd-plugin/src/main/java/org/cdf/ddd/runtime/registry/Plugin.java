@@ -38,7 +38,7 @@ final class Plugin {
         this.containerClassLoader = containerClassLoader;
     }
 
-    Plugin load(@NotNull String jarPath, String basePackage, Class<? extends Annotation> identityResolverClass, IContainerContext ctx) throws Throwable {
+    Plugin load(@NotNull String jarPath, boolean useSpring, Class<? extends Annotation> identityResolverClass, IContainerContext ctx) throws Throwable {
         if (identityResolverClass != Pattern.class && identityResolverClass != Partner.class) {
             throw new IllegalArgumentException("Must be Pattern or Partner");
         }
@@ -52,7 +52,7 @@ final class Plugin {
         pluginClassLoader = new PluginClassLoader(new URL[]{new File(jarPath).toURI().toURL()},
                 jdkClassLoader, containerClassLoader);
 
-        if (basePackage != null && !basePackage.isEmpty()) {
+        if (useSpring) {
             log.info("Spring loading Plugin with {}, {}, {} ...", jdkClassLoader, containerClassLoader, pluginClassLoader);
             long t0 = System.nanoTime();
             applicationContext = loadSpringApplicationContext(pluginClassLoader);

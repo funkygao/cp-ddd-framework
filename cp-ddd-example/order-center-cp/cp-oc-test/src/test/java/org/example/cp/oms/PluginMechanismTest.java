@@ -48,20 +48,20 @@ public class PluginMechanismTest {
         for (int i = 0; i < 1; i++) {
             // 同一个jar，load多次，模拟热更新
             log.info("n={}", i + 1);
-            Container.getInstance().loadPartnerPlugin(localIsvJar, "org.example.bp");
+            Container.getInstance().loadPartnerPlugin(localIsvJar, true);
             submitOrder(applicationContext, true);
             log.info(String.join("", Collections.nCopies(50, "=")));
         }
 
-        Container.getInstance().loadPartnerPlugin(localKaJar, "org.example.bp");
+        Container.getInstance().loadPartnerPlugin(localKaJar, true);
 
         if (true) {
             return;
         }
 
-        Container.getInstance().loadPartnerPlugin(remoteKaJar, "org.example.bp");
+        Container.getInstance().loadPartnerPlugin(remoteKaJar, true);
 
-        Container.getInstance().loadPatternPlugin(remotePatternJar, "org.example.cp");
+        Container.getInstance().loadPatternPlugin(remotePatternJar, true);
 
         Container.getInstance().unloadPatternPlugin("hair");
 
@@ -69,7 +69,7 @@ public class PluginMechanismTest {
             log.info("sleeping 2m，等待修改bp-isv里逻辑后发布新jar...");
             TimeUnit.MINUTES.sleep(2); // 等待手工发布新jar
             log.info("2m is up, go!");
-            Container.getInstance().loadPartnerPlugin(remoteIsvJar, "org.example.bp");
+            Container.getInstance().loadPartnerPlugin(remoteIsvJar, true);
             submitOrder(applicationContext, true); // 重新提交订单，看看是否新jar逻辑生效
         }
 
