@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
-final class PluginLoader {
+final class Plugin {
     private static final String pluginXml = "/plugin.xml";
 
     private final ClassLoader jdkClassLoader;
@@ -33,12 +33,12 @@ final class PluginLoader {
 
     private ApplicationContext applicationContext;
 
-    PluginLoader(ClassLoader jdkClassLoader, ClassLoader containerClassLoader) {
+    Plugin(ClassLoader jdkClassLoader, ClassLoader containerClassLoader) {
         this.jdkClassLoader = jdkClassLoader;
         this.containerClassLoader = containerClassLoader;
     }
 
-    PluginLoader load(@NotNull String jarPath, String basePackage, Class<? extends Annotation> identityResolverClass, IContainerContext ctx) throws Throwable {
+    Plugin load(@NotNull String jarPath, String basePackage, Class<? extends Annotation> identityResolverClass, IContainerContext ctx) throws Throwable {
         if (identityResolverClass != Pattern.class && identityResolverClass != Partner.class) {
             throw new IllegalArgumentException("Must be Pattern or Partner");
         }
