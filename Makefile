@@ -5,7 +5,7 @@ clean:
 	@mvn clean
 
 install:clean
-	@mvn install
+	@mvn install -Pinstall
 
 test:clean
 	@mvn test -Ptest
