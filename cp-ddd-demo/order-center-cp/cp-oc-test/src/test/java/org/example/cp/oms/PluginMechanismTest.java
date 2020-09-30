@@ -15,16 +15,13 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Scanner;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
+
+import static org.example.cp.oms.LogAssert.assertContains;
+import static org.junit.Assert.assertEquals;
 
 @Slf4j
 @Ignore
@@ -32,8 +29,6 @@ public class PluginMechanismTest {
     private URL remoteKaJar;
     private URL remoteIsvJar;
     private URL remotePatternJar;
-
-    private static final String logFile = "logs/app.log";
 
     private static final String localKaJar = "../../order-center-bp-ka/target/order-center-bp-ka-0.0.1.jar";
     private static final String localIsvJar = "../../order-center-bp-isv/target/order-center-bp-isv-0.0.1.jar";
@@ -47,7 +42,7 @@ public class PluginMechanismTest {
 
     @After
     public void tearDown() {
-        new File(logFile).delete();
+        LogAssert.cleanUp();
     }
 
     @UnderDevelopment // 需要运行在 profile:plugin 下，运行前需要mvn package为Plugin打包
@@ -58,20 +53,53 @@ public class PluginMechanismTest {
 
         log.info(String.join("", Collections.nCopies(50, "*")));
 
-        // 目前的问题：第二次循环时抛出异常
-        // org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type 'org.example.bp.oms.isv.IsvPartner' available
         for (int i = 0; i < 1; i++) {
-            // 同一个jar，load多次，模拟热更新
+            // 同一个jar，load多次，模拟热更新，然后下单验证：走ISV前台逻辑
             log.info("n={}", i + 1);
             Container.getInstance().loadPartnerPlugin("isv", localIsvJar, true);
             submitOrder(applicationContext, true);
+
             log.info(String.join("", Collections.nCopies(50, "=")));
         }
 
-        // 验证 AutoLoggerAspect 被创建
-        //assertTrue(logContains("Spring created instance AutoLoggerAspect!", "AutoLoggerAspect 注册 Spring lifecycle ok"));
+        // 通过日志验证执行正确性
+        assertContains(
+                // 验证 AutoLoggerAspect 被创建
+                "Spring created instance AutoLoggerAspect!", "AutoLoggerAspect 注册 Spring lifecycle ok",
+                // IsvPartner在动态加载时自动创建实例
+                "ISV new instanced",
+                // isv.PluginListener 被调用
+                "ISV Jar loaded, ",
+                // @AutoLogger
+                "DecideStepsExt.decideSteps 入参",
+                // isv.DecideStepsExt.decideSteps 调用了中台的 stockService.preOccupyStock
+                "预占库存：SKU From ISV",
+                // ISV的步骤编排
+                "steps [basic, persist, mq]",
+                // @AutoLogger
+                "org.example.bp.oms.isv.extension.PresortExt.presort 入参",
+                // isv.PresortExt
+                "ISV里预分拣的结果：1", "count(a): 2", "仓库号：WH009",
+                // 加载properties资源，并且有中文
+                "加载资源文件成功！站点名称：北京市海淀区中关村中路1号",
+                // @AutoLogger
+                "org.example.bp.oms.isv.extension.CustomModel.explain 入参:",
+                // CustomModel，扩展属性机制
+                "站点联系人号码：139100988343，保存到x2字段",
+                "已经发送给MQ"
+        );
 
+        // 加载KA插件，并给KA下单
         Container.getInstance().loadPartnerPlugin("ka", localKaJar, true);
+        submitOrder(applicationContext, false);
+        assertContains(
+                "KA 预占库存 GSM098",
+                "KA的锁TTL大一些",
+                "steps [basic, persist]"
+        );
+
+        // 目前已经加载了2个Plugin Jar
+        assertEquals(2, Container.getInstance().getActivePlugins().size());
 
         for (IPlugin plugin : Container.getInstance().getActivePlugins().values()) {
             log.info("Plugin: {}", plugin.getCode());
@@ -118,20 +146,5 @@ public class PluginMechanismTest {
         // Partner(KA)的下单执行：
         //     SerializableIsolationExt -> DecideStepsExt -> BasicStep -> PersistStep(AssignOrderNoExt)
         submitOrder.submit(orderModel);
-    }
-
-    private boolean logContains(String... strs) throws FileNotFoundException {
-        Scanner scanner = new Scanner(new FileInputStream(logFile));
-        Set<String> found = new HashSet<>(strs.length);
-        while (scanner.hasNextLine()) {
-            String line = scanner.nextLine();
-            for (String s : strs) {
-                if (line.contains(s)) {
-                    found.add(s);
-                }
-            }
-        }
-
-        return found.size() == strs.length;
     }
 }

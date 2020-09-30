@@ -8,7 +8,7 @@
         <Console name="console" target="SYSTEM_OUT" follow="true">
             <PatternLayout charset="UTF-8" pattern="${patternLayout}"/>
         </Console>
-        <File name="localFile" fileName="logs/app.log">
+        <File name="logFile" fileName="logs/app.log">
             <PatternLayout>
                 <Pattern>${patternLayout}</Pattern>
             </PatternLayout>
@@ -18,7 +18,7 @@
     <Loggers>
         <Root level="${root.log.level}" includeLocation="true">
             <AppenderRef ref="console"/>
-            <AppenderRef ref="localFile"/>
+            <AppenderRef ref="logFile"/>
         </Root>
         <logger name="org.springframework" level="error" additivity="false" includeLocation="true">
             <AppenderRef ref="console"/>
