@@ -140,7 +140,7 @@ You are welcome to contribute to the project with pull requests on GitHub.
 
 If you find a bug or want to request a feature, please use the [issue tracker](https://github.com/funkygao/cp-ddd-framework/issues).
 
-For any question, you can use [Gitter](https://gitter.im/cp-ddd-framework/community).
+For any question, you can use [Gitter Chat](https://gitter.im/cp-ddd-framework/community).
 
 ## Licensing
 
