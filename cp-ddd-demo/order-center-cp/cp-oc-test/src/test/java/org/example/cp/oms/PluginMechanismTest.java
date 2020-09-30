@@ -53,7 +53,7 @@ public class PluginMechanismTest {
 
         log.info(String.join("", Collections.nCopies(50, "*")));
 
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < 2; i++) {
             // 同一个jar，load多次，模拟热更新，然后下单验证：走ISV前台逻辑
             log.info("n={}", i + 1);
             Container.getInstance().loadPartnerPlugin("isv", localIsvJar, true);

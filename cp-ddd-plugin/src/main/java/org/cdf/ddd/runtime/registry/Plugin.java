@@ -9,14 +9,12 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.cdf.ddd.annotation.Extension;
 import org.cdf.ddd.annotation.Partner;
-import org.cdf.ddd.annotation.Pattern;
 import org.cdf.ddd.plugin.IContainerContext;
 import org.cdf.ddd.plugin.IPluginListener;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.lang.annotation.Annotation;
 import java.net.URL;
@@ -41,6 +39,7 @@ class Plugin implements IPlugin {
     private ClassLoader pluginClassLoader;
 
     private ApplicationContext applicationContext;
+    private IPluginListener pluginListener;
 
     Plugin(String code, ClassLoader jdkClassLoader, ClassLoader containerClassLoader) {
         this.code = code;
@@ -48,45 +47,64 @@ class Plugin implements IPlugin {
         this.containerClassLoader = containerClassLoader;
     }
 
-    Plugin load(@NotNull String jarPath, boolean useSpring, Class<? extends Annotation> identityResolverClass, IContainerContext ctx) throws Throwable {
-        if (identityResolverClass != Pattern.class && identityResolverClass != Partner.class) {
-            throw new IllegalArgumentException("Must be Pattern or Partner");
+    Plugin load(String jarPath, boolean useSpring, Class<? extends Annotation> identityResolverClass, IContainerContext ctx) throws Throwable {
+        Map<Class<? extends Annotation>, List<Class>> plugableMap = prepare(jarPath, useSpring, identityResolverClass, ctx);
+        log.info("prepared {} with plugableMap {}", jarPath, plugableMap);
+
+        if (pluginListener != null) {
+            pluginListener.onPrepared(ctx);
         }
 
-        // eager load IPlugable classes，通过Java类加载的全盘负责机制自动加载相关引用类
-        List<Class<? extends Annotation>> annotations = new ArrayList<>(2);
-        annotations.add(identityResolverClass);
-        annotations.add(Extension.class);
+        // 现在，新jar里的类已经被新的ClassLoader加载到内存了，也实例化了，但旧jar里的类仍然在工作
+        commit(identityResolverClass, plugableMap);
+        log.info("committed {}", jarPath);
 
-        // each Plugin Jar has a dedicated PluginClassLoader
-        pluginClassLoader = new PluginClassLoader(new URL[]{new File(jarPath).toURI().toURL()},
-                jdkClassLoader, containerClassLoader);
+        if (pluginListener != null) {
+            pluginListener.onSwitched(ctx);
+        }
+
+        return this;
+    }
+
+    // load all relevant classes with the new PluginClassLoader
+    private Map<Class<? extends Annotation>, List<Class>> prepare(String jarPath, boolean useSpring, Class<? extends Annotation> identityResolverClass) throws Throwable {
+        // each Plugin Jar has a specific PluginClassLoader
+        pluginClassLoader = new PluginClassLoader(new URL[]{new File(jarPath).toURI().toURL()}, jdkClassLoader, containerClassLoader);
 
         if (useSpring) {
             log.info("Spring loading Plugin with {}, {}, {} ...", jdkClassLoader, containerClassLoader, pluginClassLoader);
             long t0 = System.nanoTime();
-            applicationContext = loadSpringApplicationContext(pluginClassLoader);
+
+            // each Plugin Jar will have a specific Spring IoC with the same parent
+            applicationContext = new ClassPathXmlApplicationContext(new String[]{pluginXml}, DDDBootstrap.applicationContext()) {
+                protected void initBeanDefinitionReader(XmlBeanDefinitionReader reader) {
+                    super.initBeanDefinitionReader(reader);
+                    reader.setBeanClassLoader(pluginClassLoader);
+                    setClassLoader(pluginClassLoader); // so that it can find the pluginXml
+                }
+            };
+
             log.info("Spring loading cost {}ms", (System.nanoTime() - t0) / 1000_000);
         }
 
-        log.info("prepare Plugin for registry: {}", annotations);
-        Map<Class<? extends Annotation>, List<Class>> resultMap = JarUtils.loadClassWithAnnotations(
+        // 从Plugin Jar里把 IPlugable 挑出来，以便更新注册表
+        List<Class<? extends Annotation>> annotations = new ArrayList<>(2);
+        annotations.add(identityResolverClass);
+        annotations.add(Extension.class);
+        Map<Class<? extends Annotation>, List<Class>> plugableMap = JarUtils.loadClassWithAnnotations(
                 jarPath, annotations, null, pluginClassLoader);
-        log.debug("prepared: {}", resultMap);
 
         // IPluginListener 不通过Spring加载
-        IPluginListener pluginListener = JarUtils.loadBeanWithType(pluginClassLoader, jarPath, IPluginListener.class);
-        if (pluginListener != null) {
-            pluginListener.beforeUnload(ctx);
-        }
+        this.pluginListener = JarUtils.loadBeanWithType(pluginClassLoader, jarPath, IPluginListener.class);
 
-        // 现在，新jar里的类已经被新的ClassLoader加载到内存了，同时旧jar里的类仍然在工作
-        // 新jar里的类被IIdentityResolver切换后，新的请求就会发过来；旧的类在in-flight job完成后就不再调用了，最终被GC
-        // 注册和切换是在RegistryFactory一并完成的
+        return plugableMap;
+    }
+
+    // switch IdentityResolverClass with the new instances
+    private void commit(Class<? extends Annotation> identityResolverClass, Map<Class<? extends Annotation>, List<Class>> plugableMap) {
         // TODO 需要把Extension、IIdentityResolver 的切换过程变成原子的：一个Plugin里可以有多个Pattern，他们的切换可以不必atomic
-
         log.info("register IIdentityResolver");
-        List<Class> identityResolverClasses = resultMap.get(identityResolverClass);
+        List<Class> identityResolverClasses = plugableMap.get(identityResolverClass);
         if (identityResolverClasses != null && !identityResolverClasses.isEmpty()) {
             if (identityResolverClass == Partner.class && identityResolverClasses.size() > 1) {
                 throw new RuntimeException("One Partner jar can have at most 1 Partner instance!");
@@ -101,7 +119,7 @@ class Plugin implements IPlugin {
         }
 
         log.info("register Extension");
-        List<Class> extensions = resultMap.get(Extension.class);
+        List<Class> extensions = plugableMap.get(Extension.class);
         if (extensions != null && !extensions.isEmpty()) {
             for (Class extensionClazz : extensions) {
                 log.info("Indexing {}", extensionClazz.getCanonicalName());
@@ -109,24 +127,5 @@ class Plugin implements IPlugin {
                 RegistryFactory.lazyRegister(Extension.class, extension);
             }
         }
-
-        if (pluginListener != null) {
-            pluginListener.afterLoad(ctx);
-        }
-
-        return this;
-    }
-
-    private ApplicationContext loadSpringApplicationContext(@NotNull ClassLoader pluginClassLoader) throws Exception {
-        return new ClassPathXmlApplicationContext(new String[]{pluginXml}, DDDBootstrap.applicationContext()) {
-
-            @Override
-            protected void initBeanDefinitionReader(XmlBeanDefinitionReader reader) {
-                super.initBeanDefinitionReader(reader);
-                reader.setBeanClassLoader(pluginClassLoader);
-
-                setClassLoader(pluginClassLoader); // so that it can find the pluginXml
-            }
-        };
     }
 }

@@ -48,7 +48,7 @@ Plugin Jar可以通过maven pom静态加载，也可以事后动态加载(热更
 
 ## 风险
 
-- java.lang.ClassNotFoundException, NoClassDefFoundError, NoSuchMethodError, ClassFormatError, ClassCastException
+- java.lang.ClassNotFoundException, NoClassDefFoundError, NoSuchMethodError, ClassFormatError, ClassCastException, AbstractMethodError
 - canary release, rollback, rolling upgrade, jar deployment platform
 
 ## Roadmap
