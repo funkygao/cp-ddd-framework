@@ -14,6 +14,9 @@ import org.cdf.ddd.plugin.IPluginListener;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.lang.annotation.Annotation;
@@ -38,8 +41,8 @@ class Plugin implements IPlugin {
     private final ClassLoader containerClassLoader;
     private ClassLoader pluginClassLoader;
 
+    // each Plugin will have a specific Spring IoC with the same parent: the Container
     private ApplicationContext applicationContext;
-    private IPluginListener pluginListener;
 
     Plugin(String code, ClassLoader jdkClassLoader, ClassLoader containerClassLoader) {
         this.code = code;
@@ -51,7 +54,16 @@ class Plugin implements IPlugin {
         Map<Class<? extends Annotation>, List<Class>> plugableMap = prepare(jarPath, useSpring, identityResolverClass);
         log.info("prepared {} with plugableMap {}", jarPath, plugableMap);
 
+        // IPluginListener 不通过Spring加载，而是手工加载、创建实例
+        // 如果一个jar里有多个 IPluginListener 实现，只会返回第一个实例
+        IPluginListener pluginListener = JarUtils.loadBeanWithType(pluginClassLoader, jarPath, IPluginListener.class);
         if (pluginListener != null) {
+            if (pluginListener.getClass().isAnnotationPresent(Component.class)
+                    || pluginListener.getClass().isAnnotationPresent(Repository.class)
+                    || pluginListener.getClass().isAnnotationPresent(Service.class)) {
+                abort("IPluginListener instance cannot be Spring bean!");
+            }
+
             pluginListener.onPrepared(ctx);
         }
 
@@ -75,12 +87,11 @@ class Plugin implements IPlugin {
             log.info("Spring loading Plugin with {}, {}, {} ...", jdkClassLoader, containerClassLoader, pluginClassLoader);
             long t0 = System.nanoTime();
 
-            // each Plugin Jar will have a specific Spring IoC with the same parent
             applicationContext = new ClassPathXmlApplicationContext(new String[]{pluginXml}, DDDBootstrap.applicationContext()) {
                 protected void initBeanDefinitionReader(XmlBeanDefinitionReader reader) {
                     super.initBeanDefinitionReader(reader);
                     reader.setBeanClassLoader(pluginClassLoader);
-                    setClassLoader(pluginClassLoader); // so that it can find the pluginXml
+                    setClassLoader(pluginClassLoader); // so that it can find the pluginXml within the jar
                 }
             };
 
@@ -91,13 +102,7 @@ class Plugin implements IPlugin {
         List<Class<? extends Annotation>> annotations = new ArrayList<>(2);
         annotations.add(identityResolverClass);
         annotations.add(Extension.class);
-        Map<Class<? extends Annotation>, List<Class>> plugableMap = JarUtils.loadClassWithAnnotations(
-                jarPath, annotations, null, pluginClassLoader);
-
-        // IPluginListener 不通过Spring加载
-        this.pluginListener = JarUtils.loadBeanWithType(pluginClassLoader, jarPath, IPluginListener.class);
-
-        return plugableMap;
+        return JarUtils.loadClassWithAnnotations(jarPath, annotations, null, pluginClassLoader);
     }
 
     // switch IdentityResolverClass with the new instances
@@ -110,7 +115,8 @@ class Plugin implements IPlugin {
 
             for (Class irc : identityResolverClasses) {
                 log.info("Indexing {}", irc.getCanonicalName());
-                // 每次加载，由于 PluginClassLoader 是不同的，irc也是不同的
+
+                // 每次加载，由于 PluginClassLoader 是不同的，irc也不同
                 Object partnerOrPattern = applicationContext.getBean(irc);
                 RegistryFactory.lazyRegister(identityResolverClass, partnerOrPattern);
             }
@@ -120,9 +126,16 @@ class Plugin implements IPlugin {
         if (extensions != null && !extensions.isEmpty()) {
             for (Class extensionClazz : extensions) {
                 log.info("Indexing {}", extensionClazz.getCanonicalName());
+
+                // 这里extensionClazz是扩展点实现的类名 e,g. org.example.bp.oms.isv.extension.DecideStepsExt
+                // 而不是 IDecideStepsExt。因此，不必担心getBean异常：一个extensionClazz有多个对象
                 Object extension = applicationContext.getBean(extensionClazz);
                 RegistryFactory.lazyRegister(Extension.class, extension);
             }
         }
+    }
+
+    private void abort(String message) {
+        throw BootstrapException.ofMessage(message);
     }
 }
