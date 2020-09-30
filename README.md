@@ -126,7 +126,7 @@ Enforce expected evolvement of the business architecture based upon ArchUnit.
 
 ## Reference guide
 
-Please go to [cp-ddd-framework Javadoc](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/).
+Please visit [cp-ddd-framework Javadoc](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/).
 
 ## Total solutions
 

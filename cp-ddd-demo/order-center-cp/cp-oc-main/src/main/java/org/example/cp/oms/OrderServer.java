@@ -15,7 +15,7 @@ import java.io.IOException;
  * 完整演示的入口：在IDE下启动：会在本机启动Jetty server.
  *
  * 下单：
- * curl -d "" http://localhost:9090/order
+ * curl -d '{"source":"ISV","customerNo":"home","externalNo":"2020"}' -H 'Content-type: application/json' http://localhost:9090/order
  *
  * 查看日志，了解服务端的执行过程.
  */

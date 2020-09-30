@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="error" monitorInterval="3600">
+<Configuration status="error" monitorInterval="3600" packages="a">
     <properties>
         <property name="patternLayout">%d [%t] %-5p [%c] [%L] %m%n</property>
         <property name="root.log.level">debug</property>
@@ -8,11 +8,17 @@
         <Console name="console" target="SYSTEM_OUT" follow="true">
             <PatternLayout charset="UTF-8" pattern="${patternLayout}"/>
         </Console>
+        <File name="localFile" fileName="logs/app.log">
+            <PatternLayout>
+                <Pattern>${patternLayout}</Pattern>
+            </PatternLayout>
+        </File>
     </Appenders>
 
     <Loggers>
         <Root level="${root.log.level}" includeLocation="true">
             <AppenderRef ref="console"/>
+            <AppenderRef ref="localFile"/>
         </Root>
         <logger name="org.springframework" level="error" additivity="false" includeLocation="true">
             <AppenderRef ref="console"/>

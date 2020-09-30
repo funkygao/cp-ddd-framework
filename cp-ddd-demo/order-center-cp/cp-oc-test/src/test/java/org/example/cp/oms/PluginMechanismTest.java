@@ -8,15 +8,22 @@ import org.cdf.ddd.runtime.registry.IPlugin;
 import org.example.cp.oms.domain.model.OrderModel;
 import org.example.cp.oms.domain.model.OrderModelCreator;
 import org.example.cp.oms.domain.service.SubmitOrder;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Scanner;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -26,6 +33,8 @@ public class PluginMechanismTest {
     private URL remoteIsvJar;
     private URL remotePatternJar;
 
+    private static final String logFile = "logs/app.log";
+
     private static final String localKaJar = "../../order-center-bp-ka/target/order-center-bp-ka-0.0.1.jar";
     private static final String localIsvJar = "../../order-center-bp-isv/target/order-center-bp-isv-0.0.1.jar";
 
@@ -34,6 +43,11 @@ public class PluginMechanismTest {
         remoteIsvJar = new URL("https://github.com/funkygao/cp-ddd-framework/blob/master/doc/assets/jar/order-center-bp-isv-0.0.1.jar?raw=true");
         remoteKaJar = new URL("https://github.com/funkygao/cp-ddd-framework/blob/master/doc/assets/jar/order-center-bp-ka-0.0.1.jar?raw=true");
         remotePatternJar = new URL("https://github.com/funkygao/cp-ddd-framework/blob/master/doc/assets/jar/order-center-pattern-0.0.1.jar?raw=true");
+    }
+
+    @After
+    public void tearDown() {
+        new File(logFile).delete();
     }
 
     @UnderDevelopment // 需要运行在 profile:plugin 下，运行前需要mvn package为Plugin打包
@@ -53,6 +67,9 @@ public class PluginMechanismTest {
             submitOrder(applicationContext, true);
             log.info(String.join("", Collections.nCopies(50, "=")));
         }
+
+        // 验证 AutoLoggerAspect 被创建
+        //assertTrue(logContains("Spring created instance AutoLoggerAspect!", "AutoLoggerAspect 注册 Spring lifecycle ok"));
 
         Container.getInstance().loadPartnerPlugin("ka", localKaJar, true);
 
@@ -101,5 +118,20 @@ public class PluginMechanismTest {
         // Partner(KA)的下单执行：
         //     SerializableIsolationExt -> DecideStepsExt -> BasicStep -> PersistStep(AssignOrderNoExt)
         submitOrder.submit(orderModel);
+    }
+
+    private boolean logContains(String... strs) throws FileNotFoundException {
+        Scanner scanner = new Scanner(new FileInputStream(logFile));
+        Set<String> found = new HashSet<>(strs.length);
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine();
+            for (String s : strs) {
+                if (line.contains(s)) {
+                    found.add(s);
+                }
+            }
+        }
+
+        return found.size() == strs.length;
     }
 }

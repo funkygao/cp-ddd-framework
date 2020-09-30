@@ -6,6 +6,7 @@ import org.cdf.ddd.api.ApiResult;
 import org.cdf.ddd.api.RequestProfile;
 import org.cdf.ddd.ext.IModelAttachmentExt;
 import org.example.bp.oms.isv.IsvPartner;
+import org.example.bp.oms.isv.aop.AutoLogger;
 import org.example.cp.oms.spec.exception.OrderErrorReason;
 import org.example.cp.oms.spec.exception.OrderException;
 import org.example.cp.oms.spec.model.IOrderModel;
@@ -19,6 +20,7 @@ public class CustomModel implements IModelAttachmentExt<IOrderModel> {
     private static final String KEY_STATION_NO = "_station_contact_";
 
     @Override
+    @AutoLogger
     public void explain(@NotNull RequestProfile source, @NotNull IOrderModel target) {
         // 入参里预留了扩展属性
         Map<String, String> ext = source.getExt();
