@@ -28,7 +28,7 @@
 
 ``` bash
 git clone https://github.com/funkygao/cp-ddd-framework.git
-cd cp-ddd-framework
+cd cp-ddd-framework/
 mvn install
 ```
 
@@ -88,7 +88,7 @@ Requires Java 1.8+ and Spring 4.3.12.RELEASE or later.
 
 ``` bash
 git clone https://github.com/funkygao/cp-ddd-framework.git
-cd cp-ddd-framework
+cd cp-ddd-framework/
 mvn install
 cd demo/
 mvn package
@@ -112,7 +112,7 @@ Runtime implementation of the framework.
 
 ### cp-ddd-plugin
 
-Plugin dynamic loading implementation.
+Plugin hot reloading implementation.
 
 ### cp-ddd-enforce
 
