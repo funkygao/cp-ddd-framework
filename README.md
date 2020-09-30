@@ -54,7 +54,6 @@ Please visit [Quickstart wiki](https://github.com/funkygao/cp-ddd-framework/wiki
 
 ### What problems does it solve
 
-- empower the system to evolve without corruption
 - born for extension, the OCP
 - 业务逻辑的扩展：uncertain biz logic
 - 业务流程的扩展：uncertain biz flow
@@ -63,6 +62,7 @@ Please visit [Quickstart wiki](https://github.com/funkygao/cp-ddd-framework/wiki
 - 业务前台与中台如何协同：synergy between BP and CP teams
 - 如何让中台架构特色的DDD稳稳当当落地：DDD seamlessly landing in code
 - 如何降低系统实现的复杂度：reduce entropy of the system
+- empower the system to evolve without corruption
 - 普通研发如何编写出优雅的业务代码：low threshold for average developer to build elegant biz code
 - and more
 
