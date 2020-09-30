@@ -8,7 +8,7 @@ import org.cdf.ddd.plugin.IPluginListener;
 public class PluginListener implements IPluginListener {
 
     @Override
-    public void onSwitched(IContainerContext ctx) throws Exception {
+    public void onCommitted(IContainerContext ctx) throws Exception {
         log.info("ISV Jar loaded, ctx:{}", ctx);
     }
 

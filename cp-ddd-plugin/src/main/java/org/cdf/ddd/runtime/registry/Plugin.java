@@ -72,7 +72,7 @@ class Plugin implements IPlugin {
         log.info("committed {}", jarPath);
 
         if (pluginListener != null) {
-            pluginListener.onSwitched(ctx);
+            pluginListener.onCommitted(ctx);
         }
 
         return this;
