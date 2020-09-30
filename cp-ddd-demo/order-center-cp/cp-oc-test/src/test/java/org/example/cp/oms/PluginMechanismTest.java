@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.cdf.ddd.annotation.UnderDevelopment;
 import org.cdf.ddd.api.RequestProfile;
 import org.cdf.ddd.runtime.registry.Container;
-import org.cdf.ddd.runtime.registry.Plugin;
+import org.cdf.ddd.runtime.registry.IPlugin;
 import org.example.cp.oms.domain.model.OrderModel;
 import org.example.cp.oms.domain.model.OrderModelCreator;
 import org.example.cp.oms.domain.service.SubmitOrder;
@@ -56,7 +56,7 @@ public class PluginMechanismTest {
 
         Container.getInstance().loadPartnerPlugin("ka", localKaJar, true);
 
-        for (Plugin plugin : Container.getInstance().getActivePlugins().values()) {
+        for (IPlugin plugin : Container.getInstance().getActivePlugins().values()) {
             log.info("Plugin: {}", plugin.getCode());
         }
 
