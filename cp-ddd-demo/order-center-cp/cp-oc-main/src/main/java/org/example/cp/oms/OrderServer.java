@@ -44,6 +44,8 @@ public class OrderServer {
         server.setHandler(getServletContextHandler(getContext()));
         server.start();
         log.info("Server started at port {}", port);
+        log.info("现在，另起一个终端窗口，模拟下单，执行命令：");
+        log.info("curl -d '{\"source\":\"ISV\",\"customerNo\":\"home\",\"externalNo\":\"2020\"}' -H 'Content-type: application/json' localhost:9090/order");
         server.join();
     }
 

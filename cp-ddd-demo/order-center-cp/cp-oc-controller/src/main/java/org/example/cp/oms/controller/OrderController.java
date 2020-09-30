@@ -6,10 +6,7 @@ import org.example.cp.oms.client.dto.SubmitOrderRequest;
 import org.example.cp.oms.domain.model.OrderModel;
 import org.example.cp.oms.domain.model.OrderModelCreator;
 import org.example.cp.oms.domain.service.SubmitOrder;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
@@ -30,11 +27,11 @@ public class OrderController {
     // 下单服务
     @RequestMapping(value = "/order", method = RequestMethod.POST)
     @ResponseBody
-    public String submitOrder(@NotNull RequestProfile requestProfile, @NotNull SubmitOrderRequest submitOrderRequest) {
-        // JSR303，在此省略
-
+    public String submitOrder(@RequestBody SubmitOrderRequest submitOrderRequest) {
         // DTO 转换为 domain model，通过creator保护、封装domain model
         // 具体项目使用MapStruct会更方便，这里为了演示，全手工进行对象转换了
+        RequestProfile requestProfile = new RequestProfile();
+        requestProfile.setTraceId("1034344");
         OrderModelCreator creator = new OrderModelCreator();
         creator.setRequestProfile(requestProfile);
         creator.setSource(submitOrderRequest.getSource());
