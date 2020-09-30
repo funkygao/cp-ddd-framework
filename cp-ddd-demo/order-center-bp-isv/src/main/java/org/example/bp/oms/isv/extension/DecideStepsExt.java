@@ -1,6 +1,7 @@
 package org.example.bp.oms.isv.extension;
 
 import org.example.bp.oms.isv.IsvPartner;
+import org.example.bp.oms.isv.aop.AutoLogger;
 import org.example.cp.oms.spec.Steps;
 import org.cdf.ddd.annotation.Extension;
 import org.cdf.ddd.ext.IDecideStepsExt;
@@ -19,6 +20,7 @@ public class DecideStepsExt implements IDecideStepsExt {
     private IStockService stockService;
 
     @Override
+    @AutoLogger
     public List<String> decideSteps(@NotNull IDomainModel model, @NotNull String activityCode) {
         stockService.preOccupyStock("SKU From ISV"); // 测试Plugin的Spring注入功能
 

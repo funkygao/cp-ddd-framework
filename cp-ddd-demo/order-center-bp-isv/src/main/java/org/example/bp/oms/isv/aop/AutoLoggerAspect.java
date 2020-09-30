@@ -19,7 +19,7 @@ public class AutoLoggerAspect implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        log.info("注册 Spring lifecycle ok");
+        log.info("AutoLoggerAspect 注册 Spring lifecycle ok");
     }
 
     @Around("@annotation(autoLogger)")

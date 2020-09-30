@@ -5,6 +5,7 @@ import com.google.common.collect.Multiset;
 import lombok.extern.slf4j.Slf4j;
 import org.cdf.ddd.annotation.Extension;
 import org.example.bp.oms.isv.IsvPartner;
+import org.example.bp.oms.isv.aop.AutoLogger;
 import org.example.bp.oms.isv.extension.util.WarehouseUtil;
 import org.example.cp.oms.spec.ext.IPresortExt;
 import org.example.cp.oms.spec.model.IOrderModel;
@@ -20,7 +21,7 @@ import java.util.Properties;
 public class PresortExt implements IPresortExt {
 
     @Override
-    //@AutoLogger FIXME 加上后PresortExt不执行
+    @AutoLogger
     public void presort(@NotNull IOrderModel model) {
         log.info("ISV里预分拣的结果：{}", new MockInnerClass().getResult());
 
