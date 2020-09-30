@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 统一的API系统入参，注意与业务入参分开.
+ * 统一的RPC API系统入参，注意与业务入参分开.
  */
 @ToString
 @Getter

@@ -38,7 +38,7 @@ final class PluginClassLoader extends URLClassLoader {
         super(urls);
 
         for (URL url : urls) {
-            addUrl(url);
+            addUrl(url); // the classpath
         }
 
         this.jdkClassLoader = jdkClassLoader;

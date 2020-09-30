@@ -11,18 +11,22 @@ package org.cdf.ddd.plugin;
 public interface IPluginListener {
 
     /**
-     * 加载插件包时触发.
+     * 插件包切换完成时触发.
+     * <p>
+     * <p>此时，相应的请求会发送该插件包里的类</p>
      *
      * @param ctx 容器上下文
      * @throws Exception
      */
-    void afterLoad(IContainerContext ctx) throws Exception;
+    void onSwitched(IContainerContext ctx) throws Exception;
 
     /**
-     * 卸载插件包时触发.
+     * 插件包prepare完成时触发.
+     * <p>
+     * <p>此时，插件包里的类刚刚加载和实例化，还没有被调用</p>
      *
      * @param ctx 容器上下文
      * @throws Exception
      */
-    void beforeUnload(IContainerContext ctx) throws Exception;
+    void onPrepared(IContainerContext ctx) throws Exception;
 }
