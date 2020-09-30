@@ -7,7 +7,6 @@ package org.cdf.ddd.runtime.registry;
 
 import lombok.extern.slf4j.Slf4j;
 import org.cdf.ddd.annotation.Partner;
-import org.cdf.ddd.annotation.Pattern;
 import org.cdf.ddd.annotation.UnderDevelopment;
 
 import javax.validation.constraints.NotNull;
@@ -116,55 +115,6 @@ public final class Container {
         }
 
         log.warn("loaded partner:{}, cost {}ms", jarPath, (System.nanoTime() - t0) / 1000_000);
-    }
-
-    /**
-     * 加载业务模式jar包.
-     *
-     * @param code      {@link IPlugin#getCode()}
-     * @param jarUrl    Plugin jar URL
-     * @param useSpring jar包里是否需要Spring机制
-     * @throws Throwable
-     */
-    public void loadPatternPlugin(@NotNull String code, @NotNull URL jarUrl, boolean useSpring) throws Throwable {
-        File localJar = jarTempLocalFile(jarUrl);
-        localJar.deleteOnExit();
-
-        log.info("loadPatternPlugin {} -> {}", jarUrl, localJar.getCanonicalPath());
-        FileUtils.copyInputStreamToFile(jarUrl.openStream(), localJar);
-        loadPatternPlugin(code, localJar.getAbsolutePath(), useSpring);
-    }
-
-    /**
-     * 加载业务模式jar包.
-     *
-     * @param code      {@link IPlugin#getCode()}
-     * @param jarPath   Plugin jar path
-     * @param useSpring jar包里是否需要Spring机制
-     * @throws Throwable
-     */
-    public void loadPatternPlugin(@NotNull String code, @NotNull String jarPath, boolean useSpring) throws Throwable {
-        if (!jarPath.endsWith(".jar")) {
-            throw new IllegalArgumentException("Invalid jarPath: " + jarPath);
-        }
-
-        if (activePlugins.containsKey(code)) {
-            log.warn("Hotswap Plugin: {}", code);
-        }
-
-        long t0 = System.nanoTime();
-        log.warn("loading pattern:{} useSpring:{}", jarPath, useSpring);
-        try {
-            Plugin plugin = new Plugin(code, jdkClassLoader, containerClassLoader).
-                    load(jarPath, useSpring, Pattern.class, new ContainerContext(DDDBootstrap.applicationContext()));
-            activePlugins.put(plugin.getCode(), plugin); // old plugin will be GC'ed
-        } catch (Throwable ex) {
-            log.error("fails to load pattern:{}, cost {}ms", jarPath, (System.nanoTime() - t0) / 1000_000, ex);
-
-            throw ex;
-        }
-
-        log.warn("loaded pattern:{}, cost {}ms", jarPath, (System.nanoTime() - t0) / 1000_000);
     }
 
     File jarTempLocalFile(@NotNull URL jarUrl) throws IOException {

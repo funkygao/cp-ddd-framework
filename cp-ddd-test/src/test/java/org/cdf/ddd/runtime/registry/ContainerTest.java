@@ -70,15 +70,4 @@ public class ContainerTest {
         }
     }
 
-    @Test
-    public void loadPatternPluginSmokeTest() throws MalformedURLException {
-        try {
-            Container.getInstance().loadPatternPlugin("patterns", new URL("https://github.com/funkygao/cp-ddd-framework/blob/master/doc/assets/jar/order-center-pattern-0.0.1.jar?raw=true"), false);
-            fail();
-        } catch (NoClassDefFoundError expected) {
-        } catch (Throwable unexpected) {
-            fail();
-        }
-    }
-
 }

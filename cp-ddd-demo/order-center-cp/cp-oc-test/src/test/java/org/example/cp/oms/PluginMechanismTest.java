@@ -28,7 +28,6 @@ import static org.junit.Assert.assertEquals;
 public class PluginMechanismTest {
     private URL remoteKaJar;
     private URL remoteIsvJar;
-    private URL remotePatternJar;
 
     private static final String localKaJar = "../../order-center-bp-ka/target/order-center-bp-ka-0.0.1.jar";
     private static final String localIsvJar = "../../order-center-bp-isv/target/order-center-bp-isv-0.0.1.jar";
@@ -37,7 +36,6 @@ public class PluginMechanismTest {
     public void setUp() throws MalformedURLException {
         remoteIsvJar = new URL("https://github.com/funkygao/cp-ddd-framework/blob/master/doc/assets/jar/order-center-bp-isv-0.0.1.jar?raw=true");
         remoteKaJar = new URL("https://github.com/funkygao/cp-ddd-framework/blob/master/doc/assets/jar/order-center-bp-ka-0.0.1.jar?raw=true");
-        remotePatternJar = new URL("https://github.com/funkygao/cp-ddd-framework/blob/master/doc/assets/jar/order-center-pattern-0.0.1.jar?raw=true");
     }
 
     @After
@@ -100,26 +98,15 @@ public class PluginMechanismTest {
 
         // 目前已经加载了2个Plugin Jar
         assertEquals(2, Container.getInstance().getActivePlugins().size());
-
         for (IPlugin plugin : Container.getInstance().getActivePlugins().values()) {
             log.info("Plugin: {}", plugin.getCode());
         }
 
-        if (true) {
-            return;
-        }
-
-        Container.getInstance().loadPartnerPlugin("ka", remoteKaJar, true);
-
-        Container.getInstance().loadPatternPlugin("pattern", remotePatternJar, true);
-
-        if (true) {
-            log.info("sleeping 2m，等待修改bp-isv里逻辑后发布新jar...");
-            TimeUnit.MINUTES.sleep(2); // 等待手工发布新jar
-            log.info("2m is up, go!");
-            Container.getInstance().loadPartnerPlugin("isv", remoteIsvJar, true);
-            submitOrder(applicationContext, true); // 重新提交订单，看看是否新jar逻辑生效
-        }
+        log.info("sleeping 2m，等待修改bp-isv里逻辑后发布新jar...");
+        TimeUnit.MINUTES.sleep(2); // 等待手工发布新jar
+        log.info("2m is up, go!");
+        Container.getInstance().loadPartnerPlugin("isv", localIsvJar, true);
+        submitOrder(applicationContext, true); // 重新提交订单，看看是否新jar逻辑生效
 
         applicationContext.stop();
     }
