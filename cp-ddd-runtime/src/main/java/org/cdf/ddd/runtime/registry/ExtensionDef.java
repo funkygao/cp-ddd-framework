@@ -48,7 +48,8 @@ public class ExtensionDef implements IRegistryAware {
             throw BootstrapException.ofMessage(bean.getClass().getCanonicalName(), " MUST implement IDomainExtension");
         }
         this.extensionBean = (IDomainExtension) bean;
-        for (Class extensionBeanInterfaceClazz : extensionBean.getClass().getInterfaces()) {
+        // this.extensionBean might be Xxx$EnhancerBySpringCGLIB if the extension uses AOP
+        for (Class extensionBeanInterfaceClazz : CoreAopUtils.getTarget(this.extensionBean).getClass().getInterfaces()) {
             if (extensionBeanInterfaceClazz.isInstance(extensionBean)) {
                 this.extClazz = extensionBeanInterfaceClazz;
 
