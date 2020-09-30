@@ -7,8 +7,8 @@ interface IDomainService
 interface IDomainStep
 IDomainStep : execute()
 interface IDecideStepsExt
-interface IDomainRevokableStep
-IDomainRevokableStep : rollback()
+interface IRevokableDomainStep
+IRevokableDomainStep : rollback()
 interface IIdentityResolver
 interface IDomainExtension
 interface IPlugable
@@ -29,7 +29,7 @@ IDecideStepsExt : decideSteps()
 IIdentityResolver : match(IDomainModel)
 
 IDomainService <|-- IDomainStep
-IDomainStep <|-- IDomainRevokableStep
+IDomainStep <|-- IRevokableDomainStep
 IDomainService <|-- BaseDomainAbility
 
 IDomainExtension <|-- IDecideStepsExt

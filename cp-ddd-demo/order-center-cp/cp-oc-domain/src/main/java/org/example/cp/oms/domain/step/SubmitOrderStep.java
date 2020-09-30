@@ -1,13 +1,13 @@
 package org.example.cp.oms.domain.step;
 
 import org.example.cp.oms.domain.model.OrderModel;
-import org.cdf.ddd.step.IDomainRevokableStep;
+import org.cdf.ddd.step.IRevokableDomainStep;
 import org.example.cp.oms.spec.exception.OrderException;
 import org.example.cp.oms.spec.Steps;
 
 import javax.validation.constraints.NotNull;
 
-public abstract class SubmitOrderStep implements IDomainRevokableStep<OrderModel, OrderException> {
+public abstract class SubmitOrderStep implements IRevokableDomainStep<OrderModel, OrderException> {
 
     @Override
     public String activityCode() {

@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
  * <p>
  * <p>Sagas模式</p>
  */
-public interface IDomainRevokableStep<Model extends IDomainModel, Ex extends RuntimeException> extends IDomainStep<Model, Ex> {
+public interface IRevokableDomainStep<Model extends IDomainModel, Ex extends RuntimeException> extends IDomainStep<Model, Ex> {
 
     /**
      * 执行本步骤的回滚操作，进行冲正.

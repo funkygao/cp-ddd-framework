@@ -8,7 +8,7 @@ package org.cdf.ddd.runtime;
 import lombok.extern.slf4j.Slf4j;
 import org.cdf.ddd.model.IDomainModel;
 import org.cdf.ddd.step.IReviseStepsException;
-import org.cdf.ddd.step.IDomainRevokableStep;
+import org.cdf.ddd.step.IRevokableDomainStep;
 import org.cdf.ddd.step.IDomainStep;
 import org.springframework.core.ResolvableType;
 
@@ -37,7 +37,7 @@ public abstract class StepsExecTemplate<Step extends IDomainStep, Model extends 
      * 执行编排好的步骤.
      * <p>
      * <p>步骤的实现里，可以通过{@link IReviseStepsException}来进行后续步骤修订，即动态的步骤编排</p>
-     * <p>如果步骤实现了{@link IDomainRevokableStep}，在步骤抛出异常后会自动触发步骤回滚</p>
+     * <p>如果步骤实现了{@link IRevokableDomainStep}，在步骤抛出异常后会自动触发步骤回滚</p>
      *
      * @param activityCode 领域活动
      * @param stepCodes    (初次)编排好的步骤
@@ -49,7 +49,7 @@ public abstract class StepsExecTemplate<Step extends IDomainStep, Model extends 
             return;
         }
 
-        Stack<IDomainRevokableStep> executedSteps = new Stack<>();
+        Stack<IRevokableDomainStep> executedSteps = new Stack<>();
         int stepRevisions = 0;
         while (++stepRevisions < MAX_STEP_REVISIONS) {
             // 执行步骤的过程中，可能会产生修订步骤逻辑
@@ -71,7 +71,7 @@ public abstract class StepsExecTemplate<Step extends IDomainStep, Model extends 
     }
 
     // return revised steps
-    private List<String> executeSteps(String activityCode, List<String> stepCodes, Stack<IDomainRevokableStep> executedSteps, Model model) {
+    private List<String> executeSteps(String activityCode, List<String> stepCodes, Stack<IRevokableDomainStep> executedSteps, Model model) {
         List<Step> steps = DDD.findSteps(activityCode, stepCodes);
         try {
             for (Step step : steps) {
@@ -79,9 +79,9 @@ public abstract class StepsExecTemplate<Step extends IDomainStep, Model extends 
                 step.execute(model);
                 afterStep(step, model);
 
-                if (step instanceof IDomainRevokableStep) {
+                if (step instanceof IRevokableDomainStep) {
                     // prepare for possible rollback
-                    executedSteps.push((IDomainRevokableStep) step);
+                    executedSteps.push((IRevokableDomainStep) step);
                 }
             }
         } catch (Exception cause) {
@@ -131,10 +131,10 @@ public abstract class StepsExecTemplate<Step extends IDomainStep, Model extends 
         return null;
     }
 
-    private void rollbackExecutedSteps(Model model, RuntimeException cause, Stack<IDomainRevokableStep> executedSteps) {
+    private void rollbackExecutedSteps(Model model, RuntimeException cause, Stack<IRevokableDomainStep> executedSteps) {
         while (!executedSteps.isEmpty()) {
             // 失败时，按照反方向执行回滚操作：Sagas Pattern
-            IDomainRevokableStep executedStep = executedSteps.pop();
+            IRevokableDomainStep executedStep = executedSteps.pop();
             try {
                 executedStep.rollback(model, cause);
             } catch (Throwable ignored) {

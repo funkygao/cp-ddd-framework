@@ -363,7 +363,7 @@ public class IntegrationTest {
         }
     }
 
-    // Step抛出它IDomainRevokableStep定义的异常类型，才会触发rollback。抛出其他异常，不会回滚
+    // Step抛出 IRevokableDomainStep 定义的异常类型，才会触发rollback。抛出其他异常，不会回滚
     @Test
     public void stepsExecTemplateWithInvalidRollback() {
         fooModel.setB2c(false);
