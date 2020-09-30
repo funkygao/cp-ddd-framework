@@ -39,7 +39,7 @@
             <scope>${bp.jar.scope.ka}</scope>
         </dependency>
 
-        <!-- 常规第三方依赖 -->
+        <!-- logging -->
         <dependency>
             <artifactId>log4j-core</artifactId>
             <groupId>org.apache.logging.log4j</groupId>
@@ -51,7 +51,29 @@
             <version>2.9.1</version>
         </dependency>
 
-        <!-- the web container -->
+        <!-- json for SpringMVC -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+
+        <!-- the Jety web container -->
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-servlet</artifactId>
+            <version>${jetty.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-server</artifactId>
@@ -69,30 +91,6 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.7</version>
-                <executions>
-                    <execution>
-                        <id>main-class-placement</id>
-                        <phase>prepare-package</phase>
-                        <configuration>
-                            <tasks>
-                                <copy todir="${project.build.directory}/${project.artifactId}/">
-                                    <fileset dir="${project.build.directory}/classes/">
-                                        <include name="**/*/OrderCenterLauncher.class"/>
-                                    </fileset>
-                                </copy>
-                            </tasks>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>2.1</version>
                 <executions>
@@ -106,15 +104,10 @@
                             <transformers>
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>org.example.cp.oms.OrderCenterLauncher</mainClass>
+                                    <mainClass>org.example.cp.oms.OrderServer</mainClass>
                                 </transformer>
                             </transformers>
                             <artifactSet>
-                                <includes>
-                                    <include>org.eclipse.jetty:*</include>
-                                    <include>*:javax.servlet*</include>
-                                    <include>org.glassfish:javax.el*</include>
-                                </includes>
                             </artifactSet>
                             <filters>
                                 <filter>
@@ -131,40 +124,15 @@
                 </executions>
             </plugin>
             <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.1.0</version>
-                <configuration>
-                    <descriptors>
-                        <descriptor>src/main/assembly/assembly.xml</descriptor>
-                    </descriptors>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>make-assembly</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-maven-plugin</artifactId>
-                <version>9.3.10.v20160621</version>
+                <version>${jetty.version}</version>
                 <configuration>
-                    <scanTargetPatterns>
-                        <directory>src/main/webapp/WEB-INF</directory>
-                        <includes>
-                            <include>**/*.xml</include>
-                        </includes>
-                    </scanTargetPatterns>
-                    <connectors>
-                        <connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
-                            <port>9090</port>
-                            <maxIdleTime>60000</maxIdleTime>
-                        </connector>
-                    </connectors>
+                    <httpConnector>
+                        <port>9090</port>
+                        <host>localhost</host>
+                    </httpConnector>
+                    <scanIntervalSeconds>60</scanIntervalSeconds>
                 </configuration>
             </plugin>
         </plugins>

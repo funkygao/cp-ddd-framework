@@ -8,6 +8,7 @@ import org.example.cp.oms.domain.model.OrderModelCreator;
 import org.example.cp.oms.domain.service.SubmitOrder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -20,14 +21,16 @@ public class OrderController {
     @Resource
     private SubmitOrder submitOrder;
 
-    @RequestMapping("/hello")
+    @RequestMapping(value = "/hello", method = RequestMethod.GET)
+    @ResponseBody
     public String hello() {
         return "Hello cp-ddd-framework!";
     }
 
     // 下单服务
     @RequestMapping(value = "/order", method = RequestMethod.POST)
-    public void submitOrder(@NotNull RequestProfile requestProfile, @NotNull SubmitOrderRequest submitOrderRequest) {
+    @ResponseBody
+    public String submitOrder(@NotNull RequestProfile requestProfile, @NotNull SubmitOrderRequest submitOrderRequest) {
         // JSR303，在此省略
 
         // DTO 转换为 domain model，通过creator保护、封装domain model
@@ -41,11 +44,12 @@ public class OrderController {
 
         // 调用domain service完成该use case
         submitOrder.submit(model);
+        return "Order accepted!";
     }
 
     // 订单取消
     @RequestMapping(value = "/order", method = RequestMethod.DELETE)
-    public void cancelOrder(@NotNull RequestProfile requestProfile, @NotNull CancelOrderRequest cancelOrderRequest) {
-
+    public String cancelOrder(@NotNull RequestProfile requestProfile, @NotNull CancelOrderRequest cancelOrderRequest) {
+        return "Order cancelled!";
     }
 }

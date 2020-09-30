@@ -22,10 +22,12 @@ git clone https://github.com/funkygao/cp-ddd-framework.git
 cd cp-ddd-framework
 mvn install
 cd cp-ddd-demo
-mvn test
-```
+mvn package
+java -jar order-center-cp/cp-oc-main/target/cp-ddd-framework-demo.jar
 
-运行演示的入口：[ExampleTest](order-center-cp/cp-oc-test/src/test/java/org/example/cp/oms/ExampleTest.java)，也可以在IDE里手工执行。
+# in another terminal
+curl -d'' localhost:9090/order # 模拟下单
+```
 
 ## 代码快速入门
 

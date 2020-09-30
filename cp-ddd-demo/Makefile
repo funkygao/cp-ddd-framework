@@ -4,6 +4,9 @@ package:clean
 clean:
 	@mvn clean
 
+run:package
+	@java -jar order-center-cp/cp-oc-main/target/cp-ddd-framework-demo.jar
+
 plugin-loading:clean
 	@mvn package -Pplugin
 
