@@ -30,7 +30,7 @@ import java.util.Map;
  * <p>Plugin Jar是可以被动态加载的Jar = (Pattern + Extension) | (Partner + Extension)</p>
  */
 @Slf4j
-public class Plugin {
+class Plugin implements IPlugin {
     private static final String pluginXml = "/plugin.xml";
 
     @Getter

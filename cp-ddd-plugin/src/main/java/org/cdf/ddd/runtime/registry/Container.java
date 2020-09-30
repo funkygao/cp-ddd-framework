@@ -44,7 +44,7 @@ public final class Container {
     private static ClassLoader jdkClassLoader = initJDKClassLoader();
     private static ClassLoader containerClassLoader = Container.class.getClassLoader();
 
-    private static final Map<String, Plugin> activePlugins = new ConcurrentHashMap<>();
+    private static final Map<String, IPlugin> activePlugins = new ConcurrentHashMap<>();
 
     private Container() {
     }
@@ -63,7 +63,7 @@ public final class Container {
      * @return key: Plugin code
      */
     @NotNull
-    public Map<String, Plugin> getActivePlugins() {
+    public Map<String, IPlugin> getActivePlugins() {
         return activePlugins;
     }
 
