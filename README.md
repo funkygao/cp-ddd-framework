@@ -90,7 +90,7 @@ Requires Java 1.8+ and Spring 4.3.12.RELEASE or later.
 git clone https://github.com/funkygao/cp-ddd-framework.git
 cd cp-ddd-framework
 mvn install
-cd cp-ddd-demo/
+cd demo/
 mvn package
 java -jar order-center-cp/cp-oc-main/target/cp-ddd-framework-demo.jar
 
@@ -98,7 +98,7 @@ java -jar order-center-cp/cp-oc-main/target/cp-ddd-framework-demo.jar
 curl -d '{"source":"ISV","customerNo":"home","externalNo":"2020"}' -H 'Content-type: application/json' http://localhost:9090/order
 ```
 
-For more please visit [使用该框架搭建`订单履约中台`的例子](cp-ddd-demo).
+For more please visit [使用该框架搭建`订单履约中台`的例子](demo).
 
 ## Modules
 

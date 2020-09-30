@@ -21,7 +21,7 @@
 git clone https://github.com/funkygao/cp-ddd-framework.git
 cd cp-ddd-framework
 mvn install
-cd cp-ddd-demo
+cd demo
 mvn package
 java -jar order-center-cp/cp-oc-main/target/cp-ddd-framework-demo.jar
 

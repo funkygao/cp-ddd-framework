@@ -102,8 +102,6 @@ class Plugin implements IPlugin {
 
     // switch IdentityResolverClass with the new instances
     private void commit(Class<? extends Annotation> identityResolverClass, Map<Class<? extends Annotation>, List<Class>> plugableMap) {
-        // TODO 需要把Extension、IIdentityResolver 的切换过程变成原子的：一个Plugin里可以有多个Pattern，他们的切换可以不必atomic
-        log.info("register IIdentityResolver");
         List<Class> identityResolverClasses = plugableMap.get(identityResolverClass);
         if (identityResolverClasses != null && !identityResolverClasses.isEmpty()) {
             if (identityResolverClass == Partner.class && identityResolverClasses.size() > 1) {
@@ -118,7 +116,6 @@ class Plugin implements IPlugin {
             }
         }
 
-        log.info("register Extension");
         List<Class> extensions = plugableMap.get(Extension.class);
         if (extensions != null && !extensions.isEmpty()) {
             for (Class extensionClazz : extensions) {
