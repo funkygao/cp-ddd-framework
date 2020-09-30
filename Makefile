@@ -23,7 +23,7 @@ prepare-plugin:install
 	@git push
 
 javadoc:install
-	@mvn javadoc:javadoc
+	@mvn javadoc:javadoc -Pinstall
 	@open target/site/apidocs/index.html
 
 release:test
