@@ -13,6 +13,9 @@ package Plugin <<Frame>> {
     class Partner
 }
 
+note "hot reloadable" as N1
+Plugin .. N1
+
 interface IDomainService
 interface IDomainStep
 IDomainStep : execute()
