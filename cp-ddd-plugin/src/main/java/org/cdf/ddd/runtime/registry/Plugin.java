@@ -48,7 +48,7 @@ class Plugin implements IPlugin {
     }
 
     Plugin load(String jarPath, boolean useSpring, Class<? extends Annotation> identityResolverClass, IContainerContext ctx) throws Throwable {
-        Map<Class<? extends Annotation>, List<Class>> plugableMap = prepare(jarPath, useSpring, identityResolverClass, ctx);
+        Map<Class<? extends Annotation>, List<Class>> plugableMap = prepare(jarPath, useSpring, identityResolverClass);
         log.info("prepared {} with plugableMap {}", jarPath, plugableMap);
 
         if (pluginListener != null) {
