@@ -163,7 +163,7 @@ public class InternalIndexer {
         }
 
         childMap.put(stepDef.getCode(), stepDef);
-        log.info("indexed {} ", stepDef);
+        log.debug("indexed {} ", stepDef);
     }
 
     static void indexDomain(DomainDef domainDef) {
@@ -172,7 +172,7 @@ public class InternalIndexer {
         }
 
         domainDefMap.put(domainDef.getCode(), domainDef);
-        log.info("indexed {}", domainDef);
+        log.debug("indexed {}", domainDef);
     }
 
     static void indexDomainAbility(DomainAbilityDef domainAbilityDef) {
@@ -185,14 +185,14 @@ public class InternalIndexer {
         }
 
         domainAbilityDefMap.put(domainAbilityDef.getDomainAbilityClass(), domainAbilityDef);
-        log.info("indexed {}", domainAbilityDef);
+        log.debug("indexed {}", domainAbilityDef);
     }
 
     static void indexDomainService(DomainServiceDef domainServiceDef) {
         if (!domainDefMap.containsKey(domainServiceDef.getDomain())) {
             throw BootstrapException.ofMessage("DomainService domain not found: ", domainServiceDef.getDomain());
         }
-        log.info("indexed {}", domainServiceDef);
+        log.debug("indexed {}", domainServiceDef);
     }
 
     static void indexExtension(ExtensionDef extensionDef) {
@@ -201,7 +201,7 @@ public class InternalIndexer {
             PatternDef patternDef = patternDefMap.get(extensionDef.getCode());
             patternDef.registerExtensionDef(extensionDef);
 
-            log.info("indexed {} on {}", extensionDef, patternDef);
+            log.debug("indexed {} on {}", extensionDef, patternDef);
             return;
         }
 
@@ -210,7 +210,7 @@ public class InternalIndexer {
             PartnerDef partnerDef = partnerDefMap.get(extensionDef.getCode());
             partnerDef.registerExtensionDef(extensionDef);
 
-            log.info("indexed {} on {}", extensionDef, partnerDef);
+            log.debug("indexed {} on {}", extensionDef, partnerDef);
             return;
         }
 
@@ -231,7 +231,7 @@ public class InternalIndexer {
         }
 
         patternDefMap.put(patternDef.getCode(), patternDef);
-        log.info("indexed {}", patternDef);
+        log.debug("indexed {}", patternDef);
     }
 
     static void removePattern(@NotNull String code) {
@@ -249,7 +249,7 @@ public class InternalIndexer {
         }
 
         partnerDefMap.put(partnerDef.getCode(), partnerDef);
-        log.info("indexed {}", partnerDef);
+        log.debug("indexed {}", partnerDef);
     }
 
     static void removePartner(String code) {

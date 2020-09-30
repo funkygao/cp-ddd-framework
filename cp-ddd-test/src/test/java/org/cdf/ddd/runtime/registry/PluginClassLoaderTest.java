@@ -16,8 +16,7 @@ public class PluginClassLoaderTest {
 
     @Test
     public void containerFirstClass() throws MalformedURLException {
-        PluginClassLoader loader = new PluginClassLoader(new URL[]{new File("").toURI().toURL()},
-                Container.getInstance().getJdkClassLoader(), Container.getInstance().getContainerClassLoader());
+        PluginClassLoader loader = new PluginClassLoader(new URL[]{new File("").toURI().toURL()}, null, null);
         assertTrue(loader.containerFirstClass(DDD.class.getName()));
         assertFalse(loader.containerFirstClass(List.class.getName()));
         assertFalse(loader.containerFirstClass("com.jdl.bp.oms.doo.j.extension.JAntiConcurrentLockExt"));

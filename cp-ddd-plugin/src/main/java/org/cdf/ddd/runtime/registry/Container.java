@@ -19,26 +19,21 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * 业务容器，用于动态加载个性化业务包：Plugin.
+ * 业务容器，用于动态加载个性化业务包：Plugin Jar.
  * <p>
- * <p>Plugin是可以被动态加载的jar = (Pattern + Extension) | (Partner + Extension)</p>
- * <p>{@code Container}常驻内存，{@code Plugin}动态加载</p>
- * <ul><b>Plugin可以被动态加载的限制条件和side effect：</b>
- * <li>处于安全和效率考虑，不能自己定义Spring xml，必须由中台容器统一配置：Spring容器大家共享，不隔离，一份</li>
- * <li>所有中间件资源(RPC/Redis/JDBC/MQ/etc)由中台统一配置，并通过<b>spec jar</b>输出给Plugin使用</li>
- * <li>Plugin可以引用外部jar包，但需要{@code scope=provided}, Plugin不是FatJar</li>
- * <li>热更新依靠的是使用新ClassLoader重新加载jar，但之前已经加载的class和ClassLoader无法控制卸载时机，可能会短时间内Perm区增大</li>
- * </ul>
+ * <p>{@code Container}常驻内存，{@code PluginJar}动态加载：动静分离</p>
  * <p>
  * <pre>
- *                                                        +- 1 JDKClassLoader
- * Container -> PluginLoader -> PluginClassLoader --------|- 1 ContainerClassLoader
- *                                        | loadClass     +- N PluginClassLoader
- *                                +---------------------+
- *                                |                     |
- *                          (Partner | Pattern)      Extension
+ *                                                  +- 1 JDKClassLoader
+ * Container -> Plugin -> PluginClassLoader --------|- 1 ContainerClassLoader
+ *                              | loadClass         +- N PluginClassLoader
+ *                        +---------------------+
+ *                        |                     |
+ *                  (Partner | Pattern)      Extension
  * </pre>
  */
 @Slf4j
@@ -48,6 +43,8 @@ public final class Container {
 
     private static ClassLoader jdkClassLoader = initJDKClassLoader();
     private static ClassLoader containerClassLoader = Container.class.getClassLoader();
+
+    private static final Map<String, IPlugin> activePlugins = new ConcurrentHashMap<>();
 
     private Container() {
     }
@@ -61,18 +58,29 @@ public final class Container {
     }
 
     /**
+     * 获取当前所有活跃的{@code Plugin}.
+     *
+     * @return key: Plugin code
+     */
+    @NotNull
+    public Map<String, IPlugin> getActivePlugins() {
+        return activePlugins;
+    }
+
+    /**
      * 加载业务前台jar包.
      *
-     * @param jarUrl      Plugin jar URL
-     * @param basePackage Spring component-scan base-package值，但不支持逗号分隔. if null, will not scan Spring
+     * @param code      Plugin code
+     * @param jarUrl    Plugin jar URL
+     * @param useSpring jar包里是否需要Spring机制
      * @throws Throwable
      */
-    public void loadPartnerPlugin(@NotNull URL jarUrl, String basePackage) throws Throwable {
+    public void loadPartnerPlugin(@NotNull String code, @NotNull URL jarUrl, boolean useSpring) throws Throwable {
         File localJar = jarTempLocalFile(jarUrl);
         localJar.deleteOnExit();
         log.info("loadPartnerPlugin {} -> {}", jarUrl, localJar.getCanonicalPath());
         FileUtils.copyInputStreamToFile(jarUrl.openStream(), localJar);
-        loadPartnerPlugin(localJar.getAbsolutePath(), basePackage);
+        loadPartnerPlugin(code, localJar.getAbsolutePath(), useSpring);
     }
 
     /**
@@ -80,20 +88,26 @@ public final class Container {
      * <p>
      * <p>如果使用本动态加载，就不要maven里静态引入业务前台jar包依赖了.</p>
      *
-     * @param jarPath     jar path
-     * @param basePackage Spring component-scan base-package值，但不支持逗号分隔. if null, will not scan Spring
+     * @param code      Plugin code
+     * @param jarPath   jar path
+     * @param useSpring jar包里是否需要Spring机制
      * @throws Throwable
      */
-    public void loadPartnerPlugin(@NotNull String jarPath, String basePackage) throws Throwable {
+    public void loadPartnerPlugin(@NotNull String code, @NotNull String jarPath, boolean useSpring) throws Throwable {
         if (!jarPath.endsWith(".jar")) {
             throw new IllegalArgumentException("Invalid jarPath: " + jarPath);
         }
 
+        if (activePlugins.containsKey(code)) {
+            log.warn("Hotswap Plugin: {}", code);
+        }
+
         long t0 = System.nanoTime();
-        log.warn("loading partner:{} basePackage:{}", jarPath, basePackage);
+        log.warn("loading partner:{} useSpring:{}", jarPath, useSpring);
         try {
-            new PluginLoader(jdkClassLoader, containerClassLoader).
-                    load(jarPath, basePackage, Partner.class, new ContainerContext());
+            Plugin plugin = new Plugin(code, jdkClassLoader, containerClassLoader).
+                    load(jarPath, useSpring, Partner.class, new ContainerContext(DDDBootstrap.applicationContext()));
+            activePlugins.put(plugin.getCode(), plugin); // old plugin will be GC'ed
         } catch (Throwable ex) {
             log.error("fails to load partner:{}, cost {}ms", jarPath, (System.nanoTime() - t0) / 1000_000, ex);
 
@@ -104,49 +118,45 @@ public final class Container {
     }
 
     /**
-     * 注销一个业务前台身份.
-     *
-     * @param code {@link Partner#code()}
-     */
-    public void unloadPartnerPlugin(@NotNull String code) {
-        log.warn("unloading partner:{}", code);
-        InternalIndexer.removePartner(code);
-        log.warn("unloaded partner:{}", code);
-    }
-
-    /**
      * 加载业务模式jar包.
      *
-     * @param jarUrl      Plugin jar URL
-     * @param basePackage Spring component-scan base-package值，但不支持逗号分隔. if null, will not scan Spring
+     * @param code      Plugin code
+     * @param jarUrl    Plugin jar URL
+     * @param useSpring jar包里是否需要Spring机制
      * @throws Throwable
      */
-    public void loadPatternPlugin(@NotNull URL jarUrl, String basePackage) throws Throwable {
+    public void loadPatternPlugin(@NotNull String code, @NotNull URL jarUrl, boolean useSpring) throws Throwable {
         File localJar = jarTempLocalFile(jarUrl);
         localJar.deleteOnExit();
 
         log.info("loadPatternPlugin {} -> {}", jarUrl, localJar.getCanonicalPath());
         FileUtils.copyInputStreamToFile(jarUrl.openStream(), localJar);
-        loadPatternPlugin(localJar.getAbsolutePath(), basePackage);
+        loadPatternPlugin(code, localJar.getAbsolutePath(), useSpring);
     }
 
     /**
      * 加载业务模式jar包.
      *
-     * @param jarPath     jar path
-     * @param basePackage Spring component-scan base-package值，但不支持逗号分隔. if null, will not scan Spring
+     * @param code      Plugin code
+     * @param jarPath   jar path
+     * @param useSpring jar包里是否需要Spring机制
      * @throws Throwable
      */
-    public void loadPatternPlugin(@NotNull String jarPath, String basePackage) throws Throwable {
+    public void loadPatternPlugin(@NotNull String code, @NotNull String jarPath, boolean useSpring) throws Throwable {
         if (!jarPath.endsWith(".jar")) {
             throw new IllegalArgumentException("Invalid jarPath: " + jarPath);
         }
 
+        if (activePlugins.containsKey(code)) {
+            log.warn("Hotswap Plugin: {}", code);
+        }
+
         long t0 = System.nanoTime();
-        log.warn("loading pattern:{} basePackage:{}", jarPath, basePackage);
+        log.warn("loading pattern:{} useSpring:{}", jarPath, useSpring);
         try {
-            new PluginLoader(jdkClassLoader, containerClassLoader).
-                    load(jarPath, basePackage, Pattern.class, new ContainerContext());
+            Plugin plugin = new Plugin(code, jdkClassLoader, containerClassLoader).
+                    load(jarPath, useSpring, Pattern.class, new ContainerContext(DDDBootstrap.applicationContext()));
+            activePlugins.put(plugin.getCode(), plugin); // old plugin will be GC'ed
         } catch (Throwable ex) {
             log.error("fails to load pattern:{}, cost {}ms", jarPath, (System.nanoTime() - t0) / 1000_000, ex);
 
@@ -154,17 +164,6 @@ public final class Container {
         }
 
         log.warn("loaded pattern:{}, cost {}ms", jarPath, (System.nanoTime() - t0) / 1000_000);
-    }
-
-    /**
-     * 卸载业务模式.
-     *
-     * @param code {@link Pattern#code()}
-     */
-    public void unloadPatternPlugin(@NotNull String code) {
-        log.warn("unloading pattern:{}", code);
-        InternalIndexer.removePattern(code);
-        log.warn("unloaded pattern:{}", code);
     }
 
     File jarTempLocalFile(@NotNull URL jarUrl) throws IOException {
@@ -197,11 +196,4 @@ public final class Container {
         return new URLClassLoader(jdkUrls.toArray(new URL[0]), parent);
     }
 
-    ClassLoader getJdkClassLoader() {
-        return jdkClassLoader;
-    }
-
-    ClassLoader getContainerClassLoader() {
-        return containerClassLoader;
-    }
 }

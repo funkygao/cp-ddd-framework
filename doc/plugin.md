@@ -1,22 +1,24 @@
 # Plugin Design
 
-## Roadmap
-
-### Iteration 1
-
-- Plugin jar先不支持FatJar：所有的依赖中台提供，plugin的pom通过scope=provided来引用
-   - 像spring boot那样统一管理依赖第三方包的版本
-- 1个 Spring 容器，N个 PluginClassLoader
-
 ## 目标
 
-以jar包为单位管理扩展业务，扩展业务包，此处称为Plugin，Plugin jar可以引用外部jar包。
+以jar包为单位管理扩展业务，扩展业务包，此处称为Plugin Jar。
 
 Plugin有2种：
 - `Pattern` + `Extension`
 - `Partner` + `Extension`
 
-一个Spring application context，每个Plugin jar有独立的class loader隔离、热部署，热更新。
+一个Spring application context，每个Plugin Jar有独立的class loader隔离、热部署，热更新。
+
+Plugin Jar可以通过maven pom静态加载，也可以事后动态加载(热更新)，支持多次热更新。
+
+### JAVA类加载机制
+
+- 全盘负责：一个ClassLoader装载一个类时，除非显示地使用另一个ClassLoader，该类所依赖及引用的类也由这个ClassLoader载入
+- 双亲委派：子类加载器如果没有加载过该目标类，就先委托父类加载器加载该目标类，只有在父类加载器找不到字节码文件的情况下才从自己的类路径中查找并装载目标类
+   - 避免重复加载
+   - 安全
+
 
 ## 现有解决方案
 
@@ -49,18 +51,18 @@ Plugin有2种：
 - java.lang.ClassNotFoundException, NoClassDefFoundError, NoSuchMethodError, ClassFormatError, ClassCastException
 - canary release, rollback, rolling upgrade, jar deployment platform
 
-## Scenarios
+## Roadmap
 
-- 可以自己 AOP 吗
-- 打印日志
-- 引入guava等第三方包，都必须是provided吗
-- fat jar, lazy load
-   - 不同Plugin会引入很多重复的包，导致最终的jar很大
-   - Container提供provide，Plugin通过scope=provided引用
-- 自己带properties file
+### Iteration 1
 
-## Knowledge
+- Plugin jar先不支持FatJar：所有的依赖中台提供，plugin的pom通过scope=provided来引用
+   - 像spring boot那样统一管理依赖第三方包的版本
+- 1个 Spring 容器，N个 PluginClassLoader
 
-### Class Loader
+### P0
 
-**Loading Java classes during runtime dynamically to the JVM**.
+- AOP不生效
+- log `JDKClassLoader loaded java.lang.annotation.Target`出现多次
+- 静态加载后，再热替换
+- Spring的懒加载
+- isv的DecideStepsExt.java 和 PresortExt 都加上AutoLogger，会抛异常 SpringProxy问题

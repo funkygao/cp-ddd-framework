@@ -1,6 +1,7 @@
 @startuml
 skinparam handwritten false
 skinparam shadowing<<with_shadow>> true
+' left to right direction
 
 interface IDomainService
 interface IDomainStep
@@ -11,8 +12,8 @@ IDomainRevokableStep : rollback()
 interface IIdentityResolver
 interface IDomainExtension
 interface IPlugable
-IPlugable <|-- IDomainExtension: extend
-IPlugable <|-- IIdentityResolver: extend
+IPlugable <|-- IDomainExtension
+IPlugable <|-- IIdentityResolver
 interface IModelAttachmentExt
 IModelAttachmentExt : explain()
 IModelAttachmentExt : render()
@@ -22,7 +23,6 @@ BaseDomainAbility : getExtension()
 BaseDomainAbility : firstExtension()
 BaseDomainAbility : defaultExtension()
 StepsExecTemplate : execute()
-DDD : {static} getContainer()
 DDD : {static} findAbility()
 DDD : {static} findSteps()
 IDecideStepsExt : decideSteps()
@@ -32,8 +32,8 @@ IDomainService <|-- IDomainStep
 IDomainStep <|-- IDomainRevokableStep
 IDomainService <|-- BaseDomainAbility
 
-IDomainExtension <|-- IDecideStepsExt: extend
-IDomainExtension <|-- IModelAttachmentExt: extend
+IDomainExtension <|-- IDecideStepsExt
+IDomainExtension <|-- IModelAttachmentExt
 
 IIdentityResolver <|-- Pattern
 IIdentityResolver <|-- Partner
@@ -46,8 +46,7 @@ IDomainExtension <-- BaseDomainAbility: locate
 IDomainExtension --> Pattern: bind
 IDomainExtension --> Partner: bind
 
-DDD --> Container : get
-Container : {static} PluginLoader
+Container : loadPlugin()
 
 Container --> IPlugable : load
 
@@ -55,5 +54,5 @@ Partner : code
 Pattern : code
 IDomainExtension : code
 
-StepsExecTemplate --> IDomainStep: orchestration
+StepsExecTemplate --> IDomainStep: orchestrate
 @enduml

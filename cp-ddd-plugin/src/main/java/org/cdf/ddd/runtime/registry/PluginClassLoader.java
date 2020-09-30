@@ -49,7 +49,7 @@ final class PluginClassLoader extends URLClassLoader {
         super.addURL(url);
     }
 
-    @Override // TODO resolve
+    @Override
     protected Class<?> loadClass(String className, boolean resolve) throws ClassNotFoundException {
         Class clazz = this.findLoadedClass(className);
         if (clazz != null) {
@@ -62,7 +62,7 @@ final class PluginClassLoader extends URLClassLoader {
             clazz = jdkClassLoader.loadClass(className);
             if (clazz != null) {
                 // 说明该类是JRE的类
-                log.debug("JDKClassLoader loaded {}", className);
+                log.debug("loaded {} with {}", className, jdkClassLoader);
                 return clazz;
             }
         } catch (ClassNotFoundException ignored) {
@@ -70,9 +70,9 @@ final class PluginClassLoader extends URLClassLoader {
 
         // 不是JDK本身的类
         if (containerFirstClass(className)) {
-            clazz = containerClassLoader.loadClass(className); // parent.loadClass
+            clazz = containerClassLoader.loadClass(className);
             if (clazz != null) {
-                log.debug("ContainerClassLoader loaded {}", className);
+                log.debug("loaded {} with {}", className, containerClassLoader);
                 return clazz;
             }
         }
@@ -82,7 +82,10 @@ final class PluginClassLoader extends URLClassLoader {
             // look for classes in the file system(jar)
             clazz = this.findClass(className);
             if (clazz != null) {
-                log.info("PluginClassLoader loaded {}", className);
+                log.info("loaded {} with {}", className, this);
+                if (resolve) {
+                    resolveClass(clazz); // TODO 之前没有调用resolve，也没发现有问题
+                }
                 return clazz;
             }
         } catch (ClassNotFoundException ignored) {
@@ -92,7 +95,7 @@ final class PluginClassLoader extends URLClassLoader {
         if (clazz == null) {
             clazz = containerClassLoader.loadClass(className); // might throw ClassNotFoundException
             if (clazz != null) {
-                log.debug("ContainerClassLoader loaded {}", className);
+                log.debug("loaded {} with {}", className, containerClassLoader);
                 return clazz;
             }
         }

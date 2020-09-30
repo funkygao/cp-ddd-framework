@@ -29,7 +29,7 @@
 ``` bash
 git clone https://github.com/funkygao/cp-ddd-framework.git
 cd cp-ddd-framework
-mvn clean install
+mvn install
 ```
 
 ## What is cp-ddd-framework?
@@ -76,7 +76,7 @@ Please visit [Quickstart wiki](https://github.com/funkygao/cp-ddd-framework/wiki
 
 这14个核心抽象，勾勒出业务中台的骨架，以不变应万变。
 
-![](http://www.plantuml.com/plantuml/svg/XLHDZziW4BtpApZk7l87h2ZQRTF3IgsqslPUZM4Ses28O9nirVQ_Tt2eOmUgtioynvkFUVWf4WGQ1olYqRWJ11Xa3qvVWY529pkm4HTOx47xYt67xVPYgFz-FUzsaiA8GXX763fGA5_sVW3Zlc8u6uKLWF0a5j-oaVYEQYHyU5onKHcDYH4_lLEfyuPdVuJMOXOiWwmSlBKjgEDQ-aMZ8qC_tZ1wUyPGYdD6TD5ujuHUxNX8scB-ajjVcqrnXnjAd_gUL-ITYOiaNxn6-qm4gX-OdLglnAQXdIndvSxgU61X30n36oc08fbdYUeR3doNy0PzW8ZNBfvROxb4KKHOye0qDyd2DKfdGlmlIMC7ertHYjfMjjZlztp-6Gd8gD-fZe_U4MjYAD7EE9rprS4f5qDt5ak5tGAC5_jYnW2a-eUyyMdkZqAiBRyoHU7s3DOjNAYKUn7tRikAwrvk5gopIyVCDofjJtTUWGY3-pSSo64GbOLl6UOrDDFmryDO8PLYQoDefFKA22lypMRtjyv6jgnPf-HQCsMoI0hFdhfQNIpFiu7IapRkimUDGImeIU3stbEDmD8v4v-LroXoRVbO5fVZvMj8yajBDT87rMDwlSGNnHCwdVxbVm00)
+![](http://www.plantuml.com/plantuml/svg/XLHDRzim3BthL-ZO7l87Z21ej-pGmu2YstsW9JeM8ai1HISTjlttqQxMs96stIo-fySFFlaXCH2FWrVfwC8920RTGx0NSimOT0S-uG9BFTXuSU6mtLuSzz_UphkTPXfHAHSOgGE3-caV1t3X2zBP6Qm0Z2Ur-DQDnbSq8-FT_OgDnbcS6EdJAvSwBtYEHsWzPi4oACeKlM_17DVIJnO3E_x-WYdwCr8fBXan91V34dhsus7ILkzVUljpiodk5FY_ydsE5lqZCvX-4DRKQYKs3-da9OjqKiS9WqKI6Dh418PrdXsQhpZ8NSOhz04IlbNzs3elfQaY8f87vFUcHBX6wHob_v8iTZ3w5QseRMM3_Nulvn-9WPtv9Kc2pMfrS5OJwCOqK-fhGF1Y4y8OW4r_btSuJ_PUgRM9ynhh_irWtPIbIZbvTUkVhBZkfSwg-gVIvinz1cQay7UOE22foWgt0ilOctdOg-PNIAsLMikDzj40OuM_sUp-rDdeLZJhb5nhfgYFCR1maFGa3NPwVzDJMI9oxVg4Cq-fB2Hd4osgd3eVozmvNh6lo2yTqkX8fiV49A1wm62dN-rl)
 
 ## Requirements
 
@@ -84,20 +84,21 @@ Requires Java 1.8+ and Spring 4.3.12.RELEASE or later.
 
 ## Demo
 
-**Tip**: The entry point of the demo is [ExampleTest](cp-ddd-example/order-center-cp/cp-oc-test/src/test/java/org/example/cp/oms/ExampleTest.java).
-
 #### How to run the demo?
 
 ``` bash
-mvn test -Ptest
-mvn install -Pinstall
-cd cp-ddd-example/
-mvn test -Pdemo
+git clone https://github.com/funkygao/cp-ddd-framework.git
+cd cp-ddd-framework
+mvn install
+cd cp-ddd-demo/
+mvn package
+java -jar order-center-cp/cp-oc-main/target/cp-ddd-framework-demo.jar
+
+# in another terminal
+curl -d'' localhost:9090/order # 模拟下单
 ```
 
-你也可以在IDE下手工执行[ExampleTest](cp-ddd-example/order-center-cp/cp-oc-test/src/test/java/org/example/cp/oms/ExampleTest.java)：这是演示的入口。
-
-For more please visit [使用该框架搭建`订单履约中台`的例子](cp-ddd-example).
+For more please visit [使用该框架搭建`订单履约中台`的例子](cp-ddd-demo).
 
 ## Modules
 
@@ -131,7 +132,7 @@ Please go to [cp-ddd-framework Javadoc](https://funkygao.github.io/cp-ddd-framew
 
 [业务中台架构的整体解决方案](https://github.com/funkygao/cp-ddd-framework/wiki/Total-solutions-%E6%95%B4%E4%BD%93%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88)。
 
-Please visit [wiki](https://github.com/funkygao/cp-ddd-framework/wiki/Total-solutions-%E6%95%B4%E4%BD%93%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88)
+Please visit [wiki](https://github.com/funkygao/cp-ddd-framework/wiki/Total-solutions-%E6%95%B4%E4%BD%93%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88).
 
 ## Contribution
 

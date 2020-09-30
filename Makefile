@@ -5,7 +5,7 @@ clean:
 	@mvn clean
 
 install:clean
-	@mvn install
+	@mvn install -Pinstall
 
 test:clean
 	@mvn test -Ptest
@@ -15,9 +15,9 @@ coverage:test
 	@open cp-ddd-test/target/site/jacoco-aggregate/index.html
 
 prepare-plugin:install
-	@cp -f cp-ddd-example/order-center-bp-ka/target/order-center-bp-ka-0.0.1.jar doc/assets/jar/
-	@cp -f cp-ddd-example/order-center-bp-isv/target/order-center-bp-isv-0.0.1.jar doc/assets/jar/
-	@cp -f cp-ddd-example/order-center-pattern/target/order-center-pattern-0.0.1.jar doc/assets/jar/
+	@cp -f cp-ddd-demo/order-center-bp-ka/target/order-center-bp-ka-0.0.1.jar doc/assets/jar/
+	@cp -f cp-ddd-demo/order-center-bp-isv/target/order-center-bp-isv-0.0.1.jar doc/assets/jar/
+	@cp -f cp-ddd-demo/order-center-pattern/target/order-center-pattern-0.0.1.jar doc/assets/jar/
 	@git add doc/assets/jar/
 	@git commit -m 'update Plugin jars'
 	@git push
