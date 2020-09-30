@@ -15,6 +15,7 @@ import javax.validation.constraints.NotNull;
  * 领域模型扩展属性的解析、落库和渲染扩展点.
  * <p>
  * <p>中台作为中间环节负责控制扩展属性的传递和持久化，而前台作为中台调用方和扩展点执行方，负责两侧的扩展属性解释和业务处理</p>
+ * <p>Data extensions provide a mechanism for attaching arbitrary data to an interface to avoid bloat in core platform data models.</p>
  * <pre>
  * +-------------+     +----+      +---------------+
  * | BP client   |-----| CP |------| BP extensions |

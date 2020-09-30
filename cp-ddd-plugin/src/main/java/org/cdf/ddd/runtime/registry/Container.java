@@ -70,7 +70,7 @@ public final class Container {
     /**
      * 加载业务前台jar包.
      *
-     * @param code      Plugin code
+     * @param code      {@link IPlugin#getCode()}
      * @param jarUrl    Plugin jar URL
      * @param useSpring jar包里是否需要Spring机制
      * @throws Throwable
@@ -78,6 +78,7 @@ public final class Container {
     public void loadPartnerPlugin(@NotNull String code, @NotNull URL jarUrl, boolean useSpring) throws Throwable {
         File localJar = jarTempLocalFile(jarUrl);
         localJar.deleteOnExit();
+
         log.info("loadPartnerPlugin {} -> {}", jarUrl, localJar.getCanonicalPath());
         FileUtils.copyInputStreamToFile(jarUrl.openStream(), localJar);
         loadPartnerPlugin(code, localJar.getAbsolutePath(), useSpring);
@@ -88,7 +89,7 @@ public final class Container {
      * <p>
      * <p>如果使用本动态加载，就不要maven里静态引入业务前台jar包依赖了.</p>
      *
-     * @param code      Plugin code
+     * @param code      {@link IPlugin#getCode()}
      * @param jarPath   jar path
      * @param useSpring jar包里是否需要Spring机制
      * @throws Throwable
@@ -120,7 +121,7 @@ public final class Container {
     /**
      * 加载业务模式jar包.
      *
-     * @param code      Plugin code
+     * @param code      {@link IPlugin#getCode()}
      * @param jarUrl    Plugin jar URL
      * @param useSpring jar包里是否需要Spring机制
      * @throws Throwable
@@ -137,8 +138,8 @@ public final class Container {
     /**
      * 加载业务模式jar包.
      *
-     * @param code      Plugin code
-     * @param jarPath   jar path
+     * @param code      {@link IPlugin#getCode()}
+     * @param jarPath   Plugin jar path
      * @param useSpring jar包里是否需要Spring机制
      * @throws Throwable
      */
@@ -195,5 +196,4 @@ public final class Container {
 
         return new URLClassLoader(jdkUrls.toArray(new URL[0]), parent);
     }
-
 }
