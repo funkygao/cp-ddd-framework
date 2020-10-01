@@ -7,13 +7,16 @@ package org.cdf.ddd.runtime.registry;
 
 import lombok.extern.slf4j.Slf4j;
 import org.cdf.ddd.annotation.*;
+import org.cdf.ddd.ext.IPlugable;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 
 @Component
@@ -22,12 +25,14 @@ class RegistryFactory implements InitializingBean {
     // 有序的，因为他们之间有时间依赖关系
     private static List<RegistryEntry> validRegistryEntries = new ArrayList<>();
 
-    void register(ApplicationContext applicationContext) {
-        for (RegistryEntry entry : validRegistryEntries) {
-            log.info("register {}'s ...", entry.annotation.getSimpleName());
+    private static Map<Class<? extends Annotation>, PrepareEntry> validPrepareEntries = new HashMap<>(3);
 
-            for (Object springBean : applicationContext.getBeansWithAnnotation(entry.annotation).values()) {
-                entry.createRegistry().registerBean(springBean);
+    void register(ApplicationContext applicationContext) {
+        for (RegistryEntry registryEntry : validRegistryEntries) {
+            log.info("register {}'s ...", registryEntry.annotation.getSimpleName());
+
+            for (Object springBean : applicationContext.getBeansWithAnnotation(registryEntry.annotation).values()) {
+                registryEntry.create().registerBean(springBean);
             }
         }
 
@@ -35,17 +40,16 @@ class RegistryFactory implements InitializingBean {
     }
 
     static void preparePlugins(Class<? extends Annotation> annotation, Object bean) {
-        if (annotation.equals(Partner.class)) {
-            PartnerDef partnerDef = new PartnerDef();
-            partnerDef.prepare(bean);
-        } else if (annotation.equals(Pattern.class)) {
-            // TODO pattern hot reload mechanism
-        } else if (annotation.equals(Extension.class)) {
-            ExtensionDef extensionDef = new ExtensionDef();
-            extensionDef.prepare(bean);
-        } else {
-            throw BootstrapException.ofMessage("Supported prepare annotation: (Partner, Pattern, Extension)");
+        if (!(bean instanceof IPlugable)) {
+            throw BootstrapException.ofMessage(bean.getClass().getCanonicalName() + " must be IPlugable");
         }
+
+        PrepareEntry prepareEntry = validPrepareEntries.get(annotation);
+        if (prepareEntry == null) {
+            throw BootstrapException.ofMessage(annotation.getCanonicalName() + " not supported");
+        }
+
+        prepareEntry.create().prepare(bean);
     }
 
     @Override
@@ -60,6 +64,10 @@ class RegistryFactory implements InitializingBean {
         validRegistryEntries.add(new RegistryEntry(Partner.class, () -> new PartnerDef()));
         validRegistryEntries.add(new RegistryEntry(Pattern.class, () -> new PatternDef()));
         validRegistryEntries.add(new RegistryEntry(Extension.class, () -> new ExtensionDef()));
+
+        validPrepareEntries.put(Partner.class, new PrepareEntry(() -> new PartnerDef()));
+        validPrepareEntries.put(Pattern.class, new PrepareEntry(() -> new PatternDef()));
+        validPrepareEntries.put(Extension.class, new PrepareEntry(() -> new ExtensionDef()));
     }
 
     private static class RegistryEntry {
@@ -71,7 +79,19 @@ class RegistryFactory implements InitializingBean {
             this.supplier = supplier;
         }
 
-        IRegistryAware createRegistry() {
+        IRegistryAware create() {
+            return supplier.get();
+        }
+    }
+
+    private static class PrepareEntry {
+        private final Supplier<IPrepareAware> supplier;
+
+        PrepareEntry(Supplier<IPrepareAware> supplier) {
+            this.supplier = supplier;
+        }
+
+        IPrepareAware create() {
             return supplier.get();
         }
     }

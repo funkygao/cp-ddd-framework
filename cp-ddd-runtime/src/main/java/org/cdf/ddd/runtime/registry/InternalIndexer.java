@@ -34,7 +34,7 @@ public class InternalIndexer {
     // 扩展点 Partner
     static final Map<String, PartnerDef> partnerDefMap = new HashMap<>(); // TODO CopyOnWriteHashMap
 
-    static volatile PartnerDef partnerBacklog;
+    private static volatile PartnerDef partnerBacklog = null;
 
     /**
      * 根据业务能力类找到一个业务能力实例, internal usage only.
