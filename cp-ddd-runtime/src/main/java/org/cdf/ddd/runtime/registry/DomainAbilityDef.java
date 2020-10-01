@@ -65,6 +65,6 @@ class DomainAbilityDef implements IRegistryAware {
         this.extClazz = (Class<? extends IDomainExtension>) parameterizedType.getActualTypeArguments()[1];
         log.debug("domain ability:{} model:{} ext:{}", bean.getClass().getCanonicalName(), modelClazz.getCanonicalName(), extClazz.getCanonicalName());
 
-        InternalIndexer.indexDomainAbility(this);
+        InternalIndexer.index(this);
     }
 }

@@ -5,8 +5,8 @@
  */
 package org.cdf.ddd.runtime.registry;
 
-import org.cdf.ddd.annotation.*;
 import lombok.extern.slf4j.Slf4j;
+import org.cdf.ddd.annotation.*;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -34,15 +34,18 @@ class RegistryFactory implements InitializingBean {
         InternalIndexer.postIndexing();
     }
 
-    static void lazyRegister(Class<? extends Annotation> annotation, Object bean) {
-        for (RegistryEntry entry : validRegistryEntries) {
-            if (entry.annotation.equals(annotation)) {
-                entry.createRegistry().registerBean(bean);
-                return;
-            }
+    static void preparePlugins(Class<? extends Annotation> annotation, Object bean) {
+        if (annotation.equals(Partner.class)) {
+            PartnerDef partnerDef = new PartnerDef();
+            partnerDef.prepare(bean);
+        } else if (annotation.equals(Pattern.class)) {
+            // TODO pattern hot reload mechanism
+        } else if (annotation.equals(Extension.class)) {
+            ExtensionDef extensionDef = new ExtensionDef();
+            extensionDef.prepare(bean);
+        } else {
+            throw BootstrapException.ofMessage("Supported prepare annotation: (Partner, Pattern, Extension)");
         }
-
-        throw BootstrapException.ofMessage("Unsupported type: " + annotation.getCanonicalName());
     }
 
     @Override

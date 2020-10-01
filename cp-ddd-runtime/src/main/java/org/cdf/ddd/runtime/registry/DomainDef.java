@@ -30,6 +30,6 @@ class DomainDef implements IRegistryAware {
         this.name = domain.name();
         this.domainBean = bean;
 
-        InternalIndexer.indexDomain(this);
+        InternalIndexer.index(this);
     }
 }

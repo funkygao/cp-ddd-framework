@@ -1,7 +1,7 @@
 package org.example.bp.oms.ka.extension;
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.cp.oms.spec.partner.KaPartner;
+import org.example.bp.oms.ka.KaPartner;
 import org.example.cp.oms.spec.ext.IAssignOrderNoExt;
 import org.example.cp.oms.spec.model.IOrderModel;
 import org.cdf.ddd.annotation.Extension;

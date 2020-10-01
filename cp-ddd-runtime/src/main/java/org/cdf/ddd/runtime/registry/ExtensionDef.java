@@ -41,6 +41,16 @@ public class ExtensionDef implements IRegistryAware {
 
     @Override
     public void registerBean(@NotNull Object bean) {
+        initialize(bean);
+        InternalIndexer.index(this);
+    }
+
+    void prepare(Object bean) {
+        initialize(bean);
+        InternalIndexer.prepare(this);
+    }
+
+    private void initialize(Object bean) {
         Extension extension = CoreAopUtils.getAnnotation(bean, Extension.class);
         this.code = extension.code();
         this.name = extension.name();
@@ -57,8 +67,6 @@ public class ExtensionDef implements IRegistryAware {
                 break;
             }
         }
-
-        InternalIndexer.indexExtension(this);
     }
 
 }

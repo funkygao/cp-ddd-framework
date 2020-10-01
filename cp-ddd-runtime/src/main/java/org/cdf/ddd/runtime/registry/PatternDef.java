@@ -47,7 +47,7 @@ class PatternDef implements IRegistryAware, IIdentityResolver {
         }
         this.patternBean = (IIdentityResolver) bean;
 
-        InternalIndexer.indexPattern(this);
+        InternalIndexer.index(this);
     }
 
     @Override

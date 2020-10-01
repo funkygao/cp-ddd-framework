@@ -32,7 +32,9 @@ public class InternalIndexer {
     static final Map<Class<? extends IDomainExtension>, List<PatternDef>> sortedPatternMap = new HashMap<>();
 
     // 扩展点 Partner
-    static final Map<String, PartnerDef> partnerDefMap = new HashMap<>();
+    static final Map<String, PartnerDef> partnerDefMap = new HashMap<>(); // TODO CopyOnWriteHashMap
+
+    static volatile PartnerDef partnerBacklog;
 
     /**
      * 根据业务能力类找到一个业务能力实例, internal usage only.
@@ -154,7 +156,7 @@ public class InternalIndexer {
         return result;
     }
 
-    static void indexDomainStep(StepDef stepDef) {
+    static void index(StepDef stepDef) {
         if (!domainStepDefMap.containsKey(stepDef.getActivity())) {
             domainStepDefMap.put(stepDef.getActivity(), new HashMap<>());
         }
@@ -168,7 +170,7 @@ public class InternalIndexer {
         log.debug("indexed {} ", stepDef);
     }
 
-    static void indexDomain(DomainDef domainDef) {
+    static void index(DomainDef domainDef) {
         if (domainDefMap.containsKey(domainDef.getCode())) {
             throw BootstrapException.ofMessage("duplicated domain code: ", domainDef.getCode());
         }
@@ -177,7 +179,7 @@ public class InternalIndexer {
         log.debug("indexed {}", domainDef);
     }
 
-    static void indexDomainAbility(DomainAbilityDef domainAbilityDef) {
+    static void index(DomainAbilityDef domainAbilityDef) {
         if (!domainDefMap.containsKey(domainAbilityDef.getDomain())) {
             throw BootstrapException.ofMessage("DomainAbility domain not found: ", domainAbilityDef.getDomain());
         }
@@ -190,14 +192,14 @@ public class InternalIndexer {
         log.debug("indexed {}", domainAbilityDef);
     }
 
-    static void indexDomainService(DomainServiceDef domainServiceDef) {
+    static void index(DomainServiceDef domainServiceDef) {
         if (!domainDefMap.containsKey(domainServiceDef.getDomain())) {
             throw BootstrapException.ofMessage("DomainService domain not found: ", domainServiceDef.getDomain());
         }
         log.debug("indexed {}", domainServiceDef);
     }
 
-    static void indexExtension(ExtensionDef extensionDef) {
+    static void index(ExtensionDef extensionDef) {
         if (patternDefMap.containsKey(extensionDef.getCode())) {
             // 基于Pattern的扩展点，因为在pattern里找到了对应的code：extension.code = pattern.code
             PatternDef patternDef = patternDefMap.get(extensionDef.getCode());
@@ -222,7 +224,7 @@ public class InternalIndexer {
         }
     }
 
-    static void indexPattern(PatternDef patternDef) {
+    static void index(PatternDef patternDef) {
         if (patternDefMap.containsKey(patternDef.getCode())) {
             throw BootstrapException.ofMessage("duplicated pattern code: ", patternDef.getCode());
         }
@@ -236,7 +238,7 @@ public class InternalIndexer {
         log.debug("indexed {}", patternDef);
     }
 
-    static void indexPartner(PartnerDef partnerDef) {
+    static void index(PartnerDef partnerDef) {
         if (partnerDefMap.containsKey(partnerDef.getCode())) {
             throw BootstrapException.ofMessage("duplicated partner code: ", partnerDef.getCode());
         }
@@ -266,5 +268,25 @@ public class InternalIndexer {
 
         // patternDefMap在运行时已经没有用了
         patternDefMap.clear();
+    }
+
+    static void prepare(PartnerDef partnerDef) {
+        partnerBacklog = partnerDef;
+    }
+
+    static void prepare(ExtensionDef extensionDef) {
+        if (partnerBacklog == null) {
+            // TODO Partner的定义没有出现在Plugin Jar
+        }
+
+        // implicit ordering: Partner, then Extension
+        partnerBacklog.registerExtensionDef(extensionDef);
+    }
+
+    static void commitPartner() {
+        partnerDefMap.put(partnerBacklog.getCode(), partnerBacklog);
+        log.warn("Partner({}) committed", partnerBacklog.getCode());
+
+        partnerBacklog = null;
     }
 }
