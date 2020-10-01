@@ -18,7 +18,7 @@ import javax.validation.constraints.NotNull;
  */
 @ToString
 @Slf4j
-public class ExtensionDef implements IRegistryAware {
+public class ExtensionDef implements IRegistryAware, IPrepareAware {
 
     @Getter
     private String code;
@@ -45,7 +45,8 @@ public class ExtensionDef implements IRegistryAware {
         InternalIndexer.index(this);
     }
 
-    void prepare(Object bean) {
+    @Override
+    public void prepare(@NotNull Object bean) {
         initialize(bean);
         InternalIndexer.prepare(this);
     }

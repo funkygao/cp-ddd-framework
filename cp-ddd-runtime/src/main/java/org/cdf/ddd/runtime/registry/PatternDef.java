@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Set;
 
 @ToString
-class PatternDef implements IRegistryAware, IIdentityResolver {
+class PatternDef implements IRegistryAware, IPrepareAware, IIdentityResolver {
 
     @Getter
     private String code;
@@ -35,6 +35,22 @@ class PatternDef implements IRegistryAware, IIdentityResolver {
 
     @Override
     public void registerBean(@NotNull Object bean) {
+        initialize(bean);
+
+        InternalIndexer.index(this);
+    }
+
+    @Override
+    public void prepare(@NotNull Object bean) {
+        initialize(bean);
+    }
+
+    @Override
+    public boolean match(@NotNull IDomainModel model) {
+        return patternBean.match(model);
+    }
+
+    private void initialize(Object bean) {
         Pattern pattern = CoreAopUtils.getAnnotation(bean, Pattern.class);
         this.code = pattern.code();
         this.name = pattern.name();
@@ -46,13 +62,6 @@ class PatternDef implements IRegistryAware, IIdentityResolver {
             throw BootstrapException.ofMessage(bean.getClass().getCanonicalName(), " MUST implements IIdentityResolver");
         }
         this.patternBean = (IIdentityResolver) bean;
-
-        InternalIndexer.index(this);
-    }
-
-    @Override
-    public boolean match(@NotNull IDomainModel model) {
-        return patternBean.match(model);
     }
 
     void registerExtensionDef(ExtensionDef extensionDef) {

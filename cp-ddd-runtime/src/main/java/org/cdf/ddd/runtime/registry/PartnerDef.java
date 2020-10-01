@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @ToString
-class PartnerDef implements IRegistryAware, IIdentityResolver {
+class PartnerDef implements IRegistryAware, IPrepareAware, IIdentityResolver {
 
     @Getter
     private String code;
@@ -37,7 +37,8 @@ class PartnerDef implements IRegistryAware, IIdentityResolver {
         InternalIndexer.index(this);
     }
 
-    void prepare(@NotNull Object bean) {
+    @Override
+    public void prepare(@NotNull Object bean) {
         initialize(bean);
 
         InternalIndexer.prepare(this);
