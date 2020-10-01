@@ -236,11 +236,6 @@ public class InternalIndexer {
         log.debug("indexed {}", patternDef);
     }
 
-    static void removePattern(@NotNull String code) {
-        patternDefMap.remove(code);
-        log.info("removed Pattern:{}", code);
-    }
-
     static void indexPartner(PartnerDef partnerDef) {
         if (partnerDefMap.containsKey(partnerDef.getCode())) {
             throw BootstrapException.ofMessage("duplicated partner code: ", partnerDef.getCode());
@@ -252,12 +247,6 @@ public class InternalIndexer {
 
         partnerDefMap.put(partnerDef.getCode(), partnerDef);
         log.debug("indexed {}", partnerDef);
-    }
-
-    static void removePartner(String code) {
-        // 不卸载扩展点 side effect: 业务逻辑上正确，但已经不再调用了，而且无法GC，orphan objects
-        partnerDefMap.remove(code); // thread safety
-        log.info("removed Partner:{}", code);
     }
 
     static void postIndexing() {
