@@ -4,11 +4,14 @@ package:clean
 clean:
 	@mvn clean
 
-install:clean
+install:clean test
 	@mvn install -Pinstall
 
 test:clean
 	@mvn test -Ptest
+
+plugin-test:install
+	@cd demo; mvn package; mvn test -Pplugin
 
 coverage:test
 	@mvn clean verify -Ptest
