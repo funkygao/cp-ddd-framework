@@ -7,7 +7,6 @@ package org.cdf.ddd.runtime.registry;
 
 import lombok.extern.slf4j.Slf4j;
 import org.cdf.ddd.annotation.Partner;
-import org.cdf.ddd.annotation.UnderDevelopment;
 
 import javax.validation.constraints.NotNull;
 import java.io.File;
@@ -36,7 +35,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * </pre>
  */
 @Slf4j
-@UnderDevelopment
 public final class Container {
     private static final Container instance = new Container();
 

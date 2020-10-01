@@ -102,6 +102,10 @@ public class PluginMechanismTest {
             log.info("Plugin: {}", plugin.getCode());
         }
 
+        if (true) {
+            return;
+        }
+
         log.info("sleeping 2m，等待修改bp-isv里逻辑后发布新jar...");
         TimeUnit.MINUTES.sleep(2); // 等待手工发布新jar
         log.info("2m is up, go!");

@@ -52,6 +52,6 @@ public class StepDef implements IRegistryAware {
             throw BootstrapException.ofMessage(bean.getClass().getCanonicalName(), " stepCode cannot be empty");
         }
 
-        InternalIndexer.indexDomainStep(this);
+        InternalIndexer.index(this);
     }
 }

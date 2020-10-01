@@ -84,7 +84,7 @@ final class PluginClassLoader extends URLClassLoader {
             if (clazz != null) {
                 log.info("loaded {} with {}", className, this);
                 if (resolve) {
-                    resolveClass(clazz); // TODO 之前没有调用resolve，也没发现有问题
+                    resolveClass(clazz);
                 }
                 return clazz;
             }

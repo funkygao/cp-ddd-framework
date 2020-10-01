@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @ToString
-class PartnerDef implements IRegistryAware, IIdentityResolver {
+class PartnerDef implements IRegistryAware, IPrepareAware, IIdentityResolver {
 
     @Getter
     private String code;
@@ -32,6 +32,19 @@ class PartnerDef implements IRegistryAware, IIdentityResolver {
 
     @Override
     public void registerBean(@NotNull Object bean) {
+        initialize(bean);
+
+        InternalIndexer.index(this);
+    }
+
+    @Override
+    public void prepare(@NotNull Object bean) {
+        initialize(bean);
+
+        InternalIndexer.prepare(this);
+    }
+
+    private void initialize(Object bean) {
         Partner partner = CoreAopUtils.getAnnotation(bean, Partner.class);
         this.code = partner.code();
         this.name = partner.name();
@@ -40,8 +53,6 @@ class PartnerDef implements IRegistryAware, IIdentityResolver {
             throw BootstrapException.ofMessage(bean.getClass().getCanonicalName(), " MUST implements IIdentityResolver");
         }
         this.partnerBean = (IIdentityResolver) bean;
-
-        InternalIndexer.indexPartner(this);
     }
 
     void registerExtensionDef(ExtensionDef extensionDef) {

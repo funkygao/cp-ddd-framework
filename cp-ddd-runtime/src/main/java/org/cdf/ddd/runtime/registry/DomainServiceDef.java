@@ -31,6 +31,6 @@ class DomainServiceDef implements IRegistryAware {
         this.domain = domainService.domain();
         this.domainServiceBean = (IDomainService) bean;
 
-        InternalIndexer.indexDomainService(this);
+        InternalIndexer.index(this);
     }
 }
