@@ -34,7 +34,7 @@ public class InternalIndexer {
     // 扩展点 Partner
     static final Map<String, PartnerDef> partnerDefMap = new HashMap<>(); // TODO CopyOnWriteHashMap
 
-    private static volatile PartnerDef partnerBacklog = null;
+    private static volatile PartnerDef partnerDefPrepared = null;
 
     /**
      * 根据业务能力类找到一个业务能力实例, internal usage only.
@@ -271,22 +271,22 @@ public class InternalIndexer {
     }
 
     static void prepare(PartnerDef partnerDef) {
-        partnerBacklog = partnerDef;
+        partnerDefPrepared = partnerDef;
     }
 
     static void prepare(ExtensionDef extensionDef) {
-        if (partnerBacklog == null) {
+        if (partnerDefPrepared == null) {
             // TODO Partner的定义没有出现在Plugin Jar
         }
 
         // implicit ordering: Partner, then Extension
-        partnerBacklog.registerExtensionDef(extensionDef);
+        partnerDefPrepared.registerExtensionDef(extensionDef);
     }
 
     static void commitPartner() {
-        partnerDefMap.put(partnerBacklog.getCode(), partnerBacklog);
-        log.warn("Partner({}) committed", partnerBacklog.getCode());
+        partnerDefMap.put(partnerDefPrepared.getCode(), partnerDefPrepared);
+        log.warn("Partner({}) committed", partnerDefPrepared.getCode());
 
-        partnerBacklog = null;
+        partnerDefPrepared = null;
     }
 }
