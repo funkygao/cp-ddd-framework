@@ -27,9 +27,11 @@ public class InternalIndexer {
     static final Map<Class<? extends BaseDomainAbility>, DomainAbilityDef> domainAbilityDefMap = new HashMap<>();
     static final Map<String, Map<String, StepDef>> domainStepDefMap = new HashMap<>(); // {activityCode, {stepCode, def}}
 
-    // 扩展点
+    // 扩展点 Pattern
     static final Map<String, PatternDef> patternDefMap = new HashMap<>();
     static final Map<Class<? extends IDomainExtension>, List<PatternDef>> sortedPatternMap = new HashMap<>();
+
+    // 扩展点 Partner
     static final Map<String, PartnerDef> partnerDefMap = new HashMap<>();
 
     /**

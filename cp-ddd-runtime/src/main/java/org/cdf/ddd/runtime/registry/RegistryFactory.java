@@ -20,10 +20,10 @@ import java.util.function.Supplier;
 @Slf4j
 class RegistryFactory implements InitializingBean {
     // 有序的，因为他们之间有时间依赖关系
-    private static List<RegistryEntry> supportedRegisters = new ArrayList<>();
+    private static List<RegistryEntry> validRegistryEntries = new ArrayList<>();
 
     void register(ApplicationContext applicationContext) {
-        for (RegistryEntry entry : supportedRegisters) {
+        for (RegistryEntry entry : validRegistryEntries) {
             log.info("register {}'s ...", entry.annotation.getSimpleName());
 
             for (Object springBean : applicationContext.getBeansWithAnnotation(entry.annotation).values()) {
@@ -34,16 +34,15 @@ class RegistryFactory implements InitializingBean {
         InternalIndexer.postIndexing();
     }
 
-    static boolean lazyRegister(Class<? extends Annotation> annotation, Object bean) {
-        for (RegistryEntry entry : supportedRegisters) {
+    static void lazyRegister(Class<? extends Annotation> annotation, Object bean) {
+        for (RegistryEntry entry : validRegistryEntries) {
             if (entry.annotation.equals(annotation)) {
-                // bingo!
                 entry.createRegistry().registerBean(bean);
-                return true;
+                return;
             }
         }
 
-        return false;
+        throw BootstrapException.ofMessage("Unsupported type: " + annotation.getCanonicalName());
     }
 
     @Override
@@ -51,13 +50,13 @@ class RegistryFactory implements InitializingBean {
         log.info("setup the discoverable Spring beans...");
 
         // 注册Domain，是为了可视化，避免漏掉某些支撑域
-        supportedRegisters.add(new RegistryEntry(Domain.class, () -> new DomainDef()));
-        supportedRegisters.add(new RegistryEntry(DomainService.class, () -> new DomainServiceDef()));
-        supportedRegisters.add(new RegistryEntry(Step.class, () -> new StepDef()));
-        supportedRegisters.add(new RegistryEntry(DomainAbility.class, () -> new DomainAbilityDef()));
-        supportedRegisters.add(new RegistryEntry(Partner.class, () -> new PartnerDef()));
-        supportedRegisters.add(new RegistryEntry(Pattern.class, () -> new PatternDef()));
-        supportedRegisters.add(new RegistryEntry(Extension.class, () -> new ExtensionDef()));
+        validRegistryEntries.add(new RegistryEntry(Domain.class, () -> new DomainDef()));
+        validRegistryEntries.add(new RegistryEntry(DomainService.class, () -> new DomainServiceDef()));
+        validRegistryEntries.add(new RegistryEntry(Step.class, () -> new StepDef()));
+        validRegistryEntries.add(new RegistryEntry(DomainAbility.class, () -> new DomainAbilityDef()));
+        validRegistryEntries.add(new RegistryEntry(Partner.class, () -> new PartnerDef()));
+        validRegistryEntries.add(new RegistryEntry(Pattern.class, () -> new PatternDef()));
+        validRegistryEntries.add(new RegistryEntry(Extension.class, () -> new ExtensionDef()));
     }
 
     private static class RegistryEntry {
