@@ -101,7 +101,7 @@ public final class Container {
         }
 
         long t0 = System.nanoTime();
-        log.warn("loading partner:{} useSpring:{}", jarPath, useSpring);
+        log.warn("Loading partner:{} useSpring:{}", jarPath, useSpring);
         try {
             Plugin plugin = new Plugin(code, jdkClassLoader, containerClassLoader).
                     load(jarPath, useSpring, Partner.class, new ContainerContext(DDDBootstrap.applicationContext()));
@@ -112,7 +112,7 @@ public final class Container {
             throw ex;
         }
 
-        log.warn("loaded partner:{}, cost {}ms", jarPath, (System.nanoTime() - t0) / 1000_000);
+        log.warn("Loaded partner:{}, cost {}ms", jarPath, (System.nanoTime() - t0) / 1000_000);
     }
 
     File jarTempLocalFile(@NotNull URL jarUrl) throws IOException {

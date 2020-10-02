@@ -52,7 +52,7 @@ class Plugin implements IPlugin {
 
     Plugin load(String jarPath, boolean useSpring, Class<? extends Annotation> identityResolverClass, IContainerContext ctx) throws Throwable {
         Map<Class<? extends Annotation>, List<Class>> plugableMap = prepareClasses(jarPath, useSpring, identityResolverClass);
-        log.info("classes from {} prepared with plugableMap {}", jarPath, plugableMap);
+        log.info("Classes prepared, plugableMap {}", plugableMap);
 
         // IPluginListener 不通过Spring加载，而是手工加载、创建实例
         // 如果一个jar里有多个 IPluginListener 实现，只会返回第一个实例
@@ -69,11 +69,11 @@ class Plugin implements IPlugin {
 
         // 现在，新jar里的类已经被新的ClassLoader加载到内存了，也实例化了，但旧jar里的类仍然在工作
         preparePlugins(identityResolverClass, plugableMap);
-        log.info("{} plugins prepared from {}", identityResolverClass.getSimpleName(), jarPath);
+        log.info("Plugins index prepared for {}", identityResolverClass.getSimpleName());
 
         // 内存里插件相关索引已准备好，现在切换
         commit(identityResolverClass);
-        log.info("{} committed from {}", identityResolverClass.getSimpleName(), jarPath);
+        log.info("Committed: {}", identityResolverClass.getSimpleName());
 
         if (pluginListener != null) {
             pluginListener.onCommitted(ctx);
@@ -88,7 +88,7 @@ class Plugin implements IPlugin {
         pluginClassLoader = new PluginClassLoader(new URL[]{new File(jarPath).toURI().toURL()}, jdkClassLoader, containerClassLoader);
 
         if (useSpring) {
-            log.info("Spring loading Plugin with {}, {}, {} ...", jdkClassLoader, containerClassLoader, pluginClassLoader);
+            log.debug("Spring loading Plugin with {}, {}, {} ...", jdkClassLoader, containerClassLoader, pluginClassLoader);
             long t0 = System.nanoTime();
 
             applicationContext = new ClassPathXmlApplicationContext(new String[]{pluginXml}, DDDBootstrap.applicationContext()) {
@@ -99,7 +99,7 @@ class Plugin implements IPlugin {
                 }
             };
 
-            log.info("Spring loading cost {}ms", (System.nanoTime() - t0) / 1000_000);
+            log.info("Spring loaded, cost {}ms", (System.nanoTime() - t0) / 1000_000);
         }
 
         // 从Plugin Jar里把 IPlugable 挑出来，以便更新注册表
@@ -117,7 +117,7 @@ class Plugin implements IPlugin {
             }
 
             for (Class irc : identityResolverClasses) {
-                log.info("Preparing {} {}", identityResolverClass.getSimpleName(), irc.getCanonicalName());
+                log.info("Preparing index {} {}", identityResolverClass.getSimpleName(), irc.getCanonicalName());
 
                 // 每次加载，由于 PluginClassLoader 是不同的，irc也不同
                 Object partnerOrPattern = applicationContext.getBean(irc);
@@ -128,7 +128,7 @@ class Plugin implements IPlugin {
         List<Class> extensions = plugableMap.get(Extension.class);
         if (extensions != null && !extensions.isEmpty()) {
             for (Class extensionClazz : extensions) {
-                log.info("Preparing Extension {}", extensionClazz.getCanonicalName());
+                log.info("Preparing index Extension {}", extensionClazz.getCanonicalName());
 
                 // 这里extensionClazz是扩展点实现的类名 e,g. org.example.bp.oms.isv.extension.DecideStepsExt
                 // 而不是 IDecideStepsExt。因此，不必担心getBean异常：一个extensionClazz有多个对象

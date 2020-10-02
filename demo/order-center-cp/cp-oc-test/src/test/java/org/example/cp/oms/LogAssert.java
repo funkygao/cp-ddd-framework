@@ -1,6 +1,5 @@
 package org.example.cp.oms;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.HashSet;
@@ -25,9 +24,5 @@ class LogAssert {
         }
 
         assertTrue(foundEvents.size() == events.length);
-    }
-
-    static void cleanUp() {
-        new File(logFile).delete();
     }
 }

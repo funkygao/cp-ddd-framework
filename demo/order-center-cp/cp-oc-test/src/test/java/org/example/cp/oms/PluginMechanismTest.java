@@ -8,7 +8,6 @@ import org.cdf.ddd.runtime.registry.IPlugin;
 import org.example.cp.oms.domain.model.OrderModel;
 import org.example.cp.oms.domain.model.OrderModelCreator;
 import org.example.cp.oms.domain.service.SubmitOrder;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -38,11 +37,6 @@ public class PluginMechanismTest {
         remoteKaJar = new URL("https://github.com/funkygao/cp-ddd-framework/blob/master/doc/assets/jar/order-center-bp-ka-0.0.1.jar?raw=true");
     }
 
-    @After
-    public void tearDown() {
-        LogAssert.cleanUp();
-    }
-
     @UnderDevelopment // 需要运行在 profile:plugin 下，运行前需要mvn package为Plugin打包
     @Test
     public void dynamicLoadPlugins() throws Throwable {
@@ -54,34 +48,36 @@ public class PluginMechanismTest {
             log.info(String.join("", Collections.nCopies(50, String.valueOf(i + 1))));
             Container.getInstance().loadPartnerPlugin("isv", localIsvJar, true);
             submitOrder(applicationContext, true);
+
+            // 通过日志验证执行正确性
+            assertContains(
+                    // 验证 AutoLoggerAspect 被创建
+                    "Spring created instance AutoLoggerAspect!", "AutoLoggerAspect 注册 Spring lifecycle ok",
+                    // IsvPartner在动态加载时自动创建实例
+                    "ISV new instanced",
+                    // isv.PluginListener 被调用
+                    "ISV Jar loaded, ",
+                    // @AutoLogger
+                    "DecideStepsExt.decideSteps 入参",
+                    // isv.DecideStepsExt.decideSteps 调用了中台的 stockService.preOccupyStock
+                    "预占库存：SKU From ISV",
+                    // ISV的步骤编排
+                    "steps [basic, persist, mq]",
+                    // @AutoLogger
+                    "org.example.bp.oms.isv.extension.PresortExt.presort 入参",
+                    // isv.PresortExt
+                    "ISV里预分拣的结果：1", "count(a): 2", "仓库号：WH009",
+                    // 加载properties资源，并且有中文
+                    "加载资源文件成功！站点名称：北京市海淀区中关村中路1号",
+                    // @AutoLogger
+                    "org.example.bp.oms.isv.extension.CustomModel.explain 入参:",
+                    // CustomModel，扩展属性机制
+                    "站点联系人号码：139100988343，保存到x2字段",
+                    "已经发送给MQ"
+            );
         }
 
-        // 通过日志验证执行正确性
-        assertContains(
-                // 验证 AutoLoggerAspect 被创建
-                "Spring created instance AutoLoggerAspect!", "AutoLoggerAspect 注册 Spring lifecycle ok",
-                // IsvPartner在动态加载时自动创建实例
-                "ISV new instanced",
-                // isv.PluginListener 被调用
-                "ISV Jar loaded, ",
-                // @AutoLogger
-                "DecideStepsExt.decideSteps 入参",
-                // isv.DecideStepsExt.decideSteps 调用了中台的 stockService.preOccupyStock
-                "预占库存：SKU From ISV",
-                // ISV的步骤编排
-                "steps [basic, persist, mq]",
-                // @AutoLogger
-                "org.example.bp.oms.isv.extension.PresortExt.presort 入参",
-                // isv.PresortExt
-                "ISV里预分拣的结果：1", "count(a): 2", "仓库号：WH009",
-                // 加载properties资源，并且有中文
-                "加载资源文件成功！站点名称：北京市海淀区中关村中路1号",
-                // @AutoLogger
-                "org.example.bp.oms.isv.extension.CustomModel.explain 入参:",
-                // CustomModel，扩展属性机制
-                "站点联系人号码：139100988343，保存到x2字段",
-                "已经发送给MQ"
-        );
+        log.info(String.join("", Collections.nCopies(50, "=")));
 
         // 加载KA插件，并给KA下单
         Container.getInstance().loadPartnerPlugin("ka", localKaJar, true);
