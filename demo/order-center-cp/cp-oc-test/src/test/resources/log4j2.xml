@@ -8,7 +8,7 @@
         <Console name="console" target="SYSTEM_OUT" follow="true">
             <PatternLayout charset="UTF-8" pattern="${patternLayout}"/>
         </Console>
-        <File name="logFile" fileName="logs/app.log" append="false">
+        <File name="logFile" fileName="logs/app.log" append="false" immediateFlush="true">
             <PatternLayout>
                 <Pattern>${patternLayout}</Pattern>
             </PatternLayout>

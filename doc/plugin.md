@@ -63,5 +63,5 @@ Plugin Jar可以通过maven pom静态加载，也可以事后动态加载(热更
 
 - 静态加载后，再热替换
 - Spring的懒加载
-- LogAssert stateful
+- useSpring = false case
 - stress test to detect memory leakage
