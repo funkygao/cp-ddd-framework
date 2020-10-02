@@ -49,15 +49,11 @@ public class PluginMechanismTest {
         ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("spring-test.xml");
         applicationContext.start();
 
-        log.info(String.join("", Collections.nCopies(50, "*")));
-
         for (int i = 0; i < 2; i++) {
             // 同一个jar，load多次，模拟热更新，然后下单验证：走ISV前台逻辑
-            log.info("n={}", i + 1);
+            log.info(String.join("", Collections.nCopies(50, String.valueOf(i + 1))));
             Container.getInstance().loadPartnerPlugin("isv", localIsvJar, true);
             submitOrder(applicationContext, true);
-
-            log.info(String.join("", Collections.nCopies(50, "=")));
         }
 
         // 通过日志验证执行正确性

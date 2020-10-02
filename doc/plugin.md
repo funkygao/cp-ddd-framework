@@ -61,8 +61,7 @@ Plugin Jar可以通过maven pom静态加载，也可以事后动态加载(热更
 
 ### P0
 
-- AOP不生效
-- log `JDKClassLoader loaded java.lang.annotation.Target`出现多次
 - 静态加载后，再热替换
 - Spring的懒加载
-- isv的DecideStepsExt.java 和 PresortExt 都加上AutoLogger，会抛异常 SpringProxy问题
+- LogAssert stateful
+- stress test to detect memory leakage

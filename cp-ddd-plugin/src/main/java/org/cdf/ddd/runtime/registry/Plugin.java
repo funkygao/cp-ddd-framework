@@ -117,7 +117,7 @@ class Plugin implements IPlugin {
             }
 
             for (Class irc : identityResolverClasses) {
-                log.info("Indexing {}", irc.getCanonicalName());
+                log.info("Preparing {} {}", identityResolverClass.getSimpleName(), irc.getCanonicalName());
 
                 // 每次加载，由于 PluginClassLoader 是不同的，irc也不同
                 Object partnerOrPattern = applicationContext.getBean(irc);
@@ -128,7 +128,7 @@ class Plugin implements IPlugin {
         List<Class> extensions = plugableMap.get(Extension.class);
         if (extensions != null && !extensions.isEmpty()) {
             for (Class extensionClazz : extensions) {
-                log.info("Indexing {}", extensionClazz.getCanonicalName());
+                log.info("Preparing Extension {}", extensionClazz.getCanonicalName());
 
                 // 这里extensionClazz是扩展点实现的类名 e,g. org.example.bp.oms.isv.extension.DecideStepsExt
                 // 而不是 IDecideStepsExt。因此，不必担心getBean异常：一个extensionClazz有多个对象
