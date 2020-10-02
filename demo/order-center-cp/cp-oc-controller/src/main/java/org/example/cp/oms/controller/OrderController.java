@@ -1,6 +1,8 @@
 package org.example.cp.oms.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.cdf.ddd.api.RequestProfile;
+import org.cdf.ddd.runtime.registry.Container;
 import org.example.cp.oms.client.dto.CancelOrderRequest;
 import org.example.cp.oms.client.dto.SubmitOrderRequest;
 import org.example.cp.oms.domain.model.OrderModel;
@@ -12,6 +14,7 @@ import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
 
 @RestController
+@Slf4j
 public class OrderController {
 
     // DDD Application Layer depends on Domain Layer
@@ -22,6 +25,21 @@ public class OrderController {
     @ResponseBody
     public String hello() {
         return "Hello cp-ddd-framework!";
+    }
+
+    @RequestMapping(value = "/reloadIsv")
+    @ResponseBody
+    public String reloadIsv() {
+        log.info("CWD:{}", System.getProperty("user.dir"));
+
+        try {
+            Container.getInstance().loadPartnerPlugin("isv", "order-center-bp-isv/target/order-center-bp-isv-0.0.1.jar", true);
+        } catch (Throwable cause) {
+            log.error("fails to reload ISV Plugin Jar", cause);
+            return cause.getMessage();
+        }
+
+        return "Reloaded!";
     }
 
     // 下单服务
