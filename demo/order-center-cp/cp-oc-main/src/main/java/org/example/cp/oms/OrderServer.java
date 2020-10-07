@@ -15,7 +15,7 @@ import java.io.IOException;
  * 完整演示的入口：在IDE下启动：会在本机启动Jetty server.
  *
  * 下单：
- * curl -d '{"source":"ISV","customerNo":"home","externalNo":"2020"}' -H 'Content-type: application/json' http://localhost:9090/order
+ * curl -XPOST localhost:9090/order
  *
  * 查看日志，了解服务端的执行过程.
  */
@@ -45,7 +45,7 @@ public class OrderServer {
         server.start();
         log.info("Server started at port {}", port);
         log.info("现在，另起一个终端窗口，模拟下单，执行命令：");
-        log.info("curl -d '{\"source\":\"ISV\",\"customerNo\":\"home\",\"externalNo\":\"2020\"}' -H 'Content-type: application/json' localhost:9090/order");
+        log.info("curl -XPOST localhost:9090/order");
         server.join();
     }
 

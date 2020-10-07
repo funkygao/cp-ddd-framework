@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="error" monitorInterval="3600">
     <properties>
-        <property name="patternLayout">%d [%t] %-5p [%c] [%L] %m%n</property>
+        <property name="patternLayout">[%X{tid}] %d [%t] %-5p [%c] [%L] %m%n</property>
         <property name="root.log.level">debug</property>
     </properties>
     <Appenders>

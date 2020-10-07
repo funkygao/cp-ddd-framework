@@ -95,7 +95,7 @@ mvn package
 java -jar order-center-cp/cp-oc-main/target/cp-ddd-framework-demo.jar
 
 # in another terminal
-curl -d '{"source":"ISV","customerNo":"home","externalNo":"2020"}' -H 'Content-type: application/json' http://localhost:9090/order
+curl http://localhost:9090/order # submit an order
 ```
 
 For more please visit [使用该框架搭建`订单履约中台`的例子](demo).
