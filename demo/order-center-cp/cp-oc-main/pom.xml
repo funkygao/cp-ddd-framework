@@ -123,18 +123,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-maven-plugin</artifactId>
-                <version>${jetty.version}</version>
-                <configuration>
-                    <httpConnector>
-                        <port>9090</port>
-                        <host>localhost</host>
-                    </httpConnector>
-                    <scanIntervalSeconds>60</scanIntervalSeconds>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 
@@ -146,8 +134,15 @@
             </activation>
             <!-- 通过 (profile + properties) 实现不同环境下的打包：例如，打泰国包，打欧洲包，一套代码支持出海 -->
             <properties>
-                <bp.jar.scope.isv>provided</bp.jar.scope.isv>
+                <bp.jar.scope.isv>compile</bp.jar.scope.isv>
                 <bp.jar.scope.ka>compile</bp.jar.scope.ka>
+            </properties>
+        </profile>
+        <profile>
+            <id>plugin</id>
+            <properties>
+                <bp.jar.scope.isv>provided</bp.jar.scope.isv>
+                <bp.jar.scope.ka>provided</bp.jar.scope.ka>
             </properties>
         </profile>
     </profiles>
