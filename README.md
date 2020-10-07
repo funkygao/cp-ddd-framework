@@ -13,7 +13,6 @@
    * [Current status](#current-status)
    * [Quickstart](#quickstart)
    * [What problems does it solve](#what-problems-does-it-solve)
-   * [Why it stands out](#why-it-stands-out)
    * [Key abstractions](#key-abstractions)
 * [Requirements](#requirements)
 * [Demo](#demo)
@@ -65,12 +64,6 @@ Please visit [Quickstart wiki](https://github.com/funkygao/cp-ddd-framework/wiki
 - empower the system to evolve without corruption
 - 普通研发如何编写出优雅的业务代码：low threshold for average developer to build elegant biz code
 - and more
-
-### Why it stands out
-
-- Simple design and implementation: simplicity is the 1st requirement and less is more
-- Flexibility as result of total abstraction
-- Totally proven in production environment for complex business requirements
 
 ### Key abstractions
 
