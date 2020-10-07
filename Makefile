@@ -3,6 +3,7 @@ package:clean
 
 clean:
 	@mvn clean
+	@cd demo; mvn clean
 
 install:clean test
 	@mvn install -Pinstall
