@@ -14,6 +14,8 @@ import java.io.IOException;
 /**
  * 完整演示的入口：在IDE下启动：会在本机启动Jetty server.
  *
+ * HTTP Controller入口在cp-oc-controller module 的 OrderController
+ *
  * 下单：
  * curl -XPOST localhost:9090/order
  *

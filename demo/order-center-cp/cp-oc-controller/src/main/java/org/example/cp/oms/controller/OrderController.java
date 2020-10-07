@@ -19,14 +19,6 @@ public class OrderController {
     @Resource
     private SubmitOrder submitOrder;
 
-    @RequestMapping(value = "/hello", method = RequestMethod.GET)
-    @ResponseBody
-    public String hello() {
-        MDC.put("tid", String.valueOf(System.nanoTime()));
-
-        return "Hello cp-ddd-framework!";
-    }
-
     // 下单服务
     @RequestMapping(value = "/order", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
