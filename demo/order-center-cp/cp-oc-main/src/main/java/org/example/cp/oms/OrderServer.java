@@ -26,14 +26,21 @@ public class OrderServer {
     private static final int DEFAULT_PORT = 9090;
     private static final String CONTEXT_PATH = "/";
     private static final String MAPPING_URL = "/*";
+    private static String config;
     private static final String CONFIG_LOCATION = "org.example.cp.oms.config";
+    private static final String PLUGIN_LOCATION = "org.example.cp.oms.plugin";
 
     public static void main(String[] args) throws Exception {
         int port = DEFAULT_PORT;
+        config = CONFIG_LOCATION;
         if (args.length > 0) {
             try {
                 port = Integer.valueOf(args[0]);
             } catch (NumberFormatException ignored) {
+            }
+
+            if (args.length > 1) {
+                config = PLUGIN_LOCATION;
             }
         }
 
@@ -62,7 +69,7 @@ public class OrderServer {
 
     private static WebApplicationContext getContext() {
         AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
-        context.setConfigLocation(CONFIG_LOCATION);
+        context.setConfigLocation(config);
         return context;
     }
 
