@@ -18,25 +18,11 @@
             <version>${project.version}</version>
         </dependency>
 
-        <!-- 把pattern包静态打进来 -->
+        <!-- 把pattern包静态打进来，partner包通过profile动态打包 -->
         <dependency>
             <groupId>org.example</groupId>
             <artifactId>order-center-pattern</artifactId>
             <version>${project.version}</version>
-        </dependency>
-
-        <!-- 把pattern和业务前台包按profile进行动态打包，例如：国际包，主站包 -->
-        <dependency>
-            <groupId>org.example</groupId>
-            <artifactId>order-center-bp-isv</artifactId>
-            <version>${project.version}</version>
-            <scope>${bp.jar.scope.isv}</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.example</groupId>
-            <artifactId>order-center-bp-ka</artifactId>
-            <version>${project.version}</version>
-            <scope>${bp.jar.scope.ka}</scope>
         </dependency>
 
         <!-- 中台把Plugin需要的第三方都准备好，Plugin pom以provided scope引入 -->
@@ -139,18 +125,22 @@
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
-            <!-- 通过 (profile + properties) 实现不同环境下的打包：例如，打泰国包，打欧洲包，一套代码支持出海 -->
-            <properties>
-                <bp.jar.scope.isv>compile</bp.jar.scope.isv>
-                <bp.jar.scope.ka>compile</bp.jar.scope.ka>
-            </properties>
+            <!-- Plugin包按profile进行动态打包，例如：国际包，主站包 -->
+            <dependencies>
+                <dependency>
+                    <groupId>org.example</groupId>
+                    <artifactId>order-center-bp-isv</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.example</groupId>
+                    <artifactId>order-center-bp-ka</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
         </profile>
         <profile>
             <id>plugin</id>
-            <properties>
-                <bp.jar.scope.isv>provided</bp.jar.scope.isv>
-                <bp.jar.scope.ka>provided</bp.jar.scope.ka>
-            </properties>
         </profile>
     </profiles>
 
