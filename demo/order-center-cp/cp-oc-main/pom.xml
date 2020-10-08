@@ -39,6 +39,13 @@
             <scope>${bp.jar.scope.ka}</scope>
         </dependency>
 
+        <!-- 中台把Plugin需要的第三方都准备好，Plugin pom以provided scope引入 -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
+        </dependency>
+
         <!-- logging -->
         <dependency>
             <artifactId>log4j-core</artifactId>

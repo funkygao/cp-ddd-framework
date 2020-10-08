@@ -23,10 +23,11 @@ public class OrderController {
     @RequestMapping(value = "/order", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public String submitOrder(@RequestParam(required = false) String type) {
-        log.info("type={}", type);
         if (type == null) {
             type = "ISV"; // ISV by default
         }
+
+        log.info("type={}", type);
 
         // DTO 转换为 domain model，通过creator保护、封装domain model
         // 具体项目使用MapStruct会更方便，这里为了演示，全手工进行对象转换了
