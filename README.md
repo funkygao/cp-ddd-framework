@@ -32,7 +32,7 @@ mvn install
 
 ## What is cp-ddd-framework?
 
-cp-ddd-framework is a lightweight development framework for complex business architecture.
+cp-ddd-framework is a lightweight flexible development framework for complex business architecture.
 
 轻量级业务中台开发框架，以DDD思想为基础，融合中台核心要素，赋能中台建设。
 
