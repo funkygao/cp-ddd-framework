@@ -13,7 +13,6 @@ import org.cdf.ddd.plugin.IContainerContext;
 import org.cdf.ddd.plugin.IPlugin;
 import org.cdf.ddd.plugin.IPluginListener;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
@@ -43,7 +42,7 @@ class Plugin implements IPlugin {
     private ClassLoader pluginClassLoader;
 
     // each Plugin will have a specific Spring IoC with the same parent: the Container
-    private ApplicationContext applicationContext;
+    private ClassPathXmlApplicationContext applicationContext; // TODO 释放 applicationContext.close()
 
     Plugin(String code, ClassLoader jdkClassLoader, ClassLoader containerClassLoader) {
         this.code = code;
