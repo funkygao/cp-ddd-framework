@@ -12,7 +12,7 @@ import org.cdf.ddd.runtime.registry.InternalIndexer;
 import javax.validation.constraints.NotNull;
 
 /**
- * 领域能力，是一种业务语义不变而执行逻辑可变的能力，是一种业务扩展能力.
+ * 领域能力，是一种业务语义不变而执行逻辑可变的能力，是一种业务扩展能力，是一种业务多态能力.
  * <p>
  * <p>{@code BaseDomainAbility}是最小粒度的{@link IDomainService}，只负责一个扩展点的编排</p>
  *
