@@ -13,7 +13,7 @@
     <dependencies>
         <!-- 中台为业务前台提供的spec包，不依赖domain层，只定义接口：domain model和扩展点，以及步骤的声明 -->
         <dependency>
-            <groupId>org.cdf</groupId>
+            <groupId>io.github.cp-ddd</groupId>
             <artifactId>cp-ddd-runtime</artifactId>
             <version>${cp.ddd.framework.version}</version>
         </dependency>

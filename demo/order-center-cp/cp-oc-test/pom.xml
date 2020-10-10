@@ -18,7 +18,7 @@
         </dependency>
 
         <dependency>
-            <groupId>org.cdf</groupId>
+            <groupId>io.github.cp-ddd</groupId>
             <artifactId>cp-ddd-plugin</artifactId>
             <version>${cp.ddd.framework.version}</version>
         </dependency>
