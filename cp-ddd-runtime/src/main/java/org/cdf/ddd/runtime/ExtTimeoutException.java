@@ -11,7 +11,7 @@ package org.cdf.ddd.runtime;
 public class ExtTimeoutException extends RuntimeException {
     private final int timeoutInMs;
 
-    public ExtTimeoutException(int timeoutInMs) {
+    ExtTimeoutException(int timeoutInMs) {
         this.timeoutInMs = timeoutInMs;
     }
 
