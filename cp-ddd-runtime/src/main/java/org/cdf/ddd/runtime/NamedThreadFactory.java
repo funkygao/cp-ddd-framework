@@ -28,6 +28,7 @@ class NamedThreadFactory implements ThreadFactory {
 
     @Override
     public Thread newThread(Runnable r) {
+        // {prefix}-{poolCount}-T-{threadCount}
         Thread t = new Thread(group, r, namePrefix + threadCount.getAndIncrement(), 0);
         t.setDaemon(daemon);
         return t;
