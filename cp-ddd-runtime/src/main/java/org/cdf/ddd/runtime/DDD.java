@@ -5,7 +5,6 @@
  */
 package org.cdf.ddd.runtime;
 
-import org.cdf.ddd.model.BaseDomainAbility;
 import org.cdf.ddd.runtime.registry.InternalIndexer;
 import org.cdf.ddd.runtime.registry.StepDef;
 import org.cdf.ddd.step.IDomainStep;

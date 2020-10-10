@@ -8,7 +8,7 @@ import org.example.cp.oms.spec.ext.ISerializableIsolationExt;
 import org.example.cp.oms.spec.model.IOrderModel;
 import org.example.cp.oms.spec.model.vo.LockEntry;
 import org.cdf.ddd.annotation.DomainAbility;
-import org.cdf.ddd.model.BaseDomainAbility;
+import org.cdf.ddd.runtime.BaseDomainAbility;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;

@@ -3,11 +3,11 @@
  *
  * Licensed under the Apache License version 2.0, available at http://www.apache.org/licenses/LICENSE-2.0
  */
-package org.cdf.ddd.model;
+package org.cdf.ddd.runtime;
 
 import lombok.extern.slf4j.Slf4j;
 import org.cdf.ddd.ext.IDomainExtension;
-import org.cdf.ddd.runtime.IReducer;
+import org.cdf.ddd.model.IDomainModel;
 import org.cdf.ddd.runtime.registry.ExtensionDef;
 import org.cdf.ddd.runtime.registry.InternalIndexer;
 import org.slf4j.MDC;

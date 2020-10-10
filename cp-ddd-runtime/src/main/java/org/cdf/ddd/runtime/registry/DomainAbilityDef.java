@@ -8,7 +8,7 @@ package org.cdf.ddd.runtime.registry;
 import org.cdf.ddd.annotation.DomainAbility;
 import org.cdf.ddd.ext.IDomainExtension;
 import org.cdf.ddd.model.IDomainModel;
-import org.cdf.ddd.model.BaseDomainAbility;
+import org.cdf.ddd.runtime.BaseDomainAbility;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;

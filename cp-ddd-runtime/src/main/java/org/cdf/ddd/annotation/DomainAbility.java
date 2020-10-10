@@ -5,7 +5,7 @@
  */
 package org.cdf.ddd.annotation;
 
-import org.cdf.ddd.model.BaseDomainAbility;
+import org.cdf.ddd.runtime.BaseDomainAbility;
 import org.springframework.core.annotation.AliasFor;
 import org.springframework.stereotype.Component;
 

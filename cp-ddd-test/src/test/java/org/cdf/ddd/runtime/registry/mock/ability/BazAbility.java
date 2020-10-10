@@ -2,7 +2,7 @@ package org.cdf.ddd.runtime.registry.mock.ability;
 
 import lombok.extern.slf4j.Slf4j;
 import org.cdf.ddd.annotation.DomainAbility;
-import org.cdf.ddd.model.BaseDomainAbility;
+import org.cdf.ddd.runtime.BaseDomainAbility;
 import org.cdf.ddd.runtime.registry.mock.domain.FooDomain;
 import org.cdf.ddd.runtime.registry.mock.ext.IBazExt;
 import org.cdf.ddd.runtime.registry.mock.extension.DefaultBazExt;

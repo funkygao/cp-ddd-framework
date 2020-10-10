@@ -8,7 +8,7 @@ package org.cdf.ddd;
 import com.tngtech.archunit.core.domain.JavaModifier;
 import com.tngtech.archunit.lang.ArchRule;
 import org.cdf.ddd.annotation.*;
-import org.cdf.ddd.model.BaseDomainAbility;
+import org.cdf.ddd.runtime.BaseDomainAbility;
 import org.cdf.ddd.model.IDomainModel;
 import org.cdf.ddd.model.IDomainModelCreator;
 import org.cdf.ddd.model.IDomainService;

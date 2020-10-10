@@ -2,7 +2,7 @@ package org.cdf.ddd.runtime.registry.mock.ability;
 
 import org.cdf.ddd.annotation.DomainAbility;
 import org.cdf.ddd.ext.IDecideStepsExt;
-import org.cdf.ddd.model.BaseDomainAbility;
+import org.cdf.ddd.runtime.BaseDomainAbility;
 import org.cdf.ddd.runtime.registry.mock.domain.FooDomain;
 import org.cdf.ddd.runtime.registry.mock.model.FooModel;
 

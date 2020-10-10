@@ -3,16 +3,17 @@
  *
  * Licensed under the Apache License version 2.0, available at http://www.apache.org/licenses/LICENSE-2.0
  */
-package org.cdf.ddd.model;
+package org.cdf.ddd.runtime;
 
 import org.cdf.ddd.ext.IDomainExtension;
-import org.cdf.ddd.runtime.IReducer;
+import org.cdf.ddd.model.IDomainModel;
+import org.cdf.ddd.model.IDomainService;
 import org.cdf.ddd.runtime.registry.InternalIndexer;
 
 import javax.validation.constraints.NotNull;
 
 /**
- * 领域能力，是一种业务语义不变而执行逻辑可变的能力，是一种业务扩展能力，是一种业务多态能力.
+ * 基础领域能力，是一种业务多态能力：业务扩展能力.
  * <p>
  * <p>{@code BaseDomainAbility}是最小粒度的{@link IDomainService}，只负责一个扩展点的编排</p>
  *

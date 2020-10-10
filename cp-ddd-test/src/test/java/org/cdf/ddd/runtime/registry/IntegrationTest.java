@@ -4,7 +4,7 @@ import org.cdf.ddd.runtime.registry.mock.ability.*;
 import org.cdf.ddd.runtime.registry.mock.exception.FooException;
 import org.cdf.ddd.runtime.registry.mock.partner.FooPartner;
 import org.cdf.ddd.runtime.registry.mock.service.FooDomainService;
-import org.cdf.ddd.model.ExtTimeoutException;
+import org.cdf.ddd.runtime.ExtTimeoutException;
 import org.cdf.ddd.runtime.DDD;
 import org.cdf.ddd.runtime.registry.mock.MockStartupListener;
 import org.cdf.ddd.runtime.registry.mock.step.*;

@@ -5,7 +5,7 @@ import org.example.cp.oms.spec.DomainAbilities;
 import org.example.cp.oms.spec.model.IOrderModel;
 import org.cdf.ddd.annotation.DomainAbility;
 import org.cdf.ddd.ext.IDecideStepsExt;
-import org.cdf.ddd.model.BaseDomainAbility;
+import org.cdf.ddd.runtime.BaseDomainAbility;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;

@@ -34,6 +34,6 @@ release-javadoc:install
 	@rm -rf doc/apidocs
 	@mv -f target/site/apidocs/ doc/
 	@git add doc/apidocs
-	@git commit -m 'Javadoc updated' doc/apidocs
+	@git commit -m 'Javadoc released' doc/apidocs
 	@git push
 	@git checkout master
