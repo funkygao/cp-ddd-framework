@@ -7,6 +7,7 @@ package org.cdf.ddd.runtime.registry;
 
 import lombok.extern.slf4j.Slf4j;
 import org.cdf.ddd.annotation.Partner;
+import org.cdf.ddd.plugin.IPlugin;
 
 import javax.validation.constraints.NotNull;
 import java.io.File;

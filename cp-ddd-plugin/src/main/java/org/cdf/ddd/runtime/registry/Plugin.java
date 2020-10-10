@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.cdf.ddd.annotation.Extension;
 import org.cdf.ddd.annotation.Partner;
 import org.cdf.ddd.plugin.IContainerContext;
+import org.cdf.ddd.plugin.IPlugin;
 import org.cdf.ddd.plugin.IPluginListener;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.ApplicationContext;
