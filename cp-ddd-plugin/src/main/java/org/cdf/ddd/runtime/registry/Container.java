@@ -104,6 +104,8 @@ public final class Container {
         long t0 = System.nanoTime();
         log.warn("Loading partner:{} useSpring:{}", jarPath, useSpring);
         try {
+            // TODO 把之前的该Plugin下的所有类的所有引用处理干净，这样才能GC介入
+            // 释放：jar里的所有类，PluginClassLoader, Spring ApplicationContext
             Plugin plugin = new Plugin(code, jdkClassLoader, containerClassLoader).
                     load(jarPath, useSpring, Partner.class, new ContainerContext(DDDBootstrap.applicationContext()));
             activePlugins.put(plugin.getCode(), plugin); // old plugin will be GC'ed
