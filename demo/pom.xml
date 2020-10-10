@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.cdf</groupId>
+        <groupId>io.github.cp-ddd</groupId> <!-- TODO kill the parent, demo will be standalone -->
         <artifactId>cp-ddd-framework</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
@@ -88,13 +88,5 @@
             </plugin>
         </plugins>
     </build>
-
-    <repositories>
-        <repository>
-            <id>github</id>
-            <name>GitHub funkygao Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/funkygao/cp-ddd-framework</url>
-        </repository>
-    </repositories>
 
 </project>
