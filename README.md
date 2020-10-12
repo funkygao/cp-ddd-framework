@@ -8,7 +8,6 @@
 
 # cp-ddd-framework (Central Platform：中台)
 
-* [Building from Source](#building-from-source)
 * [What is cp-ddd-framework](#what-is-cp-ddd-framework)
    * [Current status](#current-status)
    * [Quickstart](#quickstart)
@@ -18,20 +17,13 @@
 * [Using cp-ddd-framework](#using-cp-ddd-framework)
    * [Maven](#maven)
    * [Gradle](#gradle)
+   * [Building from Source](#building-from-source)
 * [Demo](#demo)
 * [Modules](#modules)
 * [Landscape of Central Platform](#landscape-of-central-platform)
 * [Reference guide](#reference-guide)
 * [Contribution](#contribution)
 * [Licensing](#licensing)
-
-## Building from Source
-
-``` bash
-git clone https://github.com/funkygao/cp-ddd-framework.git
-cd cp-ddd-framework/
-mvn install
-```
 
 ## What is cp-ddd-framework?
 
@@ -100,6 +92,14 @@ dependencies {
     ...
     compile 'io.github.dddplus:cp-ddd-runtime:0.0.1-SNAPSHOT'
 }
+```
+
+### Building from Source
+
+``` bash
+git clone https://github.com/funkygao/cp-ddd-framework.git
+cd cp-ddd-framework/
+mvn install
 ```
 
 ## Demo
