@@ -75,13 +75,13 @@ Requires Java 1.8+ and Spring 4.3.12.RELEASE or later.
 
 ```xml
 <properties>
-    <cp.ddd.framework.version>0.0.1-SNAPSHOT</cp.ddd.framework.version>
+    <dddplus.version>0.0.1-SNAPSHOT</dddplus.version>
 </properties>
 
 <dependency>
     <groupId>io.github.dddplus</groupId>
     <artifactId>dddplus-runtime</artifactId>
-    <version>${cp.ddd.framework.version}</version>
+    <version>${dddplus.version}</version>
 </dependency>
 ```
 
