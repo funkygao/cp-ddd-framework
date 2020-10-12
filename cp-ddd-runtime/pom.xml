@@ -19,14 +19,14 @@ under the License.
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.github.dddplus</groupId>
-        <artifactId>cp-ddd-framework</artifactId>
+        <artifactId>dddplus</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>cp-ddd-runtime</artifactId>
+    <artifactId>dddplus-runtime</artifactId>
     <packaging>jar</packaging>
-    <name>DDD :: Runtime</name>
-    <description>Central Platform DDD Framework Runtime Support</description>
+    <name>DDDPlus :: Runtime</name>
+    <description>DDD Plus Framework Runtime Support</description>
 
     <properties>
         <maven.deploy.skip>false</maven.deploy.skip>
@@ -35,7 +35,7 @@ under the License.
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>cp-ddd-spec</artifactId>
+            <artifactId>dddplus-spec</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

@@ -19,14 +19,14 @@ under the License.
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.github.dddplus</groupId>
-        <artifactId>cp-ddd-framework</artifactId>
+        <artifactId>dddplus</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>cp-ddd-spec</artifactId>
+    <artifactId>dddplus-spec</artifactId>
     <packaging>jar</packaging>
-    <name>DDD :: Spec</name>
-    <description>Central Platform DDD Framework Specifications</description>
+    <name>DDDPlus :: Spec</name>
+    <description>DDD Plus Framework Specifications</description>
 
     <properties>
         <maven.deploy.skip>false</maven.deploy.skip>

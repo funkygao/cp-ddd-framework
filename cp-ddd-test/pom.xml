@@ -7,27 +7,27 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.github.dddplus</groupId>
-        <artifactId>cp-ddd-framework</artifactId>
+        <artifactId>dddplus</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>cp-ddd-test</artifactId>
-    <name>DDD :: Test</name>
+    <artifactId>dddplus-test</artifactId>
+    <name>DDDPlus :: Test</name>
+    <description>Full coverage unit test cases</description>
 
     <properties>
         <maven.deploy.skip>true</maven.deploy.skip>
     </properties>
 
     <dependencies>
-        <!-- cp-ddd-frameowrk -->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>cp-ddd-runtime</artifactId>
+            <artifactId>dddplus-runtime</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>cp-ddd-plugin</artifactId>
+            <artifactId>dddplus-plugin</artifactId>
             <version>${project.version}</version>
         </dependency>
 
