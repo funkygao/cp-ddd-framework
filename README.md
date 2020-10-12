@@ -8,27 +8,22 @@
 
 # cp-ddd-framework (Central Platform：中台)
 
-* [Building from Source](#building-from-source)
 * [What is cp-ddd-framework](#what-is-cp-ddd-framework)
    * [Current status](#current-status)
    * [Quickstart](#quickstart)
    * [What problems does it solve](#what-problems-does-it-solve)
    * [Key abstractions](#key-abstractions)
 * [Requirements](#requirements)
+* [Using cp-ddd-framework](#using-cp-ddd-framework)
+   * [Maven](#maven)
+   * [Gradle](#gradle)
+   * [Building from Source](#building-from-source)
 * [Demo](#demo)
 * [Modules](#modules)
 * [Landscape of Central Platform](#landscape-of-central-platform)
 * [Reference guide](#reference-guide)
 * [Contribution](#contribution)
 * [Licensing](#licensing)
-
-## Building from Source
-
-``` bash
-git clone https://github.com/funkygao/cp-ddd-framework.git
-cd cp-ddd-framework/
-mvn install
-```
 
 ## What is cp-ddd-framework?
 
@@ -74,37 +69,58 @@ Please visit [Quickstart wiki](https://github.com/funkygao/cp-ddd-framework/wiki
 
 Requires Java 1.8+ and Spring 4.3.12.RELEASE or later.
 
-## Demo
+## Using cp-ddd-framework
 
-#### How to run the demo?
+### Maven
 
-``` bash
-git clone https://github.com/dddplus/dddplus-demo.git
-cd dddplus-demo
-mvn package
-java -jar order-center-cp/cp-oc-main/target/cp-ddd-framework-demo.jar
+```xml
+<properties>
+    <cp.ddd.framework.version>0.0.1-SNAPSHOT</cp.ddd.framework.version>
+</properties>
 
-# in another terminal
-curl http://localhost:9090/order # submit an order
+<dependency>
+    <groupId>io.github.dddplus</groupId>
+    <artifactId>dddplus-runtime</artifactId>
+    <version>${cp.ddd.framework.version}</version>
+</dependency>
 ```
 
-For more please visit [使用该框架搭建`订单履约中台`的例子](https://github.com/dddplus/dddplus-demo).
+### Gradle
+
+```groovy
+dependencies {
+    ...
+    compile 'io.github.dddplus:dddplus-runtime:0.0.1-SNAPSHOT'
+}
+```
+
+### Building from Source
+
+``` bash
+git clone https://github.com/funkygao/cp-ddd-framework.git
+cd cp-ddd-framework/
+mvn install
+```
+
+## Demo
+
+Please visit [使用该框架搭建`订单履约中台`的例子](https://github.com/dddplus/dddplus-demo).
 
 ## Modules
 
-### cp-ddd-spec
+### dddplus-spec
 
 Specification of the framework.
 
-### cp-ddd-runtime
+### dddplus-runtime
 
 Runtime implementation of the framework.
 
-### cp-ddd-plugin
+### dddplus-plugin
 
 Plugin hot reloading implementation.
 
-### cp-ddd-enforce
+### dddplus-enforce
 
 Enforce expected evolvement of the business architecture based upon ArchUnit.
 

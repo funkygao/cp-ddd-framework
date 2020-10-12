@@ -19,19 +19,19 @@ under the License.
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.dddplus</groupId>
-    <artifactId>cp-ddd-framework</artifactId>
+    <artifactId>dddplus</artifactId>
     <packaging>pom</packaging>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Central Platform DDD Framework</name>
-    <description>Central Platform DDD Framework</description>
+    <name>DDD Plus Framework</name>
+    <description>DDD Supporting Central Platform(中台) Architecture</description>
     <url>https://github.com/funkygao/cp-ddd-framework</url>
     <inceptionYear>2020</inceptionYear>
 
     <modules>
-        <module>cp-ddd-spec</module>
-        <module>cp-ddd-runtime</module>
-        <module>cp-ddd-plugin</module>
-        <module>cp-ddd-enforce</module>
+        <module>dddplus-spec</module>
+        <module>dddplus-runtime</module>
+        <module>dddplus-plugin</module>
+        <module>dddplus-enforce</module>
     </modules>
 
     <properties>
@@ -40,7 +40,7 @@ under the License.
         <maven.compiler.failOnError>true</maven.compiler.failOnError>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.jacoco.version>0.8.5</maven.jacoco.version>
-        <maven.deploy.skip>true</maven.deploy.skip>
+        <maven.deploy.skip>false</maven.deploy.skip>
 
         <!-- unified 3rd party dependencies version -->
         <lombok.version>1.18.8</lombok.version>
@@ -160,11 +160,11 @@ under the License.
                 </plugins>
             </build>
             <modules>
-                <module>cp-ddd-test</module>
+                <module>dddplus-test</module>
             </modules>
         </profile>
 
-        <!-- 本地安装profile，不安装cp-ddd-test -->
+        <!-- 本地安装profile，不安装dddplus-test -->
         <profile>
             <id>install</id>
         </profile>

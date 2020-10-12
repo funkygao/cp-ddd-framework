@@ -12,7 +12,7 @@ test:clean
 
 coverage:test
 	@mvn clean verify -Ptest
-	@open cp-ddd-test/target/site/jacoco-aggregate/index.html
+	@open dddplus-test/target/site/jacoco-aggregate/index.html
 
 javadoc:install
 	@mvn javadoc:javadoc -Pinstall
