@@ -1,8 +1,8 @@
 package org.example.cp.oms.spec.model;
 
-import org.cdf.ddd.api.RequestProfile;
+import io.github.dddplus.api.RequestProfile;
 import org.example.cp.oms.spec.model.vo.IProductDelegate;
-import org.cdf.ddd.model.IDomainModel;
+import io.github.dddplus.model.IDomainModel;
 import lombok.NonNull;
 
 /**

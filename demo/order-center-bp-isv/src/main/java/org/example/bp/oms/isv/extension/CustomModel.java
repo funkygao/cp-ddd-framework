@@ -1,10 +1,10 @@
 package org.example.bp.oms.isv.extension;
 
 import lombok.extern.slf4j.Slf4j;
-import org.cdf.ddd.annotation.Extension;
-import org.cdf.ddd.api.ApiResult;
-import org.cdf.ddd.api.RequestProfile;
-import org.cdf.ddd.ext.IModelAttachmentExt;
+import io.github.dddplus.annotation.Extension;
+import io.github.dddplus.api.ApiResult;
+import io.github.dddplus.api.RequestProfile;
+import io.github.dddplus.ext.IModelAttachmentExt;
 import org.example.bp.oms.isv.IsvPartner;
 import org.example.bp.oms.isv.aop.AutoLogger;
 import org.example.cp.oms.spec.exception.OrderErrorReason;

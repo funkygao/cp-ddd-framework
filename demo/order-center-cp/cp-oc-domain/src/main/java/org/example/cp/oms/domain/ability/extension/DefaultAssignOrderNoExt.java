@@ -1,6 +1,6 @@
 package org.example.cp.oms.domain.ability.extension;
 
-import org.cdf.ddd.annotation.Extension;
+import io.github.dddplus.annotation.Extension;
 import org.example.cp.oms.spec.ext.IAssignOrderNoExt;
 import org.example.cp.oms.spec.model.IOrderModel;
 

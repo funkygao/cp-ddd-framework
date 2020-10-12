@@ -3,9 +3,9 @@ package org.example.cp.oms.domain.ability;
 import org.example.cp.oms.domain.CoreDomain;
 import org.example.cp.oms.spec.DomainAbilities;
 import org.example.cp.oms.spec.model.IOrderModel;
-import org.cdf.ddd.annotation.DomainAbility;
-import org.cdf.ddd.ext.IDecideStepsExt;
-import org.cdf.ddd.runtime.BaseDomainAbility;
+import io.github.dddplus.annotation.DomainAbility;
+import io.github.dddplus.ext.IDecideStepsExt;
+import io.github.dddplus.runtime.BaseDomainAbility;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
