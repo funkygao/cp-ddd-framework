@@ -1,7 +1,7 @@
 package org.example.cp.oms.domain.model;
 
-import org.cdf.ddd.api.RequestProfile;
-import org.cdf.ddd.model.IDomainModelCreator;
+import io.github.dddplus.api.RequestProfile;
+import io.github.dddplus.model.IDomainModelCreator;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

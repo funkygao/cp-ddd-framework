@@ -1,6 +1,6 @@
 package org.example.cp.oms.pattern.extension.coldchain_b2b;
 
-import org.cdf.ddd.annotation.Extension;
+import io.github.dddplus.annotation.Extension;
 import org.example.cp.oms.pattern.ColdChainB2BPattern;
 import org.example.cp.oms.spec.ext.ISerializableIsolationExt;
 import org.example.cp.oms.spec.model.IOrderModel;

@@ -1,8 +1,8 @@
 package org.example.bp.oms.isv;
 
 import lombok.extern.slf4j.Slf4j;
-import org.cdf.ddd.plugin.IContainerContext;
-import org.cdf.ddd.plugin.IPluginListener;
+import io.github.dddplus.plugin.IContainerContext;
+import io.github.dddplus.plugin.IPluginListener;
 
 @Slf4j
 public class PluginListener implements IPluginListener {
