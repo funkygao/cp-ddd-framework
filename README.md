@@ -76,19 +76,7 @@ Requires Java 1.8+ and Spring 4.3.12.RELEASE or later.
 
 ## Demo
 
-#### How to run the demo?
-
-``` bash
-git clone https://github.com/dddplus/dddplus-demo.git
-cd dddplus-demo
-mvn package
-java -jar order-center-cp/cp-oc-main/target/cp-ddd-framework-demo.jar
-
-# in another terminal
-curl http://localhost:9090/order # submit an order
-```
-
-For more please visit [使用该框架搭建`订单履约中台`的例子](https://github.com/dddplus/dddplus-demo).
+Please visit [使用该框架搭建`订单履约中台`的例子](https://github.com/dddplus/dddplus-demo).
 
 ## Modules
 
