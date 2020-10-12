@@ -6,9 +6,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.ddd.cp</groupId>
+        <groupId>org.cdf</groupId>
         <artifactId>cp-ddd-framework</artifactId>
-        <version>0.0.1</version>
+        <version>0.0.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>cp-ddd-test</artifactId>
@@ -17,43 +17,17 @@
     <dependencies>
         <!-- cp-ddd-frameowrk -->
         <dependency>
-            <groupId>org.ddd.cp</groupId>
-            <artifactId>cp-ddd-spec</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.ddd.cp</groupId>
+            <groupId>org.cdf</groupId>
             <artifactId>cp-ddd-runtime</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.ddd.cp</groupId>
-            <artifactId>cp-ddd-enforce</artifactId>
+            <groupId>org.cdf</groupId>
+            <artifactId>cp-ddd-plugin</artifactId>
             <version>${project.version}</version>
         </dependency>
 
-        <!-- cp-ddd-example -->
-        <dependency>
-            <groupId>org.ddd.cp</groupId>
-            <artifactId>cp-oc-spec</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.ddd.cp</groupId>
-            <artifactId>cp-oc-domain</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.ddd.cp</groupId>
-            <artifactId>cp-oc-infrastructure</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.ddd.cp</groupId>
-            <artifactId>order-center-pattern</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
+        <!-- logging -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -62,12 +36,12 @@
         <dependency>
             <artifactId>log4j-core</artifactId>
             <groupId>org.apache.logging.log4j</groupId>
-            <version>2.9.1</version>
+            <version>2.13.2</version>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-slf4j-impl</artifactId>
-            <version>2.9.1</version>
+            <version>2.13.2</version>
         </dependency>
 
         <!-- test framework -->
@@ -80,6 +54,13 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
             <version>${spring.version}</version>
+        </dependency>
+
+        <!-- benchmark test -->
+        <dependency>
+            <groupId>com.google.caliper</groupId>
+            <artifactId>caliper</artifactId>
+            <version>1.0-beta-2</version>
         </dependency>
 
         <dependency>
@@ -104,6 +85,16 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>**/*JarUtils.class</exclude>
+                        <exclude>**/*FileUtils.class</exclude>
+                        <exclude>**/*Container.class</exclude>
+                        <exclude>**/*ContainerContext.class</exclude>
+                        <exclude>**/*Plugin.class</exclude>
+                        <exclude>**/*PluginClassLoader.class</exclude>
+                    </excludes>
+                </configuration>
                 <executions>
                     <execution>
                         <id>report-aggregate</id>

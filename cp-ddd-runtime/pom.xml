@@ -18,21 +18,25 @@ under the License.
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.ddd.cp</groupId>
+        <groupId>org.cdf</groupId>
         <artifactId>cp-ddd-framework</artifactId>
-        <version>0.0.1</version>
+        <version>0.0.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>cp-ddd-runtime</artifactId>
     <name>DDD :: Runtime</name>
+    <description>Central Platform DDD Framework Runtime Support</description>
+
+    <properties>
+        <maven.deploy.skip>false</maven.deploy.skip>
+    </properties>
 
     <dependencies>
         <dependency>
-            <groupId>org.ddd.cp</groupId>
+            <groupId>org.cdf</groupId>
             <artifactId>cp-ddd-spec</artifactId>
             <version>${project.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>

@@ -7,7 +7,7 @@
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
         http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd"
        default-lazy-init="false" default-autowire="byName">
-    <context:component-scan base-package="org.ddd.cp,org.example">
+    <context:component-scan base-package="org.cdf.ddd,org.example">
     </context:component-scan>
     <aop:aspectj-autoproxy proxy-target-class="true"/>
 

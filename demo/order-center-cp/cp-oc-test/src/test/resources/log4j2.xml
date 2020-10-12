@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="error" monitorInterval="3600">
+    <properties>
+        <property name="patternLayout">%d [%t] %-5p [%c] [%L] %m%n</property>
+        <property name="root.log.level">info</property>
+    </properties>
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT" follow="true">
+            <PatternLayout charset="UTF-8" pattern="${patternLayout}"/>
+        </Console>
+        <File name="logFile" fileName="logs/app.log" append="false" immediateFlush="true">
+            <PatternLayout>
+                <Pattern>${patternLayout}</Pattern>
+            </PatternLayout>
+        </File>
+    </Appenders>
+
+    <Loggers>
+        <Root level="${root.log.level}" includeLocation="true">
+            <AppenderRef ref="console"/>
+            <AppenderRef ref="logFile"/>
+        </Root>
+        <logger name="org.springframework" level="error" additivity="false" includeLocation="true">
+            <AppenderRef ref="console"/>
+        </logger>
+        <logger name="org.springframework.beans.factory" level="info" additivity="false" includeLocation="true">
+            <AppenderRef ref="console"/>
+        </logger>
+    </Loggers>
+</Configuration>
