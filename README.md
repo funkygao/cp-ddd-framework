@@ -80,7 +80,7 @@ Requires Java 1.8+ and Spring 4.3.12.RELEASE or later.
 
 <dependency>
     <groupId>io.github.dddplus</groupId>
-    <artifactId>cp-ddd-runtime</artifactId>
+    <artifactId>dddplus-runtime</artifactId>
     <version>${cp.ddd.framework.version}</version>
 </dependency>
 ```
@@ -90,7 +90,7 @@ Requires Java 1.8+ and Spring 4.3.12.RELEASE or later.
 ```groovy
 dependencies {
     ...
-    compile 'io.github.dddplus:cp-ddd-runtime:0.0.1-SNAPSHOT'
+    compile 'io.github.dddplus:dddplus-runtime:0.0.1-SNAPSHOT'
 }
 ```
 
@@ -108,19 +108,19 @@ Please visit [使用该框架搭建`订单履约中台`的例子](https://github
 
 ## Modules
 
-### cp-ddd-spec
+### dddplus-spec
 
 Specification of the framework.
 
-### cp-ddd-runtime
+### dddplus-runtime
 
 Runtime implementation of the framework.
 
-### cp-ddd-plugin
+### dddplus-plugin
 
 Plugin hot reloading implementation.
 
-### cp-ddd-enforce
+### dddplus-enforce
 
 Enforce expected evolvement of the business architecture based upon ArchUnit.
 

@@ -19,11 +19,11 @@ public class BarStep extends SubmitStep {
 
     @Override
     public void execute(@NotNull FooModel model) throws FooException {
-        log.info("submit: {}", model);
+        log.debug("submit: {}", model);
 
         if (model.isRedecideDeadLoop()) {
             // 故意制造step死循环
-            log.info("dead loop on purpose for step:{}", this.stepCode());
+            log.debug("dead loop on purpose for step:{}", this.stepCode());
             List<String> revisedSteps = new ArrayList<>();
             revisedSteps.add(this.stepCode());
             throw new FooReviseStepsException().withSubsequentSteps(revisedSteps);

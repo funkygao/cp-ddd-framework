@@ -164,7 +164,7 @@ under the License.
             </modules>
         </profile>
 
-        <!-- 本地安装profile，不安装cp-ddd-test -->
+        <!-- 本地安装profile，不安装dddplus-test -->
         <profile>
             <id>install</id>
         </profile>
