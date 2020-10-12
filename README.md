@@ -20,8 +20,8 @@
    * [Building from Source](#building-from-source)
 * [Demo](#demo)
 * [Modules](#modules)
+* [Reference documentation](#reference-documentation)
 * [Landscape of Central Platform](#landscape-of-central-platform)
-* [Reference guide](#reference-guide)
 * [Contribution](#contribution)
 * [Licensing](#licensing)
 
@@ -124,15 +124,15 @@ Plugin hot reloading implementation.
 
 Enforce expected evolvement of the business architecture based upon ArchUnit.
 
+## Reference documentation
+
+Please visit [cp-ddd-framework Javadoc](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/).
+
 ## Landscape of Central Platform
 
 业务中台建设全景图。
 
 ![](doc/assets/img/landscape.png)
-
-## Reference guide
-
-Please visit [cp-ddd-framework Javadoc](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/).
 
 ## Contribution
 
