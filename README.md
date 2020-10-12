@@ -30,7 +30,7 @@
 
 cp-ddd-framework is a lightweight flexible development framework for complex business architecture.
 
-轻量级业务中台开发框架，以DDD思想为基础，融合中台核心要素，赋能中台建设。
+轻量级业务中台开发框架，以DDD思想为基础，融合[中台核心要素](https://github.com/funkygao/cp-ddd-framework/wiki/%E4%B8%9A%E5%8A%A1%E4%B8%AD%E5%8F%B0%E7%9A%84%E6%A0%B8%E5%BF%83%E8%A6%81%E7%B4%A0)，赋能中台建设。
 
 融合了DDD、前中台复杂生态协作方法论，同时充分考虑组织、历史债、运维和落地成本以及风险而开发的，面向复杂业务场景架构设计，是**中台架构的完整解决方案**。
 
