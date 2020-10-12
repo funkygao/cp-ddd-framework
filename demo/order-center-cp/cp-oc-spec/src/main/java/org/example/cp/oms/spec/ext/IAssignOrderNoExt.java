@@ -1,7 +1,7 @@
 package org.example.cp.oms.spec.ext;
 
 import org.example.cp.oms.spec.model.IOrderModel;
-import org.cdf.ddd.ext.IDomainExtension;
+import io.github.dddplus.ext.IDomainExtension;
 
 import javax.validation.constraints.NotNull;
 

@@ -1,7 +1,7 @@
 package org.example.cp.oms.pattern.extension.home_appliance;
 
 import org.example.cp.oms.pattern.HomeAppliancePattern;
-import org.cdf.ddd.annotation.Extension;
+import io.github.dddplus.annotation.Extension;
 import org.example.cp.oms.spec.ext.IAssignOrderNoExt;
 import org.example.cp.oms.spec.model.IOrderModel;
 

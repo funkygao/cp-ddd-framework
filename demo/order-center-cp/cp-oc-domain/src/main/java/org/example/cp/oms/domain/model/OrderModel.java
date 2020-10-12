@@ -3,7 +3,7 @@ package org.example.cp.oms.domain.model;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.cdf.ddd.api.RequestProfile;
+import io.github.dddplus.api.RequestProfile;
 import org.example.cp.oms.spec.exception.OrderException;
 import org.example.cp.oms.domain.model.vo.ProductDelegate;
 import org.example.cp.oms.spec.model.IOrderModel;

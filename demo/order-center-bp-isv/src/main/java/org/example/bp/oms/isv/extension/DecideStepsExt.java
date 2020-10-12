@@ -3,9 +3,9 @@ package org.example.bp.oms.isv.extension;
 import org.example.bp.oms.isv.IsvPartner;
 import org.example.bp.oms.isv.aop.AutoLogger;
 import org.example.cp.oms.spec.Steps;
-import org.cdf.ddd.annotation.Extension;
-import org.cdf.ddd.ext.IDecideStepsExt;
-import org.cdf.ddd.model.IDomainModel;
+import io.github.dddplus.annotation.Extension;
+import io.github.dddplus.ext.IDecideStepsExt;
+import io.github.dddplus.model.IDomainModel;
 import org.example.cp.oms.spec.resource.IStockService;
 
 import javax.annotation.Resource;

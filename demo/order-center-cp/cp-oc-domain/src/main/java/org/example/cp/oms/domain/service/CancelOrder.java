@@ -7,9 +7,9 @@ import org.example.cp.oms.spec.exception.OrderErrorReason;
 import org.example.cp.oms.spec.exception.OrderException;
 import org.example.cp.oms.domain.model.OrderModel;
 import org.example.cp.oms.domain.step.CancelOrderStepsExec;
-import org.cdf.ddd.annotation.DomainService;
-import org.cdf.ddd.model.IDomainService;
-import org.cdf.ddd.runtime.DDD;
+import io.github.dddplus.annotation.DomainService;
+import io.github.dddplus.model.IDomainService;
+import io.github.dddplus.runtime.DDD;
 import lombok.extern.slf4j.Slf4j;
 import org.example.cp.oms.spec.Steps;
 

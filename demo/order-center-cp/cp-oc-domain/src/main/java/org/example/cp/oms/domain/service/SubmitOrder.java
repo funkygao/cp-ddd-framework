@@ -2,9 +2,9 @@ package org.example.cp.oms.domain.service;
 
 import org.example.cp.oms.domain.ability.SerializableIsolationAbility;
 import org.example.cp.oms.domain.step.SubmitOrderStepsExec;
-import org.cdf.ddd.annotation.DomainService;
-import org.cdf.ddd.model.IDomainService;
-import org.cdf.ddd.runtime.DDD;
+import io.github.dddplus.annotation.DomainService;
+import io.github.dddplus.model.IDomainService;
+import io.github.dddplus.runtime.DDD;
 import lombok.extern.slf4j.Slf4j;
 import org.example.cp.oms.domain.CoreDomain;
 import org.example.cp.oms.domain.ability.DecideStepsAbility;
