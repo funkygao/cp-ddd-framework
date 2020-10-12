@@ -15,6 +15,9 @@
    * [What problems does it solve](#what-problems-does-it-solve)
    * [Key abstractions](#key-abstractions)
 * [Requirements](#requirements)
+* [Using cp-ddd-framework](#using-cp-ddd-framework)
+   * [Maven](#maven)
+   * [Gradle](#gradle)
 * [Demo](#demo)
 * [Modules](#modules)
 * [Landscape of Central Platform](#landscape-of-central-platform)
@@ -73,6 +76,31 @@ Please visit [Quickstart wiki](https://github.com/funkygao/cp-ddd-framework/wiki
 ## Requirements
 
 Requires Java 1.8+ and Spring 4.3.12.RELEASE or later.
+
+## Using cp-ddd-framework
+
+### Maven
+
+```xml
+<properties>
+    <cp.ddd.framework.version>0.0.1-SNAPSHOT</cp.ddd.framework.version>
+</properties>
+
+<dependency>
+    <groupId>io.github.dddplus</groupId>
+    <artifactId>cp-ddd-runtime</artifactId>
+    <version>${cp.ddd.framework.version}</version>
+</dependency>
+```
+
+### Gradle
+
+```groovy
+dependencies {
+    ...
+    compile 'io.github.dddplus:cp-ddd-runtime:0.0.1-SNAPSHOT'
+}
+```
 
 ## Demo
 
