@@ -73,7 +73,7 @@ public final class Container {
      * @param useSpring jar包里是否需要Spring机制
      * @throws Throwable
      */
-    public void loadPartnerPlugin(@NotNull String code, @NotNull URL jarUrl, boolean useSpring) throws Throwable {
+    public synchronized void loadPartnerPlugin(@NotNull String code, @NotNull URL jarUrl, boolean useSpring) throws Throwable {
         File localJar = jarTempLocalFile(jarUrl);
         localJar.deleteOnExit();
 
@@ -92,7 +92,7 @@ public final class Container {
      * @param useSpring jar包里是否需要Spring机制
      * @throws Throwable
      */
-    public void loadPartnerPlugin(@NotNull String code, @NotNull String jarPath, boolean useSpring) throws Throwable {
+    public synchronized void loadPartnerPlugin(@NotNull String code, @NotNull String jarPath, boolean useSpring) throws Throwable {
         if (!jarPath.endsWith(".jar")) {
             throw new IllegalArgumentException("Invalid jarPath: " + jarPath);
         }
