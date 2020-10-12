@@ -19,32 +19,24 @@ under the License.
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.github.dddplus</groupId>
-        <artifactId>cp-ddd-framework</artifactId>
+        <artifactId>dddplus</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>cp-ddd-enforce</artifactId>
+    <artifactId>dddplus-spec</artifactId>
     <packaging>jar</packaging>
-    <name>DDD :: Enforce</name>
-    <description>Central Platform DDD Framework Enforcement</description>
+    <name>DDDPlus :: Spec</name>
+    <description>DDD Plus Framework Specifications</description>
 
     <properties>
-        <maven.deploy.skip>true</maven.deploy.skip>
+        <maven.deploy.skip>false</maven.deploy.skip>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>com.tngtech.archunit</groupId>
-            <artifactId>archunit</artifactId>
-            <version>${archunit.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>cp-ddd-runtime</artifactId>
-            <version>${project.version}</version>
-            <scope>provided</scope>
-            <optional>true</optional>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>${javax.validation.version}</version>
         </dependency>
     </dependencies>
 

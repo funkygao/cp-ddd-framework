@@ -19,42 +19,32 @@ under the License.
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.github.dddplus</groupId>
-        <artifactId>cp-ddd-framework</artifactId>
+        <artifactId>dddplus</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>cp-ddd-runtime</artifactId>
+    <artifactId>dddplus-enforce</artifactId>
     <packaging>jar</packaging>
-    <name>DDD :: Runtime</name>
-    <description>Central Platform DDD Framework Runtime Support</description>
+    <name>DDDPlus :: Enforce</name>
+    <description>DDD Plus Framework Enforcement</description>
 
     <properties>
-        <maven.deploy.skip>false</maven.deploy.skip>
+        <maven.deploy.skip>true</maven.deploy.skip>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>cp-ddd-spec</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
-            <scope>provided</scope>
-            <optional>true</optional>
+            <groupId>com.tngtech.archunit</groupId>
+            <artifactId>archunit</artifactId>
+            <version>${archunit.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-            <version>${spring.version}</version>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>dddplus-runtime</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 
