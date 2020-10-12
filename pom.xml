@@ -34,11 +34,6 @@ under the License.
         <module>cp-ddd-enforce</module>
     </modules>
 
-    <issueManagement>
-        <system>github</system>
-        <url>https://github.com/funkygao/cp-ddd-framework/issues</url>
-    </issueManagement>
-
     <properties>
         <!-- build configs -->
         <jdk.version>1.8</jdk.version>
@@ -115,8 +110,34 @@ under the License.
         </plugins>
     </build>
 
+    <!-- Required by maven ossrh -->
+    <scm>
+        <connection>scm:git:git://github.com/funkygao/cp-ddd-framework.git</connection>
+        <developerConnection>scm:git:git@github.com:funkygao/cp-ddd-framework.git</developerConnection>
+        <url>https://github.com/funkygao/cp-ddd-framework/</url>
+        <tag>HEAD</tag>
+    </scm>
+    <issueManagement>
+        <system>github</system>
+        <url>https://github.com/funkygao/cp-ddd-framework/issues</url>
+    </issueManagement>
+    <developers>
+        <developer>
+            <id>funkygao</id>
+            <name>Funky Gao</name>
+            <email>funky.gao@gmail.com</email>
+            <url>https://funkygao.github.io/</url>
+        </developer>
+    </developers>
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
     <profiles>
-        <!-- 单元测试 profile：把cp-ddd-test module引入，准备jacoco -->
         <profile>
             <id>test</id>
             <activation>
@@ -148,9 +169,9 @@ under the License.
             <id>install</id>
         </profile>
 
-        <!-- 发布到github maven package -->
+        <!-- release to github maven package -->
         <profile>
-            <id>release</id>
+            <id>release-github</id>
             <distributionManagement>
                 <repository>
                     <id>github</id>
@@ -159,5 +180,52 @@ under the License.
                 </repository>
             </distributionManagement>
         </profile>
+
+        <!-- release to maven central repo: OSS Repository Hosting https://central.sonatype.org/pages/ossrh-guide.html -->
+        <profile>
+            <id>ossrh</id>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>ossrh</id>
+                    <name>OSS Snapshots Repository</name>
+                    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+                </snapshotRepository>
+                <repository>
+                    <id>ossrh</id>
+                    <name>OSS Staging Repository</name>
+                    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+                </repository>
+            </distributionManagement>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.6</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.7</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
+
 </project>

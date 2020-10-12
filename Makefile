@@ -22,8 +22,8 @@ javadoc:install
 	@mvn javadoc:javadoc -Pinstall
 	@open target/site/apidocs/index.html
 
-deploy-github:test
-	@mvn deploy -Prelease
+deploy:
+	@mvn clean deploy verify -Possrh
 
 release-javadoc:install
 	@git checkout gh-pages

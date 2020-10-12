@@ -24,6 +24,7 @@ under the License.
     </parent>
 
     <artifactId>cp-ddd-runtime</artifactId>
+    <packaging>jar</packaging>
     <name>DDD :: Runtime</name>
     <description>Central Platform DDD Framework Runtime Support</description>
 

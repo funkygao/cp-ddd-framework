@@ -24,6 +24,7 @@ under the License.
     </parent>
 
     <artifactId>cp-ddd-spec</artifactId>
+    <packaging>jar</packaging>
     <name>DDD :: Spec</name>
     <description>Central Platform DDD Framework Specifications</description>
 

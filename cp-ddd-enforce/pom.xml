@@ -24,6 +24,7 @@ under the License.
     </parent>
 
     <artifactId>cp-ddd-enforce</artifactId>
+    <packaging>jar</packaging>
     <name>DDD :: Enforce</name>
     <description>Central Platform DDD Framework Enforcement</description>
 
