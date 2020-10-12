@@ -28,6 +28,7 @@ deploy-github:test
 release-javadoc:install
 	@git checkout gh-pages
 	@git pull
+	@git merge -m 'Merge master to gh-pages' master
 	@git checkout master
 	@mvn javadoc:javadoc
 	@git checkout gh-pages
