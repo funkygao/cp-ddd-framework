@@ -3,16 +3,12 @@ package:clean
 
 clean:
 	@mvn clean
-	@cd demo; mvn clean
 
 install:clean test
 	@mvn install -Pinstall
 
 test:clean
 	@mvn test -Ptest
-
-plugin-test:install
-	@cd demo; mvn package; mvn test -Pplugin
 
 coverage:test
 	@mvn clean verify -Ptest
