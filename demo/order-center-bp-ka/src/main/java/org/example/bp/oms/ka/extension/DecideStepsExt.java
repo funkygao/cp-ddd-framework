@@ -2,9 +2,9 @@ package org.example.bp.oms.ka.extension;
 
 import org.example.bp.oms.ka.KaPartner;
 import org.example.cp.oms.spec.Steps;
-import org.cdf.ddd.annotation.Extension;
-import org.cdf.ddd.ext.IDecideStepsExt;
-import org.cdf.ddd.model.IDomainModel;
+import io.github.dddplus.annotation.Extension;
+import io.github.dddplus.ext.IDecideStepsExt;
+import io.github.dddplus.model.IDomainModel;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;

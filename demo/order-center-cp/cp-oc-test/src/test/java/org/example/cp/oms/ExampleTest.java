@@ -1,6 +1,6 @@
 package org.example.cp.oms;
 
-import org.cdf.ddd.api.RequestProfile;
+import io.github.dddplus.api.RequestProfile;
 import org.example.cp.oms.spec.exception.OrderException;
 import org.example.cp.oms.domain.model.OrderModel;
 import org.example.cp.oms.domain.model.OrderModelCreator;

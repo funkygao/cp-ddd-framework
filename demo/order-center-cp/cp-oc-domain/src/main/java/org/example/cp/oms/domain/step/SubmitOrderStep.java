@@ -1,7 +1,7 @@
 package org.example.cp.oms.domain.step;
 
 import org.example.cp.oms.domain.model.OrderModel;
-import org.cdf.ddd.step.IRevokableDomainStep;
+import io.github.dddplus.step.IRevokableDomainStep;
 import org.example.cp.oms.spec.exception.OrderException;
 import org.example.cp.oms.spec.Steps;
 

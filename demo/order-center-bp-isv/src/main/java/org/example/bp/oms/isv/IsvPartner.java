@@ -2,8 +2,8 @@ package org.example.bp.oms.isv;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.cp.oms.spec.model.IOrderModel;
-import org.cdf.ddd.annotation.Partner;
-import org.cdf.ddd.ext.IIdentityResolver;
+import io.github.dddplus.annotation.Partner;
+import io.github.dddplus.ext.IIdentityResolver;
 import org.springframework.beans.factory.DisposableBean;
 
 @Partner(code = IsvPartner.CODE, name = "ISV业务前台")

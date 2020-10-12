@@ -3,7 +3,7 @@ package org.example.bp.oms.isv.extension;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import lombok.extern.slf4j.Slf4j;
-import org.cdf.ddd.annotation.Extension;
+import io.github.dddplus.annotation.Extension;
 import org.example.bp.oms.isv.IsvPartner;
 import org.example.bp.oms.isv.aop.AutoLogger;
 import org.example.bp.oms.isv.extension.util.WarehouseUtil;

@@ -1,10 +1,10 @@
 package org.example.cp.oms;
 
 import lombok.extern.slf4j.Slf4j;
-import org.cdf.ddd.annotation.UnderDevelopment;
-import org.cdf.ddd.api.RequestProfile;
-import org.cdf.ddd.runtime.registry.Container;
-import org.cdf.ddd.runtime.registry.IPlugin;
+import io.github.dddplus.annotation.UnderDevelopment;
+import io.github.dddplus.api.RequestProfile;
+import io.github.dddplus.runtime.registry.Container;
+import io.github.dddplus.plugin.IPlugin;
 import org.example.cp.oms.domain.model.OrderModel;
 import org.example.cp.oms.domain.model.OrderModelCreator;
 import org.example.cp.oms.domain.service.SubmitOrder;

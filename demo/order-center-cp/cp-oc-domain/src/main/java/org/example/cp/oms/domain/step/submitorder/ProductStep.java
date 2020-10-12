@@ -5,7 +5,7 @@ import org.example.cp.oms.spec.exception.OrderException;
 import org.example.cp.oms.domain.model.OrderModel;
 import org.example.cp.oms.domain.step.SubmitOrderStep;
 import org.example.cp.oms.spec.Steps;
-import org.cdf.ddd.annotation.Step;
+import io.github.dddplus.annotation.Step;
 
 import javax.validation.constraints.NotNull;
 
