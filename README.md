@@ -1,3 +1,4 @@
+[![Latest Version](https://img.shields.io/badge/Latest%20SNAPSHOT%20Version-0.0.1-blue.svg)](https://oss.sonatype.org/#nexus-search;quick~dddplus)
 [![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](https://github.com/funkygao/cp-ddd-framework/blob/master/LICENSE)
 [![CI](https://github.com/funkygao/cp-ddd-framework/workflows/CI/badge.svg?branch=master)](https://github.com/funkygao/cp-ddd-framework/actions?query=branch%3Amaster+workflow%3ACI)
 [![Code Quality: Java](https://img.shields.io/lgtm/grade/java/g/funkygao/cp-ddd-framework.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/funkygao/cp-ddd-framework/context:java)
@@ -20,8 +21,8 @@
    * [Building from Source](#building-from-source)
 * [Demo](#demo)
 * [Modules](#modules)
+* [Reference documentation](#reference-documentation)
 * [Landscape of Central Platform](#landscape-of-central-platform)
-* [Reference guide](#reference-guide)
 * [Contribution](#contribution)
 * [Licensing](#licensing)
 
@@ -29,7 +30,7 @@
 
 cp-ddd-framework is a lightweight flexible development framework for complex business architecture.
 
-轻量级业务中台开发框架，以DDD思想为基础，融合中台核心要素，赋能中台建设。
+轻量级业务中台开发框架，以DDD思想为基础，融合[中台核心要素](https://github.com/funkygao/cp-ddd-framework/wiki/%E4%B8%9A%E5%8A%A1%E4%B8%AD%E5%8F%B0%E7%9A%84%E6%A0%B8%E5%BF%83%E8%A6%81%E7%B4%A0)，赋能中台建设。
 
 融合了DDD、前中台复杂生态协作方法论，同时充分考虑组织、历史债、运维和落地成本以及风险而开发的，面向复杂业务场景架构设计，是**中台架构的完整解决方案**。
 
@@ -75,13 +76,13 @@ Requires Java 1.8+ and Spring 4.3.12.RELEASE or later.
 
 ```xml
 <properties>
-    <cp.ddd.framework.version>0.0.1-SNAPSHOT</cp.ddd.framework.version>
+    <dddplus.version>0.0.1-SNAPSHOT</dddplus.version>
 </properties>
 
 <dependency>
     <groupId>io.github.dddplus</groupId>
     <artifactId>dddplus-runtime</artifactId>
-    <version>${cp.ddd.framework.version}</version>
+    <version>${dddplus.version}</version>
 </dependency>
 ```
 
@@ -124,15 +125,15 @@ Plugin hot reloading implementation.
 
 Enforce expected evolvement of the business architecture based upon ArchUnit.
 
+## Reference documentation
+
+Please visit [cp-ddd-framework Javadoc](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/).
+
 ## Landscape of Central Platform
 
 业务中台建设全景图。
 
 ![](doc/assets/img/landscape.png)
-
-## Reference guide
-
-Please visit [cp-ddd-framework Javadoc](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/).
 
 ## Contribution
 
