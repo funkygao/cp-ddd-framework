@@ -28,7 +28,7 @@ under the License.
     <description>Central Platform DDD Framework Enforcement</description>
 
     <properties>
-        <maven.deploy.skip>false</maven.deploy.skip>
+        <maven.deploy.skip>true</maven.deploy.skip>
     </properties>
 
     <dependencies>
