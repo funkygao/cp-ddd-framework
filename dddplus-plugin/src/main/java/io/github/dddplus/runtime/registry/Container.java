@@ -6,6 +6,7 @@
 package io.github.dddplus.runtime.registry;
 
 import io.github.dddplus.annotation.Partner;
+import io.github.dddplus.annotation.UnderDevelopment;
 import io.github.dddplus.plugin.IPlugin;
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,6 +33,7 @@ import java.util.*;
  * </pre>
  */
 @Slf4j
+@UnderDevelopment
 public final class Container {
     private static final Container instance = new Container();
 
