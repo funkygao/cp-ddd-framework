@@ -8,23 +8,31 @@
 
 # cp-ddd-framework (Central Platform：中台)
 
-* [What is cp-ddd-framework](#what-is-cp-ddd-framework)
-   * [Current status](#current-status)
-   * [Quickstart](#quickstart)
-   * [What problems does it solve](#what-problems-does-it-solve)
-   * [Key abstractions](#key-abstractions)
-   * [The complete guide](#the-complete-guide)
-* [Requirements](#requirements)
-* [Using cp-ddd-framework](#using-cp-ddd-framework)
-   * [Maven](#maven)
-   * [Gradle](#gradle)
-   * [Building from Source](#building-from-source)
-* [Demo](#demo)
-* [Modules](#modules)
-* [Reference documentation](#reference-documentation)
-* [Landscape of Central Platform](#landscape-of-central-platform)
-* [Contribution](#contribution)
-* [Licensing](#licensing)
+<details>
+<summary>Table of content</summary>
+
+## Table of content
+    * [What is cp-ddd-framework](#what-is-cp-ddd-framework)
+       * [Current status](#current-status)
+       * [Quickstart](#quickstart)
+       * [What problems does it solve](#what-problems-does-it-solve)
+       * [Key abstractions](#key-abstractions)
+       * [The complete guide](#the-complete-guide)
+    * [Requirements](#requirements)
+    * [Using cp-ddd-framework](#using-cp-ddd-framework)
+       * [Maven](#maven)
+       * [Gradle](#gradle)
+       * [Building from Source](#building-from-source)
+    * [Demo](#demo)
+    * [Modules](#modules)
+    * [Reference documentation](#reference-documentation)
+    * [Landscape of Central Platform](#landscape-of-central-platform)
+    * [Contribution](#contribution)
+    * [Licensing](#licensing)
+
+</details>
+
+----
 
 ## What is cp-ddd-framework?
 
@@ -146,6 +154,8 @@ You are welcome to contribute to the project with pull requests on GitHub.
 If you find a bug or want to request a feature, please use the [issue tracker](https://github.com/funkygao/cp-ddd-framework/issues).
 
 For any question, you can use [Gitter Chat](https://gitter.im/cp-ddd-framework/community).
+
+有任何问题，请使用 [Gitter Chat](https://gitter.im/cp-ddd-framework/community) 沟通；如果希望贡献代码，请使用 [issue tracker](https://github.com/funkygao/cp-ddd-framework/issues).
 
 ## Licensing
 
