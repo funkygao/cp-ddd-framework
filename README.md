@@ -14,10 +14,10 @@
 ## Table of content
    * [What is cp-ddd-framework](#what-is-cp-ddd-framework)
       * [Current status](#current-status)
+      * [Requirements](#requirements)
       * [Quickstart](#quickstart)
       * [What problems does it solve](#what-problems-does-it-solve)
       * [Key abstractions](#key-abstractions)
-   * [Requirements](#requirements)
    * [Using cp-ddd-framework](#using-cp-ddd-framework)
       * [Maven](#maven)
       * [Gradle](#gradle)
@@ -47,6 +47,10 @@ Used for several complex critical central platform projects in production enviro
 
 目前在多个复杂的中台核心项目生产环境下使用，是中台建设的根基。
 
+### Requirements
+
+Requires Java 1.8+ and Spring 4.3.12.RELEASE or later.
+
 ### Quickstart
 
 [快速入门](https://github.com/funkygao/cp-ddd-framework/wiki)。
@@ -72,11 +76,6 @@ Please visit [Quickstart](https://github.com/funkygao/cp-ddd-framework/wiki).
 这14个核心抽象，勾勒出业务中台的骨架，以不变应万变。
 
 ![](http://www.plantuml.com/plantuml/svg/XLHDRnCn4BtxLunwQW-fn3LQLIq4f1v0LSiTJUn9rehNZkpPfAZqlpDE7DWF8tAAvxrvyxttYJ5otpcLTjRlCM87BNfpZ9QPF6pG9HfWgKKJZjPlc-PekVrnVj_T0SUUbACD0mU8Tjio61j9imrUgJtg7Mu9dbo_jHwQvek8aRYzAP2VzKnnWvhWyT6GPyi_doa5Tw0unLUXG-i_lpBv9D9JE0V0jQEf_Mimv1wOKRSTUHR_cJ1fQ-Y5QPykg7QO4ZmX2ycFB94zHVMkb0zCSDK6XaWkeCcnhm0JVFkWIh6tj_cXPZMyK3nOJHL0Sb23_x04UYNTCrtV3DdFT0Yx773eLZ6AVmpEhMK68l2dHT3yMYnc3PtXiu5KUddASEz4HmBKyKZUK1GOruaZQeRIQjBVgHDVfh_GHqmb_uUrTH9SpImYkIM-f2rngvIDZUc_94CRxDs8DijjD8FLQYNljyJ8LhzB46-AMXqygGaqsR4SkXWAFksrC3fatLwNAPqwUwFKU8FAeEhBKy3ghinLAfrNqmqfYkDQwgpgtStBF7FBdVqJBaTN6M4ZiBHzN7QnLHAhbRa45pGoLVYBnTqbjoMiPPnrIiclKDIdu5au525BeybNbSzZY6ItixsGb2egyjR1a2fnotCUkDWh-vgr1_rOGeYwfSHHG7LFtkHl_cy0)
-
-
-## Requirements
-
-Requires Java 1.8+ and Spring 4.3.12.RELEASE or later.
 
 ## Using cp-ddd-framework
 
