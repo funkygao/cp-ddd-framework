@@ -34,3 +34,7 @@ release-javadoc:install
 	@git commit -m 'Javadoc released' doc/apidocs
 	@git push
 	@git checkout master
+
+all:release-javadoc deploy
+	@git push origin
+	@git push dddplus
