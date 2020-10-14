@@ -17,7 +17,6 @@
       * [Quickstart](#quickstart)
       * [What problems does it solve](#what-problems-does-it-solve)
       * [Key abstractions](#key-abstractions)
-      * [The complete guide](#the-complete-guide)
    * [Requirements](#requirements)
    * [Using cp-ddd-framework](#using-cp-ddd-framework)
       * [Maven](#maven)
@@ -54,9 +53,9 @@ Used for several complex critical central platform projects in production enviro
 
 ### Quickstart
 
-[快速入门](https://github.com/funkygao/cp-ddd-framework/wiki/Quickstart-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8)。
+[快速入门](https://github.com/funkygao/cp-ddd-framework/wiki)。
 
-Please visit [Quickstart](https://github.com/funkygao/cp-ddd-framework/wiki/Quickstart-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8).
+Please visit [Quickstart](https://github.com/funkygao/cp-ddd-framework/wiki).
 
 ### What problems does it solve
 
@@ -78,9 +77,6 @@ Please visit [Quickstart](https://github.com/funkygao/cp-ddd-framework/wiki/Quic
 
 ![](http://www.plantuml.com/plantuml/svg/XLHDRnCn4BtxLunwQW-fn3LQLIq4f1v0LSiTJUn9rehNZkpPfAZqlpDE7DWF8tAAvxrvyxttYJ5otpcLTjRlCM87BNfpZ9QPF6pG9HfWgKKJZjPlc-PekVrnVj_T0SUUbACD0mU8Tjio61j9imrUgJtg7Mu9dbo_jHwQvek8aRYzAP2VzKnnWvhWyT6GPyi_doa5Tw0unLUXG-i_lpBv9D9JE0V0jQEf_Mimv1wOKRSTUHR_cJ1fQ-Y5QPykg7QO4ZmX2ycFB94zHVMkb0zCSDK6XaWkeCcnhm0JVFkWIh6tj_cXPZMyK3nOJHL0Sb23_x04UYNTCrtV3DdFT0Yx773eLZ6AVmpEhMK68l2dHT3yMYnc3PtXiu5KUddASEz4HmBKyKZUK1GOruaZQeRIQjBVgHDVfh_GHqmb_uUrTH9SpImYkIM-f2rngvIDZUc_94CRxDs8DijjD8FLQYNljyJ8LhzB46-AMXqygGaqsR4SkXWAFksrC3fatLwNAPqwUwFKU8FAeEhBKy3ghinLAfrNqmqfYkDQwgpgtStBF7FBdVqJBaTN6M4ZiBHzN7QnLHAhbRa45pGoLVYBnTqbjoMiPPnrIiclKDIdu5au525BeybNbSzZY6ItixsGb2egyjR1a2fnotCUkDWh-vgr1_rOGeYwfSHHG7LFtkHl_cy0)
 
-### The complete guide
-
-Please visit [How to use this framework](https://github.com/funkygao/cp-ddd-framework/wiki).
 
 ## Requirements
 
@@ -157,7 +153,7 @@ You are welcome to contribute to the project with pull requests on GitHub.
 
 If you find a bug or want to request a feature, please use the [Issue Tracker](https://github.com/funkygao/cp-ddd-framework/issues).
 
-For any question, you can use [Gitter Chat](https://gitter.im/cp-ddd-framework/community).
+For any question, you can use [Gitter Chat](https://gitter.im/cp-ddd-framework/community) to ask.
 
 ## Licensing
 
