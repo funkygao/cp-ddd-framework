@@ -4,7 +4,8 @@
 [![Total Alerts](https://img.shields.io/lgtm/alerts/g/funkygao/cp-ddd-framework.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/funkygao/cp-ddd-framework/alerts/)
 [![Coverage Status](https://img.shields.io/codecov/c/github/funkygao/cp-ddd-framework.svg)](https://codecov.io/gh/funkygao/cp-ddd-framework)
 [![TODO](https://badgen.net/https/api.tickgit.com/badgen/github.com/funkygao/cp-ddd-framework?label=todos)](https://www.tickgit.com/browse?repo=github.com/funkygao/cp-ddd-framework)
-[![Gitter](https://img.shields.io/gitter/room/cp-ddd-framework/cp-ddd-framework.svg)](https://gitter.im/cp-ddd-framework/community)
+[![Ask Me Anything !](https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg)](https://gitter.im/cp-ddd-framework/community)
+[![Slack DDDplus](https://img.shields.io/badge/slack-dddplus-yellow.svg?logo=slack)](https://app.slack.com/client/T01CK0X051Q/C01CFTRH42Z)
 
 # cp-ddd-framework (Central Platform：中台)
 
@@ -158,8 +159,6 @@ You are welcome to contribute to the project with pull requests on GitHub.
 If you find a bug or want to request a feature, please use the [Issue Tracker](https://github.com/funkygao/cp-ddd-framework/issues).
 
 For any question, you can use [Gitter Chat](https://gitter.im/cp-ddd-framework/community).
-
-有任何问题，[![Ask Me Anything !](https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg)](https://gitter.im/cp-ddd-framework/community)；如果希望贡献代码，[![GitHub issues](https://img.shields.io/github/issues/funkygao/cp-ddd-framework.svg)](https://github.com/funkygao/cp-ddd-framework/issues/).
 
 ## Licensing
 
