@@ -9,7 +9,7 @@
 # cp-ddd-framework (Central Platform：中台)
 
 <details>
-<summary>Table of content</summary>
+<summary><b>Table of content</b></summary>
 
 ## Table of content
    * [What is cp-ddd-framework](#what-is-cp-ddd-framework)
