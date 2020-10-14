@@ -24,10 +24,6 @@
       * [Building from Source](#building-from-source)
    * [Demo](#demo)
    * [Modules](#modules)
-      * [dddplus-spec](#dddplus-spec)
-      * [dddplus-runtime](#dddplus-runtime)
-      * [dddplus-plugin](#dddplus-plugin)
-      * [dddplus-enforce](#dddplus-enforce)
    * [Reference documentation](#reference-documentation)
    * [Landscape of Central Platform](#landscape-of-central-platform)
    * [Contribution](#contribution)
@@ -84,6 +80,8 @@ Requires Java 1.8+ and Spring 4.3.12.RELEASE or later.
 
 ## Using cp-ddd-framework
 
+该框架已推送至Maven中央库，可直接引入。
+
 ### Maven
 
 ```xml
@@ -121,21 +119,14 @@ Please visit [使用该框架搭建`订单履约中台`的例子](https://github
 
 ## Modules
 
-### dddplus-spec
-
-Specification of the framework.
-
-### dddplus-runtime
-
-Runtime implementation of the framework.
-
-### dddplus-plugin
-
-Plugin hot reloading implementation.
-
-### dddplus-enforce
-
-Enforce expected evolvement of the business architecture based upon ArchUnit.
+```
+cp-ddd-framework
+   ├── dddplus-spec    -- Specification of the framework
+   ├── dddplus-runtime -- Runtime implementation
+   ├── dddplus-plugin  -- Plugin hot reloading mechanism
+   ├── dddplus-enforce -- Enforce expected evolvement of the business architecture
+   └── dddplus-test    -- Fully covered unit test cases
+```
 
 ## Reference documentation
 
