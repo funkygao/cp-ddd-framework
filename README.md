@@ -155,7 +155,7 @@ If you find a bug or want to request a feature, please use the [Issue Tracker](h
 
 For any question, you can use [Gitter Chat](https://gitter.im/cp-ddd-framework/community).
 
-有任何问题，请使用 [Gitter Chat](https://gitter.im/cp-ddd-framework/community) 沟通；如果希望贡献代码，请使用 [Issue Tracker](https://github.com/funkygao/cp-ddd-framework/issues).
+有任何问题，[![Ask Me Anything !](https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg)](https://gitter.im/cp-ddd-framework/community)；如果希望贡献代码，[![GitHub issues](https://img.shields.io/github/issues/funkygao/cp-ddd-framework.svg)](https://github.com/funkygao/cp-ddd-framework/issues/).
 
 ## Licensing
 
