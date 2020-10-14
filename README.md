@@ -80,7 +80,7 @@ Requires Java 1.8+ and Spring 4.3.12.RELEASE or later.
 
 ## Using cp-ddd-framework
 
-该框架已推送至Maven中央库，可直接引入。
+已推送至Maven中央库，可直接引入。
 
 ### Maven
 
