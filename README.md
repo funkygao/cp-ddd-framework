@@ -68,7 +68,7 @@ Please visit [Quickstart wiki](https://github.com/funkygao/cp-ddd-framework/wiki
 
 ### The complete guide
 
-Please visit [How to use this framework](https://github.com/funkygao/cp-ddd-framework/wiki/How-to-use-this-framework%3F).
+Please visit [How to use this framework](https://github.com/funkygao/cp-ddd-framework/wiki).
 
 ## Requirements
 
