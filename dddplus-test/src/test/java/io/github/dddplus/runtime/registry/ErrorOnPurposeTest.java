@@ -3,16 +3,15 @@ package io.github.dddplus.runtime.registry;
 import org.junit.After;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-// 每个测试方法单独跑可以，但一起跑ErrorOnPurposeTest就失败：
-// 1. InternalIndexer的索引数据都是static的
-// 2. DDDBootstrap.once是静态的
 @Ignore
+@PrepareForTest // PowerMock create class loader per method，解决InternalIndexer内部static state无法测试的问题
 public class ErrorOnPurposeTest {
 
     private ClassPathXmlApplicationContext applicationContext;
