@@ -12,6 +12,7 @@ import io.github.dddplus.runtime.BaseDomainAbility;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 注册表索引, internal usage only.
@@ -32,8 +33,7 @@ public class InternalIndexer {
     static final Map<Class<? extends IDomainExtension>, List<PatternDef>> sortedPatternMap = new HashMap<>();
 
     // 扩展点 Partner
-    static final Map<String, PartnerDef> partnerDefMap = new HashMap<>(); // TODO CopyOnWriteHashMap
-
+    static final Map<String, PartnerDef> partnerDefMap = new ConcurrentHashMap<>();
     private static volatile PartnerDef partnerDefPrepared = null;
 
     /**
@@ -276,10 +276,11 @@ public class InternalIndexer {
 
     static void prepare(ExtensionDef extensionDef) {
         if (partnerDefPrepared == null) {
-            // TODO Partner的定义没有出现在Plugin Jar
+            // implicit ordering: 框架内部永远会先 prepare(partnerDef)，再 prepare(extensionDef)
+            // 由于这个顺序不会暴露外部，这个隐含的条件还OK
+            throw BootstrapException.ofMessage("Partner must reside in Plugin Jar with its extensions!"); // TODO Partner的定义没有出现在Plugin Jar的场景可能也需要支持
         }
 
-        // implicit ordering: Partner, then Extension
         partnerDefPrepared.registerExtensionDef(extensionDef);
     }
 

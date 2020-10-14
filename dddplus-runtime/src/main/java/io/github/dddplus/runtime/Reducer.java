@@ -47,16 +47,26 @@ public abstract class Reducer<R> implements IReducer<R> {
     }
 
     /**
-     * 执行所有的扩展点.
+     * 执行所有的扩展点，并获取期望的结果.
      *
-     * @param <R> 扩展点方法的返回值类型
-     * @return will always be null
+     * @param predicate expected result predicate. if null, always return null
+     * @param <R>       扩展点方法的返回值类型
+     * @return the value that satisfies predicate. if none satisfied, returns null
      */
-    public static <R> Reducer<R> all() {
+    public static <R> Reducer<R> all(Predicate<R> predicate) {
         return new Reducer<R>() {
             @Override
             public R reduce(List<R> accumulatedResults) {
-                // 返回的归约结果，是null
+                if (predicate == null) {
+                    return null;
+                }
+
+                for (R r : accumulatedResults) {
+                    if (predicate.test(r)) {
+                        return r;
+                    }
+                }
+
                 return null;
             }
 
