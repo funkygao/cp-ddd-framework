@@ -17,13 +17,13 @@
       * [Requirements](#requirements)
       * [Quickstart](#quickstart)
       * [What problems does it solve](#what-problems-does-it-solve)
+      * [Modules](#modules)
       * [Key abstractions](#key-abstractions)
    * [Using cp-ddd-framework](#using-cp-ddd-framework)
       * [Maven](#maven)
       * [Gradle](#gradle)
       * [Building from Source](#building-from-source)
    * [Demo](#demo)
-   * [Modules](#modules)
    * [Reference documentation](#reference-documentation)
    * [Landscape of Central Platform](#landscape-of-central-platform)
    * [Contribution](#contribution)
@@ -71,6 +71,17 @@ Please visit [Quickstart](https://github.com/funkygao/cp-ddd-framework/wiki).
 - 普通研发如何编写出优雅的业务代码：low threshold for average developer to build elegant biz code
 - and more
 
+### Modules
+
+```
+cp-ddd-framework
+   ├── dddplus-spec    -- Specification of the framework
+   ├── dddplus-runtime -- Runtime implementation
+   ├── dddplus-plugin  -- Plugin hot reloading mechanism
+   ├── dddplus-enforce -- Enforce expected evolvement of the business architecture
+   └── dddplus-test    -- Fully covered unit test cases
+```
+
 ### Key abstractions
 
 这14个核心抽象，勾勒出业务中台的骨架，以不变应万变。
@@ -115,17 +126,6 @@ mvn install
 ## Demo
 
 Please visit [使用该框架搭建`订单履约中台`的例子](https://github.com/dddplus/dddplus-demo).
-
-## Modules
-
-```
-cp-ddd-framework
-   ├── dddplus-spec    -- Specification of the framework
-   ├── dddplus-runtime -- Runtime implementation
-   ├── dddplus-plugin  -- Plugin hot reloading mechanism
-   ├── dddplus-enforce -- Enforce expected evolvement of the business architecture
-   └── dddplus-test    -- Fully covered unit test cases
-```
 
 ## Reference documentation
 
