@@ -2,6 +2,7 @@ package io.github.dddplus.runtime.registry;
 
 import io.github.dddplus.runtime.registry.mock.MockStartupListener;
 import io.github.dddplus.runtime.registry.mock.ability.*;
+import io.github.dddplus.runtime.registry.mock.extension.BarExt;
 import io.github.dddplus.runtime.registry.mock.service.FooDomainService;
 import io.github.dddplus.runtime.registry.mock.step.*;
 import io.github.dddplus.runtime.registry.mock.exception.FooException;
@@ -108,9 +109,7 @@ public class IntegrationTest {
     public void reducerAll() {
         BarDomainAbility ability = DDD.findAbility(BarDomainAbility.class);
         String result = ability.submit2(fooModel);
-        log.info("{}", result);
-        // 由于submit2里执行了Reducer.all，返回值被置为null了
-        assertNull(result);
+        assertEquals(String.valueOf(BarExt.RESULT), result);
     }
 
     @Test

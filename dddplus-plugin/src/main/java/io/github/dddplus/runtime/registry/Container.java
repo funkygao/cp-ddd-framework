@@ -5,9 +5,10 @@
  */
 package io.github.dddplus.runtime.registry;
 
-import lombok.extern.slf4j.Slf4j;
 import io.github.dddplus.annotation.Partner;
+import io.github.dddplus.annotation.UnderDevelopment;
 import io.github.dddplus.plugin.IPlugin;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.validation.constraints.NotNull;
 import java.io.File;
@@ -15,11 +16,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.*;
 
 /**
  * 业务容器，用于动态加载个性化业务包：Plugin Jar.
@@ -36,13 +33,14 @@ import java.util.concurrent.ConcurrentHashMap;
  * </pre>
  */
 @Slf4j
+@UnderDevelopment
 public final class Container {
     private static final Container instance = new Container();
 
     private static ClassLoader jdkClassLoader = initJDKClassLoader();
     private static ClassLoader containerClassLoader = Container.class.getClassLoader();
 
-    private static final Map<String, IPlugin> activePlugins = new ConcurrentHashMap<>();
+    private static final Map<String, IPlugin> activePlugins = new HashMap<>(); // has no concurrent scenarios: thread safe
 
     private Container() {
     }
@@ -73,7 +71,7 @@ public final class Container {
      * @param useSpring jar包里是否需要Spring机制
      * @throws Throwable
      */
-    public void loadPartnerPlugin(@NotNull String code, @NotNull URL jarUrl, boolean useSpring) throws Throwable {
+    public synchronized void loadPartnerPlugin(@NotNull String code, @NotNull URL jarUrl, boolean useSpring) throws Throwable {
         File localJar = jarTempLocalFile(jarUrl);
         localJar.deleteOnExit();
 
@@ -92,7 +90,7 @@ public final class Container {
      * @param useSpring jar包里是否需要Spring机制
      * @throws Throwable
      */
-    public void loadPartnerPlugin(@NotNull String code, @NotNull String jarPath, boolean useSpring) throws Throwable {
+    public synchronized void loadPartnerPlugin(@NotNull String code, @NotNull String jarPath, boolean useSpring) throws Throwable {
         if (!jarPath.endsWith(".jar")) {
             throw new IllegalArgumentException("Invalid jarPath: " + jarPath);
         }
@@ -104,10 +102,14 @@ public final class Container {
         long t0 = System.nanoTime();
         log.warn("Loading partner:{} useSpring:{}", jarPath, useSpring);
         try {
-            // TODO 把之前的该Plugin下的所有类的所有引用处理干净，这样才能GC介入
-            // 释放：jar里的所有类，PluginClassLoader, Spring ApplicationContext
             Plugin plugin = new Plugin(code, jdkClassLoader, containerClassLoader).
                     load(jarPath, useSpring, Partner.class, new ContainerContext(DDDBootstrap.applicationContext()));
+            IPlugin pluginToDestroy = activePlugins.get(code);
+            if (pluginToDestroy != null) {
+                log.warn("to destroy partner:{}", code);
+                ((Plugin) pluginToDestroy).onDestroy();
+            }
+
             activePlugins.put(plugin.getCode(), plugin); // old plugin will be GC'ed
         } catch (Throwable ex) {
             log.error("fails to load partner:{}, cost {}ms", jarPath, (System.nanoTime() - t0) / 1000_000, ex);

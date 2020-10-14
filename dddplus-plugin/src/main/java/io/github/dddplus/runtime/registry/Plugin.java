@@ -42,7 +42,7 @@ class Plugin implements IPlugin {
     private ClassLoader pluginClassLoader;
 
     // each Plugin will have a specific Spring IoC with the same parent: the Container
-    private ClassPathXmlApplicationContext applicationContext; // TODO 释放 applicationContext.close()
+    private ClassPathXmlApplicationContext applicationContext;
 
     Plugin(String code, ClassLoader jdkClassLoader, ClassLoader containerClassLoader) {
         this.code = code;
@@ -80,6 +80,11 @@ class Plugin implements IPlugin {
         }
 
         return this;
+    }
+
+    void onDestroy() {
+        // 把该Plugin下的所有类的所有引用处理干净，这样才能GC介入
+        applicationContext.close();
     }
 
     // load all relevant classes with the new PluginClassLoader

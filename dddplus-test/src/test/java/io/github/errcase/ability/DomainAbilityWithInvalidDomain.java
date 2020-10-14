@@ -31,7 +31,7 @@ public class DomainAbilityWithInvalidDomain extends BaseDomainAbility<FooModel, 
     }
 
     public String submit2(FooModel model) {
-        Integer result = getExtension(model, Reducer.all()).execute(model);
+        Integer result = getExtension(model, Reducer.all(null)).execute(model);
         if (result == null) {
             return null;
         }
