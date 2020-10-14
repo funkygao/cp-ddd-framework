@@ -41,6 +41,8 @@ cp-ddd-framework is a lightweight flexible development framework for complex bus
 
 融合了DDD、前中台复杂生态协作方法论，同时充分考虑组织、历史债、运维和落地成本以及风险而开发的，面向复杂业务场景架构设计，是**中台架构的完整解决方案**。
 
+[![Ask Me Anything !](https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg)](https://gitter.im/cp-ddd-framework/community)
+
 ### Current status
 
 Used for several complex critical central platform projects in production environment.
