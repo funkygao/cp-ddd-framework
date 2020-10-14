@@ -5,15 +5,13 @@
  */
 package io.github.dddplus.runtime.registry;
 
-import io.github.dddplus.plugin.IContainerContext;
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
 import io.github.dddplus.annotation.Extension;
 import io.github.dddplus.annotation.Partner;
+import io.github.dddplus.plugin.IContainerContext;
 import io.github.dddplus.plugin.IPlugin;
 import io.github.dddplus.plugin.IPluginListener;
-import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
@@ -32,17 +30,22 @@ import java.util.Map;
  */
 @Slf4j
 class Plugin implements IPlugin {
-    private static final String pluginXml = "/plugin.xml";
+    private static final String[] pluginXml = new String[]{"/plugin.xml"};
 
     @Getter
     private final String code;
+    @Getter
+    private String version;
 
+    // the shared class loaders
     private final ClassLoader jdkClassLoader;
     private final ClassLoader containerClassLoader;
+
+    // each Plugin will have a specific class loader
     private ClassLoader pluginClassLoader;
 
     // each Plugin will have a specific Spring IoC with the same parent: the Container
-    private ClassPathXmlApplicationContext applicationContext;
+    private PluginApplicationContext pluginApplicationContext;
 
     Plugin(String code, ClassLoader jdkClassLoader, ClassLoader containerClassLoader) {
         this.code = code;
@@ -84,7 +87,7 @@ class Plugin implements IPlugin {
 
     void onDestroy() {
         // 把该Plugin下的所有类的所有引用处理干净，这样才能GC介入
-        applicationContext.close();
+        pluginApplicationContext.close();
     }
 
     // load all relevant classes with the new PluginClassLoader
@@ -96,13 +99,8 @@ class Plugin implements IPlugin {
             log.debug("Spring loading Plugin with {}, {}, {} ...", jdkClassLoader, containerClassLoader, pluginClassLoader);
             long t0 = System.nanoTime();
 
-            applicationContext = new ClassPathXmlApplicationContext(new String[]{pluginXml}, DDDBootstrap.applicationContext()) {
-                protected void initBeanDefinitionReader(XmlBeanDefinitionReader reader) {
-                    super.initBeanDefinitionReader(reader);
-                    reader.setBeanClassLoader(pluginClassLoader);
-                    setClassLoader(pluginClassLoader); // so that it can find the pluginXml within the jar
-                }
-            };
+            pluginApplicationContext = new PluginApplicationContext(pluginXml, DDDBootstrap.applicationContext(), pluginClassLoader);
+            pluginApplicationContext.refresh();
 
             log.info("Spring loaded, cost {}ms", (System.nanoTime() - t0) / 1000_000);
         }
@@ -125,7 +123,7 @@ class Plugin implements IPlugin {
                 log.info("Preparing index {} {}", identityResolverClass.getSimpleName(), irc.getCanonicalName());
 
                 // 每次加载，由于 PluginClassLoader 是不同的，irc也不同
-                Object partnerOrPattern = applicationContext.getBean(irc);
+                Object partnerOrPattern = pluginApplicationContext.getBean(irc);
                 RegistryFactory.preparePlugins(identityResolverClass, partnerOrPattern);
             }
         }
@@ -137,7 +135,7 @@ class Plugin implements IPlugin {
 
                 // 这里extensionClazz是扩展点实现的类名 e,g. org.example.bp.oms.isv.extension.DecideStepsExt
                 // 而不是 IDecideStepsExt。因此，不必担心getBean异常：一个extensionClazz有多个对象
-                Object extension = applicationContext.getBean(extensionClazz);
+                Object extension = pluginApplicationContext.getBean(extensionClazz);
                 RegistryFactory.preparePlugins(Extension.class, extension);
             }
         }

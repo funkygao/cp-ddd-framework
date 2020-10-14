@@ -8,23 +8,35 @@
 
 # cp-ddd-framework (Central Platform：中台)
 
-* [What is cp-ddd-framework](#what-is-cp-ddd-framework)
-   * [Current status](#current-status)
-   * [Quickstart](#quickstart)
-   * [What problems does it solve](#what-problems-does-it-solve)
-   * [Key abstractions](#key-abstractions)
-   * [The complete guide](#the-complete-guide)
-* [Requirements](#requirements)
-* [Using cp-ddd-framework](#using-cp-ddd-framework)
-   * [Maven](#maven)
-   * [Gradle](#gradle)
-   * [Building from Source](#building-from-source)
-* [Demo](#demo)
-* [Modules](#modules)
-* [Reference documentation](#reference-documentation)
-* [Landscape of Central Platform](#landscape-of-central-platform)
-* [Contribution](#contribution)
-* [Licensing](#licensing)
+<details>
+<summary><b>Table of content</b></summary>
+
+## Table of content
+   * [What is cp-ddd-framework](#what-is-cp-ddd-framework)
+      * [Current status](#current-status)
+      * [Quickstart](#quickstart)
+      * [What problems does it solve](#what-problems-does-it-solve)
+      * [Key abstractions](#key-abstractions)
+      * [The complete guide](#the-complete-guide)
+   * [Requirements](#requirements)
+   * [Using cp-ddd-framework](#using-cp-ddd-framework)
+      * [Maven](#maven)
+      * [Gradle](#gradle)
+      * [Building from Source](#building-from-source)
+   * [Demo](#demo)
+   * [Modules](#modules)
+      * [dddplus-spec](#dddplus-spec)
+      * [dddplus-runtime](#dddplus-runtime)
+      * [dddplus-plugin](#dddplus-plugin)
+      * [dddplus-enforce](#dddplus-enforce)
+   * [Reference documentation](#reference-documentation)
+   * [Landscape of Central Platform](#landscape-of-central-platform)
+   * [Contribution](#contribution)
+   * [Licensing](#licensing)
+
+</details>
+
+----
 
 ## What is cp-ddd-framework?
 
@@ -44,7 +56,7 @@ Used for several complex critical central platform projects in production enviro
 
 [快速入门](https://github.com/funkygao/cp-ddd-framework/wiki/Quickstart-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8)。
 
-Please visit [Quickstart wiki](https://github.com/funkygao/cp-ddd-framework/wiki/Quickstart-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8).
+Please visit [Quickstart](https://github.com/funkygao/cp-ddd-framework/wiki/Quickstart-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8).
 
 ### What problems does it solve
 
@@ -68,7 +80,7 @@ Please visit [Quickstart wiki](https://github.com/funkygao/cp-ddd-framework/wiki
 
 ### The complete guide
 
-Please visit [How to use this framework](https://github.com/funkygao/cp-ddd-framework/wiki/How-to-use-this-framework%3F).
+Please visit [How to use this framework](https://github.com/funkygao/cp-ddd-framework/wiki).
 
 ## Requirements
 
@@ -131,7 +143,7 @@ Enforce expected evolvement of the business architecture based upon ArchUnit.
 
 ## Reference documentation
 
-Please visit [cp-ddd-framework Javadoc](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/).
+Please visit [Javadoc](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/).
 
 ## Landscape of Central Platform
 
@@ -143,9 +155,11 @@ Please visit [cp-ddd-framework Javadoc](https://funkygao.github.io/cp-ddd-framew
 
 You are welcome to contribute to the project with pull requests on GitHub.
 
-If you find a bug or want to request a feature, please use the [issue tracker](https://github.com/funkygao/cp-ddd-framework/issues).
+If you find a bug or want to request a feature, please use the [Issue Tracker](https://github.com/funkygao/cp-ddd-framework/issues).
 
 For any question, you can use [Gitter Chat](https://gitter.im/cp-ddd-framework/community).
+
+有任何问题，[![Ask Me Anything !](https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg)](https://gitter.im/cp-ddd-framework/community)；如果希望贡献代码，[![GitHub issues](https://img.shields.io/github/issues/funkygao/cp-ddd-framework.svg)](https://github.com/funkygao/cp-ddd-framework/issues/).
 
 ## Licensing
 

@@ -1,18 +1,15 @@
 package io.github.dddplus.runtime.registry;
 
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import static org.junit.Assert.*;
 
 @Slf4j
-@Ignore
 public class ContainerTest {
 
     @Test
@@ -54,20 +51,6 @@ public class ContainerTest {
         file.deleteOnExit();
         assertTrue(file.getCanonicalPath().endsWith(".jar"));
         file.delete();
-    }
-
-    @Test
-    public void loadPartnerPluginSmokeTest() throws MalformedURLException {
-        try {
-            Container.getInstance().loadPartnerPlugin("isv", new URL("https://github.com/funkygao/cp-ddd-framework/blob/master/doc/assets/jar/order-center-bp-isv-0.0.1.jar?raw=true"), true);
-            fail();
-        } catch (NoClassDefFoundError expected) {
-            // 由于没有加载示例的中台jar，肯定会抛出 NoClassDefFoundError
-            // java.lang.NoClassDefFoundError: org/example/cp/oms/spec/ext/ISerializableIsolationExt
-            // Caused by: java.lang.ClassNotFoundException: org.example.cp.oms.spec.ext.ISerializableIsolationExt
-        } catch (Throwable unexpected) {
-            fail();
-        }
     }
 
 }
