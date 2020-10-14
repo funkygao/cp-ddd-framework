@@ -35,7 +35,7 @@
 
 ## What is cp-ddd-framework?
 
-cp-ddd-framework is a lightweight flexible development framework for complex business architecture.
+cp-ddd-framework(also known as DDDplus) is a lightweight flexible development framework for complex business architecture.
 
 轻量级业务中台开发框架，以DDD思想为基础，融合[中台核心要素](https://github.com/funkygao/cp-ddd-framework/wiki/%E4%B8%9A%E5%8A%A1%E4%B8%AD%E5%8F%B0%E7%9A%84%E6%A0%B8%E5%BF%83%E8%A6%81%E7%B4%A0)，赋能中台建设。
 
