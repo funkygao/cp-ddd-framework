@@ -33,7 +33,7 @@ import java.util.*;
  * </pre>
  */
 @Slf4j
-@UnderDevelopment
+@UnderDevelopment // TODO Plugin Jar动态加载机制可以工作，但尚未经过严格的测试，请不要生产环境使用!
 public final class Container {
     private static final Container instance = new Container();
 
