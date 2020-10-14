@@ -25,6 +25,10 @@
       * [Building from Source](#building-from-source)
    * [Demo](#demo)
    * [Modules](#modules)
+      * [dddplus-spec](#dddplus-spec)
+      * [dddplus-runtime](#dddplus-runtime)
+      * [dddplus-plugin](#dddplus-plugin)
+      * [dddplus-enforce](#dddplus-enforce)
    * [Reference documentation](#reference-documentation)
    * [Landscape of Central Platform](#landscape-of-central-platform)
    * [Contribution](#contribution)
@@ -52,7 +56,7 @@ Used for several complex critical central platform projects in production enviro
 
 [快速入门](https://github.com/funkygao/cp-ddd-framework/wiki/Quickstart-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8)。
 
-Please visit [Quickstart wiki](https://github.com/funkygao/cp-ddd-framework/wiki/Quickstart-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8).
+Please visit [Quickstart](https://github.com/funkygao/cp-ddd-framework/wiki/Quickstart-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8).
 
 ### What problems does it solve
 
@@ -139,7 +143,7 @@ Enforce expected evolvement of the business architecture based upon ArchUnit.
 
 ## Reference documentation
 
-Please visit [cp-ddd-framework Javadoc](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/).
+Please visit [Javadoc](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/).
 
 ## Landscape of Central Platform
 
