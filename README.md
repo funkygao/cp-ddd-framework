@@ -5,7 +5,6 @@
 [![Coverage Status](https://img.shields.io/codecov/c/github/funkygao/cp-ddd-framework.svg)](https://codecov.io/gh/funkygao/cp-ddd-framework)
 [![TODO](https://badgen.net/https/api.tickgit.com/badgen/github.com/funkygao/cp-ddd-framework?label=todos)](https://www.tickgit.com/browse?repo=github.com/funkygao/cp-ddd-framework)
 [![Ask Me Anything !](https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg)](https://gitter.im/cp-ddd-framework/community)
-[![Slack DDDplus](https://img.shields.io/badge/slack-dddplus-yellow.svg?logo=slack)](http://dddplus.slack.com/)
 
 # cp-ddd-framework (Central Platform：中台)
 
