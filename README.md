@@ -151,11 +151,11 @@ Please visit [cp-ddd-framework Javadoc](https://funkygao.github.io/cp-ddd-framew
 
 You are welcome to contribute to the project with pull requests on GitHub.
 
-If you find a bug or want to request a feature, please use the [issue tracker](https://github.com/funkygao/cp-ddd-framework/issues).
+If you find a bug or want to request a feature, please use the [Issue Tracker](https://github.com/funkygao/cp-ddd-framework/issues).
 
 For any question, you can use [Gitter Chat](https://gitter.im/cp-ddd-framework/community).
 
-有任何问题，请使用 [Gitter Chat](https://gitter.im/cp-ddd-framework/community) 沟通；如果希望贡献代码，请使用 [issue tracker](https://github.com/funkygao/cp-ddd-framework/issues).
+有任何问题，请使用 [Gitter Chat](https://gitter.im/cp-ddd-framework/community) 沟通；如果希望贡献代码，请使用 [Issue Tracker](https://github.com/funkygao/cp-ddd-framework/issues).
 
 ## Licensing
 
