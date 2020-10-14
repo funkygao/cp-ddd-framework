@@ -33,6 +33,7 @@ import static com.tngtech.archunit.library.dependencies.SlicesRuleDefinition.sli
  * 架构守护神规则库，based upon ArchUnit.
  * <p>
  * <p>DDDPlus框架的架构守护神，为架构演进保驾护航，拒绝架构腐化.</p>
+ * <p>同时，也为本框架提供了静态检查机制(配合单元测试使用)，杜绝线上出现不合规范的使用.</p>
  * <p>https://www.archunit.org/motivation</p>
  * <p>
  * <pre>

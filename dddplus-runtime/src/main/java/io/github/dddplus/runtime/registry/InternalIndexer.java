@@ -64,7 +64,8 @@ public class InternalIndexer {
         DomainAbilityDef domainAbilityDef = domainAbilityDefMap.get(clazz);
         if (domainAbilityDef == null) {
             // 研发忘记使用注解DomainAbility了，线上bug
-            log.error("{} not apply @DomainAbility", clazz.getCanonicalName());
+            // 但如果没有关闭架构守护神ArchitectureEnforcer，则不可能出现该bug
+            log.error("{} not apply @DomainAbility, ArchitectureEnforcer turned off?", clazz.getCanonicalName());
             return null;
         }
 
