@@ -22,7 +22,7 @@
       * [Maven](#maven)
       * [Gradle](#gradle)
       * [Building from Source](#building-from-source)
-   * [Demo](#demo)
+   * [The Demo](#the-demo)
    * [Reference documentation](#reference-documentation)
    * [Landscape of Central Platform](#landscape-of-central-platform)
    * [Contribution](#contribution)
@@ -124,7 +124,7 @@ cd cp-ddd-framework/
 mvn install # will run all test cases
 ```
 
-## Demo
+## The Demo
 
 Please visit [使用该框架搭建`订单履约中台`的例子](https://github.com/dddplus/dddplus-demo).
 
