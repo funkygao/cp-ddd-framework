@@ -17,6 +17,11 @@ public class BazStep extends SubmitStep {
     }
 
     @Override
+    public void rollback(@NotNull FooModel model, @NotNull FooException cause) {
+        log.info("baz rollback for {}", model);
+    }
+
+    @Override
     public String stepCode() {
         return Steps.Submit.BazStep;
     }

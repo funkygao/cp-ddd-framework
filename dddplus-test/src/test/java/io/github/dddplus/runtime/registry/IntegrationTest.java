@@ -12,6 +12,7 @@ import io.github.dddplus.runtime.DDD;
 import io.github.dddplus.runtime.registry.mock.ext.IMultiMatchExt;
 import io.github.dddplus.runtime.registry.mock.model.FooModel;
 import io.github.dddplus.runtime.registry.mock.pattern.extension.B2BMultiMatchExt;
+import io.github.dddplus.runtime.test.LogAssert;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.junit.Before;
@@ -23,6 +24,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -321,7 +323,7 @@ public class IntegrationTest {
         fooModel.setB2c(false);
         // B2BDecideStepsExt
         List<String> b2bSubmitSteps = DDD.findAbility(DecideStepsAbility.class).decideSteps(fooModel, Steps.Submit.Activity);
-        assertEquals(2, b2bSubmitSteps.size());
+        assertEquals(3, b2bSubmitSteps.size());
     }
 
     @Test
@@ -358,17 +360,20 @@ public class IntegrationTest {
     }
 
     @Test
-    public void stepsExecTemplateWithRollback() {
+    public void stepsExecTemplateWithRollback() throws IOException {
         fooModel.setB2c(false);
         fooModel.setWillRollback(true);
         List<String> steps = DDD.findAbility(DecideStepsAbility.class).decideSteps(fooModel, Steps.Submit.Activity);
-        log.info("steps: {}", steps);
+        log.info("steps: {}", steps); // Baz, Foo, Bar
         try {
             submitStepsExec.execute(Steps.Submit.Activity, steps, fooModel);
             fail();
         } catch (FooException expected) {
             assertEquals(BarStep.rollbackReason, expected.getMessage());
         }
+
+        // BarStep执行时抛异常，确保 FooStep, BazStep 的rollback被调用
+        LogAssert.assertContains("foo rollback, cause", "baz rollback for");
     }
 
     // Step抛出 IRevokableDomainStep 定义的异常类型，才会触发rollback。抛出其他异常，不会回滚
