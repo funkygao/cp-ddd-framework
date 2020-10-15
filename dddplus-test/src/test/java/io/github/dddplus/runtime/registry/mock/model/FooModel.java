@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 public class FooModel implements IDomainModel {
-    private String projectCode;
+    private String partnerCode;
 
     private boolean b2c;
 

@@ -91,6 +91,7 @@
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <configuration>
                     <excludes>
+                        <exclude>**/*CoreAopUtils.class</exclude>
                         <exclude>**/*JarUtils.class</exclude>
                         <exclude>**/*FileUtils.class</exclude>
                         <exclude>**/*Container.class</exclude>

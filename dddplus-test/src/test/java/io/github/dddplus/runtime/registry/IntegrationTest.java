@@ -52,7 +52,7 @@ public class IntegrationTest {
     @Before
     public void setUp() {
         fooModel = new FooModel();
-        fooModel.setProjectCode(FooPartner.CODE);
+        fooModel.setPartnerCode(FooPartner.CODE);
         fooModel.setB2c(true);
 
         // ExtensionInvocationHandler.extInvokeTimerExecutor的线程池缩小到10，方便并发测试
@@ -80,6 +80,8 @@ public class IntegrationTest {
         // 它没有加DomainAbility注解，是无法找到的
         IllegalDomainAbility illegalDomainAbility = InternalIndexer.findDomainAbility(IllegalDomainAbility.class);
         assertNull(illegalDomainAbility);
+
+        assertNotNull(DDD.findAbility(PartnerAbility.class));
     }
 
     @Test
@@ -100,8 +102,8 @@ public class IntegrationTest {
     public void reducerFirstOf() {
         BarDomainAbility ability = DDD.findAbility(BarDomainAbility.class);
         String result = ability.submit(fooModel);
-        // submit里执行了Reducer.firstOf，对应的扩展点是：BarExt, ProjectExt
-        // 应该返回ProjectExt的结果
+        // submit里执行了Reducer.firstOf，对应的扩展点是：BarExt, PartnerExt
+        // 应该返回 PartnerExt 的结果
         assertEquals("2", result);
     }
 
@@ -154,7 +156,7 @@ public class IntegrationTest {
         assertSame(activities.get(1), barStep);
 
         FooModel model = new FooModel();
-        model.setProjectCode("unit test");
+        model.setPartnerCode("unit test");
         log.info("will execute steps...");
         for (SubmitStep step : activities) {
             step.execute(model);
@@ -179,14 +181,14 @@ public class IntegrationTest {
     @Test
     public void integrationTest() {
         // domain service -> domain ability -> extension
-        // ProjectExt
+        // PartnerExt
         fooDomainService.submitOrder(fooModel);
     }
 
     @Test(expected = RuntimeException.class)
     public void extThrowException() {
         // B2BExt
-        fooModel.setProjectCode("");
+        fooModel.setPartnerCode("");
         fooModel.setB2c(false);
         fooDomainService.submitOrder(fooModel);
     }
@@ -194,7 +196,7 @@ public class IntegrationTest {
     @Test
     public void callExtTimeout() {
         // B2BExt
-        fooModel.setProjectCode("");
+        fooModel.setPartnerCode("");
         fooModel.setB2c(false);
         fooModel.setWillSleepLong(true);
         try {
@@ -208,7 +210,7 @@ public class IntegrationTest {
     @Test(expected = RuntimeException.class)
     public void callExtWithTimeoutAndThrownException() {
         // B2BExt
-        fooModel.setProjectCode("");
+        fooModel.setPartnerCode("");
         fooModel.setB2c(false);
         fooModel.setWillSleepLong(true);
         fooModel.setWillThrowRuntimeException(true);
@@ -218,7 +220,7 @@ public class IntegrationTest {
     @Test
     public void callExtThrownUnexpectedException() {
         // B2BExt
-        fooModel.setProjectCode("");
+        fooModel.setPartnerCode("");
         fooModel.setB2c(false);
         fooModel.setWillThrowOOM(true);
         try {
@@ -235,7 +237,7 @@ public class IntegrationTest {
         CountDownLatch latch = new CountDownLatch(threadCount);
 
         fooModel = new FooModel();
-        fooModel.setProjectCode("");
+        fooModel.setPartnerCode("");
         fooModel.setB2c(false); // B2BExt
         fooModel.setWillSleepLong(true);
 
@@ -304,7 +306,7 @@ public class IntegrationTest {
     @Test
     public void patterPriority() {
         // IMultiMatchExt在B2BPattern、FooPattern上都有实现，而B2BPattern的priority最小，因此应该返回它的实例
-        fooModel.setProjectCode("foo"); // 匹配 FooPattern
+        fooModel.setPartnerCode("foo"); // 匹配 FooPattern
         fooModel.setB2c(false); // 匹配 B2BPattern
         List<ExtensionDef> extensions = InternalIndexer.findEffectiveExtensions(IMultiMatchExt.class, fooModel, true);
         assertEquals(1, extensions.size());

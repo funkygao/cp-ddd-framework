@@ -70,7 +70,7 @@ public class ArchitectureEnforcer {
                 .as("Service必须是domain service，不能用于其他场景");
     }
 
-    public static final ArchRule projectDependencyRule() {
+    public static final ArchRule partnerDependencyRule() {
         return noClasses()
                 .that().resideInAPackage("..bp..")
                 .should().dependOnClassesThat().resideInAPackage("..domain..")

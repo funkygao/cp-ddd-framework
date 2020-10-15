@@ -9,7 +9,7 @@ import io.github.dddplus.runtime.registry.mock.model.FooModel;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-@DomainAbility(domain = FooDomain.CODE, value = "mockReviseStepsAbility", tags = Abilities.reviseSteps)
+@DomainAbility(domain = FooDomain.CODE, value = "mockReviseStepsAbility", tags = AbilityTag.reviseSteps)
 public class ReviseStepsAbility extends BaseDomainAbility<FooModel, IReviseStepsExt> {
 
     public List<String> revisedSteps(@NotNull FooModel model) {

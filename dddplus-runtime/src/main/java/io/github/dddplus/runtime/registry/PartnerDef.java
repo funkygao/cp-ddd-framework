@@ -9,6 +9,7 @@ import io.github.dddplus.ext.IDomainExtension;
 import io.github.dddplus.annotation.Partner;
 import io.github.dddplus.ext.IIdentityResolver;
 import io.github.dddplus.model.IDomainModel;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -28,6 +29,7 @@ class PartnerDef implements IRegistryAware, IPrepareAware, IIdentityResolver {
     @Getter
     private IIdentityResolver partnerBean;
 
+    @Getter(AccessLevel.PACKAGE)
     private Map<Class<? extends IDomainExtension>, ExtensionDef> extensionDefMap = new HashMap<>();
 
     @Override
