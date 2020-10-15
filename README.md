@@ -1,10 +1,9 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](https://github.com/funkygao/cp-ddd-framework/blob/master/LICENSE)
 [![CI](https://github.com/funkygao/cp-ddd-framework/workflows/CI/badge.svg?branch=master)](https://github.com/funkygao/cp-ddd-framework/actions?query=branch%3Amaster+workflow%3ACI)
 [![Code Quality: Java](https://img.shields.io/lgtm/grade/java/g/funkygao/cp-ddd-framework.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/funkygao/cp-ddd-framework/context:java)
-[![Total Alerts](https://img.shields.io/lgtm/alerts/g/funkygao/cp-ddd-framework.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/funkygao/cp-ddd-framework/alerts/)
 [![Coverage Status](https://img.shields.io/codecov/c/github/funkygao/cp-ddd-framework.svg)](https://codecov.io/gh/funkygao/cp-ddd-framework)
 [![TODO](https://badgen.net/https/api.tickgit.com/badgen/github.com/funkygao/cp-ddd-framework?label=todos)](https://www.tickgit.com/browse?repo=github.com/funkygao/cp-ddd-framework)
-[![Gitter](https://img.shields.io/gitter/room/cp-ddd-framework/cp-ddd-framework.svg)](https://gitter.im/cp-ddd-framework/community)
+[![Ask Me Anything !](https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg)](https://gitter.im/cp-ddd-framework/community)
 
 # cp-ddd-framework (Central Platform：中台)
 
@@ -14,21 +13,16 @@
 ## Table of content
    * [What is cp-ddd-framework](#what-is-cp-ddd-framework)
       * [Current status](#current-status)
+      * [Requirements](#requirements)
       * [Quickstart](#quickstart)
       * [What problems does it solve](#what-problems-does-it-solve)
+      * [Modules](#modules)
       * [Key abstractions](#key-abstractions)
-      * [The complete guide](#the-complete-guide)
-   * [Requirements](#requirements)
    * [Using cp-ddd-framework](#using-cp-ddd-framework)
       * [Maven](#maven)
       * [Gradle](#gradle)
       * [Building from Source](#building-from-source)
-   * [Demo](#demo)
-   * [Modules](#modules)
-      * [dddplus-spec](#dddplus-spec)
-      * [dddplus-runtime](#dddplus-runtime)
-      * [dddplus-plugin](#dddplus-plugin)
-      * [dddplus-enforce](#dddplus-enforce)
+   * [The Demo](#the-demo)
    * [Reference documentation](#reference-documentation)
    * [Landscape of Central Platform](#landscape-of-central-platform)
    * [Contribution](#contribution)
@@ -40,11 +34,13 @@
 
 ## What is cp-ddd-framework?
 
-cp-ddd-framework is a lightweight flexible development framework for complex business architecture.
+cp-ddd-framework(also known as DDDplus) is a lightweight flexible development framework for complex business architecture.
 
 轻量级业务中台开发框架，以DDD思想为基础，融合[中台核心要素](https://github.com/funkygao/cp-ddd-framework/wiki/%E4%B8%9A%E5%8A%A1%E4%B8%AD%E5%8F%B0%E7%9A%84%E6%A0%B8%E5%BF%83%E8%A6%81%E7%B4%A0)，赋能中台建设。
 
 融合了DDD、前中台复杂生态协作方法论，同时充分考虑组织、历史债、运维和落地成本以及风险而开发的，面向复杂业务场景架构设计，是**中台架构的完整解决方案**。
+
+[![Ask Me Anything !](https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg)](https://gitter.im/cp-ddd-framework/community)
 
 ### Current status
 
@@ -52,11 +48,15 @@ Used for several complex critical central platform projects in production enviro
 
 目前在多个复杂的中台核心项目生产环境下使用，是中台建设的根基。
 
+### Requirements
+
+Requires Java 1.8+ and Spring 4.3.12.RELEASE or later.
+
 ### Quickstart
 
-[快速入门](https://github.com/funkygao/cp-ddd-framework/wiki/Quickstart-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8)。
+[快速入门](https://github.com/funkygao/cp-ddd-framework/wiki)。
 
-Please visit [Quickstart](https://github.com/funkygao/cp-ddd-framework/wiki/Quickstart-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8).
+Please visit [Quickstart](https://github.com/funkygao/cp-ddd-framework/wiki).
 
 ### What problems does it solve
 
@@ -72,21 +72,26 @@ Please visit [Quickstart](https://github.com/funkygao/cp-ddd-framework/wiki/Quic
 - 普通研发如何编写出优雅的业务代码：low threshold for average developer to build elegant biz code
 - and more
 
+### Modules
+
+```
+cp-ddd-framework
+   ├── dddplus-spec    -- Specification of the framework
+   ├── dddplus-runtime -- Runtime implementation
+   ├── dddplus-plugin  -- Plugin hot reloading mechanism
+   ├── dddplus-enforce -- Enforce expected evolvement of the business architecture
+   └── dddplus-test    -- Fully covered unit test cases
+```
+
 ### Key abstractions
 
-这14个核心抽象，勾勒出业务中台的骨架，以不变应万变。
+14个核心抽象勾勒出业务中台的骨架，以不变应万变。
 
 ![](http://www.plantuml.com/plantuml/svg/XLHDRnCn4BtxLunwQW-fn3LQLIq4f1v0LSiTJUn9rehNZkpPfAZqlpDE7DWF8tAAvxrvyxttYJ5otpcLTjRlCM87BNfpZ9QPF6pG9HfWgKKJZjPlc-PekVrnVj_T0SUUbACD0mU8Tjio61j9imrUgJtg7Mu9dbo_jHwQvek8aRYzAP2VzKnnWvhWyT6GPyi_doa5Tw0unLUXG-i_lpBv9D9JE0V0jQEf_Mimv1wOKRSTUHR_cJ1fQ-Y5QPykg7QO4ZmX2ycFB94zHVMkb0zCSDK6XaWkeCcnhm0JVFkWIh6tj_cXPZMyK3nOJHL0Sb23_x04UYNTCrtV3DdFT0Yx773eLZ6AVmpEhMK68l2dHT3yMYnc3PtXiu5KUddASEz4HmBKyKZUK1GOruaZQeRIQjBVgHDVfh_GHqmb_uUrTH9SpImYkIM-f2rngvIDZUc_94CRxDs8DijjD8FLQYNljyJ8LhzB46-AMXqygGaqsR4SkXWAFksrC3fatLwNAPqwUwFKU8FAeEhBKy3ghinLAfrNqmqfYkDQwgpgtStBF7FBdVqJBaTN6M4ZiBHzN7QnLHAhbRa45pGoLVYBnTqbjoMiPPnrIiclKDIdu5au525BeybNbSzZY6ItixsGb2egyjR1a2fnotCUkDWh-vgr1_rOGeYwfSHHG7LFtkHl_cy0)
 
-### The complete guide
-
-Please visit [How to use this framework](https://github.com/funkygao/cp-ddd-framework/wiki).
-
-## Requirements
-
-Requires Java 1.8+ and Spring 4.3.12.RELEASE or later.
-
 ## Using cp-ddd-framework
+
+已推送至Maven中央库，可直接引入。release版本近期发布。
 
 ### Maven
 
@@ -116,30 +121,12 @@ dependencies {
 ``` bash
 git clone https://github.com/funkygao/cp-ddd-framework.git
 cd cp-ddd-framework/
-mvn install
+mvn install # will run all test cases
 ```
 
-## Demo
+## The Demo
 
 Please visit [使用该框架搭建`订单履约中台`的例子](https://github.com/dddplus/dddplus-demo).
-
-## Modules
-
-### dddplus-spec
-
-Specification of the framework.
-
-### dddplus-runtime
-
-Runtime implementation of the framework.
-
-### dddplus-plugin
-
-Plugin hot reloading implementation.
-
-### dddplus-enforce
-
-Enforce expected evolvement of the business architecture based upon ArchUnit.
 
 ## Reference documentation
 
@@ -157,9 +144,7 @@ You are welcome to contribute to the project with pull requests on GitHub.
 
 If you find a bug or want to request a feature, please use the [Issue Tracker](https://github.com/funkygao/cp-ddd-framework/issues).
 
-For any question, you can use [Gitter Chat](https://gitter.im/cp-ddd-framework/community).
-
-有任何问题，[![Ask Me Anything !](https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg)](https://gitter.im/cp-ddd-framework/community)；如果希望贡献代码，[![GitHub issues](https://img.shields.io/github/issues/funkygao/cp-ddd-framework.svg)](https://github.com/funkygao/cp-ddd-framework/issues/).
+For any question, you can use [Gitter Chat](https://gitter.im/cp-ddd-framework/community) to ask.
 
 ## Licensing
 

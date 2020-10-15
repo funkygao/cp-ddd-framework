@@ -185,6 +185,7 @@ under the License.
         <profile>
             <id>ossrh</id>
             <distributionManagement>
+                <!-- 这里的id ossrh 需要和setting.xml里面server节点配置的id一致 -->
                 <snapshotRepository>
                     <id>ossrh</id>
                     <name>OSS Snapshots Repository</name>

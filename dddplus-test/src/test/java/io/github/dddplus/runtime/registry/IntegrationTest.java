@@ -331,6 +331,13 @@ public class IntegrationTest {
         // B2BDecideStepsExt: FooStep -> BarStep(if redecide then add Baz & Ham) -> BazStep -> HamStep
         submitStepsExec.execute(Steps.Submit.Activity, steps, fooModel);
         assertTrue(fooModel.isStepsRevised());
+
+        // empty steps case, will do nothing
+        fooModel.setStepsRevised(false);
+        submitStepsExec.execute(Steps.Submit.Activity, null, fooModel);
+        assertFalse(fooModel.isStepsRevised());
+        submitStepsExec.execute(Steps.Submit.Activity, new ArrayList<>(), fooModel);
+        assertFalse(fooModel.isStepsRevised());
     }
 
     @Test

@@ -1,18 +1,22 @@
 package io.github.dddplus.runtime.registry;
 
+import io.github.dddplus.runtime.test.AloneRunner;
+import io.github.dddplus.runtime.test.AloneWith;
 import org.junit.After;
-import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-// 每个测试方法单独跑可以，但一起跑ErrorOnPurposeTest就失败：
-// 1. InternalIndexer的索引数据都是static的
-// 2. DDDBootstrap.once是静态的
-@Ignore
+// JUnit在整个project中是一个java进程，InternalIndexer 涉及静态变量，会导致两个单元测试类之间相互影响
+// 最有效直接的办法就是每个测试用例都使用一个独立的classloader，即每个test case都是类隔离的
+// https://stackoverflow.com/questions/42102/using-different-classloaders-for-different-junit-tests
+@RunWith(AloneRunner.class)
+@AloneWith(JUnit4.class)
 public class ErrorOnPurposeTest {
 
     private ClassPathXmlApplicationContext applicationContext;
@@ -23,6 +27,11 @@ public class ErrorOnPurposeTest {
             applicationContext.destroy();
             applicationContext = null;
         }
+
+        InternalIndexer.domainDefMap.clear();
+        InternalIndexer.domainStepDefMap.clear();
+        InternalIndexer.domainAbilityDefMap.clear();
+        InternalIndexer.partnerDefMap.clear();
     }
 
     @Test

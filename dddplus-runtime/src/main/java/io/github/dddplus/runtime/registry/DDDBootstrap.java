@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Component
 @Slf4j
 final class DDDBootstrap implements ApplicationListener<ContextRefreshedEvent>, ApplicationContextAware {
-    private static AtomicBoolean once = new AtomicBoolean();
+    private AtomicBoolean once = new AtomicBoolean();
 
     @Resource
     private RegistryFactory registryFactory;
