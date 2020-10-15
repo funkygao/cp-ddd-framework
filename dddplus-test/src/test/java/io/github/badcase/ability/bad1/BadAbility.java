@@ -1,4 +1,4 @@
-package io.github.badcase.ability;
+package io.github.badcase.ability.bad1;
 
 import io.github.dddplus.annotation.DomainAbility;
 

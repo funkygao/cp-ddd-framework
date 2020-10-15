@@ -108,7 +108,17 @@ public class BadOnPurposeTest {
             applicationContext = new ClassPathXmlApplicationContext("ability-bad.xml");
             fail();
         } catch (BeanCreationException expected) {
-            assertEquals("io.github.badcase.ability.BadAbility MUST extend BaseDomainAbility", expected.getCause().getMessage());
+            assertEquals("io.github.badcase.ability.bad1.BadAbility MUST extend BaseDomainAbility", expected.getCause().getMessage());
+        }
+    }
+
+    @Test
+    public void badDomainAbility2() {
+        try {
+            applicationContext = new ClassPathXmlApplicationContext("ability-bad2.xml");
+            fail();
+        } catch (BeanCreationException expected) {
+            assertEquals("cannot find ParameterizedType for:io.github.badcase.ability.bad2.IllegalGenericAbility", expected.getCause().getMessage());
         }
     }
 
