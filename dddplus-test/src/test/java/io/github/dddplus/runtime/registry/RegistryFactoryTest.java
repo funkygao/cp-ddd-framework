@@ -2,6 +2,8 @@ package io.github.dddplus.runtime.registry;
 
 import io.github.dddplus.annotation.Extension;
 import io.github.dddplus.annotation.Partner;
+import io.github.dddplus.annotation.Step;
+import io.github.dddplus.ext.IPlugable;
 import io.github.dddplus.runtime.registry.mock.extension.FooPartnerExt;
 import io.github.dddplus.runtime.registry.mock.partner.FooPartner;
 import org.junit.Before;
@@ -10,6 +12,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.Date;
 
 import static org.junit.Assert.*;
 
@@ -39,6 +43,27 @@ public class RegistryFactoryTest {
     }
 
     @Test
+    public void prepareNonPlugable() {
+        try {
+            // Date is not IPlugable
+            RegistryFactory.preparePlugins(Partner.class, new Date());
+            fail();
+        } catch (BootstrapException expected) {
+            assertEquals("java.util.Date must be IPlugable", expected.getMessage());
+        }
+    }
+
+    @Test
+    public void prepareUnknownPlugable() {
+        try {
+            RegistryFactory.preparePlugins(Step.class, new UnknownPlugable());
+            fail();
+        } catch (BootstrapException expected) {
+            assertEquals("io.github.dddplus.annotation.Step not supported", expected.getMessage());
+        }
+    }
+
+    @Test
     @Ignore
     public void invalidPrepare() {
         Object fooPartner = DDDBootstrap.applicationContext().getBean(FooPartner.class);
@@ -58,4 +83,8 @@ public class RegistryFactoryTest {
             assertEquals("Partner must reside in Plugin Jar with its extensions!", expected.getMessage());
         }
     }
+
+    private static class UnknownPlugable implements IPlugable {
+    }
+
 }
