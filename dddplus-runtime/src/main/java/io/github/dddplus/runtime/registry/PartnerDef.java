@@ -61,8 +61,7 @@ class PartnerDef implements IRegistryAware, IPrepareAware, IIdentityResolver {
         Class<? extends IDomainExtension> extClazz = extensionDef.getExtClazz();
         if (extensionDefMap.containsKey(extClazz)) {
             throw BootstrapException.ofMessage("Partner(code=", code, ") can hold ONLY one instance on ", extClazz.getCanonicalName(),
-                    ", existing ", extensionDefMap.get(extClazz).toString(),
-                    ", illegal ", extensionDef.toString());
+                    ", existing ", extensionDefMap.get(extClazz).toString(), ", illegal ", extensionDef.toString());
         }
 
         extensionDefMap.put(extClazz, extensionDef);

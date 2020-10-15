@@ -29,6 +29,7 @@ public class BadOnPurposeTest {
         InternalIndexer.domainStepDefMap.clear();
         InternalIndexer.domainAbilityDefMap.clear();
         InternalIndexer.partnerDefMap.clear();
+        InternalIndexer.patternDefMap.clear();
     }
 
     @Test
@@ -58,6 +59,56 @@ public class BadOnPurposeTest {
             fail();
         } catch (BeanCreationException expected) {
             assertEquals("io.github.badcase.step.notstep.NotStepButAnnotatedWithStep MUST implement IDomainStep", expected.getCause().getMessage());
+        }
+    }
+
+    @Test
+    public void notExtButAnnotatedWithExtension() {
+        try {
+            applicationContext = new ClassPathXmlApplicationContext("ext-notext.xml");
+            fail();
+        } catch (BeanCreationException expected) {
+            assertEquals("io.github.badcase.ext.NotExtButAnnotatedWithExtension MUST implement IDomainExtension", expected.getCause().getMessage());
+        }
+    }
+
+    @Test
+    public void patternWithInvalidPriority() {
+        try {
+            applicationContext = new ClassPathXmlApplicationContext("pattern-bad.xml");
+            fail();
+        } catch (BeanCreationException expected) {
+            assertEquals("Patter.priority must be zero or positive", expected.getCause().getMessage());
+        }
+    }
+
+    @Test
+    public void invalidPartner() {
+        try {
+            applicationContext = new ClassPathXmlApplicationContext("partner-bad.xml");
+            fail();
+        } catch (BeanCreationException expected) {
+            assertEquals("io.github.badcase.partner.InvalidPartner MUST implements IIdentityResolver", expected.getCause().getMessage());
+        }
+    }
+
+    @Test
+    public void badDomainService() {
+        try {
+            applicationContext = new ClassPathXmlApplicationContext("service-bad.xml");
+            fail();
+        } catch (BeanCreationException expected) {
+            assertEquals("io.github.badcase.service.BadDomainService MUST implement IDomainService", expected.getCause().getMessage());
+        }
+    }
+
+    @Test
+    public void badDomainAbility() {
+        try {
+            applicationContext = new ClassPathXmlApplicationContext("ability-bad.xml");
+            fail();
+        } catch (BeanCreationException expected) {
+            assertEquals("io.github.badcase.ability.BadAbility MUST extend BaseDomainAbility", expected.getCause().getMessage());
         }
     }
 
