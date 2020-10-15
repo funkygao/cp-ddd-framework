@@ -18,7 +18,7 @@ public class FooStep extends SubmitStep {
 
     @Override
     public void rollback(@NotNull FooModel model, @NotNull FooException cause) {
-        log.warn("rollback, cause: {}", cause.getMessage());
+        log.warn("foo rollback, cause: {}", cause.getMessage());
 
         if (!cause.getMessage().equals(BarStep.rollbackReason)) {
             throw new RuntimeException("assert fails");

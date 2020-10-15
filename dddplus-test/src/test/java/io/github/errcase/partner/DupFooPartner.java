@@ -13,6 +13,6 @@ public class DupFooPartner implements IIdentityResolver<FooModel> {
 
     @Override
     public boolean match(@NotNull FooModel model) {
-        return DupFooPartner.CODE.equals(model.getProjectCode());
+        return DupFooPartner.CODE.equals(model.getPartnerCode());
     }
 }

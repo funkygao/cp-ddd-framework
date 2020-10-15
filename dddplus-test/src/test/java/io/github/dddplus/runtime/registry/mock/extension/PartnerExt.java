@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Extension(code = FooPartner.CODE, name = "垂直业务实现的扩展点Foo项目")
 @Slf4j
-public class ProjectExt implements IFooExt {
+public class PartnerExt implements IFooExt {
     public static final int RESULT = 19;
 
     //@Resource

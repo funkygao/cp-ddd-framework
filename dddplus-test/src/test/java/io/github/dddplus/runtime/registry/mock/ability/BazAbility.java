@@ -11,7 +11,7 @@ import io.github.dddplus.runtime.registry.mock.model.FooModel;
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
 
-@DomainAbility(domain = FooDomain.CODE)
+@DomainAbility(domain = FooDomain.CODE, tags = {AbilityTag.bar, AbilityTag.foo})
 @Slf4j
 public class BazAbility extends BaseDomainAbility<FooModel, IBazExt> {
 

@@ -1,10 +1,10 @@
 package io.github.dddplus.runtime.registry.mock.pattern.extension;
 
 import io.github.dddplus.annotation.Extension;
-import io.github.dddplus.model.IDomainModel;
-import io.github.dddplus.runtime.registry.mock.step.Steps;
 import io.github.dddplus.ext.IDecideStepsExt;
+import io.github.dddplus.model.IDomainModel;
 import io.github.dddplus.runtime.registry.mock.pattern.B2BPattern;
+import io.github.dddplus.runtime.registry.mock.step.Steps;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;
@@ -26,6 +26,7 @@ public class B2BDecideStepsExt implements IDecideStepsExt {
 
     private static List<String> submitSteps() {
         List<String> steps = new ArrayList<>();
+        steps.add(Steps.Submit.BazStep);
         steps.add(Steps.Submit.FooStep);
         steps.add(Steps.Submit.BarStep);
         return steps;

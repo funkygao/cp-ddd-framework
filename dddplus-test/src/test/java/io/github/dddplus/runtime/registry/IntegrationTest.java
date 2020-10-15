@@ -12,6 +12,7 @@ import io.github.dddplus.runtime.DDD;
 import io.github.dddplus.runtime.registry.mock.ext.IMultiMatchExt;
 import io.github.dddplus.runtime.registry.mock.model.FooModel;
 import io.github.dddplus.runtime.registry.mock.pattern.extension.B2BMultiMatchExt;
+import io.github.dddplus.runtime.test.LogAssert;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.junit.Before;
@@ -23,6 +24,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -52,7 +54,7 @@ public class IntegrationTest {
     @Before
     public void setUp() {
         fooModel = new FooModel();
-        fooModel.setProjectCode(FooPartner.CODE);
+        fooModel.setPartnerCode(FooPartner.CODE);
         fooModel.setB2c(true);
 
         // ExtensionInvocationHandler.extInvokeTimerExecutor的线程池缩小到10，方便并发测试
@@ -80,6 +82,8 @@ public class IntegrationTest {
         // 它没有加DomainAbility注解，是无法找到的
         IllegalDomainAbility illegalDomainAbility = InternalIndexer.findDomainAbility(IllegalDomainAbility.class);
         assertNull(illegalDomainAbility);
+
+        assertNotNull(DDD.findAbility(PartnerAbility.class));
     }
 
     @Test
@@ -100,8 +104,8 @@ public class IntegrationTest {
     public void reducerFirstOf() {
         BarDomainAbility ability = DDD.findAbility(BarDomainAbility.class);
         String result = ability.submit(fooModel);
-        // submit里执行了Reducer.firstOf，对应的扩展点是：BarExt, ProjectExt
-        // 应该返回ProjectExt的结果
+        // submit里执行了Reducer.firstOf，对应的扩展点是：BarExt, PartnerExt
+        // 应该返回 PartnerExt 的结果
         assertEquals("2", result);
     }
 
@@ -154,7 +158,7 @@ public class IntegrationTest {
         assertSame(activities.get(1), barStep);
 
         FooModel model = new FooModel();
-        model.setProjectCode("unit test");
+        model.setPartnerCode("unit test");
         log.info("will execute steps...");
         for (SubmitStep step : activities) {
             step.execute(model);
@@ -179,14 +183,14 @@ public class IntegrationTest {
     @Test
     public void integrationTest() {
         // domain service -> domain ability -> extension
-        // ProjectExt
+        // PartnerExt
         fooDomainService.submitOrder(fooModel);
     }
 
     @Test(expected = RuntimeException.class)
     public void extThrowException() {
         // B2BExt
-        fooModel.setProjectCode("");
+        fooModel.setPartnerCode("");
         fooModel.setB2c(false);
         fooDomainService.submitOrder(fooModel);
     }
@@ -194,7 +198,7 @@ public class IntegrationTest {
     @Test
     public void callExtTimeout() {
         // B2BExt
-        fooModel.setProjectCode("");
+        fooModel.setPartnerCode("");
         fooModel.setB2c(false);
         fooModel.setWillSleepLong(true);
         try {
@@ -208,7 +212,7 @@ public class IntegrationTest {
     @Test(expected = RuntimeException.class)
     public void callExtWithTimeoutAndThrownException() {
         // B2BExt
-        fooModel.setProjectCode("");
+        fooModel.setPartnerCode("");
         fooModel.setB2c(false);
         fooModel.setWillSleepLong(true);
         fooModel.setWillThrowRuntimeException(true);
@@ -218,7 +222,7 @@ public class IntegrationTest {
     @Test
     public void callExtThrownUnexpectedException() {
         // B2BExt
-        fooModel.setProjectCode("");
+        fooModel.setPartnerCode("");
         fooModel.setB2c(false);
         fooModel.setWillThrowOOM(true);
         try {
@@ -235,7 +239,7 @@ public class IntegrationTest {
         CountDownLatch latch = new CountDownLatch(threadCount);
 
         fooModel = new FooModel();
-        fooModel.setProjectCode("");
+        fooModel.setPartnerCode("");
         fooModel.setB2c(false); // B2BExt
         fooModel.setWillSleepLong(true);
 
@@ -304,7 +308,7 @@ public class IntegrationTest {
     @Test
     public void patterPriority() {
         // IMultiMatchExt在B2BPattern、FooPattern上都有实现，而B2BPattern的priority最小，因此应该返回它的实例
-        fooModel.setProjectCode("foo"); // 匹配 FooPattern
+        fooModel.setPartnerCode("foo"); // 匹配 FooPattern
         fooModel.setB2c(false); // 匹配 B2BPattern
         List<ExtensionDef> extensions = InternalIndexer.findEffectiveExtensions(IMultiMatchExt.class, fooModel, true);
         assertEquals(1, extensions.size());
@@ -319,7 +323,7 @@ public class IntegrationTest {
         fooModel.setB2c(false);
         // B2BDecideStepsExt
         List<String> b2bSubmitSteps = DDD.findAbility(DecideStepsAbility.class).decideSteps(fooModel, Steps.Submit.Activity);
-        assertEquals(2, b2bSubmitSteps.size());
+        assertEquals(3, b2bSubmitSteps.size());
     }
 
     @Test
@@ -356,17 +360,20 @@ public class IntegrationTest {
     }
 
     @Test
-    public void stepsExecTemplateWithRollback() {
+    public void stepsExecTemplateWithRollback() throws IOException {
         fooModel.setB2c(false);
         fooModel.setWillRollback(true);
         List<String> steps = DDD.findAbility(DecideStepsAbility.class).decideSteps(fooModel, Steps.Submit.Activity);
-        log.info("steps: {}", steps);
+        log.info("steps: {}", steps); // Baz, Foo, Bar
         try {
             submitStepsExec.execute(Steps.Submit.Activity, steps, fooModel);
             fail();
         } catch (FooException expected) {
             assertEquals(BarStep.rollbackReason, expected.getMessage());
         }
+
+        // BarStep执行时抛异常，确保 FooStep, BazStep 的rollback被调用
+        LogAssert.assertContains("foo rollback, cause", "baz rollback for");
     }
 
     // Step抛出 IRevokableDomainStep 定义的异常类型，才会触发rollback。抛出其他异常，不会回滚

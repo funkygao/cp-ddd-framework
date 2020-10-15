@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Set;
 
 @ToString
-class PatternDef implements IRegistryAware, IPrepareAware, IIdentityResolver {
+class PatternDef implements IRegistryAware, IIdentityResolver {
 
     @Getter
     private String code;
@@ -38,11 +38,6 @@ class PatternDef implements IRegistryAware, IPrepareAware, IIdentityResolver {
         initialize(bean);
 
         InternalIndexer.index(this);
-    }
-
-    @Override
-    public void prepare(@NotNull Object bean) {
-        initialize(bean);
     }
 
     @Override
@@ -68,8 +63,7 @@ class PatternDef implements IRegistryAware, IPrepareAware, IIdentityResolver {
         Class<? extends IDomainExtension> extClazz = extensionDef.getExtClazz();
         if (extensionDefMap.containsKey(extClazz)) {
             throw BootstrapException.ofMessage("Pattern(code=", code, ") can hold ONLY one instance on ", extClazz.getCanonicalName(),
-                    ", existing ", extensionDefMap.get(extClazz).toString(),
-                    ", illegal ", extensionDef.toString());
+                    ", existing ", extensionDefMap.get(extClazz).toString(), ", illegal ", extensionDef.toString());
         }
 
         extensionDefMap.put(extClazz, extensionDef);

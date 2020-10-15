@@ -66,7 +66,6 @@ class RegistryFactory implements InitializingBean {
         validRegistryEntries.add(new RegistryEntry(Extension.class, () -> new ExtensionDef()));
 
         validPrepareEntries.put(Partner.class, new PrepareEntry(() -> new PartnerDef()));
-        validPrepareEntries.put(Pattern.class, new PrepareEntry(() -> new PatternDef()));
         validPrepareEntries.put(Extension.class, new PrepareEntry(() -> new ExtensionDef()));
     }
 

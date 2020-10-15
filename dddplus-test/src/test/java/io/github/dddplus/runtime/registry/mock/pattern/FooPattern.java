@@ -15,6 +15,6 @@ public class FooPattern implements IIdentityResolver<IDomainModel> {
             return false;
         }
 
-        return ((FooModel) model).getProjectCode().equals("foo");
+        return ((FooModel) model).getPartnerCode().equals("foo");
     }
 }

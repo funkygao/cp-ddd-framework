@@ -32,6 +32,7 @@ public class ErrorOnPurposeTest {
         InternalIndexer.domainStepDefMap.clear();
         InternalIndexer.domainAbilityDefMap.clear();
         InternalIndexer.partnerDefMap.clear();
+        InternalIndexer.patternDefMap.clear();
     }
 
     @Test
