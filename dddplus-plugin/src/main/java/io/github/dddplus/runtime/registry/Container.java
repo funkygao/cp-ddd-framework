@@ -24,9 +24,12 @@ import java.util.*;
  * <p>{@code Container}常驻内存，{@code PluginJar}动态加载：动静分离</p>
  * <p>
  * <pre>
- *                                                  +- 1 JDKClassLoader
- * Container -> Plugin -> PluginClassLoader --------|- 1 ContainerClassLoader
- *                              | loadClass         +- N PluginClassLoader
+ *    +- 1 ContainerClassLoader
+ *    |- 1 JDKClassLoader
+ *    |                     +- pluginApplicationContext
+ *    |                     |
+ * Container ----> Plugin --+- pluginClassLoader
+ *             N                    | loadClass
  *                        +---------------------+
  *                        |                     |
  *                  (Partner | Pattern)      Extension
@@ -106,13 +109,13 @@ public final class Container {
         try {
             Plugin plugin = new Plugin(code, version, jdkClassLoader, containerClassLoader).
                     load(jarPath, useSpring, Partner.class, new ContainerContext(DDDBootstrap.applicationContext()));
-            IPlugin pluginToDestroy = activePlugins.get(code);
+            Plugin pluginToDestroy = (Plugin) activePlugins.get(code);
             if (pluginToDestroy != null) {
                 log.warn("to destroy partner:{}", code);
-                ((Plugin) pluginToDestroy).onDestroy();
+                pluginToDestroy.onDestroy();
             }
 
-            activePlugins.put(plugin.getCode(), plugin); // old plugin will be GC'ed
+            activePlugins.put(plugin.getCode(), plugin); // old plugin will be GC'ed eventually
         } catch (Throwable ex) {
             log.error("fails to load partner:{}, cost {}ms", jarPath, (System.nanoTime() - t0) / 1000_000, ex);
 
