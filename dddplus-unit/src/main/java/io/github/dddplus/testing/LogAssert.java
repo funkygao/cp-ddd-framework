@@ -26,6 +26,12 @@ public class LogAssert {
     private LogAssert() {
     }
 
+    /**
+     * Assert that the log file not contains specified events(log message).
+     *
+     * @param events log message, a single log file line
+     * @throws IOException
+     */
     public static synchronized void assertNotContains(String... events) throws IOException {
         try {
             assertContains(events);
@@ -35,6 +41,12 @@ public class LogAssert {
         }
     }
 
+    /**
+     * Assert that the log file contains specified events(log message).
+     *
+     * @param events log message, a single log file line
+     * @throws IOException
+     */
     public static synchronized void assertContains(String... events) throws IOException {
         Set<String> expectedEvents = new HashSet<>(events.length);
         for (String event : events) {
