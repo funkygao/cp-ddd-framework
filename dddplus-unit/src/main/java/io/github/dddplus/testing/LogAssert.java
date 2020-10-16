@@ -1,27 +1,41 @@
-package io.github.dddplus.runtime.test;
+/*
+ * Copyright cp-ddd-framework Authors.
+ *
+ * Licensed under the Apache License version 2.0, available at http://www.apache.org/licenses/LICENSE-2.0
+ */
+package io.github.dddplus.testing;
+
+import org.junit.Assert;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.Assert.fail;
-
-// a unit test assert tool: assert sth exists in log file.
+/**
+ * A unit test assert tool: assert sth exists in log file: logs/app.log.
+ * <p>
+ * <p>IMPORTANT: LogAssert is stateful! Each assert will reach log EOF.</p>
+ * <p>You cannot assert twice on the same log events state.</p>
+ * <p>你需要配置{@code log4j2.xml}，以便把测试的日志输出到{@code logs/app.log}</p>
+ */
 public class LogAssert {
     private static final String logFile = "logs/app.log";
     private static RandomAccessFile reader = null;
 
-    public static void assertNotContains(String... events) throws IOException {
+    private LogAssert() {
+    }
+
+    public static synchronized void assertNotContains(String... events) throws IOException {
         try {
             assertContains(events);
-            fail();
+            Assert.fail();
         } catch (AssertionError ignored) {
             // 就该出现该异常
         }
     }
 
-    public static void assertContains(String... events) throws IOException {
+    public static synchronized void assertContains(String... events) throws IOException {
         Set<String> expectedEvents = new HashSet<>(events.length);
         for (String event : events) {
             expectedEvents.add(event);
@@ -49,7 +63,7 @@ public class LogAssert {
         // 差集
         expectedEvents.removeAll(foundEvents);
         if (!expectedEvents.isEmpty()) {
-            fail(String.format("%d events not found: %s", expectedEvents.size(), expectedEvents.toString()));
+            Assert.fail(String.format("%d events not found: %s", expectedEvents.size(), expectedEvents.toString()));
         }
     }
 }

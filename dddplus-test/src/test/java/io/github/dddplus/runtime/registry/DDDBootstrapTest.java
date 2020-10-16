@@ -1,8 +1,8 @@
 package io.github.dddplus.runtime.registry;
 
-import io.github.dddplus.runtime.test.AloneRunner;
-import io.github.dddplus.runtime.test.AloneWith;
-import io.github.dddplus.runtime.test.LogAssert;
+import io.github.dddplus.testing.AloneRunner;
+import io.github.dddplus.testing.AloneWith;
+import io.github.dddplus.testing.LogAssert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;

@@ -1,4 +1,9 @@
-package io.github.dddplus.runtime.test;
+/*
+ * Copyright cp-ddd-framework Authors.
+ *
+ * Licensed under the Apache License version 2.0, available at http://www.apache.org/licenses/LICENSE-2.0
+ */
+package io.github.dddplus.testing;
 
 import org.junit.runner.Runner;
 

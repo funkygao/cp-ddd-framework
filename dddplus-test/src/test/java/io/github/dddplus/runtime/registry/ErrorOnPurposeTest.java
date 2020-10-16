@@ -1,7 +1,7 @@
 package io.github.dddplus.runtime.registry;
 
-import io.github.dddplus.runtime.test.AloneRunner;
-import io.github.dddplus.runtime.test.AloneWith;
+import io.github.dddplus.testing.AloneRunner;
+import io.github.dddplus.testing.AloneWith;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
