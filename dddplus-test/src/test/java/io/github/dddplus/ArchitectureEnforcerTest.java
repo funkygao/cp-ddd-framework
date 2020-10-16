@@ -35,16 +35,21 @@ public class ArchitectureEnforcerTest {
     }
 
     @Test
-    public void allRules() {
-        for (ArchRule rule : ArchitectureEnforcer.allRules) {
+    public void requiredRules() {
+        for (ArchRule rule : ArchitectureEnforcer.requiredRules) {
             rule.check(classes);
         }
     }
 
     @Test
-    public void interfaceRule() {
+    public void optionalDddLayerRule() {
+        ArchitectureEnforcer.optionalDddLayerRule().check(classes);
+    }
+
+    @Test
+    public void optionalInterfaceNameStartsWithI() {
         try {
-            ArchitectureEnforcer.interfaces_name_starts_with_i().check(classes);
+            ArchitectureEnforcer.optionalInterfaceNameStartsWithI().check(classes);
             fail();
         } catch (AssertionError expected) {
             assertEquals("Architecture Violation [Priority: MEDIUM] - Rule '接口名称必须以I开头' was violated (5 times):\n" +
