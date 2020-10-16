@@ -30,6 +30,11 @@
             <artifactId>dddplus-plugin</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>io.github.dddplus</groupId>
+            <artifactId>dddplus-enforce</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <!-- logging -->
         <dependency>

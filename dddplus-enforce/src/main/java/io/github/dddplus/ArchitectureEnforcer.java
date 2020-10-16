@@ -9,12 +9,12 @@ import com.tngtech.archunit.core.domain.JavaModifier;
 import com.tngtech.archunit.lang.ArchRule;
 import io.github.dddplus.annotation.*;
 import io.github.dddplus.ext.IDomainExtension;
-import io.github.dddplus.model.IDomainModel;
-import io.github.dddplus.model.IDomainService;
-import io.github.dddplus.step.IDomainStep;
-import io.github.dddplus.runtime.BaseDomainAbility;
-import io.github.dddplus.model.IDomainModelCreator;
 import io.github.dddplus.ext.IIdentityResolver;
+import io.github.dddplus.model.IDomainModel;
+import io.github.dddplus.model.IDomainModelCreator;
+import io.github.dddplus.model.IDomainService;
+import io.github.dddplus.runtime.BaseDomainAbility;
+import io.github.dddplus.step.IDomainStep;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
@@ -24,7 +24,6 @@ import java.util.List;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.*;
 import static com.tngtech.archunit.library.Architectures.layeredArchitecture;
-import static com.tngtech.archunit.library.Architectures.onionArchitecture;
 import static com.tngtech.archunit.library.GeneralCodingRules.NO_CLASSES_SHOULD_ACCESS_STANDARD_STREAMS;
 import static com.tngtech.archunit.library.GeneralCodingRules.NO_CLASSES_SHOULD_USE_JAVA_UTIL_LOGGING;
 import static com.tngtech.archunit.library.dependencies.SlicesRuleDefinition.slices;
@@ -206,15 +205,6 @@ public class ArchitectureEnforcer {
                 .as("DDD分层架构规范");
     }
 
-    public static final ArchRule dddArchitectureRule() {
-        return onionArchitecture()
-                .withOptionalLayers(true)
-                .domainModels("..domain.model..")
-                .domainServices("..domain.service..")
-                .applicationServices("..app..")
-                .as("dddArchitectureRule");
-    }
-
     static {
         // 不允许使用System.out/System.in/System.err，printStackTrace
         allRules.add(NO_CLASSES_SHOULD_ACCESS_STANDARD_STREAMS);
@@ -222,14 +212,14 @@ public class ArchitectureEnforcer {
         allRules.add(NO_CLASSES_SHOULD_USE_JAVA_UTIL_LOGGING);
 
         allRules.add(loggers_should_be_private_static_final());
-        allRules.add(interfaces_name_starts_with_i());
+        //allRules.add(interfaces_name_starts_with_i());
 
         // DDD框架的使用规范
         allRules.add(repositoryRule());
-        //allRules.add(dddArchitectureRule());
-        //allRules.add(dddLayerRule());
+        allRules.add(dddLayerRule());
 
         allRules.add(creatorRule());
+        allRules.add(partnerDependencyRule());
         allRules.add(domainModelRule());
         allRules.add(serviceRule());
         allRules.add(noActivityClassAllowed());
