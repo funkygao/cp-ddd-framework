@@ -17,8 +17,10 @@ public class ContainerTest {
         Container container = Container.getInstance();
         assertSame(container, Container.getInstance());
 
+        assertNotNull(container.getActivePlugins());
+
         try {
-            Container.getInstance().loadPartnerPlugin("foo", "a/b", true);
+            Container.getInstance().loadPartnerPlugin("foo", "v1", "a/b", true);
             fail();
         } catch (IllegalArgumentException expected) {
             assertEquals("Invalid jarPath: a/b", expected.getMessage());

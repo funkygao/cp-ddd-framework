@@ -67,17 +67,18 @@ public final class Container {
      * 加载业务前台jar包.
      *
      * @param code      {@link IPlugin#getCode()}
+     * @param version   version of the jar
      * @param jarUrl    Plugin jar URL
      * @param useSpring jar包里是否需要Spring机制
      * @throws Throwable
      */
-    public synchronized void loadPartnerPlugin(@NotNull String code, @NotNull URL jarUrl, boolean useSpring) throws Throwable {
+    public synchronized void loadPartnerPlugin(@NotNull String code, @NotNull String version, @NotNull URL jarUrl, boolean useSpring) throws Throwable {
         File localJar = jarTempLocalFile(jarUrl);
         localJar.deleteOnExit();
 
         log.info("loadPartnerPlugin {} -> {}", jarUrl, localJar.getCanonicalPath());
         FileUtils.copyInputStreamToFile(jarUrl.openStream(), localJar);
-        loadPartnerPlugin(code, localJar.getAbsolutePath(), useSpring);
+        loadPartnerPlugin(code, version, localJar.getAbsolutePath(), useSpring);
     }
 
     /**
@@ -86,11 +87,12 @@ public final class Container {
      * <p>如果使用本动态加载，就不要maven里静态引入业务前台jar包依赖了.</p>
      *
      * @param code      {@link IPlugin#getCode()}
+     * @param version   version of the jar
      * @param jarPath   jar path
      * @param useSpring jar包里是否需要Spring机制
      * @throws Throwable
      */
-    public synchronized void loadPartnerPlugin(@NotNull String code, @NotNull String jarPath, boolean useSpring) throws Throwable {
+    public synchronized void loadPartnerPlugin(@NotNull String code, @NotNull String version, @NotNull String jarPath, boolean useSpring) throws Throwable {
         if (!jarPath.endsWith(".jar")) {
             throw new IllegalArgumentException("Invalid jarPath: " + jarPath);
         }
@@ -102,7 +104,7 @@ public final class Container {
         long t0 = System.nanoTime();
         log.warn("Loading partner:{} useSpring:{}", jarPath, useSpring);
         try {
-            Plugin plugin = new Plugin(code, jdkClassLoader, containerClassLoader).
+            Plugin plugin = new Plugin(code, version, jdkClassLoader, containerClassLoader).
                     load(jarPath, useSpring, Partner.class, new ContainerContext(DDDBootstrap.applicationContext()));
             IPlugin pluginToDestroy = activePlugins.get(code);
             if (pluginToDestroy != null) {
