@@ -55,7 +55,7 @@ class Plugin implements IPlugin {
         this.containerClassLoader = containerClassLoader;
     }
 
-    Plugin load(String jarPath, boolean useSpring, Class<? extends Annotation> identityResolverClass, IContainerContext ctx) throws Throwable {
+    void load(String jarPath, boolean useSpring, Class<? extends Annotation> identityResolverClass, IContainerContext ctx) throws Throwable {
         Map<Class<? extends Annotation>, List<Class>> plugableMap = prepareClasses(jarPath, useSpring, identityResolverClass);
         log.info("Classes prepared, plugableMap {}", plugableMap);
 
@@ -83,8 +83,6 @@ class Plugin implements IPlugin {
         if (pluginListener != null) {
             pluginListener.onCommitted(ctx);
         }
-
-        return this;
     }
 
     void onDestroy() {

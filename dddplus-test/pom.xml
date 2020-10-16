@@ -104,7 +104,6 @@
                         <exclude>**/*CoreAopUtils.class</exclude>
                         <exclude>**/*JarUtils.class</exclude>
                         <exclude>**/*FileUtils.class</exclude>
-                        <exclude>**/*Container.class</exclude>
                         <exclude>**/*Plugin.class</exclude>
                         <exclude>**/*PluginApplicationContext.class</exclude>
                         <exclude>**/*PluginClassLoader.class</exclude>

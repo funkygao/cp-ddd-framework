@@ -76,7 +76,7 @@ public final class Container {
      * @throws Throwable
      */
     public synchronized void loadPartnerPlugin(@NotNull String code, @NotNull String version, @NotNull URL jarUrl, boolean useSpring) throws Throwable {
-        File localJar = jarTempLocalFile(jarUrl);
+        File localJar = createLocalFile(jarUrl);
         localJar.deleteOnExit();
 
         log.info("loadPartnerPlugin {} -> {}", jarUrl, localJar.getCanonicalPath());
@@ -100,32 +100,29 @@ public final class Container {
             throw new IllegalArgumentException("Invalid jarPath: " + jarPath);
         }
 
-        if (activePlugins.containsKey(code)) {
-            log.warn("Hotswap Plugin: {}", code);
-        }
-
         long t0 = System.nanoTime();
         log.warn("Loading partner:{} useSpring:{}", jarPath, useSpring);
         try {
-            Plugin plugin = new Plugin(code, version, jdkClassLoader, containerClassLoader).
-                    load(jarPath, useSpring, Partner.class, new ContainerContext(DDDBootstrap.applicationContext()));
+            Plugin plugin = new Plugin(code, version, jdkClassLoader, containerClassLoader);
+            plugin.load(jarPath, useSpring, Partner.class, new ContainerContext(DDDBootstrap.applicationContext()));
+
             Plugin pluginToDestroy = (Plugin) activePlugins.get(code);
             if (pluginToDestroy != null) {
-                log.warn("to destroy partner:{}", code);
+                log.warn("to destroy partner:{} ver:{}", code, plugin.getVersion());
                 pluginToDestroy.onDestroy();
             }
 
             activePlugins.put(plugin.getCode(), plugin); // old plugin will be GC'ed eventually
+
+            log.warn("Loaded partner:{}, cost {}ms", jarPath, (System.nanoTime() - t0) / 1000_000);
         } catch (Throwable ex) {
             log.error("fails to load partner:{}, cost {}ms", jarPath, (System.nanoTime() - t0) / 1000_000, ex);
 
             throw ex;
         }
-
-        log.warn("Loaded partner:{}, cost {}ms", jarPath, (System.nanoTime() - t0) / 1000_000);
     }
 
-    File jarTempLocalFile(@NotNull URL jarUrl) throws IOException {
+    File createLocalFile(@NotNull URL jarUrl) throws IOException {
         String prefix = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date());
         String suffix = jarUrl.getPath().substring(jarUrl.getPath().lastIndexOf("/") + 1);
         return File.createTempFile(prefix, "." + suffix);
