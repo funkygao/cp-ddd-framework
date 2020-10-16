@@ -76,11 +76,11 @@ Please visit [Quickstart](https://github.com/funkygao/cp-ddd-framework/wiki).
 
 ```
 cp-ddd-framework
-   ├── dddplus-spec    -- Specification of the framework
-   ├── dddplus-runtime -- Runtime implementation
-   ├── dddplus-plugin  -- Plugin hot reloading mechanism
-   ├── dddplus-enforce -- Enforce expected evolvement of the business architecture
-   └── dddplus-test    -- Fully covered unit test cases
+   ├── dddplus-spec    - Specification of the framework
+   ├── dddplus-runtime - Runtime implementation
+   ├── dddplus-plugin  - Plugin hot reloading mechanism
+   ├── dddplus-enforce - Enforce expected evolvement of the business architecture
+   └── dddplus-test    - Fully covered unit test cases
 ```
 
 ### Key abstractions
