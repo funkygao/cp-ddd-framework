@@ -12,7 +12,7 @@ import io.github.dddplus.runtime.DDD;
 import io.github.dddplus.runtime.registry.mock.ext.IMultiMatchExt;
 import io.github.dddplus.runtime.registry.mock.model.FooModel;
 import io.github.dddplus.runtime.registry.mock.pattern.extension.B2BMultiMatchExt;
-import io.github.dddplus.runtime.test.LogAssert;
+import io.github.dddplus.testing.LogAssert;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.junit.Before;

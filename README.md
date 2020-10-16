@@ -79,6 +79,7 @@ cp-ddd-framework
    ├── dddplus-spec    - Specification of the framework
    ├── dddplus-runtime - Runtime implementation
    ├── dddplus-plugin  - Plugin hot reloading mechanism
+   ├── dddplus-unit    - Extra unit test facilities
    ├── dddplus-enforce - Enforce expected evolvement of the business architecture
    └── dddplus-test    - Fully covered unit test cases
 ```
