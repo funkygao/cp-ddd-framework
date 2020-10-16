@@ -37,7 +37,7 @@ final class DDDBootstrap implements ApplicationListener<ContextRefreshedEvent>, 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         if (!once.compareAndSet(false, true)) {
-            log.warn("register more than once, ignored!");
+            log.warn("register applicationContext more than once, ignored!");
             return;
         }
 

@@ -12,6 +12,15 @@ public class LogAssert {
     private static final String logFile = "logs/app.log";
     private static RandomAccessFile reader = null;
 
+    public static void assertNotContains(String... events) throws IOException {
+        try {
+            assertContains(events);
+            fail();
+        } catch (AssertionError ignored) {
+            // 就该出现该异常
+        }
+    }
+
     public static void assertContains(String... events) throws IOException {
         Set<String> expectedEvents = new HashSet<>(events.length);
         for (String event : events) {
