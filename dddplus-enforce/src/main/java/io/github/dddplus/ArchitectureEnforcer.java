@@ -59,7 +59,7 @@ public class ArchitectureEnforcer {
     /**
      * 业务中台架构的所有规则.
      */
-    public static final List<ArchRule> allRules = new LinkedList<>();
+    public static final List<ArchRule> requiredRules = new LinkedList<>();
 
     public static final ArchRule serviceRule() {
         return classes()
@@ -159,7 +159,7 @@ public class ArchitectureEnforcer {
     /**
      * 所有接口名称必须以'I'开头，除了Dao/Manager以及对外的Api.
      */
-    public static final ArchRule interfaces_name_starts_with_i() {
+    public static final ArchRule optionalInterfaceNameStartsWithI() {
         return classes()
                 .that().areInterfaces()
                 .and().haveNameNotMatching(".*Dao")
@@ -194,7 +194,7 @@ public class ArchitectureEnforcer {
                 .as("ACL类的使用规范");
     }
 
-    public static final ArchRule dddLayerRule() {
+    public static final ArchRule optionalDddLayerRule() {
         return layeredArchitecture()
                 .optionalLayer("Application").definedBy("..app..")
                 .optionalLayer("Domain").definedBy("..domain..")
@@ -207,30 +207,28 @@ public class ArchitectureEnforcer {
 
     static {
         // 不允许使用System.out/System.in/System.err，printStackTrace
-        allRules.add(NO_CLASSES_SHOULD_ACCESS_STANDARD_STREAMS);
+        requiredRules.add(NO_CLASSES_SHOULD_ACCESS_STANDARD_STREAMS);
         // 不允许使用java.util.logging
-        allRules.add(NO_CLASSES_SHOULD_USE_JAVA_UTIL_LOGGING);
+        requiredRules.add(NO_CLASSES_SHOULD_USE_JAVA_UTIL_LOGGING);
 
-        allRules.add(loggers_should_be_private_static_final());
-        //allRules.add(interfaces_name_starts_with_i());
+        requiredRules.add(loggers_should_be_private_static_final());
 
         // DDD框架的使用规范
-        allRules.add(repositoryRule());
-        allRules.add(dddLayerRule());
+        requiredRules.add(repositoryRule());
 
-        allRules.add(creatorRule());
-        allRules.add(partnerDependencyRule());
-        allRules.add(domainModelRule());
-        allRules.add(serviceRule());
-        allRules.add(noActivityClassAllowed());
-        allRules.add(activityRule());
-        allRules.add(aclRule());
-        allRules.add(patternRule());
-        allRules.add(abilityRule());
-        allRules.add(partnerRule());
-        allRules.add(domainStepRule());
-        allRules.add(extensionRule());
+        requiredRules.add(creatorRule());
+        requiredRules.add(partnerDependencyRule());
+        requiredRules.add(domainModelRule());
+        requiredRules.add(serviceRule());
+        requiredRules.add(noActivityClassAllowed());
+        requiredRules.add(activityRule());
+        requiredRules.add(aclRule());
+        requiredRules.add(patternRule());
+        requiredRules.add(abilityRule());
+        requiredRules.add(partnerRule());
+        requiredRules.add(domainStepRule());
+        requiredRules.add(extensionRule());
 
-        allRules.add(controllers_should_only_use_their_own_slice());
+        requiredRules.add(controllers_should_only_use_their_own_slice());
     }
 }
