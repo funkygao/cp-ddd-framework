@@ -92,13 +92,15 @@ cp-ddd-framework
 
 ## Using cp-ddd-framework
 
-已推送至Maven中央库，可直接引入。release版本近期发布。
+已推送至Maven中央库，可直接引入。
+
+Please read [Changelog](CHANGELOG.md).
 
 ### Maven
 
 ```xml
 <properties>
-    <dddplus.version>0.0.1-SNAPSHOT</dddplus.version>
+    <dddplus.version>0.1.0</dddplus.version>
 </properties>
 
 <dependency>
@@ -113,7 +115,7 @@ cp-ddd-framework
 ```groovy
 dependencies {
     ...
-    compile 'io.github.dddplus:dddplus-runtime:0.0.1-SNAPSHOT'
+    compile 'io.github.dddplus:dddplus-runtime:0.1.0'
 }
 ```
 
