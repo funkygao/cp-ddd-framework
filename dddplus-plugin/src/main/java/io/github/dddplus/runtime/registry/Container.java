@@ -24,9 +24,12 @@ import java.util.*;
  * <p>{@code Container}常驻内存，{@code PluginJar}动态加载：动静分离</p>
  * <p>
  * <pre>
- *                                                  +- 1 JDKClassLoader
- * Container -> Plugin -> PluginClassLoader --------|- 1 ContainerClassLoader
- *                              | loadClass         +- N PluginClassLoader
+ *    +- 1 ContainerClassLoader
+ *    |- 1 JDKClassLoader
+ *    |                     +- pluginApplicationContext
+ *    |                     |
+ * Container ----> Plugin --+- pluginClassLoader
+ *             N                    | loadClass
  *                        +---------------------+
  *                        |                     |
  *                  (Partner | Pattern)      Extension
@@ -67,17 +70,18 @@ public final class Container {
      * 加载业务前台jar包.
      *
      * @param code      {@link IPlugin#getCode()}
+     * @param version   version of the jar
      * @param jarUrl    Plugin jar URL
      * @param useSpring jar包里是否需要Spring机制
      * @throws Throwable
      */
-    public synchronized void loadPartnerPlugin(@NotNull String code, @NotNull URL jarUrl, boolean useSpring) throws Throwable {
-        File localJar = jarTempLocalFile(jarUrl);
+    public synchronized void loadPartnerPlugin(@NotNull String code, @NotNull String version, @NotNull URL jarUrl, boolean useSpring) throws Throwable {
+        File localJar = createLocalFile(jarUrl);
         localJar.deleteOnExit();
 
         log.info("loadPartnerPlugin {} -> {}", jarUrl, localJar.getCanonicalPath());
         FileUtils.copyInputStreamToFile(jarUrl.openStream(), localJar);
-        loadPartnerPlugin(code, localJar.getAbsolutePath(), useSpring);
+        loadPartnerPlugin(code, version, localJar.getAbsolutePath(), useSpring);
     }
 
     /**
@@ -86,41 +90,39 @@ public final class Container {
      * <p>如果使用本动态加载，就不要maven里静态引入业务前台jar包依赖了.</p>
      *
      * @param code      {@link IPlugin#getCode()}
+     * @param version   version of the jar
      * @param jarPath   jar path
      * @param useSpring jar包里是否需要Spring机制
      * @throws Throwable
      */
-    public synchronized void loadPartnerPlugin(@NotNull String code, @NotNull String jarPath, boolean useSpring) throws Throwable {
+    public synchronized void loadPartnerPlugin(@NotNull String code, @NotNull String version, @NotNull String jarPath, boolean useSpring) throws Throwable {
         if (!jarPath.endsWith(".jar")) {
             throw new IllegalArgumentException("Invalid jarPath: " + jarPath);
-        }
-
-        if (activePlugins.containsKey(code)) {
-            log.warn("Hotswap Plugin: {}", code);
         }
 
         long t0 = System.nanoTime();
         log.warn("Loading partner:{} useSpring:{}", jarPath, useSpring);
         try {
-            Plugin plugin = new Plugin(code, jdkClassLoader, containerClassLoader).
-                    load(jarPath, useSpring, Partner.class, new ContainerContext(DDDBootstrap.applicationContext()));
-            IPlugin pluginToDestroy = activePlugins.get(code);
+            Plugin plugin = new Plugin(code, version, jdkClassLoader, containerClassLoader);
+            plugin.load(jarPath, useSpring, Partner.class, new ContainerContext(DDDBootstrap.applicationContext()));
+
+            Plugin pluginToDestroy = (Plugin) activePlugins.get(code);
             if (pluginToDestroy != null) {
-                log.warn("to destroy partner:{}", code);
-                ((Plugin) pluginToDestroy).onDestroy();
+                log.warn("to destroy partner:{} ver:{}", code, plugin.getVersion());
+                pluginToDestroy.onDestroy();
             }
 
-            activePlugins.put(plugin.getCode(), plugin); // old plugin will be GC'ed
+            activePlugins.put(plugin.getCode(), plugin); // old plugin will be GC'ed eventually
+
+            log.warn("Loaded partner:{}, cost {}ms", jarPath, (System.nanoTime() - t0) / 1000_000);
         } catch (Throwable ex) {
             log.error("fails to load partner:{}, cost {}ms", jarPath, (System.nanoTime() - t0) / 1000_000, ex);
 
             throw ex;
         }
-
-        log.warn("Loaded partner:{}, cost {}ms", jarPath, (System.nanoTime() - t0) / 1000_000);
     }
 
-    File jarTempLocalFile(@NotNull URL jarUrl) throws IOException {
+    File createLocalFile(@NotNull URL jarUrl) throws IOException {
         String prefix = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date());
         String suffix = jarUrl.getPath().substring(jarUrl.getPath().lastIndexOf("/") + 1);
         return File.createTempFile(prefix, "." + suffix);
