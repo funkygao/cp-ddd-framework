@@ -24,6 +24,7 @@
       * [Building from Source](#building-from-source)
    * [The Demo](#the-demo)
    * [Reference documentation](#reference-documentation)
+   * [FAQ](#faq)
    * [Landscape of Central Platform](#landscape-of-central-platform)
    * [Contribution](#contribution)
    * [Licensing](#licensing)
@@ -134,6 +135,10 @@ Please visit [使用该框架搭建`订单履约中台`的例子](https://github
 ## Reference documentation
 
 Please visit [Javadoc](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/).
+
+## FAQ
+
+Please visit [FAQ](https://github.com/funkygao/cp-ddd-framework/wiki/FAQ).
 
 ## Landscape of Central Platform
 
