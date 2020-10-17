@@ -20,7 +20,7 @@ under the License.
     <parent>
         <groupId>io.github.dddplus</groupId>
         <artifactId>dddplus</artifactId>
-        <version>0.1.0</version>
+        <version>0.1.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>dddplus-plugin</artifactId>
@@ -29,7 +29,7 @@ under the License.
     <description>DDD Plus Framework Dynamic Plugin Jar Support</description>
 
     <properties>
-        <maven.deploy.skip>true</maven.deploy.skip>
+        <maven.deploy.skip>false</maven.deploy.skip>
     </properties>
 
     <dependencies>

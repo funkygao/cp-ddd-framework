@@ -21,7 +21,7 @@ under the License.
     <groupId>io.github.dddplus</groupId>
     <artifactId>dddplus</artifactId>
     <packaging>pom</packaging>
-    <version>0.1.0</version>
+    <version>0.1.1-SNAPSHOT</version>
     <name>DDD Plus Framework</name>
     <description>DDD Supporting Central Platform(中台) Architecture</description>
     <url>https://github.com/funkygao/cp-ddd-framework</url>
