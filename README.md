@@ -37,9 +37,7 @@
 
 cp-ddd-framework(also known as DDDplus) is a lightweight flexible development framework for complex business architecture.
 
-轻量级业务中台开发框架，一套为程序员服务的框架。
-
-以DDD思想为基础，致力于业务资产的可沉淀和可传承，全方位解决复杂业务场景的扩展问题，实现[中台核心要素](https://github.com/funkygao/cp-ddd-framework/wiki/%E4%B8%9A%E5%8A%A1%E4%B8%AD%E5%8F%B0%E7%9A%84%E6%A0%B8%E5%BF%83%E8%A6%81%E7%B4%A0)，赋能中台建设。
+轻量级业务中台开发框架，以DDD思想为基础，致力于业务资产的可沉淀和可传承，全方位解决复杂业务场景的扩展问题，实现[中台核心要素](https://github.com/funkygao/cp-ddd-framework/wiki/%E4%B8%9A%E5%8A%A1%E4%B8%AD%E5%8F%B0%E7%9A%84%E6%A0%B8%E5%BF%83%E8%A6%81%E7%B4%A0)，赋能中台建设。
 
 融合了前中台复杂生态协作方法论，充分考虑组织架构、技术债、学习门槛、可演进性、运维和落地成本以及风险而开发的，面向复杂业务场景架构设计，重新定义业务开发，是中台架构的顶层设计和完整解决方案。
 
@@ -95,9 +93,7 @@ cp-ddd-framework
 
 ## Using cp-ddd-framework
 
-已推送至Maven中央库，可直接引入。
-
-Latest version [0.1.0](https://github.com/funkygao/cp-ddd-framework/releases/tag/v0.1.0).
+Latest version [0.1.0](https://github.com/funkygao/cp-ddd-framework/releases/tag/v0.1.0)，已推送至Maven中央库，可直接引入。
 
 ### Maven
 
