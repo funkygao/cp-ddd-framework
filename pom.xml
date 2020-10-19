@@ -230,6 +230,7 @@ under the License.
                             <serverId>ossrh</serverId>
                             <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                             <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                            <skipNexusStagingDeployMojo>true</skipNexusStagingDeployMojo>
                         </configuration>
                     </plugin>
                 </plugins>
