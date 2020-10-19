@@ -7,7 +7,7 @@
 [![TODO](https://badgen.net/https/api.tickgit.com/badgen/github.com/funkygao/cp-ddd-framework?label=todos)](https://www.tickgit.com/browse?repo=github.com/funkygao/cp-ddd-framework)
 [![Ask Me Anything !](https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg)](https://gitter.im/cp-ddd-framework/community)
 
-# cp-ddd-framework (Central Platform：中台)
+# cp-ddd-framework (also known as DDDplus)
 
 <details>
 <summary><b>Table of content</b></summary>
@@ -37,7 +37,9 @@
 
 ## What is cp-ddd-framework?
 
-cp-ddd-framework(also known as DDDplus) is a lightweight flexible development framework for complex business architecture.
+cp-ddd-framework, also known as DDDplus, is a lightweight flexible development framework for complex business architecture.
+
+cp means Central Platform：中台。
 
 轻量级业务中台开发框架，以DDD思想为基础，致力于业务资产的可沉淀和可传承，全方位解决复杂业务场景的扩展问题，实现[中台核心要素](https://github.com/funkygao/cp-ddd-framework/wiki/%E4%B8%9A%E5%8A%A1%E4%B8%AD%E5%8F%B0%E7%9A%84%E6%A0%B8%E5%BF%83%E8%A6%81%E7%B4%A0)，赋能中台建设。
 
