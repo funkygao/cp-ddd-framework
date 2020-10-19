@@ -1,4 +1,4 @@
-### **[Quickstart](#quickstart)** • **[Demo](#the-demo)** • **[Wiki](https://github.com/funkygao/cp-ddd-framework/wiki)** • **[Javadoc](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/)**
+### **[Quickstart](#quickstart)** • **[Demo](#the-demo)** • **[Wiki](https://github.com/funkygao/cp-ddd-framework/wiki)** • **[Javadoc](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/)** • **[Chat](https://gitter.im/cp-ddd-framework/community)**
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](https://github.com/funkygao/cp-ddd-framework/blob/master/LICENSE)
 [![CI](https://github.com/funkygao/cp-ddd-framework/workflows/CI/badge.svg?branch=master)](https://github.com/funkygao/cp-ddd-framework/actions?query=branch%3Amaster+workflow%3ACI)
@@ -42,8 +42,6 @@ cp-ddd-framework(also known as DDDplus) is a lightweight flexible development fr
 轻量级业务中台开发框架，以DDD思想为基础，致力于业务资产的可沉淀和可传承，全方位解决复杂业务场景的扩展问题，实现[中台核心要素](https://github.com/funkygao/cp-ddd-framework/wiki/%E4%B8%9A%E5%8A%A1%E4%B8%AD%E5%8F%B0%E7%9A%84%E6%A0%B8%E5%BF%83%E8%A6%81%E7%B4%A0)，赋能中台建设。
 
 融合了前中台复杂生态协作方法论，充分考虑组织架构、技术债、学习门槛、可演进性、运维和落地成本以及风险而开发的，面向复杂业务场景架构设计，重新定义业务开发，是中台架构的顶层设计和完整解决方案。
-
-[![Ask Me Anything !](https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg)](https://gitter.im/cp-ddd-framework/community)
 
 ### Current status
 
