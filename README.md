@@ -93,13 +93,13 @@ cp-ddd-framework
 
 ## Using cp-ddd-framework
 
-Latest version [0.1.0](https://github.com/funkygao/cp-ddd-framework/releases/tag/v0.1.0)，已推送至Maven中央库，可直接引入。
+Latest version [0.1.1](https://github.com/funkygao/cp-ddd-framework/releases/tag/v0.1.1)，已推送至Maven中央库，可直接引入。
 
 ### Maven
 
 ```xml
 <properties>
-    <dddplus.version>0.1.0</dddplus.version>
+    <dddplus.version>0.1.1</dddplus.version>
 </properties>
 
 <dependency>
@@ -114,7 +114,7 @@ Latest version [0.1.0](https://github.com/funkygao/cp-ddd-framework/releases/tag
 ```groovy
 dependencies {
     ...
-    compile 'io.github.dddplus:dddplus-runtime:0.1.0'
+    compile 'io.github.dddplus:dddplus-runtime:0.1.1'
 }
 ```
 
