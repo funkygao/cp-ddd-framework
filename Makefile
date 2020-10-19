@@ -19,7 +19,7 @@ javadoc:install
 	@open target/site/apidocs/index.html
 
 deploy:
-	@mvn clean deploy verify -Possrh
+	@mvn clean deploy verify -Possrh -e
 
 release-javadoc:install
 	@git checkout gh-pages
