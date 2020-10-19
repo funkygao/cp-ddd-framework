@@ -21,6 +21,9 @@ javadoc:install
 deploy:
 	@mvn clean deploy verify -Possrh -e
 
+deploy-snapshot:
+	@mvn clean deploy verify -Dskip.dddplus.plugin.module=false -Possrh -e
+
 setver:
 	@echo mvn versions:set -DnewVersion=VER
 	@echo mvn versions:commit
