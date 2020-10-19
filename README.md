@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-### **[Quickstart](#quickstart)** • **[Examples](#the-demo)** • **[Wiki](https://github.com/funkygao/cp-ddd-framework/wiki){target="_blank"}** • **[Javadoc](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/?_blank)** • **[Chat with us](https://gitter.im/cp-ddd-framework/community?_blank)**
-=======
-### **[Quickstart](#quickstart)** • **[Examples](#the-demo)** • **[Wiki](https://github.com/funkygao/cp-ddd-framework/wiki)** • **[Javadoc](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/)** • **[Chat with us](https://gitter.im/cp-ddd-framework/community)** • **[Slack us](http://dddplus.slack.com/)**
->>>>>>> parent of 12aa0d40... slack or gitter? I have to choose 1 from them
+### **[Quickstart](#quickstart)** • **[Examples](#the-demo)** • **[Wiki](https://github.com/funkygao/cp-ddd-framework/wiki)** • **[Javadoc](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/)** • **[Chat with us](https://gitter.im/cp-ddd-framework/community)**
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](https://github.com/funkygao/cp-ddd-framework/blob/master/LICENSE)
 [![CI](https://github.com/funkygao/cp-ddd-framework/workflows/CI/badge.svg?branch=master)](https://github.com/funkygao/cp-ddd-framework/actions?query=branch%3Amaster+workflow%3ACI)
