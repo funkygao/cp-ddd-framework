@@ -109,7 +109,7 @@ under the License.
         <connection>scm:git:https://github.com/funkygao/cp-ddd-framework.git</connection>
         <developerConnection>scm:git:git@github.com:funkygao/cp-ddd-framework.git</developerConnection>
         <url>https://github.com/funkygao/cp-ddd-framework/</url>
-        <tag>v0.1.0</tag>
+        <tag>v0.1.1</tag>
     </scm>
     <issueManagement>
         <system>github</system>
