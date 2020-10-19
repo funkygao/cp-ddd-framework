@@ -114,10 +114,10 @@ under the License.
 
     <!-- Required by maven ossrh -->
     <scm>
-        <connection>scm:git:git://github.com/funkygao/cp-ddd-framework.git</connection>
+        <connection>scm:git:https://github.com/funkygao/cp-ddd-framework.git</connection>
         <developerConnection>scm:git:git@github.com:funkygao/cp-ddd-framework.git</developerConnection>
         <url>https://github.com/funkygao/cp-ddd-framework/</url>
-        <tag>HEAD</tag>
+        <tag>v0.1.0</tag>
     </scm>
     <issueManagement>
         <system>github</system>
@@ -129,6 +129,8 @@ under the License.
             <name>Funky Gao</name>
             <email>funky.gao@gmail.com</email>
             <url>https://funkygao.github.io/</url>
+            <organization>JD</organization>
+            <organizationUrl>https://www.jd.com/</organizationUrl>
         </developer>
     </developers>
     <licenses>
@@ -186,6 +188,9 @@ under the License.
         <!-- release to maven central repo: OSS Repository Hosting https://central.sonatype.org/pages/ossrh-guide.html -->
         <profile>
             <id>ossrh</id>
+            <properties>
+                <gpg.executable>gpg2</gpg.executable>
+            </properties>
             <distributionManagement>
                 <!-- 这里的id ossrh 需要和setting.xml里面server节点配置的id一致 -->
                 <snapshotRepository>
@@ -201,6 +206,19 @@ under the License.
             </distributionManagement>
             <build>
                 <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>2.2.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
