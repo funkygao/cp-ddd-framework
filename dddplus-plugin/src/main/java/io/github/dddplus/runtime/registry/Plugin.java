@@ -34,8 +34,9 @@ class Plugin implements IPlugin {
 
     @Getter
     private final String code;
+
     @Getter
-    private String version;
+    private final String version; // TODO for rollback
 
     // the shared class loaders
     private final ClassLoader jdkClassLoader;
@@ -47,13 +48,14 @@ class Plugin implements IPlugin {
     // each Plugin will have a specific Spring IoC with the same parent: the Container
     private PluginApplicationContext pluginApplicationContext;
 
-    Plugin(String code, ClassLoader jdkClassLoader, ClassLoader containerClassLoader) {
+    Plugin(String code, String version, ClassLoader jdkClassLoader, ClassLoader containerClassLoader) {
         this.code = code;
+        this.version = version;
         this.jdkClassLoader = jdkClassLoader;
         this.containerClassLoader = containerClassLoader;
     }
 
-    Plugin load(String jarPath, boolean useSpring, Class<? extends Annotation> identityResolverClass, IContainerContext ctx) throws Throwable {
+    void load(String jarPath, boolean useSpring, Class<? extends Annotation> identityResolverClass, IContainerContext ctx) throws Throwable {
         Map<Class<? extends Annotation>, List<Class>> plugableMap = prepareClasses(jarPath, useSpring, identityResolverClass);
         log.info("Classes prepared, plugableMap {}", plugableMap);
 
@@ -81,8 +83,6 @@ class Plugin implements IPlugin {
         if (pluginListener != null) {
             pluginListener.onCommitted(ctx);
         }
-
-        return this;
     }
 
     void onDestroy() {
@@ -149,5 +149,10 @@ class Plugin implements IPlugin {
 
     private void abort(String message) {
         throw BootstrapException.ofMessage(message);
+    }
+
+    @Override
+    public String toString() {
+        return "Plugin:" + code + ":" + version;
     }
 }

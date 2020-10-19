@@ -20,7 +20,7 @@ under the License.
     <parent>
         <groupId>io.github.dddplus</groupId>
         <artifactId>dddplus</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.1.2-SNAPSHOT</version>
     </parent>
 
     <artifactId>dddplus-plugin</artifactId>
@@ -47,5 +47,17 @@ under the License.
             <optional>true</optional>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <configuration>
+                    <skipNexusStagingDeployMojo>true</skipNexusStagingDeployMojo>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

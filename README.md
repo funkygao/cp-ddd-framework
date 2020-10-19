@@ -24,6 +24,7 @@
       * [Building from Source](#building-from-source)
    * [The Demo](#the-demo)
    * [Reference documentation](#reference-documentation)
+   * [FAQ](#faq)
    * [Landscape of Central Platform](#landscape-of-central-platform)
    * [Contribution](#contribution)
    * [Licensing](#licensing)
@@ -36,9 +37,9 @@
 
 cp-ddd-framework(also known as DDDplus) is a lightweight flexible development framework for complex business architecture.
 
-轻量级业务中台开发框架，以DDD思想为基础，融合[中台核心要素](https://github.com/funkygao/cp-ddd-framework/wiki/%E4%B8%9A%E5%8A%A1%E4%B8%AD%E5%8F%B0%E7%9A%84%E6%A0%B8%E5%BF%83%E8%A6%81%E7%B4%A0)，赋能中台建设。
+轻量级业务中台开发框架，以DDD思想为基础，致力于业务资产的可沉淀和可传承，全方位解决复杂业务场景的扩展问题，实现[中台核心要素](https://github.com/funkygao/cp-ddd-framework/wiki/%E4%B8%9A%E5%8A%A1%E4%B8%AD%E5%8F%B0%E7%9A%84%E6%A0%B8%E5%BF%83%E8%A6%81%E7%B4%A0)，赋能中台建设。
 
-融合了DDD、前中台复杂生态协作方法论，同时充分考虑组织、历史债、运维和落地成本以及风险而开发的，面向复杂业务场景架构设计，重新定义业务开发，是中台架构的顶层设计和完整解决方案。
+融合了前中台复杂生态协作方法论，充分考虑组织架构、技术债、学习门槛、可演进性、运维和落地成本以及风险而开发的，面向复杂业务场景架构设计，重新定义业务开发，是中台架构的顶层设计和完整解决方案。
 
 [![Ask Me Anything !](https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg)](https://gitter.im/cp-ddd-framework/community)
 
@@ -92,13 +93,13 @@ cp-ddd-framework
 
 ## Using cp-ddd-framework
 
-已推送至Maven中央库，可直接引入。release版本近期发布。
+Latest version [0.1.1](https://github.com/funkygao/cp-ddd-framework/releases/tag/v0.1.1)，已推送至Maven中央库，可直接引入。
 
 ### Maven
 
 ```xml
 <properties>
-    <dddplus.version>0.0.1-SNAPSHOT</dddplus.version>
+    <dddplus.version>0.1.1</dddplus.version>
 </properties>
 
 <dependency>
@@ -113,7 +114,7 @@ cp-ddd-framework
 ```groovy
 dependencies {
     ...
-    compile 'io.github.dddplus:dddplus-runtime:0.0.1-SNAPSHOT'
+    compile 'io.github.dddplus:dddplus-runtime:0.1.1'
 }
 ```
 
@@ -132,6 +133,10 @@ Please visit [使用该框架搭建`订单履约中台`的例子](https://github
 ## Reference documentation
 
 Please visit [Javadoc](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/).
+
+## FAQ
+
+Please visit [FAQ](https://github.com/funkygao/cp-ddd-framework/wiki/FAQ).
 
 ## Landscape of Central Platform
 

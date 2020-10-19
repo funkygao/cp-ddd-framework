@@ -17,6 +17,8 @@ import java.util.jar.JarFile;
 @Slf4j
 final class JarUtils {
 
+    private JarUtils() {}
+
     static Map<Class<? extends Annotation>, List<Class>> loadClassWithAnnotations(
             String path, List<Class<? extends Annotation>> annotations, String startWith, ClassLoader classLoader) throws Throwable {
         Map<Class<? extends Annotation>, List<Class>> result = new HashMap<>();
