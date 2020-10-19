@@ -1,4 +1,4 @@
-### **[Quickstart](#quickstart)** • **[Examples](#the-demo)** • **[Wiki](https://github.com/funkygao/cp-ddd-framework/wiki?_blank)** • **[Javadoc](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/?_blank)** • **[Chat with us](https://gitter.im/cp-ddd-framework/community?_blank)**
+### **[Quickstart](#quickstart)** • **[Examples](#the-demo)** • **[Wiki](https://github.com/funkygao/cp-ddd-framework/wiki){target="_blank"}** • **[Javadoc](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/?_blank)** • **[Chat with us](https://gitter.im/cp-ddd-framework/community?_blank)**
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](https://github.com/funkygao/cp-ddd-framework/blob/master/LICENSE)
 [![CI](https://github.com/funkygao/cp-ddd-framework/workflows/CI/badge.svg?branch=master)](https://github.com/funkygao/cp-ddd-framework/actions?query=branch%3Amaster+workflow%3ACI)
