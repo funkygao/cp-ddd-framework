@@ -42,6 +42,6 @@ release-javadoc:install
 	@git push
 	@git checkout master
 
-all:release-javadoc deploy
+all:release-javadoc deploy-snapshot
 	@git push origin
 	@git push dddplus
