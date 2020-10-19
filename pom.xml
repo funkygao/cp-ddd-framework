@@ -173,18 +173,6 @@ under the License.
             <id>install</id>
         </profile>
 
-        <!-- release to github maven package -->
-        <profile>
-            <id>release-github</id>
-            <distributionManagement>
-                <repository>
-                    <id>github</id>
-                    <name>GitHub funkygao Apache Maven Packages</name>
-                    <url>https://maven.pkg.github.com/funkygao/cp-ddd-framework</url>
-                </repository>
-            </distributionManagement>
-        </profile>
-
         <!-- release to maven central repo: OSS Repository Hosting https://central.sonatype.org/pages/ossrh-guide.html -->
         <profile>
             <id>ossrh</id>
