@@ -9,6 +9,7 @@ import io.github.dddplus.annotation.Partner;
 import io.github.dddplus.annotation.UnderDevelopment;
 import io.github.dddplus.plugin.IPlugin;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationContext;
 
 import javax.validation.constraints.NotNull;
 import java.io.File;
@@ -40,8 +41,9 @@ import java.util.*;
 public final class Container {
     private static final Container instance = new Container();
 
-    private static ClassLoader jdkClassLoader = initJDKClassLoader();
-    private static ClassLoader containerClassLoader = Container.class.getClassLoader();
+    private static final ClassLoader jdkClassLoader = initJDKClassLoader();
+    private static final ClassLoader containerClassLoader = Container.class.getClassLoader();
+    private static final ApplicationContext applicationContext = DDDBootstrap.applicationContext();
 
     private static final Map<String, IPlugin> activePlugins = new HashMap<>(); // has no concurrent scenarios: thread safe
 
@@ -104,7 +106,7 @@ public final class Container {
         log.warn("Loading partner:{} useSpring:{}", jarPath, useSpring);
         try {
             Plugin plugin = new Plugin(code, version, jdkClassLoader, containerClassLoader);
-            plugin.load(jarPath, useSpring, Partner.class, new ContainerContext(DDDBootstrap.applicationContext()));
+            plugin.load(jarPath, useSpring, Partner.class, new ContainerContext(applicationContext));
 
             Plugin pluginToDestroy = (Plugin) activePlugins.get(code);
             if (pluginToDestroy != null) {
