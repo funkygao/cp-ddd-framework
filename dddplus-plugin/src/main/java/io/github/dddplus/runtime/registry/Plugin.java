@@ -13,9 +13,6 @@ import io.github.dddplus.plugin.IPluginListener;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.lang.annotation.Annotation;
@@ -72,12 +69,6 @@ class Plugin implements IPlugin {
         // 如果一个jar里有多个 IPluginListener 实现，只会返回第一个实例
         IPluginListener pluginListener = JarUtils.loadBeanWithType(pluginClassLoader, jarPath, IPluginListener.class);
         if (pluginListener != null) {
-            if (pluginListener.getClass().isAnnotationPresent(Component.class)
-                    || pluginListener.getClass().isAnnotationPresent(Repository.class)
-                    || pluginListener.getClass().isAnnotationPresent(Service.class)) {
-                abort("IPluginListener instance cannot be Spring bean!");
-            }
-
             pluginListener.onPrepared(ctx);
         }
 
@@ -151,10 +142,6 @@ class Plugin implements IPlugin {
         if (identityResolverClass == Partner.class) {
             InternalIndexer.commitPartner();
         }
-    }
-
-    private void abort(String message) {
-        throw BootstrapException.ofMessage(message);
     }
 
     @Override
