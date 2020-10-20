@@ -25,8 +25,8 @@ under the License.
 
     <artifactId>dddplus-spec</artifactId>
     <packaging>jar</packaging>
-    <name>DDDPlus :: Spec</name>
-    <description>DDD Plus Framework Specifications</description>
+    <name>DDDplus :: Spec</name>
+    <description>DDDplus Framework Specifications</description>
 
     <properties>
         <maven.deploy.skip>false</maven.deploy.skip>

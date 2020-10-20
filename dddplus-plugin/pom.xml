@@ -25,11 +25,12 @@ under the License.
 
     <artifactId>dddplus-plugin</artifactId>
     <packaging>jar</packaging>
-    <name>DDDPlus :: Plugin</name>
-    <description>DDD Plus Framework Dynamic Plugin Jar Support</description>
+    <name>DDDplus :: Plugin</name>
+    <description>DDDplus Framework Dynamic Plugin Jar Support</description>
 
     <properties>
         <maven.deploy.skip>false</maven.deploy.skip>
+        <skip.dddplus.plugin.module>true</skip.dddplus.plugin.module>
     </properties>
 
     <dependencies>
@@ -48,16 +49,20 @@ under the License.
         </dependency>
     </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <configuration>
-                    <skipNexusStagingDeployMojo>true</skipNexusStagingDeployMojo>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-
+    <profiles>
+        <profile>
+            <id>ossrh</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <configuration>
+                            <skipNexusStagingDeployMojo>${skip.dddplus.plugin.module}</skipNexusStagingDeployMojo>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

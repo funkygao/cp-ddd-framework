@@ -1,11 +1,13 @@
+#### **[Quickstart](#quickstart)** • **[Examples](#the-demo)** • **[Landscape](#landscape-of-central-platform)** • **[Javadoc](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/)** • **[Chat with us](https://gitter.im/cp-ddd-framework/community)**
+
 [![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](https://github.com/funkygao/cp-ddd-framework/blob/master/LICENSE)
 [![CI](https://github.com/funkygao/cp-ddd-framework/workflows/CI/badge.svg?branch=master)](https://github.com/funkygao/cp-ddd-framework/actions?query=branch%3Amaster+workflow%3ACI)
 [![Code Quality: Java](https://img.shields.io/lgtm/grade/java/g/funkygao/cp-ddd-framework.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/funkygao/cp-ddd-framework/context:java)
 [![Coverage Status](https://img.shields.io/codecov/c/github/funkygao/cp-ddd-framework.svg)](https://codecov.io/gh/funkygao/cp-ddd-framework)
 [![TODO](https://badgen.net/https/api.tickgit.com/badgen/github.com/funkygao/cp-ddd-framework?label=todos)](https://www.tickgit.com/browse?repo=github.com/funkygao/cp-ddd-framework)
-[![Ask Me Anything !](https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg)](https://gitter.im/cp-ddd-framework/community)
+[![Ask Us Anything !](https://img.shields.io/badge/Ask%20us-anything-1abc9c.svg)](https://gitter.im/cp-ddd-framework/community)
 
-# cp-ddd-framework (Central Platform：中台)
+# cp-ddd-framework (also known as DDDplus)
 
 <details>
 <summary><b>Table of content</b></summary>
@@ -35,14 +37,13 @@
 
 ## What is cp-ddd-framework?
 
-cp-ddd-framework(also known as DDDplus) is a lightweight flexible development framework for complex business architecture.
+cp-ddd-framework, also known as DDDplus, is a lightweight flexible development framework for complex business architecture.
 
-轻量级业务中台开发框架，以DDD思想为基础，致力于业务资产的可沉淀和可传承，全方位解决复杂业务场景的扩展问题，实现[中台核心要素](https://github.com/funkygao/cp-ddd-framework/wiki/%E4%B8%9A%E5%8A%A1%E4%B8%AD%E5%8F%B0%E7%9A%84%E6%A0%B8%E5%BF%83%E8%A6%81%E7%B4%A0)，赋能中台建设。
+一套轻量级业务中台开发框架，以[DDD](https://github.com/funkygao/cp-ddd-framework/wiki/DDD)思想为基础，致力于业务资产的可沉淀和可传承，全方位解决复杂业务场景的扩展问题，实现[中台核心要素](https://github.com/funkygao/cp-ddd-framework/wiki/%E4%B8%9A%E5%8A%A1%E4%B8%AD%E5%8F%B0%E7%9A%84%E6%A0%B8%E5%BF%83%E8%A6%81%E7%B4%A0)，赋能中台建设。
 
 融合了前中台复杂生态协作方法论，充分考虑组织架构、技术债、学习门槛、可演进性、运维和落地成本以及风险而开发的，面向复杂业务场景架构设计，重新定义业务开发，是中台架构的顶层设计和完整解决方案。
 
-[![Ask Me Anything !](https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg)](https://gitter.im/cp-ddd-framework/community)
-
+Note: cp means Central Platform：中台。
 ### Current status
 
 Used for several complex critical central platform projects in production environment.

@@ -25,8 +25,8 @@ under the License.
 
     <artifactId>dddplus-unit</artifactId>
     <packaging>jar</packaging>
-    <name>DDDPlus :: Unit</name>
-    <description>DDD Plus Unit test facilities</description>
+    <name>DDDplus :: Unit</name>
+    <description>DDDplus Unit test facilities</description>
 
     <properties>
         <maven.deploy.skip>false</maven.deploy.skip>
