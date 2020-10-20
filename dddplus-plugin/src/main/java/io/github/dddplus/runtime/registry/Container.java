@@ -25,8 +25,10 @@ import java.util.*;
  * <p>{@code Container}常驻内存，{@code PluginJar}动态加载：动静分离</p>
  * <p>
  * <pre>
- *    +- 1 ContainerClassLoader
- *    |- 1 JDKClassLoader
+ *    +- 1 containerClassLoader
+ *    |- 1 jdkClassLoader
+ *    |- 1 containerApplicationContext
+ *    |
  *    |                     +- pluginApplicationContext
  *    |                     |
  * Container ----> Plugin --+- pluginClassLoader
@@ -43,7 +45,7 @@ public final class Container {
 
     private static final ClassLoader jdkClassLoader = initJDKClassLoader();
     private static final ClassLoader containerClassLoader = Container.class.getClassLoader();
-    private static final ApplicationContext applicationContext = DDDBootstrap.applicationContext();
+    private static final ApplicationContext containerApplicationContext = DDDBootstrap.applicationContext();
 
     private static final Map<String, IPlugin> activePlugins = new HashMap<>(); // has no concurrent scenarios: thread safe
 
@@ -105,8 +107,8 @@ public final class Container {
         long t0 = System.nanoTime();
         log.warn("Loading partner:{} useSpring:{}", jarPath, useSpring);
         try {
-            Plugin plugin = new Plugin(code, version, jdkClassLoader, containerClassLoader);
-            plugin.load(jarPath, useSpring, Partner.class, new ContainerContext(applicationContext));
+            Plugin plugin = new Plugin(code, version, jdkClassLoader, containerClassLoader, containerApplicationContext);
+            plugin.load(jarPath, useSpring, Partner.class, new ContainerContext(containerApplicationContext));
 
             Plugin pluginToDestroy = (Plugin) activePlugins.get(code);
             if (pluginToDestroy != null) {
