@@ -1,3 +1,5 @@
+<img src="doc/assets/img/logo-small.png">
+
 #### **[Quickstart](#quickstart)** • **[Examples](#the-demo)** • **[Landscape](#landscape-of-central-platform)** • **[Javadoc](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/)** • **[Chat with us](https://gitter.im/cp-ddd-framework/community)**
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](https://github.com/funkygao/cp-ddd-framework/blob/master/LICENSE)
