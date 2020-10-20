@@ -1,4 +1,4 @@
-<img src="doc/assets/img/logo.png">
+<img src="doc/assets/img/logo-small.png">
 
 #### **[Quickstart](#quickstart)** • **[Examples](#the-demo)** • **[Landscape](#landscape-of-central-platform)** • **[Javadoc](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/)** • **[Chat with us](https://gitter.im/cp-ddd-framework/community)**
 
