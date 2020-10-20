@@ -22,7 +22,7 @@ under the License.
     <artifactId>dddplus</artifactId>
     <packaging>pom</packaging>
     <version>0.1.2-SNAPSHOT</version>
-    <name>DDD Plus Framework</name>
+    <name>DDDplus Framework</name>
     <description>DDD Supporting Central Platform(中台) Architecture</description>
     <url>https://github.com/funkygao/cp-ddd-framework</url>
     <inceptionYear>2020</inceptionYear>

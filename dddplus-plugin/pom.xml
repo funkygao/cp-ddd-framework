@@ -25,8 +25,8 @@ under the License.
 
     <artifactId>dddplus-plugin</artifactId>
     <packaging>jar</packaging>
-    <name>DDDPlus :: Plugin</name>
-    <description>DDD Plus Framework Dynamic Plugin Jar Support</description>
+    <name>DDDplus :: Plugin</name>
+    <description>DDDplus Framework Dynamic Plugin Jar Support</description>
 
     <properties>
         <maven.deploy.skip>false</maven.deploy.skip>

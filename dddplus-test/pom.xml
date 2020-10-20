@@ -12,7 +12,7 @@
     </parent>
 
     <artifactId>dddplus-test</artifactId>
-    <name>DDDPlus :: Test</name>
+    <name>DDDplus :: Test</name>
     <description>Full coverage unit test cases</description>
 
     <properties>

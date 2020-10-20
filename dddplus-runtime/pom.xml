@@ -25,8 +25,8 @@ under the License.
 
     <artifactId>dddplus-runtime</artifactId>
     <packaging>jar</packaging>
-    <name>DDDPlus :: Runtime</name>
-    <description>DDD Plus Framework Runtime Support</description>
+    <name>DDDplus :: Runtime</name>
+    <description>DDDplus Framework Runtime Support</description>
 
     <properties>
         <maven.deploy.skip>false</maven.deploy.skip>

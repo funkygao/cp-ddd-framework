@@ -25,8 +25,8 @@ under the License.
 
     <artifactId>dddplus-enforce</artifactId>
     <packaging>jar</packaging>
-    <name>DDDPlus :: Enforce</name>
-    <description>DDD Plus Framework Enforcement</description>
+    <name>DDDplus :: Enforce</name>
+    <description>DDDplus Framework Enforcement</description>
 
     <properties>
         <maven.deploy.skip>false</maven.deploy.skip>
