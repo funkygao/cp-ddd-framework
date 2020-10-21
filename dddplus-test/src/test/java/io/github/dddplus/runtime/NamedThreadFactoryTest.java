@@ -1,5 +1,6 @@
 package io.github.dddplus.runtime;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
 import java.util.Set;
@@ -10,6 +11,7 @@ import java.util.concurrent.ThreadFactory;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+@Slf4j
 public class NamedThreadFactoryTest {
 
     @Test
@@ -48,12 +50,14 @@ public class NamedThreadFactoryTest {
         for (int i = 0; i < N; i++) {
             // thread name: {prefix}-{poolCount}-T-{threadCount}
             // e,g. foo-0-T-2
+            log.info("{} {}", i, threadNames);
             assertTrue(threadNames.contains("foo-0-T-" + (i + 1)));
         }
 
         // pool1
         assertEquals(N, threadNames1.size());
         for (int i = 0; i < N; i++) {
+            log.info("{} {}", i, threadNames1);
             assertTrue(threadNames1.contains("foo-1-T-" + (i + 1)));
         }
     }

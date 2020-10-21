@@ -21,12 +21,12 @@
       * [Features](#features)
       * [Modules](#modules)
       * [Key abstractions](#key-abstractions)
+      * [Reference documentation](#reference-documentation)
    * [Using cp-ddd-framework](#using-cp-ddd-framework)
       * [Maven](#maven)
       * [Gradle](#gradle)
       * [Building from Source](#building-from-source)
    * [The Demo](#the-demo)
-   * [Reference documentation](#reference-documentation)
    * [FAQ](#faq)
    * [Landscape of Central Platform](#landscape-of-central-platform)
    * [Contribution](#contribution)
@@ -99,6 +99,10 @@ cp-ddd-framework
 
 ![](http://www.plantuml.com/plantuml/svg/XLHDRnCn4BtxLunwQW-fn3LQLIq4f1v0LSiTJUn9rehNZkpPfAZqlpDE7DWF8tAAvxrvyxttYJ5otpcLTjRlCM87BNfpZ9QPF6pG9HfWgKKJZjPlc-PekVrnVj_T0SUUbACD0mU8Tjio61j9imrUgJtg7Mu9dbo_jHwQvek8aRYzAP2VzKnnWvhWyT6GPyi_doa5Tw0unLUXG-i_lpBv9D9JE0V0jQEf_Mimv1wOKRSTUHR_cJ1fQ-Y5QPykg7QO4ZmX2ycFB94zHVMkb0zCSDK6XaWkeCcnhm0JVFkWIh6tj_cXPZMyK3nOJHL0Sb23_x04UYNTCrtV3DdFT0Yx773eLZ6AVmpEhMK68l2dHT3yMYnc3PtXiu5KUddASEz4HmBKyKZUK1GOruaZQeRIQjBVgHDVfh_GHqmb_uUrTH9SpImYkIM-f2rngvIDZUc_94CRxDs8DijjD8FLQYNljyJ8LhzB46-AMXqygGaqsR4SkXWAFksrC3fatLwNAPqwUwFKU8FAeEhBKy3ghinLAfrNqmqfYkDQwgpgtStBF7FBdVqJBaTN6M4ZiBHzN7QnLHAhbRa45pGoLVYBnTqbjoMiPPnrIiclKDIdu5au525BeybNbSzZY6ItixsGb2egyjR1a2fnotCUkDWh-vgr1_rOGeYwfSHHG7LFtkHl_cy0)
 
+### Reference documentation
+
+Please visit [Javadoc](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/).
+
 ## Using cp-ddd-framework
 
 Latest version [0.1.1](https://github.com/funkygao/cp-ddd-framework/releases/tag/v0.1.1)，已推送至Maven中央库，可直接引入。
@@ -137,10 +141,6 @@ mvn install # will run all test cases
 ## The Demo
 
 Please visit [使用该框架搭建`订单履约中台`的例子](https://github.com/dddplus/dddplus-demo).
-
-## Reference documentation
-
-Please visit [Javadoc](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/).
 
 ## FAQ
 
