@@ -22,7 +22,7 @@
       * [Modules](#modules)
       * [Key abstractions](#key-abstractions)
       * [Reference documentation](#reference-documentation)
-   * [Using cp-ddd-framework](#using-cp-ddd-framework)
+   * [Using DDDplus](#using-dddplus)
       * [Maven](#maven)
       * [Gradle](#gradle)
       * [Building from Source](#building-from-source)
@@ -102,9 +102,9 @@ cp-ddd-framework
 
 Please visit [Javadoc](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/).
 
-## Using cp-ddd-framework
+## Using DDDplus
 
-Latest version [0.1.1](https://github.com/funkygao/cp-ddd-framework/releases/tag/v0.1.1)，已推送至Maven中央库，可直接引入。
+Latest version [0.1.1](https://github.com/funkygao/cp-ddd-framework/releases/tag/v0.1.1)，已推送至[Maven中央库](https://search.maven.org/search?q=g:io.github.dddplus)，可直接引入。
 
 ### Maven
 
