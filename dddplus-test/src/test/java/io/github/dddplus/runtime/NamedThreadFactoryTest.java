@@ -1,6 +1,7 @@
 package io.github.dddplus.runtime;
 
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Set;
@@ -13,6 +14,11 @@ import static org.junit.Assert.assertTrue;
 
 @Slf4j
 public class NamedThreadFactoryTest {
+
+    @Before
+    public void setUp() {
+        NamedThreadFactory.poolCount.set(0);
+    }
 
     @Test
     public void threadName() throws InterruptedException {

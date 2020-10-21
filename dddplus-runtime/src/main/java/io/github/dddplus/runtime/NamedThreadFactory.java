@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * 命名的线程工厂.
  */
 class NamedThreadFactory implements ThreadFactory {
-    private static final AtomicInteger poolCount = new AtomicInteger(0);
+    static final AtomicInteger poolCount = new AtomicInteger(0);
     private final AtomicInteger threadCount = new AtomicInteger(1);
 
     private final ThreadGroup group;
