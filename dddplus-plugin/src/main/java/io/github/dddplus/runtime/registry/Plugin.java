@@ -57,12 +57,12 @@ class Plugin implements IPlugin {
         this.containerApplicationContext = containerApplicationContext;
     }
 
-    void load(String jarPath, boolean useSpring, Class<? extends Annotation> identityResolverClass, IContainerContext ctx) throws Throwable {
+    void load(String jarPath, boolean useSpring, Class<? extends Annotation> identityResolverAnnotation, IContainerContext ctx) throws Throwable {
         // each Plugin Jar has a specific PluginClassLoader
         pluginClassLoader = new PluginClassLoader(new URL[]{new File(jarPath).toURI().toURL()}, jdkClassLoader, containerClassLoader);
 
         // Spring load classes in jar
-        Map<Class<? extends Annotation>, List<Class>> plugableMap = prepareClasses(jarPath, useSpring, identityResolverClass);
+        Map<Class<? extends Annotation>, List<Class>> plugableMap = prepareClasses(jarPath, useSpring, identityResolverAnnotation);
         log.info("Classes prepared, plugableMap {}", plugableMap);
 
         // IPluginListener 不通过Spring加载，而是手工加载、创建实例
@@ -73,12 +73,12 @@ class Plugin implements IPlugin {
         }
 
         // 现在，新jar里的类已经被新的ClassLoader加载到内存了，也实例化了，但旧jar里的类仍然在工作
-        preparePlugins(identityResolverClass, plugableMap);
-        log.info("Plugins index prepared for {}", identityResolverClass.getSimpleName());
+        preparePlugins(identityResolverAnnotation, plugableMap);
+        log.info("Plugins index prepared for {}", identityResolverAnnotation.getSimpleName());
 
         // 内存里插件相关索引已准备好，现在切换
-        commit(identityResolverClass);
-        log.info("Committed: {}", identityResolverClass.getSimpleName());
+        commit(identityResolverAnnotation);
+        log.info("Committed: {}", identityResolverAnnotation.getSimpleName());
 
         if (pluginListener != null) {
             pluginListener.onCommitted(ctx);
@@ -91,7 +91,7 @@ class Plugin implements IPlugin {
     }
 
     // Spring load all relevant classes in the jar using the new PluginClassLoader
-    private Map<Class<? extends Annotation>, List<Class>> prepareClasses(String jarPath, boolean useSpring, Class<? extends Annotation> identityResolverClass) throws Throwable {
+    private Map<Class<? extends Annotation>, List<Class>> prepareClasses(String jarPath, boolean useSpring, Class<? extends Annotation> identityResolverAnnotation) throws Throwable {
         if (useSpring) {
             log.debug("Spring loading Plugin with {}, {}, {} ...", jdkClassLoader, containerClassLoader, pluginClassLoader);
             long t0 = System.nanoTime();
@@ -104,24 +104,24 @@ class Plugin implements IPlugin {
 
         // 从Plugin Jar里把 IPlugable 挑出来，以便更新注册表
         List<Class<? extends Annotation>> annotations = new ArrayList<>(2);
-        annotations.add(identityResolverClass);
+        annotations.add(identityResolverAnnotation);
         annotations.add(Extension.class);
         return JarUtils.loadClassWithAnnotations(jarPath, annotations, null, pluginClassLoader);
     }
 
-    private void preparePlugins(Class<? extends Annotation> identityResolverClass, Map<Class<? extends Annotation>, List<Class>> plugableMap) {
-        List<Class> identityResolverClasses = plugableMap.get(identityResolverClass);
+    private void preparePlugins(Class<? extends Annotation> identityResolverAnnotation, Map<Class<? extends Annotation>, List<Class>> plugableMap) {
+        List<Class> identityResolverClasses = plugableMap.get(identityResolverAnnotation);
         if (identityResolverClasses != null && !identityResolverClasses.isEmpty()) {
-            if (identityResolverClass == Partner.class && identityResolverClasses.size() > 1) {
+            if (identityResolverAnnotation == Partner.class && identityResolverClasses.size() > 1) {
                 throw new RuntimeException("One Partner jar can have at most 1 Partner instance!");
             }
 
             for (Class irc : identityResolverClasses) {
-                log.info("Preparing index {} {}", identityResolverClass.getSimpleName(), irc.getCanonicalName());
+                log.info("Preparing index {} {}", identityResolverAnnotation.getSimpleName(), irc.getCanonicalName());
 
                 // 每次加载，由于 PluginClassLoader 是不同的，irc也不同
                 Object partnerOrPattern = pluginApplicationContext.getBean(irc);
-                RegistryFactory.preparePlugins(identityResolverClass, partnerOrPattern);
+                RegistryFactory.preparePlugins(identityResolverAnnotation, partnerOrPattern);
             }
         }
 
@@ -138,8 +138,8 @@ class Plugin implements IPlugin {
         }
     }
 
-    private void commit(Class<? extends Annotation> identityResolverClass) {
-        if (identityResolverClass == Partner.class) {
+    private void commit(Class<? extends Annotation> identityResolverAnnotation) {
+        if (identityResolverAnnotation == Partner.class) {
             InternalIndexer.commitPartner();
         }
     }
