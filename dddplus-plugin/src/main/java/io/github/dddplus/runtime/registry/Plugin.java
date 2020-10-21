@@ -12,9 +12,7 @@ import io.github.dddplus.plugin.IPlugin;
 import io.github.dddplus.plugin.IPluginListener;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
+import org.springframework.context.ApplicationContext;
 
 import java.io.File;
 import java.lang.annotation.Annotation;
@@ -36,26 +34,34 @@ class Plugin implements IPlugin {
     private final String code;
 
     @Getter
-    private final String version; // TODO for rollback
+    private final String version; // for rollback
 
     // the shared class loaders
     private final ClassLoader jdkClassLoader;
     private final ClassLoader containerClassLoader;
 
-    // each Plugin will have a specific class loader
+    // parent of pluginApplicationContext
+    private final ApplicationContext containerApplicationContext;
+
+    // each Plugin will have a specific plugin class loader
     private ClassLoader pluginClassLoader;
 
     // each Plugin will have a specific Spring IoC with the same parent: the Container
     private PluginApplicationContext pluginApplicationContext;
 
-    Plugin(String code, String version, ClassLoader jdkClassLoader, ClassLoader containerClassLoader) {
+    Plugin(String code, String version, ClassLoader jdkClassLoader, ClassLoader containerClassLoader, ApplicationContext containerApplicationContext) {
         this.code = code;
         this.version = version;
         this.jdkClassLoader = jdkClassLoader;
         this.containerClassLoader = containerClassLoader;
+        this.containerApplicationContext = containerApplicationContext;
     }
 
     void load(String jarPath, boolean useSpring, Class<? extends Annotation> identityResolverClass, IContainerContext ctx) throws Throwable {
+        // each Plugin Jar has a specific PluginClassLoader
+        pluginClassLoader = new PluginClassLoader(new URL[]{new File(jarPath).toURI().toURL()}, jdkClassLoader, containerClassLoader);
+
+        // Spring load classes in jar
         Map<Class<? extends Annotation>, List<Class>> plugableMap = prepareClasses(jarPath, useSpring, identityResolverClass);
         log.info("Classes prepared, plugableMap {}", plugableMap);
 
@@ -63,12 +69,6 @@ class Plugin implements IPlugin {
         // 如果一个jar里有多个 IPluginListener 实现，只会返回第一个实例
         IPluginListener pluginListener = JarUtils.loadBeanWithType(pluginClassLoader, jarPath, IPluginListener.class);
         if (pluginListener != null) {
-            if (pluginListener.getClass().isAnnotationPresent(Component.class)
-                    || pluginListener.getClass().isAnnotationPresent(Repository.class)
-                    || pluginListener.getClass().isAnnotationPresent(Service.class)) {
-                abort("IPluginListener instance cannot be Spring bean!");
-            }
-
             pluginListener.onPrepared(ctx);
         }
 
@@ -90,16 +90,13 @@ class Plugin implements IPlugin {
         pluginApplicationContext.close();
     }
 
-    // load all relevant classes with the new PluginClassLoader
+    // Spring load all relevant classes in the jar using the new PluginClassLoader
     private Map<Class<? extends Annotation>, List<Class>> prepareClasses(String jarPath, boolean useSpring, Class<? extends Annotation> identityResolverClass) throws Throwable {
-        // each Plugin Jar has a specific PluginClassLoader
-        pluginClassLoader = new PluginClassLoader(new URL[]{new File(jarPath).toURI().toURL()}, jdkClassLoader, containerClassLoader);
-
         if (useSpring) {
             log.debug("Spring loading Plugin with {}, {}, {} ...", jdkClassLoader, containerClassLoader, pluginClassLoader);
             long t0 = System.nanoTime();
 
-            pluginApplicationContext = new PluginApplicationContext(pluginXml, DDDBootstrap.applicationContext(), pluginClassLoader);
+            pluginApplicationContext = new PluginApplicationContext(pluginXml, containerApplicationContext, pluginClassLoader);
             pluginApplicationContext.refresh();
 
             log.info("Spring loaded, cost {}ms", (System.nanoTime() - t0) / 1000_000);
@@ -145,10 +142,6 @@ class Plugin implements IPlugin {
         if (identityResolverClass == Partner.class) {
             InternalIndexer.commitPartner();
         }
-    }
-
-    private void abort(String message) {
-        throw BootstrapException.ofMessage(message);
     }
 
     @Override
