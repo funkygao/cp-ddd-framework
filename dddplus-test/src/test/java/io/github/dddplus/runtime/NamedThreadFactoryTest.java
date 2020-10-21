@@ -2,12 +2,13 @@ package io.github.dddplus.runtime;
 
 import org.junit.Test;
 
-import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ThreadFactory;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class NamedThreadFactoryTest {
 
@@ -15,7 +16,7 @@ public class NamedThreadFactoryTest {
     public void threadName() throws InterruptedException {
         final int N = 5;
         final String prefix = "foo";
-        Set<String> threadNames = new HashSet<>(N);
+        Set<String> threadNames = new ConcurrentSkipListSet<>();
         final CountDownLatch waitGroup = new CountDownLatch(N);
         ThreadFactory threadFactory = new NamedThreadFactory(prefix, false);
         for (int i = 0; i < N; i++) {
@@ -29,7 +30,7 @@ public class NamedThreadFactoryTest {
         waitGroup.await();
 
         // another thread pool with the same prefix
-        Set<String> threadNames1 = new HashSet<>(N);
+        Set<String> threadNames1 = new ConcurrentSkipListSet<>();
         final CountDownLatch waitGroup1 = new CountDownLatch(N);
         threadFactory = new NamedThreadFactory(prefix, false);
         for (int i = 0; i < N; i++) {
