@@ -19,7 +19,7 @@
       * [Current status](#current-status)
       * [Requirements](#requirements)
       * [Quickstart](#quickstart)
-      * [What problems does it solve](#what-problems-does-it-solve)
+      * [Features](#features)
       * [Modules](#modules)
       * [Key abstractions](#key-abstractions)
    * [Using cp-ddd-framework](#using-cp-ddd-framework)
@@ -62,19 +62,27 @@ Requires Java 1.8+ and Spring 4.3.12.RELEASE or later.
 
 Please visit [Quickstart](https://github.com/funkygao/cp-ddd-framework/wiki).
 
-### What problems does it solve
+### Features
 
-- born for extension, the OCP
-- 业务逻辑的扩展：uncertain biz logic
-- 业务流程的扩展：uncertain biz flow
-- 业务模型的扩展：uncertain biz model
-- 业务的多态：polymorphic business
-- 业务前台与中台如何协同：synergy between BP and CP teams
-- 如何让中台架构特色的DDD稳稳当当落地：DDD seamlessly landing in code
-- 如何降低系统实现的复杂度：reduce entropy of the system
-- empower the system to evolve without corruption
-- 普通研发如何编写出优雅的业务代码：low threshold for average developer to build elegant biz code
-- and more
+- 以DDD架构思想为本，面向复杂业务场景架构设计
+   - 降低复杂度，持续确保业务资产可沉淀可传承
+   - 通过代码框架提供足够约束，让DDD不再仅停留在思想层面
+   - 降低DDD上手门槛，为研发减负
+- 14个核心业务抽象，勾勒出业务中台的骨架
+   - 中台架构的顶层设计
+   - 以不变应万变
+- 全方位解决业务的不确定性
+   - 业务逻辑的扩展、多态
+   - 业务流程的扩展、多态
+   - 业务模型的扩展、多态
+   - 该框架本身支持再次扩展
+   - 扩展业务包的不重启热更新
+- 支撑中台战略的复杂生态协作
+   - 前台、中台解耦
+   - 业务隔离
+- 完整的解决方案
+   - 业务能力演化，最佳实践，架构持续防腐，绞杀者落地方案等
+   - 提供[完整的Demo工程](https://github.com/dddplus/dddplus-demo)，确保落地不走样
 
 ### Modules
 
