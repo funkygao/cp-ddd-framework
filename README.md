@@ -58,8 +58,6 @@ Requires Java 1.8+ and Spring 4.3.12.RELEASE or later.
 
 ### Quickstart
 
-[快速入门](https://github.com/funkygao/cp-ddd-framework/wiki)。
-
 Please visit [Quickstart](https://github.com/funkygao/cp-ddd-framework/wiki).
 
 ### Features
