@@ -104,13 +104,13 @@ Please visit [Javadoc](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/)
 
 ## Using DDDplus
 
-Latest version [0.1.1](https://github.com/funkygao/cp-ddd-framework/releases/tag/v0.1.1)，已推送至[Maven中央库](https://search.maven.org/search?q=g:io.github.dddplus)，可直接引入。
+Latest version [1.0.1](https://github.com/funkygao/cp-ddd-framework/releases/tag/v1.0.1)，已推送至[Maven中央库](https://search.maven.org/search?q=g:io.github.dddplus)，可直接引入。
 
 ### Maven
 
 ```xml
 <properties>
-    <dddplus.version>0.1.1</dddplus.version>
+    <dddplus.version>1.0.1</dddplus.version>
 </properties>
 
 <dependency>
@@ -125,7 +125,7 @@ Latest version [0.1.1](https://github.com/funkygao/cp-ddd-framework/releases/tag
 ```groovy
 dependencies {
     ...
-    compile 'io.github.dddplus:dddplus-runtime:0.1.1'
+    compile 'io.github.dddplus:dddplus-runtime:1.0.1'
 }
 ```
 
