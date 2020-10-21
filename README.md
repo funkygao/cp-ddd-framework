@@ -9,8 +9,6 @@
 [![TODO](https://badgen.net/https/api.tickgit.com/badgen/github.com/funkygao/cp-ddd-framework?label=todos)](https://www.tickgit.com/browse?repo=github.com/funkygao/cp-ddd-framework)
 [![Ask Us Anything !](https://img.shields.io/badge/Ask%20us-anything-1abc9c.svg)](https://gitter.im/cp-ddd-framework/community)
 
-# cp-ddd-framework
-
 <details>
 <summary><b>Table of content</b></summary>
 
