@@ -14,7 +14,7 @@
 <summary><b>Table of content</b></summary>
 
 ## Table of content
-   * [What is cp-ddd-framework](#what-is-cp-ddd-framework)
+   * [What is DDDplus](#what-is-dddplus)
       * [Current status](#current-status)
       * [Requirements](#requirements)
       * [Quickstart](#quickstart)
@@ -36,15 +36,13 @@
 
 ----
 
-## What is cp-ddd-framework?
+## What is DDDplus?
 
-cp-ddd-framework, also known as DDDplus, is a lightweight flexible development framework for complex business architecture.
+DDDplus, originally cp-ddd-framework(cp means Central Platform：中台), is a lightweight flexible development framework for complex business architecture.
 
 一套轻量级业务中台开发框架，以[DDD](https://github.com/funkygao/cp-ddd-framework/wiki/DDD)思想为本，致力于业务资产的可沉淀可传承，全方位解决复杂业务场景的扩展问题，实现[中台核心要素](https://github.com/funkygao/cp-ddd-framework/wiki/%E4%B8%9A%E5%8A%A1%E4%B8%AD%E5%8F%B0%E7%9A%84%E6%A0%B8%E5%BF%83%E8%A6%81%E7%B4%A0)，赋能中台建设。
 
 融合了前中台复杂生态协作方法论，充分考虑组织架构、技术债、学习门槛、可演进性、运维成本和风险而开发的，解决业务开发痛点，是中台架构的顶层设计和完整解决方案。
-
-Note: cp means Central Platform：中台。
 
 ### Current status
 
@@ -161,4 +159,4 @@ For any question, you can use [Gitter Chat](https://gitter.im/cp-ddd-framework/c
 
 ## Licensing
 
-cp-ddd-framework is licensed under the Apache License, Version 2.0 (the "License"); you may not use this project except in compliance with the License. You may obtain a copy of the License at [http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0).
+DDDplus is licensed under the Apache License, Version 2.0 (the "License"); you may not use this project except in compliance with the License. You may obtain a copy of the License at [http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0).
