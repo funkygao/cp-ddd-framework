@@ -81,7 +81,7 @@ Please visit [Quickstart](https://github.com/funkygao/cp-ddd-framework/wiki).
    - InnerSource协同机制
 - 完整的解决方案
    - 业务能力演化，业务测试，最佳实践，架构持续防腐，重构的导流验证，绞杀者落地方案等
-   - 提供[一套完整的Demo工程](https://github.com/dddplus/dddplus-demo)，手把手教学
+   - 提供[一套完整的Demo工程](https://github.com/dddplus/dddplus-demo)，手把手真实场景教学
 
 ### Modules
 
