@@ -71,16 +71,17 @@ Please visit [Quickstart](https://github.com/funkygao/cp-ddd-framework/wiki).
    - 以不变应万变
    - 研发填空式开发
 - 全方位解决业务的不确定性
-   - 业务逻辑、流程、逻辑模型、数据模型的扩展、多态
+   - 业务逻辑、流程、逻辑模型、数据模型的扩展、多态体系
+   - 不确定收敛到确定
    - 框架本身支持再次扩展
    - 扩展业务包支持不重启热更新
 - 支撑中台战略的复杂生态协作
    - 前台、中台解耦
    - 业务隔离
-   - InnerSource协同
+   - InnerSource协同机制
 - 完整的解决方案
    - 业务能力演化，业务测试，最佳实践，架构持续防腐，重构的导流验证，绞杀者落地方案等
-   - 提供[完整的Demo工程](https://github.com/dddplus/dddplus-demo)
+   - 提供[一套完整的Demo工程](https://github.com/dddplus/dddplus-demo)，手把手教学
 
 ### Modules
 
@@ -110,7 +111,7 @@ Please visit [Javadoc](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/)
 
 ```xml
 <properties>
-    <dddplus.version>0.1.1</dddplus.version>
+    <dddplus.version>1.0.1</dddplus.version>
 </properties>
 
 <dependency>
@@ -125,7 +126,7 @@ Please visit [Javadoc](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/)
 ```groovy
 dependencies {
     ...
-    compile 'io.github.dddplus:dddplus-runtime:0.1.1'
+    compile 'io.github.dddplus:dddplus-runtime:1.0.1'
 }
 ```
 
