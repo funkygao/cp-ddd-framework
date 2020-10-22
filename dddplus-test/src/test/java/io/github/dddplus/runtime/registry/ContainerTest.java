@@ -46,14 +46,14 @@ public class ContainerTest {
 
     @Test
     public void createLocalFile() throws Exception {
-        URL jarUrl = new URL("https://github.com/funkygao/cp-ddd-framework/blob/master/doc/assets/jar/order-center-bp-isv-0.0.1.jar");
+        URL jarUrl = new URL("https://github.com/funkygao/dddplus/blob/master/doc/assets/jar/order-center-bp-isv-0.0.1.jar");
         File file = Container.getInstance().createLocalFile(jarUrl);
         file.deleteOnExit();
         log.info("{}", file.getCanonicalFile());
         assertTrue(file.getCanonicalPath().endsWith(".jar"));
         file.delete();
 
-        jarUrl = new URL("https://github.com/funkygao/cp-ddd-framework/blob/master/doc/assets/jar/order-center-bp-isv-0.0.1.jar?raw=true");
+        jarUrl = new URL("https://github.com/funkygao/dddplus/blob/master/doc/assets/jar/order-center-bp-isv-0.0.1.jar?raw=true");
         file = Container.getInstance().createLocalFile(jarUrl);
         file.deleteOnExit();
         assertTrue(file.getCanonicalPath().endsWith(".jar"));

@@ -9,7 +9,7 @@ public class PluginTest {
 
     @Test
     public void testToString() {
-        IPlugin plugin = new Plugin("foo", "v1", null, null);
+        IPlugin plugin = new Plugin("foo", "v1", null, null, null);
         assertEquals("Plugin:foo:v1", plugin.toString());
     }
 

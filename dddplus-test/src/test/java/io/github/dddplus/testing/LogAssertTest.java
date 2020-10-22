@@ -21,7 +21,7 @@ public class LogAssertTest {
         assertContains("World");
         assertNotContains("Hello", "World");
 
-        log.info("DDDPlus Framework");
+        log.info("DDDplus Framework");
         assertContains("DDD"); // partial match
 
         log.info("a");

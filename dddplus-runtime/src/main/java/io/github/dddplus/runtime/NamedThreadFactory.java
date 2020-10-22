@@ -1,5 +1,5 @@
 /*
- * Copyright cp-ddd-framework Authors.
+ * Copyright DDDplus Authors.
  *
  * Licensed under the Apache License version 2.0, available at http://www.apache.org/licenses/LICENSE-2.0
  */
@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * 命名的线程工厂.
  */
 class NamedThreadFactory implements ThreadFactory {
-    private static final AtomicInteger poolCount = new AtomicInteger();
+    static final AtomicInteger poolCount = new AtomicInteger(0);
     private final AtomicInteger threadCount = new AtomicInteger(1);
 
     private final ThreadGroup group;

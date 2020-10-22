@@ -1,5 +1,5 @@
 /*
- * Copyright cp-ddd-framework Authors.
+ * Copyright DDDplus Authors.
  *
  * Licensed under the Apache License version 2.0, available at http://www.apache.org/licenses/LICENSE-2.0
  */
@@ -34,7 +34,7 @@ public class InternalIndexer {
 
     // 扩展点 Partner
     static final Map<String, PartnerDef> partnerDefMap = new ConcurrentHashMap<>();
-    static volatile PartnerDef partnerDefPrepared = null;
+    static PartnerDef partnerDefPrepared = null;
 
     /**
      * 根据业务能力类找到一个业务能力实例, internal usage only.
