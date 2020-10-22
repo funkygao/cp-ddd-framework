@@ -72,7 +72,6 @@ Please visit [Quickstart](https://github.com/funkygao/cp-ddd-framework/wiki).
    - 研发填空式开发
 - 全方位解决业务的不确定性
    - 业务逻辑、流程、逻辑模型、数据模型的扩展、多态体系
-   - 不确定收敛到确定
    - 框架本身支持再次扩展
    - 扩展业务包支持不重启热更新
 - 支撑中台战略的复杂生态协作
