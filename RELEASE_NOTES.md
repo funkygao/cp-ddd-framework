@@ -1,10 +1,10 @@
-Release Notes - DDDplus - Version 1.0.1
+## Release Notes - DDDplus - Version 1.0.1
 
-** Improvement
+* Improvement
    * Integrated with CodeQL
    * Being renamed to DDDplus
    * Container.java and Plugin.java refactored: explicit over implicit
    * Plugin jar reloading will not allow concurrency
 
-** Test
+* Test
    * NamedThreadFactory test case bug fixed
