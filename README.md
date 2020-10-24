@@ -55,6 +55,13 @@ Please visit [Quickstart](https://github.com/funkygao/cp-ddd-framework/wiki).
 
 ### Features
 
+- Based on DDD, but beyond DDD
+- 14 key business abstractions cover most complex business scenarios
+- Full layered extensibility
+- Empowers InnerSource
+- Total solutions oriented
+
+核心特性：
 - 以DDD架构思想为本，面向复杂业务场景架构设计
    - 通过代码框架提供足够约束，让DDD不再仅停留在思想层面
    - 降低DDD上手门槛，为研发减负，防止落地偏差
