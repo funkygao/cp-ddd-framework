@@ -66,7 +66,7 @@ Please visit [Quickstart](https://github.com/funkygao/cp-ddd-framework/wiki).
    - 通过代码框架提供足够约束，让DDD不再仅停留在思想层面
    - 降低DDD上手门槛，为研发减负，防止落地偏差
    - 降低复杂度，持续保障业务资产的可沉淀可传承
-   - 提供[dddplus-archetype](https://github.com/dddplus/dddplus-archetype)自动生成工程脚手架
+   - 提供[dddplus-archetype](https://github.com/dddplus/dddplus-archetype)，自动生成包含最佳实践的脚手架
 - 14个核心业务抽象，勾勒出业务中台骨架
    - 中台架构的顶层设计
    - 以不变应万变
