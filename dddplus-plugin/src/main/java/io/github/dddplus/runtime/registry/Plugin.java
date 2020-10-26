@@ -46,6 +46,8 @@ class Plugin implements IPlugin {
     // each Plugin will have a specific plugin class loader
     private ClassLoader pluginClassLoader;
 
+    private boolean useSpring;
+
     // each Plugin will have a specific Spring IoC with the same parent: the Container
     private PluginApplicationContext pluginApplicationContext;
 
@@ -58,11 +60,13 @@ class Plugin implements IPlugin {
     }
 
     void load(String jarPath, boolean useSpring, Class<? extends Annotation> identityResolverAnnotation, IContainerContext ctx) throws Throwable {
+        this.useSpring = useSpring;
+
         // each Plugin Jar has a specific PluginClassLoader
         pluginClassLoader = new PluginClassLoader(new URL[]{new File(jarPath).toURI().toURL()}, jdkClassLoader, containerClassLoader);
 
         // Spring load classes in jar
-        Map<Class<? extends Annotation>, List<Class>> plugableMap = prepareClasses(jarPath, useSpring, identityResolverAnnotation);
+        Map<Class<? extends Annotation>, List<Class>> plugableMap = prepareClasses(jarPath, identityResolverAnnotation);
         log.info("Classes prepared, plugableMap {}", plugableMap);
 
         // IPluginListener 不通过Spring加载，而是手工加载、创建实例
@@ -87,11 +91,13 @@ class Plugin implements IPlugin {
 
     void onDestroy() {
         // 把该Plugin下的所有类的所有引用处理干净，这样才能GC介入
-        pluginApplicationContext.close();
+        if (useSpring) {
+            pluginApplicationContext.close();
+        }
     }
 
     // Spring load all relevant classes in the jar using the new PluginClassLoader
-    private Map<Class<? extends Annotation>, List<Class>> prepareClasses(String jarPath, boolean useSpring, Class<? extends Annotation> identityResolverAnnotation) throws Throwable {
+    private Map<Class<? extends Annotation>, List<Class>> prepareClasses(String jarPath, Class<? extends Annotation> identityResolverAnnotation) throws Throwable {
         if (useSpring) {
             log.debug("Spring loading Plugin with {}, {}, {} ...", jdkClassLoader, containerClassLoader, pluginClassLoader);
             long t0 = System.nanoTime();
@@ -109,7 +115,7 @@ class Plugin implements IPlugin {
         return JarUtils.loadClassWithAnnotations(jarPath, annotations, null, pluginClassLoader);
     }
 
-    private void preparePlugins(Class<? extends Annotation> identityResolverAnnotation, Map<Class<? extends Annotation>, List<Class>> plugableMap) {
+    private void preparePlugins(Class<? extends Annotation> identityResolverAnnotation, Map<Class<? extends Annotation>, List<Class>> plugableMap) throws IllegalAccessException, InstantiationException {
         List<Class> identityResolverClasses = plugableMap.get(identityResolverAnnotation);
         if (identityResolverClasses != null && !identityResolverClasses.isEmpty()) {
             if (identityResolverAnnotation == Partner.class && identityResolverClasses.size() > 1) {
@@ -119,9 +125,13 @@ class Plugin implements IPlugin {
             for (Class irc : identityResolverClasses) {
                 log.info("Preparing index {} {}", identityResolverAnnotation.getSimpleName(), irc.getCanonicalName());
 
-                // 每次加载，由于 PluginClassLoader 是不同的，irc也不同
-                Object partnerOrPattern = pluginApplicationContext.getBean(irc);
-                RegistryFactory.preparePlugins(identityResolverAnnotation, partnerOrPattern);
+                if (useSpring) {
+                    // 每次加载，由于 PluginClassLoader 是不同的，irc也不同
+                    Object partnerOrPattern = pluginApplicationContext.getBean(irc);
+                    RegistryFactory.preparePlugins(identityResolverAnnotation, partnerOrPattern);
+                } else {
+                    RegistryFactory.preparePlugins(identityResolverAnnotation, irc.newInstance()); // new instance here
+                }
             }
         }
 
@@ -132,8 +142,12 @@ class Plugin implements IPlugin {
 
                 // 这里extensionClazz是扩展点实现的类名 e,g. org.example.bp.oms.isv.extension.DecideStepsExt
                 // 而不是 IDecideStepsExt。因此，不必担心getBean异常：一个extensionClazz有多个对象
-                Object extension = pluginApplicationContext.getBean(extensionClazz);
-                RegistryFactory.preparePlugins(Extension.class, extension);
+                if (useSpring) {
+                    Object extension = pluginApplicationContext.getBean(extensionClazz);
+                    RegistryFactory.preparePlugins(Extension.class, extension);
+                } else {
+                    RegistryFactory.preparePlugins(Extension.class, extensionClazz.newInstance()); // new instance here
+                }
             }
         }
     }
