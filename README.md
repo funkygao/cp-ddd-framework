@@ -2,21 +2,20 @@
 
 #### **[Quickstart](#quickstart)** • **[Examples](#the-demo)** • **[Landscape](#landscape-of-central-platform)** • **[Chat with us](https://gitter.im/cp-ddd-framework/community)**
 
-[![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](https://github.com/funkygao/cp-ddd-framework/blob/master/LICENSE)
-[![Mavenn Central](https://img.shields.io/maven-central/v/io.github.dddplus/dddplus.svg?label=maven%20central)](https://search.maven.org/search?q=g:io.github.dddplus)
+[![Mavenn Central](https://img.shields.io/maven-central/v/io.github.dddplus/dddplus.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:io.github.dddplus)
+![Requirement](https://img.shields.io/badge/JDK-8+-green.svg)
 [![CI](https://github.com/funkygao/cp-ddd-framework/workflows/CI/badge.svg?branch=master)](https://github.com/funkygao/cp-ddd-framework/actions?query=branch%3Amaster+workflow%3ACI)
 [![Code Quality: Java](https://img.shields.io/lgtm/grade/java/g/funkygao/cp-ddd-framework.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/funkygao/cp-ddd-framework/context:java)
+[![Maintainability](https://api.codeclimate.com/v1/badges/84b05607593179e62374/maintainability)](https://codeclimate.com/github/funkygao/cp-ddd-framework/maintainability)
 [![Coverage Status](https://img.shields.io/codecov/c/github/funkygao/cp-ddd-framework.svg)](https://codecov.io/gh/funkygao/cp-ddd-framework)
 [![TODO](https://badgen.net/https/api.tickgit.com/badgen/github.com/funkygao/cp-ddd-framework?label=todos)](https://www.tickgit.com/browse?repo=github.com/funkygao/cp-ddd-framework)
-[![Ask Us Anything !](https://img.shields.io/badge/Ask%20us-anything-1abc9c.svg)](https://gitter.im/cp-ddd-framework/community)
 
 <details>
 <summary><b>Table of content</b></summary>
 
 ## Table of content
-   * [What is cp-ddd-framework](#what-is-cp-ddd-framework)
+   * [What is DDDplus](#what-is-dddplus)
       * [Current status](#current-status)
-      * [Requirements](#requirements)
       * [Quickstart](#quickstart)
       * [Features](#features)
       * [Modules](#modules)
@@ -36,15 +35,13 @@
 
 ----
 
-## What is cp-ddd-framework?
+## What is DDDplus?
 
-cp-ddd-framework, also known as DDDplus, is a lightweight flexible development framework for complex business architecture.
+DDDplus, originally cp-ddd-framework(cp means Central Platform：中台), is a lightweight flexible development framework for complex business architecture.
 
 一套轻量级业务中台开发框架，以[DDD](https://github.com/funkygao/cp-ddd-framework/wiki/DDD)思想为本，致力于业务资产的可沉淀可传承，全方位解决复杂业务场景的扩展问题，实现[中台核心要素](https://github.com/funkygao/cp-ddd-framework/wiki/%E4%B8%9A%E5%8A%A1%E4%B8%AD%E5%8F%B0%E7%9A%84%E6%A0%B8%E5%BF%83%E8%A6%81%E7%B4%A0)，赋能中台建设。
 
-融合了前中台复杂生态协作方法论，充分考虑组织架构、技术债、学习门槛、可演进性、运维成本和风险而开发的，解决业务开发痛点，是中台架构的顶层设计和完整解决方案。
-
-Note: cp means Central Platform：中台。
+融合了前中台复杂生态协作方法论，充分考虑组织架构、技术债、学习门槛、可演进性、运维成本和风险而开发的，解决[业务开发痛点](https://github.com/funkygao/cp-ddd-framework/wiki/Why-we-need-this-framework)，是中台架构的顶层设计和完整解决方案。
 
 ### Current status
 
@@ -52,21 +49,25 @@ Used for several complex critical central platform projects in production enviro
 
 多个复杂的中台核心项目生产环境下使用。
 
-### Requirements
-
-Requires Java 1.8+ and Spring 4.3.12.RELEASE or later.
-
 ### Quickstart
 
 Please visit [Quickstart](https://github.com/funkygao/cp-ddd-framework/wiki).
 
 ### Features
 
+- Based on DDD, but beyond DDD
+- 14 key business abstractions cover most complex business scenarios
+- Full layered extensibility
+- Empowers InnerSource
+- Total solutions oriented
+
+核心特性：
 - 以DDD架构思想为本，面向复杂业务场景架构设计
    - 通过代码框架提供足够约束，让DDD不再仅停留在思想层面
    - 降低DDD上手门槛，为研发减负，防止落地偏差
    - 降低复杂度，持续保障业务资产的可沉淀可传承
-- 14个核心业务抽象，勾勒出业务中台骨架
+   - 提供[dddplus-archetype](https://github.com/dddplus/dddplus-archetype)，自动生成包含最佳实践的工程脚手架
+- 14个核心业务抽象(常用的9个)，勾勒出业务中台骨架
    - 中台架构的顶层设计
    - 以不变应万变
    - 研发填空式开发
@@ -161,4 +162,4 @@ For any question, you can use [Gitter Chat](https://gitter.im/cp-ddd-framework/c
 
 ## Licensing
 
-cp-ddd-framework is licensed under the Apache License, Version 2.0 (the "License"); you may not use this project except in compliance with the License. You may obtain a copy of the License at [http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0).
+DDDplus is licensed under the Apache License, Version 2.0 (the "License"); you may not use this project except in compliance with the License. You may obtain a copy of the License at [http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0).
