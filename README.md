@@ -66,7 +66,7 @@ Please visit [Quickstart](https://github.com/funkygao/cp-ddd-framework/wiki).
    - 通过代码框架提供足够约束，让DDD不再仅停留在思想层面
    - 降低DDD上手门槛，为研发减负，防止落地偏差
    - 降低复杂度，持续保障业务资产的可沉淀可传承
-   - 提供[dddplus-archetype](https://github.com/dddplus/dddplus-archetype)，自动生成包含最佳实践的工程脚手架
+   - 提供[dddplus-archetype](https://github.com/dddplus/dddplus-archetype)，把具体的最佳实践送达距离研发同学最近的地方
 - 14个核心业务抽象(常用的9个)，勾勒出业务中台骨架
    - 中台架构的顶层设计
    - 以不变应万变
@@ -74,10 +74,10 @@ Please visit [Quickstart](https://github.com/funkygao/cp-ddd-framework/wiki).
 - 全方位解决业务的不确定性
    - 业务逻辑、流程、逻辑模型、数据模型的扩展、多态体系
    - 框架本身支持再次扩展
-   - 扩展业务包支持不重启热更新
+   - 扩展业务包，框架底层通过`ClassLoader`机制进行业务隔离，支持不重启热更新
 - 支撑中台战略的复杂生态协作
    - 前台、中台解耦
-   - 业务隔离
+   - 业务隔离，前中台组织的信任问题
    - InnerSource协同机制
 - 完整的解决方案
    - 业务能力演化，业务测试，最佳实践，架构持续防腐，重构的导流验证，绞杀者落地方案等
