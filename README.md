@@ -25,6 +25,7 @@
       * [Maven](#maven)
       * [Gradle](#gradle)
       * [Building from Source](#building-from-source)
+      * [With dddplus-archetype](#with-dddplus-archetype)
    * [The Demo](#the-demo)
    * [FAQ](#faq)
    * [Landscape of Central Platform](#landscape-of-central-platform)
@@ -59,17 +60,17 @@ Please visit [Quickstart](https://github.com/funkygao/cp-ddd-framework/wiki).
 - 14 key business abstractions cover most complex business scenarios
 - Full layered extensibility
 - Empowers InnerSource
+- Provide maven archetype that generates a DDDplus integrated project
 - Total solutions oriented
 
 核心特性：
 - 以DDD架构思想为本，面向复杂业务场景架构设计
    - 通过代码框架提供足够约束，让DDD不再仅停留在思想层面
    - 降低DDD上手门槛，为研发减负，防止落地偏差
-   - 降低复杂度，持续保障业务资产的可沉淀可传承
-   - 提供[dddplus-archetype](https://github.com/dddplus/dddplus-archetype)，把具体的最佳实践送达距离研发同学最近的地方
-- 14个核心业务抽象(常用的9个)，勾勒出业务中台骨架
+   - 提供 [dddplus-archetype](https://github.com/dddplus/dddplus-archetype)，直接生成最佳实践的代码骨架
+- 14个核心业务抽象(常用9个)，勾勒出业务中台骨架
    - 中台架构的顶层设计
-   - 以不变应万变
+   - less is more，以不变应万变
    - 研发填空式开发
 - 全方位解决业务的不确定性
    - 业务逻辑、流程、逻辑模型、数据模型的扩展、多态体系
@@ -137,6 +138,14 @@ git clone https://github.com/funkygao/cp-ddd-framework.git
 cd cp-ddd-framework/
 mvn install # will run all test cases
 ```
+
+### With dddplus-archetype
+
+``` bash
+mvn archetype:generate -DarchetypeGroupId=io.github.dddplus -DarchetypeArtifactId=dddplus-archetype -DarchetypeVersion=1.0.1 -DgroupId=com.foo -DartifactId=demo -Dpackage=com.foo -Dversion=1.0.0-SNAPSHOT -DinteractiveMode=false
+```
+
+For more, please visit [dddplus-archetype project](https://github.com/dddplus/dddplus-archetype).
 
 ## The Demo
 
