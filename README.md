@@ -3,7 +3,7 @@
 #### **[Quickstart](#quickstart)** • **[Examples](#the-demo)** • **[Landscape](#landscape-of-central-platform)** • **[Chat with us](https://gitter.im/cp-ddd-framework/community)**
 
 [![Mavenn Central](https://img.shields.io/maven-central/v/io.github.dddplus/dddplus.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:io.github.dddplus)
-![Requirement](https://img.shields.io/badge/JDK-8+-green.svg)
+![Requirement](https://img.shields.io/badge/JDK-8+-blue.svg)
 [![CI](https://github.com/funkygao/cp-ddd-framework/workflows/CI/badge.svg?branch=master)](https://github.com/funkygao/cp-ddd-framework/actions?query=branch%3Amaster+workflow%3ACI)
 [![Code Quality: Java](https://img.shields.io/lgtm/grade/java/g/funkygao/cp-ddd-framework.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/funkygao/cp-ddd-framework/context:java)
 [![Maintainability](https://api.codeclimate.com/v1/badges/84b05607593179e62374/maintainability)](https://codeclimate.com/github/funkygao/cp-ddd-framework/maintainability)
@@ -30,6 +30,7 @@
    * [FAQ](#faq)
    * [Landscape of Central Platform](#landscape-of-central-platform)
    * [Contribution](#contribution)
+   * [Release Planning](#release-planning)
    * [Licensing](#licensing)
 
 </details>
@@ -80,7 +81,7 @@ Please visit [Quickstart](https://github.com/funkygao/cp-ddd-framework/wiki).
 - 支撑中台战略的复杂生态协作
    - 前台、中台解耦
    - 业务隔离，前中台组织的信任问题
-   - 稳态、敏态双速应用都支持
+   - 支持稳态、敏态双速应用
    - InnerSource，生态合作协同机制
 - 完整的解决方案
    - 业务能力演化，业务测试，最佳实践，架构持续防腐，重构的导流验证，绞杀者落地方案等
@@ -170,6 +171,10 @@ You are welcome to contribute to the project with pull requests on GitHub.
 If you find a bug or want to request a feature, please use the [Issue Tracker](https://github.com/funkygao/cp-ddd-framework/issues).
 
 For any question, you can use [Gitter Chat](https://gitter.im/cp-ddd-framework/community) to ask.
+
+## Release Planning
+
+Interested on when the next release is coming? Check our [release planning](https://github.com/funkygao/cp-ddd-framework/wiki/Release-Planning) document for details.
 
 ## Licensing
 
