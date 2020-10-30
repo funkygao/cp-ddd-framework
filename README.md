@@ -30,6 +30,7 @@
    * [FAQ](#faq)
    * [Landscape of Central Platform](#landscape-of-central-platform)
    * [Contribution](#contribution)
+   * [Release Planning](#release-planning)
    * [Licensing](#licensing)
 
 </details>
@@ -169,6 +170,10 @@ You are welcome to contribute to the project with pull requests on GitHub.
 If you find a bug or want to request a feature, please use the [Issue Tracker](https://github.com/funkygao/cp-ddd-framework/issues).
 
 For any question, you can use [Gitter Chat](https://gitter.im/cp-ddd-framework/community) to ask.
+
+## Release Planning
+
+Interested on when the next release is coming? Check our [release planning](https://github.com/funkygao/cp-ddd-framework/wiki/Release-Planning) document for details.
 
 ## Licensing
 
