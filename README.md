@@ -67,7 +67,7 @@ Please visit [Quickstart](https://github.com/funkygao/cp-ddd-framework/wiki).
 核心特性：
 - 以DDD架构思想为本，面向复杂业务场景架构设计
    - 通过代码框架提供足够约束，让DDD不再仅停留在思想层面
-   - 只引入弱依赖的 [IDomainModel](dddplus-spec/src/main/java/io/github/dddplus/model/IDomainModel.java)，降低DDD上手门槛，弱化其他概念
+   - 只引入弱依赖的 [IDomainModel](dddplus-spec/src/main/java/io/github/dddplus/model/IDomainModel.java)，弱化其他概念，降低DDD上手门槛
    - 提供 [dddplus-archetype](https://github.com/dddplus/dddplus-archetype)，直接生成最佳实践的脚手架代码
    - DDD分层架构上增加一层`spec layer`，解决前中台协同问题
 - 14个核心业务抽象(常用9个)，勾勒出业务中台骨架
