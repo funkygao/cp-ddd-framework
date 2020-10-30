@@ -50,6 +50,11 @@ under the License.
         <junit.version>4.13.1</junit.version>
         <archunit.version>0.13.1</archunit.version>
         <spring.version>4.3.12.RELEASE</spring.version>
+
+        <!-- integration with sonarcloud.io -->
+        <sonar.projectKey>dddplus_dddplus</sonar.projectKey>
+        <sonar.organization>dddplus</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
 
     <dependencies>
