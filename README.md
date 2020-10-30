@@ -67,25 +67,26 @@ Please visit [Quickstart](https://github.com/funkygao/cp-ddd-framework/wiki).
 核心特性：
 - 以DDD架构思想为本，面向复杂业务场景架构设计
    - 通过代码框架提供足够约束，让DDD不再仅停留在思想层面
-   - 只引入弱依赖的[IDomainModel](dddplus-spec/src/main/java/io/github/dddplus/model/IDomainModel.java)，降低DDD上手门槛，弱化其他概念
+   - 只引入弱依赖的 [IDomainModel](dddplus-spec/src/main/java/io/github/dddplus/model/IDomainModel.java)，降低DDD上手门槛，弱化其他概念
    - 提供 [dddplus-archetype](https://github.com/dddplus/dddplus-archetype)，直接生成最佳实践的脚手架代码
    - DDD分层架构上增加一层`spec layer`，解决前中台协同问题
 - 14个核心业务抽象(常用9个)，勾勒出业务中台骨架
    - 中台架构的顶层设计
    - less is more，以不变应万变
-   - 研发填空式开发
+   - 研发专注于填空式开发，解决局部问题
 - 全方位解决业务的不确定性
    - 业务逻辑、流程、逻辑模型、数据模型的扩展、多态体系
    - 框架本身支持再次扩展
    - 抽象出独立的业务扩展包，框架底层通过`ClassLoader`机制进行业务隔离，支持不重启热更新
 - 支撑中台战略的复杂生态协作
    - 前台、中台解耦
-   - 业务隔离，前中台组织的信任问题
+   - 业务隔离，不同前台间业务隔离，前台和中台隔离
    - 支持稳态、敏态双速应用
    - InnerSource，生态合作协同机制
 - 完整的解决方案
    - 业务能力演化，业务测试，最佳实践，架构持续防腐，重构的导流验证，绞杀者落地方案等
-   - 提供[一套完整的Demo工程](https://github.com/dddplus/dddplus-demo)，手把手真实场景教学
+   - 提供 [一套完整的Demo工程](https://github.com/dddplus/dddplus-demo)
+   - 演示 [5分钟搭建一个仓储中台WMS](https://github.com/dddplus/dddplus-archetype-demo)，手把手真实场景教学
 
 ### Modules
 
