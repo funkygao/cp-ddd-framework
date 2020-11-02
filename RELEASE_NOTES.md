@@ -1,6 +1,18 @@
+## Release Notes - DDDplus - Version 1.0.3 (WIP)
+
+* FIXED
+   * Plugin reloading, Spring unable to get the Partner bean. see #20
+
+* Improvement
+   * Add `@Specification` for `ISpecification` interface: specifications are Spring beans
+   * renamed CoreAopUtils -> InternalAopUtils, which is internally visible
+
+* Test
+   * Stress test for plugin jar reloading passed
+
 ## Release Notes - DDDplus - Version 1.0.2
 
-* Fix
+* FIXED
    * NPE when Plugin load without using Spring
 
 * Improvement
