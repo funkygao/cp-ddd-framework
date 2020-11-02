@@ -7,7 +7,7 @@ import io.github.dddplus.specification.Notification;
 
 import javax.validation.constraints.NotNull;
 
-@Specification(name = "B2C业务必须要传递partnerCode")
+@Specification("B2C业务必须要传递partnerCode")
 public class B2CMustHavePartnerCode implements ISpecification<FooModel> {
 
     @Override
