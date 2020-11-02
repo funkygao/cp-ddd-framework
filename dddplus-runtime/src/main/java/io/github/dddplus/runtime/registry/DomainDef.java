@@ -25,7 +25,7 @@ class DomainDef implements IRegistryAware {
 
     @Override
     public void registerBean(@NotNull Object bean) {
-        Domain domain = CoreAopUtils.getAnnotation(bean, Domain.class);
+        Domain domain = InternalAopUtils.getAnnotation(bean, Domain.class);
         this.code = domain.code();
         this.name = domain.name();
         this.domainBean = bean;

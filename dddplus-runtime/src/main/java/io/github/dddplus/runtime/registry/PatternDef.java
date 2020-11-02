@@ -46,7 +46,7 @@ class PatternDef implements IRegistryAware, IIdentityResolver {
     }
 
     private void initialize(Object bean) {
-        Pattern pattern = CoreAopUtils.getAnnotation(bean, Pattern.class);
+        Pattern pattern = InternalAopUtils.getAnnotation(bean, Pattern.class);
         this.code = pattern.code();
         this.name = pattern.name();
         this.priority = pattern.priority();

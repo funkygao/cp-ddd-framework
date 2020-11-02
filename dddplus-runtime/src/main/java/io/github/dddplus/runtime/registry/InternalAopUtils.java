@@ -12,8 +12,8 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 
-final class CoreAopUtils {
-    private CoreAopUtils() {}
+final class InternalAopUtils {
+    private InternalAopUtils() {}
 
     static <T extends Annotation> T getAnnotation(Object bean, Class<T> annotationClazz) {
         Annotation annotation;

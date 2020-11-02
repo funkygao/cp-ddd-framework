@@ -41,7 +41,7 @@ class DomainAbilityDef implements IRegistryAware {
 
     @Override
     public void registerBean(@NotNull Object bean) {
-        DomainAbility domainAbility = CoreAopUtils.getAnnotation(bean, DomainAbility.class);
+        DomainAbility domainAbility = InternalAopUtils.getAnnotation(bean, DomainAbility.class);
         this.domain = domainAbility.domain();
         this.name = domainAbility.name();
         if (!(bean instanceof BaseDomainAbility)) {
@@ -49,10 +49,10 @@ class DomainAbilityDef implements IRegistryAware {
         }
 
         this.domainAbilityBean = (BaseDomainAbility) bean;
-        this.domainAbilityClass = (Class<? extends BaseDomainAbility>) CoreAopUtils.getTarget(bean).getClass();
+        this.domainAbilityClass = (Class<? extends BaseDomainAbility>) InternalAopUtils.getTarget(bean).getClass();
 
         // 获取BaseDomainAbility的Model和Ext类型
-        Type type = CoreAopUtils.getGenericSuperclass(bean);
+        Type type = InternalAopUtils.getGenericSuperclass(bean);
         if (type == null || !(type instanceof ParameterizedType)) {
             throw BootstrapException.ofMessage("cannot find ParameterizedType for:", bean.getClass().getCanonicalName());
         }
