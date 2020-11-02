@@ -24,7 +24,7 @@ import java.util.Map;
 /**
  * A Plugin is a dynamic loadable Jar that has a dedicated class loader.
  * <p>
- * <p>Plugin Jar是可以被动态加载的Jar = (Pattern + Extension) | (Partner + Extension)</p>
+ * <p>Plugin Jar，业务扩展包，是可以被动态加载的Jar = (Pattern + Extension) | (Partner + Extension)</p>
  * <p>基于 ClassLoader 实现的业务模块隔离，每个Plugin Jar可以有独立的Spring上下文.</p>
  */
 @Slf4j

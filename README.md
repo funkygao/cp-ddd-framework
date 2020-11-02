@@ -3,7 +3,7 @@
 #### **[Quickstart](#quickstart)** • **[Examples](#the-demo)** • **[Landscape](#landscape-of-central-platform)** • **[Chat with us](https://gitter.im/cp-ddd-framework/community)**
 
 [![Mavenn Central](https://img.shields.io/maven-central/v/io.github.dddplus/dddplus.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:io.github.dddplus)
-![Requirement](https://img.shields.io/badge/JDK-8+-green.svg)
+![Requirement](https://img.shields.io/badge/JDK-8+-blue.svg)
 [![CI](https://github.com/funkygao/cp-ddd-framework/workflows/CI/badge.svg?branch=master)](https://github.com/funkygao/cp-ddd-framework/actions?query=branch%3Amaster+workflow%3ACI)
 [![Code Quality: Java](https://img.shields.io/lgtm/grade/java/g/funkygao/cp-ddd-framework.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/funkygao/cp-ddd-framework/context:java)
 [![Maintainability](https://api.codeclimate.com/v1/badges/84b05607593179e62374/maintainability)](https://codeclimate.com/github/funkygao/cp-ddd-framework/maintainability)
@@ -25,10 +25,12 @@
       * [Maven](#maven)
       * [Gradle](#gradle)
       * [Building from Source](#building-from-source)
+      * [With dddplus-archetype](#with-dddplus-archetype)
    * [The Demo](#the-demo)
    * [FAQ](#faq)
    * [Landscape of Central Platform](#landscape-of-central-platform)
    * [Contribution](#contribution)
+   * [Release Planning](#release-planning)
    * [Licensing](#licensing)
 
 </details>
@@ -59,29 +61,35 @@ Please visit [Quickstart](https://github.com/funkygao/cp-ddd-framework/wiki).
 - 14 key business abstractions cover most complex business scenarios
 - Full layered extensibility
 - Empowers InnerSource
+- Provide maven archetype that generates a DDDplus integrated project
 - Total solutions oriented
+- Covers business assets full lifecycle
 
 核心特性：
 - 以DDD架构思想为本，面向复杂业务场景架构设计
    - 通过代码框架提供足够约束，让DDD不再仅停留在思想层面
-   - 降低DDD上手门槛，为研发减负，防止落地偏差
-   - 降低复杂度，持续保障业务资产的可沉淀可传承
-   - 提供[dddplus-archetype](https://github.com/dddplus/dddplus-archetype)，自动生成包含最佳实践的工程脚手架
-- 14个核心业务抽象(常用的9个)，勾勒出业务中台骨架
+   - 只引入弱依赖的 [IDomainModel](dddplus-spec/src/main/java/io/github/dddplus/model/IDomainModel.java)，弱化其他概念，降低DDD上手门槛
+   - 提供 [dddplus-archetype](https://github.com/dddplus/dddplus-archetype)，直接生成最佳实践的脚手架代码
+   - DDD分层架构上增加一层`spec layer`，解决前中台协同问题
+- 14个核心业务抽象(常用9个)，勾勒出业务中台骨架
    - 中台架构的顶层设计
-   - 以不变应万变
-   - 研发填空式开发
+   - less is more，以不变应万变
+   - 研发专注于填空式开发，解决局部问题
 - 全方位解决业务的不确定性
    - 业务逻辑、流程、逻辑模型、数据模型的扩展、多态体系
    - 框架本身支持再次扩展
-   - 扩展业务包支持不重启热更新
+   - 抽象出独立的业务扩展包，框架底层通过`ClassLoader`机制进行业务隔离，支持不重启热更新
 - 支撑中台战略的复杂生态协作
    - 前台、中台解耦
-   - 业务隔离
-   - InnerSource协同机制
+   - 业务隔离，不同前台间业务隔离，前台和中台隔离
+   - 支持稳态、敏态双速应用
+   - InnerSource，生态合作协同机制
 - 完整的解决方案
    - 业务能力演化，业务测试，最佳实践，架构持续防腐，重构的导流验证，绞杀者落地方案等
-   - 提供[一套完整的Demo工程](https://github.com/dddplus/dddplus-demo)，手把手真实场景教学
+   - 提供 [一套完整的Demo工程](https://github.com/dddplus/dddplus-demo)
+   - 演示 [5分钟搭建一个仓储中台WMS](https://github.com/dddplus/dddplus-archetype-demo)，手把手真实场景教学
+- 覆盖业务资产的全生命周期
+  - 开发，测试，发布，运维，业务运营
 
 ### Modules
 
@@ -138,6 +146,14 @@ cd cp-ddd-framework/
 mvn install # will run all test cases
 ```
 
+### With dddplus-archetype
+
+``` bash
+mvn archetype:generate -DarchetypeGroupId=io.github.dddplus -DarchetypeArtifactId=dddplus-archetype -DarchetypeVersion=1.0.1 -DgroupId=com.foo -DartifactId=demo -Dpackage=com.foo -Dversion=1.0.0-SNAPSHOT -DinteractiveMode=false
+```
+
+For more, please visit [dddplus-archetype project](https://github.com/dddplus/dddplus-archetype).
+
 ## The Demo
 
 Please visit [使用该框架搭建`订单履约中台`的例子](https://github.com/dddplus/dddplus-demo).
@@ -159,6 +175,10 @@ You are welcome to contribute to the project with pull requests on GitHub.
 If you find a bug or want to request a feature, please use the [Issue Tracker](https://github.com/funkygao/cp-ddd-framework/issues).
 
 For any question, you can use [Gitter Chat](https://gitter.im/cp-ddd-framework/community) to ask.
+
+## Release Planning
+
+Interested on when the next release is coming? Check our [release planning](https://github.com/funkygao/cp-ddd-framework/wiki/Release-Planning) document for details.
 
 ## Licensing
 
