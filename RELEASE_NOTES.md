@@ -1,3 +1,11 @@
+## Release Notes - DDDplus - Version 1.0.2
+
+* Fix
+   * NPE when Plugin load without using Spring
+
+* Improvement
+   * Add Specification & Notification Pattern to DDDplus for explicit business rules expression
+
 ## Release Notes - DDDplus - Version 1.0.1
 
 * Improvement
