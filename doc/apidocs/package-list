@@ -6,5 +6,6 @@ io.github.dddplus.model
 io.github.dddplus.plugin
 io.github.dddplus.runtime
 io.github.dddplus.runtime.registry
+io.github.dddplus.specification
 io.github.dddplus.step
 io.github.dddplus.testing
