@@ -1,7 +1,7 @@
 ## Release Notes - DDDplus - Version 1.0.3 (WIP)
 
 * FIXED
-   * Plugin reloading, Spring unable to get the Partner bean. see #20
+   * Plugin reloading, Spring unable to get the Partner bean. see https://github.com/funkygao/cp-ddd-framework/issues/20
 
 * Improvement
    * Add `@Specification` for `ISpecification` interface: specifications are Spring beans
