@@ -29,7 +29,6 @@ import java.util.Map;
  */
 @Slf4j
 class Plugin implements IPlugin {
-    private static final String[] pluginXml = new String[]{"/plugin.xml"};
 
     @Getter
     private final String code;
@@ -43,6 +42,8 @@ class Plugin implements IPlugin {
 
     // parent of pluginApplicationContext
     private final ApplicationContext containerApplicationContext;
+    // Spring config locations
+    private String[] configLocations;
 
     // each Plugin will have a specific plugin class loader
     private ClassLoader pluginClassLoader;
@@ -58,6 +59,11 @@ class Plugin implements IPlugin {
         this.jdkClassLoader = jdkClassLoader;
         this.containerClassLoader = containerClassLoader;
         this.containerApplicationContext = containerApplicationContext;
+
+        // 由于pluginApplicationContext.parent is containerApplicationContext
+        // 如都使用相同的plugin.xml，会造成Pattern Jar的plugin.xml冲了Partner Jar里的plugin.xml：假如Pattern Jar是静态加载的
+        // 为此，让每个业务扩展包的配置文件不同，保证不冲突
+        this.configLocations = new String[]{"/plugin-" + code + ".xml"};
     }
 
     void load(String jarPath, boolean useSpring, Class<? extends Annotation> identityResolverAnnotation, IContainerContext ctx) throws Throwable {
@@ -103,10 +109,10 @@ class Plugin implements IPlugin {
             log.debug("Spring loading Plugin with {}, {}, {} ...", jdkClassLoader, containerClassLoader, pluginClassLoader);
             long t0 = System.nanoTime();
 
-            pluginApplicationContext = new PluginApplicationContext(pluginXml, containerApplicationContext, pluginClassLoader);
+            pluginApplicationContext = new PluginApplicationContext(configLocations, containerApplicationContext, pluginClassLoader);
             pluginApplicationContext.refresh();
 
-            log.info("Spring loaded, cost {}ms", (System.nanoTime() - t0) / 1000_000);
+            log.info("Spring {} loaded, cost {}ms", configLocations, (System.nanoTime() - t0) / 1000_000);
         }
 
         // 从Plugin Jar里把 IPlugable 挑出来，以便更新注册表
