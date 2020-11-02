@@ -22,7 +22,7 @@ public @interface Specification {
     /**
      * 业务约束名称.
      */
-    String name();
+    String value();
 
     /**
      * 该业务约束规则所属标签.
