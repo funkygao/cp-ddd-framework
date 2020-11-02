@@ -47,7 +47,7 @@ class PartnerDef implements IRegistryAware, IPrepareAware, IIdentityResolver {
     }
 
     private void initialize(Object bean) {
-        Partner partner = CoreAopUtils.getAnnotation(bean, Partner.class);
+        Partner partner = InternalAopUtils.getAnnotation(bean, Partner.class);
         this.code = partner.code();
         this.name = partner.name();
 

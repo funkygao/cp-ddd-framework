@@ -23,7 +23,7 @@ class DomainServiceDef implements IRegistryAware {
 
     @Override
     public void registerBean(@NotNull Object bean) {
-        DomainService domainService = CoreAopUtils.getAnnotation(bean, DomainService.class);
+        DomainService domainService = InternalAopUtils.getAnnotation(bean, DomainService.class);
         if (!(bean instanceof IDomainService)) {
             throw BootstrapException.ofMessage(bean.getClass().getCanonicalName(), " MUST implement IDomainService");
         }

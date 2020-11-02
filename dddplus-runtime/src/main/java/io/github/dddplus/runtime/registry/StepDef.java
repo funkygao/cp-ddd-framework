@@ -35,7 +35,7 @@ public class StepDef implements IRegistryAware {
 
     @Override
     public void registerBean(@NotNull Object bean) {
-        Step domainStep = CoreAopUtils.getAnnotation(bean, Step.class);
+        Step domainStep = InternalAopUtils.getAnnotation(bean, Step.class);
         this.name = domainStep.name();
         this.tags = domainStep.tags();
 

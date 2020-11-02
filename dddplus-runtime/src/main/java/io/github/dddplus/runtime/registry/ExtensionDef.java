@@ -52,7 +52,7 @@ public class ExtensionDef implements IRegistryAware, IPrepareAware {
     }
 
     private void initialize(Object bean) {
-        Extension extension = CoreAopUtils.getAnnotation(bean, Extension.class);
+        Extension extension = InternalAopUtils.getAnnotation(bean, Extension.class);
         this.code = extension.code();
         this.name = extension.name();
         if (!(bean instanceof IDomainExtension)) {
@@ -60,7 +60,7 @@ public class ExtensionDef implements IRegistryAware, IPrepareAware {
         }
         this.extensionBean = (IDomainExtension) bean;
         // this.extensionBean might be Xxx$EnhancerBySpringCGLIB if the extension uses AOP
-        for (Class extensionBeanInterfaceClazz : CoreAopUtils.getTarget(this.extensionBean).getClass().getInterfaces()) {
+        for (Class extensionBeanInterfaceClazz : InternalAopUtils.getTarget(this.extensionBean).getClass().getInterfaces()) {
             if (extensionBeanInterfaceClazz.isInstance(extensionBean)) {
                 this.extClazz = extensionBeanInterfaceClazz;
 
