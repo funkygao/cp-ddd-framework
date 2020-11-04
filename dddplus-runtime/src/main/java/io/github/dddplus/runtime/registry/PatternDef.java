@@ -51,7 +51,7 @@ class PatternDef implements IRegistryAware, IIdentityResolver {
         this.name = pattern.name();
         this.priority = pattern.priority();
         if (this.priority < 0) {
-            throw BootstrapException.ofMessage("Patter.priority must be zero or positive");
+            throw BootstrapException.ofMessage("Pattern.priority must be zero or positive");
         }
         if (!(bean instanceof IIdentityResolver)) {
             throw BootstrapException.ofMessage(bean.getClass().getCanonicalName(), " MUST implements IIdentityResolver");

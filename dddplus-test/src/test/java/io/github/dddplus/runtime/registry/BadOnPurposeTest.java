@@ -78,7 +78,7 @@ public class BadOnPurposeTest {
             applicationContext = new ClassPathXmlApplicationContext("pattern-bad.xml");
             fail();
         } catch (BeanCreationException expected) {
-            assertEquals("Patter.priority must be zero or positive", expected.getCause().getMessage());
+            assertEquals("Pattern.priority must be zero or positive", expected.getCause().getMessage());
         }
     }
 
