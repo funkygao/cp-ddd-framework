@@ -269,6 +269,9 @@ public class InternalIndexer {
 
         // patternDefMap在运行时已经没有用了
         patternDefMap.clear();
+
+        // 把内部注册表信息暴露，以便上层应用方便集成
+        DomainArtifacts.getInstance().export();
     }
 
     static void prepare(PartnerDef partnerDef) {

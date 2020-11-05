@@ -1,17 +1,20 @@
 package io.github.dddplus.runtime.registry;
 
+import io.github.dddplus.ext.IDecideStepsExt;
+import io.github.dddplus.runtime.DDD;
+import io.github.dddplus.runtime.ExtTimeoutException;
 import io.github.dddplus.runtime.registry.mock.MockStartupListener;
 import io.github.dddplus.runtime.registry.mock.ability.*;
+import io.github.dddplus.runtime.registry.mock.domain.FooDomain;
+import io.github.dddplus.runtime.registry.mock.exception.FooException;
+import io.github.dddplus.runtime.registry.mock.ext.IFooExt;
+import io.github.dddplus.runtime.registry.mock.ext.IMultiMatchExt;
 import io.github.dddplus.runtime.registry.mock.extension.BarExt;
+import io.github.dddplus.runtime.registry.mock.model.FooModel;
+import io.github.dddplus.runtime.registry.mock.partner.FooPartner;
+import io.github.dddplus.runtime.registry.mock.pattern.extension.B2BMultiMatchExt;
 import io.github.dddplus.runtime.registry.mock.service.FooDomainService;
 import io.github.dddplus.runtime.registry.mock.step.*;
-import io.github.dddplus.runtime.registry.mock.exception.FooException;
-import io.github.dddplus.runtime.registry.mock.partner.FooPartner;
-import io.github.dddplus.runtime.ExtTimeoutException;
-import io.github.dddplus.runtime.DDD;
-import io.github.dddplus.runtime.registry.mock.ext.IMultiMatchExt;
-import io.github.dddplus.runtime.registry.mock.model.FooModel;
-import io.github.dddplus.runtime.registry.mock.pattern.extension.B2BMultiMatchExt;
 import io.github.dddplus.testing.LogAssert;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
@@ -392,4 +395,50 @@ public class IntegrationTest {
         }
     }
 
+    @Test
+    public void exportDomainArtifacts() {
+        DomainArtifacts artifacts = DomainArtifacts.getInstance();
+        // domains
+        assertEquals(1, artifacts.getDomains().size());
+        assertEquals(FooDomain.CODE, artifacts.getDomains().get(0).getCode());
+
+        // steps
+        assertEquals(2, artifacts.getSteps().size());
+        assertTrue(artifacts.getSteps().containsKey(Steps.Cancel.Activity));
+        assertTrue(artifacts.getSteps().containsKey(Steps.Submit.Activity));
+        List<DomainArtifacts.Step> submitSteps = artifacts.getSteps().get(Steps.Submit.Activity);
+        assertEquals(4, submitSteps.size()); // FooStep, BarStep, BazStep, HamStep
+        assertEquals(Steps.Submit.GoodsValidationGroup, submitSteps.get(0).getTags()[0]);
+
+        // extensions
+        assertEquals(4, artifacts.getExtensions().size());
+        int foundExtN = 0;
+        int foundPartners = 0;
+        for (DomainArtifacts.Extension extension : artifacts.getExtensions()) {
+            if (IDecideStepsExt.class == extension.getExt()) {
+                foundExtN++;
+
+                // B2BPattern
+                assertEquals(1, extension.getPatterns().size());
+            }
+
+            if (IMultiMatchExt.class == extension.getExt()) {
+                foundExtN++;
+
+                // B2BPattern, FooPattern
+                assertEquals(2, extension.getPatterns().size());
+            }
+
+            if (IFooExt.class == extension.getExt()) {
+                foundExtN++;
+
+                // B2BPattern, FooPattern, BarPattern
+                assertEquals(3, extension.getPatterns().size());
+            }
+
+            foundPartners += extension.getPartners().size(); // FooPartner
+        }
+        assertEquals(3, foundExtN);
+        assertEquals(1, foundPartners);
+    }
 }
