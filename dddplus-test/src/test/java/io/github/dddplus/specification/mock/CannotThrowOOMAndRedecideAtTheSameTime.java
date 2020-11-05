@@ -10,7 +10,7 @@ public class CannotThrowOOMAndRedecideAtTheSameTime implements ISpecification<Fo
     public static final String REASON = "不能同时OOM and Redecide";
 
     @Override
-    public boolean isSatisfiedBy(@NotNull FooModel candidate, Notification notification) {
+    public boolean satisfiedBy(@NotNull FooModel candidate, Notification notification) {
         if (candidate.isWillThrowOOM() && candidate.isRedecide()) {
             if (notification != null) {
                 notification.addReason(REASON);

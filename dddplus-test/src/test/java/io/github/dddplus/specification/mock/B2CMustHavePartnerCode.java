@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 public class B2CMustHavePartnerCode implements ISpecification<FooModel> {
 
     @Override
-    public boolean isSatisfiedBy(@NotNull FooModel candidate, Notification notification) {
+    public boolean satisfiedBy(@NotNull FooModel candidate, Notification notification) {
         if (candidate.isB2c()) {
             if (candidate.getPartnerCode() == null || candidate.getPartnerCode().isEmpty()) {
                 return false;
