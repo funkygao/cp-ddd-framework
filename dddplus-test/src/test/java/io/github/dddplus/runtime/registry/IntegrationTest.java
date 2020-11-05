@@ -440,5 +440,10 @@ public class IntegrationTest {
         }
         assertEquals(3, foundExtN);
         assertEquals(1, foundPartners);
+
+        // specifications
+        assertEquals(1, artifacts.getSpecifications().size());
+        assertEquals("B2C业务必须要传递partnerCode", artifacts.getSpecifications().get(0).getName());
+        assertEquals(1, artifacts.getSpecifications().get(0).getTags().length);
     }
 }

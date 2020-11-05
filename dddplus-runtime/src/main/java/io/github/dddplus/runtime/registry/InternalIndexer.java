@@ -24,6 +24,7 @@ public class InternalIndexer {
 
     private static final List<StepDef> emptySteps = Collections.emptyList();
 
+    static final List<SpecificationDef> specificationDefs = new ArrayList<>();
     static final Map<String, DomainDef> domainDefMap = new HashMap<>(); // {code, def}
     static final Map<Class<? extends BaseDomainAbility>, DomainAbilityDef> domainAbilityDefMap = new HashMap<>();
     static final Map<String, Map<String, StepDef>> domainStepDefMap = new HashMap<>(); // {activityCode, {stepCode, def}}
@@ -178,6 +179,11 @@ public class InternalIndexer {
 
         domainDefMap.put(domainDef.getCode(), domainDef);
         log.debug("indexed {}", domainDef);
+    }
+
+    static void index(SpecificationDef specificationDef) {
+        specificationDefs.add(specificationDef);
+        log.debug("indexed {}", specificationDef);
     }
 
     static void index(DomainAbilityDef domainAbilityDef) {

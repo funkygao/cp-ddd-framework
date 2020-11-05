@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * 对外输出的领域物件.
+ * 对外输出的领域物件，即核心的领域抽象.
  * <p>
  * <p>方便上层集成，例如：构建配置中心，业务可视化平台等.</p>
  */
@@ -26,6 +26,9 @@ public class DomainArtifacts {
 
     @Getter
     private List<Domain> domains;
+
+    @Getter
+    private List<Specification> specifications;
 
     @Getter
     private Map<String, List<Step>> steps; // key is activityCode
@@ -46,9 +49,11 @@ public class DomainArtifacts {
     }
 
     void export() {
+        // domains
         this.domains = new ArrayList<>(InternalIndexer.domainDefMap.size());
         domains.addAll(InternalIndexer.domainDefMap.values().stream().map(domainDef -> new Domain(domainDef.getCode(), domainDef.getName())).collect(Collectors.toList()));
 
+        // steps
         this.steps = new HashMap<>();
         for (Map.Entry<String, Map<String, StepDef>> entry : InternalIndexer.domainStepDefMap.entrySet()) {
             final String activity = entry.getKey();
@@ -58,6 +63,11 @@ public class DomainArtifacts {
             }
         }
 
+        // specifications
+        this.specifications = new ArrayList<>(InternalIndexer.specificationDefs.size());
+        specifications.addAll(InternalIndexer.specificationDefs.stream().map(specificationDef -> new Specification(specificationDef.getName(), specificationDef.getTags())).collect(Collectors.toList()));
+
+        // extensions
         this.extensions = new ArrayList<>();
         for (Map.Entry<Class<? extends IDomainExtension>, List<PatternDef>> entry : InternalIndexer.sortedPatternMap.entrySet()) {
             final Extension extension = new Extension(entry.getKey());
@@ -131,5 +141,15 @@ public class DomainArtifacts {
     public static class Partner {
         private String code;
         private String name;
+    }
+
+    /**
+     * 业务约束规则.
+     */
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class Specification {
+        private String name;
+        private String[] tags;
     }
 }
