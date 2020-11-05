@@ -5,6 +5,8 @@
  */
 package io.github.dddplus.specification;
 
+import io.github.dddplus.model.IDomainModel;
+
 import javax.validation.constraints.NotNull;
 
 /**
@@ -16,7 +18,7 @@ import javax.validation.constraints.NotNull;
  *
  * @param <T> The candidate business object.
  */
-public interface ISpecification<T> {
+public interface ISpecification<T extends IDomainModel> {
 
     /**
      * Check whether a candidate business object satisfies the specification: the business rule.
@@ -24,8 +26,8 @@ public interface ISpecification<T> {
      * @param candidate The candidate business object
      * @return true if the business rule satisfied
      */
-    default boolean isSatisfiedBy(@NotNull T candidate) {
-        return isSatisfiedBy(candidate, null);
+    default boolean satisfiedBy(@NotNull T candidate) {
+        return satisfiedBy(candidate, null);
     }
 
     /**
@@ -35,5 +37,5 @@ public interface ISpecification<T> {
      * @param notification Collect reasons why specification not satisfied. If null, will not collect unsatisfaction reasons.
      * @return true if the business rule satisfied
      */
-    boolean isSatisfiedBy(@NotNull T candidate, Notification notification);
+    boolean satisfiedBy(@NotNull T candidate, Notification notification);
 }
