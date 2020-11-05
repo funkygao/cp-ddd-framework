@@ -6,7 +6,7 @@
 package io.github.dddplus.runtime;
 
 /**
- * 系统启动的回调.
+ * 系统启动监听器.
  */
 public interface IStartupListener {
 
