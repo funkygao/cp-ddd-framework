@@ -5,6 +5,8 @@
  */
 package io.github.dddplus.specification;
 
+import io.github.dddplus.model.IDomainModel;
+
 import javax.validation.constraints.NotNull;
 
 /**
@@ -16,7 +18,7 @@ import javax.validation.constraints.NotNull;
  *
  * @param <T> The candidate business object.
  */
-public interface ISpecification<T> {
+public interface ISpecification<T extends IDomainModel> {
 
     /**
      * Check whether a candidate business object satisfies the specification: the business rule.
