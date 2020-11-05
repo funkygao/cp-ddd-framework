@@ -24,6 +24,7 @@ public class InternalIndexer {
 
     private static final List<StepDef> emptySteps = Collections.emptyList();
 
+    static final List<SpecificationDef> specificationDefs = new ArrayList<>();
     static final Map<String, DomainDef> domainDefMap = new HashMap<>(); // {code, def}
     static final Map<Class<? extends BaseDomainAbility>, DomainAbilityDef> domainAbilityDefMap = new HashMap<>();
     static final Map<String, Map<String, StepDef>> domainStepDefMap = new HashMap<>(); // {activityCode, {stepCode, def}}
@@ -180,6 +181,11 @@ public class InternalIndexer {
         log.debug("indexed {}", domainDef);
     }
 
+    static void index(SpecificationDef specificationDef) {
+        specificationDefs.add(specificationDef);
+        log.debug("indexed {}", specificationDef);
+    }
+
     static void index(DomainAbilityDef domainAbilityDef) {
         if (!domainDefMap.containsKey(domainAbilityDef.getDomain())) {
             throw BootstrapException.ofMessage("DomainAbility domain not found: ", domainAbilityDef.getDomain());
@@ -269,6 +275,9 @@ public class InternalIndexer {
 
         // patternDefMap在运行时已经没有用了
         patternDefMap.clear();
+
+        // 把内部注册表信息暴露，以便上层应用方便集成
+        DomainArtifacts.getInstance().export();
     }
 
     static void prepare(PartnerDef partnerDef) {

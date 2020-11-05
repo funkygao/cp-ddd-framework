@@ -59,6 +59,7 @@ class RegistryFactory implements InitializingBean {
         // 注册Domain，是为了可视化，避免漏掉某些支撑域
         validRegistryEntries.add(new RegistryEntry(Domain.class, () -> new DomainDef()));
         validRegistryEntries.add(new RegistryEntry(DomainService.class, () -> new DomainServiceDef()));
+        validRegistryEntries.add(new RegistryEntry(Specification.class, () -> new SpecificationDef()));
         validRegistryEntries.add(new RegistryEntry(Step.class, () -> new StepDef()));
         validRegistryEntries.add(new RegistryEntry(DomainAbility.class, () -> new DomainAbilityDef()));
         validRegistryEntries.add(new RegistryEntry(Partner.class, () -> new PartnerDef()));
