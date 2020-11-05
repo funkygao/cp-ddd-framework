@@ -33,6 +33,7 @@ public class BadOnPurposeTest {
         InternalIndexer.domainAbilityDefMap.clear();
         InternalIndexer.partnerDefMap.clear();
         InternalIndexer.patternDefMap.clear();
+        InternalIndexer.specificationDefs.clear();
     }
 
     @Test
@@ -84,6 +85,16 @@ public class BadOnPurposeTest {
             fail();
         } catch (BeanCreationException expected) {
             assertEquals("io.github.badcase.ext.NotExtButAnnotatedWithExtension MUST implement IDomainExtension", expected.getCause().getMessage());
+        }
+    }
+
+    @Test
+    public void notISpecificationButAnnotatedWithSpecification() {
+        try {
+            applicationContext = new ClassPathXmlApplicationContext("specification-bad.xml");
+            fail();
+        } catch (BeanCreationException expected) {
+            assertEquals("io.github.badcase.specification.InvalidSpecification MUST implement ISpecification", expected.getCause().getMessage());
         }
     }
 
