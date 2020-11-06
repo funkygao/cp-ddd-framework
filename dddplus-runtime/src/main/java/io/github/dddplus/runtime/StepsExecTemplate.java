@@ -133,7 +133,7 @@ public abstract class StepsExecTemplate<Step extends IDomainStep, Model extends 
 
     private void rollbackExecutedSteps(Model model, RuntimeException cause, Stack<IRevokableDomainStep> executedSteps) {
         while (!executedSteps.isEmpty()) {
-            // 失败时，按照反方向执行回滚操作：Sagas Pattern
+            // 失败时，按照反方向执行回滚操作：Sagas Pattern, best effort
             IRevokableDomainStep executedStep = executedSteps.pop();
             try {
                 executedStep.rollback(model, cause);
