@@ -192,6 +192,3 @@ Interested on when the next release is coming? Check our [release planning](http
 ## Licensing
 
 DDDplus is licensed under the Apache License, Version 2.0 (the "License"); you may not use this project except in compliance with the License. You may obtain a copy of the License at [http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0).
-
-[![HitCount](http://hits.dwyl.com/funkygao/cp-ddd-framework.svg)](http://hits.dwyl.com/funkygao/cp-ddd-framework)
-
