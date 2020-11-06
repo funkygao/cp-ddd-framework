@@ -173,7 +173,7 @@ Please visit [使用该框架搭建`订单履约中台`的例子](https://github
 - [dddplus-archetype](https://github.com/dddplus/dddplus-archetype)
    - a maven archetype that generate a complete DDDplus driven project skeleton
 - [dddplus-visualizer](https://github.com/dddplus/dddplus-visualizer)
-   - 借助ANTLR分析Java源代码AST，把零散的业务抽象集中可视化输出
+   - parse DDDplus driven project Java AST with ANTLR and visualize your business artifacts
    - written in golang, because it is a CLI
 
 ## FAQ
