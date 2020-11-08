@@ -8,7 +8,10 @@
 [![Code Quality: Java](https://img.shields.io/lgtm/grade/java/g/funkygao/cp-ddd-framework.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/funkygao/cp-ddd-framework/context:java)
 [![Maintainability](https://api.codeclimate.com/v1/badges/84b05607593179e62374/maintainability)](https://codeclimate.com/github/funkygao/cp-ddd-framework/maintainability)
 [![Coverage Status](https://img.shields.io/codecov/c/github/funkygao/cp-ddd-framework.svg)](https://codecov.io/gh/funkygao/cp-ddd-framework)
+
+[![Mentioned in Awesome DDD](https://awesome.re/mentioned-badge.svg)](https://github.com/heynickc/awesome-ddd#jvm)
 [![TODO](https://badgen.net/https/api.tickgit.com/badgen/github.com/funkygao/cp-ddd-framework?label=todos)](https://www.tickgit.com/browse?repo=github.com/funkygao/cp-ddd-framework)
+[![Gitter chat](https://img.shields.io/badge/gitter-join%20chat%20%E2%86%92-brightgreen.svg)](https://gitter.im/cp-ddd-framework/community)
 
 <details>
 <summary><b>Table of content</b></summary>
@@ -27,6 +30,7 @@
       * [Building from Source](#building-from-source)
       * [With dddplus-archetype](#with-dddplus-archetype)
    * [The Demo](#the-demo)
+   * [DDDplus Ecosystem](#dddplus-ecosystem)
    * [FAQ](#faq)
    * [Landscape of Central Platform](#landscape-of-central-platform)
    * [Contribution](#contribution)
@@ -163,6 +167,14 @@ For more, please visit [dddplus-archetype project](https://github.com/dddplus/dd
 ## The Demo
 
 Please visit [使用该框架搭建`订单履约中台`的例子](https://github.com/dddplus/dddplus-demo).
+
+## DDDplus Ecosystem
+
+- [dddplus-archetype](https://github.com/dddplus/dddplus-archetype)
+   - a maven archetype that generates a complete DDDplus driven project skeleton
+- [dddplus-visualizer](https://github.com/dddplus/dddplus-visualizer)
+   - a CLI parsing DDDplus driven project Java AST with ANTLR and visualize your business artifacts
+   - written in golang
 
 ## FAQ
 
