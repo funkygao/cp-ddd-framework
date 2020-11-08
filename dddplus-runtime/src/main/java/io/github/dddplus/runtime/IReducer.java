@@ -9,6 +9,10 @@ import java.util.List;
 
 /**
  * 扩展点执行的归约器，控制扩展点多个实例的叠加.
+ * <p>
+ * <p>MapReduce pattern.</p>
+ * <p>Accepts a list of extensions and a reduce function to produce the result.</p>
+ * <p>It basically says the providers can coexist, but you need to coordinate their results.</p>
  *
  * @param <R> 扩展点方法的返回值类型
  */
