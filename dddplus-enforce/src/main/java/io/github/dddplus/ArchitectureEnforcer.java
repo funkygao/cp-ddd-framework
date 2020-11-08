@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
+import java.lang.annotation.Target;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -170,6 +171,7 @@ public class ArchitectureEnforcer {
     public static final ArchRule optionalInterfaceNameStartsWithI() {
         return classes()
                 .that().areInterfaces()
+                .and().areNotAnnotatedWith(Target.class) // 把注解本身排除掉
                 .and().haveNameNotMatching(".*Dao")
                 .and().haveNameNotMatching(".*Manager")
                 .and().haveNameNotMatching(".*Api")
