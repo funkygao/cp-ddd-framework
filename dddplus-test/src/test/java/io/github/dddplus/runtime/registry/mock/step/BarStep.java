@@ -5,6 +5,7 @@ import io.github.dddplus.runtime.DDD;
 import io.github.dddplus.runtime.registry.mock.ability.ReviseStepsAbility;
 import io.github.dddplus.runtime.registry.mock.exception.FooException;
 import io.github.dddplus.runtime.registry.mock.exception.FooReviseStepsException;
+import io.github.dddplus.runtime.registry.mock.interceptor.DomainProfiler;
 import io.github.dddplus.runtime.registry.mock.model.FooModel;
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,6 +18,7 @@ import java.util.List;
 public class BarStep extends SubmitStep {
     public static final String rollbackReason = "rollback on purpose";
 
+    @DomainProfiler
     @Override
     public void execute(@NotNull FooModel model) throws FooException {
         log.debug("submit: {}", model);

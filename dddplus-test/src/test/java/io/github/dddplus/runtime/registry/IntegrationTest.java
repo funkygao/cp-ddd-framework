@@ -330,7 +330,7 @@ public class IntegrationTest {
     }
 
     @Test
-    public void stepsExecTemplate() {
+    public void stepsExecTemplate() throws IOException {
         fooModel.setB2c(false);
         fooModel.setRedecide(true);
         fooModel.setStepsRevised(false);
@@ -345,6 +345,9 @@ public class IntegrationTest {
         assertFalse(fooModel.isStepsRevised());
         submitStepsExec.execute(Steps.Submit.Activity, new ArrayList<>(), fooModel);
         assertFalse(fooModel.isStepsRevised());
+
+        // AOP式step interceptors test
+        LogAssert.assertContains("AROUND step:Submit.Baz", "AROUND step:Submit.Foo", "AROUND step:Submit.Bar");
     }
 
     @Test
