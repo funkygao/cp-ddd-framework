@@ -2,6 +2,7 @@ package io.github.dddplus.runtime.registry.mock.step;
 
 import io.github.dddplus.annotation.Step;
 import io.github.dddplus.runtime.registry.mock.exception.FooException;
+import io.github.dddplus.runtime.registry.mock.interceptor.DomainProfiler;
 import io.github.dddplus.runtime.registry.mock.model.FooModel;
 import lombok.extern.slf4j.Slf4j;
 
@@ -12,6 +13,7 @@ import javax.validation.constraints.NotNull;
 public class FooStep extends SubmitStep {
 
     @Override
+    @DomainProfiler
     public void execute(@NotNull FooModel model) throws FooException {
         log.info("submit: {}", model);
     }
