@@ -23,6 +23,11 @@ public class FooStep extends SubmitStep {
             } catch (InterruptedException ignored) {
             }
         }
+
+        if (model.isLetFooThrowException()) {
+            log.info("will throw exception!");
+            throw new RuntimeException("foo on purpose");
+        }
     }
 
     @Override

@@ -412,8 +412,20 @@ public class IntegrationTest {
     }
 
     @Test
-    public void asyncStepThrowsException() {
-        // TODO
+    public void asyncStepThrownExceptionWillBeIgnored() throws InterruptedException {
+        fooModel.setB2c(false);
+        fooModel.setWillSleepLong(false);
+        fooModel.setRedecide(false);
+        fooModel.setStepsRevised(false);
+        fooModel.setLetFooThrowException(true);
+        List<String> steps = DDD.findAbility(DecideStepsAbility.class).decideSteps(fooModel, Steps.Submit.Activity);
+        log.info("steps:{}", steps); // Baz, Foo, Bar
+        Set<String> asyncSteps = new HashSet<>();
+        asyncSteps.add(Steps.Submit.FooStep);
+        asyncSteps.add(Steps.Submit.BazStep);
+        // FooStep会抛出异常，但会被忽略
+        submitStepsExec.execute(Steps.Submit.Activity, steps, fooModel, asyncStepsExecutorAutoDiscard, asyncSteps);
+        Thread.sleep(1000);
     }
 
     @Test
