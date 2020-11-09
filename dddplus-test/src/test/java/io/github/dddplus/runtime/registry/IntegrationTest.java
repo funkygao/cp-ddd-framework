@@ -23,13 +23,16 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.scheduling.SchedulingTaskExecutor;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.RejectedExecutionException;
 
@@ -45,6 +48,12 @@ public class IntegrationTest {
 
     @Autowired
     protected ApplicationContext ctx;
+
+    @Resource
+    private SchedulingTaskExecutor asyncStepsExecutor;
+
+    @Resource
+    private SchedulingTaskExecutor asyncStepsExecutorAutoDiscard;
 
     @Resource
     private SubmitStepsExec submitStepsExec;
@@ -348,6 +357,63 @@ public class IntegrationTest {
 
         // AOP式step interceptors test
         LogAssert.assertContains("AROUND step:Submit.Baz", "AROUND step:Submit.Foo", "AROUND step:Submit.Bar");
+    }
+
+    @Test
+    public void stepsExecTemplateForAsync() {
+        fooModel.setB2c(false);
+        fooModel.setRedecide(true);
+        fooModel.setStepsRevised(false);
+        List<String> steps = DDD.findAbility(DecideStepsAbility.class).decideSteps(fooModel, Steps.Submit.Activity);
+        // B2BDecideStepsExt: FooStep -> BarStep(if redecide then add Baz & Ham) -> BazStep -> HamStep
+        Set<String> asyncSteps = new HashSet<>();
+        submitStepsExec.execute(Steps.Submit.Activity, steps, fooModel, null, asyncSteps);
+        assertTrue(fooModel.isStepsRevised());
+        submitStepsExec.execute(Steps.Submit.Activity, steps, fooModel, asyncStepsExecutor, null);
+        assertTrue(fooModel.isStepsRevised());
+
+        asyncSteps.add(Steps.Submit.BazStep);
+        submitStepsExec.execute(Steps.Submit.Activity, steps, fooModel, asyncStepsExecutor, asyncSteps);
+        assertTrue(fooModel.isStepsRevised());
+    }
+
+    @Test
+    public void asyncStepThreadPoolFullCase() {
+        fooModel.setB2c(false);
+        fooModel.setWillSleepLong(true);
+        fooModel.setRedecide(false);
+        fooModel.setStepsRevised(false);
+        List<String> steps = DDD.findAbility(DecideStepsAbility.class).decideSteps(fooModel, Steps.Submit.Activity);
+        // B2BDecideStepsExt: FooStep -> BarStep(if redecide then add Baz & Ham) -> BazStep -> HamStep
+        Set<String> asyncSteps = new HashSet<>();
+        asyncSteps.add(Steps.Submit.FooStep);
+        asyncSteps.add(Steps.Submit.BarStep);
+        asyncSteps.add(Steps.Submit.BazStep);
+        try {
+            submitStepsExec.execute(Steps.Submit.Activity, steps, fooModel, asyncStepsExecutor, asyncSteps);
+            fail();
+        } catch (RejectedExecutionException expected) {
+        }
+    }
+
+    @Test
+    public void asyncStepThreadPoolFullDiscardPolicyCase() {
+        fooModel.setB2c(false);
+        fooModel.setWillSleepLong(true);
+        fooModel.setRedecide(false);
+        fooModel.setStepsRevised(false);
+        List<String> steps = DDD.findAbility(DecideStepsAbility.class).decideSteps(fooModel, Steps.Submit.Activity);
+        log.info("steps:{}", steps); // Baz, Foo, Bar
+        Set<String> asyncSteps = new HashSet<>();
+        asyncSteps.add(Steps.Submit.FooStep);
+        asyncSteps.add(Steps.Submit.BarStep);
+        asyncSteps.add(Steps.Submit.BazStep);
+        submitStepsExec.execute(Steps.Submit.Activity, steps, fooModel, asyncStepsExecutorAutoDiscard, asyncSteps);
+    }
+
+    @Test
+    public void asyncStepThrowsException() {
+        // TODO
     }
 
     @Test

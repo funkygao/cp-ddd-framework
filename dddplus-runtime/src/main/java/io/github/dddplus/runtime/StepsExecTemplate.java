@@ -15,7 +15,7 @@ import org.springframework.core.ResolvableType;
 import org.springframework.scheduling.SchedulingTaskExecutor;
 
 import java.util.*;
-import java.util.concurrent.*;
+import java.util.concurrent.RejectedExecutionException;
 
 /**
  * 步骤编排的模板方法类.
@@ -56,14 +56,19 @@ public abstract class StepsExecTemplate<Step extends IDomainStep, Model extends 
      * <p>
      * <p>步骤的实现里，可以通过{@link IReviseStepsException}来进行后续步骤修订，即动态的步骤编排</p>
      * <p>如果步骤实现了{@link IRevokableDomainStep}，在步骤抛出异常后会自动触发步骤回滚</p>
-     * <p>异步执行的步骤，beforeStep/afterStep/回滚，都是同步的，都在主线程内执行</p>
-     * <p>IMPORTANT: 异步执行需要使用者保证线程安全性!</p>
+     * <p>异步执行的步骤，注意事项：</p>
+     * <ul>
+     * <li>需要使用者保证线程安全性!</li>
+     * <li>beforeStep/afterStep的执行，都是同步的，都在主线程内执行</li>
+     * <li>异步执行的步骤的异常都被忽略，不会触发回滚</li>
+     * <li>不支持在异步执行的步骤里修订后续步骤</li>
+     * </ul>
      *
      * @param activityCode   领域活动
      * @param stepCodes      待执行的的领域步骤
      * @param model          领域模型
      * @param taskExecutor   异步执行的线程池容器
-     * @param asyncStepCodes 异步执行的步骤
+     * @param asyncStepCodes 异步执行的步骤. Attention: 异步执行的任务，在失败时是不会触发回滚的
      * @throws RuntimeException 步骤执行时抛出的异常，统一封装为 RuntimeException
      */
     public final void execute(String activityCode, List<String> stepCodes, Model model,
@@ -102,10 +107,8 @@ public abstract class StepsExecTemplate<Step extends IDomainStep, Model extends 
             asyncStepCodes = emptyAsyncSteps;
         }
 
-        Map<String, String> mdcContext = MDC.getCopyOfContextMap();
         List<Step> steps = DDD.findSteps(activityCode, stepCodes);
         String currentStepCode = null;
-        List<Future> asyncFutures = new ArrayList<>(asyncStepCodes.size());
         try {
             for (Step step : steps) {
                 currentStepCode = step.stepCode();
@@ -114,22 +117,9 @@ public abstract class StepsExecTemplate<Step extends IDomainStep, Model extends 
                 beforeStep(step, model);
 
                 if (asyncStepCodes.contains(currentStepCode)) {
-                    // async execute this step
-                    //
-                    // might throw RejectedExecutionException if the step cannot be scheduled for execution
-                    Future future = taskExecutor.submit(() -> {
-                        // 切换到线程池，ThreadLocal会失效，目前ThreadLocal只有MDC
-                        // 如果业务系统有自己的ThreadLocal，可以通过 beforeStep/afterStep 机制进行处理
-                        MDC.setContextMap(mdcContext);
-                        try {
-                            step.execute(model); // IMPORTANT: model must be thread safe!
-                        } finally {
-                            MDC.clear();
-                        }
-                    });
-                    asyncFutures.add(future);
+                    // for async steps, fire and forget!
+                    asyncExecuteStep(taskExecutor, step, model);
                 } else {
-                    // sync execute this step
                     step.execute(model);
                 }
 
@@ -137,14 +127,7 @@ public abstract class StepsExecTemplate<Step extends IDomainStep, Model extends 
 
                 if (step instanceof IRevokableDomainStep && !asyncStepCodes.contains(currentStepCode)) {
                     // prepare for possible sync step rollback
-                    executedSteps.push((IRevokableDomainStep) step);
-                }
-
-                // await all async steps finish
-                for (Future future : asyncFutures) {
-                    waitForAsyncStepFinish(future);
-
-                    // prepare for possible async step rollback
+                    // 异步执行的任务，在失败时是不会触发回滚的
                     executedSteps.push((IRevokableDomainStep) step);
                 }
             }
@@ -158,7 +141,7 @@ public abstract class StepsExecTemplate<Step extends IDomainStep, Model extends 
             log.error("Step:{}.{} fails for {}", activityCode, currentStepCode, stepCodes, cause);
 
             if (cause instanceof RejectedExecutionException) {
-                // taskExecutor thread pool full! TODO rollback ignored?
+                // taskExecutor thread pool full!
                 throw (RejectedExecutionException) cause;
             }
 
@@ -178,6 +161,20 @@ public abstract class StepsExecTemplate<Step extends IDomainStep, Model extends 
         }
 
         return emptyRevisedSteps;
+    }
+
+    private void asyncExecuteStep(SchedulingTaskExecutor taskExecutor, Step step, Model model) {
+        Map<String, String> mdcContext = MDC.getCopyOfContextMap();
+        taskExecutor.execute(() -> {
+            // 切换到线程池，ThreadLocal会失效，目前ThreadLocal只有MDC
+            // 如果业务系统有自己的ThreadLocal，可以通过 beforeStep/afterStep 机制进行处理
+            MDC.setContextMap(mdcContext);
+            try {
+                step.execute(model); // IMPORTANT: model must be thread safe!
+            } finally {
+                MDC.clear();
+            }
+        });
     }
 
     private Class getStepExType() {
@@ -214,30 +211,4 @@ public abstract class StepsExecTemplate<Step extends IDomainStep, Model extends 
             }
         }
     }
-
-    private <V> V waitForAsyncStepFinish(Future<V> future) throws RuntimeException {
-        boolean interrupted = false;
-        try {
-            while (true) { // TODO dead loop for InterruptedException?
-                try {
-                    // timeout is be step's internal job
-                    // 如果这里统一加超时，无法满足这样的场景：不同的step的超时要求不同
-                    return future.get();
-                } catch (InterruptedException e) {
-                    log.warn("interrupted", e);
-                    interrupted = true;
-                }
-            }
-        } catch (ExecutionException e) {
-            // future的异常机制，这里尽可能把真实的异常抛出去
-            throw new RuntimeException(e.getCause() != null ? e.getCause() : e);
-        } catch (CancellationException e) {
-            throw new RuntimeException("operation was canceled", e);
-        } finally {
-            if (interrupted) {
-                Thread.currentThread().interrupt();
-            }
-        }
-    }
-
 }
