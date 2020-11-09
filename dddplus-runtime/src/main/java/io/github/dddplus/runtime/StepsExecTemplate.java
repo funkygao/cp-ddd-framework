@@ -12,6 +12,7 @@ import io.github.dddplus.step.IRevokableDomainStep;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.core.ResolvableType;
+import org.springframework.scheduling.SchedulingTaskExecutor;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -58,15 +59,15 @@ public abstract class StepsExecTemplate<Step extends IDomainStep, Model extends 
      * <p>异步执行的步骤，beforeStep/afterStep/回滚，都是同步的，都在主线程内执行</p>
      * <p>IMPORTANT: 异步执行需要使用者保证线程安全性!</p>
      *
-     * @param activityCode    领域活动
-     * @param stepCodes       待执行的的领域步骤
-     * @param model           领域模型
-     * @param executorService 异步执行的线程池容器
-     * @param asyncStepCodes  异步执行的步骤
+     * @param activityCode   领域活动
+     * @param stepCodes      待执行的的领域步骤
+     * @param model          领域模型
+     * @param taskExecutor   异步执行的线程池容器
+     * @param asyncStepCodes 异步执行的步骤
      * @throws RuntimeException 步骤执行时抛出的异常，统一封装为 RuntimeException
      */
     public final void execute(String activityCode, List<String> stepCodes, Model model,
-                              ExecutorService executorService, Set<String> asyncStepCodes) throws RuntimeException {
+                              SchedulingTaskExecutor taskExecutor, Set<String> asyncStepCodes) throws RuntimeException {
         if (stepCodes == null || stepCodes.isEmpty()) {
             log.warn("Empty steps of activity:{} on {}", activityCode, model);
             return;
@@ -76,7 +77,7 @@ public abstract class StepsExecTemplate<Step extends IDomainStep, Model extends 
         int stepRevisions = 0;
         while (++stepRevisions < MAX_STEP_REVISIONS) {
             // 执行步骤的过程中，可能会产生修订步骤逻辑
-            stepCodes = executeSteps(activityCode, stepCodes, executedSteps, model, executorService, asyncStepCodes);
+            stepCodes = executeSteps(activityCode, stepCodes, executedSteps, model, taskExecutor, asyncStepCodes);
             if (stepCodes.isEmpty()) {
                 // 不再有步骤修订了：所有步骤都执行完毕
                 break;
@@ -95,8 +96,8 @@ public abstract class StepsExecTemplate<Step extends IDomainStep, Model extends 
 
     // return revised steps
     private List<String> executeSteps(String activityCode, List<String> stepCodes, Stack<IRevokableDomainStep> executedSteps, Model model,
-                                      ExecutorService executorService, Set<String> asyncStepCodes) throws RuntimeException {
-        if (asyncStepCodes == null || executorService == null) {
+                                      SchedulingTaskExecutor taskExecutor, Set<String> asyncStepCodes) throws RuntimeException {
+        if (asyncStepCodes == null || taskExecutor == null) {
             // the sentry
             asyncStepCodes = emptyAsyncSteps;
         }
@@ -116,7 +117,7 @@ public abstract class StepsExecTemplate<Step extends IDomainStep, Model extends 
                     // async execute this step
                     //
                     // might throw RejectedExecutionException if the step cannot be scheduled for execution
-                    Future future = executorService.submit(() -> {
+                    Future future = taskExecutor.submit(() -> {
                         // 切换到线程池，ThreadLocal会失效，目前ThreadLocal只有MDC
                         // 如果业务系统有自己的ThreadLocal，可以通过 beforeStep/afterStep 机制进行处理
                         MDC.setContextMap(mdcContext);
@@ -157,7 +158,7 @@ public abstract class StepsExecTemplate<Step extends IDomainStep, Model extends 
             log.error("Step:{}.{} fails for {}", activityCode, currentStepCode, stepCodes, cause);
 
             if (cause instanceof RejectedExecutionException) {
-                // executorService thread pool full! TODO rollback ignored?
+                // taskExecutor thread pool full! TODO rollback ignored?
                 throw (RejectedExecutionException) cause;
             }
 
