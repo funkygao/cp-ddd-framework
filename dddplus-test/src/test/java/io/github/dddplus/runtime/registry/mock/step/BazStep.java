@@ -16,6 +16,13 @@ public class BazStep extends SubmitStep {
     @Override
     public void execute(@NotNull FooModel model) throws FooException {
         log.info("submit: {}", model);
+
+        if (model.isWillSleepLong()) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ignored) {
+            }
+        }
     }
 
     @Override

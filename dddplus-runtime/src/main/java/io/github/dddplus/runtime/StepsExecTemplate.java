@@ -7,14 +7,15 @@ package io.github.dddplus.runtime;
 
 import io.github.dddplus.model.IDomainModel;
 import io.github.dddplus.step.IDomainStep;
-import lombok.extern.slf4j.Slf4j;
 import io.github.dddplus.step.IReviseStepsException;
 import io.github.dddplus.step.IRevokableDomainStep;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.core.ResolvableType;
+import org.springframework.scheduling.SchedulingTaskExecutor;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
+import java.util.concurrent.RejectedExecutionException;
 
 /**
  * 步骤编排的模板方法类.
@@ -25,6 +26,8 @@ import java.util.Stack;
 @Slf4j
 public abstract class StepsExecTemplate<Step extends IDomainStep, Model extends IDomainModel> {
     private static final List<String> emptyRevisedSteps = Collections.emptyList();
+    private static final Set<String> emptyAsyncSteps = Collections.emptySet();
+
     private static final int MAX_STEP_REVISIONS = 100;
 
     protected void beforeStep(Step step, Model model) {
@@ -34,16 +37,42 @@ public abstract class StepsExecTemplate<Step extends IDomainStep, Model extends 
     }
 
     /**
-     * 执行编排好的步骤.
+     * 同步执行编排好的步骤.
      * <p>
      * <p>步骤的实现里，可以通过{@link IReviseStepsException}来进行后续步骤修订，即动态的步骤编排</p>
      * <p>如果步骤实现了{@link IRevokableDomainStep}，在步骤抛出异常后会自动触发步骤回滚</p>
      *
      * @param activityCode 领域活动
-     * @param stepCodes    (初次)编排好的步骤
+     * @param stepCodes    待执行的的领域步骤
      * @param model        领域模型
+     * @throws RuntimeException 步骤执行时抛出的异常，统一封装为 RuntimeException
      */
-    public final void execute(String activityCode, List<String> stepCodes, Model model) {
+    public final void execute(String activityCode, List<String> stepCodes, Model model) throws RuntimeException {
+        execute(activityCode, stepCodes, model, null, emptyAsyncSteps);
+    }
+
+    /**
+     * 执行编排好的步骤，支持异步执行指定的步骤.
+     * <p>
+     * <p>步骤的实现里，可以通过{@link IReviseStepsException}来进行后续步骤修订，即动态的步骤编排</p>
+     * <p>如果步骤实现了{@link IRevokableDomainStep}，在步骤抛出异常后会自动触发步骤回滚</p>
+     * <p>异步执行的步骤，注意事项：</p>
+     * <ul>
+     * <li>需要使用者保证线程安全性!</li>
+     * <li>beforeStep/afterStep的执行，都是同步的，都在主线程内执行</li>
+     * <li>异步执行的步骤的异常都被忽略，不会触发回滚</li>
+     * <li>不支持在异步执行的步骤里修订后续步骤</li>
+     * </ul>
+     *
+     * @param activityCode   领域活动
+     * @param stepCodes      待执行的的领域步骤
+     * @param model          领域模型
+     * @param taskExecutor   异步执行的线程池容器
+     * @param asyncStepCodes 异步执行的步骤. Attention: 异步执行的任务，在失败时是不会触发回滚的
+     * @throws RuntimeException 步骤执行时抛出的异常，统一封装为 RuntimeException
+     */
+    public final void execute(String activityCode, List<String> stepCodes, Model model,
+                              SchedulingTaskExecutor taskExecutor, Set<String> asyncStepCodes) throws RuntimeException {
         if (stepCodes == null || stepCodes.isEmpty()) {
             log.warn("Empty steps of activity:{} on {}", activityCode, model);
             return;
@@ -53,7 +82,7 @@ public abstract class StepsExecTemplate<Step extends IDomainStep, Model extends 
         int stepRevisions = 0;
         while (++stepRevisions < MAX_STEP_REVISIONS) {
             // 执行步骤的过程中，可能会产生修订步骤逻辑
-            stepCodes = executeSteps(activityCode, stepCodes, executedSteps, model);
+            stepCodes = executeSteps(activityCode, stepCodes, executedSteps, model, taskExecutor, asyncStepCodes);
             if (stepCodes.isEmpty()) {
                 // 不再有步骤修订了：所有步骤都执行完毕
                 break;
@@ -71,30 +100,56 @@ public abstract class StepsExecTemplate<Step extends IDomainStep, Model extends 
     }
 
     // return revised steps
-    private List<String> executeSteps(String activityCode, List<String> stepCodes, Stack<IRevokableDomainStep> executedSteps, Model model) {
+    private List<String> executeSteps(String activityCode, List<String> stepCodes, Stack<IRevokableDomainStep> executedSteps, Model model,
+                                      SchedulingTaskExecutor taskExecutor, Set<String> asyncStepCodes) throws RuntimeException {
+        if (asyncStepCodes == null || taskExecutor == null) {
+            // the sentry
+            asyncStepCodes = emptyAsyncSteps;
+        }
+
         List<Step> steps = DDD.findSteps(activityCode, stepCodes);
+        String currentStepCode = null;
         try {
             for (Step step : steps) {
+                currentStepCode = step.stepCode();
+
+                // async step下，before/after step，都还在主线程内执行：否则用户无法完成 ThreadLocal 的切换机制
                 beforeStep(step, model);
-                step.execute(model);
+
+                if (asyncStepCodes.contains(currentStepCode)) {
+                    // for async steps, fire and forget!
+                    asyncExecuteStep(taskExecutor, step, model);
+                } else {
+                    step.execute(model);
+                }
+
                 afterStep(step, model);
 
-                if (step instanceof IRevokableDomainStep) {
-                    // prepare for possible rollback
+                if (step instanceof IRevokableDomainStep && !asyncStepCodes.contains(currentStepCode)) {
+                    // prepare for possible sync step rollback
+                    // 异步执行的任务，在失败时是不会触发回滚的
                     executedSteps.push((IRevokableDomainStep) step);
                 }
             }
         } catch (Exception cause) {
             if (cause instanceof IReviseStepsException) {
                 // 重新编排(修订)了后续步骤
+                // 仍在运行的async steps会继续执行，不必回收
                 return ((IReviseStepsException) cause).subsequentSteps();
+            }
+
+            log.error("Step:{}.{} fails for {}", activityCode, currentStepCode, stepCodes, cause);
+
+            if (cause instanceof RejectedExecutionException) {
+                // taskExecutor thread pool full!
+                throw (RejectedExecutionException) cause;
             }
 
             // 其他异常，best effort rollback if necessary
             if (!executedSteps.empty() && cause instanceof RuntimeException) {
                 if (cause.getClass() == getStepExType()) { // Step必定是同一个ClassLoader加载的：中台统一加载
-                    // 如果是Step的泛型里定义的异常，则回滚
-                    rollbackExecutedSteps(model, (RuntimeException) cause, executedSteps);
+                    // 如果是Step的泛型里定义的异常，则回滚：回滚都是同步的
+                    safeRollbackExecutedSteps(model, (RuntimeException) cause, executedSteps);
                 } else {
                     // 其他类异常不回滚
                     log.debug("will not rollback, {} thrown", cause.getClass().getCanonicalName());
@@ -106,6 +161,20 @@ public abstract class StepsExecTemplate<Step extends IDomainStep, Model extends 
         }
 
         return emptyRevisedSteps;
+    }
+
+    private void asyncExecuteStep(SchedulingTaskExecutor taskExecutor, Step step, Model model) {
+        Map<String, String> mdcContext = MDC.getCopyOfContextMap();
+        taskExecutor.execute(() -> {
+            // 切换到线程池，ThreadLocal会失效，目前ThreadLocal只有MDC
+            // 如果业务系统有自己的ThreadLocal，可以通过 beforeStep/afterStep 机制进行处理
+            MDC.setContextMap(mdcContext);
+            try {
+                step.execute(model); // IMPORTANT: model must be thread safe!
+            } finally {
+                MDC.clear();
+            }
+        });
     }
 
     private Class getStepExType() {
@@ -131,7 +200,7 @@ public abstract class StepsExecTemplate<Step extends IDomainStep, Model extends 
         return null;
     }
 
-    private void rollbackExecutedSteps(Model model, RuntimeException cause, Stack<IRevokableDomainStep> executedSteps) {
+    private void safeRollbackExecutedSteps(Model model, RuntimeException cause, Stack<IRevokableDomainStep> executedSteps) {
         while (!executedSteps.isEmpty()) {
             // 失败时，按照反方向执行回滚操作：Sagas Pattern, best effort
             IRevokableDomainStep executedStep = executedSteps.pop();
@@ -142,5 +211,4 @@ public abstract class StepsExecTemplate<Step extends IDomainStep, Model extends 
             }
         }
     }
-
 }
