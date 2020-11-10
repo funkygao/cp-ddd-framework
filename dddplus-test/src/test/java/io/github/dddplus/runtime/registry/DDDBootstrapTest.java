@@ -1,5 +1,6 @@
 package io.github.dddplus.runtime.registry;
 
+import io.github.dddplus.runtime.registry.mock.MockStartupListener;
 import io.github.dddplus.testing.AloneRunner;
 import io.github.dddplus.testing.AloneWith;
 import io.github.dddplus.testing.LogAssert;
@@ -12,6 +13,7 @@ import org.springframework.context.support.GenericApplicationContext;
 
 import java.io.IOException;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 
@@ -37,6 +39,21 @@ public class DDDBootstrapTest {
         ContextRefreshedEvent contextRefreshedEvent = new ContextRefreshedEvent(genericApplicationContext);
         dddBootstrap.onApplicationEvent(contextRefreshedEvent);
         LogAssert.assertContains("Spring reloaded complete!");
+
+        applicationContext.close();
+    }
+
+    public void startupListenerCalledOnlyOnce() throws IOException {
+        MockStartupListener.reset();
+
+        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("spring-test.xml");
+        LogAssert.assertContains("Spring started complete!", "calling IStartupListener");
+        assertEquals(1, MockStartupListener.getCalled());
+
+        // assure that after Spring application context refresh, the startup listener will not be triggered
+        applicationContext.refresh();
+        LogAssert.assertContains("Spring reloaded complete!");
+        assertEquals(1, MockStartupListener.getCalled());
 
         applicationContext.close();
     }

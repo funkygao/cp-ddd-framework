@@ -3,12 +3,16 @@
 * FIXED
    * Plugin reloading, Spring unable to get the Partner bean. see https://github.com/funkygao/cp-ddd-framework/issues/20
    * ArchitectureEnforcer的接口规范 bug，需要把注解排除在外
+   * 在Spring Boot集成时，无法触发`IStartupListener`
 
 * Improvement
    * Add `@Specification` for `ISpecification` interface: specifications are Spring beans
    * renamed CoreAopUtils -> InternalAopUtils, which is internally visible
    * 演示如何对step进行方法拦截
+
+* Feature
    * Step可以异步执行，同步回滚
+   * 提供`DomainArtifacts`，方便业务能力可视化
 
 * Test
    * Stress test for plugin jar reloading passed
