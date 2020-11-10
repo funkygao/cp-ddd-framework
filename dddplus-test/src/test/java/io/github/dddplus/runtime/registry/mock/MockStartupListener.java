@@ -5,14 +5,22 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class MockStartupListener implements IStartupListener {
-    private boolean called = false;
+    private static int called = 0;
 
     @Override
     public void onStartComplete() {
-        called = true;
+        called++;
     }
 
     public boolean isCalled() {
+        return called > 0;
+    }
+
+    public static void reset() {
+        called = 0;
+    }
+
+    public static int getCalled() {
         return called;
     }
 
