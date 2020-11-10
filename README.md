@@ -96,8 +96,6 @@ Please visit [Quickstart](https://github.com/funkygao/cp-ddd-framework/wiki).
    - 业务能力演化，业务测试，最佳实践，架构持续防腐，重构的导流验证，绞杀者落地方案等
    - 提供 [一套完整的Demo工程](https://github.com/dddplus/dddplus-demo)
    - 演示 [5分钟搭建一个仓储中台WMS](https://github.com/dddplus/dddplus-archetype-demo)，手把手真实场景教学
-- 覆盖业务资产的全生命周期
-  - 设计，开发，测试，发布，运维，业务运营
 
 ### Modules
 
