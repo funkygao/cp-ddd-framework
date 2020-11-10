@@ -3,6 +3,7 @@
 * FIXED
    * Plugin reloading, Spring unable to get the Partner bean. see https://github.com/funkygao/cp-ddd-framework/issues/20
    * ArchitectureEnforcer的接口规范 bug，需要把注解排除在外
+   * 在Spring Boot集成时，无法触发`IStartupListener`
 
 * Improvement
    * Add `@Specification` for `ISpecification` interface: specifications are Spring beans
