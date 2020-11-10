@@ -63,6 +63,7 @@ public abstract class StepsExecTemplate<Step extends IDomainStep, Model extends 
      * <li>异步执行的步骤的异常都被忽略，不会触发回滚</li>
      * <li>不支持在异步执行的步骤里修订后续步骤</li>
      * </ul>
+     * <p>In all, async steps executes in fire and forget mode!</p>
      *
      * @param activityCode   领域活动
      * @param stepCodes      待执行的的领域步骤

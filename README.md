@@ -49,6 +49,8 @@ DDDplus, originally cp-ddd-framework(cp means Central Platform：中台), is a l
 
 融合了前中台复杂生态协作方法论，充分考虑组织架构、技术债、学习门槛、可演进性、运维成本和风险而开发的，解决[业务开发痛点](https://github.com/funkygao/cp-ddd-framework/wiki/Why-we-need-this-framework)，是中台架构的顶层设计和完整解决方案。
 
+从业务中来，到业务中去！
+
 ### Current status
 
 Used for several complex critical central platform projects in production environment.
