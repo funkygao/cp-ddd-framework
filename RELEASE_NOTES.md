@@ -8,7 +8,10 @@
    * Add `@Specification` for `ISpecification` interface: specifications are Spring beans
    * renamed CoreAopUtils -> InternalAopUtils, which is internally visible
    * 演示如何对step进行方法拦截
+
+* Feature
    * Step可以异步执行，同步回滚
+   * 提供`DomainArtifacts`，方便业务能力可视化
 
 * Test
    * Stress test for plugin jar reloading passed
