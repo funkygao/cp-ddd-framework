@@ -91,4 +91,4 @@ Plugin有2种：
 - [X] useSpring = false case
 - [X] stress test to detect memory leakage: off heap memory/metaspace
 - [X] 先静态加载plugin，然后reload，确保生效
-- [ ] Spring lazy load
+- [X] Spring lazy load
