@@ -23,6 +23,13 @@ public class BarStep extends SubmitStep {
     public void execute(@NotNull FooModel model) throws FooException {
         log.debug("submit: {}", model);
 
+        if (model.isWillSleepLong()) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ignored) {
+            }
+        }
+
         if (model.isRedecideDeadLoop()) {
             // 故意制造step死循环
             log.debug("dead loop on purpose for step:{}", this.stepCode());

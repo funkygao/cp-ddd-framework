@@ -9,6 +9,8 @@ public class FooModel implements IDomainModel {
 
     private boolean b2c;
 
+    private boolean letFooThrowException;
+
     private boolean willSleepLong;
 
     private boolean willThrowRuntimeException;

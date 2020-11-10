@@ -16,6 +16,18 @@ public class FooStep extends SubmitStep {
     @DomainProfiler
     public void execute(@NotNull FooModel model) throws FooException {
         log.info("submit: {}", model);
+
+        if (model.isWillSleepLong()) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ignored) {
+            }
+        }
+
+        if (model.isLetFooThrowException()) {
+            log.info("will throw exception!");
+            throw new RuntimeException("foo on purpose");
+        }
     }
 
     @Override
