@@ -70,6 +70,7 @@ public class DomainArtifacts {
 
         // extensions
         this.extensions = new ArrayList<>();
+        // parse indexer pattern extensions
         for (Map.Entry<Class<? extends IDomainExtension>, List<PatternDef>> entry : InternalIndexer.sortedPatternMap.entrySet()) {
             final Extension extension = new Extension(entry.getKey());
             for (PatternDef patternDef : entry.getValue()) {
@@ -83,6 +84,39 @@ public class DomainArtifacts {
             }
 
             this.extensions.add(extension);
+        }
+        // parse indexer partner extensions and merge with pattern extensions
+        for (PartnerDef partnerDef : InternalIndexer.partnerDefMap.values()) {
+            for (Class<? extends IDomainExtension> ext : partnerDef.getExtensionDefMap().keySet()) {
+                Extension extensionFound = null;
+                for (Extension extension : this.extensions) {
+                    if (extension.ext == ext) {
+                        extensionFound = extension;
+                        break;
+                    }
+                }
+
+                if (extensionFound == null) {
+                    // this extension is implemented only by Partner
+                    final Extension extension = new Extension(ext);
+                    extension.getPartners().add(new Partner(partnerDef.getCode(), partnerDef.getName()));
+                    this.extensions.add(extension);
+                } else {
+                    // this extension is implemented in both Partner and Pattern
+                    // do the merge
+                    final Partner partner = new Partner(partnerDef.getCode(), partnerDef.getName());
+                    boolean partnerFound = false;
+                    for (Partner p : extensionFound.getPartners()) {
+                        if (p.code.equals(partner.code)) {
+                            partnerFound = true;
+                            break;
+                        }
+                    }
+                    if (!partnerFound) {
+                        extensionFound.getPartners().add(partner);
+                    }
+                }
+            }
         }
     }
 
