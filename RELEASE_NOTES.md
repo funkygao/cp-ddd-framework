@@ -1,21 +1,20 @@
-## Release Notes - DDDplus - Version 1.0.3 (WIP)
+## Release Notes - DDDplus - Version 1.0.3
 
 * FIXED
-   * Plugin reloading, Spring unable to get the Partner bean. see https://github.com/funkygao/cp-ddd-framework/issues/20
-   * ArchitectureEnforcer的接口规范 bug，需要把注解排除在外
-   * 在Spring Boot集成时，无法触发`IStartupListener`
+   * [#20](https://github.com/funkygao/cp-ddd-framework/issues/20) Plugin reloading, Spring unable to get the Partner bean
+   * [#28](https://github.com/funkygao/cp-ddd-framework/issues/28) ArchitectureEnforcer的接口规范 bug，需要把注解排除在外
+   * [dddplus/dddplus#4](https://github.com/dddplus/dddplus/issues/4) 在Spring Boot集成时，无法触发`IStartupListener`
 
 * Improvement
-   * Add `@Specification` for `ISpecification` interface: specifications are Spring beans
-   * renamed CoreAopUtils -> InternalAopUtils, which is internally visible
-   * 演示如何对step进行方法拦截
+   * [#19](https://github.com/funkygao/cp-ddd-framework/issues/19) Add `@Specification` for `ISpecification` interface: specifications are Spring beans
+   * [#29](https://github.com/funkygao/cp-ddd-framework/issues/29) 演示如何对step进行方法拦截
 
 * Feature
-   * Step可以异步执行，同步回滚
-   * 提供`DomainArtifacts`，方便业务能力可视化
+   * [#24](https://github.com/funkygao/cp-ddd-framework/issues/24) Step可以异步执行，同步回滚
+   * [#23](https://github.com/funkygao/cp-ddd-framework/issues/23) 提供`DomainArtifacts`，方便业务能力可视化
 
 * Test
-   * Stress test for plugin jar reloading passed
+   * [#26](https://github.com/funkygao/cp-ddd-framework/issues/26) Stress test for plugin jar reloading passed
 
 ## Release Notes - DDDplus - Version 1.0.2
 

@@ -45,6 +45,8 @@
 
 DDDplus, originally cp-ddd-framework(cp means Central Platform：中台), is a lightweight flexible development framework for complex business architecture.
 
+Originated from business，serve business！
+
 一套轻量级业务中台开发框架，以[DDD](https://github.com/funkygao/cp-ddd-framework/wiki/DDD)思想为本，致力于业务资产的可沉淀可传承，全方位解决复杂业务场景的扩展问题，实现[中台核心要素](https://github.com/funkygao/cp-ddd-framework/wiki/%E4%B8%9A%E5%8A%A1%E4%B8%AD%E5%8F%B0%E7%9A%84%E6%A0%B8%E5%BF%83%E8%A6%81%E7%B4%A0)，赋能中台建设。
 
 融合了前中台复杂生态协作方法论，充分考虑组织架构、技术债、学习门槛、可演进性、运维成本和风险而开发的，解决[业务开发痛点](https://github.com/funkygao/cp-ddd-framework/wiki/Why-we-need-this-framework)，是中台架构的顶层设计和完整解决方案。
@@ -83,8 +85,8 @@ Please visit [Quickstart](https://github.com/funkygao/cp-ddd-framework/wiki).
    - 研发专注于填空式开发，解决局部问题
 - 全方位解决业务的不确定性
    - 业务逻辑、流程、逻辑模型、数据模型的扩展、多态体系
-   - 框架本身支持再次扩展
-   - 抽象出独立的业务扩展包，框架底层通过`ClassLoader`机制进行业务隔离，支持不重启热更新
+   - 框架本身支持再次扩展，方便集成
+   - 抽象出独立的业务扩展包，框架底层通过`ClassLoader`机制进行业务隔离，支持热更新
 - 支撑中台战略的复杂生态协作
    - 前台、中台解耦
    - 业务隔离，不同前台间业务隔离，前台和中台隔离
@@ -94,8 +96,6 @@ Please visit [Quickstart](https://github.com/funkygao/cp-ddd-framework/wiki).
    - 业务能力演化，业务测试，最佳实践，架构持续防腐，重构的导流验证，绞杀者落地方案等
    - 提供 [一套完整的Demo工程](https://github.com/dddplus/dddplus-demo)
    - 演示 [5分钟搭建一个仓储中台WMS](https://github.com/dddplus/dddplus-archetype-demo)，手把手真实场景教学
-- 覆盖业务资产的全生命周期
-  - 开发，测试，发布，运维，业务运营
 
 ### Modules
 
@@ -125,7 +125,7 @@ Please visit [Javadoc](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/)
 
 ```xml
 <properties>
-    <dddplus.version>1.0.2</dddplus.version>
+    <dddplus.version>1.0.3</dddplus.version>
 </properties>
 
 <dependency>
@@ -140,7 +140,7 @@ Please visit [Javadoc](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/)
 ```groovy
 dependencies {
     ...
-    compile 'io.github.dddplus:dddplus-runtime:1.0.2'
+    compile 'io.github.dddplus:dddplus-runtime:1.0.3'
 }
 ```
 
@@ -158,7 +158,7 @@ mvn install # will run all test cases
 mvn archetype:generate                          \
     -DarchetypeGroupId=io.github.dddplus        \
     -DarchetypeArtifactId=dddplus-archetype     \
-    -DarchetypeVersion=1.0.2                    \
+    -DarchetypeVersion=1.0.3                    \
     -DgroupId=com.foo -DartifactId=demo         \
     -Dpackage=com.foo -Dversion=1.0.0-SNAPSHOT  \
     -B
@@ -174,10 +174,8 @@ Please visit [使用该框架搭建`订单履约中台`的例子](https://github
 
 - [dddplus-archetype](https://github.com/dddplus/dddplus-archetype)
    - a maven archetype that generates a complete DDDplus driven project skeleton
-- [dddplus-visualizer](https://github.com/dddplus/dddplus-visualizer)
+- [dddplus-visualizer](https://github.com/dddplus/dddplus-vis)
    - a CLI parsing DDDplus driven project Java AST with ANTLR and visualize your business artifacts
-- [lineage](https://github.com/dddplus/lineage)
-   - programmatically discover business lineage in Microservice Architecture
 
 ## FAQ
 

@@ -86,8 +86,9 @@ Plugin有2种：
 - `Pattern` + `Extension`
 - `Partner` + `Extension`
 
-### P0
+### Checklist before release
 
-- Spring lazy load
-- useSpring = false case
-- stress test to detect memory leakage
+- [X] useSpring = false case
+- [X] stress test to detect memory leakage: off heap memory/metaspace
+- [X] 先静态加载plugin，然后reload，确保生效
+- [X] Spring lazy load
