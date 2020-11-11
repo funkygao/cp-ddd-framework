@@ -49,7 +49,7 @@ public class DomainArtifacts {
     private DomainArtifacts() {
     }
 
-    void export() {
+    synchronized void export() {
         // domains
         this.domains = new ArrayList<>(InternalIndexer.domainDefMap.size());
         domains.addAll(InternalIndexer.domainDefMap.values().stream().map(domainDef -> new Domain(domainDef.getCode(), domainDef.getName())).collect(Collectors.toList()));
