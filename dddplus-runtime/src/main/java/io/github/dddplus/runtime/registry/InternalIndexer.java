@@ -299,5 +299,8 @@ public class InternalIndexer {
         log.warn("Partner({}) committed", partnerDefPrepared.getCode());
 
         partnerDefPrepared = null;
+
+        // refresh the exported domain artifacts
+        DomainArtifacts.getInstance().export();
     }
 }
