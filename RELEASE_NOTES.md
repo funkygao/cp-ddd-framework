@@ -1,4 +1,4 @@
-## Release Notes - DDDplus - Version 1.0.3 (WIP)
+## Release Notes - DDDplus - Version 1.0.3
 
 * FIXED
    * [#20](https://github.com/funkygao/cp-ddd-framework/issues/20) Plugin reloading, Spring unable to get the Partner bean
