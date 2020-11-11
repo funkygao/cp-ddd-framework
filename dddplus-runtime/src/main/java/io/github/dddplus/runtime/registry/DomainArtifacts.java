@@ -8,6 +8,7 @@ package io.github.dddplus.runtime.registry;
 import io.github.dddplus.ext.IDomainExtension;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -88,15 +89,15 @@ public class DomainArtifacts {
         // parse indexer partner extensions and merge with pattern extensions
         for (PartnerDef partnerDef : InternalIndexer.partnerDefMap.values()) {
             for (Class<? extends IDomainExtension> ext : partnerDef.getExtensionDefMap().keySet()) {
-                Extension extensionFound = null;
+                Extension extensionsOfPattern = null;
                 for (Extension extension : this.extensions) {
                     if (extension.ext == ext) {
-                        extensionFound = extension;
+                        extensionsOfPattern = extension;
                         break;
                     }
                 }
 
-                if (extensionFound == null) {
+                if (extensionsOfPattern == null) {
                     // this extension is implemented only by Partner
                     final Extension extension = new Extension(ext);
                     extension.getPartners().add(new Partner(partnerDef.getCode(), partnerDef.getName()));
@@ -105,15 +106,8 @@ public class DomainArtifacts {
                     // this extension is implemented in both Partner and Pattern
                     // do the merge
                     final Partner partner = new Partner(partnerDef.getCode(), partnerDef.getName());
-                    boolean partnerFound = false;
-                    for (Partner p : extensionFound.getPartners()) {
-                        if (p.code.equals(partner.code)) {
-                            partnerFound = true;
-                            break;
-                        }
-                    }
-                    if (!partnerFound) {
-                        extensionFound.getPartners().add(partner);
+                    if (!extensionsOfPattern.getPartners().contains(partner)) {
+                        extensionsOfPattern.getPartners().add(partner);
                     }
                 }
             }
@@ -163,6 +157,7 @@ public class DomainArtifacts {
      */
     @Getter
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    @EqualsAndHashCode
     public static class Pattern {
         private String code;
         private String name;
@@ -172,7 +167,8 @@ public class DomainArtifacts {
      * 业务前台.
      */
     @Getter
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    @AllArgsConstructor(access = AccessLevel.PACKAGE)
+    @EqualsAndHashCode
     public static class Partner {
         private String code;
         private String name;
