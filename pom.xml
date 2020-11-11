@@ -23,8 +23,8 @@ under the License.
     <packaging>pom</packaging>
     <version>1.1.0-SNAPSHOT</version>
     <name>DDDplus Framework</name>
-    <description>DDD Supporting Central Platform(中台) Architecture</description>
-    <url>https://github.com/funkygao/cp-ddd-framework</url>
+    <description>A lightweight flexible development framework for complex business architecture with full ecosystem！</description>
+    <url>https://github.com/dddplus/dddplus</url>
     <inceptionYear>2020</inceptionYear>
 
     <modules>
@@ -106,14 +106,14 @@ under the License.
 
     <!-- Required by maven ossrh -->
     <scm>
-        <connection>scm:git:https://github.com/funkygao/cp-ddd-framework.git</connection>
-        <developerConnection>scm:git:git@github.com:funkygao/cp-ddd-framework.git</developerConnection>
-        <url>https://github.com/funkygao/cp-ddd-framework/</url>
+        <connection>scm:git:https://github.com/dddplus/dddplus.git</connection>
+        <developerConnection>scm:git:git@github.com:dddplus/dddplus.git</developerConnection>
+        <url>https://github.com/dddplus/dddplus/</url>
         <tag>v1.1.0</tag>
     </scm>
     <issueManagement>
         <system>github</system>
-        <url>https://github.com/funkygao/cp-ddd-framework/issues</url>
+        <url>https://github.com/dddplus/dddplus/issues</url>
     </issueManagement>
     <developers>
         <developer>
