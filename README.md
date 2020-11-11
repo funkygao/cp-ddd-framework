@@ -125,7 +125,7 @@ Please visit [Javadoc](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/)
 
 ```xml
 <properties>
-    <dddplus.version>1.0.2</dddplus.version>
+    <dddplus.version>1.0.3</dddplus.version>
 </properties>
 
 <dependency>
@@ -140,7 +140,7 @@ Please visit [Javadoc](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/)
 ```groovy
 dependencies {
     ...
-    compile 'io.github.dddplus:dddplus-runtime:1.0.2'
+    compile 'io.github.dddplus:dddplus-runtime:1.0.3'
 }
 ```
 
@@ -158,7 +158,7 @@ mvn install # will run all test cases
 mvn archetype:generate                          \
     -DarchetypeGroupId=io.github.dddplus        \
     -DarchetypeArtifactId=dddplus-archetype     \
-    -DarchetypeVersion=1.0.2                    \
+    -DarchetypeVersion=1.0.3                    \
     -DgroupId=com.foo -DartifactId=demo         \
     -Dpackage=com.foo -Dversion=1.0.0-SNAPSHOT  \
     -B
