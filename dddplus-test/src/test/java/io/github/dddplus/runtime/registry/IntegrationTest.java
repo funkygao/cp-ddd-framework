@@ -9,6 +9,8 @@ import io.github.dddplus.runtime.registry.mock.domain.FooDomain;
 import io.github.dddplus.runtime.registry.mock.exception.FooException;
 import io.github.dddplus.runtime.registry.mock.ext.IFooExt;
 import io.github.dddplus.runtime.registry.mock.ext.IMultiMatchExt;
+import io.github.dddplus.runtime.registry.mock.ext.IPartnerExt;
+import io.github.dddplus.runtime.registry.mock.ext.IPatternOnlyExt;
 import io.github.dddplus.runtime.registry.mock.extension.BarExt;
 import io.github.dddplus.runtime.registry.mock.model.FooModel;
 import io.github.dddplus.runtime.registry.mock.partner.FooPartner;
@@ -491,10 +493,11 @@ public class IntegrationTest {
         assertEquals(4, submitSteps.size()); // FooStep, BarStep, BazStep, HamStep
         assertEquals(Steps.Submit.GoodsValidationGroup, submitSteps.get(0).getTags()[0]);
 
-        // extensions
-        assertEquals(4, artifacts.getExtensions().size());
+        // extensions: IFooExt IMultiMatchExt IReviseStepsExt IDecideStepsExt IPartnerExt IPatternOnlyExt
+        assertEquals(6, artifacts.getExtensions().size());
         int foundExtN = 0;
-        int foundPartners = 0;
+        boolean foundPartnerOnlyPattern = false;
+        boolean foundPatternOnlyPattern = false;
         for (DomainArtifacts.Extension extension : artifacts.getExtensions()) {
             if (IDecideStepsExt.class == extension.getExt()) {
                 foundExtN++;
@@ -510,17 +513,29 @@ public class IntegrationTest {
                 assertEquals(2, extension.getPatterns().size());
             }
 
+            if (IPatternOnlyExt.class == extension.getExt()) {
+                foundPatternOnlyPattern = true;
+                assertEquals(0, extension.getPartners().size());
+                assertEquals(1, extension.getPatterns().size());
+            }
+
+            if (IPartnerExt.class == extension.getExt()) {
+                foundPartnerOnlyPattern = true;
+
+                assertEquals(0, extension.getPatterns().size());
+                assertEquals(1, extension.getPartners().size()); // 只有 FooPartner 实现了该扩展点
+            }
+
             if (IFooExt.class == extension.getExt()) {
                 foundExtN++;
 
                 // B2BPattern, FooPattern, BarPattern
                 assertEquals(3, extension.getPatterns().size());
             }
-
-            foundPartners += extension.getPartners().size(); // FooPartner
         }
         assertEquals(3, foundExtN);
-        assertEquals(1, foundPartners);
+        assertTrue(foundPatternOnlyPattern);
+        assertTrue(foundPartnerOnlyPattern);
 
         // specifications
         assertEquals(1, artifacts.getSpecifications().size());
