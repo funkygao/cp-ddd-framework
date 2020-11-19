@@ -3,6 +3,7 @@ package io.github.dddplus.runtime.registry;
 import io.github.dddplus.ext.IDecideStepsExt;
 import io.github.dddplus.runtime.DDD;
 import io.github.dddplus.runtime.ExtTimeoutException;
+import io.github.dddplus.runtime.StepsExecTemplate;
 import io.github.dddplus.runtime.registry.mock.MockStartupListener;
 import io.github.dddplus.runtime.registry.mock.ability.*;
 import io.github.dddplus.runtime.registry.mock.domain.FooDomain;
@@ -57,8 +58,8 @@ public class IntegrationTest {
     @Resource
     private SchedulingTaskExecutor asyncStepsExecutorAutoDiscard;
 
-    @Resource
-    private SubmitStepsExec submitStepsExec;
+    @Autowired
+    private StepsExecTemplate<SubmitStep, FooModel> submitStepsExec; // https://jira.springsource.org/browse/SPR-9965
 
     private FooModel fooModel;
 
