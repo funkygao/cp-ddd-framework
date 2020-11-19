@@ -148,7 +148,7 @@ public abstract class StepsExecTemplate<Step extends IDomainStep, Model extends 
 
             // 其他异常，best effort rollback if necessary
             if (!executedSteps.empty() && cause instanceof RuntimeException) {
-                if (cause.getClass() == getStepExType()) { // Step必定是同一个ClassLoader加载的：中台统一加载
+                if (cause.getClass() == resolveStepExType()) { // Step必定是同一个ClassLoader加载的：中台统一加载
                     // 如果是Step的泛型里定义的异常，则回滚：回滚都是同步的
                     safeRollbackExecutedSteps(model, (RuntimeException) cause, executedSteps);
                 } else {
@@ -178,7 +178,7 @@ public abstract class StepsExecTemplate<Step extends IDomainStep, Model extends 
         });
     }
 
-    private Class getStepExType() {
+    private Class resolveStepExType() {
         ResolvableType stepsExecType = ResolvableType.forClass(this.getClass());
         ResolvableType templateType = stepsExecType.getSuperType();
         // 处理StepsExecTemplate的多层继承
