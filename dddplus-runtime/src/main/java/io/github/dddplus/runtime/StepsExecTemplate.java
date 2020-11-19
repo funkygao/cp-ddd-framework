@@ -11,6 +11,7 @@ import io.github.dddplus.step.IReviseStepsException;
 import io.github.dddplus.step.IRevokableDomainStep;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
+import org.springframework.aop.support.AopUtils;
 import org.springframework.core.ResolvableType;
 import org.springframework.scheduling.SchedulingTaskExecutor;
 
@@ -179,9 +180,15 @@ public abstract class StepsExecTemplate<Step extends IDomainStep, Model extends 
     }
 
     private Class resolveStepExType() {
-        ResolvableType stepsExecType = ResolvableType.forClass(this.getClass());
+        Class thisClass;
+        if (AopUtils.isAopProxy(this)) {
+            thisClass = AopUtils.getTargetClass(this);
+        } else {
+            thisClass = this.getClass();
+        }
+        ResolvableType stepsExecType = ResolvableType.forClass(thisClass);
         ResolvableType templateType = stepsExecType.getSuperType();
-        // 处理StepsExecTemplate的多层继承
+        // 处理StepsExecTemplate的多层继承 TODO 目前不够严谨
         while (templateType.getGenerics().length == 0) {
             templateType = templateType.getSuperType();
         }
