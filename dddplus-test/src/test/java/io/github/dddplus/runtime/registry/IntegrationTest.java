@@ -332,7 +332,8 @@ public class IntegrationTest {
     @Test
     public void decideSteps() {
         // fooModel不是B2B模式，匹配不了B2BDecideStepsExt
-        assertNull(DDD.findAbility(DecideStepsAbility.class).decideSteps(fooModel, Steps.Submit.Activity));
+        assertNotNull(DDD.findAbility(DecideStepsAbility.class).decideSteps(fooModel, Steps.Submit.Activity));
+        assertEquals(0, DDD.findAbility(DecideStepsAbility.class).decideSteps(fooModel, Steps.Submit.Activity).size());
 
         fooModel.setB2c(false);
         // B2BDecideStepsExt
