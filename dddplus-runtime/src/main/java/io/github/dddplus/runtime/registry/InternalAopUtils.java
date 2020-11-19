@@ -10,7 +10,6 @@ import org.springframework.aop.support.AopUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.Type;
 
 final class InternalAopUtils {
     private InternalAopUtils() {}
@@ -24,17 +23,6 @@ final class InternalAopUtils {
         }
 
         return (T) annotation;
-    }
-
-    static Type getGenericSuperclass(Object bean) {
-        Type type;
-        if (AopUtils.isAopProxy(bean)) {
-            type = AopUtils.getTargetClass(bean).getGenericSuperclass();
-        } else {
-            type = bean.getClass().getGenericSuperclass();
-        }
-
-        return type;
     }
 
     static Object getTarget(Object bean) throws BootstrapException {

@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 
 @Partner(code = FooPartner.CODE, name = "BP::foo")
 public class FooPartner implements IIdentityResolver<FooModel> {
-    public static final String CODE = "jdl.cn.ka";
+    public static final String CODE = "ddd.cn.ka";
 
     @Override
     public boolean match(@NotNull FooModel model) {

@@ -19,7 +19,7 @@ public class PluginClassLoaderTest {
         PluginClassLoader loader = new PluginClassLoader(new URL[]{new File("").toURI().toURL()}, null, null);
         assertTrue(loader.containerFirstClass(DDD.class.getName()));
         assertFalse(loader.containerFirstClass(List.class.getName()));
-        assertFalse(loader.containerFirstClass("com.jdl.bp.oms.doo.j.extension.JAntiConcurrentLockExt"));
+        assertFalse(loader.containerFirstClass("com.ddd.bp.oms.doo.j.extension.JAntiConcurrentLockExt"));
     }
 
     @Test

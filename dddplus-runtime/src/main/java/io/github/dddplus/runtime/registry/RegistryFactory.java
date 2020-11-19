@@ -23,7 +23,7 @@ import java.util.function.Supplier;
 @Slf4j
 class RegistryFactory implements InitializingBean {
     // 有序的，因为他们之间有时间依赖关系
-    private static List<RegistryEntry> validRegistryEntries = new ArrayList<>();
+    static List<RegistryEntry> validRegistryEntries = new ArrayList<>();
 
     private static Map<Class<? extends Annotation>, PrepareEntry> validPrepareEntries = new HashMap<>(3);
 

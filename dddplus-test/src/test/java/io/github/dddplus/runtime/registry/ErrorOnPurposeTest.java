@@ -73,7 +73,7 @@ public class ErrorOnPurposeTest {
             applicationContext = new ClassPathXmlApplicationContext("dup-partner.xml");
             fail();
         } catch (BeanCreationException expected) {
-            assertEquals("duplicated partner code: jdl.cn.ka", expected.getCause().getMessage());
+            assertEquals("duplicated partner code: ddd.cn.ka", expected.getCause().getMessage());
         }
     }
 

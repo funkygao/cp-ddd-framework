@@ -5,17 +5,15 @@
  */
 package io.github.dddplus.runtime.registry;
 
-import io.github.dddplus.ext.IDomainExtension;
 import io.github.dddplus.annotation.DomainAbility;
-import io.github.dddplus.model.IDomainModel;
+import io.github.dddplus.ext.IDomainExtension;
 import io.github.dddplus.runtime.BaseDomainAbility;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.ResolvableType;
 
 import javax.validation.constraints.NotNull;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 
 @ToString
 @Slf4j
@@ -34,9 +32,6 @@ class DomainAbilityDef implements IRegistryAware {
     private Class<? extends BaseDomainAbility> domainAbilityClass;
 
     @Getter
-    private Class<? extends IDomainModel> modelClazz;
-
-    @Getter
     private Class<? extends IDomainExtension> extClazz;
 
     @Override
@@ -51,20 +46,27 @@ class DomainAbilityDef implements IRegistryAware {
         this.domainAbilityBean = (BaseDomainAbility) bean;
         this.domainAbilityClass = (Class<? extends BaseDomainAbility>) InternalAopUtils.getTarget(bean).getClass();
 
-        // 获取BaseDomainAbility的Model和Ext类型
-        Type type = InternalAopUtils.getGenericSuperclass(bean);
-        if (type == null || !(type instanceof ParameterizedType)) {
-            throw BootstrapException.ofMessage("cannot find ParameterizedType for:", bean.getClass().getCanonicalName());
-        }
-        ParameterizedType parameterizedType = (ParameterizedType) type;
-        if (parameterizedType == null || parameterizedType.getActualTypeArguments().length < 2) {
-            throw BootstrapException.ofMessage("illegal generic declaration for:", bean.getClass().getCanonicalName());
-        }
-
-        this.modelClazz = (Class<? extends IDomainModel>) parameterizedType.getActualTypeArguments()[0];
-        this.extClazz = (Class<? extends IDomainExtension>) parameterizedType.getActualTypeArguments()[1];
-        log.debug("domain ability:{} model:{} ext:{}", bean.getClass().getCanonicalName(), modelClazz.getCanonicalName(), extClazz.getCanonicalName());
+        this.resolveExtClazz();
+        log.debug("domain ability:{} ext:{}", bean.getClass().getCanonicalName(), extClazz.getCanonicalName());
 
         InternalIndexer.index(this);
+    }
+
+    private void resolveExtClazz() {
+        ResolvableType baseDomainAbilityType = ResolvableType.forClass(this.domainAbilityClass).getSuperType();
+        for (int i = 0; i < 5; i++) { // 5 inheritance? much enough
+            for (ResolvableType resolvableType : baseDomainAbilityType.getGenerics()) {
+                if (IDomainExtension.class.isAssignableFrom(resolvableType.resolve())) {
+                    this.extClazz = (Class<? extends IDomainExtension>) resolvableType.resolve();
+                    return;
+                }
+            }
+
+            // parent class
+            baseDomainAbilityType = baseDomainAbilityType.getSuperType();
+        }
+
+        // should never happen: otherwise java cannot compile
+        throw BootstrapException.ofMessage("Even after 5 tries, still unable to figure out the extension class of BaseDomainAbility:", this.domainAbilityClass.getCanonicalName());
     }
 }

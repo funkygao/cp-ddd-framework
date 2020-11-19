@@ -11,6 +11,7 @@ import io.github.dddplus.step.IReviseStepsException;
 import io.github.dddplus.step.IRevokableDomainStep;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
+import org.springframework.aop.support.AopUtils;
 import org.springframework.core.ResolvableType;
 import org.springframework.scheduling.SchedulingTaskExecutor;
 
@@ -148,7 +149,7 @@ public abstract class StepsExecTemplate<Step extends IDomainStep, Model extends 
 
             // 其他异常，best effort rollback if necessary
             if (!executedSteps.empty() && cause instanceof RuntimeException) {
-                if (cause.getClass() == getStepExType()) { // Step必定是同一个ClassLoader加载的：中台统一加载
+                if (cause.getClass() == resolveStepExType()) { // Step必定是同一个ClassLoader加载的：中台统一加载
                     // 如果是Step的泛型里定义的异常，则回滚：回滚都是同步的
                     safeRollbackExecutedSteps(model, (RuntimeException) cause, executedSteps);
                 } else {
@@ -178,10 +179,16 @@ public abstract class StepsExecTemplate<Step extends IDomainStep, Model extends 
         });
     }
 
-    private Class getStepExType() {
-        ResolvableType stepsExecType = ResolvableType.forClass(this.getClass());
+    private Class resolveStepExType() {
+        Class thisClass;
+        if (AopUtils.isAopProxy(this)) {
+            thisClass = AopUtils.getTargetClass(this);
+        } else {
+            thisClass = this.getClass();
+        }
+        ResolvableType stepsExecType = ResolvableType.forClass(thisClass);
         ResolvableType templateType = stepsExecType.getSuperType();
-        // 处理StepsExecTemplate的多层继承
+        // 处理StepsExecTemplate的多层继承 TODO 目前不够严谨
         while (templateType.getGenerics().length == 0) {
             templateType = templateType.getSuperType();
         }

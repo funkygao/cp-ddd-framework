@@ -8,6 +8,7 @@ package io.github.dddplus.runtime.registry;
 import io.github.dddplus.ext.IDomainExtension;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ public class DomainArtifacts {
     private DomainArtifacts() {
     }
 
-    void export() {
+    synchronized void export() {
         // domains
         this.domains = new ArrayList<>(InternalIndexer.domainDefMap.size());
         domains.addAll(InternalIndexer.domainDefMap.values().stream().map(domainDef -> new Domain(domainDef.getCode(), domainDef.getName())).collect(Collectors.toList()));
@@ -70,6 +71,7 @@ public class DomainArtifacts {
 
         // extensions
         this.extensions = new ArrayList<>();
+        // parse indexer pattern extensions
         for (Map.Entry<Class<? extends IDomainExtension>, List<PatternDef>> entry : InternalIndexer.sortedPatternMap.entrySet()) {
             final Extension extension = new Extension(entry.getKey());
             for (PatternDef patternDef : entry.getValue()) {
@@ -83,6 +85,32 @@ public class DomainArtifacts {
             }
 
             this.extensions.add(extension);
+        }
+        // parse indexer partner extensions and merge with pattern extensions
+        for (PartnerDef partnerDef : InternalIndexer.partnerDefMap.values()) {
+            for (Class<? extends IDomainExtension> ext : partnerDef.getExtensionDefMap().keySet()) {
+                Extension extensionsOfPattern = null;
+                for (Extension extension : this.extensions) {
+                    if (extension.ext == ext) {
+                        extensionsOfPattern = extension;
+                        break;
+                    }
+                }
+
+                if (extensionsOfPattern == null) {
+                    // this extension is implemented only by Partner
+                    final Extension extension = new Extension(ext);
+                    extension.getPartners().add(new Partner(partnerDef.getCode(), partnerDef.getName()));
+                    this.extensions.add(extension);
+                } else {
+                    // this extension is implemented in both Partner and Pattern
+                    // do the merge
+                    final Partner partner = new Partner(partnerDef.getCode(), partnerDef.getName());
+                    if (!extensionsOfPattern.getPartners().contains(partner)) {
+                        extensionsOfPattern.getPartners().add(partner);
+                    }
+                }
+            }
         }
     }
 
@@ -129,6 +157,7 @@ public class DomainArtifacts {
      */
     @Getter
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    @EqualsAndHashCode
     public static class Pattern {
         private String code;
         private String name;
@@ -138,7 +167,8 @@ public class DomainArtifacts {
      * 业务前台.
      */
     @Getter
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    @AllArgsConstructor(access = AccessLevel.PACKAGE)
+    @EqualsAndHashCode
     public static class Partner {
         private String code;
         private String name;
