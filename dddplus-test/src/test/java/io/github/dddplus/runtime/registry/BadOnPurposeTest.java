@@ -28,6 +28,7 @@ public class BadOnPurposeTest {
             applicationContext = null;
         }
 
+        RegistryFactory.validRegistryEntries.clear();
         InternalIndexer.domainDefMap.clear();
         InternalIndexer.domainStepDefMap.clear();
         InternalIndexer.domainAbilityDefMap.clear();
@@ -140,12 +141,7 @@ public class BadOnPurposeTest {
 
     @Test
     public void badDomainAbility2() {
-        try {
-            applicationContext = new ClassPathXmlApplicationContext("ability-bad2.xml");
-            fail();
-        } catch (BeanCreationException expected) {
-            assertEquals("cannot find ParameterizedType for:io.github.badcase.ability.bad2.IllegalGenericAbility", expected.getCause().getMessage());
-        }
+        // StillLegalGenericAbility 虽然没有指明泛型的类型，它也是合法的
+        applicationContext = new ClassPathXmlApplicationContext("ability-bad2.xml");
     }
-
 }

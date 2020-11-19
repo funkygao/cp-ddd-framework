@@ -7,9 +7,10 @@ import io.github.dddplus.runtime.BaseDomainAbility;
 import io.github.dddplus.runtime.registry.mock.domain.FooDomain;
 import lombok.extern.slf4j.Slf4j;
 
+// 虽然没有明确指定具体的泛型，但它仍旧合法，Model is IDomainModel, Ext is IDomainExtension
 @DomainAbility(domain = FooDomain.CODE)
 @Slf4j
-public class IllegalGenericAbility extends BaseDomainAbility {
+public class StillLegalGenericAbility extends BaseDomainAbility {
 
     @Override
     public IDomainExtension defaultExtension(IDomainModel model) {
