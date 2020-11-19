@@ -54,7 +54,7 @@ class DomainAbilityDef implements IRegistryAware {
 
     private void resolveExtClazz() {
         ResolvableType baseDomainAbilityType = ResolvableType.forClass(this.domainAbilityClass).getSuperType();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) { // 5 inheritance? much enough
             for (ResolvableType resolvableType : baseDomainAbilityType.getGenerics()) {
                 if (IDomainExtension.class.isAssignableFrom(resolvableType.resolve())) {
                     this.extClazz = (Class<? extends IDomainExtension>) resolvableType.resolve();
@@ -67,6 +67,6 @@ class DomainAbilityDef implements IRegistryAware {
         }
 
         // should never happen: otherwise java cannot compile
-        throw BootstrapException.ofMessage("Even after 10 tries, still unable to figure out the extension class of BaseDomainAbility:", this.domainAbilityClass.getCanonicalName());
+        throw BootstrapException.ofMessage("Even after 5 tries, still unable to figure out the extension class of BaseDomainAbility:", this.domainAbilityClass.getCanonicalName());
     }
 }
