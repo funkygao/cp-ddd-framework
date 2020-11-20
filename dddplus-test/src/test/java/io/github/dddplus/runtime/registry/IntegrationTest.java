@@ -364,6 +364,23 @@ public class IntegrationTest {
     }
 
     @Test
+    public void stepsExecTemplateOneStepTimeoutWillNotRollback() {
+        fooModel.setB2c(false);
+        fooModel.setRedecide(false);
+        fooModel.setStepsRevised(false);
+        fooModel.setSleepExtTimeout(true);
+        List<String> steps = DDD.findAbility(DecideStepsAbility.class).decideSteps(fooModel, Steps.Submit.Activity);
+        // BazStep FooStep
+        // FooStep调用一个扩展点超时，会抛出 ExtTimeoutException，不确定状态：抛出到外面，框架层不做回滚
+        try {
+            submitStepsExec.execute(Steps.Submit.Activity, steps, fooModel);
+            fail();
+        } catch (ExtTimeoutException expected) {
+            assertEquals("timeout:100ms", expected.getMessage());
+        }
+    }
+
+    @Test
     public void stepsExecTemplateForAsync() {
         fooModel.setB2c(false);
         fooModel.setRedecide(true);
