@@ -123,14 +123,10 @@ dddplus
 ### Maven
 
 ```xml
-<properties>
-    <dddplus.version>1.0.3</dddplus.version>
-</properties>
-
 <dependency>
     <groupId>io.github.dddplus</groupId>
     <artifactId>dddplus-runtime</artifactId>
-    <version>${dddplus.version}</version>
+    <version>1.0.3</version>
 </dependency>
 ```
 
