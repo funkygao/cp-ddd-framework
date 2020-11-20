@@ -144,7 +144,7 @@ dependencies {
 ``` bash
 git clone https://github.com/funkygao/cp-ddd-framework.git
 cd cp-ddd-framework/
-mvn install # will run all test cases
+mvn install
 ```
 
 ### With dddplus-archetype
