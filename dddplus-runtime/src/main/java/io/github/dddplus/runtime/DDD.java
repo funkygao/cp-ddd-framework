@@ -5,6 +5,8 @@
  */
 package io.github.dddplus.runtime;
 
+import io.github.dddplus.ext.IDomainExtension;
+import io.github.dddplus.model.IDomainModel;
 import io.github.dddplus.runtime.registry.InternalIndexer;
 import io.github.dddplus.runtime.registry.StepDef;
 import io.github.dddplus.step.IDomainStep;
@@ -50,6 +52,28 @@ public final class DDD {
         }
 
         return result;
+    }
+
+    /**
+     * 绕过 {@link BaseDomainAbility}，直接获取扩展点实例.
+     *
+     * <p>有的控制点：</p>
+     * <ul>
+     * <li>不需要默认的扩展点实现</li>
+     * <li>不会有复杂的 {@link IReducer} 逻辑，取到第一个匹配的即可</li>
+     * <li>没有很强的业务属性：它可能是出于技术考虑而抽象出来的，而不是业务抽象</li>
+     * </ul>
+     * <p>这些场景下，{@link BaseDomainAbility} 显得有些多此一举，可直接使用 {@link DDD#firstExtension(Class, IDomainModel)}</p>
+     *
+     * @param extClazz 扩展点类型
+     * @param model    领域模型，用于定位扩展点
+     * @param <Ext>
+     * @param <R>
+     */
+    @NotNull
+    public static <Ext extends IDomainExtension, R> Ext firstExtension(@NotNull Class<Ext> extClazz, IDomainModel model) {
+        ExtensionInvocationHandler<Ext, R> proxy = new ExtensionInvocationHandler(extClazz, model, null, null, 0);
+        return proxy.createProxy();
     }
 
     /**

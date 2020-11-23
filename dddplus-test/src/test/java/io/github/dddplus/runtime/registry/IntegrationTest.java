@@ -196,6 +196,13 @@ public class IntegrationTest {
     }
 
     @Test
+    public void directGetExtension() {
+        // 不通过 BaseDomainAbility，直接获取扩展点实例
+        Integer result = DDD.firstExtension(IFooExt.class, fooModel).execute(fooModel);
+        assertEquals(BarExt.RESULT, result.intValue());
+    }
+
+    @Test
     public void integrationTest() {
         // domain service -> domain ability -> extension
         // PartnerExt
