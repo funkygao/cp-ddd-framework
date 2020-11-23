@@ -151,7 +151,7 @@ public abstract class StepsExecTemplate<Step extends IDomainStep, Model extends 
             if (!executedSteps.empty() && cause instanceof RuntimeException) {
                 if (cause.getClass() == resolveStepExType()) { // Step必定是同一个ClassLoader加载的：中台统一加载
                     // 如果是Step的泛型里定义的异常，则回滚：回滚都是同步的
-                    // 其他异常，不是业务显式抛出的，状态下确定，只能向上抛出，交由使用者处理
+                    // 其他异常，不是业务显式抛出的，状态下确定，框架不敢擅自回滚：只能向上抛出，交由使用者处理
                     safeRollbackExecutedSteps(model, (RuntimeException) cause, executedSteps);
                 } else {
                     // 其他类异常不回滚
