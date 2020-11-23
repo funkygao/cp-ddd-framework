@@ -67,7 +67,7 @@ public abstract class BaseDomainAbility<Model extends IDomainModel, Ext extends 
 
     public abstract Ext defaultExtension(@NotNull Model model);
 
-    private <Ext extends IDomainExtension, R> Ext findExtension(@NotNull Class<Ext> extClazz, @NotNull IDomainModel model, IReducer<R> reducer, Ext defaultExt, int timeoutInMs) {
+    private <Ext extends IDomainExtension, R> Ext findExtension(@NotNull Class<Ext> extClazz, @NotNull Model model, IReducer<R> reducer, Ext defaultExt, int timeoutInMs) {
         ExtensionInvocationHandler<Ext, R> proxy = new ExtensionInvocationHandler<>(extClazz, model, reducer, defaultExt, timeoutInMs);
         return proxy.createProxy();
     }
