@@ -2,8 +2,10 @@ package io.github.dddplus.runtime.registry.mock.model;
 
 import io.github.dddplus.model.IDomainModel;
 import lombok.Data;
+import lombok.ToString;
 
 @Data
+@ToString
 public class FooModel implements IDomainModel {
     private String partnerCode;
 
@@ -28,5 +30,7 @@ public class FooModel implements IDomainModel {
     private boolean willRollbackInvalid;
 
     private boolean sleepExtTimeout;
+
+    private boolean foo;
 
 }
