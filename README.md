@@ -10,6 +10,7 @@
 [![Coverage Status](https://img.shields.io/codecov/c/github/funkygao/cp-ddd-framework.svg)](https://codecov.io/gh/funkygao/cp-ddd-framework)
 
 [![Mentioned in Awesome DDD](https://awesome.re/mentioned-badge.svg)](https://github.com/heynickc/awesome-ddd#jvm)
+[![Javadoc](https://img.shields.io/badge/javadoc-Reference-blue.svg)](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/)
 [![TODO](https://badgen.net/https/api.tickgit.com/badgen/github.com/funkygao/cp-ddd-framework?label=todos)](https://www.tickgit.com/browse?repo=github.com/funkygao/cp-ddd-framework)
 [![Gitter chat](https://img.shields.io/badge/gitter-join%20chat%20%E2%86%92-brightgreen.svg)](https://gitter.im/cp-ddd-framework/community)
 
@@ -23,7 +24,6 @@
       * [Features](#features)
       * [Modules](#modules)
       * [Key abstractions](#key-abstractions)
-      * [Reference documentation](#reference-documentation)
    * [Using DDDplus](#using-dddplus)
       * [Maven](#maven)
       * [Gradle](#gradle)
@@ -97,6 +97,7 @@ Please visit [Quickstart](https://github.com/funkygao/cp-ddd-framework/wiki).
    - 业务能力演化，业务测试，最佳实践，架构持续防腐，重构的导流验证，绞杀者落地方案等
    - 提供 [一套完整的Demo工程](https://github.com/dddplus/dddplus-demo)
    - 演示 [5分钟搭建一个仓储中台WMS](https://github.com/dddplus/dddplus-archetype-demo)，手把手真实场景教学
+   - 提供 [一个低代码平台的后端完整系统](https://github.com/dddplus/easyapp)
 - DDDplus框架，始终保持简单性
 
 ### Modules
@@ -115,10 +116,6 @@ dddplus
 
 ![](http://www.plantuml.com/plantuml/svg/XLHDRnCn4BtxLunwQW-fn3LQLIq4f1v0LSiTJUn9rehNZkpPfAZqlpDE7DWF8tAAvxrvyxttYJ5otpcLTjRlCM87BNfpZ9QPF6pG9HfWgKKJZjPlc-PekVrnVj_T0SUUbACD0mU8Tjio61j9imrUgJtg7Mu9dbo_jHwQvek8aRYzAP2VzKnnWvhWyT6GPyi_doa5Tw0unLUXG-i_lpBv9D9JE0V0jQEf_Mimv1wOKRSTUHR_cJ1fQ-Y5QPykg7QO4ZmX2ycFB94zHVMkb0zCSDK6XaWkeCcnhm0JVFkWIh6tj_cXPZMyK3nOJHL0Sb23_x04UYNTCrtV3DdFT0Yx773eLZ6AVmpEhMK68l2dHT3yMYnc3PtXiu5KUddASEz4HmBKyKZUK1GOruaZQeRIQjBVgHDVfh_GHqmb_uUrTH9SpImYkIM-f2rngvIDZUc_94CRxDs8DijjD8FLQYNljyJ8LhzB46-AMXqygGaqsR4SkXWAFksrC3fatLwNAPqwUwFKU8FAeEhBKy3ghinLAfrNqmqfYkDQwgpgtStBF7FBdVqJBaTN6M4ZiBHzN7QnLHAhbRa45pGoLVYBnTqbjoMiPPnrIiclKDIdu5au525BeybNbSzZY6ItixsGb2egyjR1a2fnotCUkDWh-vgr1_rOGeYwfSHHG7LFtkHl_cy0)
 
-### Reference documentation
-
-Please visit [Javadoc](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/).
-
 ## Using DDDplus
 
 已推送至[Maven中央库](https://search.maven.org/search?q=g:io.github.dddplus)，可直接引入。
@@ -126,14 +123,10 @@ Please visit [Javadoc](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/)
 ### Maven
 
 ```xml
-<properties>
-    <dddplus.version>1.0.3</dddplus.version>
-</properties>
-
 <dependency>
     <groupId>io.github.dddplus</groupId>
     <artifactId>dddplus-runtime</artifactId>
-    <version>${dddplus.version}</version>
+    <version>1.0.3</version>
 </dependency>
 ```
 
@@ -151,7 +144,7 @@ dependencies {
 ``` bash
 git clone https://github.com/funkygao/cp-ddd-framework.git
 cd cp-ddd-framework/
-mvn install # will run all test cases
+mvn install
 ```
 
 ### With dddplus-archetype

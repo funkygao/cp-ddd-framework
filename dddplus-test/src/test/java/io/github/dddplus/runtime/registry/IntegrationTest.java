@@ -196,6 +196,13 @@ public class IntegrationTest {
     }
 
     @Test
+    public void directGetExtension() {
+        // 不通过 BaseDomainAbility，直接获取扩展点实例
+        Integer result = DDD.firstExtension(IFooExt.class, fooModel).execute(fooModel);
+        assertEquals(BarExt.RESULT, result.intValue());
+    }
+
+    @Test
     public void integrationTest() {
         // domain service -> domain ability -> extension
         // PartnerExt
@@ -361,6 +368,23 @@ public class IntegrationTest {
 
         // AOP式step interceptors test
         LogAssert.assertContains("AROUND step:Submit.Baz", "AROUND step:Submit.Foo", "AROUND step:Submit.Bar");
+    }
+
+    @Test
+    public void stepsExecTemplateOneStepTimeoutWillNotRollback() {
+        fooModel.setB2c(false);
+        fooModel.setRedecide(false);
+        fooModel.setStepsRevised(false);
+        fooModel.setSleepExtTimeout(true);
+        List<String> steps = DDD.findAbility(DecideStepsAbility.class).decideSteps(fooModel, Steps.Submit.Activity);
+        // BazStep FooStep
+        // FooStep调用一个扩展点超时，会抛出 ExtTimeoutException，不确定状态：抛出到外面，框架层不做回滚
+        try {
+            submitStepsExec.execute(Steps.Submit.Activity, steps, fooModel);
+            fail();
+        } catch (ExtTimeoutException expected) {
+            assertEquals("timeout:100ms", expected.getMessage());
+        }
     }
 
     @Test

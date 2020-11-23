@@ -27,4 +27,6 @@ public class FooModel implements IDomainModel {
 
     private boolean willRollbackInvalid;
 
+    private boolean sleepExtTimeout;
+
 }
