@@ -6,8 +6,8 @@ import io.github.dddplus.model.IDomainModel;
 import io.github.dddplus.runtime.registry.mock.model.FooModel;
 
 // TODO rename to B2CPattern
-@Pattern(code = BarPattern.CODE, name = "bar模式")
-public class BarPattern implements IIdentityResolver<IDomainModel> {
+@Pattern(code = B2CPattern.CODE, name = "B2C模式")
+public class B2CPattern implements IIdentityResolver<IDomainModel> {
     public static final String CODE = "bar";
 
     @Override
