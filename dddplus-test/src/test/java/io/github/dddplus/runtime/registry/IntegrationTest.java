@@ -8,10 +8,7 @@ import io.github.dddplus.runtime.registry.mock.MockStartupListener;
 import io.github.dddplus.runtime.registry.mock.ability.*;
 import io.github.dddplus.runtime.registry.mock.domain.FooDomain;
 import io.github.dddplus.runtime.registry.mock.exception.FooException;
-import io.github.dddplus.runtime.registry.mock.ext.IFooExt;
-import io.github.dddplus.runtime.registry.mock.ext.IMultiMatchExt;
-import io.github.dddplus.runtime.registry.mock.ext.IPartnerExt;
-import io.github.dddplus.runtime.registry.mock.ext.IPatternOnlyExt;
+import io.github.dddplus.runtime.registry.mock.ext.*;
 import io.github.dddplus.runtime.registry.mock.extension.BarExt;
 import io.github.dddplus.runtime.registry.mock.model.FooModel;
 import io.github.dddplus.runtime.registry.mock.partner.FooPartner;
@@ -200,6 +197,17 @@ public class IntegrationTest {
         // 不通过 BaseDomainAbility，直接获取扩展点实例
         Integer result = DDD.firstExtension(IFooExt.class, fooModel).execute(fooModel);
         assertEquals(BarExt.RESULT, result.intValue());
+    }
+
+    @Test
+    public void testPolicy() throws IOException {
+        fooModel.setFoo(true);
+        DDD.firstExtension(ITrigger.class, fooModel).beforeInsert(fooModel);
+        LogAssert.assertContains("foo trigger");
+
+        fooModel.setFoo(false);
+        DDD.firstExtension(ITrigger.class, fooModel).beforeInsert(fooModel);
+        LogAssert.assertContains("bar trigger");
     }
 
     @Test

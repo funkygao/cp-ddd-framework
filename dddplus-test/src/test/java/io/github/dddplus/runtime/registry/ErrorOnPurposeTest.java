@@ -34,6 +34,7 @@ public class ErrorOnPurposeTest {
         InternalIndexer.partnerDefMap.clear();
         InternalIndexer.patternDefMap.clear();
         InternalIndexer.specificationDefs.clear();
+        InternalIndexer.policyDefMap.clear();
     }
 
     @Test
