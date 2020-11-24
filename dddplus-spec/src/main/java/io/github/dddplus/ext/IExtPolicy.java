@@ -10,7 +10,7 @@ import io.github.dddplus.model.IDomainModel;
 import javax.validation.constraints.NotNull;
 
 /**
- * 扩展点定位策略.
+ * 扩展点动态定位策略.
  *
  * <p>不同于 {@link IIdentityResolver} 的静态绑定，扩展点定位策略是动态的.</p>
  * <p>每一个扩展点定位策略只能有一个实例，并且绑定到一个扩展点.</p>
