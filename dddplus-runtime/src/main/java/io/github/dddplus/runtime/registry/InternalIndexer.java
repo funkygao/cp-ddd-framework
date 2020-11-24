@@ -93,7 +93,11 @@ public class InternalIndexer {
         if (policyDef != null) {
             // bingo! this extension is located by policy
             ExtensionDef extensionByPolicy = policyDef.getExtension(model);
-            // extensionByPolicy should never be null TODO
+            if (extensionByPolicy == null) {
+                // found no extension for this model
+                return effectiveExtensions;
+            }
+
             effectiveExtensions.add(extensionByPolicy);
             return effectiveExtensions;
         }
