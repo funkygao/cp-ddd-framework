@@ -29,7 +29,7 @@
       * [Gradle](#gradle)
       * [Building from Source](#building-from-source)
       * [With dddplus-archetype](#with-dddplus-archetype)
-   * [The Demo](#the-demo)
+   * [Demos](#demos)
    * [DDDplus Ecosystem](#dddplus-ecosystem)
    * [FAQ](#faq)
    * [Landscape of Central Platform](#landscape-of-central-platform)
@@ -161,9 +161,11 @@ mvn archetype:generate                          \
 
 For more, please visit [dddplus-archetype project](https://github.com/dddplus/dddplus-archetype).
 
-## The Demo
+## Demos
 
-Please visit [使用该框架搭建`订单履约中台`的例子](https://github.com/dddplus/dddplus-demo).
+- [使用DDDplus搭建`订单履约中台`的例子](https://github.com/dddplus/dddplus-demo)
+- [使用DDDplus，5分钟搭建一个仓储中台WMS](https://github.com/dddplus/dddplus-archetype-demo)
+- [使用DDDplus，开发一个low-code SaaS平台](https://github.com/dddplus/easyapp)
 
 ## DDDplus Ecosystem
 
