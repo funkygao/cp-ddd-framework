@@ -13,12 +13,21 @@ public class TriggerExtPolicy implements IExtPolicy<FooModel> {
     @Override
     public String extensionCode(FooModel model) {
         // 在此，可以调用配置中心，决定目标扩展点
-        if (model.isFoo()) {
-            log.info("will use foo");
-            return "foo";
-        }
+        switch (model.getFoo()) {
+            case 1:
+                log.info("will use foo");
+                return "foo";
 
-        log.info("will use bar");
-        return "bar";
+            case 2:
+                log.info("will use bar");
+                return "bar";
+
+            case 3:
+                log.info("will return invalid extensionCode");
+                return "invalid";
+
+            default:
+                return null;
+        }
     }
 }

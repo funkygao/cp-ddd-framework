@@ -201,13 +201,22 @@ public class IntegrationTest {
 
     @Test
     public void testPolicy() throws IOException {
-        fooModel.setFoo(true);
+        fooModel.setFoo(1);
         DDD.firstExtension(ITrigger.class, fooModel).beforeInsert(fooModel);
         LogAssert.assertContains("foo trigger");
 
-        fooModel.setFoo(false);
+        fooModel.setFoo(2);
         DDD.firstExtension(ITrigger.class, fooModel).beforeInsert(fooModel);
         LogAssert.assertContains("bar trigger");
+    }
+
+    @Test
+    public void policyHasNoExtensionInstance() {
+        fooModel.setFoo(3);
+        DDD.firstExtension(ITrigger.class, fooModel).beforeInsert(fooModel);
+
+        fooModel.setFoo(4);
+        DDD.firstExtension(ITrigger.class, fooModel).beforeInsert(fooModel);
     }
 
     @Test

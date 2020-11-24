@@ -52,6 +52,10 @@ class PolicyDef implements IRegistryAware {
     ExtensionDef getExtension(IDomainModel model) {
         // 根据领域模型，让扩展点定位策略计算目标扩展点code: will never be null
         final String extensionCode = policyBean.extensionCode(model);
+        if (extensionCode == null) {
+            return null;
+        }
+
         return extensionDefMap.get(extensionCode);
     }
 
