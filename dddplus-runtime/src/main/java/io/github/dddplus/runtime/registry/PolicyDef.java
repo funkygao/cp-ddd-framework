@@ -55,7 +55,7 @@ class PolicyDef implements IRegistryAware {
         if (extensionCode == null) {
             return null;
         }
-        
+
         return extensionDefMap.get(extensionCode);
     }
 
