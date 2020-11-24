@@ -1,3 +1,8 @@
+## Release Notes - DDDplus - Version 1.1.1
+
+* FIXED
+   * [#39](https://github.com/funkygao/cp-ddd-framework/issues/39) 解决Policy定位的扩展点如果不存在则抛出NullPointerException
+
 ## Release Notes - DDDplus - Version 1.1.0
 
 * FIXED
