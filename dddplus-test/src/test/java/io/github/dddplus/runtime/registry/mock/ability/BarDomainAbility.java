@@ -3,7 +3,7 @@ package io.github.dddplus.runtime.registry.mock.ability;
 import io.github.dddplus.annotation.DomainAbility;
 import io.github.dddplus.runtime.Reducer;
 import io.github.dddplus.runtime.registry.mock.ext.IFooExt;
-import io.github.dddplus.runtime.registry.mock.extension.BarExt;
+import io.github.dddplus.runtime.registry.mock.extension.B2CExt;
 import io.github.dddplus.runtime.registry.mock.model.FooModel;
 import lombok.extern.slf4j.Slf4j;
 import io.github.dddplus.runtime.BaseDomainAbility;
@@ -36,7 +36,7 @@ public class BarDomainAbility extends BaseDomainAbility<FooModel, IFooExt> {
         Integer result = getExtension(model, Reducer.all(new Predicate<Integer>() {
             @Override
             public boolean test(Integer v) {
-                return v != null && v.equals(BarExt.RESULT);
+                return v != null && v.equals(B2CExt.RESULT);
             }
         })).execute(model);
 

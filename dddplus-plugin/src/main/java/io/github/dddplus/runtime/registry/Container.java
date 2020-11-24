@@ -34,7 +34,7 @@ import java.util.*;
  *             N                    | loadClass
  *                        +---------------------+
  *                        |                     |
- *                  (Partner | Pattern)      Extension
+ *                  [Partner | Pattern]      Extension
  * </pre>
  */
 @Slf4j

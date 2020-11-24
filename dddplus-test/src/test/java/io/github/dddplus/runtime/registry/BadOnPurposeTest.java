@@ -35,6 +35,7 @@ public class BadOnPurposeTest {
         InternalIndexer.partnerDefMap.clear();
         InternalIndexer.patternDefMap.clear();
         InternalIndexer.specificationDefs.clear();
+        InternalIndexer.policyDefMap.clear();
     }
 
     @Test
@@ -116,6 +117,16 @@ public class BadOnPurposeTest {
             fail();
         } catch (BeanCreationException expected) {
             assertEquals("io.github.badcase.partner.InvalidPartner MUST implements IIdentityResolver", expected.getCause().getMessage());
+        }
+    }
+
+    @Test
+    public void invalidPolicy() {
+        try {
+            applicationContext = new ClassPathXmlApplicationContext("policy-bad.xml");
+            fail();
+        } catch (BeanCreationException expected) {
+            assertEquals("io.github.badcase.policy.InvalidPolicy MUST implements IExtPolicy", expected.getCause().getMessage());
         }
     }
 

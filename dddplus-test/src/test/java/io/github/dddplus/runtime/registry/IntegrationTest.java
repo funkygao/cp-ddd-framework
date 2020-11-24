@@ -8,11 +8,8 @@ import io.github.dddplus.runtime.registry.mock.MockStartupListener;
 import io.github.dddplus.runtime.registry.mock.ability.*;
 import io.github.dddplus.runtime.registry.mock.domain.FooDomain;
 import io.github.dddplus.runtime.registry.mock.exception.FooException;
-import io.github.dddplus.runtime.registry.mock.ext.IFooExt;
-import io.github.dddplus.runtime.registry.mock.ext.IMultiMatchExt;
-import io.github.dddplus.runtime.registry.mock.ext.IPartnerExt;
-import io.github.dddplus.runtime.registry.mock.ext.IPatternOnlyExt;
-import io.github.dddplus.runtime.registry.mock.extension.BarExt;
+import io.github.dddplus.runtime.registry.mock.ext.*;
+import io.github.dddplus.runtime.registry.mock.extension.B2CExt;
 import io.github.dddplus.runtime.registry.mock.model.FooModel;
 import io.github.dddplus.runtime.registry.mock.partner.FooPartner;
 import io.github.dddplus.runtime.registry.mock.pattern.extension.B2BMultiMatchExt;
@@ -119,7 +116,7 @@ public class IntegrationTest {
     public void reducerFirstOf() {
         BarDomainAbility ability = DDD.findAbility(BarDomainAbility.class);
         String result = ability.submit(fooModel);
-        // submit里执行了Reducer.firstOf，对应的扩展点是：BarExt, PartnerExt
+        // submit里执行了Reducer.firstOf，对应的扩展点是：B2CExt, PartnerExt
         // 应该返回 PartnerExt 的结果
         assertEquals("2", result);
     }
@@ -128,7 +125,7 @@ public class IntegrationTest {
     public void reducerAll() {
         BarDomainAbility ability = DDD.findAbility(BarDomainAbility.class);
         String result = ability.submit2(fooModel);
-        assertEquals(String.valueOf(BarExt.RESULT), result);
+        assertEquals(String.valueOf(B2CExt.RESULT), result);
     }
 
     @Test
@@ -199,7 +196,18 @@ public class IntegrationTest {
     public void directGetExtension() {
         // 不通过 BaseDomainAbility，直接获取扩展点实例
         Integer result = DDD.firstExtension(IFooExt.class, fooModel).execute(fooModel);
-        assertEquals(BarExt.RESULT, result.intValue());
+        assertEquals(B2CExt.RESULT, result.intValue());
+    }
+
+    @Test
+    public void testPolicy() throws IOException {
+        fooModel.setFoo(true);
+        DDD.firstExtension(ITrigger.class, fooModel).beforeInsert(fooModel);
+        LogAssert.assertContains("foo trigger");
+
+        fooModel.setFoo(false);
+        DDD.firstExtension(ITrigger.class, fooModel).beforeInsert(fooModel);
+        LogAssert.assertContains("bar trigger");
     }
 
     @Test
@@ -555,7 +563,7 @@ public class IntegrationTest {
             if (IFooExt.class == extension.getExt()) {
                 foundExtN++;
 
-                // B2BPattern, FooPattern, BarPattern
+                // B2BPattern, FooPattern, B2CPattern
                 assertEquals(3, extension.getPatterns().size());
             }
         }

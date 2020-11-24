@@ -7,8 +7,8 @@ package io.github.dddplus.runtime.registry;
 
 import io.github.dddplus.ext.IDomainExtension;
 import io.github.dddplus.model.IDomainModel;
-import lombok.extern.slf4j.Slf4j;
 import io.github.dddplus.runtime.BaseDomainAbility;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;
@@ -36,6 +36,9 @@ public class InternalIndexer {
     // 扩展点 Partner
     static final Map<String, PartnerDef> partnerDefMap = new ConcurrentHashMap<>();
     static PartnerDef partnerDefPrepared = null;
+
+    // 扩展点 Policy
+    static final Map<Class<? extends IDomainExtension>, PolicyDef> policyDefMap = new HashMap<>();
 
     /**
      * 根据业务能力类找到一个业务能力实例, internal usage only.
@@ -84,6 +87,16 @@ public class InternalIndexer {
     @NotNull
     public static List<ExtensionDef> findEffectiveExtensions(@NotNull Class<? extends IDomainExtension> extClazz, @NotNull IDomainModel model, boolean firstStop) {
         List<ExtensionDef> effectiveExtensions = new LinkedList<>();
+
+        // O(1) extension locating by Policy
+        PolicyDef policyDef = policyDefMap.get(extClazz);
+        if (policyDef != null) {
+            // bingo! this extension is located by policy
+            ExtensionDef extensionByPolicy = policyDef.getExtension(model);
+            // extensionByPolicy should never be null TODO
+            effectiveExtensions.add(extensionByPolicy);
+            return effectiveExtensions;
+        }
 
         // Pattern优先：细粒度的扩展点
         // 否则，Pattern下的扩展点可能会被粗粒度的Partner下扩展点给盖住，无法执行
@@ -207,6 +220,15 @@ public class InternalIndexer {
     }
 
     static void index(ExtensionDef extensionDef) {
+        if (policyDefMap.containsKey(extensionDef.getExtClazz())) {
+            // this extension clazz will use policy
+            PolicyDef policyDef = policyDefMap.get(extensionDef.getExtClazz());
+            policyDef.registerExtensionDef(extensionDef);
+
+            log.debug("indexed {} on {}", extensionDef, policyDef);
+            return;
+        }
+
         if (patternDefMap.containsKey(extensionDef.getCode())) {
             // 基于Pattern的扩展点，因为在pattern里找到了对应的code：extension.code = pattern.code
             PatternDef patternDef = patternDefMap.get(extensionDef.getCode());
@@ -256,6 +278,15 @@ public class InternalIndexer {
 
         partnerDefMap.put(partnerDef.getCode(), partnerDef);
         log.debug("indexed {}", partnerDef);
+    }
+
+    static void index(PolicyDef policyDef) {
+        if (policyDefMap.containsKey(policyDef.getExtClazz())) {
+            // 一个扩展点定义只能有一个策略实例
+            throw BootstrapException.ofMessage("1 Policy decides only 1 Extension:", policyDef.policyName(), ", ext:", policyDef.getExtClazz().getCanonicalName());
+        }
+        policyDefMap.put(policyDef.getExtClazz(), policyDef);
+        log.debug("indexed {}", policyDef);
     }
 
     static void postIndexing() {

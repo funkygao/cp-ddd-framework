@@ -34,6 +34,7 @@ public class ErrorOnPurposeTest {
         InternalIndexer.partnerDefMap.clear();
         InternalIndexer.patternDefMap.clear();
         InternalIndexer.specificationDefs.clear();
+        InternalIndexer.policyDefMap.clear();
     }
 
     @Test
@@ -53,6 +54,16 @@ public class ErrorOnPurposeTest {
             fail();
         } catch (BeanCreationException expected) {
             assertEquals("duplicated pattern code: b2b", expected.getCause().getMessage());
+        }
+    }
+
+    @Test
+    public void dupPolicy() {
+        try {
+            applicationContext = new ClassPathXmlApplicationContext("dup-policy.xml");
+            fail();
+        } catch (BeanCreationException expected) {
+            assertEquals("1 Policy decides only 1 Extension:io.github.errcase.policy.DupTriggerPolicy, ext:io.github.dddplus.runtime.registry.mock.ext.ITrigger", expected.getCause().getMessage());
         }
     }
 
