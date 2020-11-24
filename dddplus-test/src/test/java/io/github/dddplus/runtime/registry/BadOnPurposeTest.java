@@ -121,6 +121,16 @@ public class BadOnPurposeTest {
     }
 
     @Test
+    public void invalidPolicy() {
+        try {
+            applicationContext = new ClassPathXmlApplicationContext("policy-bad.xml");
+            fail();
+        } catch (BeanCreationException expected) {
+            assertEquals("io.github.badcase.policy.InvalidPolicy MUST implements IExtPolicy", expected.getCause().getMessage());
+        }
+    }
+
+    @Test
     public void badDomainService() {
         try {
             applicationContext = new ClassPathXmlApplicationContext("service-bad.xml");

@@ -21,7 +21,8 @@ public interface IExtPolicy<Model extends IDomainModel> {
      * 根据领域模型，定位匹配的扩展点.
      *
      * @param model 领域模型
-     * @return 匹配的扩展点编码
+     * @return 匹配的扩展点编码, SHOULD NEVER be null
      */
+    @NotNull
     String extensionCode(@NotNull Model model);
 }
