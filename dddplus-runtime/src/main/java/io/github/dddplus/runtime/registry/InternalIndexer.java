@@ -283,9 +283,8 @@ public class InternalIndexer {
     static void index(PolicyDef policyDef) {
         if (policyDefMap.containsKey(policyDef.getExtClazz())) {
             // 一个扩展点定义只能有一个策略实例
-            throw BootstrapException.ofMessage("1 Policy decides only 1 Extension:", policyDef.policyName());
+            throw BootstrapException.ofMessage("1 Policy decides only 1 Extension:", policyDef.policyName(), ", ext:", policyDef.getExtClazz().getCanonicalName());
         }
-
         policyDefMap.put(policyDef.getExtClazz(), policyDef);
         log.debug("indexed {}", policyDef);
     }

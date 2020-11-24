@@ -57,6 +57,16 @@ public class ErrorOnPurposeTest {
         }
     }
 
+    @Test
+    public void dupPolicy() {
+        try {
+            applicationContext = new ClassPathXmlApplicationContext("dup-policy.xml");
+            fail();
+        } catch (BeanCreationException expected) {
+            assertEquals("1 Policy decides only 1 Extension:io.github.errcase.policy.DupTriggerPolicy, ext:io.github.dddplus.runtime.registry.mock.ext.ITrigger", expected.getCause().getMessage());
+        }
+    }
+
     // Pattern必须实现IIdentityResolver
     @Test
     public void invalidPattern() {
