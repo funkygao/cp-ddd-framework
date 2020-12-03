@@ -97,7 +97,6 @@ Please visit [Quickstart](https://github.com/funkygao/cp-ddd-framework/wiki).
    - 业务能力演化，业务测试，最佳实践，架构持续防腐，重构的导流验证，绞杀者落地方案等
    - 提供 [一套完整的Demo工程](https://github.com/dddplus/dddplus-demo)
    - 演示 [5分钟搭建一个仓储中台WMS](https://github.com/dddplus/dddplus-archetype-demo)，手把手真实场景教学
-   - 提供 [一个低代码平台的后端完整系统](https://github.com/dddplus/easyapp)
 - DDDplus框架，始终保持简单性
 
 ### Modules
@@ -165,7 +164,6 @@ For more, please visit [dddplus-archetype project](https://github.com/dddplus/dd
 
 - [使用DDDplus搭建`订单履约中台`的例子](https://github.com/dddplus/dddplus-demo)
 - [使用DDDplus，5分钟搭建一个仓储中台WMS](https://github.com/dddplus/dddplus-archetype-demo)
-- [使用DDDplus，开发一个low-code SaaS平台](https://github.com/dddplus/easyapp)
 
 ## DDDplus Ecosystem
 
