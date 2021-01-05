@@ -21,7 +21,7 @@ under the License.
     <groupId>io.github.dddplus</groupId>
     <artifactId>dddplus</artifactId>
     <packaging>pom</packaging>
-    <version>1.1.1-SNAPSHOT</version>
+    <version>1.1.2</version>
     <name>DDDplus Framework</name>
     <description>A lightweight flexible development framework for complex business architecture with full ecosystem!</description>
     <url>https://github.com/dddplus/dddplus</url>
@@ -109,7 +109,7 @@ under the License.
         <connection>scm:git:https://github.com/dddplus/dddplus.git</connection>
         <developerConnection>scm:git:git@github.com:dddplus/dddplus.git</developerConnection>
         <url>https://github.com/dddplus/dddplus/</url>
-        <tag>v1.1.0</tag>
+        <tag>v1.1.1</tag>
     </scm>
     <issueManagement>
         <system>github</system>
