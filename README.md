@@ -126,7 +126,7 @@ dddplus
 <dependency>
     <groupId>io.github.dddplus</groupId>
     <artifactId>dddplus-runtime</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
 </dependency>
 ```
 
@@ -135,7 +135,7 @@ dddplus
 ```groovy
 dependencies {
     ...
-    compile 'io.github.dddplus:dddplus-runtime:1.1.1'
+    compile 'io.github.dddplus:dddplus-runtime:1.1.2'
 }
 ```
 
