@@ -13,7 +13,7 @@ import org.junit.Test;
 
 import static com.tngtech.archunit.base.DescribedPredicate.not;
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.belongToAnyOf;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 public class ArchitectureEnforcerTest {
@@ -52,12 +52,13 @@ public class ArchitectureEnforcerTest {
             ArchitectureEnforcer.optionalInterfaceNameStartsWithI().check(classes);
             fail();
         } catch (AssertionError expected) {
-            assertEquals("Architecture Violation [Priority: MEDIUM] - Rule '接口名称必须以I开头' was violated (5 times):\n" +
-                    "simple name of io.github.dddplus.runtime.registry.mock.ability.AbilityTag does not start with 'I' in (AbilityTag.java:0)\n" +
-                    "simple name of io.github.dddplus.runtime.registry.mock.pattern.Patterns does not start with 'I' in (Patterns.java:0)\n" +
-                    "simple name of io.github.dddplus.runtime.registry.mock.step.Steps does not start with 'I' in (Steps.java:0)\n" +
-                    "simple name of io.github.dddplus.runtime.registry.mock.step.Steps$Cancel does not start with 'I' in (Steps.java:0)\n" +
-                    "simple name of io.github.dddplus.runtime.registry.mock.step.Steps$Submit does not start with 'I' in (Steps.java:0)", expected.getMessage());
+            assertTrue(expected.getMessage().contains("Architecture Violation [Priority: MEDIUM] - Rule '接口名称必须以I开头' was violated"));
+            assertTrue(expected.getMessage().contains(" violated (5 times)"));
+            assertTrue(expected.getMessage().contains("simple name of io.github.dddplus.runtime.registry.mock.ability.AbilityTag does not start with 'I'"));
+            assertTrue(expected.getMessage().contains("simple name of io.github.dddplus.runtime.registry.mock.pattern.Patterns does not start with 'I'"));
+            assertTrue(expected.getMessage().contains("simple name of io.github.dddplus.runtime.registry.mock.step.Steps does not start with 'I'"));
+            assertTrue(expected.getMessage().contains("simple name of io.github.dddplus.runtime.registry.mock.step.Steps$Cancel does not start with 'I'"));
+            assertTrue(expected.getMessage().contains("simple name of io.github.dddplus.runtime.registry.mock.step.Steps$Submit does not start with 'I'"));
         }
     }
 
