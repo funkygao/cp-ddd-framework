@@ -126,7 +126,7 @@ dddplus
 <dependency>
     <groupId>io.github.dddplus</groupId>
     <artifactId>dddplus-runtime</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
 </dependency>
 ```
 
@@ -135,7 +135,7 @@ dddplus
 ```groovy
 dependencies {
     ...
-    compile 'io.github.dddplus:dddplus-runtime:1.1.0'
+    compile 'io.github.dddplus:dddplus-runtime:1.1.1'
 }
 ```
 
@@ -153,7 +153,7 @@ mvn install
 mvn archetype:generate                          \
     -DarchetypeGroupId=io.github.dddplus        \
     -DarchetypeArtifactId=dddplus-archetype     \
-    -DarchetypeVersion=1.1.0                    \
+    -DarchetypeVersion=1.1.1                    \
     -DgroupId=com.foo -DartifactId=demo         \
     -Dpackage=com.foo -Dversion=1.0.0-SNAPSHOT  \
     -B
