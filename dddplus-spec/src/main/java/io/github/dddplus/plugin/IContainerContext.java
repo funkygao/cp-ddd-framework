@@ -18,7 +18,7 @@ public interface IContainerContext {
      * @param requiredType type the bean must match; can be an interface or superclass
      * @param <T>
      * @return an instance of the single bean matching the required type
-     * @throws RuntimeException
+     * @throws RuntimeException if the bean could not be obtained
      */
     <T> T getBean(@NotNull Class<T> requiredType) throws RuntimeException;
 
@@ -29,7 +29,7 @@ public interface IContainerContext {
      * @param requiredType type the bean must match; can be an interface or superclass
      * @param <T>
      * @return an instance of the bean
-     * @throws RuntimeException
+     * @throws RuntimeException if the bean could not be obtained
      */
     <T> T getBean(@NotNull String name, @NotNull Class<T> requiredType) throws RuntimeException;
 
