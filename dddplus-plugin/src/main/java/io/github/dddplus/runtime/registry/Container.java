@@ -6,6 +6,7 @@
 package io.github.dddplus.runtime.registry;
 
 import io.github.dddplus.annotation.Partner;
+import io.github.dddplus.plugin.IContainerContext;
 import io.github.dddplus.plugin.IPlugin;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
@@ -87,7 +88,7 @@ public final class Container {
     }
 
     /**
-     * 加载业务前台jar包.
+     * 加载业务前台jar包，支持定制IContainerContext的实现.
      * <p>
      * <p>如果使用本动态加载，就不要maven里静态引入业务前台jar包依赖了.</p>
      *
@@ -95,9 +96,10 @@ public final class Container {
      * @param version   version of the jar
      * @param jarPath   jar path
      * @param useSpring jar包里是否需要Spring机制
+     * @param containerContext container context instance
      * @throws Throwable
      */
-    public synchronized void loadPartnerPlugin(@NotNull String code, @NotNull String version, @NotNull String jarPath, boolean useSpring) throws Throwable {
+    public synchronized void loadPartnerPlugin(@NotNull String code, @NotNull String version, @NotNull String jarPath, boolean useSpring, IContainerContext containerContext) throws Throwable {
         if (!jarPath.endsWith(".jar")) {
             throw new IllegalArgumentException("Invalid jarPath: " + jarPath);
         }
@@ -106,7 +108,7 @@ public final class Container {
         log.warn("Loading partner:{} useSpring:{}", jarPath, useSpring);
         try {
             Plugin plugin = new Plugin(code, version, jdkClassLoader, containerClassLoader, containerApplicationContext);
-            plugin.load(jarPath, useSpring, Partner.class, new ContainerContext(containerApplicationContext));
+            plugin.load(jarPath, useSpring, Partner.class, containerContext);
 
             Plugin pluginToDestroy = (Plugin) activePlugins.get(code);
             if (pluginToDestroy != null) {
@@ -122,6 +124,21 @@ public final class Container {
 
             throw ex;
         }
+    }
+
+        /**
+         * 加载业务前台jar包，使用默认的IContainerContext实现.
+         * <p>
+         * <p>如果使用本动态加载，就不要maven里静态引入业务前台jar包依赖了.</p>
+         *
+         * @param code      {@link IPlugin#getCode()}
+         * @param version   version of the jar
+         * @param jarPath   jar path
+         * @param useSpring jar包里是否需要Spring机制
+         * @throws Throwable
+         */
+    public synchronized void loadPartnerPlugin(@NotNull String code, @NotNull String version, @NotNull String jarPath, boolean useSpring) throws Throwable {
+        loadPartnerPlugin(code, version, jarPath, useSpring, new ContainerContext(containerApplicationContext));
     }
 
     File createLocalFile(@NotNull URL jarUrl) throws IOException {
