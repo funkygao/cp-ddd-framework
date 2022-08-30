@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.RejectedExecutionException;
+import java.util.Comparator;
 
 import static org.junit.Assert.*;
 
@@ -534,6 +535,7 @@ public class IntegrationTest {
         assertTrue(artifacts.getSteps().containsKey(Steps.Submit.Activity));
         List<DomainArtifacts.Step> submitSteps = artifacts.getSteps().get(Steps.Submit.Activity);
         assertEquals(4, submitSteps.size()); // FooStep, BarStep, BazStep, HamStep
+	submitSteps.sort(Comparator.comparing(DomainArtifacts.Step::getCode));
         assertEquals(Steps.Submit.GoodsValidationGroup, submitSteps.get(0).getTags()[0]);
 
         // extensions: IFooExt IMultiMatchExt IReviseStepsExt IDecideStepsExt IPartnerExt IPatternOnlyExt
