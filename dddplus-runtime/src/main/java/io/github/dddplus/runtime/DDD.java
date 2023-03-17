@@ -64,6 +64,7 @@ public final class DDD {
      * <li>没有很强的业务属性：它可能是出于技术考虑而抽象出来的，而不是业务抽象</li>
      * </ul>
      * <p>这些场景下，{@link BaseRouter} 显得有些多此一举，可直接使用 {@link DDD#firstExtension(Class, IDomainModel)}</p>
+     * <p>但此时需要提供实现{@link io.github.dddplus.ext.IExtPolicy}</p>
      *
      * @param extClazz 扩展点类型
      * @param model    领域模型，用于定位扩展点
