@@ -36,7 +36,7 @@ public @interface Pattern {
     /**
      * 业务模式名称.
      */
-    String name();
+    String name() default "";
 
     /**
      * 该业务模式的业务标签.
