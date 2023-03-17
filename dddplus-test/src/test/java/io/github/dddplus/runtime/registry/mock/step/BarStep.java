@@ -2,7 +2,7 @@ package io.github.dddplus.runtime.registry.mock.step;
 
 import io.github.dddplus.annotation.Step;
 import io.github.dddplus.runtime.DDD;
-import io.github.dddplus.runtime.registry.mock.ability.ReviseStepsAbility;
+import io.github.dddplus.runtime.registry.mock.router.ReviseStepsRouter;
 import io.github.dddplus.runtime.registry.mock.exception.FooException;
 import io.github.dddplus.runtime.registry.mock.exception.FooReviseStepsException;
 import io.github.dddplus.runtime.registry.mock.interceptor.DomainProfiler;
@@ -38,7 +38,7 @@ public class BarStep extends SubmitStep {
             throw new FooReviseStepsException().withSubsequentSteps(revisedSteps);
         }
 
-        List<String> revisedSteps = DDD.findAbility(ReviseStepsAbility.class).revisedSteps(model);
+        List<String> revisedSteps = DDD.findRouter(ReviseStepsRouter.class).revisedSteps(model);
         if (revisedSteps != null && !revisedSteps.isEmpty()) {
             log.info("重新编排步骤，增加步骤：{}", revisedSteps);
 

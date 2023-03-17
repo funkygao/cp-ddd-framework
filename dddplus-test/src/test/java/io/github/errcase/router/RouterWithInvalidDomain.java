@@ -1,18 +1,18 @@
-package io.github.errcase.ability;
+package io.github.errcase.router;
 
-import lombok.extern.slf4j.Slf4j;
-import io.github.dddplus.annotation.DomainAbility;
-import io.github.dddplus.runtime.BaseDomainAbility;
+import io.github.dddplus.annotation.Router;
+import io.github.dddplus.runtime.BaseRouter;
 import io.github.dddplus.runtime.Reducer;
 import io.github.dddplus.runtime.registry.mock.ext.IFooExt;
 import io.github.dddplus.runtime.registry.mock.model.FooModel;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.validation.constraints.NotNull;
 import java.util.function.Predicate;
 
-@DomainAbility(domain = "non-exist")
+@Router(domain = "non-exist")
 @Slf4j
-public class DomainAbilityWithInvalidDomain extends BaseDomainAbility<FooModel, IFooExt> {
+public class RouterWithInvalidDomain extends BaseRouter<FooModel, IFooExt> {
 
     public String submit(FooModel model) {
         Predicate<Integer> predicate = new Predicate<Integer>() {

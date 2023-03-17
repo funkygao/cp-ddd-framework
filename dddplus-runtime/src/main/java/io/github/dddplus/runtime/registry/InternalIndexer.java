@@ -7,7 +7,7 @@ package io.github.dddplus.runtime.registry;
 
 import io.github.dddplus.ext.IDomainExtension;
 import io.github.dddplus.model.IDomainModel;
-import io.github.dddplus.runtime.BaseDomainAbility;
+import io.github.dddplus.runtime.BaseRouter;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.validation.constraints.NotNull;
@@ -26,7 +26,7 @@ public class InternalIndexer {
 
     static final List<SpecificationDef> specificationDefs = new ArrayList<>();
     static final Map<String, DomainDef> domainDefMap = new HashMap<>(); // {code, def}
-    static final Map<Class<? extends BaseDomainAbility>, DomainAbilityDef> domainAbilityDefMap = new HashMap<>();
+    static final Map<Class<? extends BaseRouter>, RouterDef> routerDefMap = new HashMap<>();
     static final Map<String, Map<String, StepDef>> domainStepDefMap = new HashMap<>(); // {activityCode, {stepCode, def}}
 
     // 扩展点 Pattern
@@ -47,33 +47,37 @@ public class InternalIndexer {
      * @param <T>
      * @return 业务能力实例, null if not found
      */
-    public static <T extends BaseDomainAbility> T findDomainAbility(@NotNull Class<? extends T> clazz) {
-        DomainAbilityDef domainAbilityDef = domainAbilityDefMap.get(clazz);
-        if (domainAbilityDef == null) {
-            // 研发忘记使用注解DomainAbility了，线上bug
-            // 但如果没有关闭架构守护神ArchitectureEnforcer，则不可能出现该bug
-            log.error("{} forgot to apply @DomainAbility, ArchitectureEnforcer turned off? indexed:{}", clazz.getCanonicalName(), domainAbilityDefMap.keySet());
+    public static <T extends BaseRouter> T findRouter(@NotNull Class<? extends T> clazz) {
+        RouterDef routerDef = routerDefMap.get(clazz);
+        if (routerDef == null) {
+            /**
+             * 研发忘记使用注解{@link io.github.dddplus.annotation.Router}了，线上bug
+             * 但如果没有关闭架构守护神ArchitectureEnforcer，则不可能出现该bug
+             */
+            log.error("{} forgot to apply @Router, ArchitectureEnforcer turned off? indexed:{}", clazz.getCanonicalName(), routerDefMap.keySet());
             return null;
         }
 
-        return (T) domainAbilityDef.getDomainAbilityBean();
+        return (T) routerDef.getBaseRouterBean();
     }
 
     /**
-     * 给定一个领域能力，找到它定义的扩展点接口, internal usage only.
+     * 给定一个扩展点路由器，找到它定义的扩展点接口, internal usage only.
      *
      * @param clazz
      */
-    public static Class<? extends IDomainExtension> getDomainAbilityExtDeclaration(@NotNull Class<? extends BaseDomainAbility> clazz) {
-        DomainAbilityDef domainAbilityDef = domainAbilityDefMap.get(clazz);
-        if (domainAbilityDef == null) {
-            // 研发忘记使用注解DomainAbility了，线上bug
-            // 但如果没有关闭架构守护神ArchitectureEnforcer，则不可能出现该bug
-            log.error("{} not apply @DomainAbility, ArchitectureEnforcer turned off?", clazz.getCanonicalName());
+    public static Class<? extends IDomainExtension> getBaseRouterExtDeclaration(@NotNull Class<? extends BaseRouter> clazz) {
+        RouterDef routerDef = routerDefMap.get(clazz);
+        if (routerDef == null) {
+            /**
+             * 研发忘记使用注解{@link io.github.dddplus.annotation.Router}了，线上bug
+             * 但如果没有关闭架构守护神ArchitectureEnforcer，则不可能出现该bug
+             */
+            log.error("{} not apply @Router, ArchitectureEnforcer turned off?", clazz.getCanonicalName());
             return null;
         }
 
-        return domainAbilityDef.getExtClazz();
+        return routerDef.getExtClazz();
     }
 
     /**
@@ -203,17 +207,13 @@ public class InternalIndexer {
         log.debug("indexed {}", specificationDef);
     }
 
-    static void index(DomainAbilityDef domainAbilityDef) {
-        if (!domainDefMap.containsKey(domainAbilityDef.getDomain())) {
-            throw BootstrapException.ofMessage("DomainAbility domain not found: ", domainAbilityDef.getDomain());
+    static void index(RouterDef routerDef) {
+        if (routerDefMap.containsKey(routerDef.getBaseRouterClazz())) {
+            throw BootstrapException.ofMessage("duplicated router: ", routerDef.getBaseRouterBean().toString());
         }
 
-        if (domainAbilityDefMap.containsKey(domainAbilityDef.getDomainAbilityClass())) {
-            throw BootstrapException.ofMessage("duplicated domain ability: ", domainAbilityDef.getDomainAbilityBean().toString());
-        }
-
-        domainAbilityDefMap.put(domainAbilityDef.getDomainAbilityClass(), domainAbilityDef);
-        log.debug("indexed {}", domainAbilityDef);
+        routerDefMap.put(routerDef.getBaseRouterClazz(), routerDef);
+        log.debug("indexed {}", routerDef);
     }
 
     static void index(DomainServiceDef domainServiceDef) {

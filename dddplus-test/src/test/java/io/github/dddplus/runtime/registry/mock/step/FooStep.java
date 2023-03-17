@@ -2,7 +2,7 @@ package io.github.dddplus.runtime.registry.mock.step;
 
 import io.github.dddplus.annotation.Step;
 import io.github.dddplus.runtime.DDD;
-import io.github.dddplus.runtime.registry.mock.ability.SleepAbility;
+import io.github.dddplus.runtime.registry.mock.router.SleepRouter;
 import io.github.dddplus.runtime.registry.mock.exception.FooException;
 import io.github.dddplus.runtime.registry.mock.interceptor.DomainProfiler;
 import io.github.dddplus.runtime.registry.mock.model.FooModel;
@@ -20,7 +20,7 @@ public class FooStep extends SubmitStep {
         log.info("submit: {}", model);
 
         if (model.isSleepExtTimeout()) {
-            DDD.findAbility(SleepAbility.class).sleepTooLong(model);
+            DDD.findRouter(SleepRouter.class).sleepTooLong(model);
         }
 
         if (model.isWillSleepLong()) {

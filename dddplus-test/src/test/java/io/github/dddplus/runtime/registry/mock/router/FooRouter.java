@@ -1,15 +1,14 @@
-package io.github.dddplus.runtime.registry.mock.ability;
+package io.github.dddplus.runtime.registry.mock.router;
 
+import io.github.dddplus.annotation.Router;
+import io.github.dddplus.runtime.BaseRouter;
 import io.github.dddplus.runtime.registry.mock.ext.IFooExt;
 import io.github.dddplus.runtime.registry.mock.model.FooModel;
-import io.github.dddplus.annotation.DomainAbility;
-import io.github.dddplus.runtime.BaseDomainAbility;
-import io.github.dddplus.runtime.registry.mock.domain.FooDomain;
 
 import javax.validation.constraints.NotNull;
 
-@DomainAbility(domain = FooDomain.CODE, name = "foo")
-public class FooDomainAbility extends BaseDomainAbility<FooModel, IFooExt> {
+@Router
+public class FooRouter extends BaseRouter<FooModel, IFooExt> {
 
     public String submit(FooModel model) {
         if (model.isWillSleepLong() || model.isWillThrowRuntimeException()) {

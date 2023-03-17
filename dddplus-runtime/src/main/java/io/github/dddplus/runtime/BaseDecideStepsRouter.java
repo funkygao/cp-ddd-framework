@@ -17,7 +17,7 @@ import java.util.List;
  *
  * @param <Model> 领域模型
  */
-public abstract class BaseDecideStepsAbility<Model extends IDomainModel> extends BaseDomainAbility<Model, IDecideStepsExt> {
+public abstract class BaseDecideStepsRouter<Model extends IDomainModel> extends BaseRouter<Model, IDecideStepsExt> {
     private static final IDecideStepsExt defaultExt = new EmptyExt();
 
     /**

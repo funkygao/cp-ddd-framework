@@ -13,7 +13,7 @@ import io.github.dddplus.ext.IIdentityResolver;
 import io.github.dddplus.model.IDomainModel;
 import io.github.dddplus.model.IDomainModelCreator;
 import io.github.dddplus.model.IDomainService;
-import io.github.dddplus.runtime.BaseDomainAbility;
+import io.github.dddplus.runtime.BaseRouter;
 import io.github.dddplus.specification.ISpecification;
 import io.github.dddplus.step.IDomainStep;
 import org.slf4j.Logger;
@@ -78,12 +78,12 @@ public class ArchitectureEnforcer {
                 .as("前台垂直业务包不能依赖domain包，必须依赖spec包");
     }
 
-    public static final ArchRule abilityRule() {
+    public static final ArchRule routerRule() {
         return classes()
-                .that().haveNameMatching(".*Ability")
-                .should().beAssignableTo(BaseDomainAbility.class)
-                .andShould().beAnnotatedWith(DomainAbility.class)
-                .as("ability必须继承BaseDomainAbility，并且加@DomainAbility");
+                .that().haveNameMatching(".*Router")
+                .should().beAssignableTo(BaseRouter.class)
+                .andShould().beAnnotatedWith(Router.class)
+                .as("router必须继承BaseRouter，并且加@Router");
     }
 
     public static final ArchRule specificationRule() {
@@ -235,7 +235,7 @@ public class ArchitectureEnforcer {
         requiredRules.add(activityRule());
         requiredRules.add(aclRule());
         requiredRules.add(patternRule());
-        requiredRules.add(abilityRule());
+        requiredRules.add(routerRule());
         requiredRules.add(partnerRule());
         requiredRules.add(domainStepRule());
         requiredRules.add(extensionRule());

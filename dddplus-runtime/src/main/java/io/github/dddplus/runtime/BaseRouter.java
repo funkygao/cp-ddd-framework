@@ -13,14 +13,14 @@ import io.github.dddplus.runtime.registry.InternalIndexer;
 import javax.validation.constraints.NotNull;
 
 /**
- * 基础领域能力，是一种业务多态能力：业务扩展能力.
+ * 扩展点路由器的基础抽象类.
  * <p>
- * <p>{@code BaseDomainAbility}是最小粒度的{@link IDomainService}，只负责一个扩展点的编排</p>
+ * <p>{@code BaseRouter}是最小粒度的{@link IDomainService}，只负责一个扩展点的编排</p>
  *
  * @param <Model> 领域模型
- * @param <Ext>   领域能力扩展点
+ * @param <Ext>   扩展点
  */
-public abstract class BaseDomainAbility<Model extends IDomainModel, Ext extends IDomainExtension> implements IDomainService {
+public abstract class BaseRouter<Model extends IDomainModel, Ext extends IDomainExtension> implements IDomainService {
     
     /**
      * 定位指定的扩展点实例.
@@ -33,7 +33,7 @@ public abstract class BaseDomainAbility<Model extends IDomainModel, Ext extends 
      * @return null if not found
      */
     protected <R> Ext getExtension(@NotNull Model model, IReducer<R> reducer) {
-        Class<? extends IDomainExtension> extClazz = InternalIndexer.getDomainAbilityExtDeclaration(this.getClass());
+        Class<? extends IDomainExtension> extClazz = InternalIndexer.getBaseRouterExtDeclaration(this.getClass());
         return findExtension((Class<Ext>) extClazz, model, reducer, defaultExtension(model), 0);
     }
 
@@ -61,7 +61,7 @@ public abstract class BaseDomainAbility<Model extends IDomainModel, Ext extends 
      * @return null if not found
      */
     protected Ext firstExtension(@NotNull Model model, int timeoutInMs) {
-        Class<? extends IDomainExtension> extClazz = InternalIndexer.getDomainAbilityExtDeclaration(this.getClass());
+        Class<? extends IDomainExtension> extClazz = InternalIndexer.getBaseRouterExtDeclaration(this.getClass());
         return findExtension((Class<Ext>) extClazz, model, null, defaultExtension(model), timeoutInMs);
     }
 

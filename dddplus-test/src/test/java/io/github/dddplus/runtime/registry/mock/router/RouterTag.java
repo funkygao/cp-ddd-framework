@@ -1,6 +1,6 @@
-package io.github.dddplus.runtime.registry.mock.ability;
+package io.github.dddplus.runtime.registry.mock.router;
 
-public interface AbilityTag {
+public interface RouterTag {
 
     String decideSteps = "步骤编排";
     String reviseSteps = "修订步骤";

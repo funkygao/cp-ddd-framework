@@ -1,20 +1,20 @@
-package io.github.dddplus.runtime.registry.mock.ability;
+package io.github.dddplus.runtime.registry.mock.router;
 
-import io.github.dddplus.annotation.DomainAbility;
+import io.github.dddplus.annotation.Router;
+import io.github.dddplus.runtime.BaseRouter;
 import io.github.dddplus.runtime.Reducer;
+import io.github.dddplus.runtime.registry.mock.domain.FooDomain;
 import io.github.dddplus.runtime.registry.mock.ext.IFooExt;
 import io.github.dddplus.runtime.registry.mock.extension.B2CExt;
 import io.github.dddplus.runtime.registry.mock.model.FooModel;
 import lombok.extern.slf4j.Slf4j;
-import io.github.dddplus.runtime.BaseDomainAbility;
-import io.github.dddplus.runtime.registry.mock.domain.FooDomain;
 
 import javax.validation.constraints.NotNull;
 import java.util.function.Predicate;
 
-@DomainAbility(domain = FooDomain.CODE)
+@Router(domain = FooDomain.CODE)
 @Slf4j
-public class BarDomainAbility extends BaseDomainAbility<FooModel, IFooExt> {
+public class BarRouter extends BaseRouter<FooModel, IFooExt> {
 
     public String submit(FooModel model) {
         Predicate<Integer> predicate = new Predicate<Integer>() {

@@ -31,7 +31,7 @@ public class BadOnPurposeTest {
         RegistryFactory.validRegistryEntries.clear();
         InternalIndexer.domainDefMap.clear();
         InternalIndexer.domainStepDefMap.clear();
-        InternalIndexer.domainAbilityDefMap.clear();
+        InternalIndexer.routerDefMap.clear();
         InternalIndexer.partnerDefMap.clear();
         InternalIndexer.patternDefMap.clear();
         InternalIndexer.specificationDefs.clear();
@@ -141,18 +141,18 @@ public class BadOnPurposeTest {
     }
 
     @Test
-    public void badDomainAbility() {
+    public void badRouter() {
         try {
             applicationContext = new ClassPathXmlApplicationContext("ability-bad.xml");
             fail();
         } catch (BeanCreationException expected) {
-            assertEquals("io.github.badcase.ability.bad1.BadAbility MUST extend BaseDomainAbility", expected.getCause().getMessage());
+            assertEquals("io.github.badcase.router.bad1.BadRouter MUST extend BaseRouter", expected.getCause().getMessage());
         }
     }
 
     @Test
-    public void badDomainAbility2() {
-        // StillLegalGenericAbility 虽然没有指明泛型的类型，它也是合法的
+    public void badRouter2() {
+        // StillLegalGenericRouter 虽然没有指明泛型的类型，它也是合法的
         applicationContext = new ClassPathXmlApplicationContext("ability-bad2.xml");
     }
 }

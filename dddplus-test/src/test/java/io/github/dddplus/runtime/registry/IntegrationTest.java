@@ -5,7 +5,7 @@ import io.github.dddplus.runtime.DDD;
 import io.github.dddplus.runtime.ExtTimeoutException;
 import io.github.dddplus.runtime.StepsExecTemplate;
 import io.github.dddplus.runtime.registry.mock.MockStartupListener;
-import io.github.dddplus.runtime.registry.mock.ability.*;
+import io.github.dddplus.runtime.registry.mock.router.*;
 import io.github.dddplus.runtime.registry.mock.domain.FooDomain;
 import io.github.dddplus.runtime.registry.mock.exception.FooException;
 import io.github.dddplus.runtime.registry.mock.ext.*;
@@ -79,43 +79,43 @@ public class IntegrationTest {
     }
 
     @Test
-    public void findDomainAbility() {
-        FooDomainAbility fooDomainAbility = InternalIndexer.findDomainAbility(FooDomainAbility.class);
-        assertNotNull(fooDomainAbility);
+    public void findRouter() {
+        FooRouter fooRouter = InternalIndexer.findRouter(FooRouter.class);
+        assertNotNull(fooRouter);
 
-        DomainAbilityDef domainAbilityDef = new DomainAbilityDef();
+        RouterDef routerDef = new RouterDef();
         try {
-            domainAbilityDef.registerBean(fooDomainAbility);
+            routerDef.registerBean(fooRouter);
             fail();
         } catch (BootstrapException expected) {
-            assertTrue(expected.getMessage().startsWith("duplicated domain ability:"));
+            assertTrue(expected.getMessage().startsWith("duplicated router:"));
         }
 
-        // 它没有加DomainAbility注解，是无法找到的
-        IllegalDomainAbility illegalDomainAbility = InternalIndexer.findDomainAbility(IllegalDomainAbility.class);
-        assertNull(illegalDomainAbility);
+        // 它没有加Router注解，是无法找到的
+        IllegalRouter illegalRouter = InternalIndexer.findRouter(IllegalRouter.class);
+        assertNull(illegalRouter);
 
-        assertNotNull(DDD.findAbility(PartnerAbility.class));
+        assertNotNull(DDD.findRouter(PartnerRouter.class));
     }
 
     @Test
     public void noImplementationExt() {
-        NotImplementedAbility ability = DDD.findAbility(NotImplementedAbility.class);
-        assertNotNull(ability);
-        ability.ping(fooModel);
+        NotImplementedRouter router = DDD.findRouter(NotImplementedRouter.class);
+        assertNotNull(router);
+        router.ping(fooModel);
     }
 
     @Test
     public void noImplementationExtAndNoDefaultExt() {
-        NotImplementedAbility1 ability = DDD.findAbility(NotImplementedAbility1.class);
-        assertNotNull(ability);
-        ability.ping(fooModel);
+        NotImplementedRouter1 router = DDD.findRouter(NotImplementedRouter1.class);
+        assertNotNull(router);
+        router.ping(fooModel);
     }
 
     @Test
     public void reducerFirstOf() {
-        BarDomainAbility ability = DDD.findAbility(BarDomainAbility.class);
-        String result = ability.submit(fooModel);
+        BarRouter router = DDD.findRouter(BarRouter.class);
+        String result = router.submit(fooModel);
         // submit里执行了Reducer.firstOf，对应的扩展点是：B2CExt, PartnerExt
         // 应该返回 PartnerExt 的结果
         assertEquals("2", result);
@@ -123,8 +123,8 @@ public class IntegrationTest {
 
     @Test
     public void reducerAll() {
-        BarDomainAbility ability = DDD.findAbility(BarDomainAbility.class);
-        String result = ability.submit2(fooModel);
+        BarRouter router = DDD.findRouter(BarRouter.class);
+        String result = router.submit2(fooModel);
         assertEquals(String.valueOf(B2CExt.RESULT), result);
     }
 
@@ -183,10 +183,10 @@ public class IntegrationTest {
     }
 
     @Test
-    public void abilityThrowsException() {
+    public void routerThrowsException() {
         try {
-            BarDomainAbility ability = DDD.findAbility(BarDomainAbility.class);
-            ability.throwsEx(fooModel);
+            BarRouter router = DDD.findRouter(BarRouter.class);
+            router.throwsEx(fooModel);
         } catch (RuntimeException expected) {
 
         }
@@ -194,7 +194,7 @@ public class IntegrationTest {
 
     @Test
     public void directGetExtension() {
-        // 不通过 BaseDomainAbility，直接获取扩展点实例
+        // 不通过 BaseRouter，直接获取扩展点实例
         Integer result = DDD.firstExtension(IFooExt.class, fooModel).execute(fooModel);
         assertEquals(B2CExt.RESULT, result.intValue());
     }
@@ -221,7 +221,7 @@ public class IntegrationTest {
 
     @Test
     public void integrationTest() {
-        // domain service -> domain ability -> extension
+        // domain service -> domain router -> extension
         // PartnerExt
         fooDomainService.submitOrder(fooModel);
     }
@@ -341,7 +341,7 @@ public class IntegrationTest {
 
     @Test
     public void defaultExtensionComponent() {
-        assertEquals(198, DDD.findAbility(BazAbility.class).guess(fooModel).intValue());
+        assertEquals(198, DDD.findRouter(BazRouter.class).guess(fooModel).intValue());
     }
 
     @Test
@@ -357,12 +357,12 @@ public class IntegrationTest {
     @Test
     public void decideSteps() {
         // fooModel不是B2B模式，匹配不了B2BDecideStepsExt
-        assertNotNull(DDD.findAbility(DecideStepsAbility.class).decideSteps(fooModel, Steps.Submit.Activity));
-        assertEquals(0, DDD.findAbility(DecideStepsAbility.class).decideSteps(fooModel, Steps.Submit.Activity).size());
+        assertNotNull(DDD.findRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity));
+        assertEquals(0, DDD.findRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity).size());
 
         fooModel.setB2c(false);
         // B2BDecideStepsExt
-        List<String> b2bSubmitSteps = DDD.findAbility(DecideStepsAbility.class).decideSteps(fooModel, Steps.Submit.Activity);
+        List<String> b2bSubmitSteps = DDD.findRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity);
         assertEquals(3, b2bSubmitSteps.size());
     }
 
@@ -371,7 +371,7 @@ public class IntegrationTest {
         fooModel.setB2c(false);
         fooModel.setRedecide(true);
         fooModel.setStepsRevised(false);
-        List<String> steps = DDD.findAbility(DecideStepsAbility.class).decideSteps(fooModel, Steps.Submit.Activity);
+        List<String> steps = DDD.findRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity);
         // B2BDecideStepsExt: FooStep -> BarStep(if redecide then add Baz & Ham) -> BazStep -> HamStep
         submitStepsExec.execute(Steps.Submit.Activity, steps, fooModel);
         assertTrue(fooModel.isStepsRevised());
@@ -393,7 +393,7 @@ public class IntegrationTest {
         fooModel.setRedecide(false);
         fooModel.setStepsRevised(false);
         fooModel.setSleepExtTimeout(true);
-        List<String> steps = DDD.findAbility(DecideStepsAbility.class).decideSteps(fooModel, Steps.Submit.Activity);
+        List<String> steps = DDD.findRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity);
         // BazStep FooStep
         // FooStep调用一个扩展点超时，会抛出 ExtTimeoutException，不确定状态：抛出到外面，框架层不做回滚
         try {
@@ -409,7 +409,7 @@ public class IntegrationTest {
         fooModel.setB2c(false);
         fooModel.setRedecide(true);
         fooModel.setStepsRevised(false);
-        List<String> steps = DDD.findAbility(DecideStepsAbility.class).decideSteps(fooModel, Steps.Submit.Activity);
+        List<String> steps = DDD.findRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity);
         // B2BDecideStepsExt: FooStep -> BarStep(if redecide then add Baz & Ham) -> BazStep -> HamStep
         Set<String> asyncSteps = new HashSet<>();
         submitStepsExec.execute(Steps.Submit.Activity, steps, fooModel, null, asyncSteps);
@@ -428,7 +428,7 @@ public class IntegrationTest {
         fooModel.setWillSleepLong(true);
         fooModel.setRedecide(false);
         fooModel.setStepsRevised(false);
-        List<String> steps = DDD.findAbility(DecideStepsAbility.class).decideSteps(fooModel, Steps.Submit.Activity);
+        List<String> steps = DDD.findRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity);
         // B2BDecideStepsExt: FooStep -> BarStep(if redecide then add Baz & Ham) -> BazStep -> HamStep
         Set<String> asyncSteps = new HashSet<>();
         asyncSteps.add(Steps.Submit.FooStep);
@@ -447,7 +447,7 @@ public class IntegrationTest {
         fooModel.setWillSleepLong(true);
         fooModel.setRedecide(false);
         fooModel.setStepsRevised(false);
-        List<String> steps = DDD.findAbility(DecideStepsAbility.class).decideSteps(fooModel, Steps.Submit.Activity);
+        List<String> steps = DDD.findRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity);
         log.info("steps:{}", steps); // Baz, Foo, Bar
         Set<String> asyncSteps = new HashSet<>();
         asyncSteps.add(Steps.Submit.FooStep);
@@ -463,7 +463,7 @@ public class IntegrationTest {
         fooModel.setRedecide(false);
         fooModel.setStepsRevised(false);
         fooModel.setLetFooThrowException(true);
-        List<String> steps = DDD.findAbility(DecideStepsAbility.class).decideSteps(fooModel, Steps.Submit.Activity);
+        List<String> steps = DDD.findRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity);
         log.info("steps:{}", steps); // Baz, Foo, Bar
         Set<String> asyncSteps = new HashSet<>();
         asyncSteps.add(Steps.Submit.FooStep);
@@ -478,7 +478,7 @@ public class IntegrationTest {
         fooModel.setB2c(false);
         fooModel.setRedecideDeadLoop(true); // dead loop on purpose
         fooModel.setStepsRevised(false);
-        List<String> steps = DDD.findAbility(DecideStepsAbility.class).decideSteps(fooModel, Steps.Submit.Activity);
+        List<String> steps = DDD.findRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity);
         // B2BDecideStepsExt: FooStep -> BarStep(if redecideDeadLoop then add BarStep)
         try {
             submitStepsExec.execute(Steps.Submit.Activity, steps, fooModel);
@@ -492,7 +492,7 @@ public class IntegrationTest {
     public void stepsExecTemplateWithRollback() throws IOException {
         fooModel.setB2c(false);
         fooModel.setWillRollback(true);
-        List<String> steps = DDD.findAbility(DecideStepsAbility.class).decideSteps(fooModel, Steps.Submit.Activity);
+        List<String> steps = DDD.findRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity);
         log.info("steps: {}", steps); // Baz, Foo, Bar
         try {
             submitStepsExec.execute(Steps.Submit.Activity, steps, fooModel);
@@ -510,7 +510,7 @@ public class IntegrationTest {
     public void stepsExecTemplateWithInvalidRollback() {
         fooModel.setB2c(false);
         fooModel.setWillRollbackInvalid(true);
-        List<String> steps = DDD.findAbility(DecideStepsAbility.class).decideSteps(fooModel, Steps.Submit.Activity);
+        List<String> steps = DDD.findRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity);
         log.info("steps: {}", steps);
         try {
             submitStepsExec.execute(Steps.Submit.Activity, steps, fooModel);

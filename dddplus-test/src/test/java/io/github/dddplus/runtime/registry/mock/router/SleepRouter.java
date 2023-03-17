@@ -1,9 +1,8 @@
-package io.github.dddplus.runtime.registry.mock.ability;
+package io.github.dddplus.runtime.registry.mock.router;
 
-import io.github.dddplus.annotation.DomainAbility;
-import io.github.dddplus.runtime.BaseDomainAbility;
+import io.github.dddplus.annotation.Router;
+import io.github.dddplus.runtime.BaseRouter;
 import io.github.dddplus.runtime.registry.mock.domain.FooDomain;
-import io.github.dddplus.runtime.registry.mock.ext.IFooExt;
 import io.github.dddplus.runtime.registry.mock.ext.ISleepExt;
 import io.github.dddplus.runtime.registry.mock.extension.DefaultSleepExt;
 import io.github.dddplus.runtime.registry.mock.model.FooModel;
@@ -11,8 +10,8 @@ import io.github.dddplus.runtime.registry.mock.model.FooModel;
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
 
-@DomainAbility(domain = FooDomain.CODE, name = "sleep")
-public class SleepAbility extends BaseDomainAbility<FooModel, ISleepExt> {
+@Router(domain = FooDomain.CODE, name = "sleep")
+public class SleepRouter extends BaseRouter<FooModel, ISleepExt> {
     
     @Resource
     private DefaultSleepExt defaultSleepExt;

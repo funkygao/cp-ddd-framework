@@ -1,7 +1,7 @@
 package io.github.dddplus.runtime.registry;
 
 import io.github.dddplus.plugin.IContainerContext;
-import io.github.dddplus.runtime.registry.mock.ability.BarDomainAbility;
+import io.github.dddplus.runtime.registry.mock.router.BarRouter;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -26,10 +26,10 @@ public class ContainerContextTest {
     @Test
     public void getBeanOk() {
         IContainerContext containerContext = new ContainerContext(ctx);
-        BarDomainAbility barDomainAbility = containerContext.getBean(BarDomainAbility.class);
-        assertNotNull(barDomainAbility);
-        barDomainAbility = containerContext.getBean("barDomainAbility", BarDomainAbility.class);
-        assertNotNull(barDomainAbility);
+        BarRouter barRouter = containerContext.getBean(BarRouter.class);
+        assertNotNull(barRouter);
+        barRouter = containerContext.getBean("barRouter", BarRouter.class);
+        assertNotNull(barRouter);
     }
 
     @Test

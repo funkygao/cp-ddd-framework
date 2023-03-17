@@ -24,15 +24,15 @@ public final class DDD {
     }
 
     /**
-     * 定位一个领域能力点实例.
+     * 定位一个扩展点路由实例.
      *
-     * @param domainAbilityClazz 领域能力类型
-     * @param <T>                领域能力类型
-     * @return null if bug found：研发忘记使用注解DomainAbility了
+     * @param routerClazz 扩展点路由器类型
+     * @param <T>         扩展点路由器类型
+     * @return null if bug found：研发忘记使用注解{@link io.github.dddplus.annotation.Router}了
      */
     @NotNull
-    public static <T extends BaseDomainAbility> T findAbility(@NotNull Class<? extends T> domainAbilityClazz) {
-        return InternalIndexer.findDomainAbility(domainAbilityClazz);
+    public static <T extends BaseRouter> T findRouter(@NotNull Class<? extends T> routerClazz) {
+        return InternalIndexer.findRouter(routerClazz);
     }
 
     /**
@@ -55,15 +55,15 @@ public final class DDD {
     }
 
     /**
-     * 绕过 {@link BaseDomainAbility}，直接获取扩展点实例.
-     *
+     * 绕过 {@link BaseRouter}，直接获取扩展点实例.
+     * <p>
      * <p>有的控制点：</p>
      * <ul>
      * <li>不需要默认的扩展点实现</li>
      * <li>不会有复杂的 {@link IReducer} 逻辑，取到第一个匹配的即可</li>
      * <li>没有很强的业务属性：它可能是出于技术考虑而抽象出来的，而不是业务抽象</li>
      * </ul>
-     * <p>这些场景下，{@link BaseDomainAbility} 显得有些多此一举，可直接使用 {@link DDD#firstExtension(Class, IDomainModel)}</p>
+     * <p>这些场景下，{@link BaseRouter} 显得有些多此一举，可直接使用 {@link DDD#firstExtension(Class, IDomainModel)}</p>
      *
      * @param extClazz 扩展点类型
      * @param model    领域模型，用于定位扩展点
