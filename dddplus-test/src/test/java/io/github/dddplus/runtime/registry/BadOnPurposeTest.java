@@ -1,7 +1,5 @@
 package io.github.dddplus.runtime.registry;
 
-import com.tngtech.archunit.core.importer.ClassFileImporter;
-import io.github.dddplus.ArchitectureEnforcer;
 import io.github.dddplus.testing.AloneRunner;
 import io.github.dddplus.testing.AloneWith;
 import org.junit.After;
@@ -12,7 +10,6 @@ import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 @RunWith(AloneRunner.class)
@@ -34,20 +31,7 @@ public class BadOnPurposeTest {
         InternalIndexer.routerDefMap.clear();
         InternalIndexer.partnerDefMap.clear();
         InternalIndexer.patternDefMap.clear();
-        InternalIndexer.specificationDefs.clear();
         InternalIndexer.policyDefMap.clear();
-    }
-
-    @Test
-    public void specificationNotAnnotated() {
-        try {
-            ArchitectureEnforcer.specificationRule().check(new ClassFileImporter().importPackages("io.github.badcase"));
-            fail();
-        } catch (AssertionError expected) {
-            expected.printStackTrace();
-            assertTrue(expected.getMessage().contains("Rule 'ISpecification rule' was violated"));
-            assertTrue(expected.getMessage().contains("<io.github.badcase.specification.SpecificationWithoutAnnotation> is not annotated with @Specification"));
-        }
     }
 
     @Test
@@ -87,16 +71,6 @@ public class BadOnPurposeTest {
             fail();
         } catch (BeanCreationException expected) {
             assertEquals("io.github.badcase.ext.NotExtButAnnotatedWithExtension MUST implement IDomainExtension", expected.getCause().getMessage());
-        }
-    }
-
-    @Test
-    public void notISpecificationButAnnotatedWithSpecification() {
-        try {
-            applicationContext = new ClassPathXmlApplicationContext("specification-bad.xml");
-            fail();
-        } catch (BeanCreationException expected) {
-            assertEquals("io.github.badcase.specification.InvalidSpecification MUST implement ISpecification", expected.getCause().getMessage());
         }
     }
 

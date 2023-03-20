@@ -21,7 +21,6 @@ public class DomainArtifactsTest {
 
         assertNotNull(instance);
         assertNotNull(instance.getSteps());
-        assertNotNull(instance.getSpecifications());
         assertNotNull(instance.getDomains());
         assertNotNull(instance.getExtensions());
     }

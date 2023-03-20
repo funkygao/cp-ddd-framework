@@ -14,7 +14,6 @@ import io.github.dddplus.model.IDomainModel;
 import io.github.dddplus.model.IDomainModelCreator;
 import io.github.dddplus.model.IDomainService;
 import io.github.dddplus.runtime.BaseRouter;
-import io.github.dddplus.specification.ISpecification;
 import io.github.dddplus.step.IDomainStep;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
@@ -84,13 +83,6 @@ public class ArchitectureEnforcer {
                 .should().beAssignableTo(BaseRouter.class)
                 .andShould().beAnnotatedWith(Router.class)
                 .as("router必须继承BaseRouter，并且加@Router");
-    }
-
-    public static final ArchRule specificationRule() {
-        return classes()
-                .that().implement(ISpecification.class)
-                .should().beAnnotatedWith(Specification.class)
-                .as("ISpecification rule");
     }
 
     public static final ArchRule partnerRule() {
@@ -229,7 +221,6 @@ public class ArchitectureEnforcer {
         requiredRules.add(creatorRule());
         requiredRules.add(partnerDependencyRule());
         requiredRules.add(domainModelRule());
-        requiredRules.add(specificationRule());
         requiredRules.add(serviceRule());
         requiredRules.add(noActivityClassAllowed());
         requiredRules.add(activityRule());
