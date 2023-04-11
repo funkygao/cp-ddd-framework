@@ -6,13 +6,13 @@ import io.github.dddplus.runtime.registry.mock.domain.FooDomain;
 import io.github.dddplus.runtime.registry.mock.ext.ISleepExt;
 import io.github.dddplus.runtime.registry.mock.extension.DefaultSleepExt;
 import io.github.dddplus.runtime.registry.mock.model.FooModel;
+import lombok.NonNull;
 
 import javax.annotation.Resource;
-import javax.validation.constraints.NotNull;
 
 @Router(domain = FooDomain.CODE, name = "sleep")
-public class SleepRouter extends BaseRouter<FooModel, ISleepExt> {
-    
+public class SleepRouter extends BaseRouter<ISleepExt, FooModel> {
+
     @Resource
     private DefaultSleepExt defaultSleepExt;
 
@@ -23,7 +23,7 @@ public class SleepRouter extends BaseRouter<FooModel, ISleepExt> {
 
 
     @Override
-    public ISleepExt defaultExtension(@NotNull FooModel model) {
+    public ISleepExt defaultExtension(@NonNull FooModel model) {
         return defaultSleepExt;
     }
 }

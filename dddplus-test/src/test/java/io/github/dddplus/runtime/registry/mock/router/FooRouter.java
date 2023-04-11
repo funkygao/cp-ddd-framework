@@ -4,11 +4,10 @@ import io.github.dddplus.annotation.Router;
 import io.github.dddplus.runtime.BaseRouter;
 import io.github.dddplus.runtime.registry.mock.ext.IFooExt;
 import io.github.dddplus.runtime.registry.mock.model.FooModel;
-
-import javax.validation.constraints.NotNull;
+import lombok.NonNull;
 
 @Router
-public class FooRouter extends BaseRouter<FooModel, IFooExt> {
+public class FooRouter extends BaseRouter<IFooExt, FooModel> {
 
     public String submit(FooModel model) {
         if (model.isWillSleepLong() || model.isWillThrowRuntimeException()) {
@@ -16,13 +15,13 @@ public class FooRouter extends BaseRouter<FooModel, IFooExt> {
             return "";
         }
 
-        String s1 = "submit received: " + String.valueOf(this.getExtension(model, null).execute(model));
+        String s1 = "submit received: " + String.valueOf(this.forEachExtension(model, null).execute(model));
         return s1 + ", firstExt got: " + String.valueOf(firstExtension(model).execute(model));
     }
 
 
     @Override
-    public IFooExt defaultExtension(@NotNull FooModel model) {
+    public IFooExt defaultExtension(@NonNull FooModel model) {
         return null;
     }
 }

@@ -3,8 +3,7 @@ package io.github.dddplus.runtime.registry.mock.step;
 import io.github.dddplus.runtime.registry.mock.exception.FooException;
 import io.github.dddplus.runtime.registry.mock.model.FooModel;
 import io.github.dddplus.step.IRevokableDomainStep;
-
-import javax.validation.constraints.NotNull;
+import lombok.NonNull;
 
 public abstract class SubmitStep implements IRevokableDomainStep<FooModel, FooException> {
 
@@ -14,6 +13,6 @@ public abstract class SubmitStep implements IRevokableDomainStep<FooModel, FooEx
     }
 
     @Override
-    public void rollback(@NotNull FooModel model, @NotNull FooException cause) {
+    public void rollback(@NonNull FooModel model, @NonNull FooException cause) {
     }
 }

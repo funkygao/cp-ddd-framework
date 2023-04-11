@@ -25,7 +25,7 @@ public class ReducerTest {
 
     @Test
     public void allOf() {
-        IReducer<String> reducer = Reducer.all(new Predicate<String>() {
+        IReducer<String> reducer = IReducer.allOf(new Predicate<String>() {
             @Override
             public boolean test(String s) {
                 return "2".equals(s);
@@ -38,13 +38,13 @@ public class ReducerTest {
 
     @Test
     public void nullPredicate() {
-        IReducer<String> reducer = Reducer.all(null);
+        IReducer<String> reducer = IReducer.allOf(null);
         assertNull(reducer.reduce(fixture));
     }
 
     @Test
     public void nothingMatched() {
-        IReducer<String> reducer = Reducer.all(new Predicate<String>() {
+        IReducer<String> reducer = IReducer.allOf(new Predicate<String>() {
             @Override
             public boolean test(String s) {
                 return "10".equals(s);

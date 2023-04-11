@@ -57,6 +57,7 @@ public class ErrorOnPurposeTest {
         }
     }
 
+    // 一个扩展点对应的IPolicy只能有一个，如果定义多了：DupTriggerPolicy/TriggerPolicy，拒绝启动
     @Test
     public void dupPolicy() {
         try {

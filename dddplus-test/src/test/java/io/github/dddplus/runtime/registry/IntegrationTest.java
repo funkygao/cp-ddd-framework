@@ -4,8 +4,10 @@ import io.github.dddplus.ext.IDecideStepsExt;
 import io.github.dddplus.runtime.DDD;
 import io.github.dddplus.runtime.ExtTimeoutException;
 import io.github.dddplus.runtime.StepsExecTemplate;
+import io.github.dddplus.runtime.policy.ConsumableExtPolicy;
+import io.github.dddplus.runtime.policy.IConsumableExt;
+import io.github.dddplus.runtime.policy.SKU;
 import io.github.dddplus.runtime.registry.mock.MockStartupListener;
-import io.github.dddplus.runtime.registry.mock.router.*;
 import io.github.dddplus.runtime.registry.mock.domain.FooDomain;
 import io.github.dddplus.runtime.registry.mock.exception.FooException;
 import io.github.dddplus.runtime.registry.mock.ext.*;
@@ -13,8 +15,13 @@ import io.github.dddplus.runtime.registry.mock.extension.B2CExt;
 import io.github.dddplus.runtime.registry.mock.model.FooModel;
 import io.github.dddplus.runtime.registry.mock.partner.FooPartner;
 import io.github.dddplus.runtime.registry.mock.pattern.extension.B2BMultiMatchExt;
+import io.github.dddplus.runtime.registry.mock.policy.TriggerPolicy;
+import io.github.dddplus.runtime.registry.mock.router.*;
 import io.github.dddplus.runtime.registry.mock.service.FooDomainService;
-import io.github.dddplus.runtime.registry.mock.step.*;
+import io.github.dddplus.runtime.registry.mock.step.BarStep;
+import io.github.dddplus.runtime.registry.mock.step.EggStep;
+import io.github.dddplus.runtime.registry.mock.step.Steps;
+import io.github.dddplus.runtime.registry.mock.step.SubmitStep;
 import io.github.dddplus.testing.LogAssert;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
@@ -100,7 +107,7 @@ public class IntegrationTest {
 
     @Test
     public void noImplementationExt() {
-        NotImplementedRouter router = DDD.findRouter(NotImplementedRouter.class);
+        NotImplementedRouter router = DDD.useRouter(NotImplementedRouter.class);
         assertNotNull(router);
         router.ping(fooModel);
     }
@@ -187,9 +194,17 @@ public class IntegrationTest {
         try {
             BarRouter router = DDD.findRouter(BarRouter.class);
             router.throwsEx(fooModel);
+            fail();
         } catch (RuntimeException expected) {
-
+            assertEquals(BarRouter.EX, expected.getMessage());
         }
+    }
+
+    @Test
+    public void usePolicy() {
+        DDD.usePolicy(TriggerPolicy.class, fooModel).beforeInsert(fooModel);
+        fooModel.setFoo(1);
+        DDD.usePolicy(TriggerPolicy.class, fooModel).afterInsert(fooModel);
     }
 
     @Test
@@ -208,6 +223,36 @@ public class IntegrationTest {
         fooModel.setFoo(2);
         DDD.firstExtension(ITrigger.class, fooModel).beforeInsert(fooModel);
         LogAssert.assertContains("bar trigger");
+
+        DDD.usePolicy(TriggerPolicy.class, fooModel).afterInsert(fooModel);
+    }
+
+    @Test
+    public void policy_inheritance() {
+        String skuValue = "1";
+        SKU sku = new SKU(skuValue);
+        assertEquals(DDD.usePolicy(ConsumableExtPolicy.class, sku).recommend(skuValue), "CON-10");
+    }
+
+    @Test
+    public void ext_inheritance() {
+        String skuValue = "1";
+        SKU sku = new SKU(skuValue);
+        // 小件
+        assertEquals(DDD.firstExtension(IConsumableExt.class, sku).recommend(skuValue), "CON-10");
+        skuValue = "10";
+        sku = new SKU(skuValue);
+        assertEquals(DDD.firstExtension(IConsumableExt.class, sku).recommend(skuValue), "CON-11");
+
+        // 大件
+        skuValue = "20";
+        sku = new SKU(skuValue);
+        assertEquals("CON-211", DDD.firstExtension(IConsumableExt.class, sku).recommend(skuValue));
+
+        // illegal sku
+        skuValue = "invalid";
+        sku = new SKU(skuValue);
+        assertNull(DDD.firstExtension(IConsumableExt.class, sku).recommend(skuValue));
     }
 
     @Test
@@ -345,7 +390,7 @@ public class IntegrationTest {
     }
 
     @Test
-    public void patterPriority() {
+    public void patternPriority() {
         // IMultiMatchExt在B2BPattern、FooPattern上都有实现，而B2BPattern的priority最小，因此应该返回它的实例
         fooModel.setPartnerCode("foo"); // 匹配 FooPattern
         fooModel.setB2c(false); // 匹配 B2BPattern

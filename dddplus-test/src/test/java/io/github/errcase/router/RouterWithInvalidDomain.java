@@ -2,17 +2,17 @@ package io.github.errcase.router;
 
 import io.github.dddplus.annotation.Router;
 import io.github.dddplus.runtime.BaseRouter;
-import io.github.dddplus.runtime.Reducer;
+import io.github.dddplus.runtime.IReducer;
 import io.github.dddplus.runtime.registry.mock.ext.IFooExt;
 import io.github.dddplus.runtime.registry.mock.model.FooModel;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.validation.constraints.NotNull;
 import java.util.function.Predicate;
 
 @Router(domain = "non-exist")
 @Slf4j
-public class RouterWithInvalidDomain extends BaseRouter<FooModel, IFooExt> {
+public class RouterWithInvalidDomain extends BaseRouter<IFooExt, FooModel> {
 
     public String submit(FooModel model) {
         Predicate<Integer> predicate = new Predicate<Integer>() {
@@ -21,7 +21,7 @@ public class RouterWithInvalidDomain extends BaseRouter<FooModel, IFooExt> {
                 return integer > 1;
             }
         };
-        int result = getExtension(model, Reducer.firstOf(predicate)).execute(model);
+        int result = forEachExtension(model, IReducer.firstOf(predicate)).execute(model);
         return String.valueOf(result);
     }
 
@@ -31,7 +31,7 @@ public class RouterWithInvalidDomain extends BaseRouter<FooModel, IFooExt> {
     }
 
     public String submit2(FooModel model) {
-        Integer result = getExtension(model, Reducer.all(null)).execute(model);
+        Integer result = forEachExtension(model, IReducer.allOf(null)).execute(model);
         if (result == null) {
             return null;
         }
@@ -40,7 +40,7 @@ public class RouterWithInvalidDomain extends BaseRouter<FooModel, IFooExt> {
     }
 
     @Override
-    public IFooExt defaultExtension(@NotNull FooModel model) {
+    public IFooExt defaultExtension(@NonNull FooModel model) {
         return null;
     }
 }

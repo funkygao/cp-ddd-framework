@@ -9,15 +9,15 @@ import io.github.dddplus.annotation.Router;
 import io.github.dddplus.ext.IDomainExtension;
 import io.github.dddplus.runtime.BaseRouter;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ResolvableType;
 
-import javax.validation.constraints.NotNull;
-
 @ToString
 @Slf4j
 class RouterDef implements IRegistryAware {
+    private static final int MAX_INHERITANCE_DEPTH = 5;
 
     @Getter
     private String domain;
@@ -35,7 +35,7 @@ class RouterDef implements IRegistryAware {
     private Class<? extends IDomainExtension> extClazz;
 
     @Override
-    public void registerBean(@NotNull Object bean) {
+    public void registerBean(@NonNull Object bean) {
         Router router = InternalAopUtils.getAnnotation(bean, Router.class);
         this.domain = router.domain();
         this.name = router.name();
@@ -54,7 +54,7 @@ class RouterDef implements IRegistryAware {
 
     private void resolveExtClazz() {
         ResolvableType baseRouterClazz = ResolvableType.forClass(this.baseRouterClazz).getSuperType();
-        for (int i = 0; i < 5; i++) { // 5 inheritance? much enough
+        for (int i = 0; i < MAX_INHERITANCE_DEPTH; i++) {
             for (ResolvableType resolvableType : baseRouterClazz.getGenerics()) {
                 if (IDomainExtension.class.isAssignableFrom(resolvableType.resolve())) {
                     this.extClazz = (Class<? extends IDomainExtension>) resolvableType.resolve();
@@ -67,6 +67,6 @@ class RouterDef implements IRegistryAware {
         }
 
         // should never happen: otherwise java cannot compile
-        throw BootstrapException.ofMessage("Even after 5 tries, still unable to figure out the extension class of BaseRouter:", this.baseRouterClazz.getCanonicalName());
+        throw BootstrapException.ofMessage("Even after many tries, still unable to figure out the extension class of BaseRouter:", this.baseRouterClazz.getCanonicalName());
     }
 }

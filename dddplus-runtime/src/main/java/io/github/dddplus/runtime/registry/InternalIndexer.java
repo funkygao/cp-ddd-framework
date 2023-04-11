@@ -6,11 +6,12 @@
 package io.github.dddplus.runtime.registry;
 
 import io.github.dddplus.ext.IDomainExtension;
-import io.github.dddplus.model.IDomainModel;
+import io.github.dddplus.ext.IPolicy;
+import io.github.dddplus.model.IIdentity;
 import io.github.dddplus.runtime.BaseRouter;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.validation.constraints.NotNull;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -38,15 +39,16 @@ public class InternalIndexer {
 
     // 扩展点 Policy
     static final Map<Class<? extends IDomainExtension>, PolicyDef> policyDefMap = new HashMap<>();
+    static final Map<Class<? extends IPolicy>, PolicyDef> policyClazzMap = new HashMap<>();
 
     /**
-     * 根据业务能力类找到一个业务能力实例, internal usage only.
+     * 根据路由器类型找到一个扩展点路由器实例, internal usage only.
      *
-     * @param clazz 业务能力类
+     * @param clazz 扩展点路由器类型
      * @param <T>
-     * @return 业务能力实例, null if not found
+     * @return 扩展点路由器实例, null if not found
      */
-    public static <T extends BaseRouter> T findRouter(@NotNull Class<? extends T> clazz) {
+    public static <T extends BaseRouter> T findRouter(@NonNull Class<? extends T> clazz) {
         RouterDef routerDef = routerDefMap.get(clazz);
         if (routerDef == null) {
             /**
@@ -61,11 +63,23 @@ public class InternalIndexer {
     }
 
     /**
+     * 根据{@link IPolicy}类型寻找其对应的扩展点{@link IDomainExtension}类型.
+     *
+     * @param policyClazz 策略类型
+     * @param <Ext>       扩展点类型
+     * @return 该策略对应的扩展点
+     */
+    public static <Ext extends IDomainExtension> Class<Ext> extClazzOfPolicy(@NonNull Class<? extends IPolicy<Ext, ? extends IIdentity>> policyClazz) {
+        PolicyDef policyDef = policyClazzMap.get(policyClazz);
+        return (Class<Ext>) policyDef.getExtClazz();
+    }
+
+    /**
      * 给定一个扩展点路由器，找到它定义的扩展点接口, internal usage only.
      *
      * @param clazz
      */
-    public static Class<? extends IDomainExtension> getBaseRouterExtDeclaration(@NotNull Class<? extends BaseRouter> clazz) {
+    public static Class<? extends IDomainExtension> getBaseRouterExtDeclaration(@NonNull Class<? extends BaseRouter> clazz) {
         RouterDef routerDef = routerDefMap.get(clazz);
         if (routerDef == null) {
             /**
@@ -83,21 +97,26 @@ public class InternalIndexer {
      * 获取某一个扩展点的所有实现实例.
      *
      * @param extClazz  extension interface
-     * @param model     domain model
+     * @param identity  业务身份
      * @param firstStop 是否找到一个就返回
      * @return 有效的扩展点列表, empty List if not found
      */
-    @NotNull
-    public static List<ExtensionDef> findEffectiveExtensions(@NotNull Class<? extends IDomainExtension> extClazz, @NotNull IDomainModel model, boolean firstStop) {
+    @NonNull
+    public static List<ExtensionDef> findEffectiveExtensions(@NonNull Class<? extends IDomainExtension> extClazz, @NonNull IIdentity identity, boolean firstStop) {
         List<ExtensionDef> effectiveExtensions = new LinkedList<>();
 
         // O(1) extension locating by Policy
         PolicyDef policyDef = policyDefMap.get(extClazz);
         if (policyDef != null) {
             // bingo! this extension is located by policy
-            ExtensionDef extensionByPolicy = policyDef.getExtension(model);
+            ExtensionDef extensionByPolicy = policyDef.getExtension(identity);
+            if (extensionByPolicy != null) {
+                log.info("{} ident:{} use policy:{}", extClazz.getSimpleName(), identity, extensionByPolicy.getCode());
+            } else {
+                log.info("{} ident:{} use null policy", extClazz.getSimpleName(), identity);
+            }
             if (extensionByPolicy == null) {
-                // found no extension for this model
+                // found no extension for this identity
                 return effectiveExtensions;
             }
 
@@ -116,7 +135,7 @@ public class InternalIndexer {
             log.debug("{} found patterns:{}", extClazz.getCanonicalName(), sortedPatternDefs);
 
             for (PatternDef patternDef : sortedPatternDefs) {
-                if (!patternDef.match(model)) {
+                if (!patternDef.match(identity)) {
                     continue;
                 }
 
@@ -134,7 +153,7 @@ public class InternalIndexer {
 
         // 之后再找Partner
         for (PartnerDef partnerDef : partnerDefMap.values()) {
-            if (!partnerDef.match(model)) {
+            if (!partnerDef.match(identity)) {
                 continue;
             }
 
@@ -155,8 +174,8 @@ public class InternalIndexer {
      * @param stepCodeList 活动步骤的编号{@code code}列表
      * @return 匹配的活动步骤列表, will never be null
      */
-    @NotNull
-    public static List<StepDef> findDomainSteps(@NotNull String activityCode, @NotNull List<String> stepCodeList) {
+    @NonNull
+    public static List<StepDef> findDomainSteps(@NonNull String activityCode, @NonNull List<String> stepCodeList) {
         Map<String, StepDef> childMap = domainStepDefMap.get(activityCode);
         if (childMap == null || childMap.isEmpty()) {
             log.error("found NO activity:{}", activityCode);
@@ -285,6 +304,9 @@ public class InternalIndexer {
         }
         policyDefMap.put(policyDef.getExtClazz(), policyDef);
         log.debug("indexed {}", policyDef);
+
+        policyClazzMap.put(policyDef.getPolicyClazz(), policyDef);
+        log.debug("indexed ext for {}", policyDef.getPolicyBean());
     }
 
     static void postIndexing() {

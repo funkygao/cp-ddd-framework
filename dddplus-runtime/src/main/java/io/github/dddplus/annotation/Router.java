@@ -37,7 +37,7 @@ public @interface Router {
     String domain() default "";
 
     /**
-     * 能力名称.
+     * 名称.
      */
     String name() default "";
 

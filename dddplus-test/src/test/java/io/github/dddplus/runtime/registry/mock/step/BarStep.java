@@ -2,14 +2,14 @@ package io.github.dddplus.runtime.registry.mock.step;
 
 import io.github.dddplus.annotation.Step;
 import io.github.dddplus.runtime.DDD;
-import io.github.dddplus.runtime.registry.mock.router.ReviseStepsRouter;
 import io.github.dddplus.runtime.registry.mock.exception.FooException;
 import io.github.dddplus.runtime.registry.mock.exception.FooReviseStepsException;
 import io.github.dddplus.runtime.registry.mock.interceptor.DomainProfiler;
 import io.github.dddplus.runtime.registry.mock.model.FooModel;
+import io.github.dddplus.runtime.registry.mock.router.ReviseStepsRouter;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +20,7 @@ public class BarStep extends SubmitStep {
 
     @DomainProfiler
     @Override
-    public void execute(@NotNull FooModel model) throws FooException {
+    public void execute(@NonNull FooModel model) throws FooException {
         log.debug("submit: {}", model);
 
         if (model.isWillSleepLong()) {

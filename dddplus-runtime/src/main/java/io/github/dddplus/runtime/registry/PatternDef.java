@@ -5,14 +5,14 @@
  */
 package io.github.dddplus.runtime.registry;
 
-import io.github.dddplus.ext.IDomainExtension;
-import io.github.dddplus.model.IDomainModel;
 import io.github.dddplus.annotation.Pattern;
+import io.github.dddplus.ext.IDomainExtension;
 import io.github.dddplus.ext.IIdentityResolver;
+import io.github.dddplus.model.IIdentity;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.ToString;
 
-import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -34,15 +34,15 @@ class PatternDef implements IRegistryAware, IIdentityResolver {
     private Map<Class<? extends IDomainExtension>, ExtensionDef> extensionDefMap = new HashMap<>();
 
     @Override
-    public void registerBean(@NotNull Object bean) {
+    public void registerBean(@NonNull Object bean) {
         initialize(bean);
 
         InternalIndexer.index(this);
     }
 
     @Override
-    public boolean match(@NotNull IDomainModel model) {
-        return patternBean.match(model);
+    public boolean match(@NonNull IIdentity identity) {
+        return patternBean.match(identity);
     }
 
     private void initialize(Object bean) {

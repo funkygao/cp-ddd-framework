@@ -5,20 +5,20 @@
  */
 package io.github.dddplus.ext;
 
-import io.github.dddplus.model.IDomainModel;
-
-import javax.validation.constraints.NotNull;
+import io.github.dddplus.model.IDomainService;
+import io.github.dddplus.model.IIdentity;
+import lombok.NonNull;
 
 /**
- * 业务身份解析器.
+ * 业务身份解析器(业务特征识别).
  */
-public interface IIdentityResolver<Model extends IDomainModel> extends IPlugable {
+public interface IIdentityResolver<Identity extends IIdentity> extends IPlugable, IDomainService {
 
     /**
-     * 根据领域模型判断是否属于我的业务.
+     * 根据业务身份判断是否属于我的业务.
      *
-     * @param model 领域模型
+     * @param identity 业务身份，业务特征
      * @return true if yes
      */
-    boolean match(@NotNull Model model);
+    boolean match(@NonNull Identity identity);
 }

@@ -2,7 +2,7 @@ package io.github.badcase.router.bad2;
 
 import io.github.dddplus.annotation.Router;
 import io.github.dddplus.ext.IDomainExtension;
-import io.github.dddplus.model.IDomainModel;
+import io.github.dddplus.model.IIdentity;
 import io.github.dddplus.runtime.BaseRouter;
 import io.github.dddplus.runtime.registry.mock.domain.FooDomain;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 public class StillLegalGenericRouter extends BaseRouter {
 
     @Override
-    public IDomainExtension defaultExtension(IDomainModel model) {
+    public IDomainExtension defaultExtension(IIdentity model) {
         return null;
     }
 }

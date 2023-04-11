@@ -25,6 +25,7 @@ import java.util.concurrent.RejectedExecutionException;
  * @param <Model> 领域模型
  */
 @Slf4j
+@Deprecated
 public abstract class StepsExecTemplate<Step extends IDomainStep, Model extends IDomainModel> {
     private static final List<String> emptyRevisedSteps = Collections.emptyList();
     private static final Set<String> emptyAsyncSteps = Collections.emptySet();

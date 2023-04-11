@@ -11,7 +11,6 @@ import io.github.dddplus.annotation.*;
 import io.github.dddplus.ext.IDomainExtension;
 import io.github.dddplus.ext.IIdentityResolver;
 import io.github.dddplus.model.IDomainModel;
-import io.github.dddplus.model.IDomainModelCreator;
 import io.github.dddplus.model.IDomainService;
 import io.github.dddplus.runtime.BaseRouter;
 import io.github.dddplus.step.IDomainStep;
@@ -52,6 +51,7 @@ import static com.tngtech.archunit.library.dependencies.SlicesRuleDefinition.sli
  *       ``
  * </pre>
  */
+@Deprecated
 public class ArchitectureEnforcer {
 
     private ArchitectureEnforcer() {
@@ -150,13 +150,6 @@ public class ArchitectureEnforcer {
                 .as("DomainModel不能直接new");
     }
 
-    public static final ArchRule creatorRule() {
-        return classes()
-                .that().haveNameMatching(".*Creator")
-                .should().implement(IDomainModelCreator.class)
-                .as("Creator rule");
-    }
-
     /**
      * 所有接口名称必须以'I'开头，除了Dao/Manager以及对外的Api.
      */
@@ -218,7 +211,6 @@ public class ArchitectureEnforcer {
         // DDD框架的使用规范
         requiredRules.add(repositoryRule());
 
-        requiredRules.add(creatorRule());
         requiredRules.add(partnerDependencyRule());
         requiredRules.add(domainModelRule());
         requiredRules.add(serviceRule());

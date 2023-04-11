@@ -6,33 +6,34 @@
 package io.github.dddplus.runtime;
 
 import io.github.dddplus.ext.IDecideStepsExt;
-import io.github.dddplus.model.IDomainModel;
+import io.github.dddplus.model.IIdentity;
+import lombok.NonNull;
 
-import javax.validation.constraints.NotNull;
 import java.util.Collections;
 import java.util.List;
 
 /**
- * 基础决策领域步骤的能力.
+ * 基础决策领域步骤的路由器.
  *
- * @param <Model> 领域模型
+ * @param <Identity> 业务身份
  */
-public abstract class BaseDecideStepsRouter<Model extends IDomainModel> extends BaseRouter<Model, IDecideStepsExt> {
+@Deprecated
+public abstract class BaseDecideStepsRouter<Identity extends IIdentity> extends BaseRouter<IDecideStepsExt, Identity> {
     private static final IDecideStepsExt defaultExt = new EmptyExt();
 
     /**
      * 根据领域模型和领域活动码决定需要执行哪些领域步骤.
      *
-     * @param model        领域模型
+     * @param identity     业务身份
      * @param activityCode 领域活动码
      * @return step code list
      */
-    public List<String> decideSteps(@NotNull Model model, String activityCode) {
-        return firstExtension(model).decideSteps(model, activityCode);
+    public List<String> decideSteps(@NonNull Identity identity, String activityCode) {
+        return firstExtension(identity).decideSteps(identity, activityCode);
     }
 
     @Override
-    public IDecideStepsExt defaultExtension(@NotNull Model model) {
+    public IDecideStepsExt defaultExtension(@NonNull Identity identity) {
         return defaultExt;
     }
 
@@ -40,7 +41,7 @@ public abstract class BaseDecideStepsRouter<Model extends IDomainModel> extends 
         private static List<String> emptySteps = Collections.emptyList();
 
         @Override
-        public List<String> decideSteps(@NotNull IDomainModel model, @NotNull String activityCode) {
+        public List<String> decideSteps(@NonNull IIdentity identity, @NonNull String activityCode) {
             return emptySteps;
         }
     }

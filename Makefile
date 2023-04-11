@@ -18,6 +18,14 @@ javadoc:install
 	@mvn javadoc:javadoc -Pinstall
 	@open target/site/apidocs/index.html
 
+ mutation:install
+	@mvn eu.stamp-project:pitmp-maven-plugin:run
+	@open dddplus-test/target/pit-reports/
+
+jdepend:
+	@mvn site
+	@find . -name jdepend-report.html
+
 deploy:
 	@mvn clean deploy verify -Possrh -e
 

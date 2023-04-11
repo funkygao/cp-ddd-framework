@@ -21,6 +21,7 @@ import java.lang.annotation.*;
 @Documented
 @Inherited
 @Component
+@Deprecated
 public @interface Domain {
 
     /**

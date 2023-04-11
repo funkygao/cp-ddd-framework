@@ -1,6 +1,7 @@
 package io.github.dddplus.runtime.registry.mock.extension;
 
 import io.github.dddplus.annotation.Extension;
+import io.github.dddplus.annotation.Governance;
 import io.github.dddplus.runtime.registry.mock.ext.IFooExt;
 import io.github.dddplus.runtime.registry.mock.model.FooModel;
 import io.github.dddplus.runtime.registry.mock.pattern.B2BPattern;
@@ -8,6 +9,7 @@ import io.github.dddplus.runtime.registry.mock.pattern.B2BPattern;
 @Extension(code = B2BPattern.CODE)
 public class B2BExt implements IFooExt {
     @Override
+    @Governance
     public Integer execute(FooModel model) {
         if (model.isWillThrowRuntimeException()) {
             throw new RuntimeException("runtime ex on purpuse");

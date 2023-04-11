@@ -10,6 +10,7 @@ import java.util.List;
 /**
  * 框架提供的默认{@link IReviseStepsException}实现.
  */
+@Deprecated
 public class ReviseStepsException extends RuntimeException implements IReviseStepsException {
 
     private List<String> subsequentSteps;
