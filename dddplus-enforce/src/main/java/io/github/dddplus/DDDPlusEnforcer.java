@@ -5,6 +5,8 @@
  */
 package io.github.dddplus;
 
+import com.tngtech.archunit.base.DescribedPredicate;
+import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.domain.JavaModifier;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
@@ -99,9 +101,23 @@ public class DDDPlusEnforcer {
      * <p>必须实现{@link IIdentityResolver}，类名后缀为"Pattern"</p >
      */
     private static final ArchRule Pattern() {
+        class ResolverPattern extends DescribedPredicate<JavaClass> {
+            ResolverPattern() {
+                super("");
+            }
+
+            @Override
+            public boolean apply(JavaClass javaClass) {
+                Pattern pattern = javaClass.getAnnotationOfType(Pattern.class);
+                // 非resolver类pattern排除在外，利用pattern特有的application service
+                return pattern.resolver();
+            }
+        }
+
         return classes()
                 .that().areAnnotatedWith(Pattern.class)
                 .and().doNotHaveModifier(JavaModifier.ABSTRACT)
+                .and(new ResolverPattern())
                 .should().beAssignableTo(IIdentityResolver.class)
                 .andShould().haveNameMatching(".*Pattern");
     }

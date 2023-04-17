@@ -1,5 +1,6 @@
 package io.github.dddplus;
 
+import io.github.dddplus.runtime.pattern.FooAppService;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -128,6 +129,16 @@ public class DDDPlusEnforcerTest {
         } catch (AssertionError expected) {
             assertTrue(expected.getMessage().contains(" is not assignable to io.github.dddplus.ext.IIdentityResolver"));
         }
+    }
+
+    /**
+     * {@link io.github.dddplus.runtime.pattern.FooAppService} is ok to be pattern.
+     */
+    @Test
+    public void patternNotResolverAllowed() {
+        DDDPlusEnforcer enforcer = new DDDPlusEnforcer();
+        enforcer.scanPackages(FooAppService.class.getPackage().getName());
+        enforcer.enforce();
     }
 
     @Test

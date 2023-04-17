@@ -1,4 +1,4 @@
-package io.github.errcase.invalidpattern;
+package io.github.dddplus.runtime.pattern;
 
 import io.github.dddplus.annotation.Pattern;
 
