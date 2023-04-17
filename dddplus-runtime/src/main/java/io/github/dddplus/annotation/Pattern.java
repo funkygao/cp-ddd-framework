@@ -5,6 +5,7 @@
  */
 package io.github.dddplus.annotation;
 
+import io.github.dddplus.ext.IDomainExtension;
 import io.github.dddplus.runtime.BasePattern;
 import org.springframework.stereotype.Component;
 
@@ -56,4 +57,16 @@ public @interface Pattern {
      * <p>只应用于同一个扩展点在不同{@code Pattern}间的顺序问题，不同的扩展点间优先级不具备可比性</p>
      */
     int priority() default 1024;
+
+    /**
+     * 该{@code Pattern}类是否用于识别业务模式.
+     * <p>
+     * <ul>{@code Pattern}特有的行为，不仅包括{@link IDomainExtension}，还可能有：
+     * <li>Application Service</li>
+     * <li>Domain Service</li>
+     * <li>etc</li>
+     * </ul>
+     * <p>对于这类非业务模式识别情况，需要设置{@link #resolver()}为{@code false}.</p>
+     */
+    boolean resolver() default true;
 }

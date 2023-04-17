@@ -35,9 +35,10 @@ class PatternDef implements IRegistryAware, IIdentityResolver {
 
     @Override
     public void registerBean(@NonNull Object bean) {
-        initialize(bean);
-
-        InternalIndexer.index(this);
+        boolean needIndex = initialize(bean);
+        if (needIndex) {
+            InternalIndexer.index(this);
+        }
     }
 
     @Override
@@ -45,7 +46,8 @@ class PatternDef implements IRegistryAware, IIdentityResolver {
         return patternBean.match(identity);
     }
 
-    private void initialize(Object bean) {
+    private boolean initialize(Object bean) {
+        boolean needIndex = true;
         Pattern pattern = InternalAopUtils.getAnnotation(bean, Pattern.class);
         this.code = pattern.code();
         this.name = pattern.name();
@@ -53,10 +55,16 @@ class PatternDef implements IRegistryAware, IIdentityResolver {
         if (this.priority < 0) {
             throw BootstrapException.ofMessage("Pattern.priority must be zero or positive");
         }
+
+        if (!pattern.resolver()) {
+            return false;
+        }
+
         if (!(bean instanceof IIdentityResolver)) {
             throw BootstrapException.ofMessage(bean.getClass().getCanonicalName(), " MUST implements IIdentityResolver");
         }
         this.patternBean = (IIdentityResolver) bean;
+        return needIndex;
     }
 
     void registerExtensionDef(ExtensionDef extensionDef) {
