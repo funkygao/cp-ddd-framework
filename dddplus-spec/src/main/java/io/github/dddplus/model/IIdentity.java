@@ -9,18 +9,20 @@ import io.github.dddplus.ext.IIdentityResolver;
 
 /**
  * 业务身份.
- * <p>
- * <p>从中可以获取业务特征，以便路由扩展点</p>.
+ *
+ * <p>从中可以获取业务特征，以便路由扩展点.</p>
  *
  * @see io.github.dddplus.ext.IIdentityResolver
  */
 public interface IIdentity {
 
     /**
-     * 是否匹配指定的业务身份.
+     * 本业务身份是否满足指定业务身份解析器里任意一个.
+     *
+     * <p>即，本业务特征是否属于某业务场景.</p>
      *
      * @param resolvers 业务身份解析器
-     * @return
+     * @return true if yes
      */
     default boolean matchAny(IIdentityResolver... resolvers) {
         for (IIdentityResolver resolver : resolvers) {
