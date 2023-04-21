@@ -151,14 +151,14 @@ public class InternalIndexer {
             }
         }
 
-        // 之后再找Partner
+        // 之后再找Partner，也就几个，因此不在意这个遍历的性能损耗
         for (PartnerDef partnerDef : partnerDefMap.values()) {
-            if (!partnerDef.match(identity)) {
-                continue;
-            }
-
             ExtensionDef extensionDef = partnerDef.getExtension(extClazz);
             if (extensionDef != null) {
+                if (!partnerDef.match(identity)) {
+                    continue;
+                }
+
                 effectiveExtensions.add(extensionDef);
                 break; // 垂直业务是互斥的，不可叠加的
             }
