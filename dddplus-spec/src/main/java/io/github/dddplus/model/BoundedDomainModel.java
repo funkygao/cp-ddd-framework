@@ -18,6 +18,7 @@ import io.github.dddplus.ext.IDomainExtension;
  * <li>一次交互可以涉及多角色对象吗？可以，例如下面示例代码里，Buyer把购买到的商品赠送给朋友Contact</li>
  * <li>{@code if xxx order.asXxx() else if yyy order.asYyy()}，这样使用角色对象允许吗？不允许</li>
  * <li>两个角色对象有相同的行为，只是内部实现不同，可以吗？不可以，使用{@link IDomainExtension}解决多态问题。区别不同角色的是Role Method(扮演各自角色时，只能做出符合自己角色身份的行为)，而不是同一个Method的不同实现(怎么做)</li>
+ * <li>一个类之所以是角色对象，是因为它具有符合该角色身份的行为，例如：Teacher可以上课，而User不会</li>
  * <li>是什么 vs 做什么 vs 做不做 vs 怎么做</li>
  * </ul>
  * <pre>
@@ -55,6 +56,41 @@ import io.github.dddplus.ext.IDomainExtension;
  *     User get(Long userId);
  *     Buyer asBuyer(User user);
  *     Contact asContact(User user);
+ * }
+ * }
+ * </pre>
+ * 进阶应用：不仅普通的{@link IDomainModel}可以设计出角色对象，{@link IBag}也可以。
+ * <pre>
+ * {@code
+ * class ShipmentOrderBag implements IUnboundedDomainModel {
+ *     // gateway是远程RPC的防腐层
+ *     public ShipmentOrderBagContextRemote inContextOfRemote(ShipmentOrderGateway gateway) {
+ *         return new ShipmentOrderBagContextRemote(this, gateway);
+ *     }
+ * }
+ * // 这个订单集合数据存在远程的【订单中心】，通过RPC交互
+ * class ShipmentOrderBagContextRemote extends BoundedDomainModel<ShipmentOrderBag> {
+ *     private final ShipmentOrderGateway gateway;
+ *     ShipmentOrderBagContextRemote(ShipmentOrderBag model, ShipmentOrderGateway gateway) {
+ *         super(model);
+ *         this.gateway = gateway;
+ *     }
+ *
+ *     // 获取订单许可：其实是锁单，返回失败的单号
+ *     public ShipmentOrderBag acquireProductionLicence() {
+ *         Set<String> abnormalSoNoSet = gateway.acquireProductionLicence(OrderProductionNode.GENERATE_PACKAGE, model.orderNos(), model.warehouseNo());
+ *         ShipmentOrderBag abnormalShipmentOrderBag = model.filterOf(abnormalSoNoSet);
+ *         return abnormalShipmentOrderBag;
+ *     }
+ *     public void releaseProductionLicense() {}
+ * }
+ * class AppService {
+ *     void doSth() {
+ *         ShipmentOrderBagContextRemote remote = shipmentOrderBag.inContextOfRemote(shipmentOrderGateway);
+ *         // 远程模型被显性化了，而不是隐藏在过程式方法里；而且，它内部可以有状态
+ *         ShipmentOrderBag abnormalBag = remote.acquireProductionLicence();
+ *         shipmentOrderRepository.modifyStatusToException(abnormalBag);
+ *     }
  * }
  * }
  * </pre>

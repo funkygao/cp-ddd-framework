@@ -11,6 +11,7 @@ import io.github.dddplus.ext.IIdentityResolver;
  * 业务身份.
  *
  * <p>从中可以获取业务特征，以便路由扩展点.</p>
+ * <p>使用注意：{@link IIdentity}不意味着每次路由扩展点时你都要定义新的业务身份类，很可能让现有的类实现本接口即可.</p>
  *
  * @see io.github.dddplus.ext.IIdentityResolver
  */
