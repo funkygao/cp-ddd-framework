@@ -18,24 +18,24 @@
 <summary><b>Table of content</b></summary>
 
 ## Table of content
-   * [What is DDDplus](#what-is-dddplus)
-      * [Current status](#current-status)
-      * [Quickstart](#quickstart)
-      * [Features](#features)
-      * [Modules](#modules)
-      * [Key abstractions](#key-abstractions)
-   * [Using DDDplus](#using-dddplus)
-      * [Maven](#maven)
-      * [Gradle](#gradle)
-      * [Building from Source](#building-from-source)
-      * [With dddplus-archetype](#with-dddplus-archetype)
-   * [Demos](#demos)
-   * [DDDplus Ecosystem](#dddplus-ecosystem)
-   * [FAQ](#faq)
-   * [Landscape of Central Platform](#landscape-of-central-platform)
-   * [Contribution](#contribution)
-   * [Release Planning](#release-planning)
-   * [Licensing](#licensing)
+* [What is DDDplus](#what-is-dddplus)
+    * [Current status](#current-status)
+    * [Quickstart](#quickstart)
+    * [Features](#features)
+    * [Modules](#modules)
+    * [Key abstractions](#key-abstractions)
+* [Using DDDplus](#using-dddplus)
+    * [Maven](#maven)
+    * [Gradle](#gradle)
+    * [Building from Source](#building-from-source)
+    * [With dddplus-archetype](#with-dddplus-archetype)
+* [Demos](#demos)
+* [DDDplus Ecosystem](#dddplus-ecosystem)
+* [FAQ](#faq)
+* [Landscape of Central Platform](#landscape-of-central-platform)
+* [Contribution](#contribution)
+* [Release Planning](#release-planning)
+* [Licensing](#licensing)
 
 </details>
 
@@ -75,28 +75,28 @@ Please visit [Quickstart](https://github.com/funkygao/cp-ddd-framework/wiki).
 
 核心特性：
 - 以DDD架构思想为本，面向复杂业务场景架构设计
-   - 通过代码框架提供足够的约束和指导，让DDD不再仅停留在思想层面
-   - 只引入弱依赖的 [IDomainModel](dddplus-spec/src/main/java/io/github/dddplus/model/IDomainModel.java)，弱化其他概念，降低DDD上手门槛
-   - 提供 [dddplus-archetype](https://github.com/dddplus/dddplus-archetype)，直接生成最佳实践的脚手架代码
-   - DDD分层架构上增加一层`spec layer`，解决前中台协同问题
+    - 通过代码框架提供足够的约束和指导，让DDD不再仅停留在思想层面
+    - 只引入弱依赖的 [IDomainModel](dddplus-spec/src/main/java/io/github/dddplus/model/IDomainModel.java)，弱化其他概念，降低DDD上手门槛
+    - 提供 [dddplus-archetype](https://github.com/dddplus/dddplus-archetype)，直接生成最佳实践的脚手架代码
+    - DDD分层架构上增加一层`spec layer`，解决前中台协同问题
 - 14个核心业务抽象(常用9个)，勾勒出业务中台骨架
-   - 中台架构的顶层设计
-   - less is more，以不变应万变
-   - 研发专注于填空式开发，只需解决局部问题
+    - 中台架构的顶层设计
+    - less is more，以不变应万变
+    - 研发专注于填空式开发，只需解决局部问题
 - 全方位解决业务的不确定性
-   - 业务逻辑、流程、逻辑模型、数据模型的扩展、多态体系
-   - 框架本身支持再次扩展，便于被集成
-   - 抽象出独立的业务扩展包，框架底层通过`ClassLoader`机制进行业务隔离，支持热更新
-   - 平台容器包、平台业务包与业务扩展包：分离
+    - 业务逻辑、流程、逻辑模型、数据模型的扩展、多态体系
+    - 框架本身支持再次扩展，便于被集成
+    - 抽象出独立的业务扩展包，框架底层通过`ClassLoader`机制进行业务隔离，支持热更新
+    - 平台容器包、平台业务包与业务扩展包：分离
 - 支撑中台战略的复杂生态协作
-   - 前台、中台解耦
-   - 业务隔离，不同前台间业务隔离，前台和中台隔离
-   - 支持稳态、敏态双速应用
-   - InnerSource，生态合作协同机制
+    - 前台、中台解耦
+    - 业务隔离，不同前台间业务隔离，前台和中台隔离
+    - 支持稳态、敏态双速应用
+    - InnerSource，生态合作协同机制
 - 完整的解决方案
-   - 业务能力演化，业务测试，最佳实践，架构持续防腐，重构的导流验证，绞杀者落地方案等
-   - 提供 [一套完整的Demo工程](https://github.com/dddplus/dddplus-demo)
-   - 演示 [5分钟搭建一个仓储中台WMS](https://github.com/dddplus/dddplus-archetype-demo)，手把手真实场景教学
+    - 业务能力演化，业务测试，最佳实践，架构持续防腐，重构的导流验证，绞杀者落地方案等
+    - 提供 [一套完整的Demo工程](https://github.com/dddplus/dddplus-demo)
+    - 演示 [5分钟搭建一个仓储中台WMS](https://github.com/dddplus/dddplus-archetype-demo)，手把手真实场景教学
 - DDDplus框架，始终保持简单性
 
 ### Modules
@@ -168,9 +168,37 @@ For more, please visit [dddplus-archetype project](https://github.com/dddplus/dd
 ## DDDplus Ecosystem
 
 - [dddplus-archetype](https://github.com/dddplus/dddplus-archetype)
-   - a maven archetype that generates a complete DDDplus driven project skeleton
+    - a maven archetype that generates a complete DDDplus driven project skeleton
 - [dddplus-visualizer](https://github.com/dddplus/vis)
-   - a CLI parsing DDDplus driven project Java AST with ANTLR and visualize your business artifacts
+    - a CLI parsing DDDplus driven project Java AST with ANTLR and visualize your business artifacts
+
+
+## DDD建模构造块
+
+>There's a construct for everything.
+>Every developer has a different name for these constructs.
+
+提供细粒度的精确模型构造块，研发根据问题对号入座，才可能实现出好的业务模型。
+
+- 确定性问题
+    - IBag，封装集合逻辑
+    - (IUnboundedDomainModel, BoundedDomainModel)，上下文角色对象
+    - (DirtyMemento, IDirtyHint), IMergeAwareDirtyHint)，追踪领域对象状态变化，通过乐观锁实现落库
+    - Exchange，domain与infrastructure间传递非领域数据的容器
+    - ISpecification，业务校验和场景识别
+    - INativeFlow，可复用的流程片段
+    - AbstractBusinessNo，业务编号建模
+    - IGateway，远程RPC的防腐层
+    - IUnitOfWork，跨聚合根的事务
+- 不确定问题
+    - IDomainExtension，扩展点
+    - (Policy, Router)，扩展点的两种路由方式
+    - Pattern，全局业务模式
+    - IIdentity，业务身份
+- 技术组件
+    - [mapstruct](https://mapstruct.org/)，对象转换
+- 长效机制
+    - DDDPlusEnforcer，业务建模规范的架构守护
 
 ## FAQ
 
