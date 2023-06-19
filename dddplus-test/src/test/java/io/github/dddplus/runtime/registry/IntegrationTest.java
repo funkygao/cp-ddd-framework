@@ -80,7 +80,7 @@ public class IntegrationTest {
 
         // ExtensionInvocationHandler.extInvokeTimerExecutor的线程池缩小到10，方便并发测试
         System.setProperty("invokeExtMaxPoolSize", "10");
-        // GovernanceAspect UMP
+        // GovernanceAspect
         System.setProperty("appName", "foo");
     }
 
