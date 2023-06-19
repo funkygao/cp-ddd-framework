@@ -4,17 +4,26 @@ import io.github.dddplus.ext.IDecideStepsExt;
 import io.github.dddplus.runtime.DDD;
 import io.github.dddplus.runtime.ExtTimeoutException;
 import io.github.dddplus.runtime.StepsExecTemplate;
+import io.github.dddplus.runtime.policy.ConsumableExtPolicy;
+import io.github.dddplus.runtime.policy.IConsumableExt;
+import io.github.dddplus.runtime.policy.MyBusinessException;
+import io.github.dddplus.runtime.policy.SKU;
 import io.github.dddplus.runtime.registry.mock.MockStartupListener;
-import io.github.dddplus.runtime.registry.mock.ability.*;
 import io.github.dddplus.runtime.registry.mock.domain.FooDomain;
 import io.github.dddplus.runtime.registry.mock.exception.FooException;
 import io.github.dddplus.runtime.registry.mock.ext.*;
 import io.github.dddplus.runtime.registry.mock.extension.B2CExt;
 import io.github.dddplus.runtime.registry.mock.model.FooModel;
+import io.github.dddplus.runtime.registry.mock.model.SaleOrder;
 import io.github.dddplus.runtime.registry.mock.partner.FooPartner;
 import io.github.dddplus.runtime.registry.mock.pattern.extension.B2BMultiMatchExt;
+import io.github.dddplus.runtime.registry.mock.policy.TriggerPolicy;
+import io.github.dddplus.runtime.registry.mock.router.*;
 import io.github.dddplus.runtime.registry.mock.service.FooDomainService;
-import io.github.dddplus.runtime.registry.mock.step.*;
+import io.github.dddplus.runtime.registry.mock.step.BarStep;
+import io.github.dddplus.runtime.registry.mock.step.EggStep;
+import io.github.dddplus.runtime.registry.mock.step.Steps;
+import io.github.dddplus.runtime.registry.mock.step.SubmitStep;
 import io.github.dddplus.testing.LogAssert;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
@@ -71,6 +80,8 @@ public class IntegrationTest {
 
         // ExtensionInvocationHandler.extInvokeTimerExecutor的线程池缩小到10，方便并发测试
         System.setProperty("invokeExtMaxPoolSize", "10");
+        // GovernanceAspect
+        System.setProperty("appName", "foo");
     }
 
     @Test
@@ -79,52 +90,59 @@ public class IntegrationTest {
     }
 
     @Test
-    public void findDomainAbility() {
-        FooDomainAbility fooDomainAbility = InternalIndexer.findDomainAbility(FooDomainAbility.class);
-        assertNotNull(fooDomainAbility);
+    public void findRouter() {
+        FooRouter fooRouter = InternalIndexer.findRouter(FooRouter.class);
+        assertNotNull(fooRouter);
 
-        DomainAbilityDef domainAbilityDef = new DomainAbilityDef();
+        RouterDef routerDef = new RouterDef();
         try {
-            domainAbilityDef.registerBean(fooDomainAbility);
+            routerDef.registerBean(fooRouter);
             fail();
         } catch (BootstrapException expected) {
-            assertTrue(expected.getMessage().startsWith("duplicated domain ability:"));
+            assertTrue(expected.getMessage().startsWith("duplicated router:"));
         }
 
-        // 它没有加DomainAbility注解，是无法找到的
-        IllegalDomainAbility illegalDomainAbility = InternalIndexer.findDomainAbility(IllegalDomainAbility.class);
-        assertNull(illegalDomainAbility);
+        // 它没有加Router注解，是无法找到的
+        IllegalRouter illegalRouter = InternalIndexer.findRouter(IllegalRouter.class);
+        assertNull(illegalRouter);
 
-        assertNotNull(DDD.findAbility(PartnerAbility.class));
+        assertNotNull(DDD.findRouter(PartnerRouter.class));
     }
 
     @Test
     public void noImplementationExt() {
-        NotImplementedAbility ability = DDD.findAbility(NotImplementedAbility.class);
-        assertNotNull(ability);
-        ability.ping(fooModel);
+        NotImplementedRouter router = DDD.useRouter(NotImplementedRouter.class);
+        assertNotNull(router);
+        router.ping(fooModel);
     }
 
     @Test
     public void noImplementationExtAndNoDefaultExt() {
-        NotImplementedAbility1 ability = DDD.findAbility(NotImplementedAbility1.class);
-        assertNotNull(ability);
-        ability.ping(fooModel);
+        NotImplementedRouter1 router = DDD.findRouter(NotImplementedRouter1.class);
+        assertNotNull(router);
+        router.ping(fooModel);
     }
 
     @Test
     public void reducerFirstOf() {
-        BarDomainAbility ability = DDD.findAbility(BarDomainAbility.class);
-        String result = ability.submit(fooModel);
+        BarRouter router = DDD.findRouter(BarRouter.class);
+        String result = router.submit(fooModel);
         // submit里执行了Reducer.firstOf，对应的扩展点是：B2CExt, PartnerExt
         // 应该返回 PartnerExt 的结果
         assertEquals("2", result);
     }
 
     @Test
+    public void blindlyRunAllExt() {
+        log.info("blindlyRunAllExt 1");
+        DDD.useRouter(PullbackExtRouter.class).blindlyExecuteAllExt(new SaleOrder());
+        log.info("blindlyRunAllExt 2");
+    }
+
+    @Test
     public void reducerAll() {
-        BarDomainAbility ability = DDD.findAbility(BarDomainAbility.class);
-        String result = ability.submit2(fooModel);
+        BarRouter router = DDD.findRouter(BarRouter.class);
+        String result = router.submit2(fooModel);
         assertEquals(String.valueOf(B2CExt.RESULT), result);
     }
 
@@ -183,18 +201,26 @@ public class IntegrationTest {
     }
 
     @Test
-    public void abilityThrowsException() {
+    public void routerThrowsException() {
         try {
-            BarDomainAbility ability = DDD.findAbility(BarDomainAbility.class);
-            ability.throwsEx(fooModel);
+            BarRouter router = DDD.findRouter(BarRouter.class);
+            router.throwsEx(fooModel);
+            fail();
         } catch (RuntimeException expected) {
-
+            assertEquals(BarRouter.EX, expected.getMessage());
         }
     }
 
     @Test
+    public void usePolicy() {
+        DDD.usePolicy(TriggerPolicy.class, fooModel).beforeInsert(fooModel);
+        fooModel.setFoo(1);
+        DDD.usePolicy(TriggerPolicy.class, fooModel).afterInsert(fooModel);
+    }
+
+    @Test
     public void directGetExtension() {
-        // 不通过 BaseDomainAbility，直接获取扩展点实例
+        // 不通过 BaseRouter，直接获取扩展点实例
         Integer result = DDD.firstExtension(IFooExt.class, fooModel).execute(fooModel);
         assertEquals(B2CExt.RESULT, result.intValue());
     }
@@ -208,6 +234,48 @@ public class IntegrationTest {
         fooModel.setFoo(2);
         DDD.firstExtension(ITrigger.class, fooModel).beforeInsert(fooModel);
         LogAssert.assertContains("bar trigger");
+
+        DDD.usePolicy(TriggerPolicy.class, fooModel).afterInsert(fooModel);
+    }
+
+    @Test
+    public void businessException() {
+        String skuValue = "2";
+        SKU sku = new SKU(skuValue);
+        try {
+            DDD.usePolicy(ConsumableExtPolicy.class, sku).recommend(skuValue);
+            fail();
+        } catch (MyBusinessException expected) {
+            assertEquals("hi 2", expected.getMessage());
+        }
+    }
+
+    @Test
+    public void policy_inheritance() {
+        String skuValue = "1";
+        SKU sku = new SKU(skuValue);
+        assertEquals(DDD.usePolicy(ConsumableExtPolicy.class, sku).recommend(skuValue), "CON-10");
+    }
+
+    @Test
+    public void ext_inheritance() {
+        String skuValue = "1";
+        SKU sku = new SKU(skuValue);
+        // 小件
+        assertEquals(DDD.firstExtension(IConsumableExt.class, sku).recommend(skuValue), "CON-10");
+        skuValue = "10";
+        sku = new SKU(skuValue);
+        assertEquals(DDD.firstExtension(IConsumableExt.class, sku).recommend(skuValue), "CON-11");
+
+        // 大件
+        skuValue = "20";
+        sku = new SKU(skuValue);
+        assertEquals("CON-211", DDD.firstExtension(IConsumableExt.class, sku).recommend(skuValue));
+
+        // illegal sku
+        skuValue = "invalid";
+        sku = new SKU(skuValue);
+        assertNull(DDD.firstExtension(IConsumableExt.class, sku).recommend(skuValue));
     }
 
     @Test
@@ -221,7 +289,7 @@ public class IntegrationTest {
 
     @Test
     public void integrationTest() {
-        // domain service -> domain ability -> extension
+        // domain service -> domain router -> extension
         // PartnerExt
         fooDomainService.submitOrder(fooModel);
     }
@@ -341,11 +409,11 @@ public class IntegrationTest {
 
     @Test
     public void defaultExtensionComponent() {
-        assertEquals(198, DDD.findAbility(BazAbility.class).guess(fooModel).intValue());
+        assertEquals(198, DDD.findRouter(BazRouter.class).guess(fooModel).intValue());
     }
 
     @Test
-    public void patterPriority() {
+    public void patternPriority() {
         // IMultiMatchExt在B2BPattern、FooPattern上都有实现，而B2BPattern的priority最小，因此应该返回它的实例
         fooModel.setPartnerCode("foo"); // 匹配 FooPattern
         fooModel.setB2c(false); // 匹配 B2BPattern
@@ -357,12 +425,12 @@ public class IntegrationTest {
     @Test
     public void decideSteps() {
         // fooModel不是B2B模式，匹配不了B2BDecideStepsExt
-        assertNotNull(DDD.findAbility(DecideStepsAbility.class).decideSteps(fooModel, Steps.Submit.Activity));
-        assertEquals(0, DDD.findAbility(DecideStepsAbility.class).decideSteps(fooModel, Steps.Submit.Activity).size());
+        assertNotNull(DDD.findRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity));
+        assertEquals(0, DDD.findRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity).size());
 
         fooModel.setB2c(false);
         // B2BDecideStepsExt
-        List<String> b2bSubmitSteps = DDD.findAbility(DecideStepsAbility.class).decideSteps(fooModel, Steps.Submit.Activity);
+        List<String> b2bSubmitSteps = DDD.findRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity);
         assertEquals(3, b2bSubmitSteps.size());
     }
 
@@ -371,7 +439,7 @@ public class IntegrationTest {
         fooModel.setB2c(false);
         fooModel.setRedecide(true);
         fooModel.setStepsRevised(false);
-        List<String> steps = DDD.findAbility(DecideStepsAbility.class).decideSteps(fooModel, Steps.Submit.Activity);
+        List<String> steps = DDD.findRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity);
         // B2BDecideStepsExt: FooStep -> BarStep(if redecide then add Baz & Ham) -> BazStep -> HamStep
         submitStepsExec.execute(Steps.Submit.Activity, steps, fooModel);
         assertTrue(fooModel.isStepsRevised());
@@ -393,7 +461,7 @@ public class IntegrationTest {
         fooModel.setRedecide(false);
         fooModel.setStepsRevised(false);
         fooModel.setSleepExtTimeout(true);
-        List<String> steps = DDD.findAbility(DecideStepsAbility.class).decideSteps(fooModel, Steps.Submit.Activity);
+        List<String> steps = DDD.findRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity);
         // BazStep FooStep
         // FooStep调用一个扩展点超时，会抛出 ExtTimeoutException，不确定状态：抛出到外面，框架层不做回滚
         try {
@@ -409,7 +477,7 @@ public class IntegrationTest {
         fooModel.setB2c(false);
         fooModel.setRedecide(true);
         fooModel.setStepsRevised(false);
-        List<String> steps = DDD.findAbility(DecideStepsAbility.class).decideSteps(fooModel, Steps.Submit.Activity);
+        List<String> steps = DDD.findRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity);
         // B2BDecideStepsExt: FooStep -> BarStep(if redecide then add Baz & Ham) -> BazStep -> HamStep
         Set<String> asyncSteps = new HashSet<>();
         submitStepsExec.execute(Steps.Submit.Activity, steps, fooModel, null, asyncSteps);
@@ -428,7 +496,7 @@ public class IntegrationTest {
         fooModel.setWillSleepLong(true);
         fooModel.setRedecide(false);
         fooModel.setStepsRevised(false);
-        List<String> steps = DDD.findAbility(DecideStepsAbility.class).decideSteps(fooModel, Steps.Submit.Activity);
+        List<String> steps = DDD.findRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity);
         // B2BDecideStepsExt: FooStep -> BarStep(if redecide then add Baz & Ham) -> BazStep -> HamStep
         Set<String> asyncSteps = new HashSet<>();
         asyncSteps.add(Steps.Submit.FooStep);
@@ -447,7 +515,7 @@ public class IntegrationTest {
         fooModel.setWillSleepLong(true);
         fooModel.setRedecide(false);
         fooModel.setStepsRevised(false);
-        List<String> steps = DDD.findAbility(DecideStepsAbility.class).decideSteps(fooModel, Steps.Submit.Activity);
+        List<String> steps = DDD.findRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity);
         log.info("steps:{}", steps); // Baz, Foo, Bar
         Set<String> asyncSteps = new HashSet<>();
         asyncSteps.add(Steps.Submit.FooStep);
@@ -463,7 +531,7 @@ public class IntegrationTest {
         fooModel.setRedecide(false);
         fooModel.setStepsRevised(false);
         fooModel.setLetFooThrowException(true);
-        List<String> steps = DDD.findAbility(DecideStepsAbility.class).decideSteps(fooModel, Steps.Submit.Activity);
+        List<String> steps = DDD.findRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity);
         log.info("steps:{}", steps); // Baz, Foo, Bar
         Set<String> asyncSteps = new HashSet<>();
         asyncSteps.add(Steps.Submit.FooStep);
@@ -478,7 +546,7 @@ public class IntegrationTest {
         fooModel.setB2c(false);
         fooModel.setRedecideDeadLoop(true); // dead loop on purpose
         fooModel.setStepsRevised(false);
-        List<String> steps = DDD.findAbility(DecideStepsAbility.class).decideSteps(fooModel, Steps.Submit.Activity);
+        List<String> steps = DDD.findRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity);
         // B2BDecideStepsExt: FooStep -> BarStep(if redecideDeadLoop then add BarStep)
         try {
             submitStepsExec.execute(Steps.Submit.Activity, steps, fooModel);
@@ -492,7 +560,7 @@ public class IntegrationTest {
     public void stepsExecTemplateWithRollback() throws IOException {
         fooModel.setB2c(false);
         fooModel.setWillRollback(true);
-        List<String> steps = DDD.findAbility(DecideStepsAbility.class).decideSteps(fooModel, Steps.Submit.Activity);
+        List<String> steps = DDD.findRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity);
         log.info("steps: {}", steps); // Baz, Foo, Bar
         try {
             submitStepsExec.execute(Steps.Submit.Activity, steps, fooModel);
@@ -510,7 +578,7 @@ public class IntegrationTest {
     public void stepsExecTemplateWithInvalidRollback() {
         fooModel.setB2c(false);
         fooModel.setWillRollbackInvalid(true);
-        List<String> steps = DDD.findAbility(DecideStepsAbility.class).decideSteps(fooModel, Steps.Submit.Activity);
+        List<String> steps = DDD.findRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity);
         log.info("steps: {}", steps);
         try {
             submitStepsExec.execute(Steps.Submit.Activity, steps, fooModel);
@@ -537,7 +605,7 @@ public class IntegrationTest {
         assertEquals(Steps.Submit.GoodsValidationGroup, submitSteps.get(0).getTags()[0]);
 
         // extensions: IFooExt IMultiMatchExt IReviseStepsExt IDecideStepsExt IPartnerExt IPatternOnlyExt
-        assertEquals(6, artifacts.getExtensions().size());
+        assertEquals(7, artifacts.getExtensions().size());
         int foundExtN = 0;
         boolean foundPartnerOnlyPattern = false;
         boolean foundPatternOnlyPattern = false;
@@ -579,10 +647,5 @@ public class IntegrationTest {
         assertEquals(3, foundExtN);
         assertTrue(foundPatternOnlyPattern);
         assertTrue(foundPartnerOnlyPattern);
-
-        // specifications
-        assertEquals(1, artifacts.getSpecifications().size());
-        assertEquals("B2C业务必须要传递partnerCode", artifacts.getSpecifications().get(0).getName());
-        assertEquals(1, artifacts.getSpecifications().get(0).getTags().length);
     }
 }

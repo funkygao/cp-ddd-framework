@@ -5,9 +5,9 @@
  */
 package io.github.dddplus.runtime.registry;
 
-import javax.validation.constraints.NotNull;
+import lombok.NonNull;
 
 interface IPrepareAware {
 
-    void prepare(@NotNull Object bean);
+    void prepare(@NonNull Object bean);
 }

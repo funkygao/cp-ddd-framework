@@ -8,10 +8,10 @@ package io.github.dddplus.runtime.registry;
 import io.github.dddplus.annotation.Extension;
 import io.github.dddplus.ext.IDomainExtension;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
-
-import javax.validation.constraints.NotNull;
+import org.springframework.util.ClassUtils;
 
 /**
  * 扩展点的内部定义, internal usage only.
@@ -19,7 +19,6 @@ import javax.validation.constraints.NotNull;
 @ToString
 @Slf4j
 public class ExtensionDef implements IRegistryAware, IPrepareAware {
-
     @Getter
     private String code;
 
@@ -40,13 +39,13 @@ public class ExtensionDef implements IRegistryAware, IPrepareAware {
     }
 
     @Override
-    public void registerBean(@NotNull Object bean) {
+    public void registerBean(@NonNull Object bean) {
         initialize(bean);
         InternalIndexer.index(this);
     }
 
     @Override
-    public void prepare(@NotNull Object bean) {
+    public void prepare(@NonNull Object bean) {
         initialize(bean);
         InternalIndexer.prepare(this);
     }
@@ -60,14 +59,18 @@ public class ExtensionDef implements IRegistryAware, IPrepareAware {
         }
         this.extensionBean = (IDomainExtension) bean;
         // this.extensionBean might be Xxx$EnhancerBySpringCGLIB if the extension uses AOP
-        for (Class extensionBeanInterfaceClazz : InternalAopUtils.getTarget(this.extensionBean).getClass().getInterfaces()) {
+        // 扩展点实现类，可能有继承关系 ClassUtils.getAllInterfaces会取所有(indirect)的接口
+        for (Class extensionBeanInterfaceClazz : ClassUtils.getAllInterfaces(InternalAopUtils.getTarget(bean))) {
             if (extensionBeanInterfaceClazz.isInstance(extensionBean)) {
                 this.extClazz = extensionBeanInterfaceClazz;
 
                 log.debug("{} has ext instance:{}", this.extClazz.getCanonicalName(), this);
-                break;
+                return;
             }
         }
+
+        // extClazz unset
+        throw BootstrapException.ofMessage("Even after many tries, still unable to figure out the extension class of:" + bean.getClass().getCanonicalName());
     }
 
 }

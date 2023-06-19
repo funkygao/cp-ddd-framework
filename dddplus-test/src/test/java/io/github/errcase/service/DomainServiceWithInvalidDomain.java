@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import io.github.dddplus.annotation.DomainService;
 import io.github.dddplus.model.IDomainService;
 import io.github.dddplus.runtime.DDD;
-import io.github.dddplus.runtime.registry.mock.ability.FooDomainAbility;
+import io.github.dddplus.runtime.registry.mock.router.FooRouter;
 import io.github.dddplus.runtime.registry.mock.model.FooModel;
 
 @DomainService(domain = "non-exist")
@@ -12,8 +12,8 @@ import io.github.dddplus.runtime.registry.mock.model.FooModel;
 public class DomainServiceWithInvalidDomain implements IDomainService {
 
     public void submitOrder(FooModel model) {
-        FooDomainAbility ability = DDD.findAbility(FooDomainAbility.class);
-        log.info(ability.submit(model));
+        FooRouter router = DDD.findRouter(FooRouter.class);
+        log.info(router.submit(model));
     }
 
 }

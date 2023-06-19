@@ -8,9 +8,8 @@ package io.github.dddplus.runtime.registry;
 import io.github.dddplus.annotation.DomainService;
 import io.github.dddplus.model.IDomainService;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.ToString;
-
-import javax.validation.constraints.NotNull;
 
 @ToString
 class DomainServiceDef implements IRegistryAware {
@@ -22,7 +21,7 @@ class DomainServiceDef implements IRegistryAware {
     private IDomainService domainServiceBean;
 
     @Override
-    public void registerBean(@NotNull Object bean) {
+    public void registerBean(@NonNull Object bean) {
         DomainService domainService = InternalAopUtils.getAnnotation(bean, DomainService.class);
         if (!(bean instanceof IDomainService)) {
             throw BootstrapException.ofMessage(bean.getClass().getCanonicalName(), " MUST implement IDomainService");

@@ -8,10 +8,10 @@ package io.github.dddplus.runtime.registry;
 import io.github.dddplus.annotation.Partner;
 import io.github.dddplus.plugin.IContainerContext;
 import io.github.dddplus.plugin.IPlugin;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
 
-import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -54,7 +54,7 @@ public final class Container {
     /**
      * 获取业务容器单例.
      */
-    @NotNull
+    @NonNull
     public static Container getInstance() {
         return instance;
     }
@@ -64,7 +64,7 @@ public final class Container {
      *
      * @return key: Plugin code
      */
-    @NotNull
+    @NonNull
     public Map<String, IPlugin> getActivePlugins() {
         return activePlugins;
     }
@@ -78,7 +78,7 @@ public final class Container {
      * @param useSpring jar包里是否需要Spring机制
      * @throws Throwable
      */
-    public synchronized void loadPartnerPlugin(@NotNull String code, @NotNull String version, @NotNull URL jarUrl, boolean useSpring) throws Throwable {
+    public synchronized void loadPartnerPlugin(@NonNull String code, @NonNull String version, @NonNull URL jarUrl, boolean useSpring) throws Throwable {
         File localJar = createLocalFile(jarUrl);
         localJar.deleteOnExit();
 
@@ -99,7 +99,7 @@ public final class Container {
      * @param containerContext container context instance
      * @throws Throwable
      */
-    public synchronized void loadPartnerPlugin(@NotNull String code, @NotNull String version, @NotNull String jarPath, boolean useSpring, IContainerContext containerContext) throws Throwable {
+    public synchronized void loadPartnerPlugin(@NonNull String code, @NonNull String version, @NonNull String jarPath, boolean useSpring, IContainerContext containerContext) throws Throwable {
         if (!jarPath.endsWith(".jar")) {
             throw new IllegalArgumentException("Invalid jarPath: " + jarPath);
         }
@@ -137,11 +137,11 @@ public final class Container {
          * @param useSpring jar包里是否需要Spring机制
          * @throws Throwable
          */
-    public synchronized void loadPartnerPlugin(@NotNull String code, @NotNull String version, @NotNull String jarPath, boolean useSpring) throws Throwable {
+    public synchronized void loadPartnerPlugin(@NonNull String code, @NonNull String version, @NonNull String jarPath, boolean useSpring) throws Throwable {
         loadPartnerPlugin(code, version, jarPath, useSpring, new ContainerContext(containerApplicationContext));
     }
 
-    File createLocalFile(@NotNull URL jarUrl) throws IOException {
+    File createLocalFile(@NonNull URL jarUrl) throws IOException {
         String prefix = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date());
         String suffix = jarUrl.getPath().substring(jarUrl.getPath().lastIndexOf("/") + 1);
         return File.createTempFile(prefix, "." + suffix);

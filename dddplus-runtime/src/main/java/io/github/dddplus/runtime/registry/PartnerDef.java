@@ -5,15 +5,15 @@
  */
 package io.github.dddplus.runtime.registry;
 
-import io.github.dddplus.ext.IDomainExtension;
 import io.github.dddplus.annotation.Partner;
+import io.github.dddplus.ext.IDomainExtension;
 import io.github.dddplus.ext.IIdentityResolver;
-import io.github.dddplus.model.IDomainModel;
+import io.github.dddplus.model.IIdentity;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.ToString;
 
-import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,14 +33,14 @@ class PartnerDef implements IRegistryAware, IPrepareAware, IIdentityResolver {
     private Map<Class<? extends IDomainExtension>, ExtensionDef> extensionDefMap = new HashMap<>();
 
     @Override
-    public void registerBean(@NotNull Object bean) {
+    public void registerBean(@NonNull Object bean) {
         initialize(bean);
 
         InternalIndexer.index(this);
     }
 
     @Override
-    public void prepare(@NotNull Object bean) {
+    public void prepare(@NonNull Object bean) {
         initialize(bean);
 
         InternalIndexer.prepare(this);
@@ -72,8 +72,8 @@ class PartnerDef implements IRegistryAware, IPrepareAware, IIdentityResolver {
     }
 
     @Override
-    public boolean match(@NotNull IDomainModel model) {
-        return partnerBean.match(model);
+    public boolean match(@NonNull IIdentity identity) {
+        return partnerBean.match(identity);
     }
 
 }

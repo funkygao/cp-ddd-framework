@@ -1,6 +1,6 @@
 package io.github.dddplus.runtime.registry.mock.interceptor;
 
-import io.github.dddplus.runtime.BaseDomainAbility;
+import io.github.dddplus.runtime.BaseRouter;
 import io.github.dddplus.step.IDomainStep;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -21,7 +21,7 @@ public class DomainProfilerAspect {
             log.info("AROUND step:{}.{}", step.activityCode(), step.stepCode());
         }
 
-        if (target instanceof BaseDomainAbility) {
+        if (target instanceof BaseRouter) {
 
         }
 

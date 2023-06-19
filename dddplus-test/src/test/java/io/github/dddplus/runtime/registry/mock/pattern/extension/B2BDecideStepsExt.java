@@ -2,11 +2,11 @@ package io.github.dddplus.runtime.registry.mock.pattern.extension;
 
 import io.github.dddplus.annotation.Extension;
 import io.github.dddplus.ext.IDecideStepsExt;
-import io.github.dddplus.model.IDomainModel;
+import io.github.dddplus.model.IIdentity;
 import io.github.dddplus.runtime.registry.mock.pattern.B2BPattern;
 import io.github.dddplus.runtime.registry.mock.step.Steps;
+import lombok.NonNull;
 
-import javax.validation.constraints.NotNull;
 import java.util.*;
 import java.util.function.Supplier;
 
@@ -15,7 +15,7 @@ public class B2BDecideStepsExt implements IDecideStepsExt {
     private static final List<String> emptySteps = Collections.emptyList();
 
     @Override
-    public List<String> decideSteps(@NotNull IDomainModel model, @NotNull String activityCode) {
+    public List<String> decideSteps(@NonNull IIdentity model, @NonNull String activityCode) {
         Supplier<List<String>> supplier = registry.get(activityCode);
         if (supplier != null) {
             return supplier.get();

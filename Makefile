@@ -1,3 +1,5 @@
+BRANCH := $(shell git rev-parse --abbrev-ref HEAD)
+
 package:clean
 	@mvn package
 
@@ -18,8 +20,20 @@ javadoc:install
 	@mvn javadoc:javadoc -Pinstall
 	@open target/site/apidocs/index.html
 
+ mutation:install
+	@mvn eu.stamp-project:pitmp-maven-plugin:run
+	@open dddplus-test/target/pit-reports/
+
+jdepend:
+	@mvn site
+	@find . -name jdepend-report.html
+
 deploy:
+ifeq ($(BRANCH), master)
 	@mvn clean deploy verify -Possrh -e
+else
+	@echo $(BRANCH) cannot deploy
+endif
 
 deploy-snapshot:
 	@mvn clean deploy verify -Dskip.dddplus.plugin.module=false -Possrh -e

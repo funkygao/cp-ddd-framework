@@ -6,14 +6,14 @@
 package io.github.dddplus.step;
 
 import io.github.dddplus.model.IDomainModel;
-
-import javax.validation.constraints.NotNull;
+import lombok.NonNull;
 
 /**
  * 可以回滚的活动步骤.
  * <p>
  * <p>Sagas模式</p>
  */
+@Deprecated
 public interface IRevokableDomainStep<Model extends IDomainModel, Ex extends RuntimeException> extends IDomainStep<Model, Ex> {
 
     /**
@@ -24,5 +24,5 @@ public interface IRevokableDomainStep<Model extends IDomainModel, Ex extends Run
      * @param model 领域模型
      * @param cause {@link IDomainStep#execute(IDomainModel)}执行过程中抛出的异常，即回滚原因
      */
-    void rollback(@NotNull Model model, @NotNull Ex cause);
+    void rollback(@NonNull Model model, @NonNull Ex cause);
 }

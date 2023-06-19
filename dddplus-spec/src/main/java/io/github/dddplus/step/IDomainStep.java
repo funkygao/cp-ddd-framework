@@ -7,8 +7,7 @@ package io.github.dddplus.step;
 
 import io.github.dddplus.model.IDomainModel;
 import io.github.dddplus.model.IDomainService;
-
-import javax.validation.constraints.NotNull;
+import lombok.NonNull;
 
 /**
  * 领域活动(业务活动)的步骤，一种可以被编排的领域服务.
@@ -22,6 +21,7 @@ import javax.validation.constraints.NotNull;
  * @param <Model> 领域模型
  * @param <Ex>    中断步骤执行或改变后续步骤的异常
  */
+@Deprecated
 public interface IDomainStep<Model extends IDomainModel, Ex extends RuntimeException> extends IDomainService {
 
     /**
@@ -30,19 +30,19 @@ public interface IDomainStep<Model extends IDomainModel, Ex extends RuntimeExcep
      * @param model 领域模型
      * @throws Ex 中断步骤执行或改变后续步骤的异常
      */
-    void execute(@NotNull Model model) throws Ex;
+    void execute(@NonNull Model model) throws Ex;
 
     /**
      * 所属的领域活动编号.
      * <p>
      * <p>每一种领域活动，都有个唯一的编号</p>
      */
-    @NotNull
+    @NonNull
     String activityCode();
 
     /**
      * 该步骤编号.
      */
-    @NotNull
+    @NonNull
     String stepCode();
 }

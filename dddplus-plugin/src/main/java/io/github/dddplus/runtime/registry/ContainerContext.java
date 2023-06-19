@@ -6,9 +6,8 @@
 package io.github.dddplus.runtime.registry;
 
 import io.github.dddplus.plugin.IContainerContext;
+import lombok.NonNull;
 import org.springframework.context.ApplicationContext;
-
-import javax.validation.constraints.NotNull;
 
 /**
  * 默认的容器上下文实现.
@@ -23,12 +22,12 @@ final class ContainerContext implements IContainerContext {
     }
 
     @Override
-    public <T> T getBean(@NotNull Class<T> requiredType) throws RuntimeException {
+    public <T> T getBean(@NonNull Class<T> requiredType) throws RuntimeException {
         return containerApplicationContext.getBean(requiredType);
     }
 
     @Override
-    public <T> T getBean(@NotNull String name, @NotNull Class<T> requiredType) throws RuntimeException {
+    public <T> T getBean(@NonNull String name, @NonNull Class<T> requiredType) throws RuntimeException {
         return containerApplicationContext.getBean(name, requiredType);
     }
 }

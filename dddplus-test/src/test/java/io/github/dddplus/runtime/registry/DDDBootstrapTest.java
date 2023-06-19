@@ -4,6 +4,7 @@ import io.github.dddplus.runtime.registry.mock.MockStartupListener;
 import io.github.dddplus.testing.AloneRunner;
 import io.github.dddplus.testing.AloneWith;
 import io.github.dddplus.testing.LogAssert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -41,6 +42,14 @@ public class DDDBootstrapTest {
         LogAssert.assertContains("Spring reloaded complete!");
 
         applicationContext.close();
+    }
+
+    @Test
+    @Ignore
+    public void loopReload() throws IOException {
+        for (int i = 0; i < 100; i++) {
+            reload();
+        }
     }
 
     public void startupListenerCalledOnlyOnce() throws IOException {
