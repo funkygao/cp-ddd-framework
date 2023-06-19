@@ -14,6 +14,10 @@ public class ConsumableExtLargePiece extends ConsumableExtBase {
     }
     @Override
     public String recommend(String sku) {
+        if (sku.equals("2")) {
+            throw new MyBusinessException("hi 2");
+        }
+
         String actualSku = super.actualSku(sku);
         return table.get(actualSku);
     }

@@ -21,7 +21,7 @@ public class RouterWithInvalidDomain extends BaseRouter<IFooExt, FooModel> {
                 return integer > 1;
             }
         };
-        int result = forEachExtension(model, IReducer.firstOf(predicate)).execute(model);
+        int result = forEachExtension(model, IReducer.stopOnFirstMatch(predicate)).execute(model);
         return String.valueOf(result);
     }
 

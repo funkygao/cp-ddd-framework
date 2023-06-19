@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE flow PUBLIC  "liteflow" "liteflow.dtd">
+<flow>
+    <chain name="PackFlow">
+        // 子流程变量
+        waybillAllFromOrder = THEN(
+            SWITCH(ShouldPullEncryptPrintLabelData).TO(PullEncryptPrintLabelData),
+            BindEncryptPrintLabelData
+        );
+        // 子流程变量
+        waybillNotAllFromOrder = THEN(
+            SWITCH(ShouldUseFirstWaybillFromOrder).TO(GetWaybillFromOrder, GetWaybillFromExternal),
+            BindWaybill
+        );
+
+        // the full PackFlow
+        THEN(
+            SWITCH(ShouldUseAllWaybillFromOrder).TO(waybillAllFromOrder, waybillNotAllFromOrder),
+            BindWaybill
+        );
+    </chain>
+
+    <chain name="demoThen">
+        <!--
+          +-b-+
+          |   |
+        a-+-c-+-e
+          |   |
+          +-d-+
+        -->
+        THEN(
+            a,
+            WHEN(b, c, d),
+            e
+        );
+    </chain>
+    <chain name="demoWhen">
+        THEN(
+            a,
+            WHEN(b, THEN(c, d)).ignoreError(true),
+            e
+        );
+    </chain>
+    <chain name="demoSwitch">
+        <!-- 根据a的结果决定走(b, c, d)中的哪一个 -->
+        SWITCH(a).TO(b, c, d);
+    </chain>
+    <chain name="demoThenWhenSwitch">
+        THEN(
+            a,
+            WHEN(
+                b,
+                SWITCH(c).TO(d, e)
+            ),
+            f
+        );
+    </chain>
+</flow>

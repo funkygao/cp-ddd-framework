@@ -7,6 +7,7 @@ package io.github.dddplus.runtime.registry;
 
 import io.github.dddplus.annotation.Pattern;
 import io.github.dddplus.ext.IDomainExtension;
+import io.github.dddplus.ext.IPatternFilter;
 import io.github.dddplus.ext.IIdentityResolver;
 import io.github.dddplus.model.IIdentity;
 import lombok.Getter;
@@ -30,6 +31,7 @@ class PatternDef implements IRegistryAware, IIdentityResolver {
     private int priority;
 
     private IIdentityResolver patternBean;
+    private IPatternFilter filterBean;
 
     private Map<Class<? extends IDomainExtension>, ExtensionDef> extensionDefMap = new HashMap<>();
 
@@ -47,7 +49,6 @@ class PatternDef implements IRegistryAware, IIdentityResolver {
     }
 
     private boolean initialize(Object bean) {
-        boolean needIndex = true;
         Pattern pattern = InternalAopUtils.getAnnotation(bean, Pattern.class);
         this.code = pattern.code();
         this.name = pattern.name();
@@ -56,7 +57,8 @@ class PatternDef implements IRegistryAware, IIdentityResolver {
             throw BootstrapException.ofMessage("Pattern.priority must be zero or positive");
         }
 
-        if (!pattern.resolver()) {
+        if (!pattern.asResolver()) {
+            // 无需索引，marker only
             return false;
         }
 
@@ -64,7 +66,10 @@ class PatternDef implements IRegistryAware, IIdentityResolver {
             throw BootstrapException.ofMessage(bean.getClass().getCanonicalName(), " MUST implements IIdentityResolver");
         }
         this.patternBean = (IIdentityResolver) bean;
-        return needIndex;
+        if (bean instanceof IPatternFilter) {
+            this.filterBean = (IPatternFilter) bean;
+        }
+        return true;
     }
 
     void registerExtensionDef(ExtensionDef extensionDef) {

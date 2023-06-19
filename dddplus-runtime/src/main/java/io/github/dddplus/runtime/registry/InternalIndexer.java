@@ -9,6 +9,7 @@ import io.github.dddplus.ext.IDomainExtension;
 import io.github.dddplus.ext.IPolicy;
 import io.github.dddplus.model.IIdentity;
 import io.github.dddplus.runtime.BaseRouter;
+import io.github.dddplus.runtime.interceptor.IExtensionInterceptor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
@@ -40,6 +41,9 @@ public class InternalIndexer {
     // 扩展点 Policy
     static final Map<Class<? extends IDomainExtension>, PolicyDef> policyDefMap = new HashMap<>();
     static final Map<Class<? extends IPolicy>, PolicyDef> policyClazzMap = new HashMap<>();
+
+    // 扩展点 Interceptor
+    static IExtensionInterceptor extensionInterceptor = null;
 
     /**
      * 根据路由器类型找到一个扩展点路由器实例, internal usage only.
@@ -91,6 +95,15 @@ public class InternalIndexer {
         }
 
         return routerDef.getExtClazz();
+    }
+
+    /**
+     * 获取扩展点拦截器实例.
+     *
+     * <p>目前只支持单例，还没看到注册多个必要.</p>
+     */
+    public static IExtensionInterceptor registeredInterceptor() {
+        return extensionInterceptor;
     }
 
     /**
@@ -195,6 +208,14 @@ public class InternalIndexer {
         }
 
         return result;
+    }
+
+    static void index(InterceptorDef interceptorDef) {
+        if (extensionInterceptor != null) {
+            throw BootstrapException.ofMessage("ExtensionInterceptor can only be registered once! " + extensionInterceptor.getClass().getCanonicalName());
+        }
+
+        extensionInterceptor = interceptorDef.getInterceptorBean();
     }
 
     static void index(StepDef stepDef) {

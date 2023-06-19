@@ -1,6 +1,7 @@
 package io.github.dddplus.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -10,7 +11,8 @@ import static org.junit.Assert.assertEquals;
 
 public class IBagTest {
 
-    static class Order implements IDomainModel {
+    @Data
+    public static class Order implements IDomainModel {
         String order;
         OrderLineBag orderLineBag;
     }

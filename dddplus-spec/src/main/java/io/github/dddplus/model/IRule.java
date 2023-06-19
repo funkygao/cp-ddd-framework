@@ -8,7 +8,7 @@ package io.github.dddplus.model;
 /**
  * Business Rule.
  *
- * <p>The world abounds in such rules; business and society are based on them.</p>
+ * <p>The world abounds in such rules; business and society are based on them.</p >
  * <pre>
  *              IRule
  *                |

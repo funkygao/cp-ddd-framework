@@ -15,7 +15,7 @@ import lombok.NonNull;
 public interface IIdentityResolver<Identity extends IIdentity> extends IPlugable, IDomainService {
 
     /**
-     * 根据业务身份判断是否属于我的业务.
+     * 根据业务身份判断是否属于我的业务：准入规则(条件).
      *
      * @param identity 业务身份，业务特征
      * @return true if yes

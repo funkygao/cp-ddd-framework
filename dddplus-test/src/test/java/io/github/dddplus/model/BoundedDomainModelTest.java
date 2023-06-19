@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
+import static org.junit.Assert.assertSame;
+
 public class BoundedDomainModelTest {
 
     @Test
@@ -14,6 +16,7 @@ public class BoundedDomainModelTest {
         OrderPack orderPack = order.inContextOfPack();
         orderPack.packNo = "PO-89";
         orderPack.pack();
+        assertSame(order, orderPack.unbounded());
     }
 
     @Slf4j

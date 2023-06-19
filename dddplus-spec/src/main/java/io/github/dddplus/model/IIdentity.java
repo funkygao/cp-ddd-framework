@@ -10,10 +10,15 @@ import io.github.dddplus.ext.IIdentityResolver;
 /**
  * 业务身份.
  *
- * <p>从中可以获取业务特征，以便路由扩展点.</p>
- * <p>使用注意：{@link IIdentity}不意味着每次路由扩展点时你都要定义新的业务身份类，很可能让现有的类实现本接口即可.</p>
+ * <p>从中可以获取业务特征，以便路由扩展点实例.</p>
+ * <p>业务身份，本质是产生业务变化的来源，技术上表现为维度(字段的组合).</p>
+ * <ul>使用注意：
+ * <li>{@link IIdentity}不意味着每次路由扩展点时你都要定义新的业务身份类，很可能让现有的领域模型类实现本接口即可</li>
+ * <li>业务身份属于领域层概念，{@code DTO}不能是业务身份</li>
+ * </ul>
  *
- * @see io.github.dddplus.ext.IIdentityResolver
+ * @see io.github.dddplus.ext.IIdentityResolver#match(IIdentity)
+ * @see io.github.dddplus.ext.IPolicy#extensionCode(IIdentity)
  */
 public interface IIdentity {
 

@@ -102,7 +102,7 @@ public final class DDD {
      * @param <R>         Reducer
      */
     private static <Ext extends IDomainExtension, R> Ext firstExtension(@NonNull Class<Ext> extClazz, @NonNull IIdentity identity, int timeoutInMs) {
-        ExtensionInvocationHandler<Ext, R> proxy = new ExtensionInvocationHandler(extClazz, identity, null, null, timeoutInMs);
+        ExtensionInvocationHandler<Ext, R> proxy = new ExtensionInvocationHandler(extClazz, identity, null, null, InternalIndexer.registeredInterceptor(), timeoutInMs);
         return proxy.createProxy();
     }
 

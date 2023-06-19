@@ -6,6 +6,7 @@ import io.github.dddplus.runtime.ExtTimeoutException;
 import io.github.dddplus.runtime.StepsExecTemplate;
 import io.github.dddplus.runtime.policy.ConsumableExtPolicy;
 import io.github.dddplus.runtime.policy.IConsumableExt;
+import io.github.dddplus.runtime.policy.MyBusinessException;
 import io.github.dddplus.runtime.policy.SKU;
 import io.github.dddplus.runtime.registry.mock.MockStartupListener;
 import io.github.dddplus.runtime.registry.mock.domain.FooDomain;
@@ -13,6 +14,7 @@ import io.github.dddplus.runtime.registry.mock.exception.FooException;
 import io.github.dddplus.runtime.registry.mock.ext.*;
 import io.github.dddplus.runtime.registry.mock.extension.B2CExt;
 import io.github.dddplus.runtime.registry.mock.model.FooModel;
+import io.github.dddplus.runtime.registry.mock.model.SaleOrder;
 import io.github.dddplus.runtime.registry.mock.partner.FooPartner;
 import io.github.dddplus.runtime.registry.mock.pattern.extension.B2BMultiMatchExt;
 import io.github.dddplus.runtime.registry.mock.policy.TriggerPolicy;
@@ -78,6 +80,8 @@ public class IntegrationTest {
 
         // ExtensionInvocationHandler.extInvokeTimerExecutor的线程池缩小到10，方便并发测试
         System.setProperty("invokeExtMaxPoolSize", "10");
+        // GovernanceAspect UMP
+        System.setProperty("appName", "foo");
     }
 
     @Test
@@ -126,6 +130,13 @@ public class IntegrationTest {
         // submit里执行了Reducer.firstOf，对应的扩展点是：B2CExt, PartnerExt
         // 应该返回 PartnerExt 的结果
         assertEquals("2", result);
+    }
+
+    @Test
+    public void blindlyRunAllExt() {
+        log.info("blindlyRunAllExt 1");
+        DDD.useRouter(PullbackExtRouter.class).blindlyExecuteAllExt(new SaleOrder());
+        log.info("blindlyRunAllExt 2");
     }
 
     @Test
@@ -225,6 +236,18 @@ public class IntegrationTest {
         LogAssert.assertContains("bar trigger");
 
         DDD.usePolicy(TriggerPolicy.class, fooModel).afterInsert(fooModel);
+    }
+
+    @Test
+    public void businessException() {
+        String skuValue = "2";
+        SKU sku = new SKU(skuValue);
+        try {
+            DDD.usePolicy(ConsumableExtPolicy.class, sku).recommend(skuValue);
+            fail();
+        } catch (MyBusinessException expected) {
+            assertEquals("hi 2", expected.getMessage());
+        }
     }
 
     @Test
@@ -582,7 +605,7 @@ public class IntegrationTest {
         assertEquals(Steps.Submit.GoodsValidationGroup, submitSteps.get(0).getTags()[0]);
 
         // extensions: IFooExt IMultiMatchExt IReviseStepsExt IDecideStepsExt IPartnerExt IPatternOnlyExt
-        assertEquals(6, artifacts.getExtensions().size());
+        assertEquals(7, artifacts.getExtensions().size());
         int foundExtN = 0;
         boolean foundPartnerOnlyPattern = false;
         boolean foundPatternOnlyPattern = false;

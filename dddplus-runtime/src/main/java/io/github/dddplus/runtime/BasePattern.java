@@ -20,17 +20,20 @@ import java.util.concurrent.ConcurrentHashMap;
  * 业务模式身份解析器的模板方法类.
  * <p>
  * <p>通过模板方法，实现不同领域模型的{@code match}方法动态分发</p>
+ * <p>Double Dispatch：determines the method to invoke at runtime based both on the receiver type and the argument types</p>
+ * <p>Java语言本身不支持Double Dispatch，通过{@code Visitor Pattern}可以，但太复杂：这里通过反射实现</p>
+ * <p>你也可以不使用{@link BasePattern}，直接实现{@link IIdentityResolver}：这是允许的</p>
  * <p>具体的{@link BasePattern}实现类，必须使用{@link Pattern}注解进行标注!</p>
  * <p>IMPORTANT: 子类的每个{@code match}方法入参必须是{@link IIdentity}，研发自己定义的类</p>
  * <pre>
  * {@code
- * @Pattern(code = Patterns.CLPS)
- * public class ClpsPattern extends BasePattern {
+ * ℗Pattern(code = Patterns.Foo)
+ * public class FooPattern extends BasePattern {
  *     private boolean match(ShipmentOrder identity) {
- *         return identity.isScenarioOf(new FromClps());
+ *         return identity.isScenarioOf(new FromFoo());
  *     }
  *     private boolean match(CheckTask identity) {
- *         return identity.getExtInfo("clps", Boolean.class);
+ *         return identity.getExtInfo("foo", Boolean.class);
  *     }
  *     private boolean match(Carton identity) {
  *         return xxx;
@@ -38,11 +41,14 @@ import java.util.concurrent.ConcurrentHashMap;
  * }
  * }
  * </pre>
+ *
+ * @see <a href="https://www.baeldung.com/ddd-double-dispatch">Double Dispatch in DDD</a>
  */
 @Slf4j
 public abstract class BasePattern implements IIdentityResolver<IIdentity> {
     private static final String MATCH_METHOD_NAME = "match";
     // 必须考虑并发场景，因为static，JVM内共享一份cache
+    // volatile(double check lock) is not required, since the map object itself will not change
     private static final Map<String, Method> matchMethodCache = new ConcurrentHashMap<>();
 
     @Override
@@ -61,6 +67,8 @@ public abstract class BasePattern implements IIdentityResolver<IIdentity> {
                         log.debug("get pattern match method with reflection: {}", cacheKey);
                         matchMethod = getMatchMethod(patternClazz, identityClazz);
                         matchMethodCache.put(cacheKey, matchMethod);
+                    } else {
+                        log.debug("got pattern after double check: {}", cacheKey);
                     }
                 }
             } catch (Exception e) {

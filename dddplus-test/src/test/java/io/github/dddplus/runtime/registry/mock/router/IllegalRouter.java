@@ -9,7 +9,7 @@ import lombok.NonNull;
 public class IllegalRouter extends BaseRouter<IFooExt, FooModel> {
 
     public String submit(FooModel model) {
-        String s1 = "submit received: " + String.valueOf(this.forEachExtension(model, null).execute(model));
+        String s1 = "submit received: " + String.valueOf(this.forEachExtension(model).execute(model));
         return s1 + ", firstExt got: " + String.valueOf(firstExtension(model).execute(model));
     }
 

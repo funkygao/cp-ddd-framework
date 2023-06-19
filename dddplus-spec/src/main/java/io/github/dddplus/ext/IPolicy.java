@@ -10,39 +10,59 @@ import io.github.dddplus.model.IIdentity;
 import lombok.NonNull;
 
 /**
- * 单一扩展点的动态路由策略.
+ * 单一扩展点的路由策略.
  *
- * <p>不同于 {@link IIdentityResolver} 的静态绑定，扩展点定位策略是动态的.</p>
- * <p>每一个扩展点定位策略只能有一个实例，并且绑定到一个扩展点，此外也不再需要额外的扩展点路由类.</p>
- * <p>每个实现{@link IPolicy}的类，必须使用{@code Policy}注解进行标注!</p>
- * <p>最佳实践：Policy code，定义在{@link IPolicy}的实现类里，供扩展点实现者使用：</p>
+ * <p>不同于 {@link IIdentityResolver} 需要{@code Router}类进行路由，{@link IPolicy}本身已经实现路由，无需定义{@code Router}类</p>
+ * <p>{@link IPolicy}要实现在中台，这体现了"平台强管控"思想，场景的准入规则由中台控制，而不是BP自行控制</p>
+ * <p>很多研发利用{@code Spring}机制，自行实现了路由策略：</p>
  * <pre>
  * {@code
- * @Policy(extClazz = IFetchWaybillGatewayExt.class)
- * public class FetchWaybillGatewayPolicy implements IPolicy<ShipmentOrder> {
- *     public static final String NETEASE = "网易";
- *     public static final String ALPHA = "alpha";
- *     public static final String UNKNOWN = "不支持";
+ * interface Policy {
+ *     boolean support(Context context);
+ *     void execute(Context context);
+ * }
  *
- *     @Override
- *     public @NonNull String extensionCode(@NonNull ShipmentOrder identity) {
+ * List<Policy> policies; // 通过Spring自动注入
+ * for (Policy policy : policies) {
+ *     if (policy.support(context)) {
+ *         policy.execute(context);
+ *     }
+ * }
+ * }
+ * </pre>
+ * <p>这有什么问题？它耦合了(控制逻辑，执行逻辑)，丧失了平台强管控.</p>
+ * <pre>
+ * {@code
+ * ℗Policy
+ * public class FetchWaybillGatewayPolicy implements IPolicy<IFetchWaybillGatewayExt, ShipmentOrder> {
+ *     public static final String NETEASE = "网易"; // 供扩展点实现类绑定时引用
+ *     public static final String ALPHA = "alpha";
+ *
+ *     public String extensionCode(@NonNull ShipmentOrder identity) {
  *         ShipmentOrderPackContext packContext = identity.inContextOfPack();
  *         if (packContext.needWaybillFromNetease()) {
  *             return NETEASE;
  *         } else if (packContext.waybillFromAlpha()) {
  *             return ALPHA;
  *         } else {
- *             return UNKNOWN;
+ *             return null; // 没有任何扩展点实现
  *         }
  *     }
  * }
  *
- * @Extension(code = FetchWaybillGatewayPolicy.ALPHA)
+ * ℗Extension(code = FetchWaybillGatewayPolicy.ALPHA)
  * public class FetchWaybillGatewayExtAlpha implements IFetchWaybillGatewayExt {
- *     @Override
  *     public List<Waybill> fetchWaybill(ShipmentOrder so, PackBag packBag) {
  *         return null;
  *     }
+ * }
+ *
+ * // 预埋
+ * List<Waybill> waybills = DDD.usePolicy(FetchWaybillGatewayPolicy.class, so).fetchWaybill(so, packBag);
+ * if (waybills == null) {
+ *     // 没有命中任何扩展点实现，这体现了扩展点的第1个语义：做不做
+ * } else {
+ *     // 有扩展点实现，并返回了数据，这体现了扩展点的第2个语义：怎么做
  * }
  * }
  * </pre>

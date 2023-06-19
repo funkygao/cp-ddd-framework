@@ -1,6 +1,7 @@
 package io.github.dddplus.runtime.registry.mock.router;
 
 import io.github.dddplus.annotation.Governance;
+import io.github.dddplus.annotation.LogInfo;
 import io.github.dddplus.annotation.Router;
 import io.github.dddplus.runtime.BaseRouter;
 import io.github.dddplus.runtime.IReducer;
@@ -18,6 +19,7 @@ import java.util.function.Predicate;
 public class BarRouter extends BaseRouter<IFooExt, FooModel> {
     public static final String EX = "blah";
 
+    @LogInfo(in = true, out = true)
     @Governance
     public String submit(FooModel model) {
         Predicate<Integer> predicate = new Predicate<Integer>() {
@@ -26,17 +28,18 @@ public class BarRouter extends BaseRouter<IFooExt, FooModel> {
                 return integer > 1;
             }
         };
-        int result = forEachExtension(model, IReducer.firstOf(predicate)).execute(model);
+        int result = forEachExtension(model, IReducer.stopOnFirstMatch(predicate)).execute(model);
         return String.valueOf(result);
     }
 
-    @Governance(profiler = false)
+    @LogInfo(in = true)
     public void throwsEx(FooModel model) {
         log.info("will throw exception...");
         throw new RuntimeException(EX);
     }
 
     @Governance
+    @LogInfo(inOut = true)
     public String submit2(FooModel model) {
         Integer result = forEachExtension(model, IReducer.allOf(new Predicate<Integer>() {
             @Override

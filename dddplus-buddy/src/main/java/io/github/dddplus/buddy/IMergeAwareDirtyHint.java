@@ -1,3 +1,8 @@
+/*
+ * Copyright DDDplus Authors.
+ *
+ * Licensed under the Apache License version 2.0, available at http://www.apache.org/licenses/LICENSE-2.0
+ */
 package io.github.dddplus.buddy;
 
 import java.io.Serializable;
@@ -7,7 +12,7 @@ import java.io.Serializable;
  *
  * @param <ID> 该hint的唯一标识
  */
-public interface IMergeableDirtyHint<ID extends Serializable> extends IDirtyHint, IdentifiableDomainObject<ID> {
+public interface IMergeAwareDirtyHint<ID extends Serializable> extends IDirtyHint, IdentifiableDomainObject<ID> {
 
     /**
      * Merge预留的hook.
@@ -16,6 +21,5 @@ public interface IMergeableDirtyHint<ID extends Serializable> extends IDirtyHint
      *
      * @param thatHint {@link DirtyMemento}里现存的该hint
      */
-    default void onMerge(IDirtyHint thatHint) {
-    }
+    void onMerge(IDirtyHint thatHint);
 }

@@ -8,7 +8,6 @@ package io.github.dddplus;
 import com.tngtech.archunit.core.domain.JavaModifier;
 import com.tngtech.archunit.lang.ArchRule;
 import io.github.dddplus.annotation.*;
-import io.github.dddplus.ext.IDomainExtension;
 import io.github.dddplus.ext.IIdentityResolver;
 import io.github.dddplus.model.IDomainModel;
 import io.github.dddplus.model.IDomainService;
@@ -124,16 +123,6 @@ public class ArchitectureEnforcer {
                 .as("Pattern的使用规范");
     }
 
-    public static final ArchRule extensionRule() {
-        return classes()
-                .that().areAssignableTo(IDomainExtension.class)
-                .and().areNotInterfaces()
-                .and().haveNameNotMatching(".Default*") // 默认的扩展点实现可以不使用 @Extension
-                .should().haveNameMatching(".*Ext")
-                .andShould().beAnnotatedWith(Extension.class)
-                .as("扩展点实现的规范");
-    }
-
     public static final ArchRule loggers_should_be_private_static_final() {
         return fields()
                 .that().haveRawType(Logger.class)
@@ -221,7 +210,6 @@ public class ArchitectureEnforcer {
         requiredRules.add(routerRule());
         requiredRules.add(partnerRule());
         requiredRules.add(domainStepRule());
-        requiredRules.add(extensionRule());
 
         requiredRules.add(controllers_should_only_use_their_own_slice());
     }

@@ -33,6 +33,7 @@ under the License.
         <module>dddplus-buddy</module>
         <module>dddplus-plugin</module>
         <module>dddplus-enforce</module>
+        <module>dddplus-visualization</module>
     </modules>
 
     <properties>
@@ -45,11 +46,25 @@ under the License.
 
         <!-- unified 3rd party dependencies version -->
         <lombok.version>1.18.8</lombok.version>
-        <slf4j.version>1.7.25</slf4j.version>
+        <slf4j.version>1.7.30</slf4j.version>
+        <junit-jupiter.version>5.5.2</junit-jupiter.version>
         <junit.version>4.13.1</junit.version>
-        <archunit.version>0.13.1</archunit.version>
+        <mockito.version>3.8.0</mockito.version>
+        <archunit.version>0.15.0</archunit.version>
         <spring.version>5.2.6.RELEASE</spring.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>${junit-jupiter.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <dependency>
@@ -174,6 +189,13 @@ under the License.
             </build>
             <modules>
                 <module>dddplus-test</module>
+            </modules>
+        </profile>
+
+        <profile>
+            <id>plugin</id>
+            <modules>
+                <module>dddplus-plugin</module>
             </modules>
         </profile>
 

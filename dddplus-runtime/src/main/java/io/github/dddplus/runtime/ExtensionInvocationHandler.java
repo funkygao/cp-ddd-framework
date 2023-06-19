@@ -5,8 +5,11 @@
  */
 package io.github.dddplus.runtime;
 
+import io.github.dddplus.IExceptionWeakLogging;
 import io.github.dddplus.ext.IDomainExtension;
 import io.github.dddplus.model.IIdentity;
+import io.github.dddplus.runtime.interceptor.ExtensionContext;
+import io.github.dddplus.runtime.interceptor.IExtensionInterceptor;
 import io.github.dddplus.runtime.registry.ExtensionDef;
 import io.github.dddplus.runtime.registry.InternalIndexer;
 import lombok.NonNull;
@@ -41,13 +44,15 @@ class ExtensionInvocationHandler<Ext extends IDomainExtension, R> implements Inv
     private final IIdentity identity;
     private final IReducer<R> reducer;
     private final Ext defaultExt;
-    private int timeoutInMs;
+    private final IExtensionInterceptor interceptor;
+    private final int timeoutInMs;
 
-    ExtensionInvocationHandler(@NonNull Class<Ext> extInterface, @NonNull IIdentity identity, IReducer<R> reducer, Ext defaultExt, int timeoutInMs) {
+    ExtensionInvocationHandler(@NonNull Class<Ext> extInterface, @NonNull IIdentity identity, IReducer<R> reducer, Ext defaultExt, IExtensionInterceptor interceptor, int timeoutInMs) {
         this.extInterface = extInterface;
         this.identity = identity;
         this.reducer = reducer;
         this.defaultExt = defaultExt;
+        this.interceptor = interceptor;
         this.timeoutInMs = timeoutInMs;
     }
 
@@ -94,11 +99,27 @@ class ExtensionInvocationHandler<Ext extends IDomainExtension, R> implements Inv
 
     private R invokeExtension(ExtensionDef extensionDef, final Method method, Object[] args) throws Throwable {
         try {
-            return invokeExtensionMethod(extensionDef, method, args);
+            ExtensionContext context = null;
+            if (interceptor != null) {
+                context = new ExtensionContext(extensionDef.getCode(), extensionDef.getExtensionBean(), method, args);
+                interceptor.beforeInvocation(context);
+            }
+            try {
+                return invokeExtensionMethod(extensionDef, method, args);
+            } finally {
+                if (interceptor != null) {
+                    interceptor.afterInvocation(context);
+                }
+            }
         } catch (InvocationTargetException e) {
             // 此处接收被调用方法内部未被捕获的异常：扩展点里抛出异常
-            log.error("{} code:{}", this.extInterface.getCanonicalName(), extensionDef.getCode(), e.getTargetException());
-            throw e.getTargetException();
+            Throwable actualException = e.getTargetException();
+            if (actualException instanceof IExceptionWeakLogging) {
+                log.warn("{} code:{} ex:{}", this.extInterface.getCanonicalName(), extensionDef.getCode(), actualException.getMessage());
+            } else {
+                log.error("{} code:{}", this.extInterface.getCanonicalName(), extensionDef.getCode(), e.getTargetException());
+            }
+            throw actualException;
         } catch (TimeoutException e) {
             log.error("timed out:{}ms, {} method:{} args:{}", timeoutInMs, extensionDef.getExtensionBean(), method.getName(), args);
             // java里的TimeoutException继承Exception，需要转为ExtTimeoutException，否则上层看到的异常是 UndeclaredThrowableException

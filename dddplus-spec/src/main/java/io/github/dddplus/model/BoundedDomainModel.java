@@ -8,15 +8,16 @@ package io.github.dddplus.model;
 import io.github.dddplus.ext.IDomainExtension;
 
 /**
- * 限定上下文的领域模型，又称角色对象(Methodful Role)：显式对Role建模(基于Role Method).
+ * 限定上下文的领域模型，又称角色对象(Methodful Role)/特定场景对象：角色对象承担相应的角色责任.
  *
  * <p>具体场景相关，运营相关，承载对应场景下的(数据，规则，行为)，不能脱离{@link IUnboundedDomainModel}独立存在，高内聚：它的代码改动只来源于该场景上下文需求</p>
- * <p>{@link IUnboundedDomainModel}通过扮演某个角色进入某个特定场景时拥有的属性或行为，成为{@link BoundedDomainModel}</p>
+ * <p>如果对象的某些行为在任何场景都是通用的，那么就放在{@link IUnboundedDomainModel}，将其绑定，这是尊重"共性"的约束；如果某些行为依赖于具体场景，就赋予相应角色形成{@link BoundedDomainModel}，这是尊重"个性"的自由.</p>
+ * <p>{@link IUnboundedDomainModel}通过扮演某个角色进入某个特定场景时拥有的属性或独立行为，成为{@link BoundedDomainModel}</p>
  * <p>{@link IUnboundedDomainModel}回答了"它是什么"这个问题，不易变；{@link BoundedDomainModel}回答了"它做了什么"这个问题，易变，聚焦于场景特有行为</p>
  * <ul>使用规范：
  * <li>一个{@link IUnboundedDomainModel}的多个{@link BoundedDomainModel}间要满足正交性，不能有重叠：不能角色错位</li>
  * <li>一次交互可以涉及多角色对象吗？可以，例如下面示例代码里，Buyer把购买到的商品赠送给朋友Contact</li>
- * <li>{@code if xxx order.asXxx() else if yyy order.asYyy()}，这样使用角色对象允许吗？不允许</li>
+ * <li>{@code if xxx order.asXxx() else if yyy order.asYyy()}，这样使用角色对象允许吗？不允许。角色对象解决确定性场景问题，不确定性问题交给扩展点</li>
  * <li>两个角色对象有相同的行为，只是内部实现不同，可以吗？不可以，使用{@link IDomainExtension}解决多态问题。区别不同角色的是Role Method(扮演各自角色时，只能做出符合自己角色身份的行为)，而不是同一个Method的不同实现(怎么做)</li>
  * <li>一个类之所以是角色对象，是因为它具有符合该角色身份的行为，例如：Teacher可以上课，而User不会</li>
  * <li>是什么 vs 做什么 vs 做不做 vs 怎么做</li>

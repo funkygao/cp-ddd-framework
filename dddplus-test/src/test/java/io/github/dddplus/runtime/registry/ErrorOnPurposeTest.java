@@ -25,7 +25,7 @@ public class ErrorOnPurposeTest {
     @After
     public void tearDown() {
         if (applicationContext != null) {
-            applicationContext.destroy();
+            applicationContext.close();
             applicationContext = null;
         }
 
@@ -35,6 +35,7 @@ public class ErrorOnPurposeTest {
         InternalIndexer.partnerDefMap.clear();
         InternalIndexer.patternDefMap.clear();
         InternalIndexer.policyDefMap.clear();
+        InternalIndexer.extensionInterceptor = null;
     }
 
     @Test

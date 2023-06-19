@@ -9,6 +9,10 @@ import io.github.dddplus.runtime.pattern.PledgePattern;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.TestInfo;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -95,6 +99,18 @@ public class BasePatternTest {
             assertTrue(expected.getCause() instanceof NoSuchMethodException);
             assertTrue(expected.getMessage().contains(" match method NoSuchMethodException "));
         }
+    }
+
+    @Execution(ExecutionMode.CONCURRENT)
+    @RepeatedTest(value = 20)
+    void concurrentTesting(TestInfo testInfo) {
+        log.info("concurrentTesting {}", testInfo.getDisplayName());
+
+        BasePattern pattern = new SubPresalePattern();
+        Order order = new Order();
+        assertFalse(pattern.match(order));
+        order.setMoneyCollected(5);
+        assertTrue(pattern.match(order));
     }
 
     @Test

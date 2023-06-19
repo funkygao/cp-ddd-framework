@@ -21,7 +21,7 @@ public class BadOnPurposeTest {
     @After
     public void tearDown() {
         if (applicationContext != null) {
-            applicationContext.destroy();
+            applicationContext.close();
             applicationContext = null;
         }
 
@@ -32,6 +32,7 @@ public class BadOnPurposeTest {
         InternalIndexer.partnerDefMap.clear();
         InternalIndexer.patternDefMap.clear();
         InternalIndexer.policyDefMap.clear();
+        InternalIndexer.extensionInterceptor = null;
     }
 
     @Test

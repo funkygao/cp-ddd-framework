@@ -12,15 +12,11 @@ import org.springframework.stereotype.Component;
 import java.lang.annotation.*;
 
 /**
- * 业务模式身份，被标注的类可继承{@link BasePattern}模板方法类.
+ * 业务模式的身份识别.
  * <p>
- * <p>中台架构的本质，是业务模式的复用</p>
- * <p>业务模式，全称：特定场景中的业务模式，可以简单理解为场景的模式化，场景(scenario)是问题，包括时间地点起因经过结果，{@link Pattern}是以场景为输入的解决方案</p>
- * <p>业务模式帮助我们理解业务本质，而且在业务场景下帮助我们做出业务决策，业务模式实际上是一组决策模式的集合</p>
- * <p>业务模式需要一种恰如其分的抽象：适度地泛化可以在不同的场景下复用，但又要避免在具体的场景下丧失它对于业务决策的指导意义</p>
- * <p>对于业务模式，最好的办法是从已经存在的业务模型中去提取：泛化，归一化，语义标准化</p>
- * <p>设计思想：模式的定义、模式的相关行为与实现分离</p>
- * <p>一个请求可能涉及多个{@link Pattern}的叠加，例如：按生产单出库的校验，可能涉及【预售模式】、【质押模式】等的叠加，都允许才能出库</p>
+ * <p>全局业务模式，串联面状业务变化，识别出业务模式需要全局(至少是多环节)地对业务变化进行本质性思考，这些不同变化都可以归因到某个业务模式</p>
+ * <p>设计思想：模式的定义、模式的相关行为与实现分离，背后是关注点分离，隔离变化</p>
+ * <p>一个请求可能涉及多个{@link Pattern}的叠加，即业务身份重叠，例如：按生产单出库的校验，可能涉及【预售模式】、【质押模式】等的叠加，都允许才能出库</p>
  * <ul>如何理解{@code Pattern}与{@code IDomainExtension}？
  * <li>{@code Pattern}，相当于把散落在各处的某个业务逻辑{@code if} 判断条件，收敛到{@code Pattern}类里，使得这些业务判断显式化，有形化，有了化身，并有了个名字(UL)</li>
  * <li>扩展点，相当于把{@code if} 后面的code block抽象并归一化，是一种细粒度的行为</li>
@@ -59,14 +55,14 @@ public @interface Pattern {
     int priority() default 1024;
 
     /**
-     * 该{@code Pattern}类是否用于识别业务模式.
+     * 该{@code Pattern}类是否用于解析和识别业务模式.
      * <p>
      * <ul>{@code Pattern}特有的行为，不仅包括{@link IDomainExtension}，还可能有：
      * <li>Application Service</li>
      * <li>Domain Service</li>
      * <li>etc</li>
      * </ul>
-     * <p>对于这类非业务模式识别情况，需要设置{@link #resolver()}为{@code false}.</p>
+     * <p>对于这类非业务模式解析和识别应用场景，需要设置{@link #asResolver()} ()}为{@code false}.</p>
      */
-    boolean resolver() default true;
+    boolean asResolver() default true;
 }

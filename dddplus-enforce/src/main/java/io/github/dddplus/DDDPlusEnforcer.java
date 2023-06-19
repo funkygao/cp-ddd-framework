@@ -50,6 +50,7 @@ public class DDDPlusEnforcer {
         rules.add(IIdentityResolver());
         rules.add(IDomainExtensionImplementation());
         rules.add(IDomainExtensionDeclaration());
+        rules.add(Router());
         rules.add(BaseRouter());
         rules.add(Pattern());
         rules.add(BasePattern());
@@ -82,6 +83,13 @@ public class DDDPlusEnforcer {
                 .andShould().beAnnotatedWith(Router.class);
     }
 
+    private static ArchRule Router() {
+        return classes()
+                .that().areAnnotatedWith(Router.class)
+                .and().doNotHaveModifier(JavaModifier.ABSTRACT)
+                .should().haveNameMatching(".*ExtRouter");
+    }
+
     /**
      * {@link IIdentityResolver}使用规范.
      * <p>
@@ -101,23 +109,23 @@ public class DDDPlusEnforcer {
      * <p>必须实现{@link IIdentityResolver}，类名后缀为"Pattern"</p >
      */
     private static final ArchRule Pattern() {
-        class ResolverPattern extends DescribedPredicate<JavaClass> {
-            ResolverPattern() {
+        class PatternAsResolver extends DescribedPredicate<JavaClass> {
+            PatternAsResolver() {
                 super("");
             }
 
             @Override
             public boolean apply(JavaClass javaClass) {
                 Pattern pattern = javaClass.getAnnotationOfType(Pattern.class);
-                // 非resolver类pattern排除在外，利用pattern特有的application service
-                return pattern.resolver();
+                // 非resolver类pattern排除在外，例如：pattern特有的application service
+                return pattern.asResolver();
             }
         }
 
         return classes()
                 .that().areAnnotatedWith(Pattern.class)
                 .and().doNotHaveModifier(JavaModifier.ABSTRACT)
-                .and(new ResolverPattern())
+                .and(new PatternAsResolver())
                 .should().beAssignableTo(IIdentityResolver.class)
                 .andShould().haveNameMatching(".*Pattern");
     }
