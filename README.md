@@ -44,7 +44,7 @@ DDDplus提炼出(fine-grained，细粒度，精确)的模型构造块，根据�
 
 - 确定性问题
    - [IBag](/dddplus-spec/src/main/java/io/github/dddplus/model/IBag.java)，封装集合逻辑
-   - ([IRule](/dddplus-spec/src/main/java/io/github/dddplus/model/IRule.java), [IBehavioralRule](/dddplus-spec/src/main/java/io/github/dddplus/model/IBehavioralRule.java))，[IDefinitionalRule](/dddplus-spec/src/main/java/io/github/dddplus/model/IDefinitionalRule.java))，业务规则对象
+   - ([IRule](/dddplus-spec/src/main/java/io/github/dddplus/model/IRule.java), [IBehavioralRule](/dddplus-spec/src/main/java/io/github/dddplus/model/IBehavioralRule.java)，[IDefinitionalRule](/dddplus-spec/src/main/java/io/github/dddplus/model/IDefinitionalRule.java))，业务规则对象
    - ([IUnboundedDomainModel](/dddplus-spec/src/main/java/io/github/dddplus/model/IUnboundedDomainModel.java), [BoundedDomainModel](/dddplus-spec/src/main/java/io/github/dddplus/model/BoundedDomainModel.java))，上下文角色对象
    - ([DirtyMemento](/dddplus-buddy/src/main/java/io/github/dddplus/buddy/DirtyMemento.java), [IDirtyHint](/dddplus-buddy/src/main/java/io/github/dddplus/buddy/IDirtyHint.java), [IMergeAwareDirtyHint](/dddplus-buddy/src/main/java/io/github/dddplus/buddy/IMergeAwareDirtyHint.java))，追踪领域对象状态变化，通过乐观锁实现落库
    - [Exchange](/dddplus-buddy/src/main/java/io/github/dddplus/buddy/Exchange.java)，domain与infrastructure间传递非领域数据的容器
@@ -64,9 +64,9 @@ DDDplus提炼出(fine-grained，细粒度，精确)的模型构造块，根据�
 - 技术组件
    - [mapstruct](https://mapstruct.org/)，对象转换
 - 架构守护
-   - [DDDPlusEnforcer](/dddplus-enforcer/src/main/java/io/github/dddplus/DDDPlusEnforcer.java)，业务建模规范的架构守护
+   - [DDDPlusEnforcer](/dddplus-enforce/src/main/java/io/github/dddplus/DDDPlusEnforcer.java)，业务建模规范的架构守护
 - 可视化逆向建模
-   - [DomainModelAnalyzer](/dddplus-spec/src/main/java/io/github/dddplus/dsl/package-info.java), [PlantUmlBuilder](/dddplus-visualization/src/main/java/io/github/dddplus/ast/view/PlantUmlBuilder.java), 分析Java AST自动生成逆向业务模型
+   - ([DomainModelAnalyzer](/dddplus-spec/src/main/java/io/github/dddplus/dsl/package-info.java), [PlantUmlBuilder](/dddplus-visualization/src/main/java/io/github/dddplus/ast/view/PlantUmlBuilder.java)), 分析Java AST自动生成逆向业务模型
 
 
 ### Key abstractions
