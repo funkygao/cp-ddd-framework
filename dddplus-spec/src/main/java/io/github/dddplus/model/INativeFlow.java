@@ -3,10 +3,7 @@
  *
  * Licensed under the Apache License version 2.0, available at http://www.apache.org/licenses/LICENSE-2.0
  */
-package io.github.dddplus.buddy;
-
-import io.github.dddplus.model.BoundedDomainModel;
-import io.github.dddplus.model.IGateway;
+package io.github.dddplus.model;
 
 /**
  * (有明确业务意图，跨聚合，可复用，不可拆分)的流程片段.

@@ -46,11 +46,11 @@ DDDplus提炼出(fine-grained，细粒度，精确)的模型构造块，根据�
    - [IBag](/dddplus-spec/src/main/java/io/github/dddplus/model/IBag.java)，封装集合逻辑
    - ([IRule](/dddplus-spec/src/main/java/io/github/dddplus/model/IRule.java), [IBehavioralRule](/dddplus-spec/src/main/java/io/github/dddplus/model/IBehavioralRule.java)，[IDefinitionalRule](/dddplus-spec/src/main/java/io/github/dddplus/model/IDefinitionalRule.java))，业务规则对象
    - ([IUnboundedDomainModel](/dddplus-spec/src/main/java/io/github/dddplus/model/IUnboundedDomainModel.java), [BoundedDomainModel](/dddplus-spec/src/main/java/io/github/dddplus/model/BoundedDomainModel.java))，上下文角色对象
-   - ([DirtyMemento](/dddplus-buddy/src/main/java/io/github/dddplus/buddy/DirtyMemento.java), [IDirtyHint](/dddplus-buddy/src/main/java/io/github/dddplus/buddy/IDirtyHint.java), [IMergeAwareDirtyHint](/dddplus-buddy/src/main/java/io/github/dddplus/buddy/IMergeAwareDirtyHint.java))，追踪领域对象状态变化，通过乐观锁实现落库
-   - [Exchange](/dddplus-buddy/src/main/java/io/github/dddplus/buddy/Exchange.java)，domain与infrastructure间传递非领域数据的容器
-   - [ISpecification](/dddplus-buddy/src/main/java/io/github/dddplus/buddy/specification/ISpecification.java)，业务校验和场景识别
-   - [INativeFlow](/dddplus-buddy/src/main/java/io/github/dddplus/buddy/INativeFlow.java)，可复用的流程片段
-   - [AbstractBusinessNo](/dddplus-buddy/src/main/java/io/github/dddplus/buddy/vo/AbstractBusinessNo.java)，业务编号建模
+   - ([DirtyMemento](/dddplus-runtime/src/main/java/io/github/dddplus/buddy/DirtyMemento.java), [IDirtyHint](/dddplus-runtime/src/main/java/io/github/dddplus/buddy/IDirtyHint.java), [IMergeAwareDirtyHint](/dddplus-runtime/src/main/java/io/github/dddplus/buddy/IMergeAwareDirtyHint.java))，追踪领域对象状态变化，通过乐观锁实现落库
+   - [Exchange](/dddplus-runtime/src/main/java/io/github/dddplus/buddy/Exchange.java)，domain与infrastructure间传递非领域数据的容器
+   - [ISpecification](/dddplus-runtime/src/main/java/io/github/dddplus/buddy/specification/ISpecification.java)，业务校验和场景识别
+   - [INativeFlow](/dddplus-spec/src/main/java/io/github/dddplus/model/INativeFlow.java)，可复用的流程片段
+   - [AbstractBusinessNo](/dddplus-runtime/src/main/java/io/github/dddplus/buddy/vo/AbstractBusinessNo.java)，业务编号建模
    - [IUnitOfWork](/dddplus-spec/src/main/java/io/github/dddplus/model/IUnitOfWork.java)，跨聚合根的事务
 - 不确定问题
    - [IDomainExtension](/dddplus-spec/src/main/java/io/github/dddplus/ext/IDomainExtension.java)，扩展点

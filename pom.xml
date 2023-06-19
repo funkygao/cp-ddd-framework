@@ -30,7 +30,6 @@ under the License.
     <modules>
         <module>dddplus-spec</module>
         <module>dddplus-runtime</module>
-        <module>dddplus-buddy</module>
         <module>dddplus-plugin</module>
         <module>dddplus-enforce</module>
         <module>dddplus-visualization</module>

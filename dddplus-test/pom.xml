@@ -31,11 +31,6 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>io.github.dddplus</groupId>
-            <artifactId>dddplus-buddy</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>dddplus-plugin</artifactId>
             <version>${project.version}</version>
