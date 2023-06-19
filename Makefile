@@ -1,3 +1,5 @@
+BRANCH := $(shell git rev-parse --abbrev-ref HEAD)
+
 package:clean
 	@mvn package
 
@@ -27,7 +29,11 @@ jdepend:
 	@find . -name jdepend-report.html
 
 deploy:
+ifeq ($(BRANCH), master)
 	@mvn clean deploy verify -Possrh -e
+else
+	@echo $(BRANCH) cannot deploy
+endif
 
 deploy-snapshot:
 	@mvn clean deploy verify -Dskip.dddplus.plugin.module=false -Possrh -e

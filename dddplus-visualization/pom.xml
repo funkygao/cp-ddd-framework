@@ -48,11 +48,6 @@ under the License.
             <version>${javaparser.version}</version>
         </dependency>
         <dependency>
-            <groupId>guru.nidi</groupId>
-            <artifactId>graphviz-java</artifactId>
-            <version>${java.graphviz.version}</version>
-        </dependency>
-        <dependency>
             <groupId>net.steppschuh.markdowngenerator</groupId>
             <artifactId>markdowngenerator</artifactId>
             <version>1.3.2</version>
