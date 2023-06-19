@@ -43,7 +43,7 @@ DDDplus是对DDD的增强，主要包括：
 DDDplus提炼出(fine-grained，细粒度，精确)的模型构造块，根据具体问题对号入座，研发才可能实现出好的业务模型。
 
 - 确定性问题
-   - [IBag](IBag.java)，封装集合逻辑
+   - [IBag](/blob/2.0.0/dddplus-spec/src/main/java/io/github/dddplus/model/IBag.java)，封装集合逻辑
    - ([IRule](IRule.java), [IBehavioralRule](IBehavioralRule.java))，[IDefinitionalRule](IDefinitionalRule.java))，业务规则对象
    - ([IUnboundedDomainModel](IUnboundedDomainModel.java), [BoundedDomainModel](BoundedDomainModel.java))，上下文角色对象
    - ([DirtyMemento](DirtyMemento.java), [IDirtyHint](IDirtyHint.java), [IMergeAwareDirtyHint](IMergeAwareDirtyHint.java))，追踪领域对象状态变化，通过乐观锁实现落库
