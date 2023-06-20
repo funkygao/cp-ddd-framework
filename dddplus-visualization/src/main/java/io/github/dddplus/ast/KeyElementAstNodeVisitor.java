@@ -5,7 +5,6 @@
  */
 package io.github.dddplus.ast;
 
-import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -57,9 +56,8 @@ public class KeyElementAstNodeVisitor extends VoidVisitorAdapter<KeyModelReport>
             return;
         }
 
-        CompilationUnit cu = (CompilationUnit) parentClass.getParentNode().get();
-        final String packageName = cu.getPackageDeclaration().get().getNameAsString();
 
+        final String packageName = JavaParserUtil.packageName(parentClass);
         final String className = parentClass.getNameAsString();
         KeyModelEntry entry = report.getOrCreateKeyModelEntryForActor(className);
         entry.setPackageName(packageName);

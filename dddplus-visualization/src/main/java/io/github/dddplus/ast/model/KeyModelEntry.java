@@ -14,6 +14,7 @@ import java.util.*;
 @Getter
 public class KeyModelEntry {
     private static final Set<String> EMPTY_SET = new HashSet();
+    private static final Set<KeyPropertyEntry> EMPTY_PROPERTIES = new HashSet<>();
 
     @Setter
     private String packageName;
@@ -72,10 +73,9 @@ public class KeyModelEntry {
         return result;
     }
 
-
-    public Set<String> fieldSetByType(KeyElement.Type type) {
-        List<KeyPropertyEntry> propertiesOfType = properties.get(type);
-        if (propertiesOfType == null) {
+    public Set<String> fieldNameSetByType(KeyElement.Type type) {
+        Set<KeyPropertyEntry> propertiesOfType = keyPropertiesByType(type);
+        if (propertiesOfType.isEmpty()) {
             return EMPTY_SET;
         }
 
@@ -85,6 +85,15 @@ public class KeyModelEntry {
         }
 
         return result;
+    }
+
+    public Set<KeyPropertyEntry> keyPropertiesByType(KeyElement.Type type) {
+        List<KeyPropertyEntry> propertiesOfType = properties.get(type);
+        if (propertiesOfType == null) {
+            return EMPTY_PROPERTIES;
+        }
+
+        return new HashSet<>(propertiesOfType);
     }
 
     public String displayUndefinedTypes() {
@@ -101,7 +110,12 @@ public class KeyModelEntry {
     }
 
     public String displayFieldByType(KeyElement.Type type) {
-        Set<String> fields = fieldSetByType(type);
+        Set<KeyPropertyEntry> propertyEntries = keyPropertiesByType(type);
+        Set<String> fields = new TreeSet<>();
+        for (KeyPropertyEntry entry : propertyEntries) {
+            fields.add(entry.displayName());
+        }
+
         return String.join(" ", fields);
     }
 

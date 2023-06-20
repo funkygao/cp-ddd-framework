@@ -5,7 +5,6 @@
  */
 package io.github.dddplus.ast;
 
-import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -55,9 +54,7 @@ public class KeyBehaviorAstNodeVisitor extends VoidVisitorAdapter<KeyBehaviorRep
             return;
         }
 
-        CompilationUnit cu = (CompilationUnit) parentClass.getParentNode().get();
-        final String packageName = cu.getPackageDeclaration().get().getNameAsString();
-
+        final String packageName = JavaParserUtil.packageName(parentClass);
         final String className = parentClass.getNameAsString();
         AnnotationExpr annotationExpr = methodDeclaration.getAnnotationByClass(KeyBehavior.class).get();
         KeyBehaviorEntry entry = new KeyBehaviorAnnotationParser(methodDeclaration, className, packageName).parse(annotationExpr);

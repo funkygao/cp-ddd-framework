@@ -16,9 +16,9 @@ public class JaccardDomainModelSimilarity implements IDomainModelSimilarity {
     @Override
     public double similarity(KeyModelEntry model1, KeyModelEntry model2) {
         final KeyElement.Type typeA = KeyElement.Type.Structural;
-        double s1 = jaccardSimilarity(model1.fieldSetByType(typeA), model2.fieldSetByType(typeA));
+        double s1 = jaccardSimilarity(model1.fieldNameSetByType(typeA), model2.fieldNameSetByType(typeA));
         final KeyElement.Type typeB = KeyElement.Type.Referential;
-        double s2 = jaccardSimilarity(model1.fieldSetByType(typeB), model2.fieldSetByType(typeB));
+        double s2 = jaccardSimilarity(model1.fieldNameSetByType(typeB), model2.fieldNameSetByType(typeB));
         return (s1 * StructuralWeight + s2 * (1 - StructuralWeight)) * 100; // in percentage
     }
 
