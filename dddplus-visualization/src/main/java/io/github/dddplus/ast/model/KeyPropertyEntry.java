@@ -7,6 +7,9 @@ package io.github.dddplus.ast.model;
 
 import lombok.Data;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 @Data
 public class KeyPropertyEntry {
     private String className;
@@ -15,15 +18,16 @@ public class KeyPropertyEntry {
     private String remark;
     private String javadoc;
 
-    public boolean x() {
-        return !name.equals(realName);
-    }
-
-    public String displayNameWithRemark() {
-        if (remark == null || remark.isEmpty()) {
-            return name;
+    public String displayName() {
+        Set<String> parts = new LinkedHashSet<>();
+        parts.add(name);
+        if (javadoc != null && !javadoc.isEmpty()) {
+            parts.add(javadoc);
+        }
+        if (remark != null && !remark.isEmpty()) {
+            parts.add(remark);
         }
 
-        return name + "(" + remark + ")";
+        return String.join("/", parts);
     }
 }

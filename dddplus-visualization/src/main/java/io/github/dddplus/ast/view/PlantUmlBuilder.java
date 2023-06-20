@@ -66,6 +66,8 @@ public class PlantUmlBuilder {
         connections.put(KeyRelation.Type.Contextual, "--|>");
         connections.put(KeyRelation.Type.NotifiedBy, "--o");
         connections.put(KeyRelation.Type.From, "-->");
+        connections.put(KeyRelation.Type.Extends, "--|>");
+        connections.put(KeyRelation.Type.Implements, "---|>");
     }
 
     public String umlContent() {
@@ -347,7 +349,6 @@ public class PlantUmlBuilder {
         content.append(SPACE).append(BRACE_OPEN).append(NEWLINE);
         for (KeyModelEntry clazz : aggregate.keyModels()) {
             append(TAB).writeClazzDefinition(clazz, aggregate.isRoot(clazz)).append(NEWLINE);
-
         }
         content.append(BRACE_CLOSE);
         content.append(NEWLINE).append(NEWLINE);
@@ -382,6 +383,10 @@ public class PlantUmlBuilder {
     }
 
     private PlantUmlBuilder addOrphanKeyFlows() {
+        if (model.getKeyFlowReport().actors().isEmpty()) {
+            return this;
+        }
+
         content.append(MessageFormat.format(PACKAGE_TMPL, "跨聚合复杂流程", "flows"));
         content.append(SPACE).append(BRACE_OPEN).append(NEWLINE);
         for (String actor : model.getKeyFlowReport().actors()) {
@@ -395,6 +400,10 @@ public class PlantUmlBuilder {
     }
 
     private PlantUmlBuilder addKeyUsecases() {
+        if (model.getKeyUsecaseReport().getData().isEmpty()) {
+            return this;
+        }
+
         content.append(MessageFormat.format(PACKAGE_TMPL, "用例", "UseCase"));
         content.append(SPACE).append(BRACE_OPEN).append(NEWLINE);
         for (String actor : model.getKeyUsecaseReport().getData().keySet()) {

@@ -5,6 +5,7 @@
  */
 package io.github.dddplus.ast.parser;
 
+import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
@@ -19,6 +20,18 @@ public final class JavaParserUtil {
     private static final String BLANK = "";
 
     private JavaParserUtil() {
+    }
+
+    public static String packageName(ClassOrInterfaceDeclaration classOrInterfaceDeclaration) {
+        Node node = classOrInterfaceDeclaration.getParentNode().get();
+        for (; ; ) {
+            if (node instanceof CompilationUnit) {
+                CompilationUnit cu = (CompilationUnit) node;
+                return cu.getPackageDeclaration().get().getNameAsString();
+            }
+
+            node = node.getParentNode().get();
+        }
     }
 
     /**
