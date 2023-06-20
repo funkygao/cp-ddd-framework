@@ -5,7 +5,7 @@ import io.github.dddplus.ast.model.KeyModelEntry;
 /**
  * 两个领域模型关键要素的相似度分析.
  */
-public interface IDomainModelSimilarity {
+public interface IKeyModelSimilarity {
 
     /**
      * 计算两个领域模型关键要素的相似度.
