@@ -1,11 +1,16 @@
+/*
+ * Copyright DDDplus Authors.
+ *
+ * Licensed under the Apache License version 2.0, available at http://www.apache.org/licenses/LICENSE-2.0
+ */
 package io.github.dddplus.model;
 
 import lombok.NonNull;
 
 /**
- * 业务对象的引用.
+ * 引用对象.
  *
- * @param <T> 引用的数据类型.
+ * @param <T> 被引用对象类型.
  */
 public class Ref<T> extends AbstractBusinessNo<T> {
     public Ref(@NonNull T value) {
