@@ -17,28 +17,12 @@
 
 DDDplus, originally cp-ddd-framework(cp means Central Platform：中台), is a lightweight flexible development framework for complex business architecture.
 
-支撑业务中台架构的DDD增强框架.
-
-### Current status
-
-Used for several complex critical central platform projects in production environment.
-
-### Quickstart
-
-Please visit [Quickstart](https://github.com/funkygao/cp-ddd-framework/wiki).
-
-### Features
-
-DDDplus是对DDD的增强，主要包括：
+支撑业务中台架构的DDD增强框架，是对DDD的补充和增强，核心内容包括：
 - 扩展点机制
 - 扩充了DDD的building blocks
-- 提供了自动可视化的逆向建模机制
+- 提供了基于代码进行人工DSL标注的逆向建模机制
 
->There's a construct for everything.
->Every developer has a different name for these constructs.
-
-DDDplus提炼出(fine-grained，细粒度，精确)的模型构造块，根据具体问题对号入座，研发才可能实现出好的业务模型。
-
+具体内容：
 - 确定性问题
    - [IBag](/dddplus-spec/src/main/java/io/github/dddplus/model/IBag.java)，封装集合逻辑
    - ([IRule](/dddplus-spec/src/main/java/io/github/dddplus/model/IRule.java), [IBehavioralRule](/dddplus-spec/src/main/java/io/github/dddplus/model/IBehavioralRule.java)，[IDefinitionalRule](/dddplus-spec/src/main/java/io/github/dddplus/model/IDefinitionalRule.java))，业务规则对象
@@ -65,26 +49,24 @@ DDDplus提炼出(fine-grained，细粒度，精确)的模型构造块，根据�
 - 可视化逆向建模
    - ([DomainModelAnalyzer](/dddplus-spec/src/main/java/io/github/dddplus/dsl/package-info.java), [PlantUmlBuilder](/dddplus-visualization/src/main/java/io/github/dddplus/ast/view/PlantUmlBuilder.java)), 分析Java AST自动生成逆向业务模型
 
+## Current status
 
-### Key abstractions
+Used for several complex critical central platform projects in production environment.
 
-![](http://www.plantuml.com/plantuml/svg/VLJ1JXj13BtxAonwIKGJH7khLX4geH8z8CGFL6RNoOxOp4GURrC4-VTwo6IpoG8vnNvlxFSydhsAIgBjge7uvFoQX5POawysubJPuuAQo3qirbI5ZVFBejWuhV_iujaCLLg6XXUA6b3SibQid72fBdY0DPLFj6HSD-tIUIoANrQCxTWBeFsSLvO5bOotjnLxTVhym34qVrbEyNbOaVCt_vHzjDAdyBqreCU61_dGkFBvBKlU1wMa2-z9rBCCqweiVf1-jyP1oXR0iendTL0KRW9LISePKiIxIyZUfzCKGASKYzV9PE1hW0_c0XqNVs0PAXvbsHVPrSLExnYWf_OXjCQnr6DKeLBn9qNEoSDVg_Xb4UI6ohhhCXgV4fn4_H1-sNVOudd52sgR8-vyFa-ac6ILHcdtHz_7TbOC6yp1c2lIiXvro1Y6hDqGyu0-XFCsGDuMAttEUytNQS9MEXkSJlkJo_nKfLkr_ZWAoviho5WNmtNmIiwp71bEcvEkt_dV9ADqjr_HL8xx_CbabbyJG1QUzm2opM6u5XV4R1-znpXuZTqzNLgNrzaXFaQ_VOf-_nIzEqMt05Vig_GX-Wy0)
+## Quickstart
 
-## Using DDDplus
+### Dependencies
 
-已推送至[Maven中央库](https://search.maven.org/search?q=g:io.github.dddplus)，可直接引入。
-
-### Maven
+#### Maven
 
 ```xml
 <dependency>
     <groupId>io.github.dddplus</groupId>
     <artifactId>dddplus-runtime</artifactId>
-    <version>1.1.2</version>
 </dependency>
 ```
 
-### Gradle
+#### Gradle
 
 ```groovy
 dependencies {
@@ -93,7 +75,7 @@ dependencies {
 }
 ```
 
-### Building from Source
+#### Building from Source
 
 ``` bash
 git clone https://github.com/funkygao/cp-ddd-framework.git
@@ -101,7 +83,7 @@ cd cp-ddd-framework/
 mvn install
 ```
 
-### With dddplus-archetype
+#### With dddplus-archetype
 
 ``` bash
 mvn archetype:generate                          \
@@ -115,10 +97,80 @@ mvn archetype:generate                          \
 
 For more, please visit [dddplus-archetype project](https://github.com/dddplus/dddplus-archetype).
 
+### Integration with SpringBoot
+
+```java
+@SpringBootApplication(scanBasePackages = {"${your base packages}", "io.github.dddplus"})
+public class WebApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(WebApplication.class);
+    }
+}
+```
+
+### 扩展点路由原理
+
+`Pattern`/`Partner`/`Policy`，都是`Extension#code`的提供方(它们有的通过`match(IIdentity)`方法，有的通过`extensionCode(IIdentity)`方法)，即准入规则，本质上都是把动态的业务场景转换为静态的`Extension#code`，而`Extension#code`被扩展点实例通过注解绑定，从而实现了扩展点的动态路由。
+
+之所以设计成这样的间接路由，是基于`平台强管控`原则。
+
+### 逆向建模
+
+```xml
+<dependency>
+    <groupId>io.github.dddplus</groupId>
+    <artifactId>dddplus-visualization</artifactId>
+    <scope>test</scope>
+</dependency>
+```
+
+在单测代码里自动生成PlantUML图：
+```java
+class DomainModelAnalyzerTest {
+    @Test
+    void reverseModeling() {
+        DomainModelAnalyzer domainModelAnalyzer = new DomainModelAnalyzer();
+        ReverseEngineeringModel domainModel = domainModelAnalyzer.scan({your module root})
+            .analyze();
+        new PlantUmlBuilder()
+            .build(domainModel)
+            .renderSvg("myModel.svg");
+    }
+}
+```
+
+### 架构守护
+
+为了避免错误使用造成的线上事故，建议CI流水线里增加DDDplus的错误使用卡控。
+
+```xml
+<dependency>
+    <groupId>io.github.dddplus</groupId>
+    <artifactId>dddplus-enforce</artifactId>
+    <scope>test</scope>
+</dependency>
+```
+
+通过单测执行DDDplus enforcement：
+```java
+public class DDDPlusEnforcerTest {
+    @Test
+    public void enforce() {
+        DDDPlusEnforcer enforcer = new DDDPlusEnforcer();
+        enforcer.scanPackages("${your base package}")
+                .enforce();
+    }
+}
+```
+
 ## Demos
 
 - [使用DDDplus搭建`订单履约中台`的例子](https://github.com/dddplus/dddplus-demo)
 - [使用DDDplus，5分钟搭建一个仓储中台WMS](https://github.com/dddplus/dddplus-archetype-demo)
+
+### Key abstractions
+
+![](http://www.plantuml.com/plantuml/svg/VLJ1JXj13BtxAonwIKGJH7khLX4geH8z8CGFL6RNoOxOp4GURrC4-VTwo6IpoG8vnNvlxFSydhsAIgBjge7uvFoQX5POawysubJPuuAQo3qirbI5ZVFBejWuhV_iujaCLLg6XXUA6b3SibQid72fBdY0DPLFj6HSD-tIUIoANrQCxTWBeFsSLvO5bOotjnLxTVhym34qVrbEyNbOaVCt_vHzjDAdyBqreCU61_dGkFBvBKlU1wMa2-z9rBCCqweiVf1-jyP1oXR0iendTL0KRW9LISePKiIxIyZUfzCKGASKYzV9PE1hW0_c0XqNVs0PAXvbsHVPrSLExnYWf_OXjCQnr6DKeLBn9qNEoSDVg_Xb4UI6ohhhCXgV4fn4_H1-sNVOudd52sgR8-vyFa-ac6ILHcdtHz_7TbOC6yp1c2lIiXvro1Y6hDqGyu0-XFCsGDuMAttEUytNQS9MEXkSJlkJo_nKfLkr_ZWAoviho5WNmtNmIiwp71bEcvEkt_dV9ADqjr_HL8xx_CbabbyJG1QUzm2opM6u5XV4R1-znpXuZTqzNLgNrzaXFaQ_VOf-_nIzEqMt05Vig_GX-Wy0)
 
 ## Contribution
 
