@@ -18,8 +18,8 @@ DDDplus, originally cp-ddd-framework(cp means Central Platform：中台), is a l
 
 DDDplus是轻量级、对DDD进行补充和增强的框架，提供的核心内容包括：
 - 扩展点机制，支持复杂场景问题
-- 扩充了DDD的building blocks，解决落地问题
-- 基于代码进行人工DSL标注的逆向建模机制，领域知识模型化
+- 扩充了DDD的building blocks，解决DDD落地难问题
+- 基于代码进行人工[DSL](/dddplus-spec/src/main/java/io/github/dddplus/dsl)标注的逆向建模机制，领域知识模型化
 
 具体内容：
 - 确定性问题
@@ -56,45 +56,12 @@ Used for several complex critical central platform projects in production enviro
 
 ### Dependencies
 
-#### Maven
-
 ```xml
 <dependency>
     <groupId>io.github.dddplus</groupId>
     <artifactId>dddplus-runtime</artifactId>
 </dependency>
 ```
-
-#### Gradle
-
-```groovy
-dependencies {
-    ...
-    compile 'io.github.dddplus:dddplus-runtime:1.1.2'
-}
-```
-
-#### Building from Source
-
-``` bash
-git clone https://github.com/funkygao/cp-ddd-framework.git
-cd cp-ddd-framework/
-mvn install
-```
-
-#### With dddplus-archetype
-
-``` bash
-mvn archetype:generate                          \
-    -DarchetypeGroupId=io.github.dddplus        \
-    -DarchetypeArtifactId=dddplus-archetype     \
-    -DarchetypeVersion=1.1.1                    \
-    -DgroupId=com.foo -DartifactId=demo         \
-    -Dpackage=com.foo -Dversion=1.0.0-SNAPSHOT  \
-    -B
-```
-
-For more, please visit [dddplus-archetype project](https://github.com/dddplus/dddplus-archetype).
 
 ### Integration with SpringBoot
 
