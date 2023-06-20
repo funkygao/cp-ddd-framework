@@ -60,6 +60,7 @@ public @interface KeyRelation {
         /**
          * 当前对象是MQ/Event等单向[异步]通知，它是由{@link #whom()}发起的.
          */
+        @Deprecated
         NotifiedBy,
 
         /**

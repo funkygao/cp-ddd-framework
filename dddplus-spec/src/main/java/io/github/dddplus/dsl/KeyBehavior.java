@@ -65,4 +65,9 @@ public @interface KeyBehavior {
      */
     String[] args() default {};
 
+    /**
+     * 该行为会产生哪些领域事件.
+     */
+    Class[] produceEvent() default {};
+
 }

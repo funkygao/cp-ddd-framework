@@ -91,7 +91,7 @@ class ReverseModellingTest {
             new KeyFlowAstNodeVisitor().visit(FileWalker.silentParse(file), report);
         }).walkFrom(domainModuleRoot);
         Set<String> actors = report.actors();
-        assertEquals(1, actors.size());
+        assertEquals(2, actors.size());
         String firstActor = actors.iterator().next();
         assertEquals("CheckTask", firstActor);
         KeyFlowEntry check = report.keyFlowEntriesOfActor(firstActor).get(0);

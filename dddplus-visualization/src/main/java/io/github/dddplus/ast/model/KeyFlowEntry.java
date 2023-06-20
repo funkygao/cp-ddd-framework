@@ -5,26 +5,37 @@
  */
 package io.github.dddplus.ast.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 @Data
-@AllArgsConstructor
 public class KeyFlowEntry {
-    private String className;
+    private final String className;
+    private final String realMethodName;
+    private final String javadoc;
     private String actor;
     private String methodName;
     private Set<String> rules;
     private Set<String> modes;
     private List<String> args;
+    private Set<String> realArguments;
     private Set<String> initiators;
-    private String javadoc;
     private String remark;
-    private String realMethodName;
+
+    public KeyFlowEntry(String className, String realMethodName, String javadoc) {
+        this.className = className;
+        this.realMethodName = realMethodName;
+        this.methodName = realMethodName;
+        this.javadoc = javadoc;
+
+        this.actor = "";
+        this.rules = new TreeSet<>();
+        this.modes = new TreeSet<>();
+    }
 
     public String actor() {
         if (actor.isEmpty()) {
@@ -61,6 +72,9 @@ public class KeyFlowEntry {
         String args = displayArgs();
         String rules = displayRules();
         List<String> l = new ArrayList<>();
+        if (realArguments != null && !realArguments.isEmpty()) {
+            l.addAll(realArguments);
+        }
         if (!args.isEmpty()) {
             l.add(args);
         }

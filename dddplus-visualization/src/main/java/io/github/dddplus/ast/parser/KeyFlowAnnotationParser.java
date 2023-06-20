@@ -15,6 +15,7 @@ import com.google.common.collect.Lists;
 import io.github.dddplus.ast.model.KeyFlowEntry;
 import lombok.Getter;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -27,28 +28,38 @@ public class KeyFlowAnnotationParser {
     private final MethodDeclaration methodDeclaration;
     private final String className;
     private String methodName;
+    private static final Set<String> ignoredArgument = new HashSet<>();
 
     public KeyFlowAnnotationParser(MethodDeclaration methodDeclaration, String className) {
         this.methodDeclaration = methodDeclaration;
         this.className = className;
         this.methodName = methodDeclaration.getNameAsString();
+
+        ignoredArgument.add("String");
+        ignoredArgument.add("Boolean");
+        ignoredArgument.add("boolean");
+        ignoredArgument.add("Integer");
+        ignoredArgument.add("int");
+        ignoredArgument.add("Date");
     }
 
     public KeyFlowEntry parse(AnnotationExpr keyFlow) {
-        KeyFlowEntry result = new KeyFlowEntry(className, "", methodName,
-                new TreeSet<>(), new TreeSet<>(), null, null,
-                JavaParserUtil.javadocFirstLineOf(methodDeclaration),
-                "", this.methodName);
+        KeyFlowEntry result = new KeyFlowEntry(className, methodName,
+                JavaParserUtil.javadocFirstLineOf(methodDeclaration));
+
+        if (methodDeclaration.getParameters() != null) {
+            Set<String> realArguments = new TreeSet<>();
+            for (Parameter parameter : methodDeclaration.getParameters()) {
+                if (!ignoredArgument.contains(parameter.getTypeAsString())) {
+                    realArguments.add(parameter.getTypeAsString());
+                }
+            }
+            result.setRealArguments(realArguments);
+        }
+
         if (keyFlow instanceof MarkerAnnotationExpr) {
             // 标注时没有指定任何属性
             return result;
-        }
-
-        // TODO parse parameters
-        if (methodDeclaration.getParameters() != null) {
-            for (Parameter parameter : methodDeclaration.getParameters()) {
-                String a = parameter.getTypeAsString();
-            }
         }
 
         NormalAnnotationExpr normalAnnotationExpr = (NormalAnnotationExpr) keyFlow;

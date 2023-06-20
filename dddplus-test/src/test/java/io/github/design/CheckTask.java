@@ -43,4 +43,9 @@ public class CheckTask implements IIdentity, IDomainModel, IAggregateRoot {
         return false;
     }
 
+    @KeyBehavior(produceEvent = CheckTaskFinished.class)
+    public void finish() {
+
+    }
+
 }
