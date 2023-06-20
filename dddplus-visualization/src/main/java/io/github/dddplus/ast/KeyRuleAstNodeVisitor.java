@@ -34,6 +34,24 @@ public class KeyRuleAstNodeVisitor extends VoidVisitorAdapter<KeyRuleReport> {
         super.visit(methodDeclaration, report);
 
         if (!methodDeclaration.isAnnotationPresent(KeyRule.class)) {
+            // boolean foo(), auto register KeyRule
+            if (methodDeclaration.isPublic()
+                    && !methodDeclaration.isAnnotationPresent(Deprecated.class)
+                    && (methodDeclaration.getParameters() == null || methodDeclaration.getParameters().size() == 0)
+                    && methodDeclaration.getTypeAsString().equalsIgnoreCase("boolean")) {
+                ClassOrInterfaceDeclaration parentClass = JavaParserUtil.getClass(methodDeclaration.getParentNode().get());
+                if (parentClass == null) {
+                    return;
+                }
+
+                KeyRuleEntry entry = new KeyRuleEntry();
+                entry.setClassName(parentClass.getNameAsString());
+                entry.setMethodName(methodDeclaration.getNameAsString());
+                entry.setRealMethodName(entry.getMethodName());
+                entry.setJavadoc(JavaParserUtil.javadocFirstLineOf(methodDeclaration));
+                report.register(entry);
+            }
+
             return;
         }
 
