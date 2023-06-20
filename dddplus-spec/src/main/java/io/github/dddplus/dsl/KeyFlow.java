@@ -9,6 +9,16 @@ import java.lang.annotation.*;
 
 /**
  * 关键业务逻辑流程.
+ *
+ * <p>Example:</p>
+ * <pre>
+ * {@code
+ * class OrderAppService {
+ *     ℗KeyFlow(remark = "统一接单")
+ *     public void submitOrder(OrderDto dto) throws BizException {}
+ * }
+ * }
+ * </pre>
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.SOURCE)

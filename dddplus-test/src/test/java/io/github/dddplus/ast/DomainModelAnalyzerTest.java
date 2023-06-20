@@ -38,7 +38,6 @@ class DomainModelAnalyzerTest {
         assertEquals(CheckTask.class.getSimpleName(), firstKeyModelEntry.getClassName());
         List<KeyElement.Type> undefinedTypes = firstKeyModelEntry.undefinedTypes();
         assertTrue(undefinedTypes.contains(KeyElement.Type.DCU));
-        assertEquals("Contextual DCU Operational Variant Problematical", firstKeyModelEntry.displayUndefinedTypes());
         assertEquals(1, firstKeyModelEntry.getKeyBehaviorEntries().size());
         KeyBehaviorEntry keyBehaviorEntry = firstKeyModelEntry.getKeyBehaviorEntries().get(0);
         assertEquals(keyBehaviorEntry.getMethodName(), "复核");

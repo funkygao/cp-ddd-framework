@@ -65,6 +65,7 @@ class ReverseModellingTest {
         assertEquals("复核", entry.getMethodName());
         assertEquals("ok", entry.getRemark());
         assertEquals(2, entry.getRules().size());
+        assertEquals(entry.getModes().size(), 2);
         assertTrue(entry.getRules().contains("CheckBasicRule"));
         assertTrue(entry.getRules().contains(CheckAdvancedRule.class.getSimpleName()));
     }

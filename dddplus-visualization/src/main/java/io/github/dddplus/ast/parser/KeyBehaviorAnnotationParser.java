@@ -75,10 +75,6 @@ public class KeyBehaviorAnnotationParser {
                 case "args":
                     entry.setArgs(Lists.newArrayList(AnnotationFieldParser.arrayFieldValue(memberValuePair)));
                     break;
-
-                case "depends":
-                    entry.getArgs().addAll(Lists.newArrayList(AnnotationFieldParser.arrayFieldValue(memberValuePair)));
-                    break;
             }
         }
 

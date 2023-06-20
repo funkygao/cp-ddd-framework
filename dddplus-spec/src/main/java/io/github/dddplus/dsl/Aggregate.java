@@ -14,6 +14,15 @@ import java.lang.annotation.Target;
  * 聚合.
  *
  * <p>Applied on package-info.java.</p>
+ * <p>Example:</p>
+ * <pre>
+ * {@code
+ * ℗Aggregate(name = "Foo", root = Foo.class)
+ * package io.github.dddplus.domain.foo;
+ *
+ * import io.github.dddplus.dsl.Aggregate;
+ * }
+ * </pre>
  */
 @Target(ElementType.PACKAGE)
 @Retention(RetentionPolicy.SOURCE)
