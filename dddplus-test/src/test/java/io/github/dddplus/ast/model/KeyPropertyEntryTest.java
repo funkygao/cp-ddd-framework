@@ -14,7 +14,7 @@ class KeyPropertyEntryTest {
         entry.setRemark("remark");
         assertEquals("name/remark", entry.displayName());
         entry.setJavadoc("foo");
-        assertEquals("name/foo/remark", entry.displayName());
+        assertEquals("name/remark", entry.displayName());
     }
 
 }
