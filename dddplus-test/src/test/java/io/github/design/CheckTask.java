@@ -4,9 +4,10 @@ import io.github.dddplus.dsl.KeyBehavior;
 import io.github.dddplus.dsl.KeyElement;
 import io.github.dddplus.dsl.KeyRelation;
 import io.github.dddplus.dsl.KeyRule;
-import io.github.dddplus.model.IAggregateRoot;
-import io.github.dddplus.model.IDomainModel;
-import io.github.dddplus.model.IIdentity;
+import io.github.dddplus.model.*;
+import lombok.Getter;
+
+import java.util.List;
 
 /**
  * The check task.
@@ -14,6 +15,13 @@ import io.github.dddplus.model.IIdentity;
 @KeyRelation(whom = ShipmentOrder.class, type = KeyRelation.Type.Many2Many)
 @KeyRelation(whom = CheckBasicRule.class, type = KeyRelation.Type.HasMany)
 public class CheckTask implements IIdentity, IDomainModel, IAggregateRoot {
+    @Getter
+    private Long id;
+
+    private Ref<String> stationNo;
+    private HasOne<Operator> operator;
+    private Details details;
+    private ShipmentOrders orders;
 
     /**
      * here we go for status.
@@ -48,4 +56,16 @@ public class CheckTask implements IIdentity, IDomainModel, IAggregateRoot {
 
     }
 
+    public Operator operator() {
+        return operator.get();
+    }
+
+
+    public interface Details extends HasMany<CheckTaskDetail> {
+        List<CheckTaskDetail> listBy(ContainerNo containerNo);
+    }
+
+    public interface ShipmentOrders extends HasMany<ShipmentOrder> {
+        List<ShipmentOrder> pendingOrders();
+    }
 }
