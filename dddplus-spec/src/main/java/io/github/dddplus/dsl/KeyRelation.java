@@ -56,5 +56,9 @@ public @interface KeyRelation {
          * 当前对象来自于{@link #whom()}.
          */
         From,
+
+        Extends,
+        Implements
+
     }
 }
