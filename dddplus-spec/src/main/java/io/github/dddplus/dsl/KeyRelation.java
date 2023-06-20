@@ -10,8 +10,16 @@ import java.lang.annotation.*;
 /**
  * 实体间关系.
  *
- * <p>使用时，单向标注即可，以主动方视角进行标注.</p>
- * <p>因此，不会有{@code BelongTo}、{@code ManyToOne}类型.</p>
+ * <p>使用时，单向标注即可</p>
+ * <p>Example:</p>
+ * <pre>
+ * {@code
+ * ℗KeyRelation(whom = ShipmentOrderItem.class, type = KeyRelation.Type.HasMany)
+ * ℗KeyRelation(whom = Pack.class, type = KeyRelation.Type.HasMany, remark = "一个订单可能多个包裹")
+ * class ShipmentOrder {}
+ * class ShipmentOrderItem {}
+ * }
+ * </pre>
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.SOURCE)
@@ -44,12 +52,15 @@ public @interface KeyRelation {
 
         /**
          * 特定场景对象.
+         *
+         * @see io.github.dddplus.model.BoundedDomainModel
          */
         Contextual,
 
         /**
-         * MQ/Event等单向[异步]通知由谁发起.
+         * 当前对象是MQ/Event等单向[异步]通知，它是由{@link #whom()}发起的.
          */
+        @Deprecated
         NotifiedBy,
 
         /**

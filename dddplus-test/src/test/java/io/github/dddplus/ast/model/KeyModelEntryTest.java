@@ -13,7 +13,7 @@ class KeyModelEntryTest {
         KeyPropertyEntry propertyEntry = new KeyPropertyEntry();
         propertyEntry.setName("xx");
         entry.addField(KeyElement.Type.Structural, propertyEntry);
-        assertEquals("Referential Contextual Lifecycle DCU Operational Variant Problematical", entry.displayUndefinedTypes());
+        assertEquals("Referential Contextual Lifecycle DCU Operational Problematical", entry.displayUndefinedTypes());
     }
 
 }

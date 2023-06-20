@@ -30,9 +30,8 @@ public class CheckTask implements IIdentity, IDomainModel, IAggregateRoot {
     @KeyElement(types = KeyElement.Type.Propagational)
     private String locationNo;
 
-    @KeyBehavior(rules = {CheckBasicRule.class, CheckAdvancedRule.class}, name = "复核", remark = "ok")
+    @KeyBehavior(rules = {CheckBasicRule.class, CheckAdvancedRule.class}, modes = "x", modeClass = FooMode.class, name = "复核", remark = "ok")
     void foo() {
-
     }
 
     @Deprecated
@@ -42,6 +41,11 @@ public class CheckTask implements IIdentity, IDomainModel, IAggregateRoot {
     @KeyRule(name = "isDone")
     boolean isFinished() {
         return false;
+    }
+
+    @KeyBehavior(produceEvent = CheckTaskFinished.class)
+    public void finish() {
+
     }
 
 }

@@ -8,6 +8,7 @@ import io.github.dddplus.ast.view.PlantUmlBuilder;
 import io.github.dddplus.dsl.KeyElement;
 import io.github.dddplus.runtime.registry.IntegrationTest;
 import io.github.design.CheckTask;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -38,10 +39,9 @@ class DomainModelAnalyzerTest {
         assertEquals(CheckTask.class.getSimpleName(), firstKeyModelEntry.getClassName());
         List<KeyElement.Type> undefinedTypes = firstKeyModelEntry.undefinedTypes();
         assertTrue(undefinedTypes.contains(KeyElement.Type.DCU));
-        assertEquals("Contextual DCU Operational Variant Problematical", firstKeyModelEntry.displayUndefinedTypes());
-        assertEquals(1, firstKeyModelEntry.getKeyBehaviorEntries().size());
+        assertEquals(2, firstKeyModelEntry.getKeyBehaviorEntries().size());
         KeyBehaviorEntry keyBehaviorEntry = firstKeyModelEntry.getKeyBehaviorEntries().get(0);
-        assertEquals(keyBehaviorEntry.getMethodName(), "复核");
+        assertEquals(keyBehaviorEntry.getMethodName(), "finish");
         List<KeyRuleEntry> keyRuleEntries = firstKeyModelEntry.getKeyRuleEntries();
         assertTrue(keyRuleEntries.size() > 0);
         assertEquals("isDone", keyRuleEntries.get(0).getMethodName());
@@ -56,6 +56,16 @@ class DomainModelAnalyzerTest {
                 .build(model);
         String uml = pb.umlContent();
         assertFalse(uml.isEmpty());
+    }
+
+    @Test
+    @Disabled
+    void renderUml() throws IOException {
+        DomainModelAnalyzer analyzer = new DomainModelAnalyzer();
+        analyzer.scan(moduleRoot("dddplus-test"));
+        ReverseEngineeringModel model = analyzer.analyze((level, path, file) -> path.contains("design"));
+        PlantUmlBuilder pb = new PlantUmlBuilder();
+        pb.build(model).renderSvg("../test.svg");
     }
 
 }

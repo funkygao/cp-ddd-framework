@@ -15,6 +15,15 @@ import java.lang.annotation.Target;
  *
  * <p>对于无入参且返回类型是Boolean/boolean的公共方法，无需标注，自动注册为{@link KeyRule}.</p>
  * <p>如果想修正，再手工标注.</p>
+ * <p>Example:</p>
+ * <pre>
+ * {@code
+ * class ShipmentOrder {
+ *     ℗KeyRule(refer = WaybillSourceEnum.class)
+ *     public WaybillSourceEnum waybillPlatform() {}
+ * }
+ * }
+ * </pre>
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.SOURCE)

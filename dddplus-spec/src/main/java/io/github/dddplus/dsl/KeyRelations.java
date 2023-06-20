@@ -7,6 +7,11 @@ package io.github.dddplus.dsl;
 
 import java.lang.annotation.*;
 
+/**
+ * DO NOT use this annotation.
+ *
+ * <p>It exists just because of Java grammar constraints.</p>
+ */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.SOURCE)
 @Documented

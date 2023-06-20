@@ -8,10 +8,19 @@ package io.github.dddplus.dsl;
 import java.lang.annotation.*;
 
 /**
- * 业务模型的关键行为.
+ * 业务对象的关键行为.
  *
  * <p>业务方可感知的行为.</p>
  * <p>vs {@link KeyFlow}：后者可以通过{@link KeyFlow#actor()}修正绑定到某个业务对象，而{@link KeyBehavior}只能标注到当前业务对象.</p>
+ * <p>Example:</p>
+ * <pre>
+ * {@code
+ * class ShipmentOrder {
+ *     ℗KeyBehavior
+ *     void ship(Operator operator) {}
+ * }
+ * }
+ * </pre>
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.SOURCE)
@@ -21,6 +30,8 @@ public @interface KeyBehavior {
 
     /**
      * 该属性名称在逆向建模时被修正为哪一个统一语言名称.
+     *
+     * <p>如果不指定，则使用AST分析得到方法名称.</p>
      */
     String name() default "";
 
@@ -32,6 +43,7 @@ public @interface KeyBehavior {
     /**
      * 业务规则约束对应的类.
      */
+    @Deprecated
     Class[] rules() default {};
 
     /**
@@ -53,7 +65,9 @@ public @interface KeyBehavior {
      */
     String[] args() default {};
 
-    @Deprecated
-    Class[] depends() default {};
+    /**
+     * 该行为会产生哪些领域事件.
+     */
+    Class[] produceEvent() default {};
 
 }

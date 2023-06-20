@@ -67,6 +67,10 @@ public class KeyBehaviorAnnotationParser {
                     entry.setModes(modes);
                     break;
 
+                case "produceEvent":
+                    entry.setEvents(AnnotationFieldParser.arrayFieldValue(memberValuePair));
+                    break;
+
                 case "modeClass":
                     modes.addAll(AnnotationFieldParser.arrayFieldValue(memberValuePair));
                     entry.setModes(modes);
@@ -74,10 +78,6 @@ public class KeyBehaviorAnnotationParser {
 
                 case "args":
                     entry.setArgs(Lists.newArrayList(AnnotationFieldParser.arrayFieldValue(memberValuePair)));
-                    break;
-
-                case "depends":
-                    entry.getArgs().addAll(Lists.newArrayList(AnnotationFieldParser.arrayFieldValue(memberValuePair)));
                     break;
             }
         }

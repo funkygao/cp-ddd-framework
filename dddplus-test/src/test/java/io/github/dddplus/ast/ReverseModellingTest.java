@@ -65,6 +65,7 @@ class ReverseModellingTest {
         assertEquals("复核", entry.getMethodName());
         assertEquals("ok", entry.getRemark());
         assertEquals(2, entry.getRules().size());
+        assertEquals(entry.getModes().size(), 2);
         assertTrue(entry.getRules().contains("CheckBasicRule"));
         assertTrue(entry.getRules().contains(CheckAdvancedRule.class.getSimpleName()));
     }
@@ -90,7 +91,7 @@ class ReverseModellingTest {
             new KeyFlowAstNodeVisitor().visit(FileWalker.silentParse(file), report);
         }).walkFrom(domainModuleRoot);
         Set<String> actors = report.actors();
-        assertEquals(1, actors.size());
+        assertEquals(2, actors.size());
         String firstActor = actors.iterator().next();
         assertEquals("CheckTask", firstActor);
         KeyFlowEntry check = report.keyFlowEntriesOfActor(firstActor).get(0);

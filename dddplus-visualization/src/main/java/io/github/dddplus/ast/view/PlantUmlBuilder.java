@@ -28,12 +28,8 @@ public class PlantUmlBuilder {
 
     private static final String STARTUML = "@startuml";
     private static final String ENDUML = "@enduml";
-    private static final String SEMICOLON = ":";
-    private static final String COMMA = ",";
     private static final String BRACE_OPEN = "{";
     private static final String BRACE_CLOSE = "}";
-    private static final String STEREOTYPE_OPEN = "<<";
-    private static final String STEREOTYPE_CLOSE = ">>";
     private static final String SPACE = " ";
     private static final String TAB = SPACE + SPACE;
     private static final String NEWLINE = System.getProperty("line.separator");
@@ -67,7 +63,7 @@ public class PlantUmlBuilder {
         connections.put(KeyRelation.Type.NotifiedBy, "--o");
         connections.put(KeyRelation.Type.From, "-->");
         connections.put(KeyRelation.Type.Extends, "--|>");
-        connections.put(KeyRelation.Type.Implements, "---|>");
+        connections.put(KeyRelation.Type.Implements, "..|>");
     }
 
     public String umlContent() {
@@ -103,7 +99,7 @@ public class PlantUmlBuilder {
     public void renderSvg(String svgFilename) throws IOException {
         SourceStringReader reader = new SourceStringReader(content.toString());
         final ByteArrayOutputStream os = new ByteArrayOutputStream();
-        String desc = reader.generateImage(os, new FileFormatOption(FileFormat.SVG));
+        reader.generateImage(os, new FileFormatOption(FileFormat.SVG));
         try (OutputStream outputStream = new FileOutputStream(svgFilename)) {
             os.writeTo(outputStream);
             os.close();
@@ -258,8 +254,14 @@ public class PlantUmlBuilder {
                         .append(entry.displayArgs())
                         .append(BRACKET_CLOSE)
                         .append(SPACE)
-                        .append(entry.getJavadoc())
-                        .append(NEWLINE);
+                        .append(entry.getJavadoc());
+                if (entry.produceEvent()) {
+                    // https://plantuml.com/zh/color
+                    append("<color:Violet>");
+                    append(" -> ").append(entry.displayEvents()).append(SPACE);
+                    append("</color>");
+                }
+                content.append(NEWLINE);
             }
         }
 

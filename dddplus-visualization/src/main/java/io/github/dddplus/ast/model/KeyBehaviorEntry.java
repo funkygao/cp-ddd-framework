@@ -7,10 +7,7 @@ package io.github.dddplus.ast.model;
 
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Data
 public class KeyBehaviorEntry {
@@ -21,6 +18,7 @@ public class KeyBehaviorEntry {
     private Set<String> rules = new HashSet<>();
     private Set<String> modes = new HashSet<>();
     private List<String> args = new ArrayList<>();
+    private Set<String> events = new TreeSet<>(); // 该行为产生哪些领域事件
     private String remark = "";
     private String javadoc;
 
@@ -28,6 +26,14 @@ public class KeyBehaviorEntry {
         this.className = className;
         this.methodName = methodName;
         this.realMethodName = methodName;
+    }
+
+    public boolean produceEvent() {
+        return events != null && !events.isEmpty();
+    }
+
+    public String displayEvents() {
+        return String.join(",", events);
     }
 
     public String displayArgs() {
