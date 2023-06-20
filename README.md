@@ -16,10 +16,10 @@
 
 DDDplus, originally cp-ddd-framework(cp means Central Platform：中台), is a lightweight flexible development framework for complex business architecture.
 
-支撑业务中台架构的DDD增强框架，是对DDD的补充和增强，核心内容包括：
-- 扩展点机制
-- 扩充了DDD的building blocks
-- 提供了基于代码进行人工DSL标注的逆向建模机制
+DDDplus是轻量级、对DDD进行补充和增强的框架，提供的核心内容包括：
+- 扩展点机制，支持复杂场景问题
+- 扩充了DDD的building blocks，解决落地问题
+- 基于代码进行人工DSL标注的逆向建模机制，领域知识模型化
 
 具体内容：
 - 确定性问题
@@ -109,7 +109,7 @@ public class WebApplication {
 
 ### 扩展点路由原理
 
-`Pattern`/`Partner`/`Policy`，都是`Extension#code`的提供方(它们有的通过`match(IIdentity)`方法，有的通过`extensionCode(IIdentity)`方法)，即准入规则，本质上都是把动态的业务场景转换为静态的`Extension#code`，而`Extension#code`被扩展点实例通过注解绑定，从而实现了扩展点的动态路由。
+`Pattern`/`Partner`/`Policy`，都是`Extension#code`的提供者(它们有的通过`match(IIdentity)`方法，有的通过`extensionCode(IIdentity)`方法)，即准入规则，本质上都是把动态的业务场景转换为静态的`Extension#code`，而`Extension#code`被扩展点实例通过注解绑定，从而实现了扩展点的动态路由。
 
 之所以设计成这样的间接路由，是基于`平台强管控`原则。
 
@@ -119,17 +119,16 @@ public class WebApplication {
 <dependency>
     <groupId>io.github.dddplus</groupId>
     <artifactId>dddplus-visualization</artifactId>
-    <scope>test</scope>
 </dependency>
 ```
 
-在单测代码里自动生成PlantUML图：
+通过[DSL](/dddplus-spec/src/main/java/io/github/dddplus/dsl)在代码进行标注后，即可自动PlantUML类图形式的业务模型：
 ```java
-class DomainModelAnalyzerTest {
+class ReverseModelingTest {
     @Test
     void reverseModeling() {
         DomainModelAnalyzer domainModelAnalyzer = new DomainModelAnalyzer();
-        ReverseEngineeringModel domainModel = domainModelAnalyzer.scan({your module root})
+        ReverseEngineeringModel domainModel = domainModelAnalyzer.scan("{your module root}")
             .analyze();
         new PlantUmlBuilder()
             .build(domainModel)
@@ -167,7 +166,7 @@ public class DDDPlusEnforcerTest {
 - [使用DDDplus搭建`订单履约中台`的例子](https://github.com/dddplus/dddplus-demo)
 - [使用DDDplus，5分钟搭建一个仓储中台WMS](https://github.com/dddplus/dddplus-archetype-demo)
 
-### Key abstractions
+## Key abstractions
 
 ![](http://www.plantuml.com/plantuml/svg/VLJ1JXj13BtxAonwIKGJH7khLX4geH8z8CGFL6RNoOxOp4GURrC4-VTwo6IpoG8vnNvlxFSydhsAIgBjge7uvFoQX5POawysubJPuuAQo3qirbI5ZVFBejWuhV_iujaCLLg6XXUA6b3SibQid72fBdY0DPLFj6HSD-tIUIoANrQCxTWBeFsSLvO5bOotjnLxTVhym34qVrbEyNbOaVCt_vHzjDAdyBqreCU61_dGkFBvBKlU1wMa2-z9rBCCqweiVf1-jyP1oXR0iendTL0KRW9LISePKiIxIyZUfzCKGASKYzV9PE1hW0_c0XqNVs0PAXvbsHVPrSLExnYWf_OXjCQnr6DKeLBn9qNEoSDVg_Xb4UI6ohhhCXgV4fn4_H1-sNVOudd52sgR8-vyFa-ac6ILHcdtHz_7TbOC6yp1c2lIiXvro1Y6hDqGyu0-XFCsGDuMAttEUytNQS9MEXkSJlkJo_nKfLkr_ZWAoviho5WNmtNmIiwp71bEcvEkt_dV9ADqjr_HL8xx_CbabbyJG1QUzm2opM6u5XV4R1-znpXuZTqzNLgNrzaXFaQ_VOf-_nIzEqMt05Vig_GX-Wy0)
 
