@@ -21,7 +21,8 @@ public class KeyPropertyEntry {
     public String displayName() {
         Set<String> parts = new LinkedHashSet<>();
         parts.add(name);
-        if (javadoc != null && !javadoc.isEmpty()) {
+        if (false && javadoc != null && !javadoc.isEmpty()) {
+            // some javadoc is too long, ugly to display
             parts.add(javadoc);
         }
         if (remark != null && !remark.isEmpty()) {
