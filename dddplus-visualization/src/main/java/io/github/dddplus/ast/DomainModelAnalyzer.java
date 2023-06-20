@@ -1,6 +1,6 @@
 package io.github.dddplus.ast;
 
-import io.github.dddplus.ast.analysis.impl.JaccardDomainModelSimilarity;
+import io.github.dddplus.ast.analysis.impl.JaccardModelSimilarity;
 import io.github.dddplus.ast.model.*;
 
 import java.io.File;
@@ -89,7 +89,7 @@ public class DomainModelAnalyzer {
         }
 
         // similarity
-        JaccardDomainModelSimilarity similarityAnalyzer = new JaccardDomainModelSimilarity();
+        JaccardModelSimilarity similarityAnalyzer = new JaccardModelSimilarity();
         List<KeyModelEntry> keyModelEntries = new ArrayList<>(model.getKeyModelReport().getData().values());
         for (int i = 0; i < keyModelEntries.size(); i++) {
             for (int j = i + 1; j < keyModelEntries.size(); j++) {

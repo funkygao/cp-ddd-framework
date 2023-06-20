@@ -1,6 +1,6 @@
 package io.github.dddplus.ast.analysis.impl;
 
-import io.github.dddplus.ast.analysis.IDomainModelSimilarity;
+import io.github.dddplus.ast.analysis.IKeyModelSimilarity;
 import io.github.dddplus.ast.model.KeyModelEntry;
 import io.github.dddplus.dsl.KeyElement;
 
@@ -10,7 +10,7 @@ import java.util.Set;
 /**
  * Jaccard相似度(雅卡尔指数)用于计算两个集合的相似度，它是基于集合中的交集和并集计算的.
  */
-public class JaccardDomainModelSimilarity implements IDomainModelSimilarity {
+public class JaccardModelSimilarity implements IKeyModelSimilarity {
     private final double StructuralWeight = 0.6;
 
     @Override
