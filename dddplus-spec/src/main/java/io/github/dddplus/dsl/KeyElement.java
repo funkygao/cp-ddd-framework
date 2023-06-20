@@ -8,12 +8,21 @@ package io.github.dddplus.dsl;
 import java.lang.annotation.*;
 
 /**
- * 业务模型的关键要素，描述了该领域的重要概念和概念间关系，揭示领域建模的问题本质.
+ * 业务对象的关键属性，揭示问题本质.
  *
  * <p>业务方可感知的概念.</p>
  * <p>这是通过数据来抽象行为的方法，参考<a href="http://c2.com/doc/oopsla89/paper.html">CRC</a>头脑风暴建模方法.</p>
  * <p>图表很有用，但它们不是模型，只是模型的不同视图：Model vs Views of the Model.</p>
  * <p>域专家不会根据屏幕或菜单项上的字段描述新的用户故事，而是讨论域对象所需的基础属性或行为.</p>
+ * <p>Example:</p>
+ * <pre>
+ * {@code
+ * class Order {
+ *     ℗KeyElement(type = KeyElement.Type.Quantity, name = "totalPrice")
+ *     private BigDecimal price;
+ * }
+ * }
+ * </pre>
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.SOURCE)
@@ -70,14 +79,9 @@ public @interface KeyElement {
         DCU,
 
         /**
-         * 生产运营类.
+         * 生产运营类，也可以表达业务变化类和业务规则类.
          */
         Operational,
-
-        /**
-         * 业务变化类.
-         */
-        Variant,
 
         /**
          * 可能有问题的.
