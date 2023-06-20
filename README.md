@@ -1,4 +1,6 @@
+<p align="center">
 <img src="doc/assets/img/logo-small.png">
+</p>
 
 [![Mavenn Central](https://img.shields.io/maven-central/v/io.github.dddplus/dddplus.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:io.github.dddplus)
 ![Requirement](https://img.shields.io/badge/JDK-8+-blue.svg)
