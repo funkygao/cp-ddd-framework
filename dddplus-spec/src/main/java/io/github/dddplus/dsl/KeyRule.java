@@ -12,6 +12,9 @@ import java.lang.annotation.Target;
 
 /**
  * 关键规则，控制逻辑.
+ *
+ * <p>对于无入参且返回类型是Boolean/boolean的公共方法，无需标注，自动注册为{@link KeyRule}.</p>
+ * <p>如果想修正，再手工标注.</p>
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.SOURCE)
