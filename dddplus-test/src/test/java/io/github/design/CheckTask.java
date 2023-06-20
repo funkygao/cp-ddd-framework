@@ -17,6 +17,8 @@ import java.util.List;
 public class CheckTask implements IIdentity, IDomainModel, IAggregateRoot {
     @Getter
     private Long id;
+    @Getter
+    private String taskNo;
 
     private Ref<String> stationNo;
     private HasOne<Operator> operator;

@@ -8,7 +8,7 @@ package io.github.dddplus.model;
 /**
  * 关联对象.
  *
- * <p>使用时赋予其具体业务语义，并通过实现类实现其功能.</p>
+ * <p>使用时赋予其具体业务语义，并提供关联对象的实现.</p>
  * <p>Example:</p>
  * <pre>
  * {@code

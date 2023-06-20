@@ -8,13 +8,17 @@ import javax.inject.Inject;
 import java.util.List;
 
 public class TaskOrders implements CheckTask.ShipmentOrders {
-    private String taskNo;
+    private final CheckTask task;
+
+    public TaskOrders(CheckTask checkTask) {
+        this.task = checkTask;
+    }
 
     @Inject
     private ModelMapper modelMapper;
 
     @Override
     public List<ShipmentOrder> pendingOrders() {
-        return modelMapper.findPendingOrdersByTask(taskNo);
+        return modelMapper.findPendingOrdersByTask(task.getTaskNo());
     }
 }
