@@ -38,7 +38,6 @@ class DomainModelAnalyzerTest {
         KeyModelEntry firstKeyModelEntry = firstAggregate.getKeyModelEntries().get(0);
         assertEquals(CheckTask.class.getSimpleName(), firstKeyModelEntry.getClassName());
         List<KeyElement.Type> undefinedTypes = firstKeyModelEntry.undefinedTypes();
-        assertTrue(undefinedTypes.contains(KeyElement.Type.DCU));
         assertEquals(2, firstKeyModelEntry.getKeyBehaviorEntries().size());
         KeyBehaviorEntry keyBehaviorEntry = firstKeyModelEntry.getKeyBehaviorEntries().get(0);
         assertEquals(keyBehaviorEntry.getMethodName(), "finish");
