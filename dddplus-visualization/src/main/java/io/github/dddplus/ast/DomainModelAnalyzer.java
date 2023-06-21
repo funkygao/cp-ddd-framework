@@ -1,6 +1,6 @@
 package io.github.dddplus.ast;
 
-import io.github.dddplus.ast.analysis.impl.JaccardModelSimilarity;
+import io.github.dddplus.ast.analysis.JaccardModelSimilarity;
 import io.github.dddplus.ast.model.*;
 
 import java.io.File;

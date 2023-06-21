@@ -17,6 +17,8 @@ import java.util.List;
 //     <id column="id" property="id" jdbcType="BIGINT"/>
 //     <association property="orders" resultMap="taskOrders"/>
 // </resultMap>
+// association reference lifecycle implemented here
+// connected object graph VS disconnected aggregates
 public class TaskOrders implements CheckTask.ShipmentOrders {
     private String taskNo;
 

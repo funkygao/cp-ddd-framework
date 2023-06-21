@@ -4,7 +4,7 @@
  * Licensed under the Apache License version 2.0, available at http://www.apache.org/licenses/LICENSE-2.0
  */
 /**
- * 基于(代码，人工DSL标注)而自动生成领域知识的领域描述语言：reverse engineering.
+ * Reverse modeling DSL.
  *
  * <p/>
  * <ol>为什么逆向建模：

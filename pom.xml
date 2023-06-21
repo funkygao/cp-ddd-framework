@@ -32,6 +32,7 @@ under the License.
         <module>dddplus-runtime</module>
         <module>dddplus-plugin</module>
         <module>dddplus-enforce</module>
+        <module>dddplus-mybatis</module>
         <module>dddplus-visualization</module>
     </modules>
 
