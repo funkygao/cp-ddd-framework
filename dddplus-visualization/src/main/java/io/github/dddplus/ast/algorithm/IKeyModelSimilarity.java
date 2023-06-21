@@ -1,4 +1,4 @@
-package io.github.dddplus.ast.analysis;
+package io.github.dddplus.ast.algorithm;
 
 import io.github.dddplus.ast.model.KeyModelEntry;
 
