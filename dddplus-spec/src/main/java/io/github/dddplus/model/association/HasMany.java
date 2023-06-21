@@ -15,6 +15,7 @@ import io.github.dddplus.model.IBag;
  * <p>Example:</p>
  * <pre>
  * {@code
+ *
  * public class Task implements IAggregateRoot {
  *     private Orders orders;
  *

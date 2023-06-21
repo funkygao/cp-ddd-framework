@@ -14,6 +14,7 @@ import java.lang.annotation.*;
  * <p>Example:</p>
  * <pre>
  * {@code
+ *
  * ℗KeyRelation(whom = ShipmentOrderItem.class, type = KeyRelation.Type.HasMany)
  * ℗KeyRelation(whom = Pack.class, type = KeyRelation.Type.HasMany, remark = "一个订单可能多个包裹")
  * class ShipmentOrder {}

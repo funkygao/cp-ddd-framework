@@ -19,6 +19,7 @@ import java.util.List;
  * <p>JavaParser一次只能分析一个java source file，通过{@link FileWalker}可以递归地遍历目录树.</p>
  * <pre>
  * {@code
+ *
  * new FileWalker((level, path, file) -> path.endsWith(".java"), (level, path, file) -> {
  *     new ClassMethodDistributionAstNodeVisitor().visit(FileWalker.silentParse(file), result);
  * }).walkFrom(domainModuleRoot());

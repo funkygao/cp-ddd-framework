@@ -24,6 +24,7 @@ import io.github.dddplus.ext.IDomainExtension;
  * </ul>
  * <pre>
  * {@code
+ *
  * class User implements IUnboundedDomainModel {
  *     Buyer asBuyer() {
  *         return new Buyer(this);
@@ -63,6 +64,7 @@ import io.github.dddplus.ext.IDomainExtension;
  * 进阶应用：不仅普通的{@link IDomainModel}可以设计出角色对象，{@link IBag}也可以。
  * <pre>
  * {@code
+ *
  * class ShipmentOrderBag implements IUnboundedDomainModel {
  *     // gateway是远程RPC的防腐层
  *     public ShipmentOrderBagContextRemote inContextOfRemote(ShipmentOrderGateway gateway) {

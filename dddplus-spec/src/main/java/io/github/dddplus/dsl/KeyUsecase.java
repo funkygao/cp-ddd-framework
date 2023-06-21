@@ -14,6 +14,7 @@ import java.lang.annotation.*;
  * <p>Example:</p>
  * <pre>
  * {@code
+ *
  * class OrderController {
  *     ℗KeyUsecase(in = {"orderNo", "containerNo"})
  *     ℗PostMapping("a/b")

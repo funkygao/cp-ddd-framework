@@ -17,6 +17,7 @@ import java.lang.annotation.Target;
  * <p>Example:</p>
  * <pre>
  * {@code
+ *
  * ℗Aggregate(name = "Foo", root = Foo.class)
  * package io.github.dddplus.domain.foo;
  *

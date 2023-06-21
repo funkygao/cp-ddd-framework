@@ -17,6 +17,7 @@ import java.util.Map;
  * <p>例如，订单和任务在一起才能用于判断业务身份</p>
  * <pre>
  * {@code
+ *
  * class MyIdentity implements IIdentity {
  *     final Task task;
  *     final Order order;
@@ -27,6 +28,7 @@ import java.util.Map;
  * <p>为了解决这个问题，我们提供了通用万能的{@link AnyIdentity}，不必为此边缘场景额外定义新的业务身份类：</p>
  * <pre>
  * {@code
+ *
  * IIdentity identity = AnyIdentity.newIdentity();
  * identity.put("task", task).put("order", order);
  * Task task = identity.get("task", Task.class);
