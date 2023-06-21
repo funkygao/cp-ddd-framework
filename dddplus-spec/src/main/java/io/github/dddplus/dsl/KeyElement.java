@@ -17,6 +17,7 @@ import java.lang.annotation.*;
  * <p>Example:</p>
  * <pre>
  * {@code
+ *
  * class Order {
  *     ℗KeyElement(type = KeyElement.Type.Quantity, name = "totalPrice")
  *     private BigDecimal price;

@@ -15,6 +15,7 @@ import java.lang.annotation.*;
  * <p>Example:</p>
  * <pre>
  * {@code
+ *
  * class ShipmentOrder {
  *     ℗KeyBehavior
  *     void ship(Operator operator) {}

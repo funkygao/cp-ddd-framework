@@ -24,6 +24,7 @@ package io.github.dddplus.ext;
  * <p>扩展点方法的入参，有时候平台传递的是像{@code Order}这样的大对象，但又担心BP擅自调用大对象的写方法产生{@code unexpected side effect}，可以这样：</p>
  * <pre>
  * {@code
+ *
  * class Order implements IOrder {
  *     private String orderNo;
  *     private List<OrderLine> orderLines;

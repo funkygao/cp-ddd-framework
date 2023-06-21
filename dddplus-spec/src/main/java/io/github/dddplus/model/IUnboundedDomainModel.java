@@ -24,6 +24,7 @@ package io.github.dddplus.model;
  * <p>在没有区分是否有界上下文对象前，聚合根里的行为其实可以理解为这样：</p>
  * <pre>
  * {@code
+ *
  * class FooAggregateRoot implements ScenarioA, ScenarioB, ScenarioC, ScenarioD {
  *     void 与场景无关的通用方法() {}
  *     void scenarioAMethodXxx() {}

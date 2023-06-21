@@ -36,8 +36,9 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
  * <p>In your CI unit test pipeline, add the following test case:</p>
  * <pre>
  * {@code
- * DDDPlusEnforcer enforcer = new DDDPlusEnforcer();
- * enforcer.scanPackages("io.github.dddplus") // 包名替换成你的base packages
+ *
+ * new DDDPlusEnforcer()
+ *         .scanPackages("your base packages")
  *         .enforce();
  * }
  * </pre>
