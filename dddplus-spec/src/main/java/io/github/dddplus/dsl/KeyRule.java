@@ -18,6 +18,7 @@ import java.lang.annotation.Target;
  * <p>Example:</p>
  * <pre>
  * {@code
+ *
  * class ShipmentOrder {
  *     ℗KeyRule(refer = WaybillSourceEnum.class)
  *     public WaybillSourceEnum waybillPlatform() {}

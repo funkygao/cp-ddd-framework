@@ -13,6 +13,7 @@ import java.lang.annotation.*;
  * <p>Example:</p>
  * <pre>
  * {@code
+ *
  * class OrderAppService {
  *     ℗KeyFlow(remark = "统一接单")
  *     public void submitOrder(OrderDto dto) throws BizException {}

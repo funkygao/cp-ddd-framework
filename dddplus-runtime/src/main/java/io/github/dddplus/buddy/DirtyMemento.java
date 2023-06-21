@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
  * <p>进阶应用：不仅普通聚合根上使用，{@link IBag}上也可以.</p>
  * <pre>
  * {@code
+ *
  * class OrderEntity {
  *     private DirtyMemento dirtyMemento = new DirtyMemento();
  *

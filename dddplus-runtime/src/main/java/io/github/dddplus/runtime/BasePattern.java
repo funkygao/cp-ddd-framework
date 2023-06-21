@@ -27,6 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * <p>IMPORTANT: 子类的每个{@code match}方法入参必须是{@link IIdentity}，研发自己定义的类</p>
  * <pre>
  * {@code
+ *
  * ℗Pattern(code = Patterns.Foo)
  * public class FooPattern extends BasePattern {
  *     private boolean match(ShipmentOrder identity) {

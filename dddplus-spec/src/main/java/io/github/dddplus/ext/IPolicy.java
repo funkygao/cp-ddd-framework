@@ -17,6 +17,7 @@ import lombok.NonNull;
  * <p>很多研发利用{@code Spring}机制，自行实现了路由策略：</p>
  * <pre>
  * {@code
+ *
  * interface Policy {
  *     boolean support(Context context);
  *     void execute(Context context);
@@ -33,17 +34,18 @@ import lombok.NonNull;
  * <p>这有什么问题？它耦合了(控制逻辑，执行逻辑)，丧失了平台强管控.</p>
  * <pre>
  * {@code
+ *
  * ℗Policy
  * public class FetchWaybillGatewayPolicy implements IPolicy<IFetchWaybillGatewayExt, ShipmentOrder> {
- *     public static final String NETEASE = "网易"; // 供扩展点实现类绑定时引用
- *     public static final String ALPHA = "alpha";
+ *     public static final String ABC = "abc"; // 供扩展点实现类绑定时引用
+ *     public static final String Efg = "efg";
  *
  *     public String extensionCode(@NonNull ShipmentOrder identity) {
  *         ShipmentOrderPackContext packContext = identity.inContextOfPack();
- *         if (packContext.needWaybillFromNetease()) {
- *             return NETEASE;
- *         } else if (packContext.waybillFromAlpha()) {
- *             return ALPHA;
+ *         if (packContext.needWaybillFromAbc()) {
+ *             return ABC;
+ *         } else if (packContext.waybillFromEfg()) {
+ *             return Efg;
  *         } else {
  *             return null; // 没有任何扩展点实现
  *         }

@@ -19,6 +19,7 @@ import java.util.List;
  * <p>需要配置mybatis-config.xml</p>
  * <pre>
  * {@code
+ *
  * <objectFactory type="io.github.dddplus.mybatis.AutowireObjectFactory" />
  * }
  * </pre>

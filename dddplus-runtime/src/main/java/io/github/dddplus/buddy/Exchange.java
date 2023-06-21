@@ -21,6 +21,7 @@ import java.util.Map;
  * <p>如果把{@code boolean needRestow}加到{@code CheckTask}上，就腐化了{@code CheckTask}，这时候就可以：</p>
  * <pre>
  * {@code
+ *
  * class CheckTask {
  *     private final transient Exchange exchange = new Exchange();
  *
