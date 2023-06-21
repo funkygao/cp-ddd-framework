@@ -31,7 +31,7 @@ It captures DDD missing concepts and patches the building block. It enpowers bui
 The 3 most essential `plus` are:
 1. provide [extension point](/dddplus-spec/src/main/java/io/github/dddplus/ext) with multiple routing mechanism, suited for complex business scenarios
 2. [patch](/dddplus-spec/src/main/java/io/github/dddplus/model) DDD building blocks for pragmatic forward modeling, clearing obstacles of DDD implementation
-3. offer a [DSL](/dddplus-spec/src/main/java/io/github/dddplus/dsl) for reverse engineering of domain model(JavaAST), visualize complete domain knowledge from code
+3. offer a reverse modeling [DSL](/dddplus-spec/src/main/java/io/github/dddplus/dsl), visualizing complete domain knowledge from code
 
 ## Current status
 
