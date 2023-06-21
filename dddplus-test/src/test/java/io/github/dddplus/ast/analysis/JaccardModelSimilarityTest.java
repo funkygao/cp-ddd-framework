@@ -1,4 +1,4 @@
-package io.github.dddplus.ast.analysis.impl;
+package io.github.dddplus.ast.analysis;
 
 import io.github.dddplus.ast.analysis.IKeyModelSimilarity;
 import io.github.dddplus.ast.model.KeyModelEntry;
