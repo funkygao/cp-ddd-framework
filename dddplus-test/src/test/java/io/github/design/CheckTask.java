@@ -1,11 +1,19 @@
 package io.github.design;
 
+import io.github.dddplus.buddy.DirtyMemento;
+import io.github.dddplus.buddy.Exchange;
 import io.github.dddplus.dsl.KeyBehavior;
 import io.github.dddplus.dsl.KeyElement;
 import io.github.dddplus.dsl.KeyRelation;
 import io.github.dddplus.dsl.KeyRule;
-import io.github.dddplus.model.*;
+import io.github.dddplus.model.IAggregateRoot;
+import io.github.dddplus.model.IUnboundedDomainModel;
+import io.github.dddplus.model.association.HasMany;
+import io.github.dddplus.model.association.HasOne;
+import io.github.dddplus.model.association.Ref;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
@@ -14,7 +22,14 @@ import java.util.List;
  */
 @KeyRelation(whom = ShipmentOrder.class, type = KeyRelation.Type.Many2Many)
 @KeyRelation(whom = CheckBasicRule.class, type = KeyRelation.Type.HasMany)
-public class CheckTask implements IIdentity, IDomainModel, IAggregateRoot {
+@Builder
+@Slf4j
+public class CheckTask implements IAggregateRoot, IUnboundedDomainModel {
+    @Builder.Default
+    private DirtyMemento dirtyMemento = new DirtyMemento();
+    @Builder.Default
+    private Exchange exchange = new Exchange();
+
     @Getter
     private Long id;
     @Getter

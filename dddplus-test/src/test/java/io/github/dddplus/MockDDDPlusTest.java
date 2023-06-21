@@ -30,15 +30,15 @@ public class MockDDDPlusTest {
     }
 
     @AfterEach
-    public void close(){
+    public void close() {
         ddd.close();
     }
 
     // 演示如何mock DDD.useRouter
     @Test
     void demoHowToMockDDDWhenUseRouter() {
-        CheckTask task = new CheckTask();
-        ShipmentOrder order = new ShipmentOrder();
+        CheckTask task = CheckTask.builder().build();
+        ShipmentOrder order = ShipmentOrder.builder().build();
 
         // mock router
         doThrow(new RuntimeException("mocked")).when(router).splitOrderMutuallyExclusive(any(), any());
@@ -56,8 +56,8 @@ public class MockDDDPlusTest {
 
     @Test
     void demoHowToMockDDDWhenUsePolicy() {
-        CheckTask task = new CheckTask();
-        ShipmentOrder order = new ShipmentOrder();
+        CheckTask task = CheckTask.builder().build();
+        ShipmentOrder order = ShipmentOrder.builder().build();
 
         // mock扩展点实现
         doThrow(new RuntimeException("mocked by policy")).when(splitOrderExt).split(any(), any());
@@ -73,8 +73,8 @@ public class MockDDDPlusTest {
 
     @Test
     void callServiceWithDDDMock() {
-        CheckTask task = new CheckTask();
-        ShipmentOrder order = new ShipmentOrder();
+        CheckTask task = CheckTask.builder().build();
+        ShipmentOrder order = ShipmentOrder.builder().build();
 
         // mock扩展点实现
         doThrow(new RuntimeException("mocked by x")).when(splitOrderExt).split(any(), any());

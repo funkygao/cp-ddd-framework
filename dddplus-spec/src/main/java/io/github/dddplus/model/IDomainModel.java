@@ -6,7 +6,7 @@
 package io.github.dddplus.model;
 
 /**
- * 领域模型，富含业务知识的高内聚业务模型，处理单对象逻辑.
+ * 领域对象，富含业务知识的高内聚业务对象，处理单对象逻辑.
  * <p>
  * <p>领域模型对象为限界上下文内受保护的纯内存对象，不能(序列化)将其暴露到外面，否则会造成外部对领域对象的耦合.</p>
  * <p>A domain model should be a strict and unambiguous representation of the domain that captures only the most important aspects.</p>
