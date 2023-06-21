@@ -36,10 +36,15 @@ public class PlantUmlBuilder {
     private static final String QUOTE = "\"";
     private static final String HASHTAG = "#";
     private static final String PACKAGE_TMPL = "package {0} <<{1}>>";
+    private static final String COLOR_TMPL_OPEN = "<color:{0}>";
+    private static final String COLOR_TMPL_CLOSE = "</color>";
     private static final String BRACKET_OPEN = "(";
     private static final String BRACKET_CLOSE = ")";
     private static final String DIRECTION_TOP_BOTTOM = "left to right direction";
     private static final String DIRECTION_LEFT_RIGHT = "top to bottom direction";
+
+    // https://plantuml.com/zh/color
+    private static final String COLOR_BEHAVIOR_PRODUCE_EVENT = "Violet";
 
     private final Map<KeyRelation.Type, String> connections;
     private Set<KeyElement.Type> ignored;
@@ -267,10 +272,9 @@ public class PlantUmlBuilder {
                         .append(SPACE)
                         .append(entry.getJavadoc());
                 if (entry.produceEvent()) {
-                    // https://plantuml.com/zh/color
-                    append("<color:Violet>");
+                    append(MessageFormat.format(COLOR_TMPL_OPEN, COLOR_BEHAVIOR_PRODUCE_EVENT));
                     append(" -> ").append(entry.displayEvents()).append(SPACE);
-                    append("</color>");
+                    append(COLOR_TMPL_CLOSE);
                 }
                 content.append(NEWLINE);
             }
