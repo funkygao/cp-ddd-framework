@@ -23,18 +23,20 @@ Languages： English | [中文](README.zh-cn.md)
 
 ## What is DDDplus?
 
-DDDplus, originally cp-ddd-framework(cp means Central Platform：中台), is a lightweight DDD(Domain Driven Design) Enhancement Framework for complex business architecture.
+DDDplus, originally cp-ddd-framework(cp means Central Platform：中台), is a lightweight DDD(Domain Driven Design) Enhancement Framework for complex business architecture. 
 
-Critical enhancements for DDD include:
+It captures DDD missing concepts and patches the building block. It enpowers building domain model with forward and reverse modeling. It visualizes the domain knowledge. It strengthens building extension oriented flexible solution.
+
+The most essential `plus` includes:
 1. provide [extension point](/dddplus-spec/src/main/java/io/github/dddplus/ext) with multiple routing mechanism, suited for complex business scenarios
-2. [patched](/dddplus-spec/src/main/java/io/github/dddplus/model) DDD building blocks and gived clear and concise javadoc for each building block, clearing obstacles of DDD implementation
-3. invent a [DSL](/dddplus-spec/src/main/java/io/github/dddplus/dsl) for reverse engineering of domain model(JavaAST), visualize complete domain knowledge from code
+2. [patch](/dddplus-spec/src/main/java/io/github/dddplus/model) DDD building blocks for pragmatic forward modeling, clearing obstacles of DDD implementation
+3. offer a [DSL](/dddplus-spec/src/main/java/io/github/dddplus/dsl) for reverse engineering of domain model(JavaAST), visualize complete domain knowledge from code
 
 ## Current status
 
 Used for several complex critical central platform projects in production environment.
 
-Latest `Maven Central` version is: `1.1.2`, under active development version is: `2.0.0-SNAPSHOT`.
+Latest Maven Central version: `1.1.2`, under active development version: `2.0.0-SNAPSHOT`.
 
 ## Quickstart
 
