@@ -1,8 +1,7 @@
 <h1 align="center">DDDplus</h1>
 
 <div align="center">
-
-A lightweight flexible development framework for complex business architecture with full ecosystem！
+轻量级、对DDD进行补充和增强的框架！
 
 [![Mavenn Central](https://img.shields.io/maven-central/v/io.github.dddplus/dddplus.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:io.github.dddplus)
 ![Requirement](https://img.shields.io/badge/JDK-8+-blue.svg)
@@ -14,7 +13,7 @@ A lightweight flexible development framework for complex business architecture w
 </div>
 
 <div align="center">
-Languages： English | [中文](README.zh-cn.md)
+Languages： [English](README.md) | 中文
 </div>
 
 ----
