@@ -18,6 +18,7 @@ import java.lang.annotation.*;
 @Documented
 @Inherited
 @Service
+@Deprecated
 public @interface DomainService {
 
     /**

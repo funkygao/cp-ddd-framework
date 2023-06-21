@@ -8,13 +8,10 @@ package io.github.dddplus;
 import com.tngtech.archunit.core.domain.JavaModifier;
 import com.tngtech.archunit.lang.ArchRule;
 import io.github.dddplus.annotation.*;
-import io.github.dddplus.ext.IDomainExtension;
 import io.github.dddplus.ext.IIdentityResolver;
 import io.github.dddplus.model.IDomainModel;
-import io.github.dddplus.model.IDomainModelCreator;
 import io.github.dddplus.model.IDomainService;
-import io.github.dddplus.runtime.BaseDomainAbility;
-import io.github.dddplus.specification.ISpecification;
+import io.github.dddplus.runtime.BaseRouter;
 import io.github.dddplus.step.IDomainStep;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
@@ -53,6 +50,7 @@ import static com.tngtech.archunit.library.dependencies.SlicesRuleDefinition.sli
  *       ``
  * </pre>
  */
+@Deprecated
 public class ArchitectureEnforcer {
 
     private ArchitectureEnforcer() {
@@ -78,19 +76,12 @@ public class ArchitectureEnforcer {
                 .as("前台垂直业务包不能依赖domain包，必须依赖spec包");
     }
 
-    public static final ArchRule abilityRule() {
+    public static final ArchRule routerRule() {
         return classes()
-                .that().haveNameMatching(".*Ability")
-                .should().beAssignableTo(BaseDomainAbility.class)
-                .andShould().beAnnotatedWith(DomainAbility.class)
-                .as("ability必须继承BaseDomainAbility，并且加@DomainAbility");
-    }
-
-    public static final ArchRule specificationRule() {
-        return classes()
-                .that().implement(ISpecification.class)
-                .should().beAnnotatedWith(Specification.class)
-                .as("ISpecification rule");
+                .that().haveNameMatching(".*Router")
+                .should().beAssignableTo(BaseRouter.class)
+                .andShould().beAnnotatedWith(Router.class)
+                .as("router必须继承BaseRouter，并且加@Router");
     }
 
     public static final ArchRule partnerRule() {
@@ -132,16 +123,6 @@ public class ArchitectureEnforcer {
                 .as("Pattern的使用规范");
     }
 
-    public static final ArchRule extensionRule() {
-        return classes()
-                .that().areAssignableTo(IDomainExtension.class)
-                .and().areNotInterfaces()
-                .and().haveNameNotMatching(".Default*") // 默认的扩展点实现可以不使用 @Extension
-                .should().haveNameMatching(".*Ext")
-                .andShould().beAnnotatedWith(Extension.class)
-                .as("扩展点实现的规范");
-    }
-
     public static final ArchRule loggers_should_be_private_static_final() {
         return fields()
                 .that().haveRawType(Logger.class)
@@ -156,13 +137,6 @@ public class ArchitectureEnforcer {
                 .that().implement(IDomainModel.class)
                 .should().haveOnlyPrivateConstructors()
                 .as("DomainModel不能直接new");
-    }
-
-    public static final ArchRule creatorRule() {
-        return classes()
-                .that().haveNameMatching(".*Creator")
-                .should().implement(IDomainModelCreator.class)
-                .as("Creator rule");
     }
 
     /**
@@ -226,19 +200,16 @@ public class ArchitectureEnforcer {
         // DDD框架的使用规范
         requiredRules.add(repositoryRule());
 
-        requiredRules.add(creatorRule());
         requiredRules.add(partnerDependencyRule());
         requiredRules.add(domainModelRule());
-        requiredRules.add(specificationRule());
         requiredRules.add(serviceRule());
         requiredRules.add(noActivityClassAllowed());
         requiredRules.add(activityRule());
         requiredRules.add(aclRule());
         requiredRules.add(patternRule());
-        requiredRules.add(abilityRule());
+        requiredRules.add(routerRule());
         requiredRules.add(partnerRule());
         requiredRules.add(domainStepRule());
-        requiredRules.add(extensionRule());
 
         requiredRules.add(controllers_should_only_use_their_own_slice());
     }

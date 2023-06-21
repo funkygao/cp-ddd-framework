@@ -30,9 +30,6 @@ public class DomainArtifacts {
     private List<Domain> domains;
 
     @Getter
-    private List<Specification> specifications;
-
-    @Getter
     private Map<String, List<Step>> steps; // key is activityCode
 
     @Getter
@@ -64,10 +61,6 @@ public class DomainArtifacts {
                 this.steps.get(activity).add(new Step(activity, stepDef.getCode(), stepDef.getName(), stepDef.getTags()));
             }
         }
-
-        // specifications
-        this.specifications = new ArrayList<>(InternalIndexer.specificationDefs.size());
-        specifications.addAll(InternalIndexer.specificationDefs.stream().map(specificationDef -> new Specification(specificationDef.getName(), specificationDef.getTags())).collect(Collectors.toList()));
 
         // extensions
         this.extensions = new ArrayList<>();
@@ -174,13 +167,4 @@ public class DomainArtifacts {
         private String name;
     }
 
-    /**
-     * 业务约束规则.
-     */
-    @Getter
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    public static class Specification {
-        private String name;
-        private String[] tags;
-    }
 }

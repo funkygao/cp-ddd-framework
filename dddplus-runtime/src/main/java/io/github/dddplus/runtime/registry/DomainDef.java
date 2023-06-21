@@ -7,9 +7,8 @@ package io.github.dddplus.runtime.registry;
 
 import io.github.dddplus.annotation.Domain;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.ToString;
-
-import javax.validation.constraints.NotNull;
 
 @ToString
 class DomainDef implements IRegistryAware {
@@ -24,7 +23,7 @@ class DomainDef implements IRegistryAware {
     private Object domainBean;
 
     @Override
-    public void registerBean(@NotNull Object bean) {
+    public void registerBean(@NonNull Object bean) {
         Domain domain = InternalAopUtils.getAnnotation(bean, Domain.class);
         this.code = domain.code();
         this.name = domain.name();

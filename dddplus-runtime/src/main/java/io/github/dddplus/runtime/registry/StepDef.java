@@ -8,14 +8,14 @@ package io.github.dddplus.runtime.registry;
 import io.github.dddplus.annotation.Step;
 import io.github.dddplus.step.IDomainStep;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.ToString;
-
-import javax.validation.constraints.NotNull;
 
 /**
  * 领域步骤的内部定义, internal usage only.
  */
 @ToString
+@Deprecated
 public class StepDef implements IRegistryAware {
 
     @Getter
@@ -34,7 +34,7 @@ public class StepDef implements IRegistryAware {
     private IDomainStep stepBean;
 
     @Override
-    public void registerBean(@NotNull Object bean) {
+    public void registerBean(@NonNull Object bean) {
         Step domainStep = InternalAopUtils.getAnnotation(bean, Step.class);
         this.name = domainStep.name();
         this.tags = domainStep.tags();

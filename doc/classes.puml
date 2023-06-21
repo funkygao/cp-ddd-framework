@@ -3,64 +3,59 @@ skinparam handwritten false
 skinparam shadowing<<with_shadow>> true
 left to right direction
 
-package Plugin <<Frame>> {
+package plugin <<Frame>> {
     interface IIdentityResolver
     interface IDomainExtension
     interface IPlugable
-    interface IModelAttachmentExt
-    interface IDecideStepsExt
-    class Pattern
-    class Partner
+    interface IPolicy
+    annotation Partner
+    annotation Pattern
+    annotation Policy
+    annotation Extension
 }
 
 note "hot reloadable" as N1
-Plugin .. N1
+plugin .. N1
 
-interface IDomainService
-interface IDomainStep
-IDomainStep : execute()
-interface IRevokableDomainStep
-IRevokableDomainStep : rollback()
 IPlugable <|-- IDomainExtension
 IPlugable <|-- IIdentityResolver
-IModelAttachmentExt : explain()
-IModelAttachmentExt : render()
-abstract StepsExecTemplate
-abstract BaseDomainAbility
-BaseDomainAbility : getExtension()
-BaseDomainAbility : firstExtension()
-BaseDomainAbility : defaultExtension()
-StepsExecTemplate : execute()
-DDD : {static} findAbility()
-DDD : {static} findSteps()
-IDecideStepsExt : decideSteps()
-IIdentityResolver : match(IDomainModel)
 
-IDomainService <|-- IDomainStep
-IDomainStep <|-- IRevokableDomainStep
-IDomainService <|-- BaseDomainAbility
+Extension : code(Pattern/Partner/Policy)
 
-IDomainExtension <|-- IDecideStepsExt
-IDomainExtension <|-- IModelAttachmentExt
+annotation Router
+
+abstract BaseRouter
+BaseRouter : #forEachExtension()
+BaseRouter : #firstExtension()
+BaseRouter : {abstract} +defaultExtension()
+DDD : {static} +useRouter()
+DDD : {static} +usePolicy()
+IIdentityResolver : match(IIdentity)
 
 IIdentityResolver <|-- Pattern
 IIdentityResolver <|-- Partner
 
-BaseDomainAbility <-- DDD
-IDomainStep <-- DDD
+IPolicy : +extensionCode()
 
-IDomainExtension <-- BaseDomainAbility: locate
+Router .. BaseRouter
+Policy <|-- IPolicy
 
-IDomainExtension --> Pattern: bind
-IDomainExtension --> Partner: bind
+BaseRouter <-- DDD
+IPolicy <-- DDD
 
-Container : loadPlugin()
+Container : {static} +loadPluginJar(code, ver)
 
-Container --> Plugin : load
+Container --> plugin
 
 Partner : code
 Pattern : code
-IDomainExtension : code
+Pattern : priority
 
-StepsExecTemplate --> IDomainStep: orchestrate
+package plus <<Frame>> {
+    Extension1 --|> Extension
+    Extension2 --|> Extension
+    Extension3 --|> Extension
+    ExtensionN --|> Extension
+}
+
 @enduml

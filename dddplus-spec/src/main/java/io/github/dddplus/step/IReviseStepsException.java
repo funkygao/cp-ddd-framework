@@ -6,8 +6,7 @@
 package io.github.dddplus.step;
 
 import io.github.dddplus.model.IDomainModel;
-
-import javax.validation.constraints.NotNull;
+import lombok.NonNull;
 import java.util.List;
 
 /**
@@ -18,6 +17,7 @@ import java.util.List;
  * <p>有的最佳实践说：不要使用异常控制流程。但在这里，它更有效，不要太在意最佳实践的说法</p>
  * <p>IMPORTANT: 不要在领域层异常直接实现该接口，应该创建新的异常类，否则会与步骤的回滚机制冲突！推荐直接使用{@link ReviseStepsException}</p>
  */
+@Deprecated
 public interface IReviseStepsException {
 
     /**
@@ -25,6 +25,6 @@ public interface IReviseStepsException {
      *
      * @return subsequent step code list
      */
-    @NotNull
+    @NonNull
     List<String> subsequentSteps();
 }

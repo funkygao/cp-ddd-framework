@@ -5,14 +5,17 @@
  */
 package io.github.dddplus.runtime;
 
+import io.github.dddplus.IExceptionWeakLogging;
 import io.github.dddplus.ext.IDomainExtension;
-import lombok.extern.slf4j.Slf4j;
-import io.github.dddplus.model.IDomainModel;
+import io.github.dddplus.model.IIdentity;
+import io.github.dddplus.runtime.interceptor.ExtensionContext;
+import io.github.dddplus.runtime.interceptor.IExtensionInterceptor;
 import io.github.dddplus.runtime.registry.ExtensionDef;
 import io.github.dddplus.runtime.registry.InternalIndexer;
+import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 
-import javax.validation.constraints.NotNull;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -38,16 +41,18 @@ class ExtensionInvocationHandler<Ext extends IDomainExtension, R> implements Inv
             new NamedThreadFactory("ExtInvokeTimer", false)); // daemon=false, shutdown时等待扩展点执行完毕
 
     private final Class<Ext> extInterface;
-    private final IDomainModel model;
+    private final IIdentity identity;
     private final IReducer<R> reducer;
     private final Ext defaultExt;
-    private int timeoutInMs;
+    private final IExtensionInterceptor interceptor;
+    private final int timeoutInMs;
 
-    ExtensionInvocationHandler(@NotNull Class<Ext> extInterface, @NotNull IDomainModel model, IReducer<R> reducer, Ext defaultExt, int timeoutInMs) {
+    ExtensionInvocationHandler(@NonNull Class<Ext> extInterface, @NonNull IIdentity identity, IReducer<R> reducer, Ext defaultExt, IExtensionInterceptor interceptor, int timeoutInMs) {
         this.extInterface = extInterface;
-        this.model = model;
+        this.identity = identity;
         this.reducer = reducer;
         this.defaultExt = defaultExt;
+        this.interceptor = interceptor;
         this.timeoutInMs = timeoutInMs;
     }
 
@@ -57,12 +62,12 @@ class ExtensionInvocationHandler<Ext extends IDomainExtension, R> implements Inv
 
     @Override
     public Object invoke(Object proxy, final Method method, Object[] args) throws Throwable {
-        List<ExtensionDef> effectiveExts = InternalIndexer.findEffectiveExtensions(extInterface, model, reducer == null);
+        List<ExtensionDef> effectiveExts = InternalIndexer.findEffectiveExtensions(extInterface, identity, reducer == null);
         log.debug("{} effective {}", extInterface.getCanonicalName(), effectiveExts);
 
         if (effectiveExts.isEmpty()) {
             if (defaultExt == null) {
-                log.debug("found NO ext instance {} on {}, HAS TO return null", extInterface.getCanonicalName(), model);
+                log.debug("found NO ext instance {} on {}, HAS TO return null", extInterface.getCanonicalName(), identity);
                 // 扩展点方法的返回值不能是int/boolean等，否则会抛出NPE!
                 return null;
             }
@@ -94,11 +99,27 @@ class ExtensionInvocationHandler<Ext extends IDomainExtension, R> implements Inv
 
     private R invokeExtension(ExtensionDef extensionDef, final Method method, Object[] args) throws Throwable {
         try {
-            return invokeExtensionMethod(extensionDef, method, args);
+            ExtensionContext context = null;
+            if (interceptor != null) {
+                context = new ExtensionContext(extensionDef.getCode(), extensionDef.getExtensionBean(), method, args);
+                interceptor.beforeInvocation(context);
+            }
+            try {
+                return invokeExtensionMethod(extensionDef, method, args);
+            } finally {
+                if (interceptor != null) {
+                    interceptor.afterInvocation(context);
+                }
+            }
         } catch (InvocationTargetException e) {
             // 此处接收被调用方法内部未被捕获的异常：扩展点里抛出异常
-            log.error("{} code:{}", this.extInterface.getCanonicalName(), extensionDef.getCode(), e.getTargetException());
-            throw e.getTargetException();
+            Throwable actualException = e.getTargetException();
+            if (actualException instanceof IExceptionWeakLogging) {
+                log.warn("{} code:{} ex:{}", this.extInterface.getCanonicalName(), extensionDef.getCode(), actualException.getMessage());
+            } else {
+                log.error("{} code:{}", this.extInterface.getCanonicalName(), extensionDef.getCode(), e.getTargetException());
+            }
+            throw actualException;
         } catch (TimeoutException e) {
             log.error("timed out:{}ms, {} method:{} args:{}", timeoutInMs, extensionDef.getExtensionBean(), method.getName(), args);
             // java里的TimeoutException继承Exception，需要转为ExtTimeoutException，否则上层看到的异常是 UndeclaredThrowableException

@@ -1,12 +1,13 @@
 package io.github.dddplus.runtime.registry.mock.model;
 
 import io.github.dddplus.model.IDomainModel;
+import io.github.dddplus.model.IIdentity;
 import lombok.Data;
 import lombok.ToString;
 
 @Data
 @ToString
-public class FooModel implements IDomainModel {
+public class FooModel implements IDomainModel, IIdentity {
     private String partnerCode;
 
     private boolean b2c;

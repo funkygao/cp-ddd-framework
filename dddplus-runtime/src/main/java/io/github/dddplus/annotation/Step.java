@@ -19,6 +19,7 @@ import java.lang.annotation.*;
 @Documented
 @Inherited
 @Service
+@Deprecated
 public @interface Step {
     /**
      * The value may indicate a suggestion for a logical component name,

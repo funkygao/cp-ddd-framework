@@ -56,12 +56,11 @@ class RegistryFactory implements InitializingBean {
     public void afterPropertiesSet() throws Exception {
         log.info("setup the discoverable Spring beans...");
 
-        // 注册Domain，是为了可视化，避免漏掉某些支撑域
         validRegistryEntries.add(new RegistryEntry(Domain.class, () -> new DomainDef()));
+        validRegistryEntries.add(new RegistryEntry(Interceptor.class, () -> new InterceptorDef()));
         validRegistryEntries.add(new RegistryEntry(DomainService.class, () -> new DomainServiceDef()));
-        validRegistryEntries.add(new RegistryEntry(Specification.class, () -> new SpecificationDef()));
         validRegistryEntries.add(new RegistryEntry(Step.class, () -> new StepDef()));
-        validRegistryEntries.add(new RegistryEntry(DomainAbility.class, () -> new DomainAbilityDef()));
+        validRegistryEntries.add(new RegistryEntry(Router.class, () -> new RouterDef()));
         validRegistryEntries.add(new RegistryEntry(Policy.class, () -> new PolicyDef()));
         validRegistryEntries.add(new RegistryEntry(Partner.class, () -> new PartnerDef()));
         validRegistryEntries.add(new RegistryEntry(Pattern.class, () -> new PatternDef()));

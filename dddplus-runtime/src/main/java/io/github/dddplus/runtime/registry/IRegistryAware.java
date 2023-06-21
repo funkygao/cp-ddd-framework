@@ -5,9 +5,9 @@
  */
 package io.github.dddplus.runtime.registry;
 
-import javax.validation.constraints.NotNull;
+import lombok.NonNull;
 
 interface IRegistryAware {
 
-    void registerBean(@NotNull Object bean);
+    void registerBean(@NonNull Object bean);
 }

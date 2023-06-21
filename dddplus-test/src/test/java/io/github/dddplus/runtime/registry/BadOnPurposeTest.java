@@ -1,7 +1,5 @@
 package io.github.dddplus.runtime.registry;
 
-import com.tngtech.archunit.core.importer.ClassFileImporter;
-import io.github.dddplus.ArchitectureEnforcer;
 import io.github.dddplus.testing.AloneRunner;
 import io.github.dddplus.testing.AloneWith;
 import org.junit.After;
@@ -12,7 +10,6 @@ import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 @RunWith(AloneRunner.class)
@@ -24,30 +21,18 @@ public class BadOnPurposeTest {
     @After
     public void tearDown() {
         if (applicationContext != null) {
-            applicationContext.destroy();
+            applicationContext.close();
             applicationContext = null;
         }
 
         RegistryFactory.validRegistryEntries.clear();
         InternalIndexer.domainDefMap.clear();
         InternalIndexer.domainStepDefMap.clear();
-        InternalIndexer.domainAbilityDefMap.clear();
+        InternalIndexer.routerDefMap.clear();
         InternalIndexer.partnerDefMap.clear();
         InternalIndexer.patternDefMap.clear();
-        InternalIndexer.specificationDefs.clear();
         InternalIndexer.policyDefMap.clear();
-    }
-
-    @Test
-    public void specificationNotAnnotated() {
-        try {
-            ArchitectureEnforcer.specificationRule().check(new ClassFileImporter().importPackages("io.github.badcase"));
-            fail();
-        } catch (AssertionError expected) {
-            expected.printStackTrace();
-            assertTrue(expected.getMessage().contains("Rule 'ISpecification rule' was violated"));
-            assertTrue(expected.getMessage().contains("<io.github.badcase.specification.SpecificationWithoutAnnotation> is not annotated with @Specification"));
-        }
+        InternalIndexer.extensionInterceptor = null;
     }
 
     @Test
@@ -91,16 +76,6 @@ public class BadOnPurposeTest {
     }
 
     @Test
-    public void notISpecificationButAnnotatedWithSpecification() {
-        try {
-            applicationContext = new ClassPathXmlApplicationContext("specification-bad.xml");
-            fail();
-        } catch (BeanCreationException expected) {
-            assertEquals("io.github.badcase.specification.InvalidSpecification MUST implement ISpecification", expected.getCause().getMessage());
-        }
-    }
-
-    @Test
     public void patternWithInvalidPriority() {
         try {
             applicationContext = new ClassPathXmlApplicationContext("pattern-bad.xml");
@@ -126,7 +101,7 @@ public class BadOnPurposeTest {
             applicationContext = new ClassPathXmlApplicationContext("policy-bad.xml");
             fail();
         } catch (BeanCreationException expected) {
-            assertEquals("io.github.badcase.policy.InvalidPolicy MUST implements IExtPolicy", expected.getCause().getMessage());
+            assertEquals("io.github.badcase.policy.InvalidPolicy MUST implements IPolicy", expected.getCause().getMessage());
         }
     }
 
@@ -141,18 +116,18 @@ public class BadOnPurposeTest {
     }
 
     @Test
-    public void badDomainAbility() {
+    public void badRouter() {
         try {
             applicationContext = new ClassPathXmlApplicationContext("ability-bad.xml");
             fail();
         } catch (BeanCreationException expected) {
-            assertEquals("io.github.badcase.ability.bad1.BadAbility MUST extend BaseDomainAbility", expected.getCause().getMessage());
+            assertEquals("io.github.badcase.router.bad1.BadRouter MUST extend BaseRouter", expected.getCause().getMessage());
         }
     }
 
     @Test
-    public void badDomainAbility2() {
-        // StillLegalGenericAbility 虽然没有指明泛型的类型，它也是合法的
+    public void badRouter2() {
+        // StillLegalGenericRouter 虽然没有指明泛型的类型，它也是合法的
         applicationContext = new ClassPathXmlApplicationContext("ability-bad2.xml");
     }
 }

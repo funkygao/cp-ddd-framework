@@ -5,5 +5,7 @@
  */
 /**
  * 领域步骤体系规范.
+ *
+ * @deprecated 
  */
 package io.github.dddplus.step;
