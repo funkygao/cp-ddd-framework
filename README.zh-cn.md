@@ -2,7 +2,7 @@
 
 <div align="center">
 
-轻量级、对DDD进行补充和增强的框架！
+轻量级DDD增强框架！
 
 [![Mavenn Central](https://img.shields.io/maven-central/v/io.github.dddplus/dddplus.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:io.github.dddplus)
 ![Requirement](https://img.shields.io/badge/JDK-8+-blue.svg)
@@ -21,14 +21,12 @@ Languages： [English](README.md) | 中文
 
 ----
 
-## What is DDDplus?
-
-DDDplus, originally cp-ddd-framework(cp means Central Platform：中台), is a lightweight flexible development framework for complex business architecture.
+## DDDplus是什么
 
 DDDplus是轻量级、对DDD进行补充和增强的框架，提供的核心内容包括：
-- 扩展点机制，支持复杂场景问题
-- 扩充了DDD的building blocks，解决DDD落地难问题
-- 基于代码进行人工[DSL](/dddplus-spec/src/main/java/io/github/dddplus/dsl)标注的逆向建模机制，领域知识模型化
+- [扩展点机制](/dddplus-spec/src/main/java/io/github/dddplus/ext)，支持复杂场景问题
+- [扩充](/dddplus-spec/src/main/java/io/github/dddplus/model)了DDD的building blocks，解决DDD落地难问题
+- 基于代码进行人工[DSL](/dddplus-spec/src/main/java/io/github/dddplus/dsl)标注的逆向建模机制，领域模型可视化
 
 具体内容：
 - 确定性问题
@@ -61,7 +59,9 @@ DDDplus是轻量级、对DDD进行补充和增强的框架，提供的核心内�
 
 Used for several complex critical central platform projects in production environment.
 
-## Quickstart
+Latest `Maven Central` version is: `1.1.2`, under active development version is: `2.0.0-SNAPSHOT`.
+
+## 快速入门
 
 ### Dependencies
 
@@ -72,7 +72,7 @@ Used for several complex critical central platform projects in production enviro
 </dependency>
 ```
 
-### Integration with SpringBoot
+### 与SpringBoot集成
 
 ```java
 @SpringBootApplication(scanBasePackages = {"${your base packages}", "io.github.dddplus"})
@@ -99,6 +99,7 @@ public class WebApplication {
 ```
 
 通过[DSL](/dddplus-spec/src/main/java/io/github/dddplus/dsl)在代码进行标注后，即可自动PlantUML类图形式的业务模型：
+
 ```java
 class ReverseModelingTest {
     @Test
@@ -126,6 +127,7 @@ class ReverseModelingTest {
 ```
 
 通过单测执行DDDplus enforcement：
+
 ```java
 public class DDDPlusEnforcerTest {
     @Test
@@ -142,7 +144,7 @@ public class DDDPlusEnforcerTest {
 - [使用DDDplus搭建`订单履约中台`的例子](https://github.com/dddplus/dddplus-demo)
 - [使用DDDplus，5分钟搭建一个仓储中台WMS](https://github.com/dddplus/dddplus-archetype-demo)
 
-## Key abstractions
+## 扩展点机制
 
 ![](http://www.plantuml.com/plantuml/svg/VLJ1JXj13BtxAonwIKGJH7khLX4geH8z8CGFL6RNoOxOp4GURrC4-VTwo6IpoG8vnNvlxFSydhsAIgBjge7uvFoQX5POawysubJPuuAQo3qirbI5ZVFBejWuhV_iujaCLLg6XXUA6b3SibQid72fBdY0DPLFj6HSD-tIUIoANrQCxTWBeFsSLvO5bOotjnLxTVhym34qVrbEyNbOaVCt_vHzjDAdyBqreCU61_dGkFBvBKlU1wMa2-z9rBCCqweiVf1-jyP1oXR0iendTL0KRW9LISePKiIxIyZUfzCKGASKYzV9PE1hW0_c0XqNVs0PAXvbsHVPrSLExnYWf_OXjCQnr6DKeLBn9qNEoSDVg_Xb4UI6ohhhCXgV4fn4_H1-sNVOudd52sgR8-vyFa-ac6ILHcdtHz_7TbOC6yp1c2lIiXvro1Y6hDqGyu0-XFCsGDuMAttEUytNQS9MEXkSJlkJo_nKfLkr_ZWAoviho5WNmtNmIiwp71bEcvEkt_dV9ADqjr_HL8xx_CbabbyJG1QUzm2opM6u5XV4R1-znpXuZTqzNLgNrzaXFaQ_VOf-_nIzEqMt05Vig_GX-Wy0)
 
