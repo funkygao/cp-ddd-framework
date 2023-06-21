@@ -54,9 +54,9 @@ Latest Maven Central version: `1.1.2`, under active development version: `2.0.0-
 
 ```java
 @SpringBootApplication(scanBasePackages = {"${your base packages}", "io.github.dddplus"})
-public class WebApplication {
+public class Application {
     public static void main(String[] args) {
-        SpringApplication.run(WebApplication.class);
+        SpringApplication.run(Application.class);
     }
 }
 ```
@@ -74,14 +74,15 @@ Annotate your code With [DSL](/dddplus-spec/src/main/java/io/github/dddplus/dsl)
 
 ```java
 class ReverseModelingTest {
+    ReverseEngineeringModel model;
     @Test
-    void reverseModeling() {
-        DomainModelAnalyzer domainModelAnalyzer = new DomainModelAnalyzer();
-        ReverseEngineeringModel domainModel = domainModelAnalyzer.scan("{your module root}")
-            .analyze();
+    void visualizeDomainModel() {
+        model = new DomainModelAnalyzer()
+                        .scan("{your module root}")
+                        .analyze();
         new PlantUmlBuilder()
-            .build(domainModel)
-            .renderSvg("myModel.svg");
+            .build(model)
+            .renderSvg("model.svg");
     }
 }
 ```
@@ -99,11 +100,11 @@ class ReverseModelingTest {
 Enable it by writing unit test and integrate it with CI flow.
 
 ```java
-public class DDDPlusEnforcerTest {
+class ArchitectureGuardTest {
     @Test
-    public void enforce() {
-        DDDPlusEnforcer enforcer = new DDDPlusEnforcer();
-        enforcer.scanPackages("${your base package}")
+    void enforcement() {
+        new DDDPlusEnforcer()
+                .scanPackages("${your base package}")
                 .enforce();
     }
 }
