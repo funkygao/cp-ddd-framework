@@ -10,7 +10,6 @@ import io.github.dddplus.model.IAggregateRoot;
 import io.github.dddplus.model.IUnboundedDomainModel;
 import io.github.dddplus.model.association.HasMany;
 import io.github.dddplus.model.association.HasOne;
-import io.github.dddplus.model.association.Ref;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +34,7 @@ public class CheckTask implements IAggregateRoot, IUnboundedDomainModel {
     @Getter
     private String taskNo;
 
-    private Ref<String> stationNo;
+    private StationNo stationNo;
     private HasOne<Operator> operator;
     private Details details;
     private ShipmentOrders orders;
