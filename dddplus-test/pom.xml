@@ -17,7 +17,7 @@
 
     <properties>
         <maven.deploy.skip>true</maven.deploy.skip>
-        <spring-boot.version>2.2.7.RELEASE</spring-boot.version>
+        <spring-boot.version>2.5.15</spring-boot.version>
         <mybatis.version>3.5.6</mybatis.version>
     </properties>
 
