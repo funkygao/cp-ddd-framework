@@ -1,7 +1,7 @@
 io.github.dddplus
 io.github.dddplus.annotation
 io.github.dddplus.ast
-io.github.dddplus.ast.analysis
+io.github.dddplus.ast.algorithm
 io.github.dddplus.ast.model
 io.github.dddplus.ast.parser
 io.github.dddplus.ast.report
