@@ -10,8 +10,7 @@ import io.github.dddplus.model.IAggregateRoot;
 import io.github.dddplus.model.IUnboundedDomainModel;
 import io.github.dddplus.model.association.HasMany;
 import io.github.dddplus.model.association.HasOne;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -22,6 +21,8 @@ import java.util.List;
 @KeyRelation(whom = ShipmentOrder.class, type = KeyRelation.Type.Many2Many)
 @KeyRelation(whom = CheckBasicRule.class, type = KeyRelation.Type.HasMany)
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Slf4j
 public class CheckTask implements IAggregateRoot, IUnboundedDomainModel {
     @Builder.Default
@@ -43,7 +44,7 @@ public class CheckTask implements IAggregateRoot, IUnboundedDomainModel {
      * here we go for status.
      */
     @KeyElement(types = KeyElement.Type.Lifecycle, name = "theStatus")
-    private String status;
+    private CheckTaskStatus status;
 
     @KeyElement(types = KeyElement.Type.Lifecycle)
     private Integer printStatus;
@@ -61,6 +62,15 @@ public class CheckTask implements IAggregateRoot, IUnboundedDomainModel {
     @Deprecated
     @KeyElement(types = KeyElement.Type.Contextual)
     private int foo;
+
+    private CheckTask(Essence essence) {
+        // 这里进行进行各种规约检查，确保业务状态完整性和一致性
+        this.status = CheckTaskStatus.Accepted;
+
+        // 这里也可以使用mapstruct
+        this.locationNo = essence.locationNo;
+        this.containerNo = essence.containerNo;
+    }
 
     @KeyRule(name = "isDone")
     boolean isFinished() {
@@ -83,5 +93,18 @@ public class CheckTask implements IAggregateRoot, IUnboundedDomainModel {
 
     public interface ShipmentOrders extends HasMany<ShipmentOrder> {
         List<ShipmentOrder> pendingOrders();
+    }
+
+    /**
+     * {@link CheckTask}DTO形式的替身，用于创建任务的场景(此时数据库里还没有记录)，贫血，只有数据无行为和逻辑.
+     */
+    @Data
+    public static class Essence {
+        private String taskNo;
+        private String containerNo;
+        private String locationNo;
+        public CheckTask createCheckTask() {
+            return new CheckTask(this);
+        }
     }
 }
