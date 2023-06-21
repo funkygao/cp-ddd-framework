@@ -64,19 +64,9 @@ public @interface KeyElement {
         Referential,
 
         /**
-         * 特定场景相关.
-         */
-        Contextual,
-
-        /**
          * 业务对象的生命周期类.
          */
         Lifecycle,
-
-        /**
-         * data collection unit.
-         */
-        DCU,
 
         /**
          * 生产运营类，也可以表达业务变化类和业务规则类.
@@ -89,6 +79,16 @@ public @interface KeyElement {
         Problematical,
 
         //============
+
+        /**
+         * 特定场景相关.
+         */
+        Contextual,
+
+        /**
+         * data collection unit.
+         */
+        DCU,
 
         /**
          * 传播类.

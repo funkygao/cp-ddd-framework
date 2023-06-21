@@ -60,7 +60,7 @@ public class KeyModelEntry {
     public List<KeyElement.Type> undefinedTypes() {
         List<KeyElement.Type> result = new ArrayList<>();
         for (KeyElement.Type type : KeyElement.Type.values()) {
-            if (type.compareTo(KeyElement.Type.Problematical) > 0) {
+            if (type.compareTo(KeyElement.Type.Problematical) >= 0) {
                 // ignored
                 continue;
             }
