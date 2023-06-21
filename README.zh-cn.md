@@ -1,6 +1,7 @@
 <h1 align="center">DDDplus</h1>
 
 <div align="center">
+
 轻量级、对DDD进行补充和增强的框架！
 
 [![Mavenn Central](https://img.shields.io/maven-central/v/io.github.dddplus/dddplus.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:io.github.dddplus)
@@ -10,9 +11,11 @@
 [![Coverage Status](https://img.shields.io/codecov/c/github/funkygao/cp-ddd-framework.svg)](https://codecov.io/gh/funkygao/cp-ddd-framework)
 [![Mentioned in Awesome DDD](https://awesome.re/mentioned-badge.svg)](https://github.com/heynickc/awesome-ddd#jvm)
 [![Gitter chat](https://img.shields.io/badge/gitter-join%20chat%20%E2%86%92-brightgreen.svg)](https://gitter.im/cp-ddd-framework/community)
+
 </div>
 
 <div align="center">
+
 Languages： [English](README.md) | 中文
 </div>
 
