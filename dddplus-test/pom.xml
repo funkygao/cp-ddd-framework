@@ -17,6 +17,9 @@
 
     <properties>
         <maven.deploy.skip>true</maven.deploy.skip>
+        <aspectj.verion>1.9.1</aspectj.verion>
+        <liteflow.version>2.10.2</liteflow.version>
+        <caliper.version>1.0-beta-2</caliper.version>
     </properties>
 
     <dependencies>
@@ -100,30 +103,20 @@
         <dependency>
             <groupId>com.google.caliper</groupId>
             <artifactId>caliper</artifactId>
-            <version>1.0-beta-2</version>
+            <version>${caliper.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
-            <version>1.9.1</version>
+            <version>${aspectj.verion}</version>
         </dependency>
 
         <!-- LiteFlow evaluation -->
         <dependency>
             <groupId>com.yomahub</groupId>
             <artifactId>liteflow-spring</artifactId>
-            <version>2.10.2</version>
+            <version>${liteflow.version}</version>
         </dependency>
     </dependencies>
 
