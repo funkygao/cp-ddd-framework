@@ -13,8 +13,15 @@ public class DesignTest {
     private PledgePattern pledgePattern = new PledgePattern();
 
     @Test
+    void essencePattern() {
+        CheckTask.Essence essence = new CheckTask.Essence();
+        CheckTask checkTask = essence.createCheckTask();
+        // repo.save(checkTask);
+    }
+
+    @Test
     void matchAny() {
-        CheckTask task = new CheckTask();
+        CheckTask task = CheckTask.builder().build();
         assertFalse(task.matchAny(presalePattern));
         assertTrue(task.matchAny(pledgePattern));
         assertTrue(task.matchAny(presalePattern, pledgePattern));

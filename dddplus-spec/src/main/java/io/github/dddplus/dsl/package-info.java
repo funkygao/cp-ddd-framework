@@ -87,6 +87,8 @@
  * </ul>
  * </li>
  * </ul>
+ * <p>如何评估标注后生成的逆向模型质量？</p>
+ * <p>软件开发的核心难点在于处理隐藏在业务知识中的核心复杂度。因此，模型是否直观完整表达出了业务知识，是评判的标准</p>
  *
  * @see <a href="https://ieeexplore.ieee.org/document/723185/">Requirements for integrating software architecture and reengineering models</a>
  * @see <a href="http://www.jos.org.cn/jos/article/pdf/6278">面向领域驱动设计的逆向建模支持方法</a>

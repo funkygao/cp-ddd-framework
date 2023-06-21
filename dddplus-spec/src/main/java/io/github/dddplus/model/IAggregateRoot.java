@@ -23,5 +23,5 @@ package io.github.dddplus.model;
  * <li>场景一致性</li>
  * </ol>
  */
-public interface IAggregateRoot {
+public interface IAggregateRoot extends IIdentity, IDomainModel {
 }
