@@ -64,6 +64,17 @@ public class PlantUmlBuilder {
         connections.put(KeyRelation.Type.From, "-->");
         connections.put(KeyRelation.Type.Extends, "--|>");
         connections.put(KeyRelation.Type.Implements, "..|>");
+
+        boolean lineDefined = false;
+        for (KeyRelation.Type type : KeyRelation.Type.values()) {
+            if (connections.containsKey(type)) {
+                lineDefined = true;
+                break;
+            }
+        }
+        if (!lineDefined) {
+            throw new RuntimeException("KeyRelation.Type missing line definition");
+        }
     }
 
     public String umlContent() {
