@@ -140,6 +140,8 @@ public class PlantUmlBuilder {
                 report.getMethodInfo().getStaticMethods().size(),
                 report.getMethodInfo().getDeprecatedMethods().size()
                 )).append(NEWLINE);
+        append(String.format("  Statements: %d", report.getStatementN()))
+                .append(NEWLINE);
         append("end note").append(NEWLINE).append(NEWLINE);
         return this;
     }

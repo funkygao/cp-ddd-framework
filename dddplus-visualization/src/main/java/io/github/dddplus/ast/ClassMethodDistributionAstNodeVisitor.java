@@ -7,9 +7,10 @@ package io.github.dddplus.ast;
 
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
-import io.github.dddplus.ast.report.ClassMethodReport;
 import io.github.dddplus.ast.parser.JavaParserUtil;
+import io.github.dddplus.ast.report.ClassMethodReport;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Generated;
@@ -108,6 +109,83 @@ class ClassMethodDistributionAstNodeVisitor extends VoidVisitorAdapter<ClassMeth
         if (parentClass.isInterface()) {
             classInfo.getInterfaces().add(className);
         }
+    }
+
+    @Override
+    public void visit(BlockStmt stmt, final ClassMethodReport report) {
+        report.incrStatement();
+    }
+    @Override
+    public void visit(BreakStmt stmt, final ClassMethodReport report) {
+        report.incrStatement();
+    }
+    @Override
+    public void visit(ContinueStmt stmt, final ClassMethodReport report) {
+        report.incrStatement();
+    }
+    @Override
+    public void visit(DoStmt stmt, final ClassMethodReport report) {
+        report.incrStatement();
+    }
+    @Override
+    public void visit(ExplicitConstructorInvocationStmt stmt, final ClassMethodReport report) {
+        report.incrStatement();
+    }
+    @Override
+    public void visit(ExpressionStmt stmt, final ClassMethodReport report) {
+        report.incrStatement();
+    }
+    @Override
+    public void visit(ForEachStmt stmt, final ClassMethodReport report) {
+        report.incrStatement();
+    }
+    @Override
+    public void visit(ForStmt stmt, final ClassMethodReport report) {
+        report.incrStatement();
+    }
+    @Override
+    public void visit(WhileStmt stmt, final ClassMethodReport report) {
+        report.incrStatement();
+    }
+    @Override
+    public void visit(IfStmt stmt, final ClassMethodReport report) {
+        report.incrStatement();
+    }
+    @Override
+    public void visit(LabeledStmt stmt, final ClassMethodReport report) {
+        report.incrStatement();
+    }
+    @Override
+    public void visit(ReturnStmt stmt, final ClassMethodReport report) {
+        report.incrStatement();
+    }
+    @Override
+    public void visit(SwitchStmt stmt, final ClassMethodReport report) {
+        report.incrStatement();
+    }
+    @Override
+    public void visit(SynchronizedStmt stmt, final ClassMethodReport report) {
+        report.incrStatement();
+    }
+    @Override
+    public void visit(ThrowStmt stmt, final ClassMethodReport report) {
+        report.incrStatement();
+    }
+    @Override
+    public void visit(TryStmt stmt, final ClassMethodReport report) {
+        report.incrStatement();
+    }
+    @Override
+    public void visit(CatchClause stmt, final ClassMethodReport report) {
+        report.incrStatement();
+    }
+    @Override
+    public void visit(LocalClassDeclarationStmt stmt, final ClassMethodReport report) {
+        report.incrStatement();
+    }
+    @Override
+    public void visit(YieldStmt stmt, final ClassMethodReport report) {
+        report.incrStatement();
     }
 
 }
