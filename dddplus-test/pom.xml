@@ -45,6 +45,11 @@
         </dependency>
         <dependency>
             <groupId>io.github.dddplus</groupId>
+            <artifactId>dddplus-mybatis</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.dddplus</groupId>
             <artifactId>dddplus-visualization</artifactId>
             <version>${project.version}</version>
         </dependency>
