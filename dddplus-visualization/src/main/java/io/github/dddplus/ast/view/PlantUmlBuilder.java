@@ -203,8 +203,13 @@ public class PlantUmlBuilder {
                     .append(entry.displayArgsWithRules())
                     .append(BRACKET_CLOSE)
                     .append(SPACE)
-                    .append(entry.getJavadoc())
-                    .append(NEWLINE);
+                    .append(entry.getJavadoc());
+            if (entry.produceEvent()) {
+                append(MessageFormat.format(COLOR_TMPL_OPEN, COLOR_BEHAVIOR_PRODUCE_EVENT));
+                append(" -> ").append(entry.displayEvents()).append(SPACE);
+                append(COLOR_TMPL_CLOSE);
+            }
+            append(NEWLINE);
         }
         content.append(TAB).append("}").append(NEWLINE);
         return this;
@@ -266,8 +271,10 @@ public class PlantUmlBuilder {
                 content.append("    {field} ").append(keyModelEntry.displayFieldByType(type)).append(NEWLINE);
             }
 
-            content.append("    __ undefined __").append(NEWLINE);
-            content.append("    {field} ").append(keyModelEntry.displayUndefinedTypes()).append(NEWLINE);
+            if (!keyModelEntry.undefinedTypes().isEmpty()) {
+                content.append("    __ undefined __").append(NEWLINE);
+                content.append("    {field} ").append(keyModelEntry.displayUndefinedTypes()).append(NEWLINE);
+            }
         }
 
         if (!keyModelEntry.getKeyRuleEntries().isEmpty()) {
@@ -314,8 +321,13 @@ public class PlantUmlBuilder {
                         .append(SPACE)
                         .append(entry.getJavadoc())
                         .append(SPACE)
-                        .append(entry.displayActualClass())
-                        .append(NEWLINE);
+                        .append(entry.displayActualClass());
+                if (entry.produceEvent()) {
+                    append(MessageFormat.format(COLOR_TMPL_OPEN, COLOR_BEHAVIOR_PRODUCE_EVENT));
+                    append(" -> ").append(entry.displayEvents()).append(SPACE);
+                    append(COLOR_TMPL_CLOSE);
+                }
+                append(NEWLINE);
             }
         }
 
