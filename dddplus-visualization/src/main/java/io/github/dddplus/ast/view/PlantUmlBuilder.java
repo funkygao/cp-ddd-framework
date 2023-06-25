@@ -107,6 +107,7 @@ public class PlantUmlBuilder {
         addKeyUsecases();
         addOrphanKeyFlows();
         addKeyRelations();
+        addKeyEvents();
 
         appendFooter().end();
         return this;
@@ -159,6 +160,29 @@ public class PlantUmlBuilder {
 
     private String color(String color) {
         return HASHTAG + color;
+    }
+
+    private PlantUmlBuilder writeClazzDefinition(KeyEventEntry entry) {
+        content.append("class ").append(entry.getClassName());
+        String tag = "E";
+        switch (entry.getType()) {
+            case Local:
+                tag = "L";
+                break;
+            case RemoteConsuming:
+                tag = "RC";
+                break;
+            case RemoteProducing:
+                tag = "RP";
+                break;
+        }
+        content.append(String.format(" <<(E,#9197DB) %s: %s>> ", tag, entry.getJavadoc()));
+        content.append(" {").append(NEWLINE);
+        if (entry.hasRemark()) {
+            content.append(TAB).append(entry.getRemark()).append(NEWLINE);
+        }
+        content.append(TAB).append("}").append(NEWLINE);
+        return this;
     }
 
     private PlantUmlBuilder writeOrphanFlowClazzDefinition(String actor) {
@@ -396,6 +420,23 @@ public class PlantUmlBuilder {
                     .append(SPACE).append(entry.displayRemark()).append(NEWLINE);
         }
         content.append(NEWLINE);
+        return this;
+    }
+
+    private PlantUmlBuilder addKeyEvents() {
+        if (model.getKeyEventReport().isEmpty()) {
+            return this;
+        }
+
+        content.append(MessageFormat.format(PACKAGE_TMPL, "领域事件", "events"));
+        content.append(SPACE).append(BRACE_OPEN).append(NEWLINE);
+        for (KeyEventEntry entry : model.getKeyEventReport().getEvents()) {
+            append(TAB).writeClazzDefinition(entry).append(NEWLINE);
+        }
+
+        content.append(BRACE_CLOSE);
+        content.append(NEWLINE).append(NEWLINE);
+
         return this;
     }
 

@@ -82,6 +82,11 @@ public class DomainModelAnalyzer {
                 new KeyUsecaseAstNodeVisitor(ignoredAnnotations).visit(FileWalker.silentParse(file), model.getKeyUsecaseReport());
             }).walkFrom(dir);
 
+            // key event
+            new FileWalker(actualFilter, (level, path, file) -> {
+                new KeyEventAstNodeVisitor().visit(FileWalker.silentParse(file), model.getKeyEventReport());
+            }).walkFrom(dir);
+
             // key relation
             new FileWalker(actualFilter, (level, path, file) -> {
                 new KeyRelationAstNodeVisitor().visit(FileWalker.silentParse(file), model.getKeyRelationReport());

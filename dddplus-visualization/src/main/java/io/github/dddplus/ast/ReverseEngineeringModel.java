@@ -31,6 +31,7 @@ public class ReverseEngineeringModel {
     private KeyBehaviorReport keyBehaviorReport = new KeyBehaviorReport();
     private KeyFlowReport keyFlowReport = new KeyFlowReport();
     private KeyRuleReport keyRuleReport = new KeyRuleReport();
+    private KeyEventReport keyEventReport = new KeyEventReport();
     private KeyUsecaseReport keyUsecaseReport = new KeyUsecaseReport();
     private KeyRelationReport keyRelationReport = new KeyRelationReport();
     private ClassMethodReport classMethodReport = new ClassMethodReport();
