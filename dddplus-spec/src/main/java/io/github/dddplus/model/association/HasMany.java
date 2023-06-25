@@ -8,7 +8,7 @@ package io.github.dddplus.model.association;
 import io.github.dddplus.model.IBag;
 
 /**
- * 关联对象，用于处理实体之间的生命周期边界.
+ * 关联对象 1对多，用于处理实体之间的生命周期边界.
  *
  * <p>生命周期边界，是指相关联的对象是否同时出现/消失在内存中.</p>
  * <p>使用时赋予其具体业务语义，并提供关联对象的实现.</p>
