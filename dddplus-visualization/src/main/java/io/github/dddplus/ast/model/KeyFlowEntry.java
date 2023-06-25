@@ -24,7 +24,6 @@ public class KeyFlowEntry {
     private Set<String> modes;
     private List<String> args;
     private Set<String> realArguments;
-    private Set<String> initiators;
     private String remark;
 
     public KeyFlowEntry(String className, String realMethodName, String javadoc) {
