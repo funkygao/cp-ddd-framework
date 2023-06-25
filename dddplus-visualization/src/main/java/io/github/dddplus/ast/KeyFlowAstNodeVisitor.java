@@ -15,15 +15,10 @@ import io.github.dddplus.ast.parser.KeyFlowAnnotationParser;
 import io.github.dddplus.ast.report.KeyFlowReport;
 import io.github.dddplus.dsl.KeyFlow;
 
-import java.util.HashSet;
 import java.util.Set;
 
-public class KeyFlowAstNodeVisitor extends VoidVisitorAdapter<KeyFlowReport> {
+class KeyFlowAstNodeVisitor extends VoidVisitorAdapter<KeyFlowReport> {
     private final Set<String> ignoredAnnotations;
-
-    public KeyFlowAstNodeVisitor() {
-        this.ignoredAnnotations = new HashSet<>();
-    }
 
     public KeyFlowAstNodeVisitor(Set<String> ignoredAnnotations) {
         this.ignoredAnnotations = ignoredAnnotations;

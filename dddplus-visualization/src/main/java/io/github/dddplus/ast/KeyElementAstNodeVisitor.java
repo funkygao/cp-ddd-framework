@@ -16,16 +16,11 @@ import io.github.dddplus.ast.parser.KeyElementAnnotationParser;
 import io.github.dddplus.ast.report.KeyModelReport;
 import io.github.dddplus.dsl.KeyElement;
 
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class KeyElementAstNodeVisitor extends VoidVisitorAdapter<KeyModelReport> {
+class KeyElementAstNodeVisitor extends VoidVisitorAdapter<KeyModelReport> {
     private final Set<String> ignoredAnnotations;
-
-    public KeyElementAstNodeVisitor() {
-        this.ignoredAnnotations = new HashSet<>();
-    }
 
     public KeyElementAstNodeVisitor(Set<String> ignoredAnnotations) {
         this.ignoredAnnotations = ignoredAnnotations;

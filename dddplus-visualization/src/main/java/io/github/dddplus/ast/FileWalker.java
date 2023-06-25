@@ -26,7 +26,7 @@ import java.util.List;
  * }
  * </pre>
  */
-public class FileWalker {
+class FileWalker {
     public interface FileHandler {
         void handle(int level, String path, File file);
     }

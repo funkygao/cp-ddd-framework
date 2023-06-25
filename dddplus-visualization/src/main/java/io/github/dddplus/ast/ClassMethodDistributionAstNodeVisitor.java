@@ -17,7 +17,7 @@ import javax.annotation.Resource;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ClassMethodDistributionAstNodeVisitor extends VoidVisitorAdapter<ClassMethodReport> {
+class ClassMethodDistributionAstNodeVisitor extends VoidVisitorAdapter<ClassMethodReport> {
     private static Set<String> ignoredMethodNames = new HashSet<>();
     private static Set<Class> ignoredMethodAnnotation = new HashSet<>();
     private static Set<Class> ignoredClassAnnotation = new HashSet<>();
