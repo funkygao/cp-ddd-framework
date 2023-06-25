@@ -169,6 +169,7 @@ public class DomainModelAnalyzer {
         @Override
         public boolean interested(int level, String path, File file) {
             boolean interested = !path.contains("/target/") && path.endsWith(".java");
+            interested = interested && !path.endsWith("Test.java");
             if (filter != null) {
                 interested = interested && filter.interested(level, path, file);
             }
