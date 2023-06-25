@@ -12,6 +12,7 @@ import io.github.dddplus.model.association.HasMany;
 import io.github.dddplus.model.association.HasOne;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
@@ -39,6 +40,9 @@ public class CheckTask implements IAggregateRoot, IUnboundedDomainModel {
     private HasOne<Operator> operator;
     private Details details;
     private ShipmentOrders orders;
+
+    @Autowired
+    private CheckTaskDomainService checkTaskDomainService;
 
     /**
      * here we go for status.
@@ -93,6 +97,10 @@ public class CheckTask implements IAggregateRoot, IUnboundedDomainModel {
 
     public interface ShipmentOrders extends HasMany<ShipmentOrder> {
         List<ShipmentOrder> pendingOrders();
+    }
+
+    public String helo() {
+        return checkTaskDomainService.helo();
     }
 
     /**
