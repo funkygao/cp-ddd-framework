@@ -65,7 +65,6 @@ public class PlantUmlBuilder {
 
         connections.put(KeyRelation.Type.Many2Many, "--");
         connections.put(KeyRelation.Type.Contextual, "--|>");
-        connections.put(KeyRelation.Type.NotifiedBy, "--o");
         connections.put(KeyRelation.Type.From, "-->");
         connections.put(KeyRelation.Type.Extends, "--|>");
         connections.put(KeyRelation.Type.Implements, "..|>");

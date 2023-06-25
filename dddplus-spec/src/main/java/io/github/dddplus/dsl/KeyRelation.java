@@ -48,6 +48,9 @@ public @interface KeyRelation {
         HasOne,
         HasMany,
 
+        /**
+         * @deprecated 如果使用，容易导致生成的类图显示混乱.
+         */
         @Deprecated
         Many2Many,
 
@@ -57,12 +60,6 @@ public @interface KeyRelation {
          * @see io.github.dddplus.model.BoundedDomainModel
          */
         Contextual,
-
-        /**
-         * 当前对象是MQ/Event等单向[异步]通知，它是由{@link #whom()}发起的.
-         */
-        @Deprecated
-        NotifiedBy,
 
         /**
          * 当前对象来自于{@link #whom()}.
