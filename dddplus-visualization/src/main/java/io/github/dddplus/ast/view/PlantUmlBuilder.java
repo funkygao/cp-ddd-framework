@@ -158,10 +158,6 @@ public class PlantUmlBuilder {
         return QUOTE + value + QUOTE;
     }
 
-    private String color(String color) {
-        return HASHTAG + color;
-    }
-
     private PlantUmlBuilder writeClazzDefinition(KeyEventEntry entry) {
         content.append("class ").append(entry.getClassName());
         String tag = "E";
@@ -178,6 +174,9 @@ public class PlantUmlBuilder {
         }
         content.append(String.format(" <<(E,#9197DB) %s: %s>> ", tag, entry.getJavadoc()));
         content.append(" {").append(NEWLINE);
+        if (entry.orphaned()) {
+            content.append(TAB).append("未通过@KeyBehavior标注生产者").append(NEWLINE);
+        }
         if (entry.hasRemark()) {
             content.append(TAB).append(entry.getRemark()).append(NEWLINE);
         }

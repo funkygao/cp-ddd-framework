@@ -5,6 +5,7 @@
  */
 package io.github.dddplus.ast.report;
 
+import io.github.dddplus.ast.model.KeyEventEntry;
 import io.github.dddplus.ast.model.KeyModelEntry;
 import lombok.Data;
 
@@ -55,6 +56,16 @@ public class KeyModelReport {
         }
 
         return result;
+    }
+
+    public boolean hasProducer(KeyEventEntry event) {
+        for (KeyModelEntry entry : data.values()) {
+            if (entry.producedEvents().contains(event.getClassName())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 }
