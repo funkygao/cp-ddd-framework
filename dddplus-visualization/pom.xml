@@ -39,8 +39,14 @@ under the License.
     <dependencies>
         <dependency>
             <groupId>io.github.dddplus</groupId>
-            <artifactId>dddplus-runtime</artifactId>
+            <artifactId>dddplus-spec</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>${spring.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.javaparser</groupId>
@@ -51,15 +57,6 @@ under the License.
             <groupId>net.sourceforge.plantuml</groupId>
             <artifactId>plantuml</artifactId>
             <version>8059</version>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
         </dependency>
     </dependencies>
 
