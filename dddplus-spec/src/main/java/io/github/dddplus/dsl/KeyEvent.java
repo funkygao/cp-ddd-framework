@@ -14,7 +14,7 @@ import java.lang.annotation.*;
  * <pre>
  * {@code
  *
- * ℗KeyEvent(when = "订单完全发货后")
+ * ℗KeyEvent(type = KeyEvent.Type.Local)
  * class OrderShipped {}
  * }
  * </pre>
@@ -22,14 +22,30 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.SOURCE)
 public @interface KeyEvent {
+    /**
+     * 事件类型.
+     */
+    Type type();
 
     /**
-     * 何时触发该事件产生.
+     * 补充说明.
      */
-    String when() default "";
+    String remark() default "";
 
-    /**
-     * 被哪些主体发送出来.
-     */
-    Class[] by() default {};
+    enum Type {
+        /**
+         * 基于内存本地事件.
+         */
+        Local,
+
+        /**
+         * 基于MQ Broker的消息消费.
+         */
+        RemoteConsuming,
+
+        /**
+         * 基于MQ Broker的消息生产.
+         */
+        RemoteProducing,
+    }
 }
