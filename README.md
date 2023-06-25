@@ -28,7 +28,7 @@ DDDplus, originally cp-ddd-framework(cp means Central Platform：中台), is a l
 
 It captures DDD missing concepts and patches the building block. It enpowers building domain model with forward and reverse modeling. It visualizes the complete domain knowledge. It connects frontline developers with (architect, product manager, business stakeholder, management team). It makes (analysis, design, design review, implementation, code review, test) a positive feedback closed-loop. It strengthens building extension oriented flexible software solution. It eliminates frequently encountered misunderstanding of DDD via thorough javadoc for each building block.
 
-The 3 most essential `plus` are:
+In short, the 3 most essential `plus` are:
 1. provide [extension point](/dddplus-spec/src/main/java/io/github/dddplus/ext) with multiple routing mechanism, suited for complex business scenarios
 2. [patch](/dddplus-spec/src/main/java/io/github/dddplus/model) DDD building blocks for pragmatic forward modeling, clearing obstacles of DDD implementation
 3. offer a reverse modeling [DSL](/dddplus-spec/src/main/java/io/github/dddplus/dsl), visualizing complete domain knowledge from code
