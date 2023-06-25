@@ -1,0 +1,15 @@
+@startuml
+left to right direction
+
+component [dddplus-spec] as spec
+component [dddplus-runtime] as runtime
+component [dddplus-plugin] as plugin
+component [dddplus-visualization] as visualization
+component [dddplus-enforce] as enforce
+component [dddplus-mybatis] as mybatis
+
+runtime -> spec: depends
+plugin -> runtime: depends
+enforce -> runtime: depends
+visualization -> spec: depends
+@enduml

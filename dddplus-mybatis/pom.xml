@@ -35,9 +35,9 @@ under the License.
 
     <dependencies>
         <dependency>
-            <groupId>io.github.dddplus</groupId>
-            <artifactId>dddplus-runtime</artifactId>
-            <version>${project.version}</version>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
         </dependency>
         <dependency>
             <groupId>org.mybatis</groupId>

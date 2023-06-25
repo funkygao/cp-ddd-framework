@@ -27,8 +27,6 @@ public class ClassMethodDistributionAstNodeVisitor extends VoidVisitorAdapter<Cl
 
         ignoredMethodAnnotation.add(Autowired.class);
         ignoredMethodAnnotation.add(Resource.class);
-        ignoredMethodAnnotation.add(org.junit.jupiter.api.Test.class);
-        ignoredMethodAnnotation.add(org.junit.Test.class);
 
         ignoredClassAnnotation.add(Generated.class); // MapStruct generated mapper impl ignored
     }
