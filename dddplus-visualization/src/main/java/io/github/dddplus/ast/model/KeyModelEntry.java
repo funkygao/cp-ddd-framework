@@ -64,6 +64,11 @@ public class KeyModelEntry {
                 result.addAll(entry.getEvents());
             }
         }
+        for (KeyFlowEntry entry : keyFlowEntries) {
+            if (entry.produceEvent()) {
+                result.addAll(entry.getEvents());
+            }
+        }
 
         return result;
     }

@@ -7,7 +7,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class CheckTaskDomainService implements IDomainService {
 
-    @KeyFlow(actor = CheckTask.class)
+    /**
+     * foobar
+     */
+    @KeyFlow(actor = CheckTask.class, produceEvent = CheckTaskFinished.class)
     public void check() {
 
     }

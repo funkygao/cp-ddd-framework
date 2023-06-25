@@ -139,7 +139,11 @@ public class DomainModelAnalyzer {
 
                     // register to aggregate
                     AggregateEntry aggregateEntry = model.getAggregateReport().aggregateEntryOfPackage(keyModelEntry.getPackageName());
-                    aggregateEntry.addKeyModelEntry(keyModelEntry);
+                    if (aggregateEntry != null) {
+                        aggregateEntry.addKeyModelEntry(keyModelEntry);
+                    } else {
+                        // annotated with KeyFlow only, e,g. service
+                    }
                 }
             }
         }
