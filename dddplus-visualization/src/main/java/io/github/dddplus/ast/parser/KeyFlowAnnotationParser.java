@@ -101,10 +101,6 @@ public class KeyFlowAnnotationParser {
                     tmp.addAll(AnnotationFieldParser.arrayFieldValue(memberValuePair));
                     result.setModes(tmp);
                     break;
-
-                case "initiators":
-                    result.setInitiators(AnnotationFieldParser.arrayFieldValue(memberValuePair));
-                    break;
             }
         }
 

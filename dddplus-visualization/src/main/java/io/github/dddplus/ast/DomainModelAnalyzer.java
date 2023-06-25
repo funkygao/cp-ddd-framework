@@ -162,7 +162,7 @@ public class DomainModelAnalyzer {
 
         // locate orphan key events
         for (KeyEventEntry entry : model.getKeyEventReport().getEvents()) {
-            if (!model.getKeyModelReport().hasProducer(entry)) {
+            if (!model.hasProducer(entry)) {
                 entry.setOrphan(true);
             }
         }

@@ -50,14 +50,6 @@ public @interface KeyFlow {
     Class[] modeClass() default {};
 
     /**
-     * 流程的发起者.
-     *
-     * @deprecated 标注发起者破坏了least duplication principle，不好维护.
-     */
-    @Deprecated
-    Class[] initiators() default {};
-
-    /**
      * 该行为会产生哪些领域事件.
      */
     Class[] produceEvent() default {};
