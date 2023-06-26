@@ -34,6 +34,7 @@ under the License.
         <javaparser.version>3.23.1</javaparser.version>
         <java.graphviz.version>0.18.1</java.graphviz.version>
         <java.markdown.version>1.3.2</java.markdown.version>
+        <plantuml.verion>8059</plantuml.verion>
     </properties>
 
     <dependencies>
@@ -43,12 +44,6 @@ under the License.
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-beans</artifactId>
-            <version>${spring.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>com.github.javaparser</groupId>
             <artifactId>javaparser-symbol-solver-core</artifactId>
             <version>${javaparser.version}</version>
@@ -56,7 +51,7 @@ under the License.
         <dependency>
             <groupId>net.sourceforge.plantuml</groupId>
             <artifactId>plantuml</artifactId>
-            <version>8059</version>
+            <version>${plantuml.verion}</version>
         </dependency>
     </dependencies>
 

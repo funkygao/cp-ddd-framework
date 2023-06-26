@@ -11,7 +11,6 @@ import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import io.github.dddplus.ast.parser.JavaParserUtil;
 import io.github.dddplus.ast.report.ClassMethodReport;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Generated;
 import javax.annotation.Resource;
@@ -23,12 +22,7 @@ class ClassMethodDistributionAstNodeVisitor extends VoidVisitorAdapter<ClassMeth
     private static Set<Class> ignoredMethodAnnotation = new HashSet<>();
     private static Set<Class> ignoredClassAnnotation = new HashSet<>();
     static {
-        //ignoredMethodNames.add("of");
-        //ignoredMethodNames.add("isSatisfiedBy");
-
-        ignoredMethodAnnotation.add(Autowired.class);
         ignoredMethodAnnotation.add(Resource.class);
-
         ignoredClassAnnotation.add(Generated.class); // MapStruct generated mapper impl ignored
     }
 
