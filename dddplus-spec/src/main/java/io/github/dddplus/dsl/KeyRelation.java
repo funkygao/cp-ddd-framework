@@ -47,7 +47,11 @@ public @interface KeyRelation {
         Union,
         HasOne,
         HasMany,
+        BelongTo,
 
+        /**
+         * @deprecated 如果使用，容易导致生成的类图显示混乱.
+         */
         @Deprecated
         Many2Many,
 
@@ -59,18 +63,24 @@ public @interface KeyRelation {
         Contextual,
 
         /**
-         * 当前对象是MQ/Event等单向[异步]通知，它是由{@link #whom()}发起的.
-         */
-        @Deprecated
-        NotifiedBy,
-
-        /**
          * 当前对象来自于{@link #whom()}.
          */
         From,
 
         Extends,
-        Implements
+        Implements;
+
+        public static boolean match(String typeStr) {
+            boolean matched = false;
+            for (Type type : values()) {
+                if (type.toString().equals(typeStr)) {
+                    matched = true;
+                    break;
+                }
+            }
+
+            return matched;
+        }
 
     }
 }

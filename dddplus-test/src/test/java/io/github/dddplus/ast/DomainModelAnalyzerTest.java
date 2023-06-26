@@ -10,11 +10,12 @@ import io.github.dddplus.runtime.registry.IntegrationTest;
 import io.github.design.CheckTask;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.springframework.core.io.ClassPathResource;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import static io.github.dddplus.ast.ReverseModellingTest.moduleRoot;
 import static org.junit.jupiter.api.Assertions.*;
 
 class DomainModelAnalyzerTest {
@@ -65,6 +66,18 @@ class DomainModelAnalyzerTest {
         ReverseEngineeringModel model = analyzer.analyze((level, path, file) -> path.contains("design"));
         PlantUmlBuilder pb = new PlantUmlBuilder();
         pb.build(model).renderSvg("../test.svg");
+    }
+
+    static File moduleRoot(String module) throws IOException {
+        return (projectRoot().listFiles(f -> f.getName().equals(module)))[0];
+    }
+
+    private static File projectRoot() throws IOException {
+        File currentDir = new ClassPathResource("").getFile(); // dddplus-test/target/test-classes
+        return currentDir
+                .getParentFile()
+                .getParentFile()
+                .getParentFile();
     }
 
 }

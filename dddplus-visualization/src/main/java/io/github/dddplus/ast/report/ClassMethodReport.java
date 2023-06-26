@@ -17,6 +17,7 @@ import java.util.TreeSet;
 public class ClassMethodReport {
     private ClassInfo classInfo = new ClassInfo();
     private MethodInfo methodInfo = new MethodInfo();
+    private int statementN = 0;
 
     @Data
     public static class ClassInfo {
@@ -38,5 +39,9 @@ public class ClassMethodReport {
         private Set<String> abstractMethods = new TreeSet<>();
         private Set<String> staticMethods = new TreeSet<>();
         private Set<String> deprecatedMethods = new TreeSet<>();
+    }
+
+    public void incrStatement() {
+        this.statementN += 1;
     }
 }

@@ -87,6 +87,11 @@ public class KeyFlowAnnotationParser {
                     result.setRules(AnnotationFieldParser.arrayFieldValue(memberValuePair));
                     break;
 
+                case "produceEvent":
+                    result.setEvents(AnnotationFieldParser.arrayFieldValue(memberValuePair));
+                    break;
+
+
                 case "modes":
                     result.setModes(AnnotationFieldParser.arrayFieldValue(memberValuePair));
                     break;
@@ -95,10 +100,6 @@ public class KeyFlowAnnotationParser {
                     Set<String> tmp = result.getModes();
                     tmp.addAll(AnnotationFieldParser.arrayFieldValue(memberValuePair));
                     result.setModes(tmp);
-                    break;
-
-                case "initiators":
-                    result.setInitiators(AnnotationFieldParser.arrayFieldValue(memberValuePair));
                     break;
             }
         }

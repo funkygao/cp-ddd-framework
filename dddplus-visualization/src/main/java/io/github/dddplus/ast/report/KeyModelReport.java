@@ -5,6 +5,8 @@
  */
 package io.github.dddplus.ast.report;
 
+import io.github.dddplus.ast.ReverseEngineeringModel;
+import io.github.dddplus.ast.model.KeyEventEntry;
 import io.github.dddplus.ast.model.KeyModelEntry;
 import lombok.Data;
 
@@ -12,7 +14,12 @@ import java.util.*;
 
 @Data
 public class KeyModelReport {
+    private final ReverseEngineeringModel model;
     private Map<String, KeyModelEntry> data = new TreeMap<>();
+
+    public KeyModelReport(ReverseEngineeringModel model) {
+        this.model = model;
+    }
 
     public KeyModelEntry getOrCreateKeyModelEntryForActor(String actor) {
         if (!data.containsKey(actor)) {
@@ -55,6 +62,16 @@ public class KeyModelReport {
         }
 
         return result;
+    }
+
+    public boolean hasProducer(KeyEventEntry event) {
+        for (KeyModelEntry entry : data.values()) {
+            if (entry.producedEvents().contains(event.getClassName())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 }

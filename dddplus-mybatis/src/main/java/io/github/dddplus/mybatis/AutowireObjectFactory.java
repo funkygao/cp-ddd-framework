@@ -8,14 +8,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-// mybatis-config.xml
-// <objectFactory type="io.github.dddplus.mybatis.AutowireObjectFactory" />
-// 这样，HasMany/HasOne 在 infrastructure 的实现类就可以自动注入其他对象，例如DAO
-
 /**
  * 为repo里获取的(对象，关联对象)赋予Spring autoware功能.
  *
- * <p>支持{@link javax.inject.Inject}，{@link org.springframework.beans.factory.annotation.Autowired}.</p>
+ * <p>这样，HasMany/HasOne 在 infrastructure 的实现类就可以自动注入其他对象，例如DAO</p>
  * <p>需要配置mybatis-config.xml</p>
  * <pre>
  * {@code
@@ -29,7 +25,7 @@ public class AutowireObjectFactory extends DefaultObjectFactory implements Appli
     private ApplicationContext context;
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.context = context;
+        this.context = applicationContext;
     }
 
     @Override

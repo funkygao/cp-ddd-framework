@@ -13,7 +13,7 @@ import io.github.dddplus.ast.parser.KeyRelationAnnotationParser;
 import io.github.dddplus.ast.report.KeyRelationReport;
 import io.github.dddplus.dsl.KeyRelation;
 
-public class KeyRelationAstNodeVisitor extends VoidVisitorAdapter<KeyRelationReport> {
+class KeyRelationAstNodeVisitor extends VoidVisitorAdapter<KeyRelationReport> {
 
     @Override
     public void visit(final ClassOrInterfaceDeclaration classDeclaration, final KeyRelationReport report) {

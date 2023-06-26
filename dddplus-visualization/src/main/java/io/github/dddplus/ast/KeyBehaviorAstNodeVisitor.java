@@ -15,15 +15,10 @@ import io.github.dddplus.ast.parser.KeyBehaviorAnnotationParser;
 import io.github.dddplus.ast.report.KeyBehaviorReport;
 import io.github.dddplus.dsl.KeyBehavior;
 
-import java.util.HashSet;
 import java.util.Set;
 
-public class KeyBehaviorAstNodeVisitor extends VoidVisitorAdapter<KeyBehaviorReport> {
+class KeyBehaviorAstNodeVisitor extends VoidVisitorAdapter<KeyBehaviorReport> {
     private final Set<String> ignoredAnnotations;
-
-    public KeyBehaviorAstNodeVisitor() {
-        this.ignoredAnnotations = new HashSet<>();
-    }
 
     public KeyBehaviorAstNodeVisitor(Set<String> ignoredAnnotations) {
         this.ignoredAnnotations = ignoredAnnotations;

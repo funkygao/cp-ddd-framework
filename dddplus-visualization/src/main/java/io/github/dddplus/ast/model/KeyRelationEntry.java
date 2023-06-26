@@ -27,4 +27,10 @@ public class KeyRelationEntry {
 
         return remark;
     }
+
+    public boolean sameAs(KeyRelationEntry that) {
+        return leftClass.equals(that.getLeftClass())
+                && rightClass.equals(that.getRightClass())
+                && type.equals(that.getType());
+    }
 }

@@ -9,7 +9,7 @@ public class CheckTaskFinishedListener {
 
     @EventListener(classes = CheckTaskFinished.class)
     @KeyFlow
-    public void onTaskFinished(CheckTaskFinished event, String a, Integer b) {
+    public void onTaskFinished(CheckTaskFinished event) {
 
     }
 }

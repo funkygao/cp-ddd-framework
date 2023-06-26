@@ -18,4 +18,4 @@ id_file
 .pmd
 .sonar/
 .deploy
-*.svg
+test.svg

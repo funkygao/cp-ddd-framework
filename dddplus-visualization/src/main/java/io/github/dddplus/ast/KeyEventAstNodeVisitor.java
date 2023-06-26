@@ -6,11 +6,14 @@
 package io.github.dddplus.ast;
 
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import io.github.dddplus.ast.model.KeyEventEntry;
+import io.github.dddplus.ast.parser.KeyEventAnnotationParser;
 import io.github.dddplus.ast.report.KeyEventReport;
 import io.github.dddplus.dsl.KeyEvent;
 
-public class KeyEventAstNodeVisitor extends VoidVisitorAdapter<KeyEventReport> {
+class KeyEventAstNodeVisitor extends VoidVisitorAdapter<KeyEventReport> {
 
     @Override
     public void visit(final ClassOrInterfaceDeclaration classDeclaration, final KeyEventReport report) {
@@ -24,6 +27,10 @@ public class KeyEventAstNodeVisitor extends VoidVisitorAdapter<KeyEventReport> {
             System.out.printf("WARN: @KeyEvent used on Deprecated %s\n", classDeclaration.getNameAsString());
             return;
         }
+
+        AnnotationExpr annotationExpr = classDeclaration.getAnnotationByClass(KeyEvent.class).get();
+        KeyEventEntry entry = new KeyEventAnnotationParser(classDeclaration).parse(annotationExpr);
+        report.register(entry);
     }
 
 }

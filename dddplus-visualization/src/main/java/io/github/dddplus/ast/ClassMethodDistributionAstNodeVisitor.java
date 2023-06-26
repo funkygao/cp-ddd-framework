@@ -7,29 +7,22 @@ package io.github.dddplus.ast;
 
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
-import io.github.dddplus.ast.report.ClassMethodReport;
 import io.github.dddplus.ast.parser.JavaParserUtil;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.github.dddplus.ast.report.ClassMethodReport;
 
 import javax.annotation.Generated;
 import javax.annotation.Resource;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ClassMethodDistributionAstNodeVisitor extends VoidVisitorAdapter<ClassMethodReport> {
+class ClassMethodDistributionAstNodeVisitor extends VoidVisitorAdapter<ClassMethodReport> {
     private static Set<String> ignoredMethodNames = new HashSet<>();
     private static Set<Class> ignoredMethodAnnotation = new HashSet<>();
     private static Set<Class> ignoredClassAnnotation = new HashSet<>();
     static {
-        //ignoredMethodNames.add("of");
-        //ignoredMethodNames.add("isSatisfiedBy");
-
-        ignoredMethodAnnotation.add(Autowired.class);
         ignoredMethodAnnotation.add(Resource.class);
-        ignoredMethodAnnotation.add(org.junit.jupiter.api.Test.class);
-        ignoredMethodAnnotation.add(org.junit.Test.class);
-
         ignoredClassAnnotation.add(Generated.class); // MapStruct generated mapper impl ignored
     }
 
@@ -110,6 +103,83 @@ public class ClassMethodDistributionAstNodeVisitor extends VoidVisitorAdapter<Cl
         if (parentClass.isInterface()) {
             classInfo.getInterfaces().add(className);
         }
+    }
+
+    @Override
+    public void visit(BlockStmt stmt, final ClassMethodReport report) {
+        report.incrStatement();
+    }
+    @Override
+    public void visit(BreakStmt stmt, final ClassMethodReport report) {
+        report.incrStatement();
+    }
+    @Override
+    public void visit(ContinueStmt stmt, final ClassMethodReport report) {
+        report.incrStatement();
+    }
+    @Override
+    public void visit(DoStmt stmt, final ClassMethodReport report) {
+        report.incrStatement();
+    }
+    @Override
+    public void visit(ExplicitConstructorInvocationStmt stmt, final ClassMethodReport report) {
+        report.incrStatement();
+    }
+    @Override
+    public void visit(ExpressionStmt stmt, final ClassMethodReport report) {
+        report.incrStatement();
+    }
+    @Override
+    public void visit(ForEachStmt stmt, final ClassMethodReport report) {
+        report.incrStatement();
+    }
+    @Override
+    public void visit(ForStmt stmt, final ClassMethodReport report) {
+        report.incrStatement();
+    }
+    @Override
+    public void visit(WhileStmt stmt, final ClassMethodReport report) {
+        report.incrStatement();
+    }
+    @Override
+    public void visit(IfStmt stmt, final ClassMethodReport report) {
+        report.incrStatement();
+    }
+    @Override
+    public void visit(LabeledStmt stmt, final ClassMethodReport report) {
+        report.incrStatement();
+    }
+    @Override
+    public void visit(ReturnStmt stmt, final ClassMethodReport report) {
+        report.incrStatement();
+    }
+    @Override
+    public void visit(SwitchStmt stmt, final ClassMethodReport report) {
+        report.incrStatement();
+    }
+    @Override
+    public void visit(SynchronizedStmt stmt, final ClassMethodReport report) {
+        report.incrStatement();
+    }
+    @Override
+    public void visit(ThrowStmt stmt, final ClassMethodReport report) {
+        report.incrStatement();
+    }
+    @Override
+    public void visit(TryStmt stmt, final ClassMethodReport report) {
+        report.incrStatement();
+    }
+    @Override
+    public void visit(CatchClause stmt, final ClassMethodReport report) {
+        report.incrStatement();
+    }
+    @Override
+    public void visit(LocalClassDeclarationStmt stmt, final ClassMethodReport report) {
+        report.incrStatement();
+    }
+    @Override
+    public void visit(YieldStmt stmt, final ClassMethodReport report) {
+        report.incrStatement();
     }
 
 }

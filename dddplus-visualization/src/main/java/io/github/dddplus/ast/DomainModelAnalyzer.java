@@ -82,6 +82,11 @@ public class DomainModelAnalyzer {
                 new KeyUsecaseAstNodeVisitor(ignoredAnnotations).visit(FileWalker.silentParse(file), model.getKeyUsecaseReport());
             }).walkFrom(dir);
 
+            // key event
+            new FileWalker(actualFilter, (level, path, file) -> {
+                new KeyEventAstNodeVisitor().visit(FileWalker.silentParse(file), model.getKeyEventReport());
+            }).walkFrom(dir);
+
             // key relation
             new FileWalker(actualFilter, (level, path, file) -> {
                 new KeyRelationAstNodeVisitor().visit(FileWalker.silentParse(file), model.getKeyRelationReport());
@@ -134,7 +139,11 @@ public class DomainModelAnalyzer {
 
                     // register to aggregate
                     AggregateEntry aggregateEntry = model.getAggregateReport().aggregateEntryOfPackage(keyModelEntry.getPackageName());
-                    aggregateEntry.addKeyModelEntry(keyModelEntry);
+                    if (aggregateEntry != null) {
+                        aggregateEntry.addKeyModelEntry(keyModelEntry);
+                    } else {
+                        // annotated with KeyFlow only, e,g. service
+                    }
                 }
             }
         }
@@ -151,6 +160,13 @@ public class DomainModelAnalyzer {
             model.getKeyModelReport().keyModelEntryOfActor(actor).addKeyFlowEntries(flowEntries);
         }
 
+        // locate orphan key events
+        for (KeyEventEntry entry : model.getKeyEventReport().getEvents()) {
+            if (!model.hasProducer(entry)) {
+                entry.setOrphan(true);
+            }
+        }
+
         return model;
     }
 
@@ -164,6 +180,7 @@ public class DomainModelAnalyzer {
         @Override
         public boolean interested(int level, String path, File file) {
             boolean interested = !path.contains("/target/") && path.endsWith(".java");
+            interested = interested && !path.endsWith("Test.java");
             if (filter != null) {
                 interested = interested && filter.interested(level, path, file);
             }

@@ -50,10 +50,9 @@ public @interface KeyFlow {
     Class[] modeClass() default {};
 
     /**
-     * 流程的发起者.
+     * 该行为会产生哪些领域事件.
      */
-    @Deprecated
-    Class[] initiators() default {};
+    Class[] produceEvent() default {};
 
     /**
      * 关键的入参.

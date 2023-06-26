@@ -20,10 +20,10 @@ public class KeyFlowEntry {
     private String actor;
     private String methodName;
     private Set<String> rules;
+    private Set<String> events = new TreeSet<>(); // 该流程产生哪些领域事件
     private Set<String> modes;
     private List<String> args;
     private Set<String> realArguments;
-    private Set<String> initiators;
     private String remark;
 
     public KeyFlowEntry(String className, String realMethodName, String javadoc) {
@@ -43,6 +43,14 @@ public class KeyFlowEntry {
         }
 
         return actor;
+    }
+
+    public boolean produceEvent() {
+        return events != null && !events.isEmpty();
+    }
+
+    public String displayEvents() {
+        return String.join(",", events);
     }
 
     /**

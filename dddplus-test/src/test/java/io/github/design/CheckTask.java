@@ -12,13 +12,13 @@ import io.github.dddplus.model.association.HasMany;
 import io.github.dddplus.model.association.HasOne;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
 /**
  * The check task.
  */
-@KeyRelation(whom = ShipmentOrder.class, type = KeyRelation.Type.Many2Many)
 @KeyRelation(whom = CheckBasicRule.class, type = KeyRelation.Type.HasMany)
 @Builder
 @AllArgsConstructor
@@ -40,6 +40,9 @@ public class CheckTask implements IAggregateRoot, IUnboundedDomainModel {
     private Details details;
     private ShipmentOrders orders;
 
+    @Autowired
+    private CheckTaskDomainService checkTaskDomainService;
+
     /**
      * here we go for status.
      */
@@ -54,6 +57,9 @@ public class CheckTask implements IAggregateRoot, IUnboundedDomainModel {
 
     @KeyElement(types = KeyElement.Type.Propagational)
     private String locationNo;
+
+    @KeyElement(types = KeyElement.Type.Referential)
+    private HasMany<ShipmentOrder> shipmentOrders;
 
     @KeyBehavior(rules = {CheckBasicRule.class, CheckAdvancedRule.class}, modes = "x", modeClass = FooMode.class, name = "复核", remark = "ok")
     void foo() {
@@ -93,6 +99,10 @@ public class CheckTask implements IAggregateRoot, IUnboundedDomainModel {
 
     public interface ShipmentOrders extends HasMany<ShipmentOrder> {
         List<ShipmentOrder> pendingOrders();
+    }
+
+    public String helo() {
+        return checkTaskDomainService.helo();
     }
 
     /**

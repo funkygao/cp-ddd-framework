@@ -57,6 +57,22 @@ public class KeyModelEntry {
         return this;
     }
 
+    public Set<String> producedEvents() {
+        Set<String> result = new TreeSet<>();
+        for (KeyBehaviorEntry entry : keyBehaviorEntries) {
+            if (entry.produceEvent()) {
+                result.addAll(entry.getEvents());
+            }
+        }
+        for (KeyFlowEntry entry : keyFlowEntries) {
+            if (entry.produceEvent()) {
+                result.addAll(entry.getEvents());
+            }
+        }
+
+        return result;
+    }
+
     public List<KeyElement.Type> undefinedTypes() {
         List<KeyElement.Type> result = new ArrayList<>();
         for (KeyElement.Type type : KeyElement.Type.values()) {

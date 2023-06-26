@@ -11,21 +11,18 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import io.github.dddplus.ast.model.KeyModelEntry;
 import io.github.dddplus.ast.model.KeyPropertyEntry;
+import io.github.dddplus.ast.model.KeyRelationEntry;
 import io.github.dddplus.ast.parser.JavaParserUtil;
 import io.github.dddplus.ast.parser.KeyElementAnnotationParser;
 import io.github.dddplus.ast.report.KeyModelReport;
 import io.github.dddplus.dsl.KeyElement;
 
-import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
-public class KeyElementAstNodeVisitor extends VoidVisitorAdapter<KeyModelReport> {
+class KeyElementAstNodeVisitor extends VoidVisitorAdapter<KeyModelReport> {
     private final Set<String> ignoredAnnotations;
-
-    public KeyElementAstNodeVisitor() {
-        this.ignoredAnnotations = new HashSet<>();
-    }
 
     public KeyElementAstNodeVisitor(Set<String> ignoredAnnotations) {
         this.ignoredAnnotations = ignoredAnnotations;
@@ -63,9 +60,15 @@ public class KeyElementAstNodeVisitor extends VoidVisitorAdapter<KeyModelReport>
         entry.setPackageName(packageName);
         entry.setJavadoc(JavaParserUtil.javadocFirstLineOf(parentClass)); // TODO performance waste
         AnnotationExpr annotationExpr = fieldDeclaration.getAnnotationByClass(KeyElement.class).get();
-        Map<KeyElement.Type, KeyPropertyEntry> properties = new KeyElementAnnotationParser(fieldDeclaration, className).parse(annotationExpr);
+        KeyElementAnnotationParser parser = new KeyElementAnnotationParser(fieldDeclaration, className);
+        Map<KeyElement.Type, KeyPropertyEntry> properties = parser.parse(annotationExpr);
         for (KeyElement.Type type : properties.keySet()) {
             entry.addField(type, properties.get(type));
+        }
+
+        Optional<KeyRelationEntry> relationEntry = parser.extractKeyRelation();
+        if (relationEntry.isPresent()) {
+            report.getModel().getKeyRelationReport().add(relationEntry.get());
         }
     }
 }
