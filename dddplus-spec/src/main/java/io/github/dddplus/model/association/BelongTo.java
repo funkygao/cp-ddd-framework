@@ -29,5 +29,8 @@ package io.github.dddplus.model.association;
  */
 public interface BelongTo<Entity> {
 
+    /**
+     * 获取隶属的关联对象.
+     */
     Entity get();
 }

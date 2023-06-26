@@ -13,5 +13,8 @@ package io.github.dddplus.model.association;
  */
 public interface HasOne<Entity> {
 
+    /**
+     * 获取拥有的那一个关联对象.
+     */
     Entity get();
 }
