@@ -84,6 +84,7 @@
  * <li>类级：
  * <ul>
  *     <li>{@link io.github.dddplus.dsl.KeyRelation}</li>
+ *     <li>{@link io.github.dddplus.dsl.KeyEvent}</li>
  * </ul>
  * </li>
  * <li>包级：
