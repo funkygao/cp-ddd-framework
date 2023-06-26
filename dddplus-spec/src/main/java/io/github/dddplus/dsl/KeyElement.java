@@ -8,7 +8,7 @@ package io.github.dddplus.dsl;
 import java.lang.annotation.*;
 
 /**
- * 业务对象的关键属性，揭示问题本质.
+ * 业务对象的关键属性.
  *
  * <p>业务方可感知的概念.</p>
  * <p>这是通过数据来抽象行为的方法，参考<a href="http://c2.com/doc/oopsla89/paper.html">CRC</a>头脑风暴建模方法.</p>
