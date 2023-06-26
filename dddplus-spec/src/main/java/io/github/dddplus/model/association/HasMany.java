@@ -27,15 +27,26 @@ import io.github.dddplus.model.IBag;
  *
  * // 在infrastructure层实现
  * public TaskOrders implements Task.Orders {
- *     private final Task task;
- *     public TaskOrders(Task task) {
- *         this.task = task;
+ *     private final String taskNo;
+ *     // autowired by AutowireObjectFactory in dddplus-mybatis module
+ *     private Dao dao;
+ *     public TaskOrders(String taskNo) {
+ *         this.taskNo = taskNo;
  *     }
  *
  *     public List<Order> pendingOrders() {
- *         return dao.findPendingOrdersByTask(task.getTaskNo());
+ *         return dao.findPendingOrdersByTask(taskNo);
  *     }
  * }
+ *
+ * // mybatis/mapper.xml
+ * <resultMap id="taskOrders" type="io.github.design.mybatis.associations.TaskOrders">
+ *     <result column="task_no" property="taskNo" javaType="String"/>
+ * </resultMap>
+ * <resultMap id="checkTask" type="io.github.design.CheckTask">
+ *     <id column="id" property="id" jdbcType="BIGINT"/>
+ *     <association property="orders" resultMap="taskOrders"/>
+ * </resultMap>
  * }
  * </pre>
  *

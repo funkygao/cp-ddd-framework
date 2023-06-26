@@ -17,7 +17,7 @@ import io.github.dddplus.dsl.KeyUsecase;
 
 import java.util.Set;
 
-public class KeyUsecaseAstNodeVisitor extends VoidVisitorAdapter<KeyUsecaseReport> {
+class KeyUsecaseAstNodeVisitor extends VoidVisitorAdapter<KeyUsecaseReport> {
     private final Set<String> ignoredAnnotations;
 
     public KeyUsecaseAstNodeVisitor(Set<String> ignoredAnnotations) {

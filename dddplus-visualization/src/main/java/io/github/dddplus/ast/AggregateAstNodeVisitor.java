@@ -13,7 +13,7 @@ import io.github.dddplus.ast.report.AggregateReport;
 import io.github.dddplus.ast.parser.AggregateAnnotationParser;
 import io.github.dddplus.dsl.Aggregate;
 
-public class AggregateAstNodeVisitor extends VoidVisitorAdapter<AggregateReport> {
+class AggregateAstNodeVisitor extends VoidVisitorAdapter<AggregateReport> {
     @Override
     public void visit(final PackageDeclaration packageDeclaration, final AggregateReport report) {
         super.visit(packageDeclaration, report);

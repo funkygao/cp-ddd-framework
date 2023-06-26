@@ -47,6 +47,7 @@ public @interface KeyRelation {
         Union,
         HasOne,
         HasMany,
+        BelongTo,
 
         /**
          * @deprecated 如果使用，容易导致生成的类图显示混乱.
@@ -67,7 +68,19 @@ public @interface KeyRelation {
         From,
 
         Extends,
-        Implements
+        Implements;
+
+        public static boolean match(String typeStr) {
+            boolean matched = false;
+            for (Type type : values()) {
+                if (type.toString().equals(typeStr)) {
+                    matched = true;
+                    break;
+                }
+            }
+
+            return matched;
+        }
 
     }
 }
