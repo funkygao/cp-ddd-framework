@@ -19,7 +19,6 @@ import java.util.List;
 /**
  * The check task.
  */
-@KeyRelation(whom = ShipmentOrder.class, type = KeyRelation.Type.Many2Many)
 @KeyRelation(whom = CheckBasicRule.class, type = KeyRelation.Type.HasMany)
 @Builder
 @AllArgsConstructor
@@ -58,6 +57,9 @@ public class CheckTask implements IAggregateRoot, IUnboundedDomainModel {
 
     @KeyElement(types = KeyElement.Type.Propagational)
     private String locationNo;
+
+    @KeyElement(types = KeyElement.Type.Referential)
+    private HasMany<ShipmentOrder> shipmentOrders;
 
     @KeyBehavior(rules = {CheckBasicRule.class, CheckAdvancedRule.class}, modes = "x", modeClass = FooMode.class, name = "复核", remark = "ok")
     void foo() {
