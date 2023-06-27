@@ -357,8 +357,11 @@ public class PlantUmlBuilder {
         }
         CoverageReport report = model.coverageReport();
         append(String.format("公共类：%d，标注：%d，覆盖率：%%", report.getPublicClazzN(), report.getAnnotatedClazzN(), report.clazzCoverage()));
+        append(NEWLINE);
         append(String.format("公共方法：%d，标注：%d，覆盖率：%%", report.getPublicMethodN(), report.getAnnotatedMethodN(), report.methodCoverage()));
+        append(NEWLINE);
         append(String.format("字段属性：%d，标注：%d，覆盖率：%%", report.getPropertyN(), report.getAnnotatedPropertyN(), report.propertyCoverage()));
+        append(NEWLINE);
         append("endheader").append(NEWLINE).append(NEWLINE);
         return this;
     }
