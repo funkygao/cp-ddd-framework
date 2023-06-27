@@ -46,6 +46,8 @@ public class PlainTextBuilder {
                 .append(String.format("Method(%d/%.1f%%)", report.getPublicMethodN(), report.methodCoverage()))
                 .append(SPACE)
                 .append(String.format("Property(%d/%.1f%%)", report.getPropertyN(), report.propertyCoverage()))
+                .append(SPACE)
+                .append(String.format("Statement(%d)", model.getClassMethodReport().getStatementN()))
                 .append(NEWLINE);
         return this;
     }
