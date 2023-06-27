@@ -22,6 +22,7 @@ public class KeyModelEntry {
     private final String className;
     @Setter
     private String javadoc;
+
     private final Map<KeyElement.Type, List<KeyPropertyEntry>> properties;
 
     private transient List<KeyBehaviorEntry> keyBehaviorEntries = new ArrayList<>();
