@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+/**
+ * KMeans cluster java method names.
+ */
 public class KMeans {
     private static final int NUM_CLUSTERS = 3;
     private static final int MAX_ITERATIONS = 100;
