@@ -122,7 +122,13 @@ public class PlainTextBuilder {
             }
 
             append(TAB).append("[聚类]").append(NEWLINE);
-            // TODO
+            List<List<String>> clusters = keyModelEntry.methodClusters();
+            for (int i = 0; i < clusters.size(); i++) {
+                if (clusters.get(i).isEmpty()) {
+                    continue;
+                }
+                append(TAB).append(TAB).append(clusters.get(i).toString()).append(NEWLINE);
+            }
         }
 
         return this;
