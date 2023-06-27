@@ -484,7 +484,7 @@ public class PlantUmlBuilder {
             return this;
         }
 
-        content.append(MessageFormat.format(PACKAGE_TMPL, "用例", "UseCase"));
+        content.append(MessageFormat.format(PACKAGE_TMPL, "交互", "UseCase"));
         content.append(SPACE).append(BRACE_OPEN).append(NEWLINE);
         for (String actor : model.getKeyUsecaseReport().getData().keySet()) {
             append(TAB).writeKeyUsecaseClazzDefinition(actor).append(NEWLINE);
