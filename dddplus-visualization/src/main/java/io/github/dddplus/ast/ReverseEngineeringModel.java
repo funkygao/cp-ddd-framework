@@ -101,8 +101,4 @@ public class ReverseEngineeringModel {
         return false;
     }
 
-    public String exportAsText() {
-        return ""; // TODO
-    }
-
 }
