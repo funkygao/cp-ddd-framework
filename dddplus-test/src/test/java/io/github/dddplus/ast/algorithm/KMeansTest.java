@@ -20,10 +20,20 @@ class KMeansTest {
         Map<String, double[]> vectorMap = new HashMap<>();
 
         // 将方法名转换为向量
+        int maxLength = -1;
         for (String methodName : methodNames) {
-            double[] vector = new double[methodName.length()];
+            if (methodName.length() > maxLength) {
+                maxLength = methodName.length();
+            }
+        }
+        for (String methodName : methodNames) {
+            double[] vector = new double[maxLength];
             for (int i = 0; i < methodName.length(); i++) {
                 vector[i] = methodName.charAt(i); // 向量值为ascii
+            }
+            // padding with 0
+            for (int i = methodName.length(); i < maxLength; i++) {
+                vector[i] = 0;
             }
             vectors.add(vector);
             vectorMap.put(methodName, vector);
