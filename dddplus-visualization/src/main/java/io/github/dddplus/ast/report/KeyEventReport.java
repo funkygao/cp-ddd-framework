@@ -20,6 +20,10 @@ public class KeyEventReport {
         return this;
     }
 
+    public int size() {
+        return events.size();
+    }
+
     public boolean isEmpty() {
         return events.isEmpty();
     }

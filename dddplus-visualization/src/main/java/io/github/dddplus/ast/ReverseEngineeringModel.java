@@ -51,11 +51,23 @@ public class ReverseEngineeringModel {
     }
 
     public int annotatedModels() {
-        return keyModelReport.models();
+        return keyModelReport.models() + keyEventReport.size();
     }
 
     public int annotatedMethods() {
         return keyModelReport.methods() + keyFlowReport.orphanMethods() + keyUsecaseReport.methods();
+    }
+
+    public CoverageReport coverageReport() {
+        CoverageReport report = new CoverageReport();
+        report.setPublicClazzN(classMethodReport.publicClazzN());
+        report.setAnnotatedClazzN(annotatedModels());
+        report.setPublicMethodN(classMethodReport.publicMethodN());
+        report.setAnnotatedMethodN(annotatedMethods());
+        report.setPropertyN(classMethodReport.getFieldsN());
+        report.setAnnotatedPropertyN(keyModelReport.propertiesN());
+
+        return report;
     }
 
     /**

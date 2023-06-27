@@ -4,6 +4,7 @@ import com.google.common.collect.Sets;
 import io.github.dddplus.ast.ReverseEngineeringModel;
 import io.github.dddplus.ast.model.*;
 import io.github.dddplus.ast.report.ClassMethodReport;
+import io.github.dddplus.ast.report.CoverageReport;
 import io.github.dddplus.dsl.KeyElement;
 import io.github.dddplus.dsl.KeyRelation;
 import net.sourceforge.plantuml.FileFormat;
@@ -100,7 +101,7 @@ public class PlantUmlBuilder {
 
         start().appendDirection().appendSkinParam().appendTitle().appendHeader();
 
-        addClassMethodReport();
+        //addClassMethodReport();
 
         model.aggregates().forEach(a -> addAggregate(a));
         //addSimilarities();
@@ -350,10 +351,15 @@ public class PlantUmlBuilder {
     }
 
     private PlantUmlBuilder appendHeader() {
+        append("header").append(NEWLINE);
         if (header != null && !header.isEmpty()) {
-            content.append("header").append(NEWLINE).append(header).append(NEWLINE)
-                    .append("endheader").append(NEWLINE).append(NEWLINE);
+            append(header).append(NEWLINE);
         }
+        CoverageReport report = model.coverageReport();
+        append(String.format("公共类：%d，标注：%d，覆盖率：%%", report.getPublicClazzN(), report.getAnnotatedClazzN(), report.clazzCoverage()));
+        append(String.format("公共方法：%d，标注：%d，覆盖率：%%", report.getPublicMethodN(), report.getAnnotatedMethodN(), report.methodCoverage()));
+        append(String.format("字段属性：%d，标注：%d，覆盖率：%%", report.getPropertyN(), report.getAnnotatedPropertyN(), report.propertyCoverage()));
+        append("endheader").append(NEWLINE).append(NEWLINE);
         return this;
     }
 
