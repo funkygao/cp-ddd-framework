@@ -61,7 +61,12 @@ public class PlainTextBuilder {
     }
 
     private PlainTextBuilder writeClazzDefinition(KeyModelEntry keyModelEntry, boolean isAggregateRoot) {
-        append(keyModelEntry.getClassName()).append(SPACE).append(keyModelEntry.getJavadoc()).append(NEWLINE);
+        append(keyModelEntry.getClassName());
+        if (keyModelEntry.hasJavadoc()) {
+            append(SPACE).append(keyModelEntry.getJavadoc());
+        }
+        append(NEWLINE);
+
         if (!keyModelEntry.types().isEmpty()) {
             append(TAB).append("[属性]").append(NEWLINE);
             for (KeyElement.Type type : keyModelEntry.types()) {
