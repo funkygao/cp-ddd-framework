@@ -15,6 +15,7 @@ import java.util.*;
  * <p>模型与程序语言主要的区别不在于图形化，也不在于抽象的程度，而在于表达方式突破了程序设计语言“单一顺序”的限制，模型可以更容易和直接地表达复杂的结构.</p>
  * <pre>
  * RelationEntry
+ * KeyEventEntry
  * AggregateEntry
  *     KeyElementEntry
  *         KeyBehaviorEntry
@@ -50,11 +51,23 @@ public class ReverseEngineeringModel {
     }
 
     public int annotatedModels() {
-        return keyModelReport.models();
+        return keyModelReport.models() + keyEventReport.size();
     }
 
     public int annotatedMethods() {
         return keyModelReport.methods() + keyFlowReport.orphanMethods() + keyUsecaseReport.methods();
+    }
+
+    public CoverageReport coverageReport() {
+        CoverageReport report = new CoverageReport();
+        report.setPublicClazzN(classMethodReport.publicClazzN());
+        report.setAnnotatedClazzN(annotatedModels());
+        report.setPublicMethodN(classMethodReport.publicMethodN());
+        report.setAnnotatedMethodN(annotatedMethods());
+        report.setPropertyN(classMethodReport.getFieldsN());
+        report.setAnnotatedPropertyN(keyModelReport.propertiesN());
+
+        return report;
     }
 
     /**

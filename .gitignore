@@ -19,3 +19,4 @@ id_file
 .sonar/
 .deploy
 test.svg
+model.txt

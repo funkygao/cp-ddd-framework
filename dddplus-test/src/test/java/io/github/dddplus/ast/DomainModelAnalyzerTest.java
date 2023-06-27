@@ -4,6 +4,7 @@ import io.github.dddplus.ast.model.AggregateEntry;
 import io.github.dddplus.ast.model.KeyBehaviorEntry;
 import io.github.dddplus.ast.model.KeyModelEntry;
 import io.github.dddplus.ast.model.KeyRuleEntry;
+import io.github.dddplus.ast.view.PlainTextBuilder;
 import io.github.dddplus.ast.view.PlantUmlBuilder;
 import io.github.dddplus.dsl.KeyElement;
 import io.github.dddplus.runtime.registry.IntegrationTest;
@@ -56,6 +57,16 @@ class DomainModelAnalyzerTest {
                 .build(model);
         String uml = pb.umlContent();
         assertFalse(uml.isEmpty());
+    }
+
+    @Test
+    void renderText() throws IOException {
+        DomainModelAnalyzer analyzer = new DomainModelAnalyzer();
+        analyzer.scan(moduleRoot("dddplus-test"));
+        ReverseEngineeringModel model = analyzer.analyze((level, path, file) -> path.contains("design"));
+        PlainTextBuilder pb = new PlainTextBuilder();
+        pb.build(model)
+                .render("../model.txt");
     }
 
     @Test
