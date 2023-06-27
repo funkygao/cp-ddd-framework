@@ -22,6 +22,7 @@ public class KeyModelEntry {
     private final String className;
     @Setter
     private String javadoc;
+
     private final Map<KeyElement.Type, List<KeyPropertyEntry>> properties;
 
     private transient List<KeyBehaviorEntry> keyBehaviorEntries = new ArrayList<>();
@@ -171,6 +172,11 @@ public class KeyModelEntry {
     }
 
     public List<List<String>> methodClusters() {
+        if (keyBehaviorEntries.size() < 6) {
+            // 太少，没必要聚类分析
+            return null;
+        }
+
         List<String> methodNames = new ArrayList<>(keyBehaviorEntries.size());
         for (KeyBehaviorEntry entry : keyBehaviorEntries) {
             methodNames.add(entry.getMethodName());

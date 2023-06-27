@@ -46,6 +46,8 @@ public class PlainTextBuilder {
                 .append(String.format("Method(%d/%.1f%%)", report.getPublicMethodN(), report.methodCoverage()))
                 .append(SPACE)
                 .append(String.format("Property(%d/%.1f%%)", report.getPropertyN(), report.propertyCoverage()))
+                .append(SPACE)
+                .append(String.format("Statement(%d)", model.getClassMethodReport().getStatementN()))
                 .append(NEWLINE);
         return this;
     }
@@ -59,7 +61,7 @@ public class PlainTextBuilder {
     }
 
     private PlainTextBuilder writeClazzDefinition(KeyModelEntry keyModelEntry, boolean isAggregateRoot) {
-        append(keyModelEntry.getClassName()).append(NEWLINE);
+        append(keyModelEntry.getClassName()).append(SPACE).append(keyModelEntry.getJavadoc()).append(NEWLINE);
         if (!keyModelEntry.types().isEmpty()) {
             append(TAB).append("[属性]").append(NEWLINE);
             for (KeyElement.Type type : keyModelEntry.types()) {
@@ -121,13 +123,15 @@ public class PlainTextBuilder {
                 }
             }
 
-            append(TAB).append("[聚类]").append(NEWLINE);
             List<List<String>> clusters = keyModelEntry.methodClusters();
-            for (int i = 0; i < clusters.size(); i++) {
-                if (clusters.get(i).isEmpty()) {
-                    continue;
+            if (clusters != null) {
+                append(TAB).append("[聚类]").append(NEWLINE);
+                for (int i = 0; i < clusters.size(); i++) {
+                    if (clusters.get(i).isEmpty()) {
+                        continue;
+                    }
+                    append(TAB).append(TAB).append(clusters.get(i).toString()).append(NEWLINE);
                 }
-                append(TAB).append(TAB).append(clusters.get(i).toString()).append(NEWLINE);
             }
         }
 
