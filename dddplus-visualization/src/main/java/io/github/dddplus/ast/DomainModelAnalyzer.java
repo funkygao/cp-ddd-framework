@@ -167,8 +167,6 @@ public class DomainModelAnalyzer {
             }
         }
 
-        // coverage report
-
         return model;
     }
 
