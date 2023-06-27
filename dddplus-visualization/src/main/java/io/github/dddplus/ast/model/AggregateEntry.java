@@ -48,4 +48,12 @@ public class AggregateEntry {
     public boolean belongToMe(String packageName) {
         return packageName.startsWith(this.packageName);
     }
+
+    public boolean overlapWith(AggregateEntry that) {
+        if (packageName.startsWith(that.packageName) || that.packageName.startsWith(packageName)) {
+            return true;
+        }
+
+        return false;
+    }
 }

@@ -32,6 +32,14 @@ public class KeyModelEntry {
         this.properties = new TreeMap<>();
     }
 
+    public int propertiesN() {
+        int n = 0;
+        for (KeyElement.Type type : properties.keySet()) {
+            n += properties.get(type).size();
+        }
+        return n;
+    }
+
     public int methods() {
         return keyBehaviorEntries.size() + keyRuleEntries.size() + keyFlowEntries.size();
     }

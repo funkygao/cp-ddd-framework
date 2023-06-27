@@ -41,6 +41,14 @@ public class KeyModelReport {
         return n;
     }
 
+    public int propertiesN() {
+        int n = 0;
+        for (KeyModelEntry entry : data.values()) {
+            n += entry.propertiesN();
+        }
+        return n;
+    }
+
     public boolean containsActor(String actor) {
         return data.containsKey(actor);
     }

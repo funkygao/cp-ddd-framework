@@ -47,7 +47,7 @@ public class DomainModelAnalyzer {
         ReverseEngineeringModel model = new ReverseEngineeringModel();
         FileWalker.Filter actualFilter = new ActualFilter(filter);
         for (File dir : dirs) {
-            // aggregate
+            // class method distribution
             new FileWalker(actualFilter, (level, path, file) -> {
                 new ClassMethodDistributionAstNodeVisitor().visit(FileWalker.silentParse(file), model.getClassMethodReport());
             }).walkFrom(dir);

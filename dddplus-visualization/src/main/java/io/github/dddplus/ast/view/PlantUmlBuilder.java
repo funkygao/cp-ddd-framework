@@ -4,6 +4,7 @@ import com.google.common.collect.Sets;
 import io.github.dddplus.ast.ReverseEngineeringModel;
 import io.github.dddplus.ast.model.*;
 import io.github.dddplus.ast.report.ClassMethodReport;
+import io.github.dddplus.ast.report.CoverageReport;
 import io.github.dddplus.dsl.KeyElement;
 import io.github.dddplus.dsl.KeyRelation;
 import net.sourceforge.plantuml.FileFormat;
@@ -100,7 +101,7 @@ public class PlantUmlBuilder {
 
         start().appendDirection().appendSkinParam().appendTitle().appendHeader();
 
-        addClassMethodReport();
+        //addClassMethodReport();
 
         model.aggregates().forEach(a -> addAggregate(a));
         //addSimilarities();
@@ -350,10 +351,18 @@ public class PlantUmlBuilder {
     }
 
     private PlantUmlBuilder appendHeader() {
+        append("header").append(NEWLINE);
         if (header != null && !header.isEmpty()) {
-            content.append("header").append(NEWLINE).append(header).append(NEWLINE)
-                    .append("endheader").append(NEWLINE).append(NEWLINE);
+            append(header).append(NEWLINE);
         }
+        CoverageReport report = model.coverageReport();
+        append(String.format("公共类：%d，标注：%d，覆盖率：%.1f%%", report.getPublicClazzN(), report.getAnnotatedClazzN(), report.clazzCoverage()));
+        append(NEWLINE);
+        append(String.format("公共方法：%d，标注：%d，覆盖率：%.1f%%", report.getPublicMethodN(), report.getAnnotatedMethodN(), report.methodCoverage()));
+        append(NEWLINE);
+        append(String.format("字段属性：%d，标注：%d，覆盖率：%.1f%%", report.getPropertyN(), report.getAnnotatedPropertyN(), report.propertyCoverage()));
+        append(NEWLINE);
+        append("endheader").append(NEWLINE).append(NEWLINE);
         return this;
     }
 
@@ -475,7 +484,7 @@ public class PlantUmlBuilder {
             return this;
         }
 
-        content.append(MessageFormat.format(PACKAGE_TMPL, "用例", "UseCase"));
+        content.append(MessageFormat.format(PACKAGE_TMPL, "交互", "UseCase"));
         content.append(SPACE).append(BRACE_OPEN).append(NEWLINE);
         for (String actor : model.getKeyUsecaseReport().getData().keySet()) {
             append(TAB).writeKeyUsecaseClazzDefinition(actor).append(NEWLINE);

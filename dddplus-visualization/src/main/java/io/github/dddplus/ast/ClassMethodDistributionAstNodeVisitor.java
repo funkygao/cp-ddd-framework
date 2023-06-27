@@ -6,6 +6,7 @@
 package io.github.dddplus.ast;
 
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
@@ -24,6 +25,15 @@ class ClassMethodDistributionAstNodeVisitor extends VoidVisitorAdapter<ClassMeth
     static {
         ignoredMethodAnnotation.add(Resource.class);
         ignoredClassAnnotation.add(Generated.class); // MapStruct generated mapper impl ignored
+    }
+
+    public void visit(final FieldDeclaration fieldDeclaration, final ClassMethodReport report) {
+        super.visit(fieldDeclaration, report);
+        if (fieldDeclaration.isAnnotationPresent(Deprecated.class)) {
+            return;
+        }
+
+        report.incrField();
     }
 
     @Override

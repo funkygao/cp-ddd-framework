@@ -18,6 +18,15 @@ public class ClassMethodReport {
     private ClassInfo classInfo = new ClassInfo();
     private MethodInfo methodInfo = new MethodInfo();
     private int statementN = 0;
+    private int fieldsN = 0;
+
+    public int publicClazzN() {
+        return classInfo.publicClasses.size();
+    }
+
+    public int publicMethodN() {
+        return methodInfo.publicMethods.size();
+    }
 
     @Data
     public static class ClassInfo {
@@ -43,5 +52,9 @@ public class ClassMethodReport {
 
     public void incrStatement() {
         this.statementN += 1;
+    }
+
+    public void incrField() {
+        this.fieldsN += 1;
     }
 }
