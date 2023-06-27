@@ -24,6 +24,7 @@ public class AggregateReport {
     }
 
     public AggregateReport add(AggregateEntry aggregateEntry) {
+        validate(aggregateEntry);
         aggregateEntries.add(aggregateEntry);
         return this;
     }
@@ -36,6 +37,14 @@ public class AggregateReport {
         }
 
         return null;
+    }
+
+    private void validate(AggregateEntry newEntry) {
+        for (AggregateEntry entry : aggregateEntries) {
+            if (entry.overlapWith(newEntry)) {
+                throw new IllegalStateException(String.format("Aggregate overlaps (%s, %s)", entry.getName(), newEntry.getName()));
+            }
+        }
     }
 
 }
