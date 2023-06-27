@@ -2,6 +2,7 @@ package io.github.dddplus.ast.view;
 
 import io.github.dddplus.ast.ReverseEngineeringModel;
 import io.github.dddplus.ast.model.*;
+import io.github.dddplus.ast.report.CoverageReport;
 import io.github.dddplus.dsl.KeyElement;
 
 import java.io.BufferedWriter;
@@ -12,7 +13,7 @@ import java.util.List;
 
 public class PlainTextBuilder {
     private static final String SPACE = " ";
-    private static final String TAB = SPACE + SPACE;
+    private static final String TAB = SPACE + SPACE + SPACE;
     private static final String NEWLINE = System.getProperty("line.separator");
 
     private final StringBuilder content = new StringBuilder();
@@ -21,10 +22,10 @@ public class PlainTextBuilder {
     public PlainTextBuilder build(ReverseEngineeringModel model) {
         this.model = model;
 
+        appendCoverage();
         model.aggregates().forEach(a -> addAggregate(a));
         addKeyUsecases();
         addOrphanKeyFlows();
-        addKeyRelations();
         addKeyEvents();
 
         return this;
@@ -35,6 +36,18 @@ public class PlainTextBuilder {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.append(content);
         }
+    }
+
+    private PlainTextBuilder appendCoverage() {
+        CoverageReport report = model.coverageReport();
+        append("标注覆盖率：")
+                .append(String.format("Class(%d/%.1f%%)", report.getPublicClazzN(), report.clazzCoverage()))
+                .append(SPACE)
+                .append(String.format("Method(%d/%.1f%%)", report.getPublicMethodN(), report.methodCoverage()))
+                .append(SPACE)
+                .append(String.format("Property(%d/%.1f%%)", report.getPropertyN(), report.propertyCoverage()))
+                .append(NEWLINE);
+        return this;
     }
 
     private PlainTextBuilder addAggregate(AggregateEntry aggregate) {
@@ -48,15 +61,16 @@ public class PlainTextBuilder {
     private PlainTextBuilder writeClazzDefinition(KeyModelEntry keyModelEntry, boolean isAggregateRoot) {
         append(keyModelEntry.getClassName()).append(NEWLINE);
         if (!keyModelEntry.types().isEmpty()) {
+            append(TAB).append("[属性]").append(NEWLINE);
             for (KeyElement.Type type : keyModelEntry.types()) {
-                append(TAB).append(TAB)
-                        .append(String.format("%15s %s", type, keyModelEntry.displayFieldByType(type)))
+                append(TAB)
+                        .append(String.format("%-13s %s", type, keyModelEntry.displayFieldByType(type)))
                         .append(NEWLINE);
             }
 
             if (!keyModelEntry.undefinedTypes().isEmpty()) {
-                append(TAB).append(TAB)
-                        .append(String.format("%15s %s", "Undefined", keyModelEntry.displayUndefinedTypes()))
+                append(TAB)
+                        .append(String.format("%-13s %s", "-NotLabeled-", keyModelEntry.displayUndefinedTypes()))
                         .append(NEWLINE);
             }
         }
@@ -106,6 +120,9 @@ public class PlainTextBuilder {
                     append(NEWLINE);
                 }
             }
+
+            append(TAB).append("[聚类]").append(NEWLINE);
+            // TODO
         }
 
         return this;
@@ -131,10 +148,6 @@ public class PlainTextBuilder {
     }
 
     private PlainTextBuilder addKeyUsecases() {
-        if (model.getKeyUsecaseReport().getData().isEmpty()) {
-            return this;
-        }
-
         append("<<交互>>").append(NEWLINE);
         for (String actor : model.getKeyUsecaseReport().getData().keySet()) {
             append(TAB).writeKeyUsecaseClazzDefinition(actor).append(NEWLINE);
@@ -143,10 +156,6 @@ public class PlainTextBuilder {
     }
 
     private PlainTextBuilder addOrphanKeyFlows() {
-        if (model.getKeyFlowReport().actors().isEmpty()) {
-            return this;
-        }
-
         append("<<跨聚合复杂流程>>").append(NEWLINE);
         for (String actor : model.getKeyFlowReport().actors()) {
             writeOrphanFlowClazzDefinition(actor);
@@ -180,15 +189,7 @@ public class PlainTextBuilder {
         return this;
     }
 
-    private PlainTextBuilder addKeyRelations() {
-        return this;
-    }
-
     private PlainTextBuilder addKeyEvents() {
-        if (model.getKeyEventReport().isEmpty()) {
-            return this;
-        }
-
         content.append("<<领域事件>>").append(NEWLINE);
         for (KeyEventEntry entry : model.getKeyEventReport().getEvents()) {
             append(TAB).writeClazzDefinition(entry);
