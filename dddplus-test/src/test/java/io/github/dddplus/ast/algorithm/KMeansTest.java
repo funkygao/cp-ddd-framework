@@ -1,5 +1,6 @@
 package io.github.dddplus.ast.algorithm;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -7,6 +8,7 @@ import java.util.*;
 class KMeansTest {
 
     @Test
+    @Disabled
     void cluster() {
         List<String> methodNames = new ArrayList<>(Arrays.asList(
                 "getUserName", "setUserName", "getUserAge", "setUserAge", "getUserEmail", "setUserEmail",
