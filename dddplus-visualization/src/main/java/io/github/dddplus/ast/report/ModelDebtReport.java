@@ -27,7 +27,6 @@ import lombok.Data;
  *           <ul>DDDplus 逆向建模的主战场
  *               <li>例如：(一词多意，多词一意)如何识别，经测试GPT4也无法准确识别</li>
  *               <li>例如：工具只能判断注释的完备性，却无法判断一致性、准确性、充分性、不必要性</li>
- *               <li>例如：模块的划分在业务视角看是否合理，它们之间的关系是否经得起推敲</li>
  *           </ul>
  *       </li>
  *   </ul>
@@ -37,19 +36,20 @@ import lombok.Data;
  *       <li>系统的可观测性、performance risk/evaluation</li>
  *       <li>unplanned traffic risk</li>
  *       <li>incomplete FEMA design</li>
- *       <li>运行时覆盖率/never executed code block</li>
+ *       <li>运行时覆盖率/never executed code blocks</li>
  *   </ul>
  * </li>
  * <li>过程时
  *   <ul>主要依靠git analysis
- *       <li>hotspot of (code commit, merge conflict)</li>
+ *       <li>(code commit, merge conflict) hotspot</li>
  *       <li>file ownership metrics</li>
  *       <li>branch leading time before being merged/commit size</li>
  *   </ul>
  * </li>
  * <li>管理视角
  *   <ul>
- *       <li>技术债墙/排期/追踪：如何定义和排序技术债是关键</li>
+ *       <li>线上故障</li>
+ *       <li>技术债墙/排期/过程追踪：如何定义和排序技术债是关键</li>
  *       <li>design review质量</li>
  *       <li>code review质量：主要依靠(简单的数量，历史趋势分析，采样人工分析验证)</li>
  *   </ul>

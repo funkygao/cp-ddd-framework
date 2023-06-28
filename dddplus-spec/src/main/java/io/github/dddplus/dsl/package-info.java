@@ -4,77 +4,29 @@
  * Licensed under the Apache License version 2.0, available at http://www.apache.org/licenses/LICENSE-2.0
  */
 /**
- * Reverse modeling DSL.
+ * Reverse modeling DSL: Object-Oriented Domain Model(As-Is -> To-Be) Re-Design without tech constraints.
  *
  * <p/>
- * 领域专家不会根据屏幕或菜单项上的字段描述新的用户故事，而是讨论域对象所需的基础属性或行为.
- * <p>通过该DSL建立的逆向模型，不仅仅是知识层的业务概念模型(对现实业务抽取核心概念)，更是开发可落地的操作层系统模型，它忠实反映了系统实现情况，揭示业务链路.</p>
- * <p>建模通过对现实业务进行抽象，构建出全局业务概念模型，有了全局的认识，再去了解业务细节才会高效，否则容易迷失在细节.</p>
- * <p>生成的逆向模型，可直接用于需求分析、系统设计，指导正向模型，并通过持续逆向过程验证设计与实现的一致性.</p>
- * <p>{@code 建模 = 图形 + 逻辑 + 现实的抽象}，代码是一维的，而模型多维，模型相当于活地图</p>
- * <p/>
- * <ol>为什么逆向建模：
- * <li>the architecture of an existing system is recovered from extracted source code artifacts，代码成为活文档</li>
- * <li>建模是将混沌的事物抽象成有序关联事物的过程，混沌到有序</li>
- * <li>它可以极大简化大家对复杂事物的认识，让人能在短时间内有全局视野看清楚业务，而且建模是用面向对象的思维分析事物，也容易转化成可视化的类图</li>
- * <li>通过对比逆向领域模型与正向领域模型, 以快速发现二者的分歧(deviation)从而避免程序设计偏离领域模型/系统腐化</li>
- * <li>围绕抽象程序设计得到的领域模型展开知识消化, 减少其对代码实现细节的依赖, 从而加速知识消化过程</li>
- * </ol>
+ * <p>通过该DSL建立的逆向模型，不仅仅是业务概念模型，更是一线研发可落地的系统模型，支持(正/逆)向循环迭代、交叉验证，最终实现(业务模型，代码)的一致.</p>
  * <pre>
  * DomainModel      -->   CodeImplementation
  *     ^                        |
  *     |                        V
  * KnowledgeCrunch  <--   ReversedDomainModel
  * </pre>
- * <ul>什么是领域模型：
- * <li>领域模型是领域业务逻辑的有组织且有选择的抽象</li>
- * <li>领域模型是由开发人员与领域专家协作构建出的一个反映深层次领域知识的模型，强调(业务，代码)始终统一</li>
- * <li>(领域模型 vs 代码实现)绑定，使得开发人员能够基于对模型的理解来解释和重构代码</li>
- * </ul>
+ * <blockquote>
+ *     软件开发，归根到底不是生产工程，而是系统性知识工程。
+ *     DDD提倡领域专家和开发人员使用模型中的概念有意识地进行交流。
+ *     因此，领域专家不会根据屏幕或菜单项上的字段来描述新的用户故事，而是谈论域对象所需的核心属性或核心行为。
+ *     同样，开发人员也不会谈论数据库表中类或列的新实例变量。
+ *     这就是DDD里的UL，这是最难的。
+ * </blockquote>
+ * <p>DSL标注过程是二次抽象/二次设计/还原业务本质/揭示技术债的过程，类比{@code Declarative Programming}，不受任何技术约束限制，可以大胆使用OO思想.</p>
+ * <p>谁该来标注？最熟悉业务的一线研发！它体现了：(introspection, knowledge dissemination).</p>
+ * <p>由于代码具有(可运行，包含完全细节，演进过程完整追溯，自我修复)特征，因此成为业务的唯一事实真相；但代码里有太多技术细节产生的业务模型噪音，导致代码里无法直观看到业务真相.</p>
+ * <p>{@code 建模 = 图形 + 逻辑 + 现实的抽象}，代码(一维的，局部的)，而模型(多维的，全局的)，逆向模型相当于动态的活地图</p>
  * <p/>
- * <ul>DSL的假设：
- * <li>(非一线研发，其他stakeholders)对模型的渴望程度是不同的</li>
- * <li>一线研发是(不理解DSL，可能遗漏标注DSL)的</li>
- * </ul>
- * <p></p>
- * <ul>DSL有效的前提：
- * <li>最少重复原则：否则代码变而标注不跟着改变，生成的领域知识产生误导</li>
- * <li>突出重点原则：主动放弃领域知识外实现细节，(清晰，完整)，高信噪比
- *  <ul>
- *      <li>领域意图不丢失原则</li>
- *  </ul>
- * </li>
- * <li>易于使用原则：一线研发轻松地在代码上打标，不漏用，不误用
- *  <ul>
- *      <li>漏用，可发现</li>
- *      <li>误用：可识别</li>
- *  </ul>
- * </li>
- * <li>业务的唯一事实真相：代码特征(可运行，包含完全细节，演进过程完整追溯，自我修复)
- *  <ul>
- *     <li>{@code DDD}是靠{@code Building Blocks}统一了(业务模型，代码)：代码直接映射业务概念，{@code DDDplus}补充了该{@code Building Blocks}</li>
- *     <li>代码级配置：(yaml, properties, dynamic config center)</li>
- *     <li>业务规则：{@link io.github.dddplus.model.IRule IRule}</li>
- *  </ul>
- * </li>
- * </ul>
- * <p/>
- * <ul>DSL目标：
- * <li>更高的抽象层级：避免一切技术细节，这样才能沟通(业务专家，开发人员，架构师)</li>
- * <li>隐性知识显性化：软件开发归根到底不是生产工程，而是知识工程</li>
- * <li>持续实现(领域模型，代码实现)的统一，追溯完整的模型演进过程</li>
- * <li>根据代码自动生成全部领域知识，业务方可理解的UL</li>
- * <li>自动揭露代码实现中存在的问题，(技术债，重构方向)，{@code DSL}可修复代码并揭露代码问题</li>
- * <li>(业务方，技术管理者，架构师，TL，不深谙其道的研发)实现细节无知的相关方，快速掌握全局和必要细节</li>
- * <li>业务开发，从模型中来到模型中去</li>
- * </ul>
- * <ul>结构化思维：
- * <li>以事物的结构为思考对象，来引导思维、表达和解决问题的一种思考方法</li>
- * <li>结构让思考问题更有逻辑、与人沟通更加清晰、解决问题更加高效</li>
- * <li>结构化思维的本质是信息熵：把知识的有序度最大化</li>
- * </ul>
- * <p/>
- * <ul>元模型标注，通过为代码附加元数据以帮助编译器理解程序结构：
+ * <ul>DSL标注结构：
  * <li>字段级：
  * <ul>
  *     <li>{@link io.github.dddplus.dsl.KeyElement}</li>
@@ -88,7 +40,6 @@
  *     <li>{@link io.github.dddplus.dsl.KeyUsecase}</li>
  * </ul>
  * </li>
- * <li>方法内部：WIP 通过注释</li>
  * <li>类级：
  * <ul>
  *     <li>{@link io.github.dddplus.dsl.KeyRelation}</li>
@@ -100,9 +51,13 @@
  *     <li>{@link io.github.dddplus.dsl.Aggregate}</li>
  * </ul>
  * </li>
+ * <li>方法内部：WIP 通过注释</li>
  * </ul>
- * <p>如何评估标注后生成的逆向模型质量？</p>
- * <p>软件开发的核心难点在于处理隐藏在业务知识中的核心复杂度。因此，模型是否直观完整表达出了业务知识，是评判的标准</p>
+ * <p/>
+ * <ul>如何评估标注后生成的逆向模型质量？
+ * <li>模型是否直观完整表达出了业务知识</li>
+ * <li>日常开发，是否{@code 从模型中来，到模型中去}</li>
+ * </ul>
  *
  * @see <a href="https://xie.infoq.cn/article/3da89918c7d27ccc8e8f98ab7">面向对象设计的逆向建模方法和开源工具</a>
  * @see <a href="https://ieeexplore.ieee.org/document/723185/">Requirements for integrating software architecture and reengineering models</a>
