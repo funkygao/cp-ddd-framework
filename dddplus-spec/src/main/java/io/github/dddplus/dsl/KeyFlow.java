@@ -34,6 +34,8 @@ public @interface KeyFlow {
 
     /**
      * 行为主体对应的类.
+     *
+     * <p>重新分配职责的过程.</p>
      */
     Class[] actor() default {};
 
@@ -51,6 +53,8 @@ public @interface KeyFlow {
 
     /**
      * 该行为会产生哪些领域事件.
+     *
+     * 松散的业务逻辑链路还原的过程.
      */
     Class[] produceEvent() default {};
 
