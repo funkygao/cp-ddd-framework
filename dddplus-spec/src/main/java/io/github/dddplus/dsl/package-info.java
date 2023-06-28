@@ -9,7 +9,7 @@
  * <p/>
  * <p>通过该DSL建立的逆向模型，不仅仅是知识层的业务概念模型(对现实业务抽取核心概念)，更是开发可落地的操作层系统模型，它忠实反映了系统实现情况，揭示业务链路.</p>
  * <p>生成的逆向模型，可直接用于需求分析、系统设计，指导正向模型，并通过持续逆向过程验证设计与实现的一致性.</p>
- * <p>{@code 建模 = 图形 + 逻辑 + 现实的抽象}，代码是一维的，而模型多维，模型相当于地图</p>
+ * <p>{@code 建模 = 图形 + 逻辑 + 现实的抽象}，代码是一维的，而模型多维，模型相当于活地图</p>
  * <p/>
  * <ol>为什么逆向建模：
  * <li>the architecture of an existing system is recovered from extracted source code artifacts，代码成为活文档</li>
@@ -102,6 +102,7 @@
  * <p>如何评估标注后生成的逆向模型质量？</p>
  * <p>软件开发的核心难点在于处理隐藏在业务知识中的核心复杂度。因此，模型是否直观完整表达出了业务知识，是评判的标准</p>
  *
+ * @see <a href="https://xie.infoq.cn/article/3da89918c7d27ccc8e8f98ab7">面向对象设计的逆向建模方法和开源工具</a>
  * @see <a href="https://ieeexplore.ieee.org/document/723185/">Requirements for integrating software architecture and reengineering models</a>
  * @see <a href="http://www.jos.org.cn/jos/article/pdf/6278">面向领域驱动设计的逆向建模支持方法</a>
  * @see <a href="https://www.eclipse.org/MoDisco/">MoDisco</a>
