@@ -2,6 +2,7 @@
 " :1,$ call HighlightBrackets()
 highlight AngleBrackets ctermfg=green
 highlight SquareBrackets ctermfg=cyan
+highlight DashBrackets ctermfg=Magenta
 
 augroup highlight_brackets
   autocmd!
@@ -24,5 +25,12 @@ function! HighlightBrackets()
   if square_match_item != []
     let start_pos = square_match_item[0]
     call matchadd("SquareBrackets", start_pos)
+  endif
+
+  let dash_pattern = '\v\-(.+)\-'
+  let dash_match_item = matchlist(line_content, dash_pattern)
+  if dash_match_item != []
+    let start_pos = dash_match_item[0]
+    call matchadd("DashBrackets", start_pos)
   endif
 endfunction
