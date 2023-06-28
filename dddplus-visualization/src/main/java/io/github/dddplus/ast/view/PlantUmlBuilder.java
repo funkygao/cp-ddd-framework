@@ -20,6 +20,8 @@ import java.util.*;
 
 /**
  * DSL -> Reverse Engineering Model -> PlantUML DSL.
+ *
+ * @see <a href="https://www.augmentedmind.de/2021/01/17/plantuml-layout-tutorial-styles/">PlantUml Layout Guide</a>
  */
 public class PlantUmlBuilder {
     public enum Direction {
@@ -510,6 +512,20 @@ public class PlantUmlBuilder {
         return this;
     }
 
+    /**
+     * 增加(可以多次调用)皮肤控制.
+     *
+     * <ul>Examples:
+     * <li>linetype polyline</li>
+     * <li>linetype ortho</li>
+     * <li>handwritten true</li>
+     * <li>monochrome true</li>
+     * <li>nodesep 5</li>
+     * <li>ranksep 8</li>
+     * </ul>
+     *
+     * @see <a href="https://plantuml.com/en/skinparam">skinparam reference</a>
+     */
     public PlantUmlBuilder skinParam(String skinParam) {
         this.skinParams.add(skinParam);
         return this;
