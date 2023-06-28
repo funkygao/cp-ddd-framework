@@ -8,12 +8,9 @@ package io.github.dddplus.dsl;
 import java.lang.annotation.*;
 
 /**
- * 业务对象的关键属性.
+ * 业务对象的核心属性：业务方可感知的最小完备集.
  *
- * <p>业务方可感知的概念.</p>
- * <p>这是通过数据来抽象行为的方法，参考<a href="http://c2.com/doc/oopsla89/paper.html">CRC</a>头脑风暴建模方法.</p>
- * <p>图表很有用，但它们不是模型，只是模型的不同视图：Model vs Views of the Model.</p>
- * <p>域专家不会根据屏幕或菜单项上的字段描述新的用户故事，而是讨论域对象所需的基础属性或行为.</p>
+ * <p>排除为了(查询，报表)等场景而冗余的宽表逻辑字段.</p>
  * <p>Example:</p>
  * <pre>
  * {@code
@@ -88,14 +85,14 @@ public @interface KeyElement {
         Operational,
 
         /**
-         * 可能有问题的.
+         * 可能有问题的，是模型债.
          *
          * <p>在标注过程中发现的非领域概念被放在了领域模型.</p>
          * <ul>常见原因：
          * <li>为了数据库查询而产生的Entity内字段冗余，但与领域逻辑无关</li>
          * <li>Entity在处理请求过程中产生的中间结果，需要个地方保存</li>
          * <li>过早设计：想当然的需求，却无实际落地场景，产生僵尸(数据，逻辑)</li>
-         * <li>直接把Endity等同于DTO，没有做领域层抽象</li>
+         * <li>直接把Entity等同于DTO，没有做领域层抽象，自然就不会有实质意义上的隔离和分层</li>
          * </ul>
          */
         Problematical,

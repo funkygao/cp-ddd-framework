@@ -10,7 +10,7 @@ import java.lang.annotation.*;
 /**
  * 业务对象间关系.
  *
- * <p>使用时，单向标注即可</p>
+ * <p>JDK8+才支持在一处多次标注</p>
  * <p>Example:</p>
  * <pre>
  * {@code
@@ -19,6 +19,7 @@ import java.lang.annotation.*;
  * ℗KeyRelation(whom = Pack.class, type = KeyRelation.Type.HasMany, remark = "一个订单可能多个包裹")
  * class ShipmentOrder {}
  * class ShipmentOrderItem {}
+ * class Pack {}
  * }
  * </pre>
  */

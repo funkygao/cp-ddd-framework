@@ -8,7 +8,7 @@ package io.github.dddplus.dsl;
 import java.lang.annotation.*;
 
 /**
- * 关键领域事件.
+ * 关键领域事件，单向传递.
  *
  * <p>Example:</p>
  * <pre>

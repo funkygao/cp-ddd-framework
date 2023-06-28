@@ -2,6 +2,9 @@ package io.github.dddplus.ast.report;
 
 import lombok.Data;
 
+/**
+ * 逆向建模DSL覆盖率报告.
+ */
 @Data
 public class CoverageReport {
     private int publicClazzN;
