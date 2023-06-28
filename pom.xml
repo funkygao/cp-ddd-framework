@@ -105,6 +105,28 @@ under the License.
                     <encoding>${project.build.sourceEncoding}</encoding>
                     <excludePackageNames>org.example*</excludePackageNames>
                     <additionalJOption>-Xdoclint:none</additionalJOption>
+                    <groups>
+                        <group>
+                            <title>DDD Forward Modeling</title>
+                            <packages>io.github.dddplus.model*:io.github.dddplus.buddy*:io.github.dddplus.step</packages>
+                        </group>
+                        <group>
+                            <title>Reverse Modeling</title>
+                            <packages>io.github.dddplus.ast*:io.github.dddplus.dsl</packages>
+                        </group>
+                        <group>
+                            <title>Extension Oriented Framework</title>
+                            <packages>io.github.dddplus.ext*</packages>
+                        </group>
+                        <group>
+                            <title>Runtime</title>
+                            <packages>io.github.dddplus.annotation:io.github.dddplus.runtime*:io.github.dddplus.plugin</packages>
+                        </group>
+                        <group>
+                            <title>Integration With MyBatis</title>
+                            <packages>io.github.dddplus.mybatis*</packages>
+                        </group>
+                    </groups>
                 </configuration>
                 <executions>
                     <execution>
