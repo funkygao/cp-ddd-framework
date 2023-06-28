@@ -7,9 +7,15 @@
  * Reverse modeling DSL.
  *
  * <p/>
+ * <p>通过该DSL建立的逆向模型，不仅仅是知识层的业务概念模型(对现实业务抽取核心概念)，更是开发可落地的操作层系统模型，它忠实反映了系统实现情况，揭示业务链路.</p>
+ * <p>生成的逆向模型，可直接用于需求分析、系统设计，指导正向模型，并通过持续逆向过程验证设计与实现的一致性.</p>
+ * <p>{@code 建模 = 图形 + 逻辑 + 现实的抽象}，代码是一维的，而模型多维，模型相当于地图</p>
+ * <p/>
  * <ol>为什么逆向建模：
- * <li>the architecture of an existing system is recovered from extracted source code artifacts</li>
- * <li>通过对比逆向领域模型与正向领域模型, 以快速发现二者的分歧(deviation)从而避免程序设计偏离领域模型</li>
+ * <li>the architecture of an existing system is recovered from extracted source code artifacts，代码成为活文档</li>
+ * <li>建模是将混沌的事物抽象成有序关联事物的过程，混沌到有序</li>
+ * <li>它可以极大简化大家对复杂事物的认识，让人能在短时间内有全局视野看清楚业务，而且建模是用面向对象的思维分析事物，也容易转化成可视化的类图</li>
+ * <li>通过对比逆向领域模型与正向领域模型, 以快速发现二者的分歧(deviation)从而避免程序设计偏离领域模型/系统腐化</li>
  * <li>围绕抽象程序设计得到的领域模型展开知识消化, 减少其对代码实现细节的依赖, 从而加速知识消化过程</li>
  * </ol>
  * <pre>
@@ -42,7 +48,7 @@
  *      <li>误用：可识别</li>
  *  </ul>
  * </li>
- * <li>唯一事实真相：代码特征(事实真相(哪怕它是错的)，有妥协，自我修复，完整追溯)
+ * <li>业务的唯一事实真相：代码特征(可运行，包含完全细节，演进过程完整追溯，自我修复)
  *  <ul>
  *     <li>{@code DDD}是靠{@code Building Blocks}统一了(业务模型，代码)：代码直接映射业务概念，{@code DDDplus}补充了该{@code Building Blocks}</li>
  *     <li>代码级配置：(yaml, properties, dynamic config center)</li>

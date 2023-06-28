@@ -5,6 +5,7 @@
  */
 package io.github.dddplus.ast.model;
 
+import io.github.dddplus.ast.algorithm.KMeans;
 import io.github.dddplus.dsl.KeyElement;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +22,7 @@ public class KeyModelEntry {
     private final String className;
     @Setter
     private String javadoc;
+
     private final Map<KeyElement.Type, List<KeyPropertyEntry>> properties;
 
     private transient List<KeyBehaviorEntry> keyBehaviorEntries = new ArrayList<>();
@@ -127,7 +129,7 @@ public class KeyModelEntry {
         }
 
         StringJoiner joiner = new StringJoiner(" ");
-        for (KeyElement.Type t: types) {
+        for (KeyElement.Type t : types) {
             joiner.add(t.toString());
         }
         return joiner.toString();
@@ -167,5 +169,44 @@ public class KeyModelEntry {
         }
 
         this.keyFlowEntries.addAll(entries);
+    }
+
+    public List<List<String>> methodClusters() {
+        if (keyBehaviorEntries.size() < 6) {
+            // 太少，没必要聚类分析
+            return null;
+        }
+
+        List<String> methodNames = new ArrayList<>(keyBehaviorEntries.size());
+        for (KeyBehaviorEntry entry : keyBehaviorEntries) {
+            methodNames.add(entry.getMethodName());
+        }
+
+        List<double[]> vectors = new ArrayList<>();
+        Map<String, double[]> vectorMap = new HashMap<>();
+
+        // 将方法名转换为向量
+        int maxLength = -1;
+        for (String methodName : methodNames) {
+            if (methodName.length() > maxLength) {
+                maxLength = methodName.length();
+            }
+        }
+        for (String methodName : methodNames) {
+            double[] vector = new double[maxLength];
+            for (int i = 0; i < methodName.length(); i++) {
+                vector[i] = methodName.charAt(i); // 向量值为ascii
+            }
+            // padding with 0
+            for (int i = methodName.length(); i < maxLength; i++) {
+                vector[i] = 0;
+            }
+            vectors.add(vector);
+            vectorMap.put(methodName, vector);
+        }
+
+        // 使用K-Means算法进行聚类
+        KMeans kMeans = new KMeans();
+        return kMeans.cluster(vectors, methodNames, vectorMap);
     }
 }
