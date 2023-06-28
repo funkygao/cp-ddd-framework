@@ -277,7 +277,7 @@ public class PlantUmlBuilder {
             }
 
             if (!keyModelEntry.undefinedTypes().isEmpty()) {
-                content.append("    __ undefined __").append(NEWLINE);
+                content.append("    __ NotLabeled __").append(NEWLINE);
                 content.append("    {field} ").append(keyModelEntry.displayUndefinedTypes()).append(NEWLINE);
             }
         }
