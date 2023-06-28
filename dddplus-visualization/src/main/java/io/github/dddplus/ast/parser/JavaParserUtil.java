@@ -11,6 +11,7 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.comments.Comment;
+import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 
 /**
@@ -63,18 +64,25 @@ public final class JavaParserUtil {
         return false;
     }
 
-    public static String javadocFirstLineOf(FieldDeclaration fieldDeclaration) {
-        if (!fieldDeclaration.getComment().isPresent()) {
-            return BLANK;
+    static String extractJavadocContent(Comment comment) {
+        if (comment instanceof LineComment) {
+            return comment.getContent().split("\n")[0].replace("/", "").trim();
         }
 
-        final Comment comment = fieldDeclaration.getComment().get();
         final String commentContent = comment.getContent();
         String info = commentContent.split("\n")[1].replace("*", "").trim();
         if (info.startsWith("@") || info.startsWith("{@")) {
             return BLANK;
         }
         return info;
+    }
+
+    public static String javadocFirstLineOf(FieldDeclaration fieldDeclaration) {
+        if (!fieldDeclaration.getComment().isPresent()) {
+            return BLANK;
+        }
+
+        return extractJavadocContent(fieldDeclaration.getComment().get());
     }
 
     public static String javadocFirstLineOf(MethodDeclaration methodDeclaration) {
@@ -82,21 +90,7 @@ public final class JavaParserUtil {
             return BLANK;
         }
 
-        final Comment comment = methodDeclaration.getComment().get();
-        if (!"JavadocComment".equals(comment.getClass().getSimpleName()) || comment.getContent().isEmpty()) {
-            // respect javadoc only
-            return BLANK;
-        }
-
-        final String commentContent = comment.getContent();
-        // 取注释的第一句话
-        String info = commentContent.split("\n")[1].replace("*", "").trim();
-        if (info.startsWith("@") || info.startsWith("{@")) {
-            // javadoc上没有写方法描述，直接就写 @return 或 @param 等
-            // {@inheritDoc}
-            return BLANK;
-        }
-        return info;
+        return extractJavadocContent(methodDeclaration.getComment().get());
     }
 
     public static String javadocFirstLineOf(ClassOrInterfaceDeclaration classOrInterfaceDeclaration) {
@@ -104,23 +98,6 @@ public final class JavaParserUtil {
             return BLANK;
         }
 
-        final Comment comment = classOrInterfaceDeclaration.getComment().get();
-        if (!"JavadocComment".equals(comment.getClass().getSimpleName()) || comment.getContent().isEmpty()) {
-            // respect javadoc only
-            return BLANK;
-        }
-
-        final String commentContent = comment.getContent();
-        // 取注释的第一句话
-        String info = commentContent.split("\n")[1].replace("*", "").trim();
-        // 由于IDEA有热键自动生成javadoc，里面自动携带类名：冗余信息，统统去掉
-        info = info.replaceAll(classOrInterfaceDeclaration.getNameAsString(), "").trim();
-        if (info.startsWith("@") || info.startsWith("{@")) {
-            // javadoc上没有写方法描述，直接就写 @return 或 @param 等
-            // {@inheritDoc}
-            return BLANK;
-        }
-
-        return info;
+        return extractJavadocContent(classOrInterfaceDeclaration.getComment().get());
     }
 }
