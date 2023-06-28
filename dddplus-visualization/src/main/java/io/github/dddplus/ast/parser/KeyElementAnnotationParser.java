@@ -103,7 +103,7 @@ public class KeyElementAnnotationParser {
 
     @AllArgsConstructor
     @Getter
-    public static class RelationToClazz {
+    static class RelationToClazz {
         private String relationType;
         private String rightClass;
     }
