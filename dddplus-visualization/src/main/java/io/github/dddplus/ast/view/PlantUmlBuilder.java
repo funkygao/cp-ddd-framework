@@ -531,6 +531,21 @@ public class PlantUmlBuilder {
         return this;
     }
 
+    public PlantUmlBuilder skinParamPolyline() {
+        this.skinParam("linetype polyline");
+        return this;
+    }
+
+    public PlantUmlBuilder skinParamOrtholine() {
+        this.skinParam("linetype ortho");
+        return this;
+    }
+
+    public PlantUmlBuilder skipParamHandWrittenStyle() {
+        this.skinParam("handwritten true");
+        return this;
+    }
+
     public PlantUmlBuilder title(String title) {
         this.title = title;
         return this;
