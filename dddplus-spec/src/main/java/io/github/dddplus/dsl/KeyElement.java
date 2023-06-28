@@ -32,7 +32,7 @@ import java.lang.annotation.*;
 public @interface KeyElement {
 
     /**
-     * 该要素的归类.
+     * 该属性属于哪些分类.
      */
     Type[] types();
 
@@ -46,6 +46,14 @@ public @interface KeyElement {
     String name() default "";
 
     /**
+     * 该属性的名称是否根据类型来命名: 默认byName.
+     *
+     * <p>{@code String sku}，这样的属性是不能按类型来命名的: 无区分度</p>
+     * <p>{@code OrderLine orderLine}，这样的属性适合{@code byType = true}</p>
+     */
+    boolean byType() default false;
+
+    /**
      * 补充说明.
      */
     String remark() default "";
@@ -53,7 +61,7 @@ public @interface KeyElement {
     /**
      * 业务属性的分类.
      *
-     * <p>分类，容易让我们更接近问题本质.</p>
+     * <p>分类，容易让我们更接近问题本质：分类是人类最重要的认知.</p>
      */
     enum Type {
 
