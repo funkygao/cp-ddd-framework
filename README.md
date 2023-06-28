@@ -81,7 +81,10 @@ class ReverseModelingTest {
                         .analyze();
         new PlantUmlBuilder()
             .build(model)
-            .renderSvg("model.svg");
+            .renderSvg("model.svg"); // read-only searchable graph
+        new PlainTextBuilder()
+            .build(domainModel)
+            .render("model.txt"); // mutable, integrated with forward modeling design process
     }
 }
 ```
