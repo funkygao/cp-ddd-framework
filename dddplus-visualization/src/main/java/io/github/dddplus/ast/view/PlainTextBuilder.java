@@ -152,7 +152,7 @@ public class PlainTextBuilder {
     }
 
     private PlainTextBuilder writeKeyUsecaseClazzDefinition(String actor) {
-        append(actor);
+        append(actor).append(NEWLINE);
         for (KeyUsecaseEntry entry : model.getKeyUsecaseReport().actorKeyUsecases(actor)) {
             append(TAB);
             if (!entry.displayOut().isEmpty()) {
@@ -171,9 +171,9 @@ public class PlainTextBuilder {
     }
 
     private PlainTextBuilder addKeyUsecases() {
-        append("<<交互>>").append(NEWLINE);
+        append("<<用户交互>>").append(NEWLINE);
         for (String actor : model.getKeyUsecaseReport().getData().keySet()) {
-            append(TAB).writeKeyUsecaseClazzDefinition(actor).append(NEWLINE);
+            writeKeyUsecaseClazzDefinition(actor);
         }
         return this;
     }

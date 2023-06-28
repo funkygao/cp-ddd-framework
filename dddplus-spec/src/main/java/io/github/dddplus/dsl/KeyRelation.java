@@ -8,7 +8,7 @@ package io.github.dddplus.dsl;
 import java.lang.annotation.*;
 
 /**
- * 实体间关系.
+ * 业务对象间关系.
  *
  * <p>使用时，单向标注即可</p>
  * <p>Example:</p>
@@ -40,6 +40,9 @@ public @interface KeyRelation {
 
     String remark() default "";
 
+    /**
+     * 业务对象间关系的分类.
+     */
     enum Type {
         /**
          * 非此即彼.

@@ -11,6 +11,7 @@ import java.lang.annotation.*;
  * DO NOT use this annotation.
  *
  * <p>It exists just because of Java grammar constraints.</p>
+ * @deprecated 不要直接使用.
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.SOURCE)
