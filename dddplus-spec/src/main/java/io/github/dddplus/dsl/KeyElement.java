@@ -50,6 +50,11 @@ public @interface KeyElement {
      */
     String remark() default "";
 
+    /**
+     * 业务属性的分类.
+     *
+     * <p>分类，容易让我们更接近问题本质.</p>
+     */
     enum Type {
 
         /**

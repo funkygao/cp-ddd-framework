@@ -32,6 +32,9 @@ public @interface KeyEvent {
      */
     String remark() default "";
 
+    /**
+     * 领域事件在技术视角的分类.
+     */
     enum Type {
         /**
          * 基于内存本地事件.
