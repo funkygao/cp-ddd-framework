@@ -16,8 +16,14 @@ public class PlainTextBuilder {
     private static final String TAB = SPACE + SPACE + SPACE;
     private static final String NEWLINE = System.getProperty("line.separator");
 
+    private boolean clustering = false;
     private final StringBuilder content = new StringBuilder();
     private ReverseEngineeringModel model;
+
+    public PlainTextBuilder clustering() {
+        this.clustering = true;
+        return this;
+    }
 
     public PlainTextBuilder build(ReverseEngineeringModel model) {
         this.model = model;
@@ -128,14 +134,16 @@ public class PlainTextBuilder {
                 }
             }
 
-            List<List<String>> clusters = keyModelEntry.methodClusters();
-            if (clusters != null) {
-                append(TAB).append("[聚类]").append(NEWLINE);
-                for (int i = 0; i < clusters.size(); i++) {
-                    if (clusters.get(i).isEmpty()) {
-                        continue;
+            if (clustering) {
+                List<List<String>> clusters = keyModelEntry.methodClusters();
+                if (clusters != null) {
+                    append(TAB).append("[聚类]").append(NEWLINE);
+                    for (int i = 0; i < clusters.size(); i++) {
+                        if (clusters.get(i).isEmpty()) {
+                            continue;
+                        }
+                        append(TAB).append(TAB).append(clusters.get(i).toString()).append(NEWLINE);
                     }
-                    append(TAB).append(TAB).append(clusters.get(i).toString()).append(NEWLINE);
                 }
             }
         }
