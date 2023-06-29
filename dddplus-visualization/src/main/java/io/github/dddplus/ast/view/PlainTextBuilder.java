@@ -18,6 +18,7 @@ public class PlainTextBuilder {
     private static final String NEWLINE = System.getProperty("line.separator");
 
     private boolean clustering = false;
+    private boolean showNotLabeledElements = false;
     private final StringBuilder content = new StringBuilder();
     private ReverseEngineeringModel model;
 
@@ -90,7 +91,7 @@ public class PlainTextBuilder {
                         .append(NEWLINE);
             }
 
-            if (!keyModelEntry.undefinedTypes().isEmpty()) {
+            if (this.showNotLabeledElements && !keyModelEntry.undefinedTypes().isEmpty()) {
                 append(TAB)
                         .append(String.format("%-13s %s", "-NotLabeled-", keyModelEntry.displayUndefinedTypes()))
                         .append(NEWLINE);
@@ -176,6 +177,11 @@ public class PlainTextBuilder {
                     .append(entry.getJavadoc())
                     .append(NEWLINE);
         }
+        return this;
+    }
+
+    public PlainTextBuilder showNotLabeledElements() {
+        this.showNotLabeledElements = true;
         return this;
     }
 
