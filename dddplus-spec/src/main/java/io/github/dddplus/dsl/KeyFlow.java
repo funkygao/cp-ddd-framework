@@ -8,7 +8,7 @@ package io.github.dddplus.dsl;
 import java.lang.annotation.*;
 
 /**
- * 关键业务逻辑流程，也可以理解为{@code KeyService}.
+ * 关键业务逻辑流程，也可以理解为{@code KeyService}的某个方法.
  *
  * <p>Example:</p>
  * <pre>

@@ -11,6 +11,9 @@ import lombok.Data;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 聚合/模块的分析报告.
+ */
 @Data
 public class AggregateReport {
     private List<AggregateEntry> aggregateEntries = new ArrayList<>();

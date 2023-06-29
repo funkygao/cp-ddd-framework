@@ -16,7 +16,6 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.SOURCE)
 @Documented
-@Deprecated
 public @interface KeyRelations {
     KeyRelation[] value();
 }

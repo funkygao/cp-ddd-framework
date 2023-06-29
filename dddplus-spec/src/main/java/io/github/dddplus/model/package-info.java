@@ -4,7 +4,7 @@
  * Licensed under the Apache License version 2.0, available at http://www.apache.org/licenses/LICENSE-2.0
  */
 /**
- * 业务中台统一输出的DDD领域模型规范.
+ * DDD patched building blocks.
  *
  * <p>软件开发的核心难点，就是处理隐藏在业务知识中的核心复杂度，除了清晰地理解业务诉求之外，还需要通过建模的方式对这种复杂度进行简化与精炼.</p>
  * <p>数据量大导致性能慢、高并发等问题，不是核心复杂性，只是阶段性问题.</p>

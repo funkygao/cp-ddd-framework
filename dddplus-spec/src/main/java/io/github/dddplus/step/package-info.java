@@ -4,8 +4,8 @@
  * Licensed under the Apache License version 2.0, available at http://www.apache.org/licenses/LICENSE-2.0
  */
 /**
- * 领域步骤体系规范.
+ * Business logic orchestrated dynamic step.
  *
- * @deprecated 
+ * @deprecated 业务逻辑编排建议采用专用框架 e,g. LiteFlow
  */
 package io.github.dddplus.step;

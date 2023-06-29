@@ -3,6 +3,7 @@ package io.github.dddplus.ast.view;
 import io.github.dddplus.ast.ReverseEngineeringModel;
 import io.github.dddplus.ast.model.*;
 import io.github.dddplus.ast.report.CoverageReport;
+import io.github.dddplus.ast.report.ModelDebtReport;
 import io.github.dddplus.dsl.KeyElement;
 
 import java.io.BufferedWriter;
@@ -29,6 +30,7 @@ public class PlainTextBuilder {
         this.model = model;
 
         appendCoverage();
+        appendModelDebt();
         model.aggregates().forEach(a -> addAggregate(a));
         addKeyUsecases();
         addOrphanKeyFlows();
@@ -42,6 +44,13 @@ public class PlainTextBuilder {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.append(content);
         }
+    }
+
+    private PlainTextBuilder appendModelDebt() {
+        ModelDebtReport report = model.getModelDebtReport();
+        append("模型债：");
+        append(NEWLINE);
+        return this;
     }
 
     private PlainTextBuilder appendCoverage() {

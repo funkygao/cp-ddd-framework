@@ -8,7 +8,7 @@ package io.github.dddplus.dsl;
 import java.lang.annotation.*;
 
 /**
- * 业务对象的关键行为.
+ * 业务对象的关键行为，只隶属于当前对象.
  *
  * <p>业务方可感知的行为.</p>
  * <p>vs {@link KeyFlow}：后者可以通过{@link KeyFlow#actor()}修正绑定到某个业务对象，而{@link KeyBehavior}只能标注到当前业务对象.</p>

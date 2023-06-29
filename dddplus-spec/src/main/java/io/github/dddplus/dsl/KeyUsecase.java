@@ -8,9 +8,9 @@ package io.github.dddplus.dsl;
 import java.lang.annotation.*;
 
 /**
- * 关键业务用例.
+ * 关键业务用例：(用户, 系统)交互入口.
  *
- * <p>业务的核心入口，常用于：Controller/ApplicationService/MQ Consumer.</p>
+ * <p>业务的核心入口，常用于：Controller/ApplicationService/MQ Consumer/Job/Worker.</p>
  * <p>Example:</p>
  * <pre>
  * {@code
