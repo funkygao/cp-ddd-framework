@@ -59,6 +59,7 @@ public class PlantUmlBuilder {
     private Direction direction;
     private Set<String> skinParams = new HashSet<>();
     private Set<String> notes = new TreeSet<>();
+    private boolean showNotLabeledElements = false;
 
     public PlantUmlBuilder() {
         connections = new HashMap<>();
@@ -84,6 +85,11 @@ public class PlantUmlBuilder {
         if (!lineDefined) {
             throw new RuntimeException("KeyRelation.Type missing line definition");
         }
+    }
+
+    public PlantUmlBuilder showNotLabeledElements() {
+        this.showNotLabeledElements = true;
+        return this;
     }
 
     public String umlContent() {
@@ -291,7 +297,7 @@ public class PlantUmlBuilder {
                 content.append("    {field} ").append(keyModelEntry.displayFieldByType(type)).append(NEWLINE);
             }
 
-            if (!keyModelEntry.undefinedTypes().isEmpty()) {
+            if (showNotLabeledElements && !keyModelEntry.undefinedTypes().isEmpty()) {
                 content.append("    __ NotLabeled __").append(NEWLINE);
                 content.append("    {field} ").append(keyModelEntry.displayUndefinedTypes()).append(NEWLINE);
             }
