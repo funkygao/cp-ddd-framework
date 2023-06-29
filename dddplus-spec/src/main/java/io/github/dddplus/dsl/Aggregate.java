@@ -11,7 +11,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 聚合，边界.
+ * 聚合，非DDD项目可以理解为模块.
  *
  * <p>Applied on package-info.java.</p>
  * <p>Example:</p>

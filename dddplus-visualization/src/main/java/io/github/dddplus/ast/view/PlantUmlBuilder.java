@@ -277,7 +277,7 @@ public class PlantUmlBuilder {
             }
 
             if (!keyModelEntry.undefinedTypes().isEmpty()) {
-                content.append("    __ undefined __").append(NEWLINE);
+                content.append("    __ NotLabeled __").append(NEWLINE);
                 content.append("    {field} ").append(keyModelEntry.displayUndefinedTypes()).append(NEWLINE);
             }
         }
@@ -528,6 +528,21 @@ public class PlantUmlBuilder {
      */
     public PlantUmlBuilder skinParam(String skinParam) {
         this.skinParams.add(skinParam);
+        return this;
+    }
+
+    public PlantUmlBuilder skinParamPolyline() {
+        this.skinParam("linetype polyline");
+        return this;
+    }
+
+    public PlantUmlBuilder skinParamOrtholine() {
+        this.skinParam("linetype ortho");
+        return this;
+    }
+
+    public PlantUmlBuilder skipParamHandWrittenStyle() {
+        this.skinParam("handwritten true");
         return this;
     }
 

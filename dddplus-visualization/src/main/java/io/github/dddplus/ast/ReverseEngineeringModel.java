@@ -12,7 +12,7 @@ import java.util.*;
 /**
  * 逆向模型.
  *
- * <p>模型与程序语言主要的区别不在于图形化，也不在于抽象的程度，而在于表达方式突破了程序设计语言“单一顺序”的限制，模型可以更容易和直接地表达复杂的结构.</p>
+ * <p>模型与程序语言主要的区别不在于图形化，也不在于抽象的程度，而在于表达方式突破了程序设计语言“单一顺序/一维”的限制，模型可以更容易和直接地表达复杂的多维结构.</p>
  * <pre>
  * RelationEntry
  * KeyEventEntry
@@ -35,6 +35,8 @@ public class ReverseEngineeringModel {
     private KeyUsecaseReport keyUsecaseReport = new KeyUsecaseReport();
     private KeyRelationReport keyRelationReport = new KeyRelationReport();
     private ClassMethodReport classMethodReport = new ClassMethodReport();
+    private ModelDebtReport modelDebtReport = new ModelDebtReport(this);
+
 
     public List<SimilarityEntry> sortedSimilarities() {
         Collections.sort(similarities, Comparator.comparing(SimilarityEntry::getSimilarity));

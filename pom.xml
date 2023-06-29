@@ -111,7 +111,7 @@ under the License.
                             <packages>io.github.dddplus.model*:io.github.dddplus.buddy*:io.github.dddplus.step</packages>
                         </group>
                         <group>
-                            <title>Reverse Modeling</title>
+                            <title>Domain Knowledge Reverse Modeling</title>
                             <packages>io.github.dddplus.ast*:io.github.dddplus.dsl</packages>
                         </group>
                         <group>

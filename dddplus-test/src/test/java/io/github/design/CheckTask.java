@@ -46,7 +46,7 @@ public class CheckTask implements IAggregateRoot, IUnboundedDomainModel {
     /**
      * here we go for status.
      */
-    @KeyElement(types = KeyElement.Type.Lifecycle, name = "theStatus")
+    @KeyElement(types = KeyElement.Type.Lifecycle, name = "theStatus", byType = true)
     private CheckTaskStatus status;
 
     @KeyElement(types = KeyElement.Type.Lifecycle)

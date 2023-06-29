@@ -3,7 +3,7 @@ package io.github.dddplus.ast.algorithm;
 import io.github.dddplus.ast.model.KeyModelEntry;
 
 /**
- * 两个领域模型关键要素的相似度分析.
+ * 两个业务对象关键要素的相似度分析.
  */
 public interface IKeyModelSimilarity {
 

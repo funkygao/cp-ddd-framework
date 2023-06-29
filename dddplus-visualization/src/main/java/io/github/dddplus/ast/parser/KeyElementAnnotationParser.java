@@ -59,6 +59,12 @@ public class KeyElementAnnotationParser {
                         types.add(KeyElement.Type.valueOf(typeStr));
                     }
                     break;
+
+                case "byType":
+                    // we assume 'if byType is specified it is always true'
+                    // will overwrite `name`
+                    entry.setName(fieldDeclaration.getElementType().asString());
+                    break;
             }
         }
 
