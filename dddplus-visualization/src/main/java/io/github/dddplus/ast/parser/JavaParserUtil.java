@@ -70,7 +70,12 @@ public final class JavaParserUtil {
         }
 
         final String commentContent = comment.getContent();
-        String info = commentContent.split("\n")[1].replace("*", "").trim();
+        String[] lines = commentContent.split("\n");
+        int idx = 1;
+        if (lines.length == 1) {
+            idx = 0;
+        }
+        String info = lines[idx].replace("*", "").trim();
         if (info.startsWith("@") || info.startsWith("{@")) {
             return BLANK;
         }
