@@ -52,6 +52,8 @@ class DomainModelAnalyzerTest {
                 .header("header")
                 .footer("footer")
                 .title("title")
+                .appendNote("abc")
+                .appendNote("dc")
                 .skinParam("ranksep 150")
                 .direction(PlantUmlBuilder.Direction.LeftToRight)
                 .build(model);
@@ -75,8 +77,11 @@ class DomainModelAnalyzerTest {
         DomainModelAnalyzer analyzer = new DomainModelAnalyzer();
         analyzer.scan(moduleRoot("dddplus-test"));
         ReverseEngineeringModel model = analyzer.analyze((level, path, file) -> path.contains("design"));
-        PlantUmlBuilder pb = new PlantUmlBuilder();
-        pb.build(model).renderSvg("../test.svg");
+        new PlantUmlBuilder()
+                .appendNote("abc")
+                .appendNote("dc")
+                .skipParamHandWrittenStyle()
+                .build(model).renderSvg("../test.svg");
     }
 
     static File moduleRoot(String module) throws IOException {

@@ -58,6 +58,8 @@ public class PlantUmlBuilder {
     private String title;
     private Direction direction;
     private Set<String> skinParams = new HashSet<>();
+    private Set<String> notes = new TreeSet<>();
+    private boolean showNotLabeledElements = false;
 
     public PlantUmlBuilder() {
         connections = new HashMap<>();
@@ -85,6 +87,11 @@ public class PlantUmlBuilder {
         }
     }
 
+    public PlantUmlBuilder showNotLabeledElements() {
+        this.showNotLabeledElements = true;
+        return this;
+    }
+
     public String umlContent() {
         if (model == null) {
             throw new IllegalArgumentException("call build before this");
@@ -104,6 +111,7 @@ public class PlantUmlBuilder {
         start().appendDirection().appendSkinParam().appendTitle().appendHeader();
 
         //addClassMethodReport();
+        addNotes();
 
         model.aggregates().forEach(a -> addAggregate(a));
         //addSimilarities();
@@ -124,6 +132,19 @@ public class PlantUmlBuilder {
             os.writeTo(outputStream);
             os.close();
         }
+    }
+
+    private PlantUmlBuilder addNotes() {
+        if (notes.isEmpty()) {
+            return this;
+        }
+
+        append("note as Legend").append(NEWLINE);
+        for (String note : notes) {
+            append(TAB).append(note).append(NEWLINE);
+        }
+        append("end note").append(NEWLINE).append(NEWLINE);
+        return this;
     }
 
     private PlantUmlBuilder addClassMethodReport() {
@@ -276,7 +297,7 @@ public class PlantUmlBuilder {
                 content.append("    {field} ").append(keyModelEntry.displayFieldByType(type)).append(NEWLINE);
             }
 
-            if (!keyModelEntry.undefinedTypes().isEmpty()) {
+            if (showNotLabeledElements && !keyModelEntry.undefinedTypes().isEmpty()) {
                 content.append("    __ NotLabeled __").append(NEWLINE);
                 content.append("    {field} ").append(keyModelEntry.displayUndefinedTypes()).append(NEWLINE);
             }
@@ -365,6 +386,11 @@ public class PlantUmlBuilder {
         append(String.format("字段属性：%d，标注：%d，覆盖率：%.1f%%", report.getPropertyN(), report.getAnnotatedPropertyN(), report.propertyCoverage()));
         append(NEWLINE);
         append("endheader").append(NEWLINE).append(NEWLINE);
+        return this;
+    }
+
+    public PlantUmlBuilder appendNote(String note) {
+        notes.add(note);
         return this;
     }
 
