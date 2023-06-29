@@ -39,13 +39,13 @@ class KeyFlowAstNodeVisitor extends VoidVisitorAdapter<KeyFlowReport> {
 
         for (String annotation : ignoredAnnotations) {
             if (methodDeclaration.isAnnotationPresent(annotation)) {
-                System.out.printf("WARN: @KeyFlow used on %s %s\n", annotation, methodDeclaration.getNameAsString());
+                System.out.printf("SKIP: @KeyFlow used on %s %s\n", annotation, methodDeclaration.getNameAsString());
                 return;
             }
         }
 
         if (methodDeclaration.isAnnotationPresent(Deprecated.class)) {
-            System.out.printf("WARN: @KeyFlow used on Deprecated %s\n", methodDeclaration.getNameAsString());
+            System.out.printf("SKIP: @KeyFlow used on Deprecated %s\n", methodDeclaration.getNameAsString());
             return;
         }
 

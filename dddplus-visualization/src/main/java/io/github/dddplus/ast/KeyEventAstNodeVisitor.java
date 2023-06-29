@@ -24,7 +24,7 @@ class KeyEventAstNodeVisitor extends VoidVisitorAdapter<KeyEventReport> {
         }
 
         if (classDeclaration.isAnnotationPresent(Deprecated.class)) {
-            System.out.printf("WARN: @KeyEvent used on Deprecated %s\n", classDeclaration.getNameAsString());
+            System.out.printf("SKIP: @KeyEvent used on Deprecated %s\n", classDeclaration.getNameAsString());
             return;
         }
 

@@ -37,13 +37,13 @@ class KeyElementAstNodeVisitor extends VoidVisitorAdapter<KeyModelReport> {
         }
 
         if (fieldDeclaration.isAnnotationPresent(Deprecated.class)) {
-            System.out.printf("WARN: @KeyElement used on Deprecated %s\n", fieldDeclaration.getVariable(0).getNameAsString());
+            System.out.printf("SKIP: @KeyElement used on Deprecated %s\n", fieldDeclaration.getVariable(0).getNameAsString());
             return;
         }
 
         for (String annotation : ignoredAnnotations) {
             if (fieldDeclaration.isAnnotationPresent(annotation)) {
-                System.out.printf("WARN: @KeyElement used on %s %s\n", annotation, fieldDeclaration.getVariable(0).getNameAsString());
+                System.out.printf("SKIP: @KeyElement used on %s %s\n", annotation, fieldDeclaration.getVariable(0).getNameAsString());
                 return;
             }
         }
