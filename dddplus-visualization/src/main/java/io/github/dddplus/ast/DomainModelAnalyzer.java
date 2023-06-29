@@ -16,9 +16,15 @@ public class DomainModelAnalyzer {
     private File[] dirs;
     private double similarityThreshold = 25; // 25%
     private Set<String> ignoredAnnotations = new HashSet<>(); // in simpleName
+    private boolean rawSimilarity = false;
 
     public DomainModelAnalyzer scan(File... dirs) {
         this.dirs = dirs;
+        return this;
+    }
+
+    public DomainModelAnalyzer rawSimilarity() {
+        this.rawSimilarity = true;
         return this;
     }
 
@@ -59,7 +65,7 @@ public class DomainModelAnalyzer {
 
             // key element
             new FileWalker(actualFilter, (level, path, file) -> {
-                new KeyElementAstNodeVisitor(ignoredAnnotations).visit(FileWalker.silentParse(file), model.getKeyModelReport());
+                new KeyElementAstNodeVisitor(rawSimilarity, ignoredAnnotations).visit(FileWalker.silentParse(file), model.getKeyModelReport());
             }).walkFrom(dir);
 
             // key behavior
@@ -111,6 +117,27 @@ public class DomainModelAnalyzer {
                         .similarity(similarity)
                         .build();
                 model.addSimilarityEntry(entry);
+            }
+        }
+
+        if (rawSimilarity) {
+            List<KeyModelEntry> rawModels = new ArrayList<>(model.getKeyModelReport().getRawModels().values());
+            for (int i = 0; i < rawModels.size(); i++) {
+                for (int j = i + 1; j < rawModels.size(); j++) {
+                    KeyModelEntry model1 = rawModels.get(i);
+                    KeyModelEntry model2 = rawModels.get(j);
+                    double similarity = similarityAnalyzer.rawModelSimilarity(model1, model2);
+                    if (similarity < similarityThreshold) {
+                        continue;
+                    }
+
+                    SimilarityEntry entry = SimilarityEntry.builder()
+                            .leftClass(model1.getClassName())
+                            .rightClass(model2.getClassName())
+                            .similarity(similarity)
+                            .build();
+                    model.addRawSimilarityEntry(entry);
+                }
             }
         }
 

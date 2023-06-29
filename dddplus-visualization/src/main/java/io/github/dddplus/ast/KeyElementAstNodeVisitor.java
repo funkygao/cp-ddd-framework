@@ -23,14 +23,20 @@ import java.util.Set;
 
 class KeyElementAstNodeVisitor extends VoidVisitorAdapter<KeyModelReport> {
     private final Set<String> ignoredAnnotations;
+    private final boolean parseRawModel;
 
-    public KeyElementAstNodeVisitor(Set<String> ignoredAnnotations) {
+    public KeyElementAstNodeVisitor(boolean parseRawModel, Set<String> ignoredAnnotations) {
+        this.parseRawModel = parseRawModel;
         this.ignoredAnnotations = ignoredAnnotations;
     }
 
     @Override
     public void visit(final FieldDeclaration fieldDeclaration, final KeyModelReport report) {
         super.visit(fieldDeclaration, report);
+
+        if (parseRawModel) {
+            parseRawModel(fieldDeclaration, report);
+        }
 
         if (!fieldDeclaration.isAnnotationPresent(KeyElement.class)) {
             return;
@@ -53,7 +59,6 @@ class KeyElementAstNodeVisitor extends VoidVisitorAdapter<KeyModelReport> {
             return;
         }
 
-
         final String packageName = JavaParserUtil.packageName(parentClass);
         final String className = parentClass.getNameAsString();
         KeyModelEntry entry = report.getOrCreateKeyModelEntryForActor(className);
@@ -70,5 +75,17 @@ class KeyElementAstNodeVisitor extends VoidVisitorAdapter<KeyModelReport> {
         if (relationEntry.isPresent()) {
             report.getModel().getKeyRelationReport().add(relationEntry.get());
         }
+    }
+
+    private void parseRawModel(final FieldDeclaration fieldDeclaration, final KeyModelReport report) {
+        ClassOrInterfaceDeclaration parentClass = JavaParserUtil.getClass(fieldDeclaration.getParentNode().get());
+        if (parentClass == null) {
+            return;
+        }
+
+        final String className = parentClass.getNameAsString();
+        final String fieldName = fieldDeclaration.getVariable(0).getNameAsString();
+        KeyModelEntry entry = report.getOrCreateRawModelEntry(className);
+        entry.addRawField(fieldName);
     }
 }

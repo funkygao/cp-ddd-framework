@@ -21,6 +21,11 @@ public class JaccardModelSimilarity implements IKeyModelSimilarity {
         return (s1 * StructuralWeight + s2 * (1 - StructuralWeight)) * 100; // in percentage
     }
 
+    public double rawModelSimilarity(KeyModelEntry model1, KeyModelEntry model2) {
+        return jaccardSimilarity(model1.getRawFields(), model2.getRawFields());
+    }
+
+
     private double jaccardSimilarity(Set<String> set1, Set<String> set2) {
         Set<String> intersection = new HashSet<>(set1);
         intersection.retainAll(set2);

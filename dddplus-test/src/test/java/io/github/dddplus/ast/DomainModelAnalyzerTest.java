@@ -64,10 +64,13 @@ class DomainModelAnalyzerTest {
     @Test
     void renderText() throws IOException {
         DomainModelAnalyzer analyzer = new DomainModelAnalyzer();
-        analyzer.scan(moduleRoot("dddplus-test"));
+        analyzer.rawSimilarity()
+                .similarityThreshold(0)
+                .scan(moduleRoot("dddplus-test"));
         ReverseEngineeringModel model = analyzer.analyze((level, path, file) -> path.contains("design"));
-        PlainTextBuilder pb = new PlainTextBuilder();
-        pb.build(model)
+        new PlainTextBuilder()
+                .build(model)
+                .showRawSimilarities()
                 .render("../model.txt");
     }
 
