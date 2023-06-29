@@ -25,6 +25,9 @@ class JavaParserUtilTest {
                 " */";
         comment.setContent(content);
         assertEquals(JavaParserUtil.extractJavadocContent(comment), "Java AST Node 工具.");
+
+        comment.setContent(" 单号");
+        assertEquals(JavaParserUtil.extractJavadocContent(comment), "单号");
     }
 
 }
