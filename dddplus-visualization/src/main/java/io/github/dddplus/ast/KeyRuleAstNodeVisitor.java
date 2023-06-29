@@ -51,13 +51,13 @@ class KeyRuleAstNodeVisitor extends VoidVisitorAdapter<KeyRuleReport> {
         }
 
         if (methodDeclaration.isAnnotationPresent(Deprecated.class)) {
-            System.out.printf("WARN: @KeyRule used on Deprecated %s\n", methodDeclaration.getNameAsString());
+            System.out.printf("SKIP: @KeyRule used on Deprecated %s\n", methodDeclaration.getNameAsString());
             return;
         }
 
         for (String annotation : ignoredAnnotations) {
             if (methodDeclaration.isAnnotationPresent(annotation)) {
-                System.out.printf("WARN: @KeyRule used on %s %s\n", annotation, methodDeclaration.getNameAsString());
+                System.out.printf("SKIP: @KeyRule used on %s %s\n", annotation, methodDeclaration.getNameAsString());
                 return;
             }
         }

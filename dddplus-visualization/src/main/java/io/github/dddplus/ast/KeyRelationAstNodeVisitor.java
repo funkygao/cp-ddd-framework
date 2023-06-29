@@ -24,7 +24,7 @@ class KeyRelationAstNodeVisitor extends VoidVisitorAdapter<KeyRelationReport> {
         }
 
         if (classDeclaration.isAnnotationPresent(Deprecated.class)) {
-            System.out.printf("WARN: @KeyRelation used on Deprecated %s\n", classDeclaration.getNameAsString());
+            System.out.printf("SKIP: @KeyRelation used on Deprecated %s\n", classDeclaration.getNameAsString());
             return;
         }
 
