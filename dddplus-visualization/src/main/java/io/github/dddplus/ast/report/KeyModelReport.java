@@ -23,6 +23,9 @@ public class KeyModelReport {
         this.model = model;
     }
 
+    /**
+     * 使用注意：返回的{@link KeyModelEntry#getPackageName()}是空的，需要接下来赋值，否则出报告时NPE.
+     */
     public KeyModelEntry getOrCreateRawModelEntry(String className) {
         if (!rawModels.containsKey(className)) {
             rawModels.put(className, new KeyModelEntry(className));

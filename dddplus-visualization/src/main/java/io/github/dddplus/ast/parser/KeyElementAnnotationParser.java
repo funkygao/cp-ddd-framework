@@ -5,6 +5,7 @@
  */
 package io.github.dddplus.ast.parser;
 
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.MemberValuePair;
@@ -27,11 +28,13 @@ import java.util.regex.Pattern;
 public class KeyElementAnnotationParser {
     private static Pattern pattern = Pattern.compile("(\\w+)<(\\w+)>");
 
+    private final ClassOrInterfaceDeclaration classOrInterfaceDeclaration;
     private final FieldDeclaration fieldDeclaration;
     private final String className;
     private KeyPropertyEntry propertyEntry;
 
-    public KeyElementAnnotationParser(FieldDeclaration fieldDeclaration, String className) {
+    public KeyElementAnnotationParser(ClassOrInterfaceDeclaration classOrInterfaceDeclaration, FieldDeclaration fieldDeclaration, String className) {
+        this.classOrInterfaceDeclaration = classOrInterfaceDeclaration;
         this.fieldDeclaration = fieldDeclaration;
         this.className = className;
     }
@@ -87,6 +90,7 @@ public class KeyElementAnnotationParser {
         KeyRelationEntry entry = new KeyRelationEntry();
         entry.setJavadoc(propertyEntry.getJavadoc());
         entry.setRemark(propertyEntry.getRemark());
+        entry.setLeftClassPackageName(JavaParserUtil.packageName(classOrInterfaceDeclaration));
         entry.setLeftClass(propertyEntry.getClassName());
         entry.setRightClass(typeToClazz.rightClass);
         entry.setType(KeyRelation.Type.valueOf(typeToClazz.relationType));

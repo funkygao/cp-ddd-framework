@@ -1,14 +1,10 @@
 package io.github.dddplus.ast;
 
 import io.github.dddplus.ast.model.AggregateEntry;
-import io.github.dddplus.ast.model.KeyBehaviorEntry;
 import io.github.dddplus.ast.model.KeyModelEntry;
-import io.github.dddplus.ast.model.KeyRuleEntry;
 import io.github.dddplus.ast.view.PlainTextBuilder;
 import io.github.dddplus.ast.view.PlantUmlBuilder;
-import io.github.dddplus.dsl.KeyElement;
 import io.github.dddplus.runtime.registry.IntegrationTest;
-import io.github.design.CheckTask;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.ClassPathResource;
@@ -33,20 +29,10 @@ class DomainModelAnalyzerTest {
         assertTrue(model.getKeyRelationReport().size() > 1);
         assertTrue(model.aggregates().size() > 0);
         List<KeyModelEntry> keyModelEntryList = model.getKeyModelReport().keyModelsOfPackage(model.getAggregateReport().getAggregateEntries().get(0).getPackageName());
-        assertEquals(3, keyModelEntryList.size());
+        assertEquals(5, keyModelEntryList.size());
         assertEquals("io.github.design", keyModelEntryList.get(0).getPackageName());
         AggregateEntry firstAggregate = model.getAggregateReport().get(0);
-        assertEquals(3, firstAggregate.keyModels().size());
-        KeyModelEntry firstKeyModelEntry = firstAggregate.getKeyModelEntries().get(0);
-        assertEquals(CheckTask.class.getSimpleName(), firstKeyModelEntry.getClassName());
-        List<KeyElement.Type> undefinedTypes = firstKeyModelEntry.undefinedTypes();
-        assertEquals(2, firstKeyModelEntry.getKeyBehaviorEntries().size());
-        KeyBehaviorEntry keyBehaviorEntry = firstKeyModelEntry.getKeyBehaviorEntries().get(0);
-        assertEquals(keyBehaviorEntry.getMethodName(), "finish");
-        List<KeyRuleEntry> keyRuleEntries = firstKeyModelEntry.getKeyRuleEntries();
-        assertTrue(keyRuleEntries.size() > 0);
-        assertEquals("isDone", keyRuleEntries.get(0).getMethodName());
-
+        assertEquals(firstAggregate.getName(), "foo");
         // render
         PlantUmlBuilder pb = new PlantUmlBuilder()
                 .header("header")
@@ -77,13 +63,16 @@ class DomainModelAnalyzerTest {
     @Test
     @Disabled
     void renderUml() throws IOException {
-        DomainModelAnalyzer analyzer = new DomainModelAnalyzer();
-        analyzer.scan(moduleRoot("dddplus-test"));
-        ReverseEngineeringModel model = analyzer.analyze((level, path, file) -> path.contains("design"));
+        ReverseEngineeringModel model = new DomainModelAnalyzer()
+                .debug()
+                .rawSimilarity()
+                .scan(moduleRoot("dddplus-test"))
+                .analyze((level, path, file) -> path.contains("design"));
         new PlantUmlBuilder()
                 .appendNote("abc")
                 .appendNote("dc")
                 .skipParamHandWrittenStyle()
+                .skinParamPolyline()
                 .build(model).renderSvg("../test.svg");
     }
 

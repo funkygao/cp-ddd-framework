@@ -83,6 +83,10 @@ public class KeyFlowAnnotationParser {
                     result.setArgs(args);
                     break;
 
+                case "async":
+                    result.setAsync(true);
+                    break;
+
                 case "rules":
                     result.setRules(AnnotationFieldParser.arrayFieldValue(memberValuePair));
                     break;

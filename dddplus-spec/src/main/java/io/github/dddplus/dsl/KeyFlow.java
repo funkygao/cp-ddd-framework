@@ -74,4 +74,11 @@ public @interface KeyFlow {
      * 补充说明.
      */
     String remark() default "";
+
+    /**
+     * 该行为执行过程是异步的.
+     *
+     * <p>这意味着内部状态变化可能不实时，可能最终一致.</p>
+     */
+    boolean async() default false;
 }

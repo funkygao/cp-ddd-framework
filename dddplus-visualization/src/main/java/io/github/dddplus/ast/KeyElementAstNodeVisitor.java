@@ -66,7 +66,7 @@ class KeyElementAstNodeVisitor extends VoidVisitorAdapter<KeyModelReport> {
         entry.setPackageName(packageName);
         entry.setJavadoc(JavaParserUtil.javadocFirstLineOf(parentClass)); // TODO performance waste
         AnnotationExpr annotationExpr = fieldDeclaration.getAnnotationByClass(KeyElement.class).get();
-        KeyElementAnnotationParser parser = new KeyElementAnnotationParser(fieldDeclaration, className);
+        KeyElementAnnotationParser parser = new KeyElementAnnotationParser(parentClass, fieldDeclaration, className);
         Map<KeyElement.Type, KeyPropertyEntry> properties = parser.parse(annotationExpr);
         for (KeyElement.Type type : properties.keySet()) {
             entry.addField(type, properties.get(type));
