@@ -10,8 +10,10 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import io.github.dddplus.ast.model.KeyModelEntry;
 import io.github.dddplus.ast.parser.JavaParserUtil;
 import io.github.dddplus.ast.report.ClassMethodReport;
+import io.github.dddplus.dsl.IVirtualModel;
 
 import javax.annotation.Generated;
 import javax.annotation.Resource;
@@ -25,6 +27,21 @@ class ClassMethodDistributionAstNodeVisitor extends VoidVisitorAdapter<ClassMeth
     static {
         ignoredMethodAnnotation.add(Resource.class);
         ignoredClassAnnotation.add(Generated.class); // MapStruct generated mapper impl ignored
+    }
+
+    @Override
+    public void visit(final ClassOrInterfaceDeclaration classDeclaration, final ClassMethodReport report) {
+        super.visit(classDeclaration, report);
+
+        if (!JavaParserUtil.implementsInterface(classDeclaration, IVirtualModel.class)) {
+            return;
+        }
+
+        // 注册该虚拟业务对象到Aggregate
+        KeyModelEntry entry = report.getModel().getKeyModelReport()
+                .getOrCreateKeyModelEntryForActor(classDeclaration.getNameAsString());
+        entry.setPackageName(JavaParserUtil.packageName(classDeclaration));
+        entry.setJavadoc(JavaParserUtil.javadocFirstLineOf(classDeclaration));
     }
 
     public void visit(final FieldDeclaration fieldDeclaration, final ClassMethodReport report) {

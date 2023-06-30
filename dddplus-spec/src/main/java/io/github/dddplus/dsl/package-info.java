@@ -37,6 +37,7 @@
  * <ul>
  *     <li>{@link io.github.dddplus.dsl.KeyRelation}</li>
  *     <li>{@link io.github.dddplus.dsl.KeyEvent}</li>
+ *     <li>{@link io.github.dddplus.dsl.IVirtualModel}</li>
  * </ul>
  * </li>
  * <li>包级：
@@ -44,7 +45,11 @@
  *     <li>{@link io.github.dddplus.dsl.Aggregate}</li>
  * </ul>
  * </li>
- * <li>方法内部：WIP 通过注释</li>
+ * </ul>
+ * <ul>DSL提供的代码模型修正机制：
+ * <li>{@link io.github.dddplus.dsl.KeyElement#name()}，{@link io.github.dddplus.dsl.KeyBehavior#name()}等，修正关键概念名称</li>
+ * <li>{@link io.github.dddplus.dsl.IVirtualModel}，识别关键职责对象</li>
+ * <li>{@link io.github.dddplus.dsl.KeyFlow#actor()}，重新分配行为职责</li>
  * </ul>
  * <p/>
  * <ul>如何评估标注后生成的逆向模型质量？
