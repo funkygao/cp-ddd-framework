@@ -14,6 +14,7 @@ public class KeyRelationEntry {
     private String rightClass;
     private KeyRelation.Type type;
     private String remark;
+    private String leftClassPackageName;
     private String javadoc;
 
     public void setTypeInString(String typeStr) {

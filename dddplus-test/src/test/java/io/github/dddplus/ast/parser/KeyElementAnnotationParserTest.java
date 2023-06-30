@@ -2,15 +2,14 @@ package io.github.dddplus.ast.parser;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class KeyElementAnnotationParserTest {
 
     @Test
     public void keyRelationTypeOf() {
-        KeyElementAnnotationParser parser = new KeyElementAnnotationParser(null, "");
+        KeyElementAnnotationParser parser = new KeyElementAnnotationParser(null, null, "");
         KeyElementAnnotationParser.RelationToClazz relation = parser.keyRelationTypeOf("String");
         assertNull(relation);
         relation = parser.keyRelationTypeOf("List");
