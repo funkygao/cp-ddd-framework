@@ -508,7 +508,7 @@ public class PlantUmlBuilder {
             return this;
         }
 
-        content.append(MessageFormat.format(PACKAGE_TMPL, "跨聚合复杂流程", "flows"));
+        content.append(MessageFormat.format(PACKAGE_TMPL, "跨聚合复杂流程", "Orphan Services"));
         content.append(SPACE).append(BRACE_OPEN).append(NEWLINE);
         for (String actor : model.getKeyFlowReport().actors()) {
             append(TAB).writeOrphanFlowClazzDefinition(actor).append(NEWLINE);
