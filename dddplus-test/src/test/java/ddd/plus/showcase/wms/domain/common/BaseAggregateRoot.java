@@ -1,10 +1,23 @@
 package ddd.plus.showcase.wms.domain.common;
 
+import io.github.dddplus.buddy.DirtyMemento;
+import io.github.dddplus.buddy.Exchange;
+import io.github.dddplus.buddy.IDirtyHint;
 import io.github.dddplus.buddy.specification.ISpecification;
 import io.github.dddplus.buddy.specification.Notification;
 import io.github.dddplus.model.IAggregateRoot;
+import lombok.Builder;
 
 public abstract class BaseAggregateRoot<Entity> implements IAggregateRoot {
+    @Builder.Default
+    protected DirtyMemento memento = new DirtyMemento();
+    @Builder.Default
+    protected Exchange exchange = new Exchange();
+
+    protected final <T> T dirty(IDirtyHint hint) {
+        memento.register(hint);
+        return (T) this;
+    }
 
     /**
      * 业务归约要满足.

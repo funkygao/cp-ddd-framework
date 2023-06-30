@@ -5,15 +5,12 @@ import ddd.plus.showcase.wms.app.service.dto.ClaimTaskRequest;
 import ddd.plus.showcase.wms.app.service.dto.ConfirmQtyRequest;
 import ddd.plus.showcase.wms.app.service.dto.RecommendPlatformRequest;
 import ddd.plus.showcase.wms.app.service.dto.base.ApiResponse;
-import ddd.plus.showcase.wms.domain.common.MasterDataGateway;
-import ddd.plus.showcase.wms.domain.common.Operator;
-import ddd.plus.showcase.wms.domain.common.WarehouseNo;
-import ddd.plus.showcase.wms.domain.common.WmsException;
+import ddd.plus.showcase.wms.domain.common.*;
 import ddd.plus.showcase.wms.domain.order.OrderNo;
 import ddd.plus.showcase.wms.domain.task.PlatformNo;
 import ddd.plus.showcase.wms.domain.task.Task;
 import ddd.plus.showcase.wms.domain.task.TaskNo;
-import ddd.plus.showcase.wms.domain.task.TaskRepository;
+import ddd.plus.showcase.wms.domain.task.ITaskRepository;
 import ddd.plus.showcase.wms.domain.task.spec.OperatorCannotBePicker;
 import ddd.plus.showcase.wms.domain.task.spec.TaskCanPerformChecking;
 import io.github.design.ContainerNo;
@@ -22,13 +19,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 
+/**
+ * 人工复核用例.
+ */
 @Service
 @Setter(onMethod_ = {@Resource})
 @Slf4j
 public class ManualCheckAppService {
     private MasterDataGateway masterDataGateway;
-    private TaskRepository taskRepository;
+    private ITaskRepository taskRepository;
     private UnitOfWork uow;
 
     /**
@@ -63,13 +64,21 @@ public class ManualCheckAppService {
 
     /**
      * 操作员(复核员)清点并确认货品数量.
+     *
+     * <p>作业维度：(taskNo, orderNo, skuNo)</p>
+     * <p>即：某个任务的下某个订单的某种货品，它确实可以发货{n}件/each，因为他们的(质量，数量)都OK.</p>
      */
     public ApiResponse<Void> confirmQty(ConfirmQtyRequest request) throws WmsException {
         WarehouseNo warehouseNo = WarehouseNo.of(request.getWarehouseNo());
         Operator operator = Operator.of(request.getOperatorNo());
         OrderNo orderNo = OrderNo.of(request.getOrderNo());
+        Sku sku = Sku.of(request.getSkuNo());
+        BigDecimal qty = new BigDecimal(request.getQty());
 
-        Task task = taskRepository.mustGet(TaskNo.of(request.getTaskNo()), warehouseNo);
+        // 推荐复核台强约束？
+
+        Task task = taskRepository.mustGet(TaskNo.of(request.getTaskNo()), orderNo, sku, warehouseNo);
+        task.confirmQty(qty, operator, PlatformNo.of(request.getPlatformNo()));
 
         return ApiResponse.ofOk();
     }

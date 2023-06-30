@@ -5,6 +5,7 @@ import ddd.plus.showcase.wms.domain.order.OrderLine;
 import ddd.plus.showcase.wms.domain.order.OrderLineNo;
 import io.github.dddplus.dsl.KeyElement;
 import io.github.dddplus.dsl.KeyRelation;
+import io.github.dddplus.dsl.KeyRule;
 import io.github.dddplus.model.IDomainModel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,6 +22,7 @@ import java.math.BigDecimal;
 @KeyRelation(whom = OrderLine.class, type = KeyRelation.Type.BelongTo)
 public class ContainerItem implements IDomainModel {
     private Long id;
+
     @KeyElement(types = KeyElement.Type.Structural)
     private Sku sku;
 
@@ -45,6 +47,7 @@ public class ContainerItem implements IDomainModel {
     /**
      * 复核作业发现的差异数量.
      */
+    @KeyRule
     public BigDecimal diffQty() {
         return expectedQty.subtract(givenQty);
     }

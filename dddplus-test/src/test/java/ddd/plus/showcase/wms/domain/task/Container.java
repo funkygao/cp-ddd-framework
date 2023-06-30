@@ -17,11 +17,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@KeyRelation(whom = ContainerItem.class, type = KeyRelation.Type.HasMany)
+@KeyRelation(whom = ContainerItemBag.class, type = KeyRelation.Type.HasOne)
 public class Container implements IDomainModel {
     private Long id;
     @KeyElement(types = KeyElement.Type.DCU, remark = "扫描枪可扫")
     private ContainerNo containerNo;
+    @KeyElement(types = KeyElement.Type.Operational)
     private ContainerType type;
 
     private ContainerItemBag containerItemBag;

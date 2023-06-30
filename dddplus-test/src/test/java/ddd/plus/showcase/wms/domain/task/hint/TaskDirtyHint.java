@@ -3,10 +3,12 @@ package ddd.plus.showcase.wms.domain.task.hint;
 import ddd.plus.showcase.wms.domain.task.Task;
 import io.github.dddplus.buddy.IDirtyHint;
 import io.github.dddplus.buddy.IMergeAwareDirtyHint;
+import lombok.Getter;
 
 import java.util.HashSet;
 import java.util.Set;
 
+@Getter
 public class TaskDirtyHint implements IMergeAwareDirtyHint<Long> {
     private final Task task;
     private final Set<String> dirtyFields = new HashSet<>();
