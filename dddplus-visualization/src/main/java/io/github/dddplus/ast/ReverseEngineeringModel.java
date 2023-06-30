@@ -28,13 +28,14 @@ public class ReverseEngineeringModel {
     private AggregateReport aggregateReport = new AggregateReport();
     private KeyModelReport keyModelReport = new KeyModelReport(this);
     private List<SimilarityEntry> similarities = new LinkedList<>();
+    private List<SimilarityEntry> rawSimilarities = new LinkedList<>();
     private KeyBehaviorReport keyBehaviorReport = new KeyBehaviorReport();
     private KeyFlowReport keyFlowReport = new KeyFlowReport();
     private KeyRuleReport keyRuleReport = new KeyRuleReport();
     private KeyEventReport keyEventReport = new KeyEventReport();
     private KeyUsecaseReport keyUsecaseReport = new KeyUsecaseReport();
     private KeyRelationReport keyRelationReport = new KeyRelationReport();
-    private ClassMethodReport classMethodReport = new ClassMethodReport();
+    private ClassMethodReport classMethodReport = new ClassMethodReport(this);
     private ModelDebtReport modelDebtReport = new ModelDebtReport(this);
 
 
@@ -45,6 +46,16 @@ public class ReverseEngineeringModel {
 
     public ReverseEngineeringModel addSimilarityEntry(SimilarityEntry similarityEntry) {
         similarities.add(similarityEntry);
+        return this;
+    }
+
+    public List<SimilarityEntry> sortedRawSimilarities() {
+        Collections.sort(rawSimilarities, Comparator.comparing(SimilarityEntry::getSimilarity));
+        return rawSimilarities;
+    }
+
+    public ReverseEngineeringModel addRawSimilarityEntry(SimilarityEntry similarityEntry) {
+        rawSimilarities.add(similarityEntry);
         return this;
     }
 

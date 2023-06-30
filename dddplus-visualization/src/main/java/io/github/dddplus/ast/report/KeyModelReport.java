@@ -15,10 +15,20 @@ import java.util.*;
 @Data
 public class KeyModelReport {
     private final ReverseEngineeringModel model;
+
     private Map<String, KeyModelEntry> data = new TreeMap<>();
+    private Map<String, KeyModelEntry> rawModels = new TreeMap<>();
 
     public KeyModelReport(ReverseEngineeringModel model) {
         this.model = model;
+    }
+
+    public KeyModelEntry getOrCreateRawModelEntry(String className) {
+        if (!rawModels.containsKey(className)) {
+            rawModels.put(className, new KeyModelEntry(className));
+        }
+
+        return rawModels.get(className);
     }
 
     public KeyModelEntry getOrCreateKeyModelEntryForActor(String actor) {
