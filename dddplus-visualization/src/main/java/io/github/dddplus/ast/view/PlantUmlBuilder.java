@@ -23,7 +23,7 @@ import java.util.*;
  *
  * @see <a href="https://www.augmentedmind.de/2021/01/17/plantuml-layout-tutorial-styles/">PlantUml Layout Guide</a>
  */
-public class PlantUmlBuilder {
+public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
     public enum Direction {
         TopToBottom,
         LeftToRight,
@@ -100,6 +100,7 @@ public class PlantUmlBuilder {
         return content.toString();
     }
 
+    @Override
     public PlantUmlBuilder build(ReverseEngineeringModel model) {
         return build(model, Sets.newHashSet());
     }
