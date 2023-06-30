@@ -17,6 +17,7 @@ import io.github.dddplus.ast.parser.KeyElementAnnotationParser;
 import io.github.dddplus.ast.report.KeyModelReport;
 import io.github.dddplus.dsl.KeyElement;
 
+import javax.annotation.Resource;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -80,6 +81,11 @@ class KeyElementAstNodeVisitor extends VoidVisitorAdapter<KeyModelReport> {
     private void parseRawModel(final FieldDeclaration fieldDeclaration, final KeyModelReport report) {
         ClassOrInterfaceDeclaration parentClass = JavaParserUtil.getClass(fieldDeclaration.getParentNode().get());
         if (parentClass == null) {
+            return;
+        }
+
+        if (fieldDeclaration.isStatic()
+                || fieldDeclaration.isAnnotationPresent(Resource.class)) {
             return;
         }
 
