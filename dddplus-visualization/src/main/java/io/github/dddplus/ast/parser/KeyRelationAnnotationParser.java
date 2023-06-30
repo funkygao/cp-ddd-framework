@@ -17,16 +17,17 @@ import lombok.Getter;
  */
 @Getter
 public class KeyRelationAnnotationParser {
-    private final ClassOrInterfaceDeclaration classDeclaration;
+    private final ClassOrInterfaceDeclaration leftClassDeclaration;
 
     public KeyRelationAnnotationParser(ClassOrInterfaceDeclaration classDeclaration) {
-        this.classDeclaration = classDeclaration;
+        this.leftClassDeclaration = classDeclaration;
     }
 
     public KeyRelationEntry parse(AnnotationExpr keyRelation) {
         KeyRelationEntry result = new KeyRelationEntry();
-        result.setJavadoc(JavaParserUtil.javadocFirstLineOf(classDeclaration));
-        result.setLeftClass(classDeclaration.getNameAsString());
+        result.setJavadoc(JavaParserUtil.javadocFirstLineOf(leftClassDeclaration));
+        result.setLeftClass(leftClassDeclaration.getNameAsString());
+        result.setLeftClassPackageName(JavaParserUtil.packageName(leftClassDeclaration));
 
         NormalAnnotationExpr normalAnnotationExpr = (NormalAnnotationExpr) keyRelation;
         for (MemberValuePair memberValuePair : normalAnnotationExpr.getPairs()) {

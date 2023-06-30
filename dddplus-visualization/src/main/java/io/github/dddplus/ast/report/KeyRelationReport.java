@@ -5,6 +5,8 @@
  */
 package io.github.dddplus.ast.report;
 
+import io.github.dddplus.ast.ReverseEngineeringModel;
+import io.github.dddplus.ast.model.KeyModelEntry;
 import io.github.dddplus.ast.model.KeyRelationEntry;
 import lombok.Data;
 
@@ -13,7 +15,13 @@ import java.util.List;
 
 @Data
 public class KeyRelationReport {
+    private final ReverseEngineeringModel model;
+
     private List<KeyRelationEntry> relationEntries = new ArrayList<>();
+
+    public KeyRelationReport(ReverseEngineeringModel model) {
+        this.model = model;
+    }
 
     public KeyRelationReport add(KeyRelationEntry entry) {
         // dup check
@@ -24,6 +32,12 @@ public class KeyRelationReport {
         }
 
         relationEntries.add(entry);
+
+        // register key model if necessary
+        KeyModelEntry modelEntry = model.getKeyModelReport().getOrCreateKeyModelEntryForActor(entry.getRightClass());
+        if (modelEntry.getPackageName() == null || modelEntry.getPackageName().isEmpty()) {
+            modelEntry.setPackageName(entry.getLeftClassPackageName());
+        }
         return this;
     }
 

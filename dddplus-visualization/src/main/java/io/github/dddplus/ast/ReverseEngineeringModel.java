@@ -34,7 +34,7 @@ public class ReverseEngineeringModel {
     private KeyRuleReport keyRuleReport = new KeyRuleReport();
     private KeyEventReport keyEventReport = new KeyEventReport();
     private KeyUsecaseReport keyUsecaseReport = new KeyUsecaseReport();
-    private KeyRelationReport keyRelationReport = new KeyRelationReport();
+    private KeyRelationReport keyRelationReport = new KeyRelationReport(this);
     private ClassMethodReport classMethodReport = new ClassMethodReport(this);
     private ModelDebtReport modelDebtReport = new ModelDebtReport(this);
 
