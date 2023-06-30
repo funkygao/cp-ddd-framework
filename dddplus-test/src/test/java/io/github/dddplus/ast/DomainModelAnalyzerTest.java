@@ -84,6 +84,7 @@ class DomainModelAnalyzerTest {
                 .appendNote("abc")
                 .appendNote("dc")
                 .skipParamHandWrittenStyle()
+                .skinParamPolyline()
                 .build(model).renderSvg("../test.svg");
     }
 

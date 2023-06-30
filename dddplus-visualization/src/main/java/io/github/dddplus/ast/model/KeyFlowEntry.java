@@ -25,6 +25,7 @@ public class KeyFlowEntry {
     private List<String> args;
     private Set<String> realArguments;
     private String remark;
+    private boolean async = false;
 
     public KeyFlowEntry(String className, String realMethodName, String javadoc) {
         this.className = className;

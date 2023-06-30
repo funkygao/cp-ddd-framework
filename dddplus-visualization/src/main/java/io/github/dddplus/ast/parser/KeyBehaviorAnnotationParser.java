@@ -71,6 +71,10 @@ public class KeyBehaviorAnnotationParser {
                     entry.setEvents(AnnotationFieldParser.arrayFieldValue(memberValuePair));
                     break;
 
+                case "async":
+                    entry.setAsync(true);
+                    break;
+
                 case "modeClass":
                     modes.addAll(AnnotationFieldParser.arrayFieldValue(memberValuePair));
                     entry.setModes(modes);

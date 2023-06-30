@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class CheckTaskFinishedListener {
 
     @EventListener(classes = CheckTaskFinished.class)
-    @KeyFlow
+    @KeyFlow(async = true)
     public void onTaskFinished(CheckTaskFinished event) {
 
     }
