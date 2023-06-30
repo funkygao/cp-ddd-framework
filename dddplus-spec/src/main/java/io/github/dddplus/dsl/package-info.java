@@ -6,6 +6,9 @@
 /**
  * Reverse modeling DSL: Object-Oriented Domain Model(As-Is -> To-Be) Re-Design without tech constraints.
  * <p/>
+ * <p>目标：提供一套模型描述语言，从代码提炼精粹的业务知识，指导模型和系统演进.</p>
+ * <p>路径：明确业务中关键问题，跨越(架构约束，技术限制)等造成代码难以直观表达模型的问题，面向对象地抽取和修正，形成与正向模型正反馈闭环。DSL标注过程，是二次抽象/二次设计的过程，不受技术约束，只关注业务核心问题.</p>
+ * <p/>
  * <p>由于代码具有(可运行，包含完全细节，演进过程完整追溯，自我修复)特征，因此成为业务的唯一事实真相；但代码里有太多技术细节产生的业务模型噪音，导致代码里无法直观看到业务真相.</p>
  * <p>{@code 建模 = 图形 + 逻辑 + 现实的抽象}，代码(一维的，局部的)，而模型(多维的，全局的)，逆向模型相当于动态的活地图</p>
  * <p>通过逆向建模建立全局认识的活地图，再去了解业务细节就会快得多。我们要建模的对象即是问题域，我们并不需要覆盖所有的点，而是基于核心的内容进行建模</p>
@@ -16,10 +19,8 @@
  *     |                        V
  * KnowledgeCrunch  <--   ReversedDomainModel
  * </pre>
- * <p>DSL标注过程是二次抽象/二次设计/还原业务本质/揭示技术债的过程，不受任何技术约束限制，可以大胆使用OO思想，让service里的逻辑通过{@link io.github.dddplus.dsl.KeyFlow#actor()}回归到业务对象.</p>
- * <p>谁该来标注？最熟悉业务的一线研发！它体现了：(introspection, knowledge dissemination).</p>
  * <p/>
- * <ul>DSL标注结构：
+ * <ul>DSL结构：
  * <li>字段级：
  * <ul>
  *     <li>{@link io.github.dddplus.dsl.KeyElement}</li>
