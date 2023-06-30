@@ -23,7 +23,7 @@ import java.util.*;
  *
  * @see <a href="https://www.augmentedmind.de/2021/01/17/plantuml-layout-tutorial-styles/">PlantUml Layout Guide</a>
  */
-public class PlantUmlBuilder {
+public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
     public enum Direction {
         TopToBottom,
         LeftToRight,
@@ -100,6 +100,7 @@ public class PlantUmlBuilder {
         return content.toString();
     }
 
+    @Override
     public PlantUmlBuilder build(ReverseEngineeringModel model) {
         return build(model, Sets.newHashSet());
     }
@@ -508,7 +509,7 @@ public class PlantUmlBuilder {
             return this;
         }
 
-        content.append(MessageFormat.format(PACKAGE_TMPL, "跨聚合复杂流程", "flows"));
+        content.append(MessageFormat.format(PACKAGE_TMPL, "跨聚合复杂流程", "Orphan Services"));
         content.append(SPACE).append(BRACE_OPEN).append(NEWLINE);
         for (String actor : model.getKeyFlowReport().actors()) {
             append(TAB).writeOrphanFlowClazzDefinition(actor).append(NEWLINE);

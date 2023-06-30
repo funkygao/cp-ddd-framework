@@ -12,7 +12,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
-public class PlainTextBuilder {
+public class PlainTextBuilder implements IViewBuilder<PlainTextBuilder> {
     private static final String SPACE = " ";
     private static final String TAB = SPACE + SPACE + SPACE;
     private static final String NEWLINE = System.getProperty("line.separator");
@@ -29,6 +29,7 @@ public class PlainTextBuilder {
         return this;
     }
 
+    @Override
     public PlainTextBuilder build(ReverseEngineeringModel model) {
         this.model = model;
 
