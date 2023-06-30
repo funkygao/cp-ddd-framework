@@ -77,13 +77,16 @@ class DomainModelAnalyzerTest {
     @Test
     @Disabled
     void renderUml() throws IOException {
-        DomainModelAnalyzer analyzer = new DomainModelAnalyzer();
-        analyzer.scan(moduleRoot("dddplus-test"));
-        ReverseEngineeringModel model = analyzer.analyze((level, path, file) -> path.contains("design"));
+        ReverseEngineeringModel model = new DomainModelAnalyzer()
+                .debug()
+                .rawSimilarity()
+                .scan(moduleRoot("dddplus-test"))
+                .analyze((level, path, file) -> path.contains("design"));
         new PlantUmlBuilder()
                 .appendNote("abc")
                 .appendNote("dc")
                 .skipParamHandWrittenStyle()
+                .skinParamPolyline()
                 .build(model).renderSvg("../test.svg");
     }
 

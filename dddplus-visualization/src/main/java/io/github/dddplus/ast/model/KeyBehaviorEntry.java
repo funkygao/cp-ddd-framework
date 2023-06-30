@@ -21,6 +21,7 @@ public class KeyBehaviorEntry {
     private Set<String> events = new TreeSet<>(); // 该行为产生哪些领域事件
     private String remark = "";
     private String javadoc;
+    private boolean async = false;
 
     public KeyBehaviorEntry(String className, String methodName) {
         this.className = className;

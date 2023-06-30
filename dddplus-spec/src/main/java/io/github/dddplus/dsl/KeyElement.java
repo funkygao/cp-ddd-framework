@@ -135,5 +135,10 @@ public @interface KeyElement {
          * 位置，场.
          */
         Location,
+
+        /**
+         * 预留的扩展.
+         */
+        Reserved
     }
 }

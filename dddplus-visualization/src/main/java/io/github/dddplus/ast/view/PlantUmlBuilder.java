@@ -223,7 +223,12 @@ public class PlantUmlBuilder {
         content.append("class ").append(actor);
         content.append(" {").append(NEWLINE);
         for (KeyFlowEntry entry : orphanFlowsOfActor) {
-            content.append("    {method} ");
+            if (entry.isAsync()) {
+                content.append("    {abstract} {method} ");
+            } else {
+                content.append("    {method} ");
+            }
+
             content.append(entry.displayNameWithRemark())
                     .append(BRACKET_OPEN)
                     .append(entry.displayArgsWithRules())
@@ -320,8 +325,12 @@ public class PlantUmlBuilder {
         if (!keyModelEntry.getKeyBehaviorEntries().isEmpty()) {
             content.append("    __ 行为 __").append(NEWLINE);
             for (KeyBehaviorEntry entry : keyModelEntry.getKeyBehaviorEntries()) {
-                content.append("    {method} ");
-                content.append(entry.displayNameWithRemark())
+                if (entry.isAsync()) {
+                    append("    {abstract} {method} ");
+                } else {
+                    append("    {method} ");
+                }
+                append(entry.displayNameWithRemark())
                         .append(BRACKET_OPEN)
                         .append(entry.displayArgs())
                         .append(BRACKET_CLOSE)
@@ -339,8 +348,12 @@ public class PlantUmlBuilder {
         if (!keyModelEntry.getKeyFlowEntries().isEmpty()) {
             content.append("    __ 流程 __").append(NEWLINE);
             for (KeyFlowEntry entry : keyModelEntry.getKeyFlowEntries()) {
-                content.append("    {method} ");
-                content.append(entry.getMethodName())
+                if (entry.isAsync()) {
+                    append("    {abstract} {method} ");
+                } else {
+                    append("    {method} ");
+                }
+                append(entry.getMethodName())
                         .append(BRACKET_OPEN)
                         .append(entry.displayArgsWithRules())
                         .append(BRACKET_CLOSE)

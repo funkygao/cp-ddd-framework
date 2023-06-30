@@ -83,7 +83,7 @@ public class CheckTask implements IAggregateRoot, IUnboundedDomainModel {
         return false;
     }
 
-    @KeyBehavior(produceEvent = CheckTaskFinished.class)
+    @KeyBehavior(produceEvent = CheckTaskFinished.class, async = true)
     public void finish() {
 
     }
