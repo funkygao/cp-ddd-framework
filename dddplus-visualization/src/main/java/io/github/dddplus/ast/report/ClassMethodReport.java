@@ -5,6 +5,7 @@
  */
 package io.github.dddplus.ast.report;
 
+import io.github.dddplus.ast.ReverseEngineeringModel;
 import lombok.Data;
 
 import java.util.Set;
@@ -15,10 +16,16 @@ import java.util.TreeSet;
  */
 @Data
 public class ClassMethodReport {
+    private final ReverseEngineeringModel model;
+
     private ClassInfo classInfo = new ClassInfo();
     private MethodInfo methodInfo = new MethodInfo();
     private int statementN = 0;
     private int fieldsN = 0;
+
+    public ClassMethodReport(ReverseEngineeringModel model) {
+        this.model = model;
+    }
 
     public int publicClazzN() {
         return classInfo.publicClasses.size();

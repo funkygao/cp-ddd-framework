@@ -17,14 +17,17 @@ import io.github.dddplus.ast.parser.KeyElementAnnotationParser;
 import io.github.dddplus.ast.report.KeyModelReport;
 import io.github.dddplus.dsl.KeyElement;
 
+import javax.annotation.Resource;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
 class KeyElementAstNodeVisitor extends VoidVisitorAdapter<KeyModelReport> {
     private final Set<String> ignoredAnnotations;
+    private final boolean parseRawModel;
 
-    public KeyElementAstNodeVisitor(Set<String> ignoredAnnotations) {
+    public KeyElementAstNodeVisitor(boolean parseRawModel, Set<String> ignoredAnnotations) {
+        this.parseRawModel = parseRawModel;
         this.ignoredAnnotations = ignoredAnnotations;
     }
 
@@ -32,18 +35,22 @@ class KeyElementAstNodeVisitor extends VoidVisitorAdapter<KeyModelReport> {
     public void visit(final FieldDeclaration fieldDeclaration, final KeyModelReport report) {
         super.visit(fieldDeclaration, report);
 
+        if (parseRawModel) {
+            parseRawModel(fieldDeclaration, report);
+        }
+
         if (!fieldDeclaration.isAnnotationPresent(KeyElement.class)) {
             return;
         }
 
         if (fieldDeclaration.isAnnotationPresent(Deprecated.class)) {
-            System.out.printf("WARN: @KeyElement used on Deprecated %s\n", fieldDeclaration.getVariable(0).getNameAsString());
+            System.out.printf("SKIP: @KeyElement used on Deprecated %s\n", fieldDeclaration.getVariable(0).getNameAsString());
             return;
         }
 
         for (String annotation : ignoredAnnotations) {
             if (fieldDeclaration.isAnnotationPresent(annotation)) {
-                System.out.printf("WARN: @KeyElement used on %s %s\n", annotation, fieldDeclaration.getVariable(0).getNameAsString());
+                System.out.printf("SKIP: @KeyElement used on %s %s\n", annotation, fieldDeclaration.getVariable(0).getNameAsString());
                 return;
             }
         }
@@ -52,7 +59,6 @@ class KeyElementAstNodeVisitor extends VoidVisitorAdapter<KeyModelReport> {
         if (parentClass == null) {
             return;
         }
-
 
         final String packageName = JavaParserUtil.packageName(parentClass);
         final String className = parentClass.getNameAsString();
@@ -70,5 +76,22 @@ class KeyElementAstNodeVisitor extends VoidVisitorAdapter<KeyModelReport> {
         if (relationEntry.isPresent()) {
             report.getModel().getKeyRelationReport().add(relationEntry.get());
         }
+    }
+
+    private void parseRawModel(final FieldDeclaration fieldDeclaration, final KeyModelReport report) {
+        ClassOrInterfaceDeclaration parentClass = JavaParserUtil.getClass(fieldDeclaration.getParentNode().get());
+        if (parentClass == null) {
+            return;
+        }
+
+        if (fieldDeclaration.isStatic()
+                || fieldDeclaration.isAnnotationPresent(Resource.class)) {
+            return;
+        }
+
+        final String className = parentClass.getNameAsString();
+        final String fieldName = fieldDeclaration.getVariable(0).getNameAsString();
+        KeyModelEntry entry = report.getOrCreateRawModelEntry(className);
+        entry.addRawField(fieldName);
     }
 }

@@ -24,6 +24,7 @@ public class KeyModelEntry {
     private String javadoc;
 
     private final Map<KeyElement.Type, List<KeyPropertyEntry>> properties;
+    private final Set<String> rawFields = new HashSet<>();
 
     private transient List<KeyBehaviorEntry> keyBehaviorEntries = new ArrayList<>();
     private transient List<KeyRuleEntry> keyRuleEntries = new ArrayList<>();
@@ -65,6 +66,10 @@ public class KeyModelEntry {
 
         properties.get(type).add(keyPropertyEntry);
         return this;
+    }
+
+    public void addRawField(String fieldName) {
+        rawFields.add(fieldName);
     }
 
     public Set<String> producedEvents() {

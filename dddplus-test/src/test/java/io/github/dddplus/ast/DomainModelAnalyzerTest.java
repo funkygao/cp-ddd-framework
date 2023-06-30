@@ -33,10 +33,10 @@ class DomainModelAnalyzerTest {
         assertTrue(model.getKeyRelationReport().size() > 1);
         assertTrue(model.aggregates().size() > 0);
         List<KeyModelEntry> keyModelEntryList = model.getKeyModelReport().keyModelsOfPackage(model.getAggregateReport().getAggregateEntries().get(0).getPackageName());
-        assertEquals(2, keyModelEntryList.size());
+        assertEquals(3, keyModelEntryList.size());
         assertEquals("io.github.design", keyModelEntryList.get(0).getPackageName());
         AggregateEntry firstAggregate = model.getAggregateReport().get(0);
-        assertEquals(2, firstAggregate.keyModels().size());
+        assertEquals(3, firstAggregate.keyModels().size());
         KeyModelEntry firstKeyModelEntry = firstAggregate.getKeyModelEntries().get(0);
         assertEquals(CheckTask.class.getSimpleName(), firstKeyModelEntry.getClassName());
         List<KeyElement.Type> undefinedTypes = firstKeyModelEntry.undefinedTypes();
@@ -64,10 +64,13 @@ class DomainModelAnalyzerTest {
     @Test
     void renderText() throws IOException {
         DomainModelAnalyzer analyzer = new DomainModelAnalyzer();
-        analyzer.scan(moduleRoot("dddplus-test"));
+        analyzer.rawSimilarity()
+                .similarityThreshold(0)
+                .scan(moduleRoot("dddplus-test"));
         ReverseEngineeringModel model = analyzer.analyze((level, path, file) -> path.contains("design"));
-        PlainTextBuilder pb = new PlainTextBuilder();
-        pb.build(model)
+        new PlainTextBuilder()
+                .build(model)
+                .showRawSimilarities()
                 .render("../model.txt");
     }
 

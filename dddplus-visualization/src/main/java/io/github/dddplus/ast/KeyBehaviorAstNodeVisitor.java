@@ -33,13 +33,13 @@ class KeyBehaviorAstNodeVisitor extends VoidVisitorAdapter<KeyBehaviorReport> {
         }
 
         if (methodDeclaration.isAnnotationPresent(Deprecated.class)) {
-            System.out.printf("WARN: @KeyBehavior used on Deprecated %s\n", methodDeclaration.getNameAsString());
+            System.out.printf("SKIP: @KeyBehavior used on Deprecated %s\n", methodDeclaration.getNameAsString());
             return;
         }
 
         for (String annotation : ignoredAnnotations) {
             if (methodDeclaration.isAnnotationPresent(annotation)) {
-                System.out.printf("WARN: @KeyBehavior used on %s %s\n", annotation, methodDeclaration.getNameAsString());
+                System.out.printf("SKIP: @KeyBehavior used on %s %s\n", annotation, methodDeclaration.getNameAsString());
                 return;
             }
         }

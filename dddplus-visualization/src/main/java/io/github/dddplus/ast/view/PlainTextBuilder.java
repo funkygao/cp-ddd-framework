@@ -18,6 +18,9 @@ public class PlainTextBuilder {
     private static final String NEWLINE = System.getProperty("line.separator");
 
     private boolean clustering = false;
+    private boolean showNotLabeledElements = false;
+    private boolean showRawSimilarities = false;
+
     private final StringBuilder content = new StringBuilder();
     private ReverseEngineeringModel model;
 
@@ -35,8 +38,19 @@ public class PlainTextBuilder {
         addKeyUsecases();
         addOrphanKeyFlows();
         addKeyEvents();
+        if (showRawSimilarities) {
+            addRawModelSimilarities();
+        }
 
         return this;
+    }
+
+    private void addRawModelSimilarities() {
+        append("<<相似度>>").append(NEWLINE);
+        for (SimilarityEntry entry : model.sortedRawSimilarities()) {
+            append(entry.getLeftClass()).append(SPACE).append(entry.getRightClass()).append(SPACE);
+            append(String.format("%.0f", entry.getSimilarity())).append(NEWLINE);
+        }
     }
 
     public void render(String txtFilename) throws IOException {
@@ -90,7 +104,7 @@ public class PlainTextBuilder {
                         .append(NEWLINE);
             }
 
-            if (!keyModelEntry.undefinedTypes().isEmpty()) {
+            if (this.showNotLabeledElements && !keyModelEntry.undefinedTypes().isEmpty()) {
                 append(TAB)
                         .append(String.format("%-13s %s", "-NotLabeled-", keyModelEntry.displayUndefinedTypes()))
                         .append(NEWLINE);
@@ -176,6 +190,16 @@ public class PlainTextBuilder {
                     .append(entry.getJavadoc())
                     .append(NEWLINE);
         }
+        return this;
+    }
+
+    public PlainTextBuilder showNotLabeledElements() {
+        this.showNotLabeledElements = true;
+        return this;
+    }
+
+    public PlainTextBuilder showRawSimilarities() {
+        this.showRawSimilarities = true;
         return this;
     }
 
