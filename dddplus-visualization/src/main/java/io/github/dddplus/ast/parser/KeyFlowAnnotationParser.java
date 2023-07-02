@@ -44,7 +44,7 @@ public class KeyFlowAnnotationParser {
     }
 
     public KeyFlowEntry parse(AnnotationExpr keyFlow) {
-        KeyFlowEntry result = new KeyFlowEntry(className, methodName,
+        KeyFlowEntry entry = new KeyFlowEntry(className, methodName,
                 JavaParserUtil.javadocFirstLineOf(methodDeclaration));
 
         if (methodDeclaration.getParameters() != null) {
@@ -54,60 +54,63 @@ public class KeyFlowAnnotationParser {
                     realArguments.add(parameter.getTypeAsString());
                 }
             }
-            result.setRealArguments(realArguments);
+            entry.setRealArguments(realArguments);
         }
 
         if (keyFlow instanceof MarkerAnnotationExpr) {
             // 标注时没有指定任何属性
-            return result;
+            return entry;
         }
 
         NormalAnnotationExpr normalAnnotationExpr = (NormalAnnotationExpr) keyFlow;
         for (MemberValuePair memberValuePair : normalAnnotationExpr.getPairs()) {
             switch (memberValuePair.getNameAsString()) {
                 case "name":
-                    result.setMethodName(AnnotationFieldParser.stringFieldValue(memberValuePair));
+                    entry.setMethodName(AnnotationFieldParser.stringFieldValue(memberValuePair));
                     break;
 
                 case "remark":
-                    result.setRemark(AnnotationFieldParser.stringFieldValue(memberValuePair));
+                    entry.setRemark(AnnotationFieldParser.stringFieldValue(memberValuePair));
                     break;
 
                 case "actor":
                     // Class[] actor，只是为了注解值是可选的，实际使用只会用1个
-                    result.setActor(AnnotationFieldParser.stringFieldValue(memberValuePair));
+                    entry.setActor(AnnotationFieldParser.stringFieldValue(memberValuePair));
                     break;
 
                 case "args":
                     List<String> args = Lists.newArrayList(AnnotationFieldParser.arrayFieldValue(memberValuePair));
-                    result.setArgs(args);
+                    entry.setArgs(args);
                     break;
 
                 case "async":
-                    result.setAsync(true);
+                    entry.setAsync(true);
+                    break;
+
+                case "polymorphism":
+                    entry.setPolymorphism(true);
                     break;
 
                 case "rules":
-                    result.setRules(AnnotationFieldParser.arrayFieldValue(memberValuePair));
+                    entry.setRules(AnnotationFieldParser.arrayFieldValue(memberValuePair));
                     break;
 
                 case "produceEvent":
-                    result.setEvents(AnnotationFieldParser.arrayFieldValue(memberValuePair));
+                    entry.setEvents(AnnotationFieldParser.arrayFieldValue(memberValuePair));
                     break;
 
-
                 case "modes":
-                    result.setModes(AnnotationFieldParser.arrayFieldValue(memberValuePair));
+                    entry.setModes(AnnotationFieldParser.arrayFieldValue(memberValuePair));
                     break;
 
                 case "modeClass":
-                    Set<String> tmp = result.getModes();
+                    Set<String> tmp = entry.getModes();
                     tmp.addAll(AnnotationFieldParser.arrayFieldValue(memberValuePair));
-                    result.setModes(tmp);
+                    entry.setModes(tmp);
                     break;
             }
         }
 
-        return result;
+        return entry;
     }
 }

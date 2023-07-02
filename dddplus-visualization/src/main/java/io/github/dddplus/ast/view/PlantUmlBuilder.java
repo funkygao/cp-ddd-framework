@@ -224,11 +224,14 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
         content.append("class ").append(actor);
         content.append(" {").append(NEWLINE);
         for (KeyFlowEntry entry : orphanFlowsOfActor) {
+            append(TAB);
             if (entry.isAsync()) {
-                content.append("    {abstract} {method} ");
-            } else {
-                content.append("    {method} ");
+                append(" {abstract} ");
             }
+            if (entry.isPolymorphism()) {
+                append(" {static} ");
+            }
+            append(" {method} ");
 
             content.append(entry.displayNameWithRemark())
                     .append(BRACKET_OPEN)
@@ -326,11 +329,11 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
         if (!keyModelEntry.getKeyBehaviorEntries().isEmpty()) {
             content.append("    __ 行为 __").append(NEWLINE);
             for (KeyBehaviorEntry entry : keyModelEntry.getKeyBehaviorEntries()) {
+                append(TAB);
                 if (entry.isAsync()) {
-                    append("    {abstract} {method} ");
-                } else {
-                    append("    {method} ");
+                    append(" {abstract} ");
                 }
+                append(" {method} ");
                 append(entry.displayNameWithRemark())
                         .append(BRACKET_OPEN)
                         .append(entry.displayArgs())
@@ -349,11 +352,14 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
         if (!keyModelEntry.getKeyFlowEntries().isEmpty()) {
             content.append("    __ 流程 __").append(NEWLINE);
             for (KeyFlowEntry entry : keyModelEntry.getKeyFlowEntries()) {
+                append(TAB);
                 if (entry.isAsync()) {
-                    append("    {abstract} {method} ");
-                } else {
-                    append("    {method} ");
+                    append(" {abstract} ");
                 }
+                if (entry.isPolymorphism()) {
+                    append(" {static} ");
+                }
+                append(" {method} ");
                 append(entry.getMethodName())
                         .append(BRACKET_OPEN)
                         .append(entry.displayArgsWithRules())
