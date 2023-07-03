@@ -1,4 +1,4 @@
-package ddd.plus.showcase.wms.domain.ship;
+package ddd.plus.showcase.wms.domain.pack;
 
 import io.github.dddplus.model.AbstractBusinessNo;
 import lombok.NonNull;

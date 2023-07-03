@@ -1,6 +1,7 @@
 package ddd.plus.showcase.wms.domain.order;
 
 import ddd.plus.showcase.wms.domain.common.BaseAggregateRoot;
+import ddd.plus.showcase.wms.domain.pack.Pack;
 import io.github.dddplus.dsl.KeyElement;
 import io.github.dddplus.dsl.KeyRelation;
 import io.github.dddplus.model.IUnboundedDomainModel;
@@ -19,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Getter
 @KeyRelation(whom = OrderLineBag.class, type = KeyRelation.Type.HasOne)
+@KeyRelation(whom = Pack.class, type = KeyRelation.Type.HasMany)
 public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainModel {
     private Long id;
 

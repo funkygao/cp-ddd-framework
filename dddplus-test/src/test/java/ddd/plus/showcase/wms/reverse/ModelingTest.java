@@ -19,7 +19,6 @@ class ModelingTest {
                 .analyze((level, path, file) -> path.contains("showcase") && !path.contains("Test"));
         new PlantUmlBuilder()
                 .direction(PlantUmlBuilder.Direction.TopToBottom)
-                .skipParamHandWrittenStyle()
                 .skinParamPolyline()
                 .build(model).renderSvg("../doc/wms.svg");
     }
