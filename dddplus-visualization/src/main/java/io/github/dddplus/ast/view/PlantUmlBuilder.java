@@ -257,18 +257,14 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
             content.append("    {method} ");
             if (!entry.displayOut().isEmpty()) {
                 content.append(entry.displayOut()).append(SPACE);
-                content.append(entry.displayNameWithRemark())
-                        .append(BRACKET_OPEN)
-                        .append(entry.displayIn())
-                        .append(BRACKET_CLOSE)
-                        .append(NEWLINE);
-            } else {
-                content.append(entry.displayNameWithRemark())
-                        .append(BRACKET_OPEN)
-                        .append(entry.displayIn())
-                        .append(BRACKET_CLOSE)
-                        .append(NEWLINE);
             }
+            content.append(entry.displayNameWithRemark())
+                    .append(BRACKET_OPEN)
+                    .append(entry.displayIn())
+                    .append(BRACKET_CLOSE)
+                    .append(SPACE)
+                    .append(entry.getJavadoc())
+                    .append(NEWLINE);
         }
         content.append(TAB).append("}").append(NEWLINE);
         return this;
