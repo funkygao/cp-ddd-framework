@@ -33,10 +33,15 @@ public class KeyRelationReport {
 
         relationEntries.add(entry);
 
-        // register key model if necessary
+        // auto register key model if necessary: for left and right clazz
         KeyModelEntry modelEntry = model.getKeyModelReport().getOrCreateKeyModelEntryForActor(entry.getRightClass());
         if (modelEntry.getPackageName() == null || modelEntry.getPackageName().isEmpty()) {
             modelEntry.setPackageName(entry.getLeftClassPackageName());
+        }
+        modelEntry = model.getKeyModelReport().getOrCreateRawModelEntry(entry.getLeftClass());
+        if (modelEntry.getPackageName() == null || modelEntry.getPackageName().isEmpty()) {
+            modelEntry.setPackageName(entry.getLeftClassPackageName());
+            modelEntry.setJavadoc(entry.getJavadoc());
         }
         return this;
     }
