@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 /**
  * 拣货容器.
  *
+ * <p>一个拣货容器里货品可能属于不同的{@link ddd.plus.showcase.wms.domain.order.Order}.</p>
  * <p>运营生产环节，拣货人员把拣货容器(里面装有订单的sku)移动到复核台.</p>
  */
 @AllArgsConstructor

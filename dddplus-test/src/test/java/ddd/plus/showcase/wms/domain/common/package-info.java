@@ -1,4 +1,4 @@
-@Aggregate(name = "跨聚合共用的子域")
+@Aggregate(name = "通用子域")
 package ddd.plus.showcase.wms.domain.common;
 
 import io.github.dddplus.dsl.Aggregate;

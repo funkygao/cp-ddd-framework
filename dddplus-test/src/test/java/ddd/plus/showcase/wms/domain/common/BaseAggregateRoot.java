@@ -19,6 +19,10 @@ public abstract class BaseAggregateRoot<Entity> implements IAggregateRoot {
         return (T) this;
     }
 
+    public <T extends IDirtyHint> T firstHintOf(Class<T> hintClass) {
+        return memento.firstHintOf(hintClass);
+    }
+
     /**
      * 业务归约要满足.
      *

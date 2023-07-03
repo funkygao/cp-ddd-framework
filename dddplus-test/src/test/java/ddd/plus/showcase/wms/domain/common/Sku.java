@@ -12,10 +12,8 @@ import java.util.List;
  */
 @Getter
 public class Sku extends AbstractBusinessNo<String> {
-    @KeyElement(types = KeyElement.Type.Structural)
-    private String skuNo;
     @KeyElement(types = KeyElement.Type.Structural, byType = true)
-    private OwnerNo ownerNo;
+    protected OwnerNo ownerNo;
     @KeyElement(types = KeyElement.Type.Structural, byType = true)
     private PackCode packCode;
     @KeyElement(types = KeyElement.Type.Contextual, byType = true)
@@ -29,7 +27,7 @@ public class Sku extends AbstractBusinessNo<String> {
     @KeyElement(types = KeyElement.Type.Contextual)
     private List<String> snList;
 
-    private Sku(@NonNull String skuNo) {
+    protected Sku(@NonNull String skuNo) {
         super(skuNo);
     }
 

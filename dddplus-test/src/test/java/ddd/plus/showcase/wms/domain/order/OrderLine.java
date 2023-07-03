@@ -10,6 +10,9 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
+/**
+ * 订单行.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
