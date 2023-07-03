@@ -5,6 +5,7 @@ import ddd.plus.showcase.wms.domain.carton.CartonItem;
 import ddd.plus.showcase.wms.domain.carton.CartonItemBag;
 import ddd.plus.showcase.wms.domain.common.Operator;
 import ddd.plus.showcase.wms.domain.common.WarehouseNo;
+import ddd.plus.showcase.wms.domain.common.WmsException;
 import ddd.plus.showcase.wms.domain.order.Order;
 import ddd.plus.showcase.wms.domain.order.OrderBag;
 import ddd.plus.showcase.wms.domain.order.OrderNo;
@@ -15,6 +16,7 @@ import io.github.dddplus.dsl.*;
 import io.github.dddplus.model.IUnboundedDomainModel;
 import io.github.dddplus.model.association.HasMany;
 import lombok.*;
+import lombok.experimental.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
@@ -28,7 +30,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Slf4j
-@Getter
+@Getter(AccessLevel.PACKAGE)
 @KeyRelation(whom = ContainerBag.class, type = KeyRelation.Type.HasOne)
 public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainModel {
     private Long id;
@@ -37,6 +39,9 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
     private Integer priority;
     @KeyElement(types = KeyElement.Type.Lifecycle, byType = true)
     private TaskStatus status;
+    public TaskStatus status() {
+        return status;
+    }
     @KeyElement(types = KeyElement.Type.Location, byType = true)
     private PlatformNo platformNo;
     // 该复核任务由哪一个操作员完成：1个任务只能1人完成
@@ -44,11 +49,12 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
     private WarehouseNo warehouseNo;
 
     private ContainerBag containerBag;
+    @lombok.experimental.Delegate
+    public ContainerBag containerBag() { // TODO kill with lombok Delegate
+        return containerBag;
+    }
 
     // associations
-    private TaskOrders orders;
-    private TaskCartonItems cartonItems;
-
     /**
      * 针对关联关系显式建模.
      *
@@ -56,11 +62,20 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
      */
     public interface TaskOrders extends HasMany<Order> {
         /**
-         * 当前复核任务的待复核的所有出库单.
+         * 该任务的待复核的所有出库单.
          */
         OrderBag pendingOrders();
 
-        Order pendingOrder(OrderNo orderNo);
+        /**
+         * 该任务的指定待复核出库单.
+         */
+        Order pendingOrder(OrderNo orderNo) throws WmsException;
+    }
+
+    private TaskOrders orders;
+    @lombok.experimental.Delegate
+    public TaskOrders orders() {
+        return orders;
     }
 
     public interface TaskCartonItems extends HasMany<CartonItem> {
@@ -70,22 +85,13 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
         CartonItemBag cartonItemBag();
     }
 
-    public Set<OrderNo> orderNoSet() {
-        return containerBag.orderNoSet();
-    }
-
-    @KeyRule
-    public int totalSku() {
-        return containerBag.totalSku();
-    }
-
-    @KeyRule
-    public BigDecimal totalQty() {
-        return containerBag.totalQty();
+    private TaskCartonItems cartonItems;
+    public TaskCartonItems cartonItems() {
+        return cartonItems;
     }
 
     @KeyBehavior
-    public void bind(Operator operator, PlatformNo platformNo) {
+    public void claimedWith(Operator operator, PlatformNo platformNo) {
         this.platformNo = platformNo;
         this.operator = operator;
         dirty(new TaskDirtyHint(this).dirty("operator", "platform_no"));
@@ -95,7 +101,7 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
     public void confirmQty(BigDecimal qty, Operator operator, PlatformNo platformNo) {
         this.platformNo = platformNo;
         this.operator = operator;
-        containerBag.pendingItemBag().confirmQty(qty);
+        pendingItemBag().confirmQty(qty);
         dirty(new ConfirmQtyHint(this));
     }
 

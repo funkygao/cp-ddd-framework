@@ -7,6 +7,7 @@ import io.github.dddplus.dsl.KeyElement;
 import io.github.dddplus.dsl.KeyRelation;
 import io.github.dddplus.dsl.KeyRule;
 import io.github.dddplus.model.IDomainModel;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +19,7 @@ import java.math.BigDecimal;
  */
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
+@Getter(AccessLevel.PACKAGE)
 @KeyRelation(whom = OrderLine.class, type = KeyRelation.Type.BelongTo)
 public class ContainerItem implements IDomainModel {
     private Long id;

@@ -18,7 +18,7 @@ public class OrderBag extends SetBag<Order> implements IUnboundedDomainModel {
         this.items = orders;
     }
 
-    public static OrderBag of(Set<Order> orders) {
+    static OrderBag of(Set<Order> orders) {
         return new OrderBag(orders);
     }
 
@@ -43,7 +43,7 @@ public class OrderBag extends SetBag<Order> implements IUnboundedDomainModel {
         return set;
     }
 
-    public WarehouseNo warehouseNo() {
+    private WarehouseNo warehouseNo() {
         // 这里的订单一定都在同一个仓库
         return anyItem().getWarehouseNo();
     }

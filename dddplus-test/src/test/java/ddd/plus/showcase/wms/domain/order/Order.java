@@ -12,10 +12,7 @@ import io.github.dddplus.dsl.KeyElement;
 import io.github.dddplus.dsl.KeyRelation;
 import io.github.dddplus.model.IUnboundedDomainModel;
 import io.github.dddplus.model.association.HasMany;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -25,33 +22,43 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 @NoArgsConstructor
 @Slf4j
-@Getter
+@Getter(AccessLevel.PACKAGE)
 @KeyRelation(whom = OrderLineBag.class, type = KeyRelation.Type.HasOne)
 @KeyRelation(whom = Pack.class, type = KeyRelation.Type.HasMany)
+@KeyRelation(whom = Order.OrderCartons.class, type = KeyRelation.Type.Associate)
 public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainModel {
     private Long id;
 
     private OrderNo orderNo;
+    private WarehouseNo warehouseNo;
+    private Operator lastOperator;
+
     @KeyElement(types = KeyElement.Type.Lifecycle, byType = true)
     private OrderStatus status;
     @KeyElement(types = KeyElement.Type.Lifecycle, byType = true)
     private ProductionStatus productionStatus;
+
+    @lombok.experimental.Delegate
     @KeyElement(types = KeyElement.Type.Operational, byType = true)
     private OrderConstraint constraint;
 
     private OrderLineBag orderLineBag;
-    private WarehouseNo warehouseNo;
-    private Operator lastOperator;
+    @lombok.experimental.Delegate
+    private OrderLineBag lineBag() {
+        return orderLineBag;
+    }
 
-    private OrderCartons cartons;
-
+    // associations
     public interface OrderCartons extends HasMany<Carton> {
         /**
          * 该订单已经装箱的货品件数总和.
          */
         int totalCartonizedQty();
     }
-
+    private OrderCartons cartons;
+    public OrderCartons cartons() {
+        return cartons;
+    }
 
     @KeyBehavior
     public void pause(Operator operator) {

@@ -13,6 +13,6 @@ public class TaskCanRecheck extends AbstractSpecification<Task> {
 
     @Override
     public boolean isSatisfiedBy(Task task, Notification notification) {
-        return task.getStatus().canRecheck();
+        return task.status().canRecheck();
     }
 }

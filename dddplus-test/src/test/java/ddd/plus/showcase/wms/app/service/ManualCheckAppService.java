@@ -70,10 +70,10 @@ public class ManualCheckAppService {
         Task task = taskRepository.mustGetPending(containerNo, warehouseNo);
         task.assureSatisfied(new TaskCanPerformChecking()
                 .and(new OperatorCannotBePicker(masterDataGateway, operator)));
-        task.bind(operator, platformNo);
+        task.claimedWith(operator, platformNo);
 
         // 通过association对象加载管理聚合根
-        OrderBag pendingOrders = task.getOrders().pendingOrders();
+        OrderBag pendingOrders = task.pendingOrders();
         pendingOrders.assureSatisfied(new OrderUsesManualCheckFlow());
         // 逆向物流逻辑
         OrderBagCanceled canceledOrderBag = pendingOrders.subBagOfCanceled(orderGateway);
@@ -103,7 +103,7 @@ public class ManualCheckAppService {
                 .and(new UniqueCodeConstraint(UniqueCode.of(request.getUniqueCode())))
                 .and(new OperatorCannotBePicker(masterDataGateway, operator)));
 
-        Order order = task.getOrders().pendingOrder(orderNo);
+        Order order = task.pendingOrder(orderNo);
         order.assureSatisfied(new OrderNotFullyCartonized());
 
         task.confirmQty(qty, operator, PlatformNo.of(request.getPlatformNo()));

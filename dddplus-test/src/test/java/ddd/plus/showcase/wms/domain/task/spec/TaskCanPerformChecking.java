@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 public class TaskCanPerformChecking extends AbstractSpecification<Task> {
     @Override
     public boolean isSatisfiedBy(Task task, Notification notification) {
-        if (task.getStatus().canPerformChecking()) {
+        if (task.status().canPerformChecking()) {
             notification.addError(ExceptionCode.TaskCannotPerform.error());
             return false;
         }

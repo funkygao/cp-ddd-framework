@@ -4,6 +4,7 @@ import ddd.plus.showcase.wms.domain.common.Sku;
 import io.github.dddplus.dsl.KeyElement;
 import io.github.dddplus.dsl.KeyRule;
 import io.github.dddplus.model.IDomainModel;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,7 @@ import java.math.BigDecimal;
  */
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
+@Getter(AccessLevel.PACKAGE)
 public class OrderLine implements IDomainModel {
     private Long id;
 

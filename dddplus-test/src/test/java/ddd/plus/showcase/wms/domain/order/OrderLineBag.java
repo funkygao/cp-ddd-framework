@@ -2,6 +2,7 @@ package ddd.plus.showcase.wms.domain.order;
 
 import ddd.plus.showcase.wms.domain.base.ListBag;
 import io.github.dddplus.dsl.KeyRelation;
+import io.github.dddplus.dsl.KeyRule;
 
 import java.math.BigDecimal;
 
@@ -13,6 +14,7 @@ public class OrderLineBag extends ListBag<OrderLine> {
      *
      * <p>要货量 - 缺货量</p>
      */
+    @KeyRule
     public BigDecimal totalExpectedQty() {
         BigDecimal total = BigDecimal.ZERO;
         for (OrderLine orderLine : items) {

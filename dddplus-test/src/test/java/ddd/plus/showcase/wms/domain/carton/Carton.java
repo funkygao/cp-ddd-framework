@@ -10,6 +10,7 @@ import io.github.dddplus.dsl.KeyBehavior;
 import io.github.dddplus.dsl.KeyElement;
 import io.github.dddplus.dsl.KeyRelation;
 import io.github.dddplus.model.IUnboundedDomainModel;
+import lombok.AccessLevel;
 import lombok.Getter;
 
 @KeyRelation(whom = CartonItemBag.class, type = KeyRelation.Type.HasOne)
@@ -17,7 +18,7 @@ import lombok.Getter;
 @KeyRelation(whom = Pallet.class, type = KeyRelation.Type.BelongTo, remark = "可能")
 @KeyRelation(whom = Task.class, type = KeyRelation.Type.BelongTo)
 @KeyRelation(whom = Order.class, type = KeyRelation.Type.BelongTo)
-@Getter
+@Getter(AccessLevel.PACKAGE)
 public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomainModel {
     private Long id;
     private CartonNo cartonNo;

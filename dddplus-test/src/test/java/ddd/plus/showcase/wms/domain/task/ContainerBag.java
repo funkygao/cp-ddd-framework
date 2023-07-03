@@ -21,7 +21,7 @@ public class ContainerBag extends ListBag<Container> {
     public int totalSku() {
         int total = 0;
         for (Container container : items) {
-            total += container.getContainerItemBag().totalSku();
+            total += container.totalSku();
         }
         return total;
     }
@@ -33,7 +33,7 @@ public class ContainerBag extends ListBag<Container> {
     public BigDecimal totalQty() {
         BigDecimal total = BigDecimal.ZERO;
         for (Container container : items) {
-            total = total.add(container.getContainerItemBag().totalQty());
+            total = total.add(container.totalQty());
         }
         return total;
     }
@@ -42,7 +42,7 @@ public class ContainerBag extends ListBag<Container> {
     ContainerItemBagPending pendingItemBag() {
         List<ContainerItem> containerItems = new ArrayList<>();
         for (Container container : items) {
-            containerItems.addAll(container.itemBag().pendingBag().items());
+            containerItems.addAll(container.pendingBag().items());
         }
         return new ContainerItemBagPending(ContainerItemBag.of(containerItems));
     }

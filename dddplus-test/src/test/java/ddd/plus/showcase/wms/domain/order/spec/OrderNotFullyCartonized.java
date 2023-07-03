@@ -9,8 +9,8 @@ import java.math.BigDecimal;
 public class OrderNotFullyCartonized extends AbstractSpecification<Order> {
     @Override
     public boolean isSatisfiedBy(Order order, Notification notification) {
-        BigDecimal expectedQty = order.getOrderLineBag().totalExpectedQty();
-        BigDecimal cartonizedQty = BigDecimal.valueOf(order.getCartons().totalCartonizedQty());
+        BigDecimal expectedQty = order.totalExpectedQty();
+        BigDecimal cartonizedQty = BigDecimal.valueOf(order.cartons().totalCartonizedQty());
         return expectedQty.compareTo(cartonizedQty) > 0;
     }
 }

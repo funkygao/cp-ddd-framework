@@ -52,6 +52,7 @@ public @interface KeyRelation {
         HasOne,
         HasMany,
         BelongTo,
+        Associate,
 
         /**
          * @deprecated 如果使用，容易导致生成的类图显示混乱.

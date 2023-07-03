@@ -20,4 +20,8 @@ public enum OrderStatus {
 
     int value;
 
+    public boolean isNormal() {
+        return Normal.equals(this);
+    }
+
 }
