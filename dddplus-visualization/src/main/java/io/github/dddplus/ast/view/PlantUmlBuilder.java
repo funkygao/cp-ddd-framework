@@ -260,14 +260,12 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
                 content.append(entry.displayNameWithRemark())
                         .append(BRACKET_OPEN)
                         .append(entry.displayIn())
-                        .append(SPACE)
                         .append(BRACKET_CLOSE)
                         .append(NEWLINE);
             } else {
                 content.append(entry.displayNameWithRemark())
                         .append(BRACKET_OPEN)
                         .append(entry.displayIn())
-                        .append(SPACE)
                         .append(BRACKET_CLOSE)
                         .append(NEWLINE);
             }
