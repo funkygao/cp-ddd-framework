@@ -13,6 +13,7 @@ import ddd.plus.showcase.wms.domain.task.TaskNo;
 import ddd.plus.showcase.wms.domain.task.ITaskRepository;
 import ddd.plus.showcase.wms.domain.task.spec.OperatorCannotBePicker;
 import ddd.plus.showcase.wms.domain.task.spec.TaskCanPerformChecking;
+import io.github.dddplus.dsl.KeyUsecase;
 import io.github.design.ContainerNo;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +36,8 @@ public class ManualCheckAppService {
     /**
      * 操作员在执行一个复核任务，他应该去哪一个复核台?
      */
-    public ApiResponse<String> recommenPlatform(RecommendPlatformRequest request) {
+    @KeyUsecase(in = "taskNo", out = "platformNo")
+    public ApiResponse<String> recommendPlatform(RecommendPlatformRequest request) {
         WarehouseNo warehouseNo = WarehouseNo.of(request.getWarehouseNo());
         Operator operator = Operator.of(request.getOperatorNo());
         TaskNo taskNo = TaskNo.of(request.getTaskNo());
@@ -46,6 +48,7 @@ public class ManualCheckAppService {
     /**
      * 操作员领取复核任务.
      */
+    @KeyUsecase(in = "containerNo")
     public ApiResponse<Void> claimTask(ClaimTaskRequest request) throws WmsException {
         WarehouseNo warehouseNo = WarehouseNo.of(request.getWarehouseNo());
         Operator operator = Operator.of(request.getOperatorNo());
@@ -68,6 +71,7 @@ public class ManualCheckAppService {
      * <p>作业维度：(taskNo, orderNo, skuNo)</p>
      * <p>即：某个任务的下某个订单的某种货品，它确实可以发货{n}件/each，因为他们的(质量，数量)都OK.</p>
      */
+    @KeyUsecase(in = {"taskNo", "orderNo", "skuNo", "qty"})
     public ApiResponse<Void> confirmQty(ConfirmQtyRequest request) throws WmsException {
         WarehouseNo warehouseNo = WarehouseNo.of(request.getWarehouseNo());
         Operator operator = Operator.of(request.getOperatorNo());

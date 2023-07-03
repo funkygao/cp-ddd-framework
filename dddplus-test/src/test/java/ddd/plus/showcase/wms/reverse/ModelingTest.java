@@ -1,31 +1,23 @@
 package ddd.plus.showcase.wms.reverse;
 
-import org.springframework.core.io.ClassPathResource;
+import io.github.dddplus.ast.DomainModelAnalyzer;
+import io.github.dddplus.ast.DomainModelAnalyzerTest;
+import io.github.dddplus.ast.ReverseEngineeringModel;
+import io.github.dddplus.ast.view.PlantUmlBuilder;
+import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.io.IOException;
 
 class ModelingTest {
 
+    @Test
     void visualizeTheReverseModel() throws IOException {
         ReverseEngineeringModel model = new DomainModelAnalyzer()
-                .scan(moduleRoot("dddplus-test"))
+                .scan(DomainModelAnalyzerTest.moduleRoot("dddplus-test"))
                 .analyze((level, path, file) -> path.contains("showcase") && !path.contains("Test"));
         new PlantUmlBuilder()
                 .skipParamHandWrittenStyle()
                 .skinParamPolyline()
                 .build(model).renderSvg("../wms.svg");
-    }
-
-    static File moduleRoot(String module) throws IOException {
-        return (projectRoot().listFiles(f -> f.getName().equals(module)))[0];
-    }
-
-    private static File projectRoot() throws IOException {
-        File currentDir = new ClassPathResource("").getFile();
-        return currentDir
-                .getParentFile()
-                .getParentFile()
-                .getParentFile();
     }
 }

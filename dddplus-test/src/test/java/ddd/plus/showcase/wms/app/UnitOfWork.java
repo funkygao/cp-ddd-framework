@@ -1,15 +1,16 @@
 package ddd.plus.showcase.wms.app;
 
-import ddd.plus.showcase.wms.domain.order.Order;
 import ddd.plus.showcase.wms.domain.order.IOrderRepository;
-import ddd.plus.showcase.wms.domain.task.Task;
+import ddd.plus.showcase.wms.domain.order.Order;
 import ddd.plus.showcase.wms.domain.task.ITaskRepository;
+import ddd.plus.showcase.wms.domain.task.Task;
 import io.github.dddplus.model.IUnitOfWork;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @Setter(onMethod_ = {@Autowired})
