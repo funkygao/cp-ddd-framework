@@ -42,11 +42,8 @@ public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainM
     @KeyElement(types = KeyElement.Type.Operational, byType = true)
     private OrderConstraint constraint;
 
-    private OrderLineBag orderLineBag;
     @lombok.experimental.Delegate
-    private OrderLineBag lineBag() {
-        return orderLineBag;
-    }
+    private OrderLineBag orderLineBag;
 
     // associations
     public interface OrderCartons extends HasMany<Carton> {
@@ -55,10 +52,8 @@ public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainM
          */
         int totalCartonizedQty();
     }
+    @lombok.experimental.Delegate
     private OrderCartons cartons;
-    public OrderCartons cartons() {
-        return cartons;
-    }
 
     @KeyBehavior
     public void pause(Operator operator) {

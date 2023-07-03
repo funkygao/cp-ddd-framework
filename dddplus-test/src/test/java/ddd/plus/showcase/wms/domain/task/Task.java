@@ -46,13 +46,11 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
     private PlatformNo platformNo;
     // 该复核任务由哪一个操作员完成：1个任务只能1人完成
     private Operator operator;
+    @Getter
     private WarehouseNo warehouseNo;
 
-    private ContainerBag containerBag;
     @lombok.experimental.Delegate
-    public ContainerBag containerBag() { // TODO kill with lombok Delegate
-        return containerBag;
-    }
+    private ContainerBag containerBag;
 
     // associations
     /**
@@ -72,11 +70,8 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
         Order pendingOrder(OrderNo orderNo) throws WmsException;
     }
 
-    private TaskOrders orders;
     @lombok.experimental.Delegate
-    public TaskOrders orders() {
-        return orders;
-    }
+    private TaskOrders orders;
 
     public interface TaskCartonItems extends HasMany<CartonItem> {
         /**

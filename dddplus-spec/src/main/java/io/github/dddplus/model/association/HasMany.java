@@ -15,13 +15,14 @@ import io.github.dddplus.model.IBag;
  * <p>Example:</p>
  * <pre>
  * {@code
- *
+ * ℗lombok.Getter(AccessLevel.PACKAGE)
  * public class Task implements IAggregateRoot {
- *     private Orders orders;
- *
  *     public interface Orders extends HasMany<Order> {
  *         List<Order> pendingOrders();
  *     }
+ *
+ *     ℗lombok.experimental.Delegate
+ *     private Orders orders; // task.pendingOrders()
  * }
  * public class Order implements IAggregateRoot {}
  *
@@ -29,6 +30,7 @@ import io.github.dddplus.model.IBag;
  * public TaskOrders implements Task.Orders {
  *     private final String taskNo;
  *     // autowired by AutowireObjectFactory in dddplus-mybatis module
+ *     ℗Autowired
  *     private Dao dao;
  *     public TaskOrders(String taskNo) {
  *         this.taskNo = taskNo;
