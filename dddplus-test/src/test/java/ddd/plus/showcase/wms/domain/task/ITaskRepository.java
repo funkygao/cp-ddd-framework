@@ -9,6 +9,8 @@ import io.github.design.ContainerNo;
 
 public interface ITaskRepository extends IRepository {
 
+    Task mustGet(TaskNo taskNo, WarehouseNo warehouseNo) throws WmsException;
+
     Task mustGet(ContainerNo containerNo, WarehouseNo warehouseNo) throws WmsException;
 
     Task mustGet(TaskNo taskNo, OrderNo orderNo, Sku sku, WarehouseNo warehouseNo) throws WmsException;

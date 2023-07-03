@@ -7,7 +7,8 @@ import java.util.List;
 public enum TaskStatus {
     Submitted,
     Ongoing,
-    Finished;
+    Finished,
+    Appending;
 
     private static List<TaskStatus> allowCheckStatus() {
         return Lists.newArrayList(Submitted, Ongoing);
@@ -18,5 +19,9 @@ public enum TaskStatus {
      */
     public boolean canPerformChecking() {
         return allowCheckStatus().contains(this);
+    }
+
+    public boolean canRecheck() {
+        return Submitted.equals(this) || Ongoing.equals(this);
     }
 }

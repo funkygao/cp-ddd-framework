@@ -11,6 +11,8 @@ import io.github.dddplus.model.IUnboundedDomainModel;
 @KeyRelation(whom = Pallet.class, type = KeyRelation.Type.BelongTo, remark = "可能")
 @KeyRelation(whom = Task.class, type = KeyRelation.Type.BelongTo)
 public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomainModel {
+    private Long id;
+    private CartonNo cartonNo;
 
     @KeyBehavior
     public void fullize() {

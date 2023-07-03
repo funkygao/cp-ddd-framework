@@ -6,7 +6,6 @@ import ddd.plus.showcase.wms.domain.common.WarehouseNo;
 import ddd.plus.showcase.wms.domain.task.dict.TaskStatus;
 import ddd.plus.showcase.wms.domain.task.hint.ConfirmQtyHint;
 import ddd.plus.showcase.wms.domain.task.hint.TaskDirtyHint;
-import io.github.dddplus.buddy.IDirtyHint;
 import io.github.dddplus.dsl.KeyBehavior;
 import io.github.dddplus.dsl.KeyElement;
 import io.github.dddplus.dsl.KeyRelation;
@@ -44,10 +43,6 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
 
     private ContainerBag containerBag;
 
-    public <T extends IDirtyHint> T firstHintOf(Class<T> hintClass) {
-        return memento.firstHintOf(hintClass); // FIXME dup code
-    }
-
     @KeyRule
     public int totalSku() {
         return containerBag.totalSku();
@@ -70,14 +65,12 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
         dirty(new TaskDirtyHint(this).dirty("operator", "platform_no"));
     }
 
-    @KeyBehavior(async = false)
+    @KeyBehavior
     public void confirmQty(BigDecimal qty, Operator operator, PlatformNo platformNo) {
         this.platformNo = platformNo;
         this.operator = operator;
         containerBag.pendingItemBag().allocatedQty(qty);
         dirty(new ConfirmQtyHint(this));
     }
-
-
 
 }

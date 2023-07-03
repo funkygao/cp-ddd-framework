@@ -1,11 +1,12 @@
 package ddd.plus.showcase.wms.app.service;
 
 import ddd.plus.showcase.wms.app.UnitOfWork;
-import ddd.plus.showcase.wms.app.service.dto.ClaimTaskRequest;
-import ddd.plus.showcase.wms.app.service.dto.ConfirmQtyRequest;
-import ddd.plus.showcase.wms.app.service.dto.RecommendPlatformRequest;
+import ddd.plus.showcase.wms.app.service.dto.*;
 import ddd.plus.showcase.wms.app.service.dto.base.ApiResponse;
+import ddd.plus.showcase.wms.domain.carton.CartonNo;
 import ddd.plus.showcase.wms.domain.common.*;
+import ddd.plus.showcase.wms.domain.order.IOrderRepository;
+import ddd.plus.showcase.wms.domain.order.Order;
 import ddd.plus.showcase.wms.domain.order.OrderNo;
 import ddd.plus.showcase.wms.domain.task.PlatformNo;
 import ddd.plus.showcase.wms.domain.task.Task;
@@ -13,6 +14,7 @@ import ddd.plus.showcase.wms.domain.task.TaskNo;
 import ddd.plus.showcase.wms.domain.task.ITaskRepository;
 import ddd.plus.showcase.wms.domain.task.spec.OperatorCannotBePicker;
 import ddd.plus.showcase.wms.domain.task.spec.TaskCanPerformChecking;
+import ddd.plus.showcase.wms.domain.task.spec.TaskCanRecheck;
 import io.github.dddplus.dsl.KeyUsecase;
 import io.github.design.ContainerNo;
 import lombok.Setter;
@@ -31,12 +33,13 @@ import java.math.BigDecimal;
 public class ManualCheckAppService {
     private MasterDataGateway masterDataGateway;
     private ITaskRepository taskRepository;
+    private IOrderRepository orderRepository;
     private UnitOfWork uow;
 
     /**
-     * 操作员在执行一个复核任务，他应该去哪一个复核台?
+     * 操作员应该去哪一个复核台?
      */
-    @KeyUsecase(in = "taskNo", out = "platformNo")
+    @KeyUsecase(in = "taskNo")
     public ApiResponse<String> recommendPlatform(RecommendPlatformRequest request) {
         WarehouseNo warehouseNo = WarehouseNo.of(request.getWarehouseNo());
         Operator operator = Operator.of(request.getOperatorNo());
@@ -86,6 +89,51 @@ public class ManualCheckAppService {
 
         uow.persist(task);
 
+        return ApiResponse.ofOk();
+    }
+
+    /**
+     * 暂停一个出库单.
+     */
+    @KeyUsecase(in = "orderNo")
+    public ApiResponse<Void> pause(PauseOrderRequest request) throws WmsException {
+        Order order = orderRepository.mustGet(OrderNo.of(request.getOrderNo()), WarehouseNo.of(request.getWarehouseNo()));
+        order.pause(Operator.of(request.getOperatorNo()));
+        orderRepository.save(order);
+        return ApiResponse.ofOk();
+    }
+
+    /**
+     * 恢复一个出库单的执行.
+     */
+    @KeyUsecase(in = "orderNo")
+    public ApiResponse<Void> resume(ResumeOrderRequest request) throws WmsException {
+        Order order = orderRepository.mustGet(OrderNo.of(request.getOrderNo()), WarehouseNo.of(request.getWarehouseNo()));
+        order.resume(Operator.of(request.getOperatorNo()));
+        orderRepository.save(order);
+        return ApiResponse.ofOk();
+    }
+
+    /**
+     * 重新复核.
+     */
+    @KeyUsecase(in = {"taskNo", "cartonNo"})
+    public ApiResponse<Void> recheck(RecheckRequest request) throws WmsException {
+        TaskNo taskNo = TaskNo.of(request.getTaskNo());
+        CartonNo cartonNo = CartonNo.of(request.getCartonNo());
+        Operator operator = Operator.of(request.getOperatorNo());
+
+        Task task = taskRepository.mustGet(taskNo, WarehouseNo.of(request.getWarehouseNo()));
+        task.assureSatisfied(new TaskCanRecheck());
+
+        return ApiResponse.ofOk();
+    }
+
+    /**
+     * 复核员把拣货容器的货品放入箱，并使用耗材以便运输安全，该过程发现箱已满.
+     */
+    @KeyUsecase(in = {"orderNo", "cartonNo", "consumables"})
+    public ApiResponse<Void> cartonFull(CartonFullRequest request) throws WmsException {
         return ApiResponse.ofOk();
     }
 }
