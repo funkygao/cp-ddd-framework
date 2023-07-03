@@ -23,8 +23,11 @@ import java.math.BigDecimal;
 public class ContainerItem implements IDomainModel {
     private Long id;
 
-    @KeyElement(types = KeyElement.Type.Structural)
+    @KeyElement(types = KeyElement.Type.Structural, byType = true)
     private Sku sku;
+
+    @KeyElement(types = KeyElement.Type.Structural, byType = true)
+    private OrderLineNo orderLineNo;
 
     /**
      * 预计的复核数量.
@@ -41,8 +44,6 @@ public class ContainerItem implements IDomainModel {
      */
     @KeyElement(types = KeyElement.Type.Quantity)
     private BigDecimal pendingQty;
-
-    private OrderLineNo orderLineNo;
 
     /**
      * 复核作业发现的差异数量.

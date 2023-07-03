@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Data
-public class ApiRequest implements Serializable {
+public abstract class ApiRequest implements Serializable {
     private static final long serialVersionUID = 1L;
 
     protected String operatorNo;

@@ -12,9 +12,13 @@ import java.util.List;
  */
 @Getter
 public class Sku extends AbstractBusinessNo<String> {
+    @KeyElement(types = KeyElement.Type.Structural)
+    private String skuNo;
+    @KeyElement(types = KeyElement.Type.Structural, byType = true)
     private OwnerNo ownerNo;
+    @KeyElement(types = KeyElement.Type.Structural, byType = true)
     private PackCode packCode;
-    @KeyElement(types = KeyElement.Type.Contextual)
+    @KeyElement(types = KeyElement.Type.Contextual, byType = true)
     private LotNo lotNo;
     /**
      * 货品的序列号/serial number.
@@ -22,8 +26,8 @@ public class Sku extends AbstractBusinessNo<String> {
      * <p>例如，iPhone，为了精确管理库存，每件货品都有一个唯一的序列号追踪.</p>
      * <p>该场景下，{@link Sku}代表的是{@code iPhone}，即“品”，而sn代表的是“件”.</p>
      */
+    @KeyElement(types = KeyElement.Type.Contextual)
     private List<String> snList;
-
 
     private Sku(@NonNull String skuNo) {
         super(skuNo);

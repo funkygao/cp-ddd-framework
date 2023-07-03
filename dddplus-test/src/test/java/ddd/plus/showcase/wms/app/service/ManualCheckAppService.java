@@ -84,6 +84,8 @@ public class ManualCheckAppService {
         Task task = taskRepository.mustGet(TaskNo.of(request.getTaskNo()), orderNo, sku, warehouseNo);
         task.confirmQty(qty, operator, PlatformNo.of(request.getPlatformNo()));
 
+        uow.persist(task);
+
         return ApiResponse.ofOk();
     }
 }
