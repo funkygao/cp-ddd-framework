@@ -1,6 +1,6 @@
 package ddd.plus.showcase.wms.domain.pack;
 
-import ddd.plus.showcase.wms.domain.common.BaseAggregateRoot;
+import ddd.plus.showcase.wms.domain.base.BaseAggregateRoot;
 import ddd.plus.showcase.wms.domain.order.OrderNo;
 import ddd.plus.showcase.wms.domain.pack.dict.PackStatus;
 import io.github.dddplus.dsl.KeyElement;

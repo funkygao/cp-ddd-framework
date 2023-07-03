@@ -1,5 +1,6 @@
-package ddd.plus.showcase.wms.domain.common;
+package ddd.plus.showcase.wms.domain.base;
 
+import ddd.plus.showcase.wms.domain.common.WmsException;
 import io.github.dddplus.buddy.DirtyMemento;
 import io.github.dddplus.buddy.Exchange;
 import io.github.dddplus.buddy.IDirtyHint;

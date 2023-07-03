@@ -1,5 +1,6 @@
 package ddd.plus.showcase.wms.domain.task;
 
+import ddd.plus.showcase.wms.domain.order.OrderNo;
 import ddd.plus.showcase.wms.domain.task.dict.ContainerType;
 import io.github.dddplus.dsl.KeyElement;
 import io.github.dddplus.dsl.KeyRelation;
@@ -8,6 +9,8 @@ import io.github.design.ContainerNo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.Set;
 
 /**
  * 拣货容器.
@@ -23,9 +26,17 @@ public class Container implements IDomainModel {
     private Long id;
     @KeyElement(types = KeyElement.Type.DCU, remark = "扫描枪可扫")
     private ContainerNo containerNo;
-    @KeyElement(types = KeyElement.Type.Operational)
+    @KeyElement(types = KeyElement.Type.Operational, byType = true)
     private ContainerType type;
 
     private ContainerItemBag containerItemBag;
+
+    public ContainerItemBag itemBag() {
+        return containerItemBag;
+    }
+
+    public Set<OrderNo> orderNoSet() {
+        return containerItemBag.orderNoSet();
+    }
 
 }

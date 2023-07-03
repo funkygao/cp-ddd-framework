@@ -3,18 +3,22 @@ package ddd.plus.showcase.wms.app.service;
 import ddd.plus.showcase.wms.app.UnitOfWork;
 import ddd.plus.showcase.wms.app.service.dto.*;
 import ddd.plus.showcase.wms.app.service.dto.base.ApiResponse;
+import ddd.plus.showcase.wms.domain.carton.Carton;
 import ddd.plus.showcase.wms.domain.carton.CartonNo;
+import ddd.plus.showcase.wms.domain.carton.ICartonRepository;
+import ddd.plus.showcase.wms.domain.carton.spec.CaronNotFull;
 import ddd.plus.showcase.wms.domain.common.*;
-import ddd.plus.showcase.wms.domain.order.IOrderRepository;
-import ddd.plus.showcase.wms.domain.order.Order;
-import ddd.plus.showcase.wms.domain.order.OrderNo;
+import ddd.plus.showcase.wms.domain.order.*;
+import ddd.plus.showcase.wms.domain.order.spec.OrderNotFullyCartonized;
+import ddd.plus.showcase.wms.domain.order.spec.OrderUsesManualCheckFlow;
+import ddd.plus.showcase.wms.domain.task.ITaskRepository;
 import ddd.plus.showcase.wms.domain.task.PlatformNo;
 import ddd.plus.showcase.wms.domain.task.Task;
 import ddd.plus.showcase.wms.domain.task.TaskNo;
-import ddd.plus.showcase.wms.domain.task.ITaskRepository;
 import ddd.plus.showcase.wms.domain.task.spec.OperatorCannotBePicker;
 import ddd.plus.showcase.wms.domain.task.spec.TaskCanPerformChecking;
 import ddd.plus.showcase.wms.domain.task.spec.TaskCanRecheck;
+import ddd.plus.showcase.wms.domain.task.spec.UniqueCodeConstraint;
 import io.github.dddplus.dsl.KeyUsecase;
 import io.github.design.ContainerNo;
 import lombok.Setter;
@@ -32,8 +36,12 @@ import java.math.BigDecimal;
 @Slf4j
 public class ManualCheckAppService {
     private MasterDataGateway masterDataGateway;
+    private OrderGateway orderGateway;
+
     private ITaskRepository taskRepository;
     private IOrderRepository orderRepository;
+    private ICartonRepository cartonRepository;
+
     private UnitOfWork uow;
 
     /**
@@ -58,13 +66,19 @@ public class ManualCheckAppService {
         ContainerNo containerNo = ContainerNo.of(request.getContainerNo());
         PlatformNo platformNo = PlatformNo.of(request.getPlatformNo());
 
-        Task task = taskRepository.mustGet(containerNo, warehouseNo);
+        // 该容器还没复核完，把它的任务加载
+        Task task = taskRepository.mustGetPending(containerNo, warehouseNo);
         task.assureSatisfied(new TaskCanPerformChecking()
                 .and(new OperatorCannotBePicker(masterDataGateway, operator)));
-
         task.bind(operator, platformNo);
-        uow.persist(task);
 
+        // 通过association对象加载管理聚合根
+        OrderBag pendingOrders = task.getOrders().pendingOrders();
+        pendingOrders.assureSatisfied(new OrderUsesManualCheckFlow());
+        // 逆向物流逻辑
+        OrderBagCanceled canceledOrderBag = pendingOrders.subBagOfCanceled(orderGateway);
+
+        uow.persist(task, canceledOrderBag);
         return ApiResponse.ofOk();
     }
 
@@ -84,8 +98,19 @@ public class ManualCheckAppService {
 
         // 推荐复核台强约束？
 
-        Task task = taskRepository.mustGet(TaskNo.of(request.getTaskNo()), orderNo, sku, warehouseNo);
+        Task task = taskRepository.mustGetPending(TaskNo.of(request.getTaskNo()), orderNo, sku, warehouseNo);
+        task.assureSatisfied(new TaskCanPerformChecking()
+                .and(new UniqueCodeConstraint(UniqueCode.of(request.getUniqueCode())))
+                .and(new OperatorCannotBePicker(masterDataGateway, operator)));
+
+        Order order = task.getOrders().pendingOrder(orderNo);
+        order.assureSatisfied(new OrderNotFullyCartonized());
+
         task.confirmQty(qty, operator, PlatformNo.of(request.getPlatformNo()));
+
+        // 装箱
+        Carton carton = cartonRepository.mustGet(CartonNo.of(request.getCartonNo()), warehouseNo);
+        carton.assureSatisfied(new CaronNotFull());
 
         uow.persist(task);
 
@@ -123,7 +148,7 @@ public class ManualCheckAppService {
         CartonNo cartonNo = CartonNo.of(request.getCartonNo());
         Operator operator = Operator.of(request.getOperatorNo());
 
-        Task task = taskRepository.mustGet(taskNo, WarehouseNo.of(request.getWarehouseNo()));
+        Task task = taskRepository.mustGetPending(taskNo, WarehouseNo.of(request.getWarehouseNo()));
         task.assureSatisfied(new TaskCanRecheck());
 
         return ApiResponse.ofOk();

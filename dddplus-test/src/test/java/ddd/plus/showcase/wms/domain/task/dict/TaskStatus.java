@@ -10,7 +10,7 @@ public enum TaskStatus {
     Finished,
     Appending;
 
-    private static List<TaskStatus> allowCheckStatus() {
+    public static List<TaskStatus> allowCheckStatus() {
         return Lists.newArrayList(Submitted, Ongoing);
     }
 

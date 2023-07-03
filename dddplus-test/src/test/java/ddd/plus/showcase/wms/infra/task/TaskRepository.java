@@ -15,17 +15,17 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class TaskRepository implements ITaskRepository {
     @Override
-    public Task mustGet(TaskNo taskNo, WarehouseNo warehouseNo) throws WmsException {
+    public Task mustGetPending(TaskNo taskNo, WarehouseNo warehouseNo) throws WmsException {
         return null;
     }
 
     @Override
-    public Task mustGet(ContainerNo containerNo, WarehouseNo warehouseNo) throws WmsException {
+    public Task mustGetPending(ContainerNo containerNo, WarehouseNo warehouseNo) throws WmsException {
         return null;
     }
 
     @Override
-    public Task mustGet(TaskNo taskNo, OrderNo orderNo, Sku sku, WarehouseNo warehouseNo) throws WmsException {
+    public Task mustGetPending(TaskNo taskNo, OrderNo orderNo, Sku sku, WarehouseNo warehouseNo) throws WmsException {
         return null;
     }
 

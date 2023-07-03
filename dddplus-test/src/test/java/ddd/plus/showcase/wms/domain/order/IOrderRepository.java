@@ -9,4 +9,6 @@ public interface IOrderRepository extends IRepository {
 
     void save(Order order);
 
+    void switchToCanceledStatus(OrderBagCanceled orderBagCanceled);
+
 }

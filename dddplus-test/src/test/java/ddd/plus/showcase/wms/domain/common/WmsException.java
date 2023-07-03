@@ -5,6 +5,10 @@ package ddd.plus.showcase.wms.domain.common;
  */
 public class WmsException extends RuntimeException {
 
+    public WmsException(ExceptionCode code) {
+
+    }
+
     public WmsException(String exceptionCode) {
 
     }
