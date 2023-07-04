@@ -13,7 +13,7 @@ import java.io.IOException;
 class WmsReverseModelingTest {
 
     @Test
-    @Disabled
+    @Disabled // 手工按需可视化，无需集成到CI flow
     void visualizeTheReverseModel() throws IOException {
         ReverseEngineeringModel model = new DomainModelAnalyzer()
                 .scan(DomainModelAnalyzerTest.moduleRoot("dddplus-test"))
@@ -25,7 +25,7 @@ class WmsReverseModelingTest {
                 .renderSvg("../doc/wms.svg");
     }
 
-    @Test
+    @Test // integrated CI flow and auto generate pull request: reviewer check the diff
     void generateForwardModel() throws IOException {
         ReverseEngineeringModel model = new DomainModelAnalyzer()
                 .scan(DomainModelAnalyzerTest.moduleRoot("dddplus-test"))
