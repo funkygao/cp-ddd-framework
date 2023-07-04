@@ -12,6 +12,7 @@ import io.github.dddplus.dsl.KeyRelation;
 import io.github.dddplus.model.IUnboundedDomainModel;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.experimental.Delegate;
 
 @KeyRelation(whom = CartonItemBag.class, type = KeyRelation.Type.HasOne)
 @KeyRelation(whom = ConsumableBag.class, type = KeyRelation.Type.HasOne)
@@ -27,6 +28,7 @@ public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomai
     private OrderNo orderNo;
 
     @KeyElement(types = KeyElement.Type.Lifecycle)
+    @Delegate
     private CartonStatus status;
 
     private CartonItemBag itemBag;

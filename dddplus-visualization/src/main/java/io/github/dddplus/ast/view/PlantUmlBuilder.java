@@ -68,6 +68,7 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
         connections.put(KeyRelation.Type.HasOne, escape("1") + " *-- " + escape("1"));
         connections.put(KeyRelation.Type.HasMany, escape("1") + " *-- " + escape("N"));
         connections.put(KeyRelation.Type.BelongTo, "--|>");
+        connections.put(KeyRelation.Type.Associate, "o--");
 
         connections.put(KeyRelation.Type.Many2Many, "--");
         connections.put(KeyRelation.Type.Contextual, "--|>");

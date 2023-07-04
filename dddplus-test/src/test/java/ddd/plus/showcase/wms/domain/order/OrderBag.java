@@ -3,6 +3,7 @@ package ddd.plus.showcase.wms.domain.order;
 import ddd.plus.showcase.wms.domain.base.SetBag;
 import ddd.plus.showcase.wms.domain.common.OrderGateway;
 import ddd.plus.showcase.wms.domain.common.WarehouseNo;
+import ddd.plus.showcase.wms.domain.common.WmsException;
 import io.github.dddplus.dsl.KeyBehavior;
 import io.github.dddplus.model.IUnboundedDomainModel;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +13,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
-public class OrderBag extends SetBag<Order> implements IUnboundedDomainModel {
+public class OrderBag extends SetBag<Order, WmsException> implements IUnboundedDomainModel {
 
     private OrderBag(Set<Order> orders) {
         this.items = orders;

@@ -8,7 +8,7 @@ import lombok.Getter;
 
 import java.util.List;
 
-public abstract class ListBag<Entity> implements IBag {
+public abstract class ListBag<Entity, Ex> implements IBag {
     @Getter
     protected List<Entity> items;
 
@@ -24,11 +24,11 @@ public abstract class ListBag<Entity> implements IBag {
         return items.iterator().next();
     }
 
-    public final void assureSatisfied(ISpecification<Entity> specification) throws WmsException {
+    public final <Ex extends RuntimeException> void satisfy(ISpecification<Entity> specification) throws Ex {
         Notification notification = Notification.build();
         for (Entity item : items) {
             if (!specification.isSatisfiedBy(item, notification)) {
-                throw new WmsException(notification.first());
+                throw new RuntimeException(notification.first());
             }
         }
     }

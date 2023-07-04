@@ -7,6 +7,6 @@ import io.github.dddplus.buddy.specification.Notification;
 public class CaronNotFull extends AbstractSpecification<Carton> {
     @Override
     public boolean isSatisfiedBy(Carton carton, Notification notification) {
-        return !carton.getStatus().isFull();
+        return !carton.isFull();
     }
 }

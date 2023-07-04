@@ -1,6 +1,7 @@
 package ddd.plus.showcase.wms.domain.task;
 
 import ddd.plus.showcase.wms.domain.base.ListBag;
+import ddd.plus.showcase.wms.domain.common.WmsException;
 import ddd.plus.showcase.wms.domain.order.OrderNo;
 import io.github.dddplus.dsl.KeyBehavior;
 import io.github.dddplus.dsl.KeyRelation;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.Set;
 
 @KeyRelation(whom = ContainerItem.class, type = KeyRelation.Type.HasMany)
-public class ContainerItemBag extends ListBag<ContainerItem> implements IUnboundedDomainModel {
+public class ContainerItemBag extends ListBag<ContainerItem, WmsException> implements IUnboundedDomainModel {
 
     private ContainerItemBag(List<ContainerItem> items) {
         this.items = items;

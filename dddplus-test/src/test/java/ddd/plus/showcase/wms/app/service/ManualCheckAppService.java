@@ -74,7 +74,7 @@ public class ManualCheckAppService {
 
         // 通过association对象加载管理聚合根
         OrderBag pendingOrders = task.pendingOrders();
-        pendingOrders.assureSatisfied(new OrderUsesManualCheckFlow());
+        pendingOrders.satisfy(new OrderUsesManualCheckFlow());
         // 逆向物流逻辑
         OrderBagCanceled canceledOrderBag = pendingOrders.subBagOfCanceled(orderGateway);
 

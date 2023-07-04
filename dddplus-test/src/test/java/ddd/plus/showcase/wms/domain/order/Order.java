@@ -29,7 +29,9 @@ import lombok.extern.slf4j.Slf4j;
 public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainModel {
     private Long id;
 
+    @Getter
     private OrderNo orderNo;
+    @Getter
     private WarehouseNo warehouseNo;
     private Operator lastOperator;
 

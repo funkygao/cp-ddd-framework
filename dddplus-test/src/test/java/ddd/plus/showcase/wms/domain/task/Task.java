@@ -12,15 +12,15 @@ import ddd.plus.showcase.wms.domain.order.OrderNo;
 import ddd.plus.showcase.wms.domain.task.dict.TaskStatus;
 import ddd.plus.showcase.wms.domain.task.hint.ConfirmQtyHint;
 import ddd.plus.showcase.wms.domain.task.hint.TaskDirtyHint;
-import io.github.dddplus.dsl.*;
+import io.github.dddplus.dsl.KeyBehavior;
+import io.github.dddplus.dsl.KeyElement;
+import io.github.dddplus.dsl.KeyRelation;
 import io.github.dddplus.model.IUnboundedDomainModel;
 import io.github.dddplus.model.association.HasMany;
 import lombok.*;
-import lombok.experimental.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
-import java.util.Set;
 
 /**
  * 复核任务.
@@ -33,8 +33,10 @@ import java.util.Set;
 @Getter(AccessLevel.PACKAGE)
 @KeyRelation(whom = ContainerBag.class, type = KeyRelation.Type.HasOne)
 public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainModel {
+    @Getter
     private Long id;
 
+    @Getter
     private TaskNo taskNo;
     private Integer priority;
     @KeyElement(types = KeyElement.Type.Lifecycle, byType = true)
@@ -92,11 +94,13 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
         dirty(new TaskDirtyHint(this).dirty("operator", "platform_no"));
     }
 
+
+
     @KeyBehavior
     public void confirmQty(BigDecimal qty, Operator operator, PlatformNo platformNo) {
         this.platformNo = platformNo;
         this.operator = operator;
-        pendingItemBag().confirmQty(qty);
+        containerBag.pendingItemBag().confirmQty(qty);
         dirty(new ConfirmQtyHint(this));
     }
 
