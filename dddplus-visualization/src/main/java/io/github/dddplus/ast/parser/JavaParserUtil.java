@@ -79,6 +79,7 @@ public final class JavaParserUtil {
         if (info.startsWith("@") || info.startsWith("{@")) {
             return BLANK;
         }
+        info = info.replaceAll("\\{@link ", "").replaceAll("\\}", "");
         return info;
     }
 
