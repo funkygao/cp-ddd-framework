@@ -108,6 +108,7 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
     public void confirmQty(BigDecimal qty, Operator operator, Platform platformNo) {
         this.platformNo = platformNo;
         this.operator = operator;
+        // lombok Delegate，只能在外边调用时，才会Decorate：这里不能绕过containerBag直接调用pendingItemBag()
         containerBag.pendingItemBag().confirmQty(qty);
         dirty(new ConfirmQtyHint(this));
     }
