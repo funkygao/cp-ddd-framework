@@ -1,4 +1,4 @@
-package ddd.plus.showcase.wms.reverse;
+package ddd.plus.showcase.reverse;
 
 import io.github.dddplus.ast.DomainModelAnalyzer;
 import io.github.dddplus.ast.DomainModelAnalyzerTest;
@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-class ReverseModelingTest {
+class WmsReverseModelingTest {
 
     @Test
     @Disabled

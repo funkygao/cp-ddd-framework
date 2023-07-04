@@ -6,4 +6,4 @@
 /**
  * Reverse modeling of WMS.
  */
-package ddd.plus.showcase.wms.reverse;
+package ddd.plus.showcase.reverse;
