@@ -20,6 +20,7 @@
         <aspectj.verion>1.9.1</aspectj.verion>
         <liteflow.version>2.10.2</liteflow.version>
         <caliper.version>1.0-beta-2</caliper.version>
+        <mapstruct.version>1.5.5.Final</mapstruct.version>
     </properties>
 
     <dependencies>
@@ -52,6 +53,12 @@
             <groupId>io.github.dddplus</groupId>
             <artifactId>dddplus-visualization</artifactId>
             <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${mapstruct.version}</version>
         </dependency>
 
         <!-- logging -->
