@@ -33,7 +33,7 @@ public class Pack extends BaseAggregateRoot<Pack> implements IUnboundedDomainMod
     private BigDecimal totalVolume;
 
     @Override
-    protected void onNotSatisfied(Notification notification) {
+    protected void whenNotSatisfied(Notification notification) {
         throw new WmsException(notification.first());
     }
 }

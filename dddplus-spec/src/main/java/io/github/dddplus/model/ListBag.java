@@ -1,7 +1,5 @@
 package io.github.dddplus.model;
 
-import io.github.dddplus.model.spcification.ISpecification;
-import io.github.dddplus.model.spcification.Notification;
 import lombok.Getter;
 import lombok.NonNull;
 
@@ -28,19 +26,14 @@ public abstract class ListBag<Entity> implements IBag {
         return size() == 0;
     }
 
+    /**
+     * 返回任意一个对象：在与具体对象无关场景使用.
+     */
     protected Entity anyItem() {
         return items.iterator().next();
     }
 
-    public final void satisfy(@NonNull ISpecification<Entity> specification) {
-        Notification notification = Notification.build();
-        for (Entity entity : items) {
-            if (!specification.isSatisfiedBy(entity, notification)) {
-                whenNotSatisfied(notification);
-                break;
-            }
-        }
+    public final boolean contains(Entity entity) {
+        return items.contains(entity);
     }
-
-    protected abstract void whenNotSatisfied(Notification notification);
 }

@@ -2,7 +2,6 @@ package ddd.plus.showcase.wms.domain.task;
 
 import ddd.plus.showcase.wms.domain.common.Platform;
 import io.github.dddplus.model.ListBag;
-import io.github.dddplus.model.spcification.Notification;
 import lombok.NonNull;
 
 import java.math.BigDecimal;
@@ -16,11 +15,6 @@ public class TaskBag extends ListBag<Task> {
 
     public static TaskBag of(List<Task> tasks) {
         return new TaskBag(tasks);
-    }
-
-    @Override
-    protected void whenNotSatisfied(Notification notification) {
-
     }
 
     public BigDecimal totalQty() {

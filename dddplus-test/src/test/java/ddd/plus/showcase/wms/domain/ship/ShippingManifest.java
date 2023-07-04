@@ -23,7 +23,7 @@ public class ShippingManifest extends BaseAggregateRoot<ShippingManifest> implem
     private Map<String, Object> extInfo;
 
     @Override
-    protected void onNotSatisfied(Notification notification) {
+    protected void whenNotSatisfied(Notification notification) {
         throw new WmsException(notification.first());
     }
 }

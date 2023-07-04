@@ -36,7 +36,7 @@ public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomai
     private ConsumableBag consumableBag;
 
     @Override
-    protected void onNotSatisfied(Notification notification) {
+    protected void whenNotSatisfied(Notification notification) {
         throw new WmsException(notification.first());
     }
 

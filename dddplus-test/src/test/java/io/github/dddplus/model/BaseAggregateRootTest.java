@@ -39,7 +39,7 @@ class BaseAggregateRootTest {
         Long id;
 
         @Override
-        protected void onNotSatisfied(Notification notification) {
+        protected void whenNotSatisfied(Notification notification) {
 
         }
     }

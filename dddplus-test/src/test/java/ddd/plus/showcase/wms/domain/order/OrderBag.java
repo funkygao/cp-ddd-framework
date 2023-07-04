@@ -6,6 +6,7 @@ import ddd.plus.showcase.wms.domain.common.WmsException;
 import io.github.dddplus.dsl.KeyBehavior;
 import io.github.dddplus.model.IUnboundedDomainModel;
 import io.github.dddplus.model.SetBag;
+import io.github.dddplus.model.spcification.ISpecification;
 import io.github.dddplus.model.spcification.Notification;
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,13 +21,17 @@ public class OrderBag extends SetBag<Order> implements IUnboundedDomainModel {
         super(orders);
     }
 
-    @Override
-    protected void whenNotSatisfied(Notification notification) {
-        throw new WmsException(notification.first());
-    }
-
     static OrderBag of(Set<Order> orders) {
         return new OrderBag(orders);
+    }
+
+    public void satisfy(ISpecification<Order> spec) {
+        Notification notification = Notification.build();
+        for (Order order : items) {
+            if (!spec.isSatisfiedBy(order, notification)) {
+                throw new WmsException(notification.first());
+            }
+        }
     }
 
     /**

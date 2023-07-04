@@ -32,7 +32,7 @@ public abstract class BaseAggregateRoot<Entity> implements IAggregateRoot {
     public void assureSatisfied(ISpecification<Entity> specification) {
         Notification notification = Notification.build();
         if (!specification.isSatisfiedBy((Entity) this, notification)) {
-            onNotSatisfied(notification);
+            whenNotSatisfied(notification);
         }
     }
 
@@ -41,7 +41,7 @@ public abstract class BaseAggregateRoot<Entity> implements IAggregateRoot {
      *
      * @param notification 未满足原因
      */
-    protected abstract void onNotSatisfied(Notification notification);
+    protected abstract void whenNotSatisfied(Notification notification);
 
     /**
      * 临时交换区赋值.

@@ -1,11 +1,9 @@
 package ddd.plus.showcase.wms.domain.task;
 
-import ddd.plus.showcase.wms.domain.common.WmsException;
 import ddd.plus.showcase.wms.domain.order.OrderNo;
 import io.github.dddplus.dsl.KeyRelation;
 import io.github.dddplus.dsl.KeyRule;
 import io.github.dddplus.model.ListBag;
-import io.github.dddplus.model.spcification.Notification;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -18,11 +16,6 @@ public class ContainerBag extends ListBag<Container> {
 
     protected ContainerBag(List<Container> items) {
         super(items);
-    }
-
-    @Override
-    protected void whenNotSatisfied(Notification notification) {
-        throw new WmsException(notification.first());
     }
 
     /**

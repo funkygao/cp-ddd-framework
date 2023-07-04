@@ -1,10 +1,8 @@
 package ddd.plus.showcase.wms.domain.order;
 
-import ddd.plus.showcase.wms.domain.common.WmsException;
 import io.github.dddplus.dsl.KeyRelation;
 import io.github.dddplus.dsl.KeyRule;
 import io.github.dddplus.model.ListBag;
-import io.github.dddplus.model.spcification.Notification;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -14,11 +12,6 @@ public class OrderLineBag extends ListBag<OrderLine> {
 
     protected OrderLineBag(List<OrderLine> items) {
         super(items);
-    }
-
-    @Override
-    protected void whenNotSatisfied(Notification notification) {
-        throw new WmsException(notification.first());
     }
 
     /**
