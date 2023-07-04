@@ -44,7 +44,7 @@ public class ManualCheckAppService {
     private RecommendPlatformFlow recommendPlatformFlow;
 
     /**
-     * 操作员应该去哪一个复核台?
+     * 拣货员应该去哪一个复核台进行复核?
      */
     @KeyUsecase(in = "taskNo")
     public ApiResponse<String> recommendPlatform(RecommendPlatformRequest request) {
@@ -53,7 +53,7 @@ public class ManualCheckAppService {
     }
 
     /**
-     * 操作员扫描容器领取复核任务.
+     * 复核员扫描容器领取复核任务.
      */
     @KeyUsecase(in = "containerNo")
     public ApiResponse<Void> claimTask(ClaimTaskRequest request) throws WmsException {
