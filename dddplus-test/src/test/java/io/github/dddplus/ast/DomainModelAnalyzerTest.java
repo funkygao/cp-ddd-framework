@@ -76,8 +76,13 @@ public class DomainModelAnalyzerTest {
                 .build(model).renderSvg("../test.svg");
     }
 
-    public static File moduleRoot(String module) throws IOException {
-        return (projectRoot().listFiles(f -> f.getName().equals(module)))[0];
+    public static File moduleRoot(String module) {
+        try {
+            return (projectRoot().listFiles(f -> f.getName().equals(module)))[0];
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+
     }
 
     private static File projectRoot() throws IOException {

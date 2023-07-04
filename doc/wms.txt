@@ -1,4 +1,4 @@
-标注覆盖率：Class(49/49.0%) Method(86/43.0%) Property(147/23.8%) Statement(145)
+标注覆盖率：Class(44/54.5%) Method(76/40.8%) Property(137/25.5%) Statement(132)
 模型债：
 <<Aggregate: 装箱>>
 Carton
@@ -82,10 +82,6 @@ Task 复核任务.
    [行为]
       claimedWith() 
       confirmQty() 
-   [流程]
-      cartonItemBag()  TaskCartonItemsDb
-      pendingOrders()  TaskOrdersDb
-      pendingOrder(OrderNo)  TaskOrdersDb
 TaskOfContainer
 TaskOfOrder
 TaskOfSku

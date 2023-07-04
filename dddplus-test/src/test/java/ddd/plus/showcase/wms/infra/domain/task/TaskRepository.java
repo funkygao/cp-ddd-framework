@@ -65,21 +65,24 @@ public class TaskRepository implements ITaskRepository {
      * <ol>
      * <li>如何通过{@link IDirtyHint}获取落库的线索：trace the dirty data</li>
      * <li>如何在基础设施层进行数据库交互的合并</li>
+     * <li>如何解决为了(查询，报表)而进行的领域层无关数据冗余问题</li>
      * <li>如何通过{@link Exchange}实现领域层无感的技术细节：乐观锁</li>
      * </ol>
      */
     @Override
-    public void save(TaskOfSku task) {
+    public void save(TaskOfSku taskOfSku) {
         // 1. 获取所有hint，这样才知道该如何落库
-        ConfirmQtyHint confirmQtyHint = task.unbounded().firstHintOf(ConfirmQtyHint.class);
-        TaskDirtyHint taskDirtyHint = task.unbounded().firstHintOf(TaskDirtyHint.class);
+        ConfirmQtyHint confirmQtyHint = taskOfSku.unbounded().firstHintOf(ConfirmQtyHint.class);
+        TaskDirtyHint taskDirtyHint = taskOfSku.unbounded().firstHintOf(TaskDirtyHint.class);
 
         // 2. 这2个hint可以在Task这个维度合并，以降低数据库交互，从而提升性能
 
-        // 3. DDD里的更新绝大部分采用乐观锁：通过 Exchange 有效传递而不污染领域层
-        Short oldVersion = task.unbounded().xGet(Task.OptimisticLock, Short.class);
-        dao.execute("update set xxx where yyy and version=?",
-                oldVersion);
+        // 3. 转换为po，为了(查询，报表)进行的字段冗余：denormalization
+        TaskPo po = TaskConverter.INSTANCE.toPo(taskOfSku);
+
+        // 4. DDD里的更新绝大部分采用乐观锁：通过 Exchange 有效传递而不污染领域层
+        po.setVersion(taskOfSku.unbounded().xGet(Task.OptimisticLock, Short.class));
+        dao.update(po);
     }
 
     @Override

@@ -62,7 +62,10 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
         this.containerBag = containerBag;
     }
 
+
+    // ============
     // associations
+    // ============
     /**
      * 针对关联关系显式建模.
      *
