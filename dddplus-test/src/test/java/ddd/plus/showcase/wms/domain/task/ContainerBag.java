@@ -49,6 +49,9 @@ public class ContainerBag extends ListBag<Container> {
         return total;
     }
 
+    /**
+     * 待复核的所有容器明细.
+     */
     @KeyRule
     ContainerItemBagPending pendingItemBag() {
         List<ContainerItem> containerItems = new ArrayList<>();
@@ -58,6 +61,9 @@ public class ContainerBag extends ListBag<Container> {
         return new ContainerItemBagPending(ContainerItemBag.of(containerItems));
     }
 
+    /**
+     * 所有的出库单号.
+     */
     @KeyRule
     public Set<OrderNo> orderNoSet() {
         Set<OrderNo> orderNos = new HashSet<>(size());

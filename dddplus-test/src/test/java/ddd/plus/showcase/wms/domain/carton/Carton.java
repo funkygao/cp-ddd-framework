@@ -16,8 +16,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.Delegate;
 
-@KeyRelation(whom = CartonItemBag.class, type = KeyRelation.Type.HasOne)
-@KeyRelation(whom = ConsumableBag.class, type = KeyRelation.Type.HasOne)
 @KeyRelation(whom = Pallet.class, type = KeyRelation.Type.BelongTo, remark = "可能")
 @KeyRelation(whom = Task.class, type = KeyRelation.Type.BelongTo)
 @KeyRelation(whom = Order.class, type = KeyRelation.Type.BelongTo)
@@ -32,8 +30,9 @@ public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomai
     @KeyElement(types = KeyElement.Type.Lifecycle)
     @Delegate
     private CartonStatus status;
-
+    @KeyRelation(whom = CartonItemBag.class, type = KeyRelation.Type.HasOne)
     private CartonItemBag itemBag;
+    @KeyRelation(whom = ConsumableBag.class, type = KeyRelation.Type.HasOne)
     private ConsumableBag consumableBag;
 
     @Override
@@ -42,7 +41,7 @@ public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomai
     }
 
     @KeyBehavior
-    public void fullize() {
+    public void fulfill() {
 
     }
 }

@@ -32,7 +32,6 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Slf4j
 @Getter(AccessLevel.PACKAGE)
-@KeyRelation(whom = ContainerBag.class, type = KeyRelation.Type.HasOne)
 public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainModel {
     @Getter
     private Long id;
@@ -53,6 +52,7 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
     private WarehouseNo warehouseNo;
 
     @lombok.experimental.Delegate
+    @KeyRelation(whom = ContainerBag.class, type = KeyRelation.Type.HasOne)
     private ContainerBag containerBag;
 
     // associations

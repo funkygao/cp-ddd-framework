@@ -17,7 +17,6 @@ import lombok.experimental.Delegate;
  */
 @AllArgsConstructor
 @NoArgsConstructor
-@KeyRelation(whom = ContainerItemBag.class, type = KeyRelation.Type.HasOne)
 public class Container implements IDomainModel {
     private Long id;
 
@@ -27,6 +26,7 @@ public class Container implements IDomainModel {
     private ContainerType type;
 
     @Delegate
+    @KeyRelation(whom = ContainerItemBag.class, type = KeyRelation.Type.HasOne)
     private ContainerItemBag containerItemBag;
 
 }

@@ -7,12 +7,19 @@ import io.github.dddplus.dsl.KeyElement;
 import io.github.dddplus.model.BaseAggregateRoot;
 import io.github.dddplus.model.IUnboundedDomainModel;
 import io.github.dddplus.model.spcification.Notification;
+import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
 
 /**
  * 包裹.
  */
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Slf4j
+@Getter(AccessLevel.PACKAGE)
 public class Pack extends BaseAggregateRoot<Pack> implements IUnboundedDomainModel {
     @KeyElement(types = KeyElement.Type.Structural)
     private WaybillNo waybillNo;

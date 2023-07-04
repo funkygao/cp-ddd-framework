@@ -23,7 +23,7 @@ import java.lang.annotation.*;
  * }
  * </pre>
  */
-@Target(ElementType.TYPE)
+@Target({ElementType.TYPE, ElementType.FIELD})
 @Retention(RetentionPolicy.SOURCE)
 @Documented
 @Repeatable(KeyRelations.class)

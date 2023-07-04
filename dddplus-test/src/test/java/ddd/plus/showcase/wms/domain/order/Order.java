@@ -10,6 +10,7 @@ import ddd.plus.showcase.wms.domain.pack.Pack;
 import io.github.dddplus.dsl.KeyBehavior;
 import io.github.dddplus.dsl.KeyElement;
 import io.github.dddplus.dsl.KeyRelation;
+import io.github.dddplus.dsl.KeyRule;
 import io.github.dddplus.model.BaseAggregateRoot;
 import io.github.dddplus.model.IUnboundedDomainModel;
 import io.github.dddplus.model.association.HasMany;
@@ -25,9 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 @NoArgsConstructor
 @Slf4j
 @Getter(AccessLevel.PACKAGE)
-@KeyRelation(whom = OrderLineBag.class, type = KeyRelation.Type.HasOne)
 @KeyRelation(whom = Pack.class, type = KeyRelation.Type.HasMany)
-@KeyRelation(whom = Order.OrderCartons.class, type = KeyRelation.Type.Associate)
 public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainModel {
     private Long id;
 
@@ -47,6 +46,7 @@ public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainM
     private OrderConstraint constraint;
 
     @lombok.experimental.Delegate
+    @KeyRelation(whom = OrderLineBag.class, type = KeyRelation.Type.HasOne)
     private OrderLineBag orderLineBag;
 
     // associations
@@ -54,9 +54,11 @@ public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainM
         /**
          * 该订单已经装箱的货品件数总和.
          */
+        @KeyRule // FIXME not shown in uml
         int totalCartonizedQty();
     }
     @lombok.experimental.Delegate
+    @KeyRelation(whom = Order.OrderCartons.class, type = KeyRelation.Type.Associate)
     private OrderCartons cartons;
 
     @Override
