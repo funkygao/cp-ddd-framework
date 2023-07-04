@@ -1,7 +1,7 @@
 package ddd.plus.showcase.wms.domain.flow;
 
 import ddd.plus.showcase.wms.app.service.dto.RecommendPlatformRequest;
-import ddd.plus.showcase.wms.domain.common.MasterDataGateway;
+import ddd.plus.showcase.wms.domain.common.IMasterDataGateway;
 import ddd.plus.showcase.wms.domain.common.Platform;
 import ddd.plus.showcase.wms.domain.common.WarehouseNo;
 import ddd.plus.showcase.wms.domain.order.IOrderRepository;
@@ -31,7 +31,7 @@ import java.util.Map;
 public class RecommendPlatformFlow implements INativeFlow {
     private ITaskRepository taskRepository;
     private IOrderRepository orderRepository;
-    private MasterDataGateway masterDataGateway;
+    private IMasterDataGateway masterDataGateway;
     private Comparator<Platform> comparator;
 
     @KeyFlow

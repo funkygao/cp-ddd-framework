@@ -1,6 +1,6 @@
 package ddd.plus.showcase.wms.domain.order;
 
-import ddd.plus.showcase.wms.domain.common.OrderGateway;
+import ddd.plus.showcase.wms.domain.common.IOrderGateway;
 import ddd.plus.showcase.wms.domain.common.WarehouseNo;
 import ddd.plus.showcase.wms.domain.common.WmsException;
 import io.github.dddplus.dsl.KeyBehavior;
@@ -38,7 +38,7 @@ public class OrderBag extends SetBag<Order> implements IUnboundedDomainModel {
      * 当前出库单集合里哪些已经在单据中心里被客户取消了.
      */
     @KeyBehavior
-    public OrderBagCanceled subBagOfCanceled(OrderGateway gateway) {
+    public OrderBagCanceled subBagOfCanceled(IOrderGateway gateway) {
         Set<OrderNo> canceledSet = gateway.canceledSet(orderNos(), warehouseNo());
         return new OrderBagCanceled(subBagOf(canceledSet));
     }

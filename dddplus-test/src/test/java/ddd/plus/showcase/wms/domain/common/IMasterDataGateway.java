@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * 主数据RPC防腐层.
  */
-public interface MasterDataGateway extends IGateway {
+public interface IMasterDataGateway extends IGateway {
 
     boolean allowPerformChecking(Operator operator);
 

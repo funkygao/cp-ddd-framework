@@ -4,6 +4,7 @@ import ddd.plus.showcase.wms.domain.order.OrderNo;
 import io.github.dddplus.dsl.KeyRelation;
 import io.github.dddplus.dsl.KeyRule;
 import io.github.dddplus.model.ListBag;
+import lombok.NonNull;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -13,9 +14,12 @@ import java.util.Set;
 
 @KeyRelation(whom = Container.class, type = KeyRelation.Type.HasMany)
 public class ContainerBag extends ListBag<Container> {
-
     protected ContainerBag(List<Container> items) {
         super(items);
+    }
+
+    public static ContainerBag of(@NonNull List<Container> containers) {
+        return new ContainerBag(containers);
     }
 
     /**

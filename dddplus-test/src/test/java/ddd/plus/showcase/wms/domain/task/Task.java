@@ -58,6 +58,9 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
     @lombok.experimental.Delegate
     @KeyRelation(whom = ContainerBag.class, type = KeyRelation.Type.HasOne)
     private ContainerBag containerBag;
+    public void injectContainerBag(@NonNull Class<? extends ITaskRepository> repo, ContainerBag containerBag) {
+        this.containerBag = containerBag;
+    }
 
     // associations
     /**
@@ -80,6 +83,13 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
     @lombok.experimental.Delegate
     private TaskOrders orders;
 
+    /**
+     * Note：确保不滥用，只能{@link ITaskRepository}才能调用
+     */
+    public void injectOrders(@NonNull Class<? extends ITaskRepository> _any, TaskOrders orders) {
+        this.orders = orders;
+    }
+
     public interface TaskCartonItems extends HasMany<CartonItem> {
         /**
          * 该任务已经装箱的货品明细.
@@ -87,9 +97,11 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
         CartonItemBag cartonItemBag();
     }
 
+    @lombok.experimental.Delegate
     private TaskCartonItems cartonItems;
-    public TaskCartonItems cartonItems() {
-        return cartonItems;
+
+    public void injectCartonItems(@NonNull Class<? extends ITaskRepository> _any, TaskCartonItems cartonItems) {
+        this.cartonItems = cartonItems;
     }
 
     @Override

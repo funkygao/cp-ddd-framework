@@ -1,7 +1,7 @@
 package ddd.plus.showcase.wms.domain.task.spec;
 
 import ddd.plus.showcase.wms.domain.common.ExceptionCode;
-import ddd.plus.showcase.wms.domain.common.MasterDataGateway;
+import ddd.plus.showcase.wms.domain.common.IMasterDataGateway;
 import ddd.plus.showcase.wms.domain.common.Operator;
 import ddd.plus.showcase.wms.domain.task.Task;
 import io.github.dddplus.model.spcification.AbstractSpecification;
@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @AllArgsConstructor
 public class OperatorCannotBePicker extends AbstractSpecification<Task> {
-    private final MasterDataGateway masterDataGateway;
+    private final IMasterDataGateway masterDataGateway;
     private final Operator candidate;
 
     @Override

@@ -1,4 +1,4 @@
-package ddd.plus.showcase.wms.infra.task.association;
+package ddd.plus.showcase.wms.infra.domain.task.association;
 
 import ddd.plus.showcase.wms.domain.common.ExceptionCode;
 import ddd.plus.showcase.wms.domain.common.WmsException;
@@ -10,12 +10,10 @@ import ddd.plus.showcase.wms.domain.task.dict.TaskStatus;
 import ddd.plus.showcase.wms.infra.dao.Dao;
 import io.github.dddplus.dsl.KeyFlow;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @AllArgsConstructor
 public class TaskOrdersDb implements Task.TaskOrders {
     private final Task task;
-    @Autowired
     private Dao dao;
 
     @Override

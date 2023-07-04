@@ -16,6 +16,6 @@ public class UniqueCodeConstraint extends AbstractSpecification<Task> {
 
     @Override
     public boolean isSatisfiedBy(Task task, Notification notification) {
-        return !task.cartonItems().cartonItemBag().contains(uniqueCode);
+        return !task.cartonItemBag().contains(uniqueCode);
     }
 }

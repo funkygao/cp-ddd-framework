@@ -5,5 +5,5 @@ import io.github.dddplus.model.IGateway;
 /**
  * 库存RPC防腐层.
  */
-public interface InventoryGateway extends IGateway {
+public interface IInventoryGateway extends IGateway {
 }

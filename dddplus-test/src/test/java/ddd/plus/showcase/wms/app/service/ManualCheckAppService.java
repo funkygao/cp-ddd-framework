@@ -33,8 +33,8 @@ import java.math.BigDecimal;
 @Setter(onMethod_ = {@Resource})
 @Slf4j
 public class ManualCheckAppService {
-    private MasterDataGateway masterDataGateway;
-    private OrderGateway orderGateway;
+    private IMasterDataGateway masterDataGateway;
+    private IOrderGateway orderGateway;
 
     private ITaskRepository taskRepository;
     private IOrderRepository orderRepository;
