@@ -1,10 +1,12 @@
 package ddd.plus.showcase.wms.domain.pack;
 
-import ddd.plus.showcase.wms.domain.base.BaseAggregateRoot;
+import ddd.plus.showcase.wms.domain.common.WmsException;
 import ddd.plus.showcase.wms.domain.order.OrderNo;
 import ddd.plus.showcase.wms.domain.pack.dict.PackStatus;
 import io.github.dddplus.dsl.KeyElement;
+import io.github.dddplus.model.BaseAggregateRoot;
 import io.github.dddplus.model.IUnboundedDomainModel;
+import io.github.dddplus.model.spcification.Notification;
 
 import java.math.BigDecimal;
 
@@ -22,4 +24,9 @@ public class Pack extends BaseAggregateRoot<Pack> implements IUnboundedDomainMod
     private BigDecimal totalWeight;
     @KeyElement(types = KeyElement.Type.Billing)
     private BigDecimal totalVolume;
+
+    @Override
+    protected void onNotSatisfied(Notification notification) {
+        throw new WmsException(notification.first());
+    }
 }

@@ -5,15 +5,21 @@ import ddd.plus.showcase.wms.domain.common.UniqueCode;
 import ddd.plus.showcase.wms.domain.common.WmsException;
 import io.github.dddplus.dsl.KeyBehavior;
 import io.github.dddplus.dsl.KeyRelation;
+import io.github.dddplus.model.spcification.Notification;
 import lombok.NonNull;
 
 import java.util.List;
 
 @KeyRelation(whom = CartonItem.class, type = KeyRelation.Type.HasMany)
-public class CartonItemBag extends ListBag<CartonItem, WmsException> {
+public class CartonItemBag extends ListBag<CartonItem> {
 
     protected CartonItemBag(List<CartonItem> items) {
         super(items);
+    }
+
+    @Override
+    protected void whenNotSatisfied(Notification notification) {
+        throw new WmsException(notification.first());
     }
 
     /**

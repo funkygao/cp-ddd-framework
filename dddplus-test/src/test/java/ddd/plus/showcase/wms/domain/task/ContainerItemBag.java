@@ -1,12 +1,13 @@
 package ddd.plus.showcase.wms.domain.task;
 
-import io.github.dddplus.model.ListBag;
 import ddd.plus.showcase.wms.domain.common.WmsException;
 import ddd.plus.showcase.wms.domain.order.OrderNo;
 import io.github.dddplus.dsl.KeyBehavior;
 import io.github.dddplus.dsl.KeyRelation;
 import io.github.dddplus.dsl.KeyRule;
 import io.github.dddplus.model.IUnboundedDomainModel;
+import io.github.dddplus.model.ListBag;
+import io.github.dddplus.model.spcification.Notification;
 import lombok.NonNull;
 
 import java.math.BigDecimal;
@@ -16,10 +17,15 @@ import java.util.List;
 import java.util.Set;
 
 @KeyRelation(whom = ContainerItem.class, type = KeyRelation.Type.HasMany)
-public class ContainerItemBag extends ListBag<ContainerItem, WmsException> implements IUnboundedDomainModel {
+public class ContainerItemBag extends ListBag<ContainerItem> implements IUnboundedDomainModel {
 
     protected ContainerItemBag(List<ContainerItem> items) {
         super(items);
+    }
+
+    @Override
+    protected void whenNotSatisfied(Notification notification) {
+        throw new WmsException(notification.first());
     }
 
     public static ContainerItemBag of(@NonNull List<ContainerItem> items) {

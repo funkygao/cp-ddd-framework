@@ -1,17 +1,19 @@
 package ddd.plus.showcase.wms.domain.order;
 
-import ddd.plus.showcase.wms.domain.base.BaseAggregateRoot;
 import ddd.plus.showcase.wms.domain.carton.Carton;
 import ddd.plus.showcase.wms.domain.common.Operator;
 import ddd.plus.showcase.wms.domain.common.WarehouseNo;
+import ddd.plus.showcase.wms.domain.common.WmsException;
 import ddd.plus.showcase.wms.domain.order.dict.OrderStatus;
 import ddd.plus.showcase.wms.domain.order.dict.ProductionStatus;
 import ddd.plus.showcase.wms.domain.pack.Pack;
 import io.github.dddplus.dsl.KeyBehavior;
 import io.github.dddplus.dsl.KeyElement;
 import io.github.dddplus.dsl.KeyRelation;
+import io.github.dddplus.model.BaseAggregateRoot;
 import io.github.dddplus.model.IUnboundedDomainModel;
 import io.github.dddplus.model.association.HasMany;
+import io.github.dddplus.model.spcification.Notification;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
@@ -56,6 +58,11 @@ public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainM
     }
     @lombok.experimental.Delegate
     private OrderCartons cartons;
+
+    @Override
+    protected void onNotSatisfied(Notification notification) {
+        throw new WmsException(notification.first());
+    }
 
     @KeyBehavior
     public void pause(Operator operator) {

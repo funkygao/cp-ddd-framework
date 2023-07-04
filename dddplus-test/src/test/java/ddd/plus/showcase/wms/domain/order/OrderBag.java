@@ -1,11 +1,12 @@
 package ddd.plus.showcase.wms.domain.order;
 
-import io.github.dddplus.model.SetBag;
 import ddd.plus.showcase.wms.domain.common.OrderGateway;
 import ddd.plus.showcase.wms.domain.common.WarehouseNo;
 import ddd.plus.showcase.wms.domain.common.WmsException;
 import io.github.dddplus.dsl.KeyBehavior;
 import io.github.dddplus.model.IUnboundedDomainModel;
+import io.github.dddplus.model.SetBag;
+import io.github.dddplus.model.spcification.Notification;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashSet;
@@ -13,10 +14,15 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
-public class OrderBag extends SetBag<Order, WmsException> implements IUnboundedDomainModel {
+public class OrderBag extends SetBag<Order> implements IUnboundedDomainModel {
 
     protected OrderBag(Set<Order> orders) {
         super(orders);
+    }
+
+    @Override
+    protected void whenNotSatisfied(Notification notification) {
+        throw new WmsException(notification.first());
     }
 
     static OrderBag of(Set<Order> orders) {

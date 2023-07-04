@@ -24,8 +24,7 @@ class ListBagTest {
             bag.satisfy(new BookSpec());
             fail();
         } catch (RuntimeException expected) {
-            // FIXME
-            //assertTrue(expected instanceof BookException);
+            assertTrue(expected instanceof BookException);
         }
         assertTrue(bag.anyItem().id > 0);
     }
@@ -45,9 +44,14 @@ class ListBagTest {
         }
     }
 
-    static class BookBag extends ListBag<Book, BookException> {
+    static class BookBag extends ListBag<Book> {
         protected BookBag(List<Book> items) {
             super(items);
+        }
+
+        @Override
+        protected void whenNotSatisfied(Notification notification) {
+            throw new BookException();
         }
     }
 

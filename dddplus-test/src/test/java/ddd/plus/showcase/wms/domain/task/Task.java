@@ -1,6 +1,5 @@
 package ddd.plus.showcase.wms.domain.task;
 
-import ddd.plus.showcase.wms.domain.base.BaseAggregateRoot;
 import ddd.plus.showcase.wms.domain.carton.CartonItem;
 import ddd.plus.showcase.wms.domain.carton.CartonItemBag;
 import ddd.plus.showcase.wms.domain.common.Operator;
@@ -15,8 +14,10 @@ import ddd.plus.showcase.wms.domain.task.hint.TaskDirtyHint;
 import io.github.dddplus.dsl.KeyBehavior;
 import io.github.dddplus.dsl.KeyElement;
 import io.github.dddplus.dsl.KeyRelation;
+import io.github.dddplus.model.BaseAggregateRoot;
 import io.github.dddplus.model.IUnboundedDomainModel;
 import io.github.dddplus.model.association.HasMany;
+import io.github.dddplus.model.spcification.Notification;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
@@ -85,6 +86,11 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
     private TaskCartonItems cartonItems;
     public TaskCartonItems cartonItems() {
         return cartonItems;
+    }
+
+    @Override
+    protected void onNotSatisfied(Notification notification) {
+        throw new WmsException(notification.first());
     }
 
     @KeyBehavior

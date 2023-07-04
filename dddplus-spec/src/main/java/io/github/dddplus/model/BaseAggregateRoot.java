@@ -1,0 +1,66 @@
+package io.github.dddplus.model;
+
+import io.github.dddplus.model.spcification.ISpecification;
+import io.github.dddplus.model.spcification.Notification;
+import lombok.Builder;
+
+/**
+ * BaseAggregateRoot is a handy reusable {@link IAggregateRoot}.
+ *
+ * @param <Entity>
+ */
+public abstract class BaseAggregateRoot<Entity> implements IAggregateRoot {
+    @Builder.Default
+    protected DirtyMemento memento = new DirtyMemento();
+    @Builder.Default
+    protected Exchange exchange = new Exchange();
+
+    protected final <T> T dirty(IDirtyHint hint) {
+        memento.register(hint);
+        return (T) this;
+    }
+
+    public <T extends IDirtyHint> T firstHintOf(Class<T> hintClass) {
+        return memento.firstHintOf(hintClass);
+    }
+
+    /**
+     * 业务归约要满足.
+     *
+     * @param specification 业务归约
+     */
+    public void assureSatisfied(ISpecification<Entity> specification) {
+        Notification notification = Notification.build();
+        if (!specification.isSatisfiedBy((Entity) this, notification)) {
+            onNotSatisfied(notification);
+        }
+    }
+
+    /**
+     * 业务规约没有满足时如何处理.
+     *
+     * @param notification 未满足原因
+     */
+    protected abstract void onNotSatisfied(Notification notification);
+
+    /**
+     * 临时交换区赋值.
+     */
+    public void exchangeSet(String key, Object value) {
+        exchange.set(key, value);
+    }
+
+    /**
+     * 从临时交换区里取值.
+     */
+    public <T> T exchangeGet(String key, Class<T> valueType) throws ClassCastException {
+        return exchange.get(key, valueType);
+    }
+
+    /**
+     * 临时交换区方便的布尔类型取值.
+     */
+    public boolean exchangeIs(String key) throws ClassCastException {
+        return exchange.is(key);
+    }
+}

@@ -1,7 +1,7 @@
 package ddd.plus.showcase.wms.domain.carton;
 
-import ddd.plus.showcase.wms.domain.base.BaseAggregateRoot;
 import ddd.plus.showcase.wms.domain.carton.dict.CartonStatus;
+import ddd.plus.showcase.wms.domain.common.WmsException;
 import ddd.plus.showcase.wms.domain.order.Order;
 import ddd.plus.showcase.wms.domain.order.OrderNo;
 import ddd.plus.showcase.wms.domain.task.Task;
@@ -9,7 +9,9 @@ import ddd.plus.showcase.wms.domain.task.TaskNo;
 import io.github.dddplus.dsl.KeyBehavior;
 import io.github.dddplus.dsl.KeyElement;
 import io.github.dddplus.dsl.KeyRelation;
+import io.github.dddplus.model.BaseAggregateRoot;
 import io.github.dddplus.model.IUnboundedDomainModel;
+import io.github.dddplus.model.spcification.Notification;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.Delegate;
@@ -33,6 +35,11 @@ public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomai
 
     private CartonItemBag itemBag;
     private ConsumableBag consumableBag;
+
+    @Override
+    protected void onNotSatisfied(Notification notification) {
+        throw new WmsException(notification.first());
+    }
 
     @KeyBehavior
     public void fullize() {

@@ -10,9 +10,8 @@ import java.util.Set;
  * SetBag is a handy memory Set based {@link IBag}.
  *
  * @param <Entity> The entity type
- * @param <Ex> throws what type of exception if {@link #satisfy(ISpecification)} fails
  */
-public abstract class SetBag<Entity, Ex> implements IBag {
+public abstract class SetBag<Entity> implements IBag {
     protected final Set<Entity> items;
 
     protected SetBag(@NonNull Set<Entity> items) {
@@ -31,12 +30,16 @@ public abstract class SetBag<Entity, Ex> implements IBag {
         return items.iterator().next();
     }
 
-    public final <Ex extends RuntimeException> void satisfy(@NonNull ISpecification<Entity> specification) throws Ex {
+    public final void satisfy(@NonNull ISpecification<Entity> specification) {
         Notification notification = Notification.build();
         for (Entity entity : items) {
             if (!specification.isSatisfiedBy(entity, notification)) {
-                throw new RuntimeException(notification.first());
+                whenNotSatisfied(notification);
+                break;
             }
         }
     }
+
+    protected abstract void whenNotSatisfied(Notification notification);
+
 }

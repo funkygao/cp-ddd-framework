@@ -33,7 +33,7 @@ public class AggregateAnnotationParser {
                     break;
 
                 case "root":
-                    // FIXME is Class[]
+                    // is Class[], but we get 1, that's enough for visualization
                     ClassExpr classExpr = (ClassExpr) memberValuePair.getValue();
                     entry.setRootClass(classExpr.getTypeAsString());
                     break;
