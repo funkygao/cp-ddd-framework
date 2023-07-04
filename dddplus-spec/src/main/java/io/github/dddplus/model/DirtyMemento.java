@@ -3,10 +3,8 @@
  *
  * Licensed under the Apache License version 2.0, available at http://www.apache.org/licenses/LICENSE-2.0
  */
-package io.github.dddplus.buddy;
+package io.github.dddplus.model;
 
-import io.github.dddplus.model.IBag;
-import io.github.dddplus.model.IUnitOfWork;
 import lombok.NonNull;
 
 import java.util.LinkedList;

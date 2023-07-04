@@ -4,8 +4,8 @@ import ddd.plus.showcase.wms.domain.common.ExceptionCode;
 import ddd.plus.showcase.wms.domain.common.MasterDataGateway;
 import ddd.plus.showcase.wms.domain.common.Operator;
 import ddd.plus.showcase.wms.domain.task.Task;
-import io.github.dddplus.buddy.specification.AbstractSpecification;
-import io.github.dddplus.buddy.specification.Notification;
+import io.github.dddplus.model.spcification.AbstractSpecification;
+import io.github.dddplus.model.spcification.Notification;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

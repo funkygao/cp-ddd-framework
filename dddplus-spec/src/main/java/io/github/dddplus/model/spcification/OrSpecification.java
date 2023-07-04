@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License version 2.0, available at http://www.apache.org/licenses/LICENSE-2.0
  */
-package io.github.dddplus.buddy.specification;
+package io.github.dddplus.model.spcification;
 
 /**
  * OR specification, used to create a new specification that is the OR of two other specifications.

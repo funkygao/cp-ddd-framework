@@ -1,5 +1,8 @@
-package io.github.dddplus.buddy;
+package io.github.dddplus.model;
 
+import io.github.dddplus.model.DirtyMemento;
+import io.github.dddplus.model.IDirtyHint;
+import io.github.dddplus.model.IMergeAwareDirtyHint;
 import io.github.dddplus.model.IUnboundedDomainModel;
 import org.junit.Test;
 

@@ -2,8 +2,8 @@ package ddd.plus.showcase.wms.domain.task.spec;
 
 import ddd.plus.showcase.wms.domain.common.UniqueCode;
 import ddd.plus.showcase.wms.domain.task.Task;
-import io.github.dddplus.buddy.specification.AbstractSpecification;
-import io.github.dddplus.buddy.specification.Notification;
+import io.github.dddplus.model.spcification.AbstractSpecification;
+import io.github.dddplus.model.spcification.Notification;
 import lombok.AllArgsConstructor;
 
 /**

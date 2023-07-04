@@ -1,5 +1,6 @@
-package io.github.dddplus.buddy.specification;
+package io.github.dddplus.model.specification;
 
+import io.github.dddplus.model.spcification.Notification;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

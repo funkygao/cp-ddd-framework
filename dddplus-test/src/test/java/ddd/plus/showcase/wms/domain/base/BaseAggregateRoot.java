@@ -1,11 +1,11 @@
 package ddd.plus.showcase.wms.domain.base;
 
 import ddd.plus.showcase.wms.domain.common.WmsException;
-import io.github.dddplus.buddy.DirtyMemento;
-import io.github.dddplus.buddy.Exchange;
-import io.github.dddplus.buddy.IDirtyHint;
-import io.github.dddplus.buddy.specification.ISpecification;
-import io.github.dddplus.buddy.specification.Notification;
+import io.github.dddplus.model.DirtyMemento;
+import io.github.dddplus.model.Exchange;
+import io.github.dddplus.model.IDirtyHint;
+import io.github.dddplus.model.spcification.ISpecification;
+import io.github.dddplus.model.spcification.Notification;
 import io.github.dddplus.model.IAggregateRoot;
 import lombok.Builder;
 

@@ -1,8 +1,8 @@
 package ddd.plus.showcase.wms.domain.carton.spec;
 
 import ddd.plus.showcase.wms.domain.carton.Carton;
-import io.github.dddplus.buddy.specification.AbstractSpecification;
-import io.github.dddplus.buddy.specification.Notification;
+import io.github.dddplus.model.spcification.AbstractSpecification;
+import io.github.dddplus.model.spcification.Notification;
 
 public class CaronNotFull extends AbstractSpecification<Carton> {
     @Override

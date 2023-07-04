@@ -107,8 +107,12 @@ under the License.
                     <additionalJOption>-Xdoclint:none</additionalJOption>
                     <groups>
                         <group>
+                            <title>DDDplus Root</title>
+                            <packages>io.github.dddplus</packages>
+                        </group>
+                        <group>
                             <title>DDD Forward Modeling</title>
-                            <packages>io.github.dddplus.model*:io.github.dddplus.buddy*:io.github.dddplus.step</packages>
+                            <packages>io.github.dddplus.model*:io.github.dddplus.step</packages>
                         </group>
                         <group>
                             <title>Domain Knowledge Reverse Modeling</title>

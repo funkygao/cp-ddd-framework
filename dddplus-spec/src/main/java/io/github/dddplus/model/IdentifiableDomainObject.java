@@ -3,9 +3,7 @@
  *
  * Licensed under the Apache License version 2.0, available at http://www.apache.org/licenses/LICENSE-2.0
  */
-package io.github.dddplus.buddy;
-
-import org.springframework.lang.Nullable;
+package io.github.dddplus.model;
 
 import java.io.Serializable;
 
@@ -21,6 +19,5 @@ public interface IdentifiableDomainObject<ID extends Serializable> {
      *
      * @return the ID or {@code null} if an ID has not been assigned yet.
      */
-    @Nullable
     ID getId();
 }

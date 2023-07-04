@@ -1,4 +1,4 @@
-package io.github.dddplus.buddy;
+package io.github.dddplus.model;
 
 import org.junit.Test;
 
