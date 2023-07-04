@@ -1,6 +1,6 @@
 package ddd.plus.showcase.wms.domain.task;
 
-import ddd.plus.showcase.wms.domain.base.ListBag;
+import io.github.dddplus.model.ListBag;
 import ddd.plus.showcase.wms.domain.common.WmsException;
 import ddd.plus.showcase.wms.domain.order.OrderNo;
 import io.github.dddplus.dsl.KeyRelation;
@@ -14,6 +14,10 @@ import java.util.Set;
 
 @KeyRelation(whom = Container.class, type = KeyRelation.Type.HasMany)
 public class ContainerBag extends ListBag<Container, WmsException> {
+
+    protected ContainerBag(List<Container> items) {
+        super(items);
+    }
 
     /**
      * 该容器的总商品种类(品数).

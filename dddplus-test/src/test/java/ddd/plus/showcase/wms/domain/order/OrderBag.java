@@ -1,6 +1,6 @@
 package ddd.plus.showcase.wms.domain.order;
 
-import ddd.plus.showcase.wms.domain.base.SetBag;
+import io.github.dddplus.model.SetBag;
 import ddd.plus.showcase.wms.domain.common.OrderGateway;
 import ddd.plus.showcase.wms.domain.common.WarehouseNo;
 import ddd.plus.showcase.wms.domain.common.WmsException;
@@ -15,8 +15,8 @@ import java.util.stream.Collectors;
 @Slf4j
 public class OrderBag extends SetBag<Order, WmsException> implements IUnboundedDomainModel {
 
-    private OrderBag(Set<Order> orders) {
-        this.items = orders;
+    protected OrderBag(Set<Order> orders) {
+        super(orders);
     }
 
     static OrderBag of(Set<Order> orders) {
