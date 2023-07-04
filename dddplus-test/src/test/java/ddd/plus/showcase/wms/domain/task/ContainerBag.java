@@ -42,11 +42,12 @@ public class ContainerBag extends ListBag<Container> {
      */
     @KeyRule
     public BigDecimal totalQty() {
-        BigDecimal total = BigDecimal.ZERO;
-        for (Container container : items) {
-            total = total.add(container.totalQty());
-        }
-        return total;
+        return items.stream().map(Container::totalQty).reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    @KeyRule
+    public BigDecimal totalPendingQty() {
+        return items.stream().map(Container::totalPendingQty).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     /**

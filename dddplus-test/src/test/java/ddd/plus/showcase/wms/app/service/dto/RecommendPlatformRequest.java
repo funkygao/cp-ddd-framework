@@ -9,4 +9,8 @@ import lombok.Data;
 @Data
 public class RecommendPlatformRequest extends ApiRequest {
     private String taskNo;
+    private String taskMode;
+
+    private String orderNo;
+    private String orderType;
 }

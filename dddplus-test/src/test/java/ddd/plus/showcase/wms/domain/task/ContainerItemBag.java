@@ -2,7 +2,6 @@ package ddd.plus.showcase.wms.domain.task;
 
 import ddd.plus.showcase.wms.domain.common.WmsException;
 import ddd.plus.showcase.wms.domain.order.OrderNo;
-import io.github.dddplus.dsl.KeyBehavior;
 import io.github.dddplus.dsl.KeyRelation;
 import io.github.dddplus.dsl.KeyRule;
 import io.github.dddplus.model.IUnboundedDomainModel;
@@ -45,17 +44,12 @@ public class ContainerItemBag extends ListBag<ContainerItem> implements IUnbound
      */
     @KeyRule
     public BigDecimal totalQty() {
-        BigDecimal total = BigDecimal.ZERO;
-        for (ContainerItem item : items) {
-            total = total.add(item.getExpectedQty());
-        }
-        return total;
+        return items.stream().map(ContainerItem::getExpectedQty).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    // Yes, not public
-    @KeyBehavior
-    ContainerItemBag allocatedQty(BigDecimal confirmedQty) {
-        return null;
+    @KeyRule
+    public BigDecimal totalPendingQty() {
+        return items.stream().map(ContainerItem::getPendingQty).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     public Set<OrderNo> orderNoSet() {

@@ -1,10 +1,10 @@
 package ddd.plus.showcase.wms.app;
 
 import ddd.plus.showcase.wms.domain.order.IOrderRepository;
-import ddd.plus.showcase.wms.domain.order.Order;
 import ddd.plus.showcase.wms.domain.order.OrderBagCanceled;
 import ddd.plus.showcase.wms.domain.task.ITaskRepository;
-import ddd.plus.showcase.wms.domain.task.Task;
+import ddd.plus.showcase.wms.domain.task.TaskOfContainer;
+import ddd.plus.showcase.wms.domain.task.TaskOfSku;
 import io.github.dddplus.model.IUnitOfWork;
 import lombok.NonNull;
 import lombok.Setter;
@@ -21,17 +21,13 @@ public class UnitOfWork implements IUnitOfWork {
     private IOrderRepository orderRepository;
 
     @Transactional(rollbackFor = Exception.class)
-    public void persist(@NonNull Task task) {
+    public void persist(@NonNull TaskOfSku task) {
         taskRepository.save(task);
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void persist(@NonNull Task task, @NonNull Order order) {
-        taskRepository.save(task);
-        orderRepository.save(order);
-    }
-
-    public void persist(@NonNull Task task, @NonNull OrderBagCanceled canceledBag) {
+    public void persist(@NonNull TaskOfContainer task, @NonNull OrderBagCanceled canceledBag) {
+        // sync with local storage
         orderRepository.switchToCanceledStatus(canceledBag);
         taskRepository.save(task);
     }

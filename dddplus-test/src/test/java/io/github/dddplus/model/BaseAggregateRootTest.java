@@ -15,23 +15,23 @@ class BaseAggregateRootTest {
         student.dirty(new NameChanged(student));
         NameChanged hint = student.firstHintOf(NameChanged.class);
         assertEquals(hint.student.id, 5L);
-        student.exchangeSet("key", "value");
+        student.xSet("key", "value");
         try {
-            student.exchangeGet("key", Integer.class);
+            student.xGet("key", Integer.class);
             fail();
         } catch (ClassCastException expected) {
         }
-        assertEquals(student.exchangeGet("key", String.class), "value");
-        student.exchangeSet("k1", true);
-        assertTrue(student.exchangeIs("k1"));
-        assertFalse(student.exchangeIs("non-exist"));
+        assertEquals(student.xGet("key", String.class), "value");
+        student.xSet("k1", true);
+        assertTrue(student.xIs("k1"));
+        assertFalse(student.xIs("non-exist"));
         try {
-            student.exchangeIs("key");
+            student.xIs("key");
             fail();
         } catch (ClassCastException expected) {
         }
 
-        assertNull(student.exchangeGet("blah", Float.class));
+        assertNull(student.xGet("blah", Float.class));
     }
 
     @Builder

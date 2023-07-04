@@ -4,9 +4,12 @@ import ddd.plus.showcase.wms.domain.carton.Carton;
 import ddd.plus.showcase.wms.domain.common.Operator;
 import ddd.plus.showcase.wms.domain.common.WarehouseNo;
 import ddd.plus.showcase.wms.domain.common.WmsException;
+import ddd.plus.showcase.wms.domain.order.dict.OrderExchangeKey;
 import ddd.plus.showcase.wms.domain.order.dict.OrderStatus;
+import ddd.plus.showcase.wms.domain.order.dict.OrderType;
 import ddd.plus.showcase.wms.domain.order.dict.ProductionStatus;
 import ddd.plus.showcase.wms.domain.pack.Pack;
+import ddd.plus.showcase.wms.domain.common.Platform;
 import io.github.dddplus.dsl.KeyBehavior;
 import io.github.dddplus.dsl.KeyElement;
 import io.github.dddplus.dsl.KeyRelation;
@@ -27,11 +30,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Getter(AccessLevel.PACKAGE)
 @KeyRelation(whom = Pack.class, type = KeyRelation.Type.HasMany)
-public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainModel {
+public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainModel, OrderExchangeKey {
     private Long id;
 
     @Getter
     private OrderNo orderNo;
+    private OrderType orderType;
     @Getter
     private WarehouseNo warehouseNo;
     private Operator lastOperator;
@@ -74,5 +78,13 @@ public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainM
     @KeyBehavior
     public void resume(Operator operator) {
         lastOperator = operator;
+    }
+
+    /**
+     * 该订单已经被推荐到哪一个复核台.
+     */
+    @KeyRule
+    public Platform recommendedPlatformNo() {
+        return Platform.of(xGet(RecommendedPlatformNo, String.class));
     }
 }

@@ -3,11 +3,14 @@ package ddd.plus.showcase.wms.domain.task;
 import ddd.plus.showcase.wms.domain.carton.CartonItem;
 import ddd.plus.showcase.wms.domain.carton.CartonItemBag;
 import ddd.plus.showcase.wms.domain.common.Operator;
+import ddd.plus.showcase.wms.domain.common.Platform;
 import ddd.plus.showcase.wms.domain.common.WarehouseNo;
 import ddd.plus.showcase.wms.domain.common.WmsException;
 import ddd.plus.showcase.wms.domain.order.Order;
 import ddd.plus.showcase.wms.domain.order.OrderBag;
 import ddd.plus.showcase.wms.domain.order.OrderNo;
+import ddd.plus.showcase.wms.domain.task.dict.TaskExchangeKey;
+import ddd.plus.showcase.wms.domain.task.dict.TaskMode;
 import ddd.plus.showcase.wms.domain.task.dict.TaskStatus;
 import ddd.plus.showcase.wms.domain.task.hint.ConfirmQtyHint;
 import ddd.plus.showcase.wms.domain.task.hint.TaskDirtyHint;
@@ -32,12 +35,13 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Slf4j
 @Getter(AccessLevel.PACKAGE)
-public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainModel {
+public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainModel, TaskExchangeKey {
     @Getter
     private Long id;
 
     @Getter
     private TaskNo taskNo;
+    private TaskMode taskMode;
     private Integer priority;
     @KeyElement(types = KeyElement.Type.Lifecycle, byType = true)
     private TaskStatus status;
@@ -45,7 +49,7 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
         return status;
     }
     @KeyElement(types = KeyElement.Type.Location, byType = true)
-    private PlatformNo platformNo;
+    private Platform platformNo;
     // 该复核任务由哪一个操作员完成：1个任务只能1人完成
     private Operator operator;
     @Getter
@@ -94,16 +98,14 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
     }
 
     @KeyBehavior
-    public void claimedWith(Operator operator, PlatformNo platformNo) {
+    public void claimedWith(Operator operator, Platform platformNo) {
         this.platformNo = platformNo;
         this.operator = operator;
         dirty(new TaskDirtyHint(this).dirty("operator", "platform_no"));
     }
 
-
-
     @KeyBehavior
-    public void confirmQty(BigDecimal qty, Operator operator, PlatformNo platformNo) {
+    public void confirmQty(BigDecimal qty, Operator operator, Platform platformNo) {
         this.platformNo = platformNo;
         this.operator = operator;
         containerBag.pendingItemBag().confirmQty(qty);

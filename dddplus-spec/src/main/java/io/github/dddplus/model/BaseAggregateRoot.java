@@ -46,21 +46,21 @@ public abstract class BaseAggregateRoot<Entity> implements IAggregateRoot {
     /**
      * 临时交换区赋值.
      */
-    public void exchangeSet(String key, Object value) {
+    public void xSet(String key, Object value) {
         exchange.set(key, value);
     }
 
     /**
      * 从临时交换区里取值.
      */
-    public <T> T exchangeGet(String key, Class<T> valueType) throws ClassCastException {
+    public <T> T xGet(String key, Class<T> valueType) throws ClassCastException {
         return exchange.get(key, valueType);
     }
 
     /**
      * 临时交换区方便的布尔类型取值.
      */
-    public boolean exchangeIs(String key) throws ClassCastException {
+    public boolean xIs(String key) throws ClassCastException {
         return exchange.is(key);
     }
 }

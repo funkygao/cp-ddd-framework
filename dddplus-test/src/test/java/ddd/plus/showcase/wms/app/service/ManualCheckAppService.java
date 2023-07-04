@@ -8,13 +8,11 @@ import ddd.plus.showcase.wms.domain.carton.CartonNo;
 import ddd.plus.showcase.wms.domain.carton.ICartonRepository;
 import ddd.plus.showcase.wms.domain.carton.spec.CaronNotFull;
 import ddd.plus.showcase.wms.domain.common.*;
+import ddd.plus.showcase.wms.domain.flow.RecommendPlatformFlow;
 import ddd.plus.showcase.wms.domain.order.*;
 import ddd.plus.showcase.wms.domain.order.spec.OrderNotFullyCartonized;
 import ddd.plus.showcase.wms.domain.order.spec.OrderUsesManualCheckFlow;
-import ddd.plus.showcase.wms.domain.task.ITaskRepository;
-import ddd.plus.showcase.wms.domain.task.PlatformNo;
-import ddd.plus.showcase.wms.domain.task.Task;
-import ddd.plus.showcase.wms.domain.task.TaskNo;
+import ddd.plus.showcase.wms.domain.task.*;
 import ddd.plus.showcase.wms.domain.task.spec.OperatorCannotBePicker;
 import ddd.plus.showcase.wms.domain.task.spec.TaskCanPerformChecking;
 import ddd.plus.showcase.wms.domain.task.spec.TaskCanRecheck;
@@ -41,44 +39,42 @@ public class ManualCheckAppService {
     private ITaskRepository taskRepository;
     private IOrderRepository orderRepository;
     private ICartonRepository cartonRepository;
-
     private UnitOfWork uow;
+
+    private RecommendPlatformFlow recommendPlatformFlow;
 
     /**
      * 操作员应该去哪一个复核台?
      */
     @KeyUsecase(in = "taskNo")
     public ApiResponse<String> recommendPlatform(RecommendPlatformRequest request) {
-        WarehouseNo warehouseNo = WarehouseNo.of(request.getWarehouseNo());
-        Operator operator = Operator.of(request.getOperatorNo());
-        TaskNo taskNo = TaskNo.of(request.getTaskNo());
-
-        return ApiResponse.ofOk("");
+        Platform platformNo = recommendPlatformFlow.execute(request);
+        return ApiResponse.ofOk(platformNo.value());
     }
 
     /**
-     * 操作员领取复核任务.
+     * 操作员扫描容器领取复核任务.
      */
     @KeyUsecase(in = "containerNo")
     public ApiResponse<Void> claimTask(ClaimTaskRequest request) throws WmsException {
         WarehouseNo warehouseNo = WarehouseNo.of(request.getWarehouseNo());
         Operator operator = Operator.of(request.getOperatorNo());
         ContainerNo containerNo = ContainerNo.of(request.getContainerNo());
-        PlatformNo platformNo = PlatformNo.of(request.getPlatformNo());
+        Platform platformNo = Platform.of(request.getPlatformNo());
 
         // 该容器还没复核完，把它的任务加载
-        Task task = taskRepository.mustGetPending(containerNo, warehouseNo);
-        task.assureSatisfied(new TaskCanPerformChecking()
+        TaskOfContainer containerTask = taskRepository.mustGetPending(containerNo, warehouseNo);
+        containerTask.unbounded().assureSatisfied(new TaskCanPerformChecking()
                 .and(new OperatorCannotBePicker(masterDataGateway, operator)));
-        task.claimedWith(operator, platformNo);
+        containerTask.unbounded().claimedWith(operator, platformNo);
 
         // 通过association对象加载管理聚合根
-        OrderBag pendingOrders = task.pendingOrders();
+        OrderBag pendingOrders = containerTask.unbounded().pendingOrders();
         pendingOrders.satisfy(new OrderUsesManualCheckFlow());
         // 逆向物流逻辑
         OrderBagCanceled canceledOrderBag = pendingOrders.subBagOfCanceled(orderGateway);
 
-        uow.persist(task, canceledOrderBag);
+        uow.persist(containerTask, canceledOrderBag);
         return ApiResponse.ofOk();
     }
 
@@ -98,22 +94,21 @@ public class ManualCheckAppService {
 
         // 推荐复核台强约束？
 
-        Task task = taskRepository.mustGetPending(TaskNo.of(request.getTaskNo()), orderNo, sku, warehouseNo);
-        task.assureSatisfied(new TaskCanPerformChecking()
+        TaskOfSku taskOfSku = taskRepository.mustGetPending(TaskNo.of(request.getTaskNo()), orderNo, sku, warehouseNo);
+        taskOfSku.unbounded().assureSatisfied(new TaskCanPerformChecking()
                 .and(new UniqueCodeConstraint(UniqueCode.of(request.getUniqueCode())))
                 .and(new OperatorCannotBePicker(masterDataGateway, operator)));
 
-        Order order = task.pendingOrder(orderNo);
+        Order order = taskOfSku.unbounded().pendingOrder(orderNo);
         order.assureSatisfied(new OrderNotFullyCartonized());
 
-        task.confirmQty(qty, operator, PlatformNo.of(request.getPlatformNo()));
+        taskOfSku.unbounded().confirmQty(qty, operator, Platform.of(request.getPlatformNo()));
 
         // 装箱
         Carton carton = cartonRepository.mustGet(CartonNo.of(request.getCartonNo()), warehouseNo);
         carton.assureSatisfied(new CaronNotFull());
 
-        uow.persist(task);
-
+        uow.persist(taskOfSku);
         return ApiResponse.ofOk();
     }
 
@@ -150,7 +145,6 @@ public class ManualCheckAppService {
 
         Task task = taskRepository.mustGetPending(taskNo, WarehouseNo.of(request.getWarehouseNo()));
         task.assureSatisfied(new TaskCanRecheck());
-
         return ApiResponse.ofOk();
     }
 

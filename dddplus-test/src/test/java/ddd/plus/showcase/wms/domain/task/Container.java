@@ -5,7 +5,9 @@ import io.github.dddplus.dsl.KeyElement;
 import io.github.dddplus.dsl.KeyRelation;
 import io.github.dddplus.model.IDomainModel;
 import io.github.design.ContainerNo;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Delegate;
 
@@ -17,6 +19,7 @@ import lombok.experimental.Delegate;
  */
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter(AccessLevel.PACKAGE)
 public class Container implements IDomainModel {
     private Long id;
 
