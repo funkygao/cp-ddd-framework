@@ -32,11 +32,11 @@ DDDplus是轻量级DDD补充和增强的框架。
 - [扩充](/dddplus-spec/src/main/java/io/github/dddplus/model)了DDD的building blocks，解决DDD落地难问题
 - 逆向建模的[DSL](/dddplus-spec/src/main/java/io/github/dddplus/dsl)，让代码可视化地表达完整业务模型
 
-## Current status
+## 项目现状
 
-Used for several complex critical central platform projects in production environment.
+应用于多个大型核心复杂项目的生产环境。
 
-Latest `Maven Central` version is: `1.1.2`, under active development version is: `2.0.0-SNAPSHOT`.
+`Maven Central` 最新版本: `1.1.2`, 正在积极开发的版本: `2.0.0-SNAPSHOT`。
 
 ## 快速入门
 

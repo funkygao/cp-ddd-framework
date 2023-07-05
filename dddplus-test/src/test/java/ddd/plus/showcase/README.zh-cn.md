@@ -31,6 +31,7 @@
 ### 1.4 正向模型
 
 - [应用层](wms/app/)
+   - 系统交互入口：[人工复核](wms/app/service/ManualCheckAppService.java)
 - [领域层](wms/domain/)
 - [基础设施层](wms/infra/)
 
