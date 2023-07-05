@@ -27,6 +27,9 @@ public class TaskRepository implements ITaskRepository {
     @Resource
     private Dao dao;
 
+    private static TaskConverter converter = TaskConverter.INSTANCE;
+    private static Class _self = TaskRepository.class;
+
     /**
      * 这里演示如何把数据库里的数据转换为充血模型的{@link IDomainModel}：
      *
@@ -43,19 +46,18 @@ public class TaskRepository implements ITaskRepository {
         TaskPo po = dao.query("select inner join .. where warehouse_no=?",
                 warehouseNo.value());
         // 1. po -> entity
-        Task task = TaskConverter.INSTANCE.toTask(po);
+        Task task = converter.toTask(po);
 
-        // 2. 传递技术细节但业务无关的字段到 domain entity
+        // 2. 传递技术细节但业务无关的字段到 domain entity；落库时再取出来
         task.xSet(task.OptimisticLock, po.getVersion());
 
         // 3. 组装 bag 对象，但不希望被误用
-        List<Container> containers = dao.query("select xxx");
-        task.injectContainerBag(this.getClass(), ContainerBag.of(containers));
+        List<ContainerPo> containerPos = dao.query("select xxx");
+        task.injectContainerBag(_self, ContainerBag.of(converter.fromPoList(containerPos)));
 
         // 4. 组装 association implementation
-        task.injectCartonItems(this.getClass(), new TaskCartonItemsDb(task, dao));
-        task.injectOrders(this.getClass(), new TaskOrdersDb(task, dao));
-
+        task.injectCartonItems(_self, new TaskCartonItemsDb(task, dao));
+        task.injectOrders(_self, new TaskOrdersDb(task, dao));
         return task;
     }
 

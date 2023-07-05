@@ -1,11 +1,14 @@
 package ddd.plus.showcase.wms.infra.domain.task.convert;
 
+import ddd.plus.showcase.wms.domain.task.Container;
 import ddd.plus.showcase.wms.domain.task.Task;
 import ddd.plus.showcase.wms.domain.task.TaskOfSku;
+import ddd.plus.showcase.wms.infra.domain.task.ContainerPo;
 import ddd.plus.showcase.wms.infra.domain.task.TaskPo;
 import org.mapstruct.Mapper;
-import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.factory.Mappers;
+
+import java.util.List;
 
 @Mapper
 public interface TaskConverter {
@@ -25,4 +28,6 @@ public interface TaskConverter {
         po.setTotalSku(task.totalSku());
         return po;
     }
+
+    List<Container> fromPoList(List<ContainerPo> containerPos);
 }
