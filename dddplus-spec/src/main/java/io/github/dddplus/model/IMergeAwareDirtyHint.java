@@ -10,6 +10,42 @@ import java.io.Serializable;
 /**
  * 可以合并的脏数据提示.
  *
+ * <p>Example:</p>
+ * <pre>
+ * {@code
+ * public class OrderDirtyHint implements IMergeAwareDirtyHint<Long> {
+ *     public enum Type {
+ *         BindOrder(0),
+ *         TransferFrom(1);
+ *         int bit;
+ *     }
+ *
+ *     private BitSet dirtyMap = new BitSet(8);
+ *     private final Order order;
+ *     private BigDecimal price;
+ *
+ *     public CaronDirtyHint(Order order, Type type) {
+ *         this.order = order;
+ *         this.dirtyMap.set(type.bit);
+ *     }
+ *
+ *     @Override
+ *     public void onMerge(IDirtyHint thatHint) {
+ *         OrderDirtyHint that = (OrderDirtyHint) thatHint;
+ *         that.dirtyMap.or(this.dirtyMap);
+ *         if (this.price != null) {
+ *             that.price = this.price;
+ *         }
+ *     }
+ *
+ *     @Override
+ *     public Long getId() {
+ *         return order.getId();
+ *     }
+ * }
+ * }
+ * </pre>
+ *
  * @param <ID> 该hint的唯一标识
  */
 public interface IMergeAwareDirtyHint<ID extends Serializable> extends IDirtyHint, IdentifiableDomainObject<ID> {

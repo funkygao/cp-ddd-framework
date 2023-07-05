@@ -15,9 +15,12 @@ public abstract class BaseAggregateRoot<Entity> implements IAggregateRoot {
     @Builder.Default
     protected Exchange exchange = new Exchange();
 
-    protected final <T> T dirty(IDirtyHint hint) {
+    protected final void dirty(IDirtyHint hint) {
         memento.register(hint);
-        return (T) this;
+    }
+
+    protected final void mergeDirty(IMergeAwareDirtyHint hint) {
+        memento.merge(hint);
     }
 
     public <T extends IDirtyHint> T firstHintOf(Class<T> hintClass) {
