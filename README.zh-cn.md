@@ -32,33 +32,6 @@ DDDplus是轻量级DDD补充和增强的框架。
 - [扩充](/dddplus-spec/src/main/java/io/github/dddplus/model)了DDD的building blocks，解决DDD落地难问题
 - 逆向建模的[DSL](/dddplus-spec/src/main/java/io/github/dddplus/dsl)，让代码可视化地表达完整业务模型
 
-具体内容：
-- 确定性问题
-   - [IBag](/dddplus-spec/src/main/java/io/github/dddplus/model/IBag.java)，封装集合逻辑
-   - ([IRule](/dddplus-spec/src/main/java/io/github/dddplus/model/IRule.java), [IBehavioralRule](/dddplus-spec/src/main/java/io/github/dddplus/model/IBehavioralRule.java)，[IDefinitionalRule](/dddplus-spec/src/main/java/io/github/dddplus/model/IDefinitionalRule.java))，业务规则对象
-   - ([IUnboundedDomainModel](/dddplus-spec/src/main/java/io/github/dddplus/model/IUnboundedDomainModel.java), [BoundedDomainModel](/dddplus-spec/src/main/java/io/github/dddplus/model/BoundedDomainModel.java))，上下文角色对象
-   - ([DirtyMemento](/dddplus-runtime/src/main/java/io/github/dddplus/buddy/DirtyMemento.java), [IDirtyHint](/dddplus-runtime/src/main/java/io/github/dddplus/buddy/IDirtyHint.java), [IMergeAwareDirtyHint](/dddplus-runtime/src/main/java/io/github/dddplus/buddy/IMergeAwareDirtyHint.java))，追踪领域对象状态变化，通过乐观锁实现落库
-   - [Exchange](/dddplus-runtime/src/main/java/io/github/dddplus/buddy/Exchange.java)，domain与infrastructure间传递非领域数据的容器
-   - [ISpecification](/dddplus-runtime/src/main/java/io/github/dddplus/buddy/specification/ISpecification.java)，业务校验和场景识别
-   - [INativeFlow](/dddplus-spec/src/main/java/io/github/dddplus/model/INativeFlow.java)，可复用的流程片段
-   - [AbstractBusinessNo](/dddplus-runtime/src/main/java/io/github/dddplus/buddy/vo/AbstractBusinessNo.java)，业务编号建模
-   - [IUnitOfWork](/dddplus-spec/src/main/java/io/github/dddplus/model/IUnitOfWork.java)，跨聚合根的事务
-- 不确定问题
-   - [IDomainExtension](/dddplus-spec/src/main/java/io/github/dddplus/ext/IDomainExtension.java)，扩展点
-   - [IIdentity](/dddplus-spec/src/main/java/io/github/dddplus/model/IIdentity.java)，业务身份
-   - ([Policy](/dddplus-spec/src/main/java/io/github/dddplus/ext/IPolicy.java), [Router](/dddplus-runtime/src/main/java/io/github/dddplus/runtime/BaseRouter.java))，扩展点的两种路由方式
-   - [Pattern](/dddplus-runtime/src/main/java/io/github/dddplus/annotation/Pattern.java)，全局业务模式
-   - [Interceptor](/dddplus-runtime/src/main/java/io/github/dddplus/annotation/Interceptor.java)，扩展点拦截器
-- 进程外依赖
-   - [IGateway](/dddplus-spec/src/main/java/io/github/dddplus/model/IGateway.java)，远程RPC的防腐层
-   - [IRepository](/dddplus-spec/src/main/java/io/github/dddplus/model/IRepository.java)，数据持久化
-- 技术组件
-   - [mapstruct](https://mapstruct.org/)，对象转换
-- 架构守护
-   - [DDDPlusEnforcer](/dddplus-enforce/src/main/java/io/github/dddplus/DDDPlusEnforcer.java)，业务建模规范的架构守护
-- 可视化逆向建模
-   - ([DomainModelAnalyzer](/dddplus-spec/src/main/java/io/github/dddplus/dsl/package-info.java), [PlantUmlBuilder](/dddplus-visualization/src/main/java/io/github/dddplus/ast/view/PlantUmlBuilder.java)), 分析Java AST自动生成逆向业务模型
-
 ## Current status
 
 Used for several complex critical central platform projects in production environment.
@@ -69,7 +42,7 @@ Latest `Maven Central` version is: `1.1.2`, under active development version is:
 
 ### 项目演示
 
-[正向和逆向建模的项目演示](dddplus-test/src/test/java/ddd/plus/showcase/README.zh-cn.md).
+[正向和逆向建模的项目演示](dddplus-test/src/test/java/ddd/plus/showcase/README.zh-cn.md)
 
 ### Dependencies
 

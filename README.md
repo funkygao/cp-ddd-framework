@@ -42,7 +42,7 @@ Latest Maven Central version: `1.1.2`, under active development version: `2.0.0-
 
 ### Showcase
 
-[A full demo of DDDplus forward/reverse modeling ->](dddplus-test/src/test/java/ddd/plus/showcase/README.md).
+[A full demo of DDDplus forward/reverse modeling ->](dddplus-test/src/test/java/ddd/plus/showcase/README.md)
 
 ### Dependencies
 
