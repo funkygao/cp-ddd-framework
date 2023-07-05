@@ -19,6 +19,8 @@ public interface ITaskRepository extends IRepository {
 
     TaskOfSku mustGetPending(TaskNo taskNo, OrderNo orderNo, Sku sku, WarehouseNo warehouseNo) throws WmsException;
 
+    TaskOfOrder mustGet(OrderNo orderNo, WarehouseNo warehouseNo) throws WmsException;
+
     Map<Platform, List<Task>> pendingTasksOfPlatforms(List<Platform> platformNos);
 
     TaskBag tasksOfOrder(OrderNo orderNo, WarehouseNo warehouseNo);

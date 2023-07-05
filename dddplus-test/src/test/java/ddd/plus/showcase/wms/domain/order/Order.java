@@ -64,7 +64,6 @@ public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainM
         /**
          * 该订单已经装箱的货品件数总和.
          */
-        @KeyRule // FIXME not shown in uml
         int totalCartonizedQty();
 
         CartonItemBag cartonItemBag();

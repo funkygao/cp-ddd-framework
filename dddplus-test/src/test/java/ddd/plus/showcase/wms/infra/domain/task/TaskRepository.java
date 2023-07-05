@@ -114,6 +114,11 @@ public class TaskRepository implements ITaskRepository {
     }
 
     @Override
+    public TaskOfOrder mustGet(OrderNo orderNo, WarehouseNo warehouseNo) throws WmsException {
+        return null;
+    }
+
+    @Override
     public Map<Platform, List<Task>> pendingTasksOfPlatforms(List<Platform> platformNos) {
         return null;
     }

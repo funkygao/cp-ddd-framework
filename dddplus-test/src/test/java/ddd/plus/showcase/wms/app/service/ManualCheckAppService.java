@@ -11,7 +11,9 @@ import ddd.plus.showcase.wms.domain.carton.spec.CaronNotFull;
 import ddd.plus.showcase.wms.domain.common.*;
 import ddd.plus.showcase.wms.domain.flow.RecommendPlatformFlow;
 import ddd.plus.showcase.wms.domain.order.*;
+import ddd.plus.showcase.wms.domain.order.spec.OrderNotCartonizedYet;
 import ddd.plus.showcase.wms.domain.order.spec.OrderNotFullyCartonized;
+import ddd.plus.showcase.wms.domain.order.spec.OrderUseOnePack;
 import ddd.plus.showcase.wms.domain.order.spec.OrderUsesManualCheckFlow;
 import ddd.plus.showcase.wms.domain.task.*;
 import ddd.plus.showcase.wms.domain.task.spec.OperatorCannotBePicker;
@@ -123,11 +125,18 @@ public class ManualCheckAppService {
     }
 
     /**
-     * 把一个出库单的所有货品一次性放到入参指定的纸箱
+     * 把一个出库单的所有货品一次性放到入参指定的纸箱：爆品订单复核
      */
     @KeyUsecase(in = {"orderNo"})
     public ApiResponse<Void> checkByOrder(CheckByOrderRequest request) throws WmsException {
-        Order order = orderRepository.mustGet(OrderNo.of(request.getOrderNo()), WarehouseNo.of(request.getWarehouseNo()));
+        WarehouseNo warehouseNo = WarehouseNo.of(request.getWarehouseNo());
+        Order order = orderRepository.mustGet(OrderNo.of(request.getOrderNo()), warehouseNo);
+        order.assureSatisfied(new OrderUseOnePack()
+                .and(new OrderNotCartonizedYet()));
+
+        TaskOfOrder taskOfOrder = taskRepository.mustGet(order.getOrderNo(), warehouseNo);
+        taskOfOrder.confirmQty(Operator.of(request.getOperatorNo()), Platform.of(request.getPlatformNo()));
+
         List<Carton> cartonList = CartonAppConverter.INSTANCE.fromDto(request);
         cartonList.stream().forEach(c -> c.fulfill(Operator.of(request.getOperatorNo()), Platform.of(request.getPlatformNo())));
         // ...
