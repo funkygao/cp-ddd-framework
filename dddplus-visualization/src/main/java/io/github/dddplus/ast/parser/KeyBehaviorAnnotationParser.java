@@ -83,6 +83,11 @@ public class KeyBehaviorAnnotationParser {
                 case "args":
                     entry.setArgs(Lists.newArrayList(AnnotationFieldParser.arrayFieldValue(memberValuePair)));
                     break;
+
+                case "useRawArgs":
+                    entry.setRealArguments(JavaParserUtil.extractMethodArguments(methodDeclaration));
+                    entry.setUseRawArgs(true);
+                    break;
             }
         }
 

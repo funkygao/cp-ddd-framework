@@ -7,11 +7,15 @@
  * Reverse modeling DSL: Object-Oriented Domain Model(As-Is -> To-Be) Re-Design without tech constraints.
  * <p/>
  * <p>目标：提供一套模型描述语言，从代码提炼精粹的业务知识，指导并约束模型和系统演进.</p>
- * <p>路径：明确业务中关键问题，跨越(架构约束，技术限制)等造成代码难以直观表达模型的问题，面向对象地抽取和修正，形成与正向模型正反馈闭环。DSL标注过程，是大胆二次设计的过程.</p>
+ * <p>路径：明确业务中关键问题，跨越(架构约束，技术限制)等造成代码难以直观表达模型的问题，面向对象地抽取和修正，形成与正向模型正反馈闭环。DSL标注过程是大胆二次设计的过程.</p>
  * <p/>
  * <p>由于代码具有(可运行，包含完全细节，演进过程完整追溯，自我修复)特征，因此成为业务的唯一事实真相；但代码里有太多技术细节产生的业务模型噪音，导致代码里无法直观看到业务真相.</p>
  * <p>{@code 建模 = 图形 + 逻辑 + 现实的抽象}，代码(一维的，局部的)，而模型(多维立体的，全局的)，逆向模型相当于动态的活地图</p>
  * <p>通过该DSL建立的逆向模型，(业务强相关，代码强相关)，它完成了业务与代码双向映射，最终实现(业务模型，代码实现)的持续一致.</p>
+ * <blockquote cite="Martin Fowler 1996 《Analysis Patterns: Reusable Object Models》">
+ *     Although much of the attention in business engineering is about process, most of these patterns are static type models. I like to think of type models as defining the language of the business. These models thus provide a way of coming up with useful concepts that underlie a great deal of the process modeling.
+ *     在面向对象开发过程中很重要的原则：要设计软件，使得软件的结构反映问题的结构。
+ * </blockquote>
  * <pre>
  * DomainModel      -->   CodeImplementation
  *     ^                        |

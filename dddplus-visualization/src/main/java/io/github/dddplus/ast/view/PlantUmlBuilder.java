@@ -48,6 +48,7 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
 
     // https://plantuml.com/zh/color
     private static final String COLOR_BEHAVIOR_PRODUCE_EVENT = "Violet";
+    private static final String COLOR_FLOW_ACTUAL_CLASS = "Olive";
 
     private final Map<KeyRelation.Type, String> connections;
     private Set<KeyElement.Type> ignored;
@@ -60,6 +61,7 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
     private Set<String> skinParams = new HashSet<>();
     private Set<String> notes = new TreeSet<>();
     private boolean showNotLabeledElements = false;
+    private boolean showCoverage = true;
 
     public PlantUmlBuilder() {
         connections = new HashMap<>();
@@ -68,6 +70,7 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
         connections.put(KeyRelation.Type.HasOne, escape("1") + " *-- " + escape("1"));
         connections.put(KeyRelation.Type.HasMany, escape("1") + " *-- " + escape("N"));
         connections.put(KeyRelation.Type.BelongTo, "--|>");
+        connections.put(KeyRelation.Type.Associate, "o--");
 
         connections.put(KeyRelation.Type.Many2Many, "--");
         connections.put(KeyRelation.Type.Contextual, "--|>");
@@ -92,6 +95,11 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
         return this;
     }
 
+    public PlantUmlBuilder disableCoverage() {
+        this.showCoverage = false;
+        return this;
+    }
+
     public String umlContent() {
         if (model == null) {
             throw new IllegalArgumentException("call build before this");
@@ -109,12 +117,20 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
         this.model = model;
         this.ignored = ignored;
 
-        start().appendDirection().appendSkinParam().appendTitle().appendHeader();
+        start().appendDirection().appendSkinParam().appendTitle();
+
+        if (showCoverage) {
+            appendHeader();
+        }
 
         //addClassMethodReport();
         addNotes();
 
+        // aggregates
+        append("package 业务模型 {").append(NEWLINE);
         model.aggregates().forEach(a -> addAggregate(a));
+        append(BRACE_CLOSE).append(NEWLINE);
+
         //addSimilarities();
         addKeyUsecases();
         addOrphanKeyFlows();
@@ -172,12 +188,12 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
     }
 
     private PlantUmlBuilder start() {
-        content.append(STARTUML).append(NEWLINE).append(NEWLINE);
+        append(STARTUML).append(NEWLINE).append(NEWLINE);
         return this;
     }
 
     private PlantUmlBuilder end() {
-        content.append(NEWLINE).append(ENDUML);
+        append(NEWLINE).append(ENDUML);
         return this;
     }
 
@@ -186,7 +202,7 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
     }
 
     private PlantUmlBuilder writeClazzDefinition(KeyEventEntry entry) {
-        content.append("class ").append(entry.getClassName());
+        append("class ").append(entry.getClassName());
         String tag = "E";
         switch (entry.getType()) {
             case Local:
@@ -199,15 +215,15 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
                 tag = "RP";
                 break;
         }
-        content.append(String.format(" <<(E,#9197DB) %s: %s>> ", tag, entry.getJavadoc()));
-        content.append(" {").append(NEWLINE);
+        append(String.format(" <<(E,#9197DB) %s: %s>> ", tag, entry.getJavadoc()));
+        append(" {").append(NEWLINE);
         if (entry.orphaned()) {
-            content.append(TAB).append("未通过@KeyBehavior标注生产者").append(NEWLINE);
+            append(TAB).append("未通过@KeyBehavior标注生产者").append(NEWLINE);
         }
         if (entry.hasRemark()) {
-            content.append(TAB).append(entry.getRemark()).append(NEWLINE);
+            append(TAB).append(entry.getRemark()).append(NEWLINE);
         }
-        content.append(TAB).append("}").append(NEWLINE);
+        append(TAB).append("}").append(NEWLINE);
         return this;
     }
 
@@ -221,99 +237,78 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
             return this;
         }
 
-        content.append("class ").append(actor);
-        content.append(" {").append(NEWLINE);
+        append("class ").append(actor);
+        append(" {").append(NEWLINE);
         for (KeyFlowEntry entry : orphanFlowsOfActor) {
-            if (entry.isAsync()) {
-                content.append("    {abstract} {method} ");
-            } else {
-                content.append("    {method} ");
-            }
-
-            content.append(entry.displayNameWithRemark())
-                    .append(BRACKET_OPEN)
-                    .append(entry.displayArgsWithRules())
-                    .append(BRACKET_CLOSE)
-                    .append(SPACE)
-                    .append(entry.getJavadoc());
-            if (entry.produceEvent()) {
-                append(MessageFormat.format(COLOR_TMPL_OPEN, COLOR_BEHAVIOR_PRODUCE_EVENT));
-                append(" -> ").append(entry.displayEvents()).append(SPACE);
-                append(COLOR_TMPL_CLOSE);
-            }
+            append(TAB);
+            append(entry, null);
             append(NEWLINE);
         }
-        content.append(TAB).append("}").append(NEWLINE);
+        append(TAB).append("}").append(NEWLINE);
         return this;
     }
 
     private PlantUmlBuilder writeKeyUsecaseClazzDefinition(String actor) {
-        content.append("class ").append(actor);
-        content.append(" {").append(NEWLINE);
+        append("class ").append(actor);
+        append(" {").append(NEWLINE);
         for (KeyUsecaseEntry entry : model.getKeyUsecaseReport().actorKeyUsecases(actor)) {
-            content.append("    {method} ");
+            append("    {method} ");
             if (!entry.displayOut().isEmpty()) {
-                content.append(entry.displayOut()).append(SPACE);
-                content.append(entry.displayNameWithRemark())
-                        .append(BRACKET_OPEN)
-                        .append(entry.displayIn())
-                        .append(SPACE)
-                        .append(BRACKET_CLOSE)
-                        .append(NEWLINE);
-            } else {
-                content.append(entry.displayNameWithRemark())
-                        .append(BRACKET_OPEN)
-                        .append(entry.displayIn())
-                        .append(SPACE)
-                        .append(BRACKET_CLOSE)
-                        .append(NEWLINE);
+                append(entry.displayOut()).append(SPACE);
             }
+            append(entry.displayNameWithRemark())
+                    .append(BRACKET_OPEN)
+                    .append(entry.displayIn())
+                    .append(BRACKET_CLOSE)
+                    .append(SPACE)
+                    .append(entry.getJavadoc())
+                    .append(NEWLINE);
         }
-        content.append(TAB).append("}").append(NEWLINE);
+        append(TAB).append("}").append(NEWLINE);
         return this;
     }
 
     private PlantUmlBuilder writeClazzDefinition(KeyModelEntry keyModelEntry, boolean isAggregateRoot) {
-        content.append("class ").append(keyModelEntry.getClassName());
+        append("class ").append(keyModelEntry.getClassName());
         if (isAggregateRoot) {
             if (keyModelEntry.hasJavadoc()) {
-                content.append(String.format(" <<(R,#FF7700) %s>> ", keyModelEntry.getJavadoc()));
+                append(String.format(" <<(R,#FF7700) %s>> ", keyModelEntry.getJavadoc()));
             } else {
-                content.append(String.format(" <<(R,#FF7700)>> "));
+                append(String.format(" <<(R,#FF7700)>> "));
             }
         } else if (keyModelEntry.isBehaviorOnly()) {
             if (keyModelEntry.hasJavadoc()) {
-                content.append(String.format(" <<(B,#9197DB) %s>> ", keyModelEntry.getJavadoc()));
+                append(String.format(" <<(B,#9197DB) %s>> ", keyModelEntry.getJavadoc()));
             } else {
-                content.append(String.format(" <<(B,#9197DB)>> "));
+                append(String.format(" <<(B,#9197DB)>> "));
             }
         } else {
             if (keyModelEntry.hasJavadoc()) {
-                content.append(String.format(" <<%s>> ", keyModelEntry.getJavadoc()));
+                append(String.format(" <<%s>> ", keyModelEntry.getJavadoc()));
             }
         }
-        content.append(" {").append(NEWLINE);
+        append(" {").append(NEWLINE);
         if (!keyModelEntry.types().isEmpty()) {
             for (KeyElement.Type type : keyModelEntry.types()) {
                 if (ignored.contains(type)) {
                     continue;
                 }
 
-                content.append(String.format("    __ %s __", type)).append(NEWLINE);
-                content.append("    {field} ").append(keyModelEntry.displayFieldByType(type)).append(NEWLINE);
+                append(String.format("    __ %s __", type)).append(NEWLINE);
+                append("    {field} ").append(keyModelEntry.displayFieldByType(type)).append(NEWLINE);
             }
 
             if (showNotLabeledElements && !keyModelEntry.undefinedTypes().isEmpty()) {
-                content.append("    __ NotLabeled __").append(NEWLINE);
-                content.append("    {field} ").append(keyModelEntry.displayUndefinedTypes()).append(NEWLINE);
+                append("    __ NotLabeled __").append(NEWLINE);
+                append("    {field} ").append(keyModelEntry.displayUndefinedTypes()).append(NEWLINE);
             }
         }
 
         if (!keyModelEntry.getKeyRuleEntries().isEmpty()) {
-            content.append("    __ 规则 __").append(NEWLINE);
+            append("    __ 规则 __").append(NEWLINE);
             for (KeyRuleEntry entry : keyModelEntry.getKeyRuleEntries()) {
-                content.append("    {method} ");
-                content.append(entry.displayNameWithRemark())
+                append("    {method} ");
+                append(entry.displayNameWithRemark())
                         .append(BRACKET_OPEN)
                         .append(entry.displayRefer())
                         .append(BRACKET_CLOSE)
@@ -324,13 +319,13 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
         }
 
         if (!keyModelEntry.getKeyBehaviorEntries().isEmpty()) {
-            content.append("    __ 行为 __").append(NEWLINE);
+            append("    __ 行为 __").append(NEWLINE);
             for (KeyBehaviorEntry entry : keyModelEntry.getKeyBehaviorEntries()) {
+                append(TAB);
                 if (entry.isAsync()) {
-                    append("    {abstract} {method} ");
-                } else {
-                    append("    {method} ");
+                    append(" {abstract} ");
                 }
+                append(" {method} ");
                 append(entry.displayNameWithRemark())
                         .append(BRACKET_OPEN)
                         .append(entry.displayArgs())
@@ -342,42 +337,53 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
                     append(" -> ").append(entry.displayEvents()).append(SPACE);
                     append(COLOR_TMPL_CLOSE);
                 }
-                content.append(NEWLINE);
-            }
-        }
-
-        if (!keyModelEntry.getKeyFlowEntries().isEmpty()) {
-            content.append("    __ 流程 __").append(NEWLINE);
-            for (KeyFlowEntry entry : keyModelEntry.getKeyFlowEntries()) {
-                if (entry.isAsync()) {
-                    append("    {abstract} {method} ");
-                } else {
-                    append("    {method} ");
-                }
-                append(entry.getMethodName())
-                        .append(BRACKET_OPEN)
-                        .append(entry.displayArgsWithRules())
-                        .append(BRACKET_CLOSE)
-                        .append(SPACE)
-                        .append(entry.getJavadoc())
-                        .append(SPACE)
-                        .append(entry.displayActualClass());
-                if (entry.produceEvent()) {
-                    append(MessageFormat.format(COLOR_TMPL_OPEN, COLOR_BEHAVIOR_PRODUCE_EVENT));
-                    append(" -> ").append(entry.displayEvents()).append(SPACE);
-                    append(COLOR_TMPL_CLOSE);
-                }
                 append(NEWLINE);
             }
         }
 
-        content.append(TAB).append("}").append(NEWLINE);
+        if (!keyModelEntry.getKeyFlowEntries().isEmpty()) {
+            append("    __ 流程 __").append(NEWLINE);
+            for (KeyFlowEntry entry : keyModelEntry.getKeyFlowEntries()) {
+                append(TAB);
+                append(entry, keyModelEntry);
+                append(NEWLINE);
+            }
+        }
+
+        append(TAB).append("}").append(NEWLINE);
         // the note
         if (false && keyModelEntry.hasJavadoc()) {
-            content.append("note left: " + keyModelEntry.getJavadoc()).append(NEWLINE);
+            append("note left: " + keyModelEntry.getJavadoc()).append(NEWLINE);
         }
 
         return this;
+    }
+
+    private void append(KeyFlowEntry entry, KeyModelEntry keyModelEntry) {
+        if (entry.isAsync()) {
+            append(" {abstract} ");
+        }
+        if (entry.isPolymorphism()) {
+            append(" {static} ");
+        }
+        append(" {method} ");
+        append(entry.getMethodName())
+                .append(BRACKET_OPEN)
+                .append(entry.displayArgsWithRules())
+                .append(BRACKET_CLOSE)
+                .append(SPACE)
+                .append(entry.getJavadoc());
+        if (keyModelEntry != null && !keyModelEntry.getClassName().equals(entry.displayActualClass())) {
+            append(SPACE)
+                    .append(MessageFormat.format(COLOR_TMPL_OPEN, COLOR_FLOW_ACTUAL_CLASS))
+                    .append(entry.displayActualClass()).append(SPACE)
+                    .append(COLOR_TMPL_CLOSE);
+        }
+        if (entry.produceEvent()) {
+            append(MessageFormat.format(COLOR_TMPL_OPEN, COLOR_BEHAVIOR_PRODUCE_EVENT));
+            append(" -> ").append(entry.displayEvents()).append(SPACE);
+            append(COLOR_TMPL_CLOSE);
+        }
     }
 
     private PlantUmlBuilder append(String s) {
@@ -435,7 +441,7 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
 
     private PlantUmlBuilder appendTitle() {
         if (title != null && !title.isEmpty()) {
-            content.append("title").append(SPACE).append(title)
+            append("title").append(SPACE).append(title)
                     .append(NEWLINE).append(NEWLINE);
         }
         return this;
@@ -443,34 +449,34 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
 
     private PlantUmlBuilder appendFooter() {
         if (footer != null && !footer.isEmpty()) {
-            content.append("footer").append(NEWLINE).append(footer).append(NEWLINE)
+            append("footer").append(NEWLINE).append(footer).append(NEWLINE)
                     .append("endfooter").append(NEWLINE).append(NEWLINE);
         }
         return this;
     }
 
     private PlantUmlBuilder addAggregate(AggregateEntry aggregate) {
-        content.append(MessageFormat.format(PACKAGE_TMPL, "Aggregate：" + aggregate.getName(), aggregate.getPackageName()));
-        content.append(SPACE).append(BRACE_OPEN).append(NEWLINE);
+        append(MessageFormat.format(PACKAGE_TMPL, "Aggregate：" + aggregate.getName(), aggregate.getPackageName()));
+        append(SPACE).append(BRACE_OPEN).append(NEWLINE);
         for (KeyModelEntry clazz : aggregate.keyModels()) {
             append(TAB).writeClazzDefinition(clazz, aggregate.isRoot(clazz)).append(NEWLINE);
         }
-        content.append(BRACE_CLOSE);
-        content.append(NEWLINE).append(NEWLINE);
+        append(BRACE_CLOSE);
+        append(NEWLINE).append(NEWLINE);
 
         return this;
     }
 
     private PlantUmlBuilder addSimilarities() {
-        content.append(MessageFormat.format(PACKAGE_TMPL, "相似度", "%"));
-        content.append(SPACE).append(BRACE_OPEN).append(NEWLINE);
+        append(MessageFormat.format(PACKAGE_TMPL, "相似度", "%"));
+        append(SPACE).append(BRACE_OPEN).append(NEWLINE);
         for (SimilarityEntry entry : model.sortedSimilarities()) {
             append(TAB).append(entry.getLeftClass()).append(" .. ").append(entry.getRightClass())
                     .append(": ").append(String.format("%.0f", entry.getSimilarity()))
                     .append(NEWLINE);
         }
-        content.append(BRACE_CLOSE);
-        content.append(NEWLINE).append(NEWLINE);
+        append(BRACE_CLOSE);
+        append(NEWLINE).append(NEWLINE);
 
         return this;
     }
@@ -480,10 +486,14 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
             append(entry.getLeftClass())
                     .append(SPACE).append(connections.get(entry.getType())).append(SPACE)
                     .append(entry.getRightClass())
-                    .append(": ").append(entry.getType().toString())
-                    .append(SPACE).append(entry.displayRemark()).append(NEWLINE);
+                    .append(": ").append(entry.getType().toString());
+            String remark = entry.displayRemark();
+            if (!remark.isEmpty()) {
+                append("/").append(remark);
+            }
+            append(NEWLINE);
         }
-        content.append(NEWLINE);
+        append(NEWLINE);
         return this;
     }
 
@@ -492,31 +502,31 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
             return this;
         }
 
-        content.append(MessageFormat.format(PACKAGE_TMPL, "领域事件", "events"));
-        content.append(SPACE).append(BRACE_OPEN).append(NEWLINE);
+        append(MessageFormat.format(PACKAGE_TMPL, "领域事件", "events"));
+        append(SPACE).append(BRACE_OPEN).append(NEWLINE);
         for (KeyEventEntry entry : model.getKeyEventReport().getEvents()) {
             append(TAB).writeClazzDefinition(entry).append(NEWLINE);
         }
 
-        content.append(BRACE_CLOSE);
-        content.append(NEWLINE).append(NEWLINE);
+        append(BRACE_CLOSE);
+        append(NEWLINE).append(NEWLINE);
 
         return this;
     }
 
     private PlantUmlBuilder addOrphanKeyFlows() {
-        if (model.getKeyFlowReport().actors().isEmpty()) {
+        if (!model.getKeyFlowReport().hasOrphanFlowEntries()) {
             return this;
         }
 
-        content.append(MessageFormat.format(PACKAGE_TMPL, "跨聚合复杂流程", "Orphan Services"));
-        content.append(SPACE).append(BRACE_OPEN).append(NEWLINE);
+        append(MessageFormat.format(PACKAGE_TMPL, "跨聚合复杂流程", "Orphan Services"));
+        append(SPACE).append(BRACE_OPEN).append(NEWLINE);
         for (String actor : model.getKeyFlowReport().actors()) {
             append(TAB).writeOrphanFlowClazzDefinition(actor).append(NEWLINE);
         }
 
-        content.append(BRACE_CLOSE);
-        content.append(NEWLINE).append(NEWLINE);
+        append(BRACE_CLOSE);
+        append(NEWLINE).append(NEWLINE);
 
         return this;
     }
@@ -526,14 +536,14 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
             return this;
         }
 
-        content.append(MessageFormat.format(PACKAGE_TMPL, "交互", "UseCase"));
-        content.append(SPACE).append(BRACE_OPEN).append(NEWLINE);
+        append(MessageFormat.format(PACKAGE_TMPL, "交互", "UseCase"));
+        append(SPACE).append(BRACE_OPEN).append(NEWLINE);
         for (String actor : model.getKeyUsecaseReport().getData().keySet()) {
             append(TAB).writeKeyUsecaseClazzDefinition(actor).append(NEWLINE);
         }
 
-        content.append(BRACE_CLOSE);
-        content.append(NEWLINE).append(NEWLINE);
+        append(BRACE_CLOSE);
+        append(NEWLINE).append(NEWLINE);
         return this;
     }
 

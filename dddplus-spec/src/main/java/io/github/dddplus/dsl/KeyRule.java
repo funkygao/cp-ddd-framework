@@ -38,6 +38,13 @@ public @interface KeyRule {
     String remark() default "";
 
     /**
+     * 修正业务规则到某个业务主体.
+     *
+     * <p>重新分配职责的过程.</p>
+     */
+    Class[] actor() default {};
+
+    /**
      * 相关对象.
      */
     Class[] refer() default {};

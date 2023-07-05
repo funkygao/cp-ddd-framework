@@ -17,16 +17,16 @@ public class PatternTemplateTest {
 
         }
 
-        private boolean match(Task task) {
-            return task.getTaskType().contains("-2x-");
+        private boolean match(FooTask fooTask) {
+            return fooTask.getTaskType().contains("-2x-");
 
         }
     }
 
     @Pattern(code = Patterns.B2C)
     class B2CBasePattern extends BasePattern implements IPatternFilter {
-        private boolean match(Task task) {
-            return task.getTaskType().equals("2B");
+        private boolean match(FooTask fooTask) {
+            return fooTask.getTaskType().equals("2B");
         }
 
         @Override

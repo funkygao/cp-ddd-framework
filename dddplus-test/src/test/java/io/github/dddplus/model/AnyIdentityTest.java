@@ -1,6 +1,6 @@
 package io.github.dddplus.model;
 
-import io.github.errcase.pattern.Task;
+import io.github.errcase.pattern.FooTask;
 import org.junit.jupiter.api.Test;
 
 import java.util.Date;
@@ -12,14 +12,14 @@ class AnyIdentityTest {
     @Test
     void basic() {
         // new AnyIdentity() compile err
-        Task task = new Task();
-        task.setTaskType("T01");
+        FooTask fooTask = new FooTask();
+        fooTask.setTaskType("T01");
         IBagTest.Order order = new IBagTest.Order();
         order.setOrder("O-A");
         AnyIdentity identity = AnyIdentity.newIdentity();
-        identity.put("t", task)
+        identity.put("t", fooTask)
                 .put("o", order);
-        Task t = identity.get("t", Task.class);
+        FooTask t = identity.get("t", FooTask.class);
         assertEquals("T01", t.getTaskType());
         IBagTest.Order o = identity.get("o", IBagTest.Order.class);
         assertEquals("O-A", o.getOrder());

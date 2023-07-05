@@ -24,28 +24,32 @@ public class KeyRelationAnnotationParser {
     }
 
     public KeyRelationEntry parse(AnnotationExpr keyRelation) {
-        KeyRelationEntry result = new KeyRelationEntry();
-        result.setJavadoc(JavaParserUtil.javadocFirstLineOf(leftClassDeclaration));
-        result.setLeftClass(leftClassDeclaration.getNameAsString());
-        result.setLeftClassPackageName(JavaParserUtil.packageName(leftClassDeclaration));
+        KeyRelationEntry entry = new KeyRelationEntry();
+        entry.setJavadoc(JavaParserUtil.javadocFirstLineOf(leftClassDeclaration));
+        entry.setLeftClass(leftClassDeclaration.getNameAsString());
+        entry.setLeftClassPackageName(JavaParserUtil.packageName(leftClassDeclaration));
 
         NormalAnnotationExpr normalAnnotationExpr = (NormalAnnotationExpr) keyRelation;
         for (MemberValuePair memberValuePair : normalAnnotationExpr.getPairs()) {
             switch (memberValuePair.getNameAsString()) {
                 case "type":
-                    result.setTypeInString(AnnotationFieldParser.stringFieldValue(memberValuePair));
+                    entry.setTypeInString(AnnotationFieldParser.stringFieldValue(memberValuePair));
                     break;
 
                 case "remark":
-                    result.setRemark(AnnotationFieldParser.stringFieldValue(memberValuePair));
+                    entry.setRemark(AnnotationFieldParser.stringFieldValue(memberValuePair));
+                    break;
+
+                case "contextual":
+                    entry.setContextual(true);
                     break;
 
                 case "whom":
-                    result.setRightClass(AnnotationFieldParser.stringFieldValue(memberValuePair));
+                    entry.setRightClass(AnnotationFieldParser.stringFieldValue(memberValuePair));
                     break;
             }
         }
 
-        return result;
+        return entry;
     }
 }

@@ -13,10 +13,19 @@ import java.util.Set;
 public class KeyRuleEntry {
     private String className;
     private String methodName;
+    private String actor = "";
     private String realMethodName;
     private String remark;
     private Set<String> refer;
     private String javadoc;
+
+    public String actor() {
+        if (actor.isEmpty()) {
+            return className;
+        }
+
+        return actor;
+    }
 
     public String displayRefer() {
         if (refer == null || refer.isEmpty()) {

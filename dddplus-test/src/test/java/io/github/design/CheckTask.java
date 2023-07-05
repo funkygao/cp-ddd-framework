@@ -1,7 +1,7 @@
 package io.github.design;
 
-import io.github.dddplus.buddy.DirtyMemento;
-import io.github.dddplus.buddy.Exchange;
+import io.github.dddplus.model.DirtyMemento;
+import io.github.dddplus.model.Exchange;
 import io.github.dddplus.dsl.KeyBehavior;
 import io.github.dddplus.dsl.KeyElement;
 import io.github.dddplus.dsl.KeyRelation;

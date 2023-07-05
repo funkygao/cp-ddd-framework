@@ -10,15 +10,30 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Java AST Node 工具.
  */
 public final class JavaParserUtil {
     private static final String BLANK = "";
+    private static final Set<String> emptySet = new HashSet<>();
+    private static final Set<String> ignoredArgument = new HashSet<>();
+    static {
+        ignoredArgument.add("String");
+        ignoredArgument.add("Boolean");
+        ignoredArgument.add("boolean");
+        ignoredArgument.add("Integer");
+        ignoredArgument.add("int");
+        ignoredArgument.add("Date");
+    }
 
     private JavaParserUtil() {
     }
@@ -64,6 +79,20 @@ public final class JavaParserUtil {
         return false;
     }
 
+    static Set<String> extractMethodArguments(MethodDeclaration methodDeclaration) {
+        if (methodDeclaration.getParameters() == null) {
+            return emptySet;
+        }
+
+        Set<String> realArguments = new TreeSet<>();
+        for (Parameter parameter : methodDeclaration.getParameters()) {
+            if (!ignoredArgument.contains(parameter.getTypeAsString())) {
+                realArguments.add(parameter.getTypeAsString());
+            }
+        }
+        return realArguments;
+    }
+
     static String extractJavadocContent(Comment comment) {
         if (comment instanceof LineComment) {
             return comment.getContent().split("\n")[0].replace("/", "").trim();
@@ -79,6 +108,7 @@ public final class JavaParserUtil {
         if (info.startsWith("@") || info.startsWith("{@")) {
             return BLANK;
         }
+        info = info.replaceAll("\\{@link ", "").replaceAll("\\}", "");
         return info;
     }
 

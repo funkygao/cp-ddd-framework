@@ -6,7 +6,6 @@
 package io.github.dddplus.model;
 
 import lombok.Getter;
-import lombok.NonNull;
 
 /**
  * 统一定义的业务编号类.
@@ -20,8 +19,15 @@ public abstract class AbstractBusinessNo<T> implements IBusinessNo<T> {
     @Getter
     protected final T value;
 
-    protected AbstractBusinessNo(@NonNull T value) {
+    protected AbstractBusinessNo(T value) {
         this.value = value;
+    }
+
+    /**
+     * 值是否存在，即是否非空.
+     */
+    public boolean isPresent() {
+        return this.value != null;
     }
 
     @Override

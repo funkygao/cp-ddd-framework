@@ -54,12 +54,13 @@ under the License.
         </dependency>
 
         <!-- NLP -->
+        <!--
         <dependency>
-            <!-- https://github.com/haifengl/smile -->
             <groupId>com.github.haifengl</groupId>
             <artifactId>smile-core</artifactId>
             <version>3.0.1</version>
         </dependency>
+        -->
 
         <!-- visualization -->
         <dependency>

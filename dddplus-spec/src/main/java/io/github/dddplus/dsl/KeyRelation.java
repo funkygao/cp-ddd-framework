@@ -23,7 +23,7 @@ import java.lang.annotation.*;
  * }
  * </pre>
  */
-@Target(ElementType.TYPE)
+@Target({ElementType.TYPE, ElementType.FIELD})
 @Retention(RetentionPolicy.SOURCE)
 @Documented
 @Repeatable(KeyRelations.class)
@@ -39,6 +39,11 @@ public @interface KeyRelation {
      */
     Type type();
 
+    /**
+     * 这种关系是否某些特定场景才发生.
+     */
+    boolean contextual() default false;
+
     String remark() default "";
 
     /**
@@ -52,6 +57,7 @@ public @interface KeyRelation {
         HasOne,
         HasMany,
         BelongTo,
+        Associate,
 
         /**
          * @deprecated 如果使用，容易导致生成的类图显示混乱.
