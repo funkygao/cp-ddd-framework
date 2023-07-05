@@ -11,8 +11,11 @@ public class TaskCartonItemsDb implements Task.TaskCartonItems {
     private final Task task;
     private Dao dao;
 
+    /**
+     * 另外一个关联对象的实现.
+     */
     @Override
-    @KeyFlow(actor = Task.class)
+    @KeyFlow
     public CartonItemBag cartonItemBag() {
         return dao.query("select * from ob_carton_item where warehouse_no=? and task_no=?",
                 task.getWarehouseNo().value(),

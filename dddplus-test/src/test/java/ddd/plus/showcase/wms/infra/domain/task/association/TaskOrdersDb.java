@@ -16,8 +16,11 @@ public class TaskOrdersDb implements Task.TaskOrders {
     private final Task task;
     private Dao dao;
 
+    /**
+     * 如何实现关联对象，注入dao和entity
+     */
     @Override
-    @KeyFlow(actor = Task.class)
+    @KeyFlow
     public OrderBag pendingOrders() {
         return dao.query("select * from ob_order where warehouse_no=? and order_no in ? and status in ?",
                 task.getWarehouseNo().value(),
@@ -25,8 +28,11 @@ public class TaskOrdersDb implements Task.TaskOrders {
                 TaskStatus.allowCheckStatus());
     }
 
+    /**
+     * 关联对象实现业务校验，避免逻辑泄露
+     */
     @Override
-    @KeyFlow(actor = Task.class)
+    @KeyFlow
     public Order pendingOrder(OrderNo orderNo) throws WmsException {
         if (!task.orderNoSet().contains(orderNo)) {
             // 该出库单不属于该任务

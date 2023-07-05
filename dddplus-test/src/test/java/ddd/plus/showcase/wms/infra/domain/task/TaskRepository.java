@@ -12,6 +12,8 @@ import ddd.plus.showcase.wms.infra.dao.Dao;
 import ddd.plus.showcase.wms.infra.domain.task.association.TaskCartonItemsDb;
 import ddd.plus.showcase.wms.infra.domain.task.association.TaskOrdersDb;
 import ddd.plus.showcase.wms.infra.domain.task.convert.TaskConverter;
+import io.github.dddplus.dsl.KeyBehavior;
+import io.github.dddplus.dsl.KeyElement;
 import io.github.dddplus.model.Exchange;
 import io.github.dddplus.model.IDirtyHint;
 import io.github.dddplus.model.IDomainModel;
@@ -28,10 +30,11 @@ public class TaskRepository implements ITaskRepository {
     private Dao dao;
 
     private static TaskConverter converter = TaskConverter.INSTANCE;
+    @KeyElement(types = KeyElement.Type.Structural, remark = "如何克服Java访问权限控制粒度问题")
     private static Class _self = TaskRepository.class;
 
     /**
-     * 这里演示如何把数据库里的数据转换为充血模型的{@link IDomainModel}：
+     * 如何把数据库里的数据转换为充血模型的{@link IDomainModel}，并注入关联对象
      *
      * <ol>
      * <li>通过{@code MyBatis的TypeHandler}进行数据库与特定Java类型的转换</li>
@@ -42,6 +45,7 @@ public class TaskRepository implements ITaskRepository {
      * </ol>
      */
     @Override
+    @KeyBehavior
     public Task mustGetPending(TaskNo taskNo, WarehouseNo warehouseNo) throws WmsException {
         TaskPo po = dao.query("select inner join .. where warehouse_no=?",
                 warehouseNo.value());
@@ -55,14 +59,14 @@ public class TaskRepository implements ITaskRepository {
         List<ContainerPo> containerPos = dao.query("select xxx");
         task.injectContainerBag(_self, ContainerBag.of(converter.fromPoList(containerPos)));
 
-        // 4. 组装 association implementation
+        // 4. 实例化并注入 association implementation
         task.injectCartonItems(_self, new TaskCartonItemsDb(task, dao));
         task.injectOrders(_self, new TaskOrdersDb(task, dao));
         return task;
     }
 
     /**
-     * 这里演示：
+     * 如何把充血模型落库，dirty hint，乐观锁
      *
      * <ol>
      * <li>如何通过{@link IDirtyHint}获取落库的线索：trace the dirty data</li>
@@ -72,6 +76,7 @@ public class TaskRepository implements ITaskRepository {
      * </ol>
      */
     @Override
+    @KeyBehavior(args = "TaskOfSku")
     public void save(TaskOfSku taskOfSku) {
         // 1. 获取所有hint，这样才知道该如何落库
         ConfirmQtyHint confirmQtyHint = taskOfSku.unbounded().firstHintOf(ConfirmQtyHint.class);
@@ -107,7 +112,12 @@ public class TaskRepository implements ITaskRepository {
         return null;
     }
 
+    /**
+     * 如何使用mapstruct
+     */
     @Override
+    @KeyBehavior(args = "TaskOfContainer")
     public void save(TaskOfContainer task) {
+        TaskPo po = converter.toPo(task.unbounded());
     }
 }

@@ -6,6 +6,8 @@ import ddd.plus.showcase.wms.domain.common.WarehouseNo;
 import ddd.plus.showcase.wms.domain.task.Task;
 import ddd.plus.showcase.wms.domain.task.dict.TaskMode;
 import ddd.plus.showcase.wms.domain.task.dict.TaskStatus;
+import io.github.dddplus.dsl.KeyBehavior;
+import io.github.dddplus.dsl.KeyElement;
 import io.github.dddplus.model.IPo;
 import lombok.Data;
 
@@ -20,7 +22,7 @@ public class TaskPo implements IPo {
     private String taskNo;
     private Integer priority;
 
-    // MyBatis TypeHandler for the following enum
+    @KeyElement(types = KeyElement.Type.Structural, byType = true, remark = "(use MyBatis TypeHandler)")
     private TaskMode taskMode;
     private Platform platformNo;
     private TaskStatus status;
@@ -36,5 +38,11 @@ public class TaskPo implements IPo {
     private Integer totalSku; // 总品数
     private BigDecimal totalQty; // 总要货件数，each
     private BigDecimal totalPendingQty; // 总待复核件数，backlog
+
+    // po对象不能有任何setter getter外的逻辑
+    @KeyBehavior
+    public void shouldHaveNoLogic() {
+
+    }
 
 }

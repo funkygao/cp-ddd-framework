@@ -13,15 +13,16 @@ import java.io.File;
 import java.io.IOException;
 
 class WmsReverseModelingTest {
-    private final TargetSource targetSource = new TargetSource();
+    private final TargetDomainSource targetDomainSource = new TargetDomainSource();
+    private final TargetTechSource targetTechSource = new TargetTechSource();
     private final File root = DomainModelAnalyzerTest.moduleRoot("dddplus-test");
 
     @Test
     @Disabled // 手工按需可视化，无需集成到CI flow
-    void visualizeTheReverseModel() throws IOException {
+    void visualizeDomainModel() throws IOException {
         ReverseEngineeringModel model = new DomainModelAnalyzer()
                 .scan(root)
-                .analyze(targetSource);
+                .analyze(targetDomainSource);
         new PlantUmlBuilder()
                 .direction(PlantUmlBuilder.Direction.TopToBottom)
                 .skinParamPolyline()
@@ -29,21 +30,43 @@ class WmsReverseModelingTest {
                 .renderSvg("../doc/wms.svg");
     }
 
+    @Test
+    @Disabled
+    void highlightTheTechImplementation() throws IOException {
+        ReverseEngineeringModel model = new DomainModelAnalyzer()
+                .scan(root)
+                .analyze(targetTechSource);
+        new PlantUmlBuilder()
+                .title("技术实现细节指引")
+                .direction(PlantUmlBuilder.Direction.TopToBottom)
+                .disableCoverage()
+                .skinParamPolyline()
+                .build(model)
+                .renderSvg("../doc/tech.svg");
+    }
+
     @Test // integrated CI flow and auto generate pull request: reviewer check the diff
     void generateForwardModel() throws IOException {
         ReverseEngineeringModel model = new DomainModelAnalyzer()
                 .scan(root)
-                .analyze(targetSource);
+                .analyze(targetDomainSource);
         new PlainTextBuilder()
                 .build(model)
                 .render("../doc/wms.txt");
     }
 
-    private static class TargetSource implements FileWalker.Filter {
+    private static class TargetDomainSource implements FileWalker.Filter {
         @Override
         public boolean interested(int level, String path, File file) {
             // 去掉(单测，基础设施层)
-            return path.contains("showcase") && !path.contains("Test") && !path.contains("infra");
+            return path.contains("showcase") && path.contains("wms") && !path.contains("Test") && !path.contains("infra");
+        }
+    }
+
+    private static class TargetTechSource implements FileWalker.Filter {
+        @Override
+        public boolean interested(int level, String path, File file) {
+            return path.contains("showcase") && path.contains("wms") && !path.contains("Test") && path.contains("infra");
         }
     }
 
