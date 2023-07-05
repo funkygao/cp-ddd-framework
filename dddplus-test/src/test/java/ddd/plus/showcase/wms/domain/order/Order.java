@@ -3,6 +3,7 @@ package ddd.plus.showcase.wms.domain.order;
 import ddd.plus.showcase.wms.domain.carton.Carton;
 import ddd.plus.showcase.wms.domain.carton.CartonItemBag;
 import ddd.plus.showcase.wms.domain.common.Operator;
+import ddd.plus.showcase.wms.domain.common.Platform;
 import ddd.plus.showcase.wms.domain.common.WarehouseNo;
 import ddd.plus.showcase.wms.domain.common.WmsException;
 import ddd.plus.showcase.wms.domain.order.dict.OrderExchangeKey;
@@ -10,10 +11,8 @@ import ddd.plus.showcase.wms.domain.order.dict.OrderStatus;
 import ddd.plus.showcase.wms.domain.order.dict.OrderType;
 import ddd.plus.showcase.wms.domain.order.dict.ProductionStatus;
 import ddd.plus.showcase.wms.domain.pack.Pack;
-import ddd.plus.showcase.wms.domain.common.Platform;
 import ddd.plus.showcase.wms.domain.task.ContainerItem;
 import ddd.plus.showcase.wms.domain.task.ContainerItemBag;
-import io.github.dddplus.dsl.KeyBehavior;
 import io.github.dddplus.dsl.KeyElement;
 import io.github.dddplus.dsl.KeyRelation;
 import io.github.dddplus.dsl.KeyRule;
@@ -49,9 +48,12 @@ public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainM
     @KeyElement(types = KeyElement.Type.Lifecycle, byType = true)
     private ProductionStatus productionStatus;
 
-    @Delegate
     @KeyElement(types = KeyElement.Type.Operational, byType = true)
     private OrderConstraint constraint;
+
+    public OrderConstraint constraint() {
+        return constraint;
+    }
 
     @Delegate
     @KeyRelation(whom = OrderLineBag.class, type = KeyRelation.Type.HasOne)
@@ -83,25 +85,15 @@ public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainM
         throw new WmsException(notification.first());
     }
 
-    @KeyBehavior
-    public void pause(Operator operator) {
-        lastOperator = operator;
-    }
-
-    @KeyBehavior
-    public void resume(Operator operator) {
-        lastOperator = operator;
-    }
-
     /**
      * 推荐该订单使用几个包裹：{@link Pack}.
      */
     public int recommendPackQty() {
-        if (isUseOnePack()) {
+        if (constraint.isUseOnePack()) {
             return 1;
         }
 
-        if (isCollectConsumables()) {
+        if (constraint.isCollectConsumables()) {
             return totalCartonizedQty();
         }
 

@@ -36,4 +36,10 @@ public class UnitOfWork implements IUnitOfWork {
         taskRepository.save(task);
     }
 
+    @Transactional(rollbackFor = Exception.class)
+    public void persist(@NonNull Carton carton) {
+        // 内部会保存好几张表：carton, carton_item, consumable, ...
+        cartonRepository.save(carton);
+    }
+
 }

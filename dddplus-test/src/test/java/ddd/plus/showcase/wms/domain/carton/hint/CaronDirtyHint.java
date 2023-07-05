@@ -19,7 +19,10 @@ public class CaronDirtyHint implements IMergeAwareDirtyHint<Long> {
     @AllArgsConstructor
     public enum Type {
         BindOrder(0),
-        TransferFrom(1);
+        TransferFrom(1),
+        Fulfill(3),
+        UseConsumables(4),
+        Ship(5);
         int bit;
     }
 

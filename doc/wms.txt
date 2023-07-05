@@ -1,50 +1,12 @@
-标注覆盖率：Class(44/54.5%) Method(76/40.8%) Property(137/25.5%) Statement(132)
+标注覆盖率：Class(47/55.3%) Method(85/38.8%) Property(167/24.6%) Statement(145)
 模型债：
-<<Aggregate: 装箱>>
-Carton
-   [属性]
-   Lifecycle     status
-   [行为]
-      fulfill() 
-CartonItem
-   [属性]
-   Structural    sku
-   Referential   orderLineNo
-   Quantity      checkedQty
-CartonItemBag
-   [行为]
-      contains() 货品唯一是否在本箱里已有了
-Consumable
-ConsumableBag
-Pallet
-<<Aggregate: 通用子域>>
-Sku 货品编号.
-   [属性]
-   Structural    OwnerNo PackCode
-   Contextual    LotNo snList
-<<Aggregate: 复核报差异>>
-ContainerDiff 复核过程中发现的容器差异.
-   [属性]
-   Structural    containerNo
-   Operational   reason
-   Location      platform
-   [行为]
-      registerBroken() 
-      registerLost() 
-ContainerDiffItem
-   [属性]
-   Structural    sku
 <<Aggregate: 客户出库单>>
 Order 客户的出库单.
    [属性]
    Lifecycle     OrderStatus ProductionStatus
    Operational   OrderConstraint
-   [行为]
-      pause() 
-      resume() 
-   [规则]
-      recommendedPlatformNo() 该订单已经被推荐到哪一个复核台.
 Order.OrderCartons
+OrderContainerItems
 OrderLine 订单行.
    [属性]
    Structural    OrderLineNo Sku
@@ -59,11 +21,52 @@ Pack 包裹.
    Structural    orderNo waybillNo
    Lifecycle     PackStatus
    Billing       totalVolume totalWeight
-<<Aggregate: 发货>>
-ShippingManifest
+<<Aggregate: 复核报差异>>
+ContainerDiff 复核过程中发现的容器差异.
    [属性]
-   Structural    carrierNo
-   Reserved      extInfo
+   Structural    containerNo
+   Operational   reason
+   Location      platform
+   [行为]
+      registerBroken() 
+      registerLost() 
+ContainerDiffItem
+   [属性]
+   Structural    Sku
+ContainerDiffItemBag
+<<Aggregate: 装箱>>
+Carton 纸箱，它会成为包裹.
+   [属性]
+   Lifecycle     status
+   Operational   cartonizationRule
+   Location      Platform
+   [行为]
+      bindOrder() 
+      fulfill() 箱满了
+      transferFrom(ContainerItemBag) 
+      useConsumables() 向纸箱添加耗材.
+   [规则]
+      isEmpty() 是否空箱.
+      cartonizationRule() 装箱规则，利用gateway延迟加载，规则也是规约.
+CartonItem
+   [属性]
+   Structural    sku
+   Referential   orderLineNo
+   Quantity      checkedQty
+CartonItemBag
+   [行为]
+      contains(UniqueCode) 货品唯一码是否在本箱里已有了
+Consumable
+   [属性]
+   Structural    CartonNo OrderNo TaskNo
+   Location      Platform
+ConsumableBag
+Pallet
+<<Aggregate: 通用子域>>
+Sku 货品编号.
+   [属性]
+   Structural    OwnerNo PackCode
+   Contextual    LotNo snList
 <<Aggregate: 出库复核任务>>
 Container 拣货容器.
    [属性]
@@ -81,19 +84,24 @@ Task 复核任务.
    Location      Platform
    [行为]
       claimedWith() 
-      confirmQty() 
 TaskOfContainer
 TaskOfOrder
 TaskOfSku
+   [行为]
+      confirmQty() 
+<<Aggregate: 发货>>
+ShippingManifest
+   [属性]
+   Structural    carrierNo
+   Reserved      extInfo
 <<用户交互>>
 ManualCheckAppService
    recommendPlatform(taskNo) 拣货员应该去哪一个复核台进行复核?
    claimTask(containerNo) 复核员扫描容器领取复核任务.
-   confirmQty(orderNo,qty,skuNo,taskNo) 操作员(复核员)清点并确认货品数量.
-   pause(orderNo) 暂停一个出库单.
-   resume(orderNo) 恢复一个出库单的执行.
+   checkBySku(qty,skuNo) 复核装箱一体化：按货品维度.
+   checkByOrder(orderNo) 把一个出库单的所有货品一次性放到入参指定的纸箱
    recheck(cartonNo,taskNo) 重新复核.
-   cartonFull(cartonNo,consumables,orderNo) 复核员把拣货容器的货品放入箱，并使用耗材以便运输安全，该过程发现箱已满.
+   fulfillCarton(cartonNo,consumables,orderNo) 复核员把拣货容器的货品放入箱，并使用耗材以便运输安全，该过程发现箱已满.
 TaskSubmittedConsumer
    消费接收复核任务(json) 
 <<跨聚合复杂流程>>

@@ -1,6 +1,7 @@
 package ddd.plus.showcase.wms.app.service;
 
 import ddd.plus.showcase.wms.app.UnitOfWork;
+import ddd.plus.showcase.wms.app.convert.CartonAppConverter;
 import ddd.plus.showcase.wms.app.service.dto.*;
 import ddd.plus.showcase.wms.app.service.dto.base.ApiResponse;
 import ddd.plus.showcase.wms.domain.carton.Carton;
@@ -25,6 +26,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * 人工复核用例.
@@ -89,7 +91,7 @@ public class ManualCheckAppService {
      * <p>作业维度：(taskNo, orderNo, skuNo)</p>
      * <p>即：某个任务的下某个订单的某种货品，它确实可以发货{n}件/each，因为他们的(质量，数量)都OK.</p>
      */
-    @KeyUsecase(in = {"taskNo", "orderNo", "skuNo", "qty"})
+    @KeyUsecase(in = {"skuNo", "qty"})
     public ApiResponse<Void> checkBySku(CheckBySkuRequest request) throws WmsException {
         WarehouseNo warehouseNo = WarehouseNo.of(request.getWarehouseNo());
         Operator operator = Operator.of(request.getOperatorNo());
@@ -120,30 +122,15 @@ public class ManualCheckAppService {
         return ApiResponse.ofOk();
     }
 
-    @KeyUsecase(in = {"taskNo", "orderNo", "skuNo", "qty"})
-    public ApiResponse<Void> checkByOrder(CheckBySkuRequest request) throws WmsException {
-        return ApiResponse.ofOk();
-    }
-
     /**
-     * 暂停一个出库单.
+     * 把一个出库单的所有货品一次性放到入参指定的纸箱
      */
-    @KeyUsecase(in = "orderNo")
-    public ApiResponse<Void> pause(PauseOrderRequest request) throws WmsException {
+    @KeyUsecase(in = {"orderNo"})
+    public ApiResponse<Void> checkByOrder(CheckByOrderRequest request) throws WmsException {
         Order order = orderRepository.mustGet(OrderNo.of(request.getOrderNo()), WarehouseNo.of(request.getWarehouseNo()));
-        order.pause(Operator.of(request.getOperatorNo()));
-        orderRepository.save(order);
-        return ApiResponse.ofOk();
-    }
-
-    /**
-     * 恢复一个出库单的执行.
-     */
-    @KeyUsecase(in = "orderNo")
-    public ApiResponse<Void> resume(ResumeOrderRequest request) throws WmsException {
-        Order order = orderRepository.mustGet(OrderNo.of(request.getOrderNo()), WarehouseNo.of(request.getWarehouseNo()));
-        order.resume(Operator.of(request.getOperatorNo()));
-        orderRepository.save(order);
+        List<Carton> cartonList = CartonAppConverter.INSTANCE.fromDto(request);
+        cartonList.stream().forEach(c -> c.fulfill(Operator.of(request.getOperatorNo()), Platform.of(request.getPlatformNo())));
+        // ...
         return ApiResponse.ofOk();
     }
 
@@ -152,11 +139,7 @@ public class ManualCheckAppService {
      */
     @KeyUsecase(in = {"taskNo", "cartonNo"})
     public ApiResponse<Void> recheck(RecheckRequest request) throws WmsException {
-        TaskNo taskNo = TaskNo.of(request.getTaskNo());
-        CartonNo cartonNo = CartonNo.of(request.getCartonNo());
-        Operator operator = Operator.of(request.getOperatorNo());
-
-        Task task = taskRepository.mustGetPending(taskNo, WarehouseNo.of(request.getWarehouseNo()));
+        Task task = taskRepository.mustGetPending(TaskNo.of(request.getTaskNo()), WarehouseNo.of(request.getWarehouseNo()));
         task.assureSatisfied(new TaskCanRecheck());
         return ApiResponse.ofOk();
     }
@@ -166,6 +149,21 @@ public class ManualCheckAppService {
      */
     @KeyUsecase(in = {"orderNo", "cartonNo", "consumables"})
     public ApiResponse<Void> fulfillCarton(CartonFullRequest request) throws WmsException {
+        Carton carton = cartonRepository.mustGet(CartonNo.of(request.getCartonNo()), WarehouseNo.of(request.getWarehouseNo()));
+        carton.assureSatisfied(new CaronNotFull());
+        if (carton.isEmpty()) {
+            // 复核员说这个空箱满了？
+        }
+
+        Order order = carton.order().get();
+        if (order.constraint().isCollectConsumables()) {
+            // 该订单要记录使用了哪些耗材，以便独立核算成本
+            carton.useConsumables(null); // request里定义耗材信息，mapstruct转换：这样了省略细节
+        }
+
+        carton.fulfill(Operator.of(request.getOperatorNo()), Platform.of(request.getPlatformNo()));
+
+        uow.persist(carton);
         return ApiResponse.ofOk();
     }
 }

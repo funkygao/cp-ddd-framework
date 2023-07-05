@@ -19,12 +19,14 @@ import io.github.dddplus.dsl.KeyRelation;
 import io.github.dddplus.dsl.KeyRule;
 import io.github.dddplus.model.BaseAggregateRoot;
 import io.github.dddplus.model.IUnboundedDomainModel;
+import io.github.dddplus.model.association.BelongTo;
 import io.github.dddplus.model.spcification.Notification;
 import lombok.*;
 import lombok.experimental.Delegate;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -55,11 +57,39 @@ public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomai
     private CartonItemBag itemBag;
     @KeyRelation(whom = ConsumableBag.class, type = KeyRelation.Type.HasOne)
     private ConsumableBag consumableBag;
+    @KeyElement(types = KeyElement.Type.Location, byType = true)
+    private Platform platform;
+    private Operator operator;
+    private LocalDateTime fulfillTime;
 
     private IRuleGateway ruleGateway;
 
     public void injectRuleGateway(Class<? extends ICartonRepository> _any, IRuleGateway ruleGateway) {
         this.ruleGateway = ruleGateway;
+    }
+
+    public interface CartonOrder extends BelongTo<Order> {
+    }
+    private CartonOrder order;
+    public CartonOrder order() {
+        return order;
+    }
+
+    /**
+     * 是否空箱.
+     */
+    public boolean isEmpty() {
+        return itemBag.isEmpty();
+    }
+
+    /**
+     * 向纸箱添加耗材.
+     */
+    @KeyBehavior
+    public void useConsumables(List<Consumable> consumables) {
+        consumables.forEach(c -> c.bind(this));
+        this.consumableBag = new ConsumableBag(consumables);
+        mergeDirty(new CaronDirtyHint(this, CaronDirtyHint.Type.UseConsumables));
     }
 
     /**
@@ -100,6 +130,14 @@ public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomai
      */
     @KeyBehavior
     public void fulfill(Operator operator, Platform platform) {
+        this.status = CartonStatus.Full;
+        this.fulfillTime = LocalDateTime.now();
+        mergeDirty(new CaronDirtyHint(this, CaronDirtyHint.Type.UseConsumables));
 
+        if (order.get().constraint().isAutoShip()) {
+            // 运营要求这个订单自动发货
+            // 触发后续流程自动执行
+            mergeDirty(new CaronDirtyHint(this, CaronDirtyHint.Type.Ship));
+        }
     }
 }

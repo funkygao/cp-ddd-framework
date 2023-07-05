@@ -26,6 +26,11 @@ public class OrderConstraint {
     private boolean collectConsumables;
 
     /**
+     * 自动发货，而无需人工操作：走数据流，与实物流分离
+     */
+    private boolean autoShip;
+
+    /**
      * 该出库单是否人工复核.
      */
     @KeyRule
