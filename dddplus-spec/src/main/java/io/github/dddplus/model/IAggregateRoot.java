@@ -6,7 +6,7 @@
 package io.github.dddplus.model;
 
 /**
- * 聚合根，Aggregate Facade，Global Entity，可全局被标识.
+ * 聚合根，Aggregate Facade，(具有全局身份，负责维护聚合内一致性).
  *
  * <p>Aggregate is a tree with a single root：the {@link IAggregateRoot}，聚合内其他{@code Entity}都是Local Entity，Local Entity不能脱离Global Entity存在和被引用.</p>
  * <p>聚合的本质就是建立了一个比类粒度更大的边界，聚集那些紧密关联的对象，形成了一个业务整体(边界).</p>
@@ -17,7 +17,7 @@ package io.github.dddplus.model;
  * <li>The root entity controls access and cannot be blindsided by changes to its internals</li>
  * <li>passing out references to internal members that support MUTATION operations is NOT Allowed</li>
  * </ol>
- * <ol>聚合边界内的对象应满足如下一致性规则：
+ * <ol>设计聚合边界内的对象应满足如下一致性规则：
  * <li>生命周期一致性</li>
  * <li>问题域一致性</li>
  * <li>场景一致性</li>
