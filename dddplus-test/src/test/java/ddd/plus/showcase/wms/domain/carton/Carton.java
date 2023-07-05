@@ -60,11 +60,12 @@ public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomai
     @KeyElement(types = KeyElement.Type.Location, byType = true)
     private Platform platform;
     private Operator operator;
+    @KeyElement(types = KeyElement.Type.KPI)
     private LocalDateTime fulfillTime;
 
     private IRuleGateway ruleGateway;
 
-    public void injectRuleGateway(Class<? extends ICartonRepository> _any, IRuleGateway ruleGateway) {
+    public void injectRuleGateway(@NonNull Class<? extends ICartonRepository> _any, IRuleGateway ruleGateway) {
         this.ruleGateway = ruleGateway;
     }
 

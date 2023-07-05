@@ -103,7 +103,7 @@ public class TaskRepository implements ITaskRepository {
         Container container = converter.fromPo(containerPo);
         TaskPo taskPo = dao.query("");
         Task task = converter.fromPo(taskPo);
-        TaskOfContainer taskOfContainer = new TaskOfContainer(task, container);
+        TaskOfContainer taskOfContainer = new TaskOfContainer(_self, task, container);
         return taskOfContainer;
     }
 

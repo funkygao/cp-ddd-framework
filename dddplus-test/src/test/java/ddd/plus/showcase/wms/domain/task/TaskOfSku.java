@@ -9,6 +9,7 @@ import io.github.dddplus.dsl.KeyBehavior;
 import io.github.dddplus.dsl.KeyRelation;
 import io.github.dddplus.model.BoundedDomainModel;
 import io.github.dddplus.model.DirtyMemento;
+import lombok.NonNull;
 
 import java.math.BigDecimal;
 
@@ -18,7 +19,7 @@ public class TaskOfSku extends BoundedDomainModel<Task> {
     private final OrderNo orderNo;
     private final Sku sku;
 
-    public TaskOfSku(Class<? extends ITaskRepository> _any, Task task, OrderNo orderNo, Sku sku) {
+    public TaskOfSku(@NonNull Class<? extends ITaskRepository> _any, Task task, OrderNo orderNo, Sku sku) {
         this.model = task;
         this.orderNo = orderNo;
         this.sku = sku;
