@@ -36,7 +36,7 @@ In short, the 3 most essential `plus` are:
 
 Used for several complex critical central platform projects in production environment.
 
-Latest Maven Central version: `1.1.2`, under active development version: `2.0.0-SNAPSHOT`.
+Latest Maven Central version: `1.1.2`; under active development version: `2.0.0-SNAPSHOT`.
 
 ## Quickstart
 

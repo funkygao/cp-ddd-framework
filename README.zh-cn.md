@@ -36,13 +36,13 @@ DDDplus是轻量级DDD补充和增强的框架。
 
 应用于多个大型核心复杂项目的生产环境。
 
-`Maven Central` 最新版本: `1.1.2`, 正在积极开发的版本: `2.0.0-SNAPSHOT`。
+`Maven Central` 最新版本: `1.1.2`；正在积极开发的版本: `2.0.0-SNAPSHOT`。
 
 ## 快速入门
 
 ### 项目演示
 
-[正向和逆向建模的项目演示](dddplus-test/src/test/java/ddd/plus/showcase/README.zh-cn.md)
+[正向和逆向建模的项目演示 ->](dddplus-test/src/test/java/ddd/plus/showcase/README.zh-cn.md)
 
 ### 正向建模
 
