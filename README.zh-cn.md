@@ -67,6 +67,10 @@ Latest `Maven Central` version is: `1.1.2`, under active development version is:
 
 ## 快速入门
 
+### 项目演示
+
+[正向和逆向建模的项目演示](dddplus-test/src/test/java/ddd/plus/showcase/README.zh-cn.md).
+
 ### Dependencies
 
 ```xml
