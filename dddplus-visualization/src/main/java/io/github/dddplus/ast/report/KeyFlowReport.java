@@ -28,6 +28,23 @@ public class KeyFlowReport {
         return keyFlows.keySet();
     }
 
+    public boolean hasOrphanFlowEntries() {
+        if (actors().isEmpty()) {
+            return false;
+        }
+
+        for (String actor : actors()) {
+            List<KeyFlowEntry> orphanFlowsOfActor = orphanFlowsOfActor(actor);
+            if (!orphanFlowsOfActor.isEmpty()) {
+                if (orphanFlowsOfActor.stream().allMatch(KeyFlowEntry::isOrphan)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     public List<KeyFlowEntry> keyFlowEntriesOfActor(String actor) {
         return keyFlows.get(actor);
     }

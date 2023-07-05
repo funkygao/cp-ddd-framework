@@ -48,6 +48,7 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
 
     // https://plantuml.com/zh/color
     private static final String COLOR_BEHAVIOR_PRODUCE_EVENT = "Violet";
+    private static final String COLOR_FLOW_ACTUAL_CLASS = "Olive";
 
     private final Map<KeyRelation.Type, String> connections;
     private Set<KeyElement.Type> ignored;
@@ -240,25 +241,7 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
         append(" {").append(NEWLINE);
         for (KeyFlowEntry entry : orphanFlowsOfActor) {
             append(TAB);
-            if (entry.isAsync()) {
-                append(" {abstract} ");
-            }
-            if (entry.isPolymorphism()) {
-                append(" {static} ");
-            }
-            append(" {method} ");
-
-            append(entry.displayNameWithRemark())
-                    .append(BRACKET_OPEN)
-                    .append(entry.displayArgsWithRules())
-                    .append(BRACKET_CLOSE)
-                    .append(SPACE)
-                    .append(entry.getJavadoc());
-            if (entry.produceEvent()) {
-                append(MessageFormat.format(COLOR_TMPL_OPEN, COLOR_BEHAVIOR_PRODUCE_EVENT));
-                append(" -> ").append(entry.displayEvents()).append(SPACE);
-                append(COLOR_TMPL_CLOSE);
-            }
+            append(entry, null);
             append(NEWLINE);
         }
         append(TAB).append("}").append(NEWLINE);
@@ -362,27 +345,7 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
             append("    __ 流程 __").append(NEWLINE);
             for (KeyFlowEntry entry : keyModelEntry.getKeyFlowEntries()) {
                 append(TAB);
-                if (entry.isAsync()) {
-                    append(" {abstract} ");
-                }
-                if (entry.isPolymorphism()) {
-                    append(" {static} ");
-                }
-                append(" {method} ");
-                append(entry.getMethodName())
-                        .append(BRACKET_OPEN)
-                        .append(entry.displayArgsWithRules())
-                        .append(BRACKET_CLOSE)
-                        .append(SPACE)
-                        .append(entry.getJavadoc());
-                if (!keyModelEntry.getClassName().equals(entry.displayActualClass())) {
-                    append(SPACE).append(entry.displayActualClass());
-                }
-                if (entry.produceEvent()) {
-                    append(MessageFormat.format(COLOR_TMPL_OPEN, COLOR_BEHAVIOR_PRODUCE_EVENT));
-                    append(" -> ").append(entry.displayEvents()).append(SPACE);
-                    append(COLOR_TMPL_CLOSE);
-                }
+                append(entry, keyModelEntry);
                 append(NEWLINE);
             }
         }
@@ -394,6 +357,33 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
         }
 
         return this;
+    }
+
+    private void append(KeyFlowEntry entry, KeyModelEntry keyModelEntry) {
+        if (entry.isAsync()) {
+            append(" {abstract} ");
+        }
+        if (entry.isPolymorphism()) {
+            append(" {static} ");
+        }
+        append(" {method} ");
+        append(entry.getMethodName())
+                .append(BRACKET_OPEN)
+                .append(entry.displayArgsWithRules())
+                .append(BRACKET_CLOSE)
+                .append(SPACE)
+                .append(entry.getJavadoc());
+        if (keyModelEntry != null && !keyModelEntry.getClassName().equals(entry.displayActualClass())) {
+            append(SPACE)
+                    .append(MessageFormat.format(COLOR_TMPL_OPEN, COLOR_FLOW_ACTUAL_CLASS))
+                    .append(entry.displayActualClass()).append(SPACE)
+                    .append(COLOR_TMPL_CLOSE);
+        }
+        if (entry.produceEvent()) {
+            append(MessageFormat.format(COLOR_TMPL_OPEN, COLOR_BEHAVIOR_PRODUCE_EVENT));
+            append(" -> ").append(entry.displayEvents()).append(SPACE);
+            append(COLOR_TMPL_CLOSE);
+        }
     }
 
     private PlantUmlBuilder append(String s) {
@@ -525,7 +515,7 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
     }
 
     private PlantUmlBuilder addOrphanKeyFlows() {
-        if (model.getKeyFlowReport().actors().isEmpty()) {
+        if (!model.getKeyFlowReport().hasOrphanFlowEntries()) {
             return this;
         }
 
