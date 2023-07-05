@@ -364,9 +364,10 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
                         .append(entry.displayArgsWithRules())
                         .append(BRACKET_CLOSE)
                         .append(SPACE)
-                        .append(entry.getJavadoc())
-                        .append(SPACE)
-                        .append(entry.displayActualClass());
+                        .append(entry.getJavadoc());
+                if (!keyModelEntry.getClassName().equals(entry.displayActualClass())) {
+                    append(SPACE).append(entry.displayActualClass());
+                }
                 if (entry.produceEvent()) {
                     append(MessageFormat.format(COLOR_TMPL_OPEN, COLOR_BEHAVIOR_PRODUCE_EVENT));
                     append(" -> ").append(entry.displayEvents()).append(SPACE);
