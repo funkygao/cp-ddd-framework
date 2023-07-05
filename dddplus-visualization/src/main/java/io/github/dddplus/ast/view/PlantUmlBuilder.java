@@ -60,6 +60,7 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
     private Set<String> skinParams = new HashSet<>();
     private Set<String> notes = new TreeSet<>();
     private boolean showNotLabeledElements = false;
+    private boolean showCoverage = true;
 
     public PlantUmlBuilder() {
         connections = new HashMap<>();
@@ -93,6 +94,11 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
         return this;
     }
 
+    public PlantUmlBuilder disableCoverage() {
+        this.showCoverage = false;
+        return this;
+    }
+
     public String umlContent() {
         if (model == null) {
             throw new IllegalArgumentException("call build before this");
@@ -110,7 +116,11 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
         this.model = model;
         this.ignored = ignored;
 
-        start().appendDirection().appendSkinParam().appendTitle().appendHeader();
+        start().appendDirection().appendSkinParam().appendTitle();
+
+        if (showCoverage) {
+            appendHeader();
+        }
 
         //addClassMethodReport();
         addNotes();
