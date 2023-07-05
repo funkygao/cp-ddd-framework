@@ -6,12 +6,11 @@ io.github.dddplus.ast.model
 io.github.dddplus.ast.parser
 io.github.dddplus.ast.report
 io.github.dddplus.ast.view
-io.github.dddplus.buddy
-io.github.dddplus.buddy.specification
 io.github.dddplus.dsl
 io.github.dddplus.ext
 io.github.dddplus.model
 io.github.dddplus.model.association
+io.github.dddplus.model.spcification
 io.github.dddplus.mybatis
 io.github.dddplus.plugin
 io.github.dddplus.runtime
