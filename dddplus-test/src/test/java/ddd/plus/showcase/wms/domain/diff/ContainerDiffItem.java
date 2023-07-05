@@ -7,9 +7,9 @@ import io.github.dddplus.dsl.KeyElement;
 import io.github.dddplus.dsl.KeyRelation;
 import io.github.dddplus.model.IDomainModel;
 
-@KeyRelation(whom = OrderLine.class, type = KeyRelation.Type.BelongTo)
 public class ContainerDiffItem implements IDomainModel {
-    @KeyElement(types = KeyElement.Type.Structural)
+    @KeyElement(types = KeyElement.Type.Structural, byType = true)
     private Sku sku;
+    @KeyRelation(whom = OrderLine.class, type = KeyRelation.Type.BelongTo)
     private OrderLineNo orderLineNo;
 }

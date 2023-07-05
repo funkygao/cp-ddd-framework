@@ -20,7 +20,6 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter(AccessLevel.PACKAGE)
-@KeyRelation(whom = OrderLine.class, type = KeyRelation.Type.BelongTo)
 public class ContainerItem implements IDomainModel {
     private Long id;
 
@@ -28,6 +27,7 @@ public class ContainerItem implements IDomainModel {
     private Sku sku;
 
     @KeyElement(types = KeyElement.Type.Structural, byType = true)
+    @KeyRelation(whom = OrderLine.class, type = KeyRelation.Type.BelongTo)
     private OrderLineNo orderLineNo;
 
     /**

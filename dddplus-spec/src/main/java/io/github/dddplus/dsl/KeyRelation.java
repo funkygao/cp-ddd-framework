@@ -39,6 +39,11 @@ public @interface KeyRelation {
      */
     Type type();
 
+    /**
+     * 这种关系是否某些特定场景才发生.
+     */
+    boolean contextual() default false;
+
     String remark() default "";
 
     /**

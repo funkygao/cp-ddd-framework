@@ -4,6 +4,7 @@ import ddd.plus.showcase.wms.domain.common.Platform;
 import ddd.plus.showcase.wms.domain.diff.dict.DiffReason;
 import io.github.dddplus.dsl.KeyBehavior;
 import io.github.dddplus.dsl.KeyElement;
+import io.github.dddplus.dsl.KeyRelation;
 import io.github.dddplus.model.IAggregateRoot;
 import io.github.design.ContainerNo;
 import lombok.experimental.Delegate;
@@ -19,6 +20,9 @@ public class ContainerDiff implements IAggregateRoot {
     @Delegate
     @KeyElement(types = KeyElement.Type.Operational)
     private DiffReason reason;
+    @Delegate
+    @KeyRelation(whom = ContainerDiffItemBag.class, type = KeyRelation.Type.HasOne)
+    private ContainerDiffItemBag itemBag;
 
     @KeyBehavior
     public void registerBroken() {

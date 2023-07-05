@@ -16,16 +16,17 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.Delegate;
 
-@KeyRelation(whom = Pallet.class, type = KeyRelation.Type.BelongTo, remark = "可能")
-@KeyRelation(whom = Task.class, type = KeyRelation.Type.BelongTo)
-@KeyRelation(whom = Order.class, type = KeyRelation.Type.BelongTo)
 @Getter(AccessLevel.PACKAGE)
 public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomainModel {
     private Long id;
     private CartonNo cartonNo;
 
+    @KeyRelation(whom = Task.class, type = KeyRelation.Type.BelongTo)
     private TaskNo taskNo;
+    @KeyRelation(whom = Order.class, type = KeyRelation.Type.BelongTo)
     private OrderNo orderNo;
+    @KeyRelation(whom = Pallet.class, type = KeyRelation.Type.BelongTo, contextual = true)
+    private PalletNo palletNo;
 
     @KeyElement(types = KeyElement.Type.Lifecycle)
     @Delegate

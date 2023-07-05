@@ -485,8 +485,12 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
             append(entry.getLeftClass())
                     .append(SPACE).append(connections.get(entry.getType())).append(SPACE)
                     .append(entry.getRightClass())
-                    .append(": ").append(entry.getType().toString())
-                    .append(SPACE).append(entry.displayRemark()).append(NEWLINE);
+                    .append(": ").append(entry.getType().toString());
+            String remark = entry.displayRemark();
+            if (!remark.isEmpty()) {
+                append("/").append(remark);
+            }
+            append(NEWLINE);
         }
         append(NEWLINE);
         return this;

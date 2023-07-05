@@ -8,6 +8,9 @@ package io.github.dddplus.ast.model;
 import io.github.dddplus.dsl.KeyRelation;
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 public class KeyRelationEntry {
     private String leftClass;
@@ -16,17 +19,27 @@ public class KeyRelationEntry {
     private String remark;
     private String leftClassPackageName;
     private String javadoc;
+    private boolean contextual = false;
 
     public void setTypeInString(String typeStr) {
         this.type = KeyRelation.Type.valueOf(typeStr);
     }
 
     public String displayRemark() {
-        if (remark == null) {
+        List<String> l = new ArrayList<>();
+
+        if (contextual) {
+            l.add("Contextual");
+        }
+        if (remark != null && !remark.isEmpty()) {
+            l.add(remark);
+        }
+
+        if (l.isEmpty()) {
             return "";
         }
 
-        return remark;
+        return String.join(" ", l);
     }
 
     public boolean sameAs(KeyRelationEntry that) {
