@@ -30,33 +30,38 @@ public class KeyRuleAnnotationParser {
     }
 
     public KeyRuleEntry parse(AnnotationExpr keyFlow) {
-        KeyRuleEntry result = new KeyRuleEntry();
-        result.setClassName(this.className);
-        result.setMethodName(this.methodName);
-        result.setRealMethodName(this.methodName);
-        result.setJavadoc(JavaParserUtil.javadocFirstLineOf(methodDeclaration));
+        KeyRuleEntry entry = new KeyRuleEntry();
+        entry.setClassName(this.className);
+        entry.setMethodName(this.methodName);
+        entry.setRealMethodName(this.methodName);
+        entry.setJavadoc(JavaParserUtil.javadocFirstLineOf(methodDeclaration));
 
         if (keyFlow instanceof MarkerAnnotationExpr) {
-            return result;
+            return entry;
         }
 
         NormalAnnotationExpr normalAnnotationExpr = (NormalAnnotationExpr) keyFlow;
         for (MemberValuePair memberValuePair : normalAnnotationExpr.getPairs()) {
             switch (memberValuePair.getNameAsString()) {
                 case "name":
-                    result.setMethodName(AnnotationFieldParser.stringFieldValue(memberValuePair));
+                    entry.setMethodName(AnnotationFieldParser.stringFieldValue(memberValuePair));
                     break;
 
                 case "remark":
-                    result.setRemark(AnnotationFieldParser.stringFieldValue(memberValuePair));
+                    entry.setRemark(AnnotationFieldParser.stringFieldValue(memberValuePair));
+                    break;
+
+                case "actor":
+                    // Class[] actor，只是为了注解值是可选的，实际使用只会用1个
+                    entry.setActor(AnnotationFieldParser.stringFieldValue(memberValuePair));
                     break;
 
                 case "refer":
-                    result.setRefer(AnnotationFieldParser.arrayFieldValue(memberValuePair));
+                    entry.setRefer(AnnotationFieldParser.arrayFieldValue(memberValuePair));
                     break;
             }
         }
 
-        return result;
+        return entry;
     }
 }

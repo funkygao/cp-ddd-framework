@@ -18,10 +18,12 @@ public class KeyBehaviorEntry {
     private Set<String> rules = new HashSet<>();
     private Set<String> modes = new HashSet<>();
     private List<String> args = new ArrayList<>();
+    private Set<String> realArguments = new TreeSet<>();
     private Set<String> events = new TreeSet<>(); // 该行为产生哪些领域事件
     private String remark = "";
     private String javadoc;
     private boolean async = false;
+    private boolean useRawArgs = false;
 
     public KeyBehaviorEntry(String className, String methodName) {
         this.className = className;
@@ -38,6 +40,10 @@ public class KeyBehaviorEntry {
     }
 
     public String displayArgs() {
+        if (useRawArgs) {
+            return String.join(",", realArguments);
+        }
+
         if (args == null || args.isEmpty()) {
             return "";
         }

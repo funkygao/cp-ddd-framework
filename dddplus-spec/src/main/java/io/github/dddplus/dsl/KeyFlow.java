@@ -28,35 +28,9 @@ import java.lang.annotation.*;
 public @interface KeyFlow {
 
     /**
-     * 业务规则约束对应的类.
+     * 该属性名称在逆向建模时被修正为哪一个统一语言名称.
      */
-    Class[] rules() default {};
-
-    /**
-     * 行为主体对应的类.
-     *
-     * <p>重新分配职责的过程.</p>
-     */
-    Class[] actor() default {};
-
-    /**
-     * 行为模式，即业务场景变化点.
-     */
-    String[] modes() default {};
-
-    /**
-     * 行为模式对应的类，通常是业务字典类.
-     *
-     * <p>它与{@link #modes()}合并，共同定义行为模式.</p>
-     */
-    Class[] modeClass() default {};
-
-    /**
-     * 该行为会产生哪些领域事件.
-     *
-     * 松散的业务逻辑链路还原的过程.
-     */
-    Class[] produceEvent() default {};
+    String name() default "";
 
     /**
      * 关键的入参.
@@ -66,9 +40,9 @@ public @interface KeyFlow {
     String[] args() default {};
 
     /**
-     * 该属性名称在逆向建模时被修正为哪一个统一语言名称.
+     * 是否拿方法签名的入参作为{@link #args()}.
      */
-    String name() default "";
+    boolean useRawArgs() default false;
 
     /**
      * 补充说明.
@@ -76,9 +50,50 @@ public @interface KeyFlow {
     String remark() default "";
 
     /**
+     * 行为主体对应的类.
+     *
+     * <p>重新分配职责的过程.</p>
+     */
+    Class[] actor() default {};
+
+    /**
+     * 该行为会产生哪些领域事件.
+     *
+     * 松散的业务逻辑链路还原的过程.
+     */
+    Class[] produceEvent() default {};
+
+    /**
      * 该行为执行过程是异步的.
      *
      * <p>这意味着内部状态变化可能不实时，可能最终一致.</p>
      */
     boolean async() default false;
+
+    /**
+     * 该行为是否多态.
+     *
+     * <p>即一个方法有多个实现.</p>
+     */
+    boolean polymorphism() default false;
+
+    /**
+     * 业务规则约束对应的类.
+     */
+    @Deprecated
+    Class[] rules() default {};
+
+    /**
+     * 行为模式，即业务场景变化点.
+     */
+    @Deprecated
+    String[] modes() default {};
+
+    /**
+     * 行为模式对应的类，通常是业务字典类.
+     *
+     * <p>它与{@link #modes()}合并，共同定义行为模式.</p>
+     */
+    @Deprecated
+    Class[] modeClass() default {};
 }

@@ -100,18 +100,7 @@ import io.github.dddplus.ext.IDomainExtension;
  * @see <a href="https://martinfowler.com/bliki/RoleInterface.html">Martin Fowler的角色接口</a>
  */
 public abstract class BoundedDomainModel<UnboundedModel extends IUnboundedDomainModel> {
-    protected final UnboundedModel model;
-
-    /**
-     * 限定上下文模型的构造器.
-     * <p>
-     * <p>Visibility by design：这意味着{@link IUnboundedDomainModel}与{@link BoundedDomainModel}必须在同一个package.</p>
-     *
-     * @param model 基于哪一个非限定上下文模型
-     */
-    protected BoundedDomainModel(UnboundedModel model) {
-        this.model = model;
-    }
+    protected UnboundedModel model;
 
     /**
      * The underlying unbounded domain model.

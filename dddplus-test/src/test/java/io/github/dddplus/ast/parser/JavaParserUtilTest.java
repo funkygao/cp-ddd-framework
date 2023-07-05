@@ -5,7 +5,7 @@ import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class JavaParserUtilTest {
 
@@ -28,6 +28,11 @@ class JavaParserUtilTest {
 
         comment.setContent(" 单号");
         assertEquals(JavaParserUtil.extractJavadocContent(comment), "单号");
+
+        comment.setContent("/**\n" +
+                " * 只加载一个{@link Container}的{@link Task}.\n" +
+                " */");
+        assertEquals(JavaParserUtil.extractJavadocContent(comment), "只加载一个Container的Task.");
     }
 
 }

@@ -53,6 +53,16 @@ under the License.
             <optional>true</optional>
         </dependency>
 
+        <!-- NLP -->
+        <!--
+        <dependency>
+            <groupId>com.github.haifengl</groupId>
+            <artifactId>smile-core</artifactId>
+            <version>3.0.1</version>
+        </dependency>
+        -->
+
+        <!-- visualization -->
         <dependency>
             <groupId>com.github.javaparser</groupId>
             <artifactId>javaparser-symbol-solver-core</artifactId>

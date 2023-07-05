@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class AbstractBusinessNoTest {
 
     static class Foo extends AbstractBusinessNo<Integer> {
-        protected Foo(@NonNull Integer value) {
+        protected Foo(Integer value) {
             super(value);
         }
     }
@@ -22,7 +22,13 @@ class AbstractBusinessNoTest {
     }
 
     @Test
-    public void basic() {
+    void present() {
+        Foo foo = new Foo(null);
+        assertFalse(foo.isPresent());
+    }
+
+    @Test
+    void basic() {
         Integer i = 87;
         Foo foo = new Foo(i);
         assertEquals(foo, i);
