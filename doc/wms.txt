@@ -1,4 +1,4 @@
-标注覆盖率：Class(52/51.9%) Method(91/41.8%) Property(162/25.9%) Statement(151)
+标注覆盖率：Class(53/54.7%) Method(94/40.4%) Property(170/25.3%) Statement(155)
 模型债：
 <<Aggregate: 装箱>>
 Carton 纸箱，它会成为包裹.
@@ -72,10 +72,14 @@ OrderBag
 <<Aggregate: 包裹>>
 Pack 包裹.
    [属性]
-   Structural    orderNo waybillNo
+   Structural    OrderNo WaybillNo
    Lifecycle     PackStatus
    Billing       totalVolume totalWeight
 <<Aggregate: 发货>>
+OrderLineManifest
+   [属性]
+   Structural    sku
+OrderManifest
 ShippingManifest
    [属性]
    Structural    carrierNo

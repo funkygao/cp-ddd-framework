@@ -11,6 +11,7 @@ import ddd.plus.showcase.wms.domain.order.dict.OrderStatus;
 import ddd.plus.showcase.wms.domain.order.dict.OrderType;
 import ddd.plus.showcase.wms.domain.order.dict.ProductionStatus;
 import ddd.plus.showcase.wms.domain.pack.Pack;
+import ddd.plus.showcase.wms.domain.pack.PackBag;
 import ddd.plus.showcase.wms.domain.task.ContainerItem;
 import ddd.plus.showcase.wms.domain.task.ContainerItemBag;
 import io.github.dddplus.dsl.KeyBehavior;
@@ -33,7 +34,6 @@ import lombok.extern.slf4j.Slf4j;
 @NoArgsConstructor
 @Slf4j
 @Getter(AccessLevel.PACKAGE)
-@KeyRelation(whom = Pack.class, type = KeyRelation.Type.HasMany)
 public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainModel, OrderExchangeKey {
     private Long id;
 
@@ -61,6 +61,17 @@ public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainM
     private OrderLineBag orderLineBag;
 
     // associations
+    public interface OrderPacks extends HasMany<Pack> {
+        PackBag packBag();
+    }
+
+    @KeyRelation(whom = Pack.class, type = KeyRelation.Type.HasMany)
+    private OrderPacks packs;
+
+    public OrderPacks packs() {
+        return packs;
+    }
+
     public interface OrderCartons extends HasMany<Carton> {
         /**
          * 该订单已经装箱的货品件数总和.

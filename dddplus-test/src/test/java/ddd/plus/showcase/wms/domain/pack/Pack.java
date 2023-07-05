@@ -21,9 +21,9 @@ import java.math.BigDecimal;
 @Slf4j
 @Getter(AccessLevel.PACKAGE)
 public class Pack extends BaseAggregateRoot<Pack> implements IUnboundedDomainModel {
-    @KeyElement(types = KeyElement.Type.Structural)
+    @KeyElement(types = KeyElement.Type.Structural, byType = true)
     private WaybillNo waybillNo;
-    @KeyElement(types = KeyElement.Type.Structural)
+    @KeyElement(types = KeyElement.Type.Structural, byType = true)
     private OrderNo orderNo;
     @KeyElement(types = KeyElement.Type.Lifecycle, byType = true)
     private PackStatus status;
