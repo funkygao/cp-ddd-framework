@@ -16,6 +16,8 @@ import java.util.Map;
 @Slf4j
 @Getter(AccessLevel.PACKAGE)
 public class ShippingManifest extends BaseAggregateRoot<ShippingManifest> implements IUnboundedDomainModel {
+    @Getter
+    private Long id;
 
     @KeyElement(types = KeyElement.Type.Structural)
     private String carrierNo;

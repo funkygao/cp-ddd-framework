@@ -4,7 +4,7 @@ import ddd.plus.showcase.wms.domain.carton.convert.CartonConverter;
 import ddd.plus.showcase.wms.domain.carton.dict.CartonStatus;
 import ddd.plus.showcase.wms.domain.carton.hint.CaronDirtyHint;
 import ddd.plus.showcase.wms.domain.carton.spec.CartonizationRule;
-import ddd.plus.showcase.wms.domain.common.IRuleGateway;
+import ddd.plus.showcase.wms.domain.common.gateway.IRuleGateway;
 import ddd.plus.showcase.wms.domain.common.Operator;
 import ddd.plus.showcase.wms.domain.common.Platform;
 import ddd.plus.showcase.wms.domain.common.WmsException;

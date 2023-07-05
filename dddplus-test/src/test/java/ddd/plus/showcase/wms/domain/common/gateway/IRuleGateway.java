@@ -1,4 +1,4 @@
-package ddd.plus.showcase.wms.domain.common;
+package ddd.plus.showcase.wms.domain.common.gateway;
 
 import ddd.plus.showcase.wms.domain.carton.Carton;
 import ddd.plus.showcase.wms.domain.carton.spec.CartonizationRule;

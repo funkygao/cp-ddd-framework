@@ -127,7 +127,7 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
         addNotes();
 
         // aggregates
-        append("package 业务模型 {").append(NEWLINE);
+        append("package 逆向业务模型 {").append(NEWLINE);
         model.aggregates().forEach(a -> addAggregate(a));
         append(BRACE_CLOSE).append(NEWLINE);
 

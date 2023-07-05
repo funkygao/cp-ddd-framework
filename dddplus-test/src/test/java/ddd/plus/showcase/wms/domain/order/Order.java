@@ -13,6 +13,7 @@ import ddd.plus.showcase.wms.domain.order.dict.ProductionStatus;
 import ddd.plus.showcase.wms.domain.pack.Pack;
 import ddd.plus.showcase.wms.domain.task.ContainerItem;
 import ddd.plus.showcase.wms.domain.task.ContainerItemBag;
+import io.github.dddplus.dsl.KeyBehavior;
 import io.github.dddplus.dsl.KeyElement;
 import io.github.dddplus.dsl.KeyRelation;
 import io.github.dddplus.dsl.KeyRule;
@@ -97,6 +98,14 @@ public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainM
         }
 
         return 0;
+    }
+
+    /**
+     * 切换到预售场景.
+     */
+    @KeyBehavior
+    public OrderOfPresale asPresale() {
+        return new OrderOfPresale(this);
     }
 
     /**

@@ -1,4 +1,4 @@
-package ddd.plus.showcase.wms.domain.common;
+package ddd.plus.showcase.wms.domain.common.gateway;
 
 import io.github.dddplus.model.IGateway;
 

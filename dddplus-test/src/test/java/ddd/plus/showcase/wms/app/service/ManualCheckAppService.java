@@ -9,7 +9,9 @@ import ddd.plus.showcase.wms.domain.carton.CartonNo;
 import ddd.plus.showcase.wms.domain.carton.ICartonRepository;
 import ddd.plus.showcase.wms.domain.carton.spec.CaronNotFull;
 import ddd.plus.showcase.wms.domain.common.*;
-import ddd.plus.showcase.wms.domain.flow.RecommendPlatformFlow;
+import ddd.plus.showcase.wms.domain.common.gateway.IMasterDataGateway;
+import ddd.plus.showcase.wms.domain.common.gateway.IOrderGateway;
+import ddd.plus.showcase.wms.domain.common.flow.RecommendPlatformFlow;
 import ddd.plus.showcase.wms.domain.order.*;
 import ddd.plus.showcase.wms.domain.order.spec.OrderNotCartonizedYet;
 import ddd.plus.showcase.wms.domain.order.spec.OrderNotFullyCartonized;
@@ -21,6 +23,7 @@ import ddd.plus.showcase.wms.domain.task.spec.TaskCanPerformChecking;
 import ddd.plus.showcase.wms.domain.task.spec.TaskCanRecheck;
 import ddd.plus.showcase.wms.domain.task.spec.UniqueCodeConstraint;
 import io.github.dddplus.dsl.KeyUsecase;
+import io.github.dddplus.model.IApplicationService;
 import io.github.design.ContainerNo;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -31,12 +34,15 @@ import java.math.BigDecimal;
 import java.util.List;
 
 /**
- * 人工复核用例.
+ * 业务用例：人工复核.
+ * <p>
+ * <p>仅做{@code DDDplus}正向建模演示使用，因此无关细节被省略.</p>
+ * <p>通过它，可以掌握{@code DDDplus}绝大部分正向建模方法，以及逆向建模{@code DSL}标注方法.</p>
  */
 @Service
 @Setter(onMethod_ = {@Resource})
 @Slf4j
-public class ManualCheckAppService {
+public class ManualCheckAppService implements IApplicationService {
     private IMasterDataGateway masterDataGateway;
     private IOrderGateway orderGateway;
 
@@ -89,7 +95,7 @@ public class ManualCheckAppService {
 
     /**
      * 复核装箱一体化：按货品维度.
-     *
+     * <p>
      * <p>作业维度：(taskNo, orderNo, skuNo)</p>
      * <p>即：某个任务的下某个订单的某种货品，它确实可以发货{n}件/each，因为他们的(质量，数量)都OK.</p>
      */
