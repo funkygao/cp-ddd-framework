@@ -109,7 +109,8 @@ public class TaskRepository implements ITaskRepository {
 
     @Override
     public TaskOfSku mustGetPending(TaskNo taskNo, OrderNo orderNo, Sku sku, WarehouseNo warehouseNo) throws WmsException {
-        return null;
+        Task task = dao.query("");
+        return new TaskOfSku(_self, task, orderNo, sku);
     }
 
     @Override

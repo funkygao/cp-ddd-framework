@@ -6,8 +6,9 @@ import lombok.experimental.Delegate;
 import java.util.List;
 
 public class ContainerItemBagPending extends BoundedDomainModel<ContainerItemBag> {
-    protected ContainerItemBagPending(ContainerItemBag model) {
-        super(model);
+
+    ContainerItemBagPending(ContainerItemBag bag) {
+        this.model = bag;
     }
 
     @Delegate

@@ -5,14 +5,10 @@ import io.github.dddplus.model.BoundedDomainModel;
 
 @KeyRelation(whom = Task.class, type = KeyRelation.Type.Contextual)
 public class TaskOfContainer extends BoundedDomainModel<Task> {
-    private Container container;
-
-    protected TaskOfContainer(Task model) {
-        super(model);
-    }
+    private final Container container;
 
     public TaskOfContainer(Task task, Container container) {
-        this(task);
+        this.model = task;
         this.container = container;
     }
 

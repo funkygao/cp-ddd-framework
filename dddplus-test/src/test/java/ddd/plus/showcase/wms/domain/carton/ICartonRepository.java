@@ -5,4 +5,6 @@ import io.github.dddplus.model.IRepository;
 
 public interface ICartonRepository extends IRepository {
     Carton mustGet(CartonNo cartonNo, WarehouseNo warehouseNo);
+
+    void save(Carton carton);
 }

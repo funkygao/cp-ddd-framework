@@ -12,19 +12,17 @@ import ddd.plus.showcase.wms.domain.order.OrderNo;
 import ddd.plus.showcase.wms.domain.task.dict.TaskExchangeKey;
 import ddd.plus.showcase.wms.domain.task.dict.TaskMode;
 import ddd.plus.showcase.wms.domain.task.dict.TaskStatus;
-import ddd.plus.showcase.wms.domain.task.hint.ConfirmQtyHint;
 import ddd.plus.showcase.wms.domain.task.hint.TaskDirtyHint;
 import io.github.dddplus.dsl.KeyBehavior;
 import io.github.dddplus.dsl.KeyElement;
 import io.github.dddplus.dsl.KeyRelation;
 import io.github.dddplus.model.BaseAggregateRoot;
+import io.github.dddplus.model.DirtyMemento;
 import io.github.dddplus.model.IUnboundedDomainModel;
 import io.github.dddplus.model.association.HasMany;
 import io.github.dddplus.model.spcification.Notification;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
-
-import java.math.BigDecimal;
 
 /**
  * 复核任务.
@@ -45,19 +43,27 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
     private Integer priority;
     @KeyElement(types = KeyElement.Type.Lifecycle, byType = true)
     private TaskStatus status;
+
     public TaskStatus status() {
         return status;
     }
+
     @KeyElement(types = KeyElement.Type.Location, byType = true)
-    private Platform platformNo;
+    Platform platformNo;
     // 该复核任务由哪一个操作员完成：1个任务只能1人完成
-    private Operator operator;
+    Operator operator;
     @Getter
     private WarehouseNo warehouseNo;
+
+    DirtyMemento dirtyMemento() {
+        return this.memento;
+    }
+
 
     @lombok.experimental.Delegate
     @KeyRelation(whom = ContainerBag.class, type = KeyRelation.Type.HasOne)
     private ContainerBag containerBag;
+
     public void injectContainerBag(@NonNull Class<? extends ITaskRepository> _any, ContainerBag containerBag) {
         this.containerBag = containerBag;
     }
@@ -65,6 +71,7 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
     // ============
     // associations
     // ============
+
     /**
      * 针对关联关系显式建模.
      *
@@ -115,16 +122,7 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
     public void claimedWith(Operator operator, Platform platformNo) {
         this.platformNo = platformNo;
         this.operator = operator;
-        dirty(new TaskDirtyHint(this).dirty("operator", "platform_no"));
-    }
-
-    @KeyBehavior
-    public void confirmQty(BigDecimal qty, Operator operator, Platform platformNo) {
-        this.platformNo = platformNo;
-        this.operator = operator;
-        // lombok Delegate，只能在外边调用时，才会Decorate：这里不能绕过containerBag直接调用pendingItemBag()
-        containerBag.pendingItemBag().confirmQty(qty);
-        dirty(new ConfirmQtyHint(this));
+        mergeDirty(new TaskDirtyHint(this).dirty("operator", "platform_no"));
     }
 
 }

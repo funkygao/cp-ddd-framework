@@ -15,10 +15,14 @@ public class CartonItemBag extends ListBag<CartonItem> {
         super(items);
     }
 
+    void appendAll(List<CartonItem> items) {
+        this.items.addAll(items);
+    }
+
     /**
-     * 货品唯一是否在本箱里已有了
+     * 货品唯一码是否在本箱里已有了
      */
-    @KeyBehavior
+    @KeyBehavior(useRawArgs = true)
     public boolean contains(@NonNull UniqueCode uniqueCode) {
         for (CartonItem item : items) {
             if (uniqueCode.equals(item.getUniqueCode())) {

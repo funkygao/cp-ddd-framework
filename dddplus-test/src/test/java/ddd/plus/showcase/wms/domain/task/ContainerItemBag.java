@@ -62,7 +62,7 @@ public class ContainerItemBag extends ListBag<ContainerItem> implements IUnbound
         return new ContainerItemBagPending(ContainerItemBag.of(list));
     }
 
-    public void confirmQty(BigDecimal qty) {
+    public ContainerItemBag confirmQty(BigDecimal qty) {
         for (ContainerItem item : items) {
             if (item.getPendingQty().compareTo(qty) > 0) {
                 item.confirmQty(qty);
@@ -72,5 +72,7 @@ public class ContainerItemBag extends ListBag<ContainerItem> implements IUnbound
             // 需要分配给多个容器明细
             qty = item.confirmQty(qty);
         }
+
+        return ContainerItemBag.of(items);
     }
 }

@@ -4,8 +4,9 @@ import io.github.dddplus.model.BoundedDomainModel;
 import lombok.experimental.Delegate;
 
 public class OrderBagCanceled extends BoundedDomainModel<OrderBag> {
-    protected OrderBagCanceled(OrderBag model) {
-        super(model);
+
+    OrderBagCanceled(OrderBag bag) {
+        this.model = bag;
     }
 
     @Delegate

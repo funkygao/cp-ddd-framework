@@ -6,7 +6,6 @@
 package io.github.dddplus.ast.parser;
 
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
 import com.github.javaparser.ast.expr.MemberValuePair;
@@ -15,10 +14,8 @@ import com.google.common.collect.Lists;
 import io.github.dddplus.ast.model.KeyFlowEntry;
 import lombok.Getter;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 /**
  * {@link io.github.dddplus.dsl.KeyFlow}.
@@ -28,34 +25,17 @@ public class KeyFlowAnnotationParser {
     private final MethodDeclaration methodDeclaration;
     private final String className;
     private String methodName;
-    private static final Set<String> ignoredArgument = new HashSet<>();
 
     public KeyFlowAnnotationParser(MethodDeclaration methodDeclaration, String className) {
         this.methodDeclaration = methodDeclaration;
         this.className = className;
         this.methodName = methodDeclaration.getNameAsString();
-
-        ignoredArgument.add("String");
-        ignoredArgument.add("Boolean");
-        ignoredArgument.add("boolean");
-        ignoredArgument.add("Integer");
-        ignoredArgument.add("int");
-        ignoredArgument.add("Date");
     }
 
     public KeyFlowEntry parse(AnnotationExpr keyFlow) {
         KeyFlowEntry entry = new KeyFlowEntry(className, methodName,
                 JavaParserUtil.javadocFirstLineOf(methodDeclaration));
-
-        if (methodDeclaration.getParameters() != null) {
-            Set<String> realArguments = new TreeSet<>();
-            for (Parameter parameter : methodDeclaration.getParameters()) {
-                if (!ignoredArgument.contains(parameter.getTypeAsString())) {
-                    realArguments.add(parameter.getTypeAsString());
-                }
-            }
-            entry.setRealArguments(realArguments);
-        }
+        entry.setRealArguments(JavaParserUtil.extractMethodArguments(methodDeclaration));
 
         if (keyFlow instanceof MarkerAnnotationExpr) {
             // 标注时没有指定任何属性
@@ -107,6 +87,11 @@ public class KeyFlowAnnotationParser {
                     Set<String> tmp = entry.getModes();
                     tmp.addAll(AnnotationFieldParser.arrayFieldValue(memberValuePair));
                     entry.setModes(tmp);
+                    break;
+
+                case "useRawArgs":
+                    entry.setRealArguments(JavaParserUtil.extractMethodArguments(methodDeclaration));
+                    entry.setUseRawArgs(true);
                     break;
             }
         }

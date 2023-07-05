@@ -49,6 +49,11 @@ public @interface KeyBehavior {
     String[] args() default {};
 
     /**
+     * 是否拿方法签名的入参作为{@link #args()}.
+     */
+    boolean useRawArgs() default false;
+
+    /**
      * 该行为会产生哪些领域事件.
      */
     Class[] produceEvent() default {};

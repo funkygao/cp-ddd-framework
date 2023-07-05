@@ -84,7 +84,7 @@ public class ManualCheckAppService {
     }
 
     /**
-     * 操作员(复核员)清点并确认货品数量.
+     * 复核装箱一体化：按货品维度.
      *
      * <p>作业维度：(taskNo, orderNo, skuNo)</p>
      * <p>即：某个任务的下某个订单的某种货品，它确实可以发货{n}件/each，因为他们的(质量，数量)都OK.</p>
@@ -107,13 +107,16 @@ public class ManualCheckAppService {
         Order order = taskOfSku.unbounded().pendingOrder(orderNo);
         order.assureSatisfied(new OrderNotFullyCartonized());
 
-        taskOfSku.unbounded().confirmQty(qty, operator, Platform.of(request.getPlatformNo()));
+        ContainerItemBag checkResult = taskOfSku.confirmQty(qty, operator, Platform.of(request.getPlatformNo()));
 
-        // 装箱
+        // 装箱，物理世界里，复核员已经清点数量，并把货品从容器里转移到箱，但人可能放错货品，运营要管控
         Carton carton = cartonRepository.mustGet(CartonNo.of(request.getCartonNo()), warehouseNo);
-        carton.assureSatisfied(new CaronNotFull());
+        carton.assureSatisfied(new CaronNotFull()
+                .and(carton.cartonizationRule())); // 业务规则本身也可以是规约
+        carton.bindOrder(orderNo, qty);
+        carton.transferFrom(checkResult);
 
-        uow.persist(taskOfSku);
+        uow.persist(taskOfSku, carton);
         return ApiResponse.ofOk();
     }
 

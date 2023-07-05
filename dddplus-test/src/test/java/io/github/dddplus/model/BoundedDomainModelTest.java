@@ -38,8 +38,8 @@ public class BoundedDomainModelTest {
     static class OrderPack extends BoundedDomainModel<Order> {
         String packNo;
 
-        protected OrderPack(Order model) {
-            super(model);
+        OrderPack(Order model) {
+            this.model = model;
         }
 
         public void pack() {

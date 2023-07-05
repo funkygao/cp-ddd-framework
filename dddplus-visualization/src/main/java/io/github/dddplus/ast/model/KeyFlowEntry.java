@@ -27,6 +27,7 @@ public class KeyFlowEntry {
     private String remark;
     private boolean async = false;
     private boolean polymorphism = false;
+    private boolean useRawArgs = false;
 
     public KeyFlowEntry(String className, String realMethodName, String javadoc) {
         this.className = className;
@@ -71,6 +72,10 @@ public class KeyFlowEntry {
     }
 
     private String displayArgs() {
+        if (useRawArgs) {
+            return String.join(",", realArguments);
+        }
+
         if (args == null || args.isEmpty()) {
             return "";
         }

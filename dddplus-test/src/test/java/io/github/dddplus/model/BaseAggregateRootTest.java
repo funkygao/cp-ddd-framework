@@ -3,6 +3,7 @@ package io.github.dddplus.model;
 import io.github.dddplus.model.spcification.Notification;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -45,6 +46,7 @@ class BaseAggregateRootTest {
     }
 
     @AllArgsConstructor
+    @Getter
     static class NameChanged implements IDirtyHint {
         private final Student student;
     }

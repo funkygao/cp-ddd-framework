@@ -6,15 +6,10 @@ import io.github.dddplus.model.BoundedDomainModel;
 
 @KeyRelation(whom = Task.class, type = KeyRelation.Type.Contextual)
 public class TaskOfOrder extends BoundedDomainModel<Task> {
-    private OrderNo orderNo;
-
-    protected TaskOfOrder(Task model) {
-        super(model);
-    }
+    private final OrderNo orderNo;
 
     public TaskOfOrder(Task task, OrderNo orderNo) {
-        this(task);
+        this.model = task;
         this.orderNo = orderNo;
     }
-
 }

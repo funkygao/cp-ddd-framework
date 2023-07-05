@@ -1,5 +1,7 @@
 package ddd.plus.showcase.wms.app;
 
+import ddd.plus.showcase.wms.domain.carton.Carton;
+import ddd.plus.showcase.wms.domain.carton.ICartonRepository;
 import ddd.plus.showcase.wms.domain.order.IOrderRepository;
 import ddd.plus.showcase.wms.domain.order.OrderBagCanceled;
 import ddd.plus.showcase.wms.domain.task.ITaskRepository;
@@ -19,10 +21,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class UnitOfWork implements IUnitOfWork {
     private ITaskRepository taskRepository;
     private IOrderRepository orderRepository;
+    private ICartonRepository cartonRepository;
 
     @Transactional(rollbackFor = Exception.class)
-    public void persist(@NonNull TaskOfSku task) {
+    public void persist(@NonNull TaskOfSku task, @NonNull Carton carton) {
         taskRepository.save(task);
+        cartonRepository.save(carton);
     }
 
     @Transactional(rollbackFor = Exception.class)

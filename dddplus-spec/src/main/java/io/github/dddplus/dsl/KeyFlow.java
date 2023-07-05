@@ -40,6 +40,11 @@ public @interface KeyFlow {
     String[] args() default {};
 
     /**
+     * 是否拿方法签名的入参作为{@link #args()}.
+     */
+    boolean useRawArgs() default false;
+
+    /**
      * 补充说明.
      */
     String remark() default "";
