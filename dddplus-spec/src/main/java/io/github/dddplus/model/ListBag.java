@@ -29,7 +29,7 @@ public abstract class ListBag<Entity> implements IBag {
     /**
      * 返回任意一个对象：在与具体对象无关场景使用.
      */
-    protected Entity anyItem() {
+    public final Entity anyItem() {
         return items.iterator().next();
     }
 

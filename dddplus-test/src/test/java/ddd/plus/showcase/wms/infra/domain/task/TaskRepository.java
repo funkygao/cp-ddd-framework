@@ -50,14 +50,14 @@ public class TaskRepository implements ITaskRepository {
         TaskPo po = dao.query("select inner join .. where warehouse_no=?",
                 warehouseNo.value());
         // 1. po -> entity
-        Task task = converter.toTask(po);
+        Task task = converter.fromPo(po);
 
         // 2. 传递技术细节但业务无关的字段到 domain entity；落库时再取出来
         task.xSet(task.OptimisticLock, po.getVersion());
 
         // 3. 组装 bag 对象，但不希望被误用
         List<ContainerPo> containerPos = dao.query("select xxx");
-        task.injectContainerBag(_self, ContainerBag.of(converter.fromPoList(containerPos)));
+        task.injectContainerBag(_self, ContainerBag.of(converter.fromContainerPoList(containerPos)));
 
         // 4. 实例化并注入 association implementation
         task.injectCartonItems(_self, new TaskCartonItemsDb(task, dao));
@@ -81,6 +81,7 @@ public class TaskRepository implements ITaskRepository {
         // 1. 获取所有hint，这样才知道该如何落库
         ConfirmQtyHint confirmQtyHint = taskOfSku.unbounded().firstHintOf(ConfirmQtyHint.class);
         TaskDirtyHint taskDirtyHint = taskOfSku.unbounded().firstHintOf(TaskDirtyHint.class);
+        taskDirtyHint.getDirtyFields();
 
         // 2. 这2个hint可以在Task这个维度合并，以降低数据库交互，从而提升性能
 
@@ -92,9 +93,18 @@ public class TaskRepository implements ITaskRepository {
         dao.update(po);
     }
 
+    /**
+     * 如何从数据库加载场景对象
+     */
     @Override
+    @KeyBehavior
     public TaskOfContainer mustGetPending(ContainerNo containerNo, WarehouseNo warehouseNo) throws WmsException {
-        return null;
+        ContainerPo containerPo = dao.query("select * from ob_container inner join ob_container_item");
+        Container container = converter.fromPo(containerPo);
+        TaskPo taskPo = dao.query("");
+        Task task = converter.fromPo(taskPo);
+        TaskOfContainer taskOfContainer = new TaskOfContainer(task, container);
+        return taskOfContainer;
     }
 
     @Override

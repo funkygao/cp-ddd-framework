@@ -1,10 +1,13 @@
 package ddd.plus.showcase.wms.infra.domain.task.convert;
 
 import ddd.plus.showcase.wms.domain.task.Container;
+import ddd.plus.showcase.wms.domain.task.ContainerItem;
 import ddd.plus.showcase.wms.domain.task.Task;
 import ddd.plus.showcase.wms.domain.task.TaskOfSku;
+import ddd.plus.showcase.wms.infra.domain.task.ContainerItemPo;
 import ddd.plus.showcase.wms.infra.domain.task.ContainerPo;
 import ddd.plus.showcase.wms.infra.domain.task.TaskPo;
+import ddd.plus.showcase.wms.infra.domain.task.TaskRepository;
 import io.github.dddplus.dsl.KeyFlow;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -15,14 +18,14 @@ import java.util.List;
 public interface TaskConverter {
     TaskConverter INSTANCE = Mappers.getMapper(TaskConverter.class);
 
-    Task toTask(TaskPo po);
+    Task fromPo(TaskPo po);
 
     TaskPo toPo(Task task);
 
     /**
      * 如何落库时处理查询和报表使用的冗余字段
      */
-    @KeyFlow
+    @KeyFlow(actor = TaskRepository.class)
     default TaskPo toPo(TaskOfSku taskOfSku) {
         Task task = taskOfSku.unbounded();
         TaskPo po = toPo(task);
@@ -34,5 +37,9 @@ public interface TaskConverter {
         return po;
     }
 
-    List<Container> fromPoList(List<ContainerPo> containerPos);
+    Container fromPo(ContainerPo containerPo);
+
+    List<Container> fromContainerPoList(List<ContainerPo> containerPos);
+
+    List<ContainerItem> fromContainerItemPoList(List<ContainerItemPo> containerItemPoList);
 }

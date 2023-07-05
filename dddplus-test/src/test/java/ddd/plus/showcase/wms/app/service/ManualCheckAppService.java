@@ -56,7 +56,7 @@ public class ManualCheckAppService {
      * 复核员扫描容器领取复核任务.
      */
     @KeyUsecase(in = "containerNo")
-    public ApiResponse<Void> claimTask(ClaimTaskRequest request) throws WmsException {
+    public ApiResponse<Integer> claimTask(ClaimTaskRequest request) throws WmsException {
         WarehouseNo warehouseNo = WarehouseNo.of(request.getWarehouseNo());
         Operator operator = Operator.of(request.getOperatorNo());
         ContainerNo containerNo = ContainerNo.of(request.getContainerNo());
@@ -75,7 +75,12 @@ public class ManualCheckAppService {
         OrderBagCanceled canceledOrderBag = pendingOrders.subBagOfCanceled(orderGateway);
 
         uow.persist(containerTask, canceledOrderBag);
-        return ApiResponse.ofOk();
+
+        if (request.getRecommendPackQty()) {
+            return ApiResponse.ofOk(pendingOrders.anyItem().recommendPackQty());
+        }
+
+        return ApiResponse.ofOk(0);
     }
 
     /**
@@ -85,7 +90,7 @@ public class ManualCheckAppService {
      * <p>即：某个任务的下某个订单的某种货品，它确实可以发货{n}件/each，因为他们的(质量，数量)都OK.</p>
      */
     @KeyUsecase(in = {"taskNo", "orderNo", "skuNo", "qty"})
-    public ApiResponse<Void> confirmQty(ConfirmQtyRequest request) throws WmsException {
+    public ApiResponse<Void> checkBySku(CheckBySkuRequest request) throws WmsException {
         WarehouseNo warehouseNo = WarehouseNo.of(request.getWarehouseNo());
         Operator operator = Operator.of(request.getOperatorNo());
         OrderNo orderNo = OrderNo.of(request.getOrderNo());
@@ -109,6 +114,11 @@ public class ManualCheckAppService {
         carton.assureSatisfied(new CaronNotFull());
 
         uow.persist(taskOfSku);
+        return ApiResponse.ofOk();
+    }
+
+    @KeyUsecase(in = {"taskNo", "orderNo", "skuNo", "qty"})
+    public ApiResponse<Void> checkByOrder(CheckBySkuRequest request) throws WmsException {
         return ApiResponse.ofOk();
     }
 
@@ -152,7 +162,7 @@ public class ManualCheckAppService {
      * 复核员把拣货容器的货品放入箱，并使用耗材以便运输安全，该过程发现箱已满.
      */
     @KeyUsecase(in = {"orderNo", "cartonNo", "consumables"})
-    public ApiResponse<Void> cartonFull(CartonFullRequest request) throws WmsException {
+    public ApiResponse<Void> fulfillCarton(CartonFullRequest request) throws WmsException {
         return ApiResponse.ofOk();
     }
 }
