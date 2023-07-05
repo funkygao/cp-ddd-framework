@@ -44,7 +44,7 @@ Latest Maven Central version: `1.1.2`, under active development version: `2.0.0-
 
 [A full demo of DDDplus forward/reverse modeling ->](dddplus-test/src/test/java/ddd/plus/showcase/README.md)
 
-### Dependencies
+### Forward modeling
 
 ```xml
 <dependency>
@@ -53,7 +53,7 @@ Latest Maven Central version: `1.1.2`, under active development version: `2.0.0-
 </dependency>
 ```
 
-### Integration with SpringBoot
+#### Integration with SpringBoot
 
 ```java
 @SpringBootApplication(scanBasePackages = {"${your base packages}", "io.github.dddplus"})

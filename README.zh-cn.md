@@ -44,7 +44,7 @@ Latest `Maven Central` version is: `1.1.2`, under active development version is:
 
 [正向和逆向建模的项目演示](dddplus-test/src/test/java/ddd/plus/showcase/README.zh-cn.md)
 
-### Dependencies
+### 正向建模
 
 ```xml
 <dependency>
@@ -53,7 +53,7 @@ Latest `Maven Central` version is: `1.1.2`, under active development version is:
 </dependency>
 ```
 
-### 与SpringBoot集成
+#### 与SpringBoot集成
 
 ```java
 @SpringBootApplication(scanBasePackages = {"${your base packages}", "io.github.dddplus"})
@@ -64,7 +64,7 @@ public class WebApplication {
 }
 ```
 
-### 扩展点路由原理
+#### 扩展点路由原理
 
 `Pattern`/`Partner`/`Policy`，都是`Extension#code`的提供者(它们有的通过`match(IIdentity)`方法，有的通过`extensionCode(IIdentity)`方法)，即准入规则，本质上都是把动态的业务场景转换为静态的`Extension#code`，而`Extension#code`被扩展点实例通过注解绑定，从而实现了扩展点的动态路由。
 
