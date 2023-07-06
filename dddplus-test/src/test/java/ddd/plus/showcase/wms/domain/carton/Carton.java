@@ -65,20 +65,9 @@ public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomai
     private LocalDateTime fulfillTime;
 
     private IRuleGateway ruleGateway;
-    public void injectRuleGateway(@NonNull Class<? extends ICartonRepository> __, IRuleGateway ruleGateway) {
-        this.ruleGateway = ruleGateway;
-    }
 
-    public interface CartonOrder extends BelongTo<Order> {
-    }
     @KeyRelation(whom = CartonOrder.class, type = KeyRelation.Type.Associate)
     private CartonOrder order;
-    public CartonOrder order() {
-        return order;
-    }
-    public void injectCartonOrder(@NonNull Class<? extends ICartonRepository> __, CartonOrder cartonOrder) {
-        this.order = cartonOrder;
-    }
 
     /**
      * 向纸箱添加耗材.
@@ -99,11 +88,6 @@ public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomai
             cartonizationRule = ruleGateway.fetchCartonizationRule(this);
         }
         return cartonizationRule;
-    }
-
-    @Override
-    protected void whenNotSatisfied(Notification notification) {
-        throw new WmsException(notification.first());
     }
 
     @KeyBehavior
@@ -128,6 +112,8 @@ public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomai
      */
     @KeyBehavior
     public void fulfill(Operator operator, Platform platform) {
+        this.operator = operator;
+        this.platform = platform;
         this.status = CartonStatus.Full;
         this.fulfillTime = LocalDateTime.now();
         mergeDirty(new CaronDirtyHint(this, CaronDirtyHint.Type.UseConsumables));
@@ -137,5 +123,25 @@ public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomai
             // 触发后续流程自动执行
             mergeDirty(new CaronDirtyHint(this, CaronDirtyHint.Type.Ship));
         }
+    }
+
+    @Override
+    protected void whenNotSatisfied(Notification notification) {
+        throw new WmsException(notification.first());
+    }
+
+    public interface CartonOrder extends BelongTo<Order> {
+    }
+
+    public CartonOrder order() {
+        return order;
+    }
+
+    public void injectCartonOrder(@NonNull Class<? extends ICartonRepository> __, CartonOrder cartonOrder) {
+        this.order = cartonOrder;
+    }
+
+    public void injectRuleGateway(@NonNull Class<? extends ICartonRepository> __, IRuleGateway ruleGateway) {
+        this.ruleGateway = ruleGateway;
     }
 }
