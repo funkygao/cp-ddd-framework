@@ -105,7 +105,7 @@ public abstract class BoundedDomainModel<UnboundedModel extends IUnboundedDomain
     /**
      * The underlying unbounded domain model.
      */
-    public final UnboundedModel unbounded() {
+    public UnboundedModel unbounded() {
         return model;
     }
 }

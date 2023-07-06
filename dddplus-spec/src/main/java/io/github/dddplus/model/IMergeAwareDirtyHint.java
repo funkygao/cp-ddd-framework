@@ -13,6 +13,7 @@ import java.io.Serializable;
  * <p>Example:</p>
  * <pre>
  * {@code
+ *
  * public class OrderDirtyHint implements IMergeAwareDirtyHint<Long> {
  *     public enum Type {
  *         BindOrder(0),

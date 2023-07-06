@@ -8,10 +8,10 @@ import io.github.dddplus.dsl.KeyRelation;
 import io.github.dddplus.model.BoundedDomainModel;
 
 @KeyRelation(whom = Task.class, type = KeyRelation.Type.Contextual)
-public class TaskOfOrder extends BoundedDomainModel<Task> {
+public class TaskOfOrderPending extends BoundedDomainModel<Task> {
     private final OrderNo orderNo;
 
-    public TaskOfOrder(Task task, OrderNo orderNo) {
+    public TaskOfOrderPending(Task task, OrderNo orderNo) {
         this.model = task;
         this.orderNo = orderNo;
     }

@@ -55,9 +55,12 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
         return this.memento;
     }
 
-    @lombok.experimental.Delegate
     @KeyRelation(whom = ContainerBag.class, type = KeyRelation.Type.HasOne)
     private ContainerBag containerBag;
+
+    public ContainerBag containerBag() {
+        return containerBag;
+    }
 
     public void injectContainerBag(@NonNull Class<? extends ITaskRepository> __, ContainerBag containerBag) {
         this.containerBag = containerBag;

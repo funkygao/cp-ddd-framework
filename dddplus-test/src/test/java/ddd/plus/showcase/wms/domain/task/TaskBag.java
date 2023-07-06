@@ -22,7 +22,10 @@ public class TaskBag extends ListBag<Task> {
      * 总要货量.
      */
     public BigDecimal totalQty() {
-        return items.stream().map(Task::totalQty).reduce(BigDecimal.ZERO, BigDecimal::add);
+        return items.stream()
+                .map(Task::containerBag)
+                .map(ContainerBag::totalQty)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     /**
@@ -30,7 +33,10 @@ public class TaskBag extends ListBag<Task> {
      */
     @KeyRule
     public BigDecimal totalPendingQty() {
-        return items.stream().map(Task::totalPendingQty).reduce(BigDecimal.ZERO, BigDecimal::add);
+        return items.stream()
+                .map(Task::containerBag)
+                .map(ContainerBag::totalPendingQty)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     /**

@@ -57,7 +57,7 @@ public class DomainModelAnalyzerTest {
         new PlainTextBuilder()
                 .build(model)
                 .showRawSimilarities()
-                .render("../model.txt");
+                .render("../doc/model.txt");
     }
 
     @Test

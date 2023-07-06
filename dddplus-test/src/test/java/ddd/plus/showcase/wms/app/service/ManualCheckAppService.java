@@ -54,22 +54,22 @@ public class ManualCheckAppService implements IApplicationService {
 
     private Random random = new Random();
 
-    /**
-     * 拣货员应该去哪一个复核台进行复核?
-     */
-    @KeyUsecase(in = {"taskNo", "orderNo"})
     public ApiResponse<String> recommendPlatform(RecommendPlatformRequest request) {
         Platform platform;
         if (request.getOrderNo() != null) {
             platform = recommendByOrder(request);
         } else {
-            platform = recommendByTaskBacklog(request);
+            platform = recommendPlatformByTaskBacklog(request);
         }
 
         return ApiResponse.ofOk(platform.value());
     }
 
-    private Platform recommendByTaskBacklog(RecommendPlatformRequest request) {
+    /**
+     * 提升拣货员去哪个复核台：按任务积压情况
+     */
+    @KeyUsecase(in = {"taskNo"})
+    private Platform recommendPlatformByTaskBacklog(RecommendPlatformRequest request) {
         List<Platform> platforms = masterDataGateway.candidatePlatforms(
                 OrderType.valueOf(request.getOrderType()),
                 TaskMode.valueOf(request.getTaskMode()),
@@ -93,6 +93,10 @@ public class ManualCheckAppService implements IApplicationService {
         return platforms.get(0);
     }
 
+    /**
+     * 提升拣货员去哪个复核台：按订单
+     */
+    @KeyUsecase(in = {"orderNo"})
     private Platform recommendByOrder(RecommendPlatformRequest request) {
         WarehouseNo warehouseNo = WarehouseNo.of(request.getWarehouseNo());
         Order order = orderRepository.mustGet(OrderNo.of(request.getOrderNo()), warehouseNo);
@@ -110,7 +114,7 @@ public class ManualCheckAppService implements IApplicationService {
         }
 
         // 业务兜底
-        return recommendByTaskBacklog(request);
+        return recommendPlatformByTaskBacklog(request);
     }
 
     /**
@@ -124,18 +128,18 @@ public class ManualCheckAppService implements IApplicationService {
         Platform platformNo = Platform.of(request.getPlatformNo());
 
         // 该容器还没复核完，把它的任务加载
-        TaskOfContainer taskOfContainer = taskRepository.mustGetPending(containerNo, warehouseNo);
-        taskOfContainer.unbounded().assureSatisfied(new TaskCanPerformChecking()
+        TaskOfContainerPending taskOfContainerPending = taskRepository.mustGet(containerNo, warehouseNo);
+        taskOfContainerPending.assureSatisfied(new TaskCanPerformChecking()
                 .and(new OperatorCannotBePicker(masterDataGateway, operator)));
-        taskOfContainer.unbounded().claimedWith(operator, platformNo);
+        taskOfContainerPending.claimedWith(operator, platformNo);
 
         // 通过association对象加载管理聚合根
-        OrderBag pendingOrderBag = taskOfContainer.unbounded().orders().pendingOrders();
+        OrderBag pendingOrderBag = taskOfContainerPending.orders().pendingOrders();
         pendingOrderBag.satisfy(new OrderUsesManualCheckFlow());
         // 逆向物流逻辑
         OrderBagCanceled canceledOrderBag = pendingOrderBag.canceledBag(orderGateway);
 
-        uow.persist(taskOfContainer, canceledOrderBag);
+        uow.persist(taskOfContainerPending, canceledOrderBag);
 
         if (request.getRecommendPackQty()) {
             return ApiResponse.ofOk(pendingOrderBag.anyItem().recommendPackQty());
@@ -158,17 +162,17 @@ public class ManualCheckAppService implements IApplicationService {
         Sku sku = Sku.of(request.getSkuNo());
         BigDecimal qty = new BigDecimal(request.getQty());
 
-        TaskOfSku taskOfSku = taskRepository.mustGetPending(TaskNo.of(request.getTaskNo()), orderNo, sku, warehouseNo);
-        taskOfSku.unbounded().assureSatisfied(new TaskCanPerformChecking()
+        TaskOfSkuPending taskOfSkuPending = taskRepository.mustGet(TaskNo.of(request.getTaskNo()), orderNo, sku, warehouseNo);
+        taskOfSkuPending.assureSatisfied(new TaskCanPerformChecking()
                 .and(new UniqueCodeConstraint(UniqueCode.of(request.getUniqueCode())))
                 .and(new OperatorCannotBePicker(masterDataGateway, operator)));
 
-        Order order = taskOfSku.unbounded().orders().pendingOrder(orderNo);
+        Order order = taskOfSkuPending.orders().pendingOrder(orderNo);
         order.assureSatisfied(new OrderNotFullyCartonized());
 
         // 此时复核员已经领取任务了，客单是不允许取消的，因此不必检查逆向逻辑
 
-        ContainerItemBag checkResult = taskOfSku.confirmQty(qty, operator, Platform.of(request.getPlatformNo()));
+        ContainerItemBag checkResult = taskOfSkuPending.confirmQty(qty, operator, Platform.of(request.getPlatformNo()));
 
         // 装箱，物理世界里，复核员已经清点数量，并把货品从容器里转移到箱，但人可能放错货品，运营要管控
         Carton carton = cartonRepository.mustGet(CartonNo.of(request.getCartonNo()), warehouseNo);
@@ -177,7 +181,7 @@ public class ManualCheckAppService implements IApplicationService {
         carton.bindOrder(orderNo, qty);
         carton.transferFrom(checkResult);
 
-        uow.persist(taskOfSku, carton);
+        uow.persist(taskOfSkuPending, carton);
         return ApiResponse.ofOk();
     }
 
@@ -191,8 +195,8 @@ public class ManualCheckAppService implements IApplicationService {
         order.assureSatisfied(new OrderUseOnePack()
                 .and(new OrderNotCartonizedYet()));
 
-        TaskOfOrder taskOfOrder = taskRepository.mustGet(order.getOrderNo(), warehouseNo);
-        taskOfOrder.confirmQty(Operator.of(request.getOperatorNo()), Platform.of(request.getPlatformNo()));
+        TaskOfOrderPending taskOfOrderPending = taskRepository.mustGet(order.getOrderNo(), warehouseNo);
+        taskOfOrderPending.confirmQty(Operator.of(request.getOperatorNo()), Platform.of(request.getPlatformNo()));
 
         List<Carton> cartonList = CartonAppConverter.INSTANCE.fromDto(request);
         cartonList.stream().forEach(c -> c.fulfill(Operator.of(request.getOperatorNo()), Platform.of(request.getPlatformNo())));

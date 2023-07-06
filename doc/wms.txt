@@ -1,9 +1,9 @@
-标注覆盖率：Class(52/61.5%) Method(86/43.0%) Property(178/27.5%) Statement(152)
+标注覆盖率：Class(52/65.4%) Method(99/38.4%) Property(177/28.8%) Statement(164)
 模型债：
 <<Aggregate: 客户出库单>>
 Order 客户的出库单.
    [属性]
-   Referential   Carrier
+   Referential   Carrier Consignee Supplier
    Lifecycle     OrderStatus ProductionStatus
    Operational   OrderConstraint
    Contextual    WaybillNo/OFC随单下发
@@ -14,7 +14,6 @@ Order 客户的出库单.
 OrderCartons
    [行为]
       totalCartonizedQty() 该订单已经装箱的货品件数总和.
-OrderContainerItems
 OrderLine 订单行.
    [属性]
    Structural    OrderLineNo Sku
@@ -64,8 +63,7 @@ CartonItem
    Referential   orderLineNo
    Quantity      checkedQty
 CartonItemBag
-   [行为]
-      contains(UniqueCode) 货品唯一码是否在本箱里已有了
+CartonOrder
 Consumable
    [属性]
    Structural    CartonNo OrderNo TaskNo
@@ -99,13 +97,17 @@ Task 复核任务.
    [行为]
       claimedWith() 
 TaskBag
-TaskOfContainer
-TaskOfOrder
+TaskCartons
+   [行为]
+      contains(UniqueCode) 该任务下所有纸箱里是否已经有该唯一码
+TaskOfContainerPending
+TaskOfOrderPending
    [行为]
       confirmQty() 
-TaskOfSku
+TaskOfSkuPending
    [行为]
       confirmQty() 
+TaskOrders
 <<Aggregate: 发货>>
 OrderLineManifest
    [属性]
@@ -119,7 +121,8 @@ ShippingManifest
    Reserved      extInfo
 <<用户交互>>
 ManualCheckAppService
-   recommendPlatform(orderNo,taskNo) 拣货员应该去哪一个复核台进行复核?
+   recommendPlatformByTaskBacklog(taskNo) 提升拣货员去哪个复核台：按任务积压情况
+   recommendByOrder(orderNo) 提升拣货员去哪个复核台：按订单
    claimTask(containerNo) 复核员扫描容器领取复核任务.
    checkBySku(qty,skuNo) 复核装箱一体化：按货品维度.
    checkByOrder(orderNo) 把一个出库单的所有货品一次性放到入参指定的纸箱：爆品订单复核

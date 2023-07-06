@@ -23,6 +23,7 @@ public class WmsException extends RuntimeException {
         OperatorDisallowed("1101"),
         InvalidOrderNo("1102"),
         TaskNotFound("1103"),
+        ContainerNotFound("1104"),
         ;
 
         private String errorCode;
