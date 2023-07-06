@@ -9,15 +9,16 @@ import ddd.plus.showcase.wms.domain.carton.CartonNo;
 import ddd.plus.showcase.wms.domain.carton.ICartonRepository;
 import ddd.plus.showcase.wms.domain.carton.spec.CaronNotFull;
 import ddd.plus.showcase.wms.domain.common.*;
-import ddd.plus.showcase.wms.domain.common.flow.RecommendPlatformFlow;
 import ddd.plus.showcase.wms.domain.common.gateway.IMasterDataGateway;
 import ddd.plus.showcase.wms.domain.common.gateway.IOrderGateway;
 import ddd.plus.showcase.wms.domain.order.*;
+import ddd.plus.showcase.wms.domain.order.dict.OrderType;
 import ddd.plus.showcase.wms.domain.order.spec.OrderNotCartonizedYet;
 import ddd.plus.showcase.wms.domain.order.spec.OrderNotFullyCartonized;
 import ddd.plus.showcase.wms.domain.order.spec.OrderUseOnePack;
 import ddd.plus.showcase.wms.domain.order.spec.OrderUsesManualCheckFlow;
 import ddd.plus.showcase.wms.domain.task.*;
+import ddd.plus.showcase.wms.domain.task.dict.TaskMode;
 import ddd.plus.showcase.wms.domain.task.spec.OperatorCannotBePicker;
 import ddd.plus.showcase.wms.domain.task.spec.TaskCanPerformChecking;
 import ddd.plus.showcase.wms.domain.task.spec.UniqueCodeConstraint;
@@ -30,7 +31,10 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 业务用例：人工复核.
@@ -44,21 +48,66 @@ import java.util.List;
 public class ManualCheckAppService implements IApplicationService {
     private IMasterDataGateway masterDataGateway;
     private IOrderGateway orderGateway;
+    private Comparator<Platform> comparator;
 
     private ITaskRepository taskRepository;
     private IOrderRepository orderRepository;
     private ICartonRepository cartonRepository;
     private UnitOfWork uow;
 
-    private RecommendPlatformFlow recommendPlatformFlow;
-
     /**
      * 拣货员应该去哪一个复核台进行复核?
      */
-    @KeyUsecase(in = "taskNo")
+    @KeyUsecase(in = {"taskNo", "orderNo"})
     public ApiResponse<String> recommendPlatform(RecommendPlatformRequest request) {
-        Platform platformNo = recommendPlatformFlow.execute(request);
-        return ApiResponse.ofOk(platformNo.value());
+        Platform platform;
+        if (request.getOrderNo() != null) {
+            platform = recommendByOrder(request);
+        } else {
+            platform = recommendByTaskBacklog(request);
+        }
+
+        return ApiResponse.ofOk(platform.value());
+    }
+
+    private Platform recommendByTaskBacklog(RecommendPlatformRequest request) {
+        List<Platform> platformNoList = masterDataGateway.candidatePlatforms(OrderType.valueOf(request.getOrderType()), TaskMode.valueOf(request.getTaskMode()), WarehouseNo.of(request.getWarehouseNo()));
+        if (platformNoList.size() == 1) {
+            return platformNoList.get(0);
+        }
+
+        // sort and find the best according to backlog
+        Map<Platform, List<Task>> taskMap = taskRepository.pendingTasksOfPlatforms(platformNoList);
+        platformNoList.forEach(platform -> {
+            TaskBag taskBag = TaskBag.of(taskMap.get(platform));
+            BigDecimal totalBacklogQty = taskBag.totalPendingQty();
+            platform.setEffort(taskBag.totalCheckedQty());
+            platform.setBacklog(totalBacklogQty);
+        });
+
+        platformNoList = new ArrayList<>(taskMap.keySet());
+        platformNoList.stream().sorted(comparator);
+        return platformNoList.get(0);
+    }
+
+    private Platform recommendByOrder(RecommendPlatformRequest request) {
+        WarehouseNo warehouseNo = WarehouseNo.of(request.getWarehouseNo());
+        Order order = orderRepository.mustGet(OrderNo.of(request.getOrderNo()), warehouseNo);
+        Platform platformNo = order.recommendedPlatformNo();
+        if (platformNo.isPresent()) {
+            // 这个订单之前已经推荐了，仍使用原来的复核台
+            return platformNo;
+        }
+
+        // TODO use association object
+        TaskBag tasksOfOrder = taskRepository.tasksOfOrder(order.getOrderNo(), warehouseNo);
+        List<Platform> platformNos = tasksOfOrder.platformNos();
+        if (!platformNos.isEmpty()) {
+            return platformNos.get(0);
+        }
+
+        // 业务兜底
+        return recommendByTaskBacklog(request);
     }
 
     /**
