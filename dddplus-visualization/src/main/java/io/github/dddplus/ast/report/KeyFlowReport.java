@@ -5,6 +5,7 @@
  */
 package io.github.dddplus.ast.report;
 
+import io.github.dddplus.ast.ReverseEngineeringModel;
 import io.github.dddplus.ast.model.KeyFlowEntry;
 import lombok.Data;
 
@@ -12,8 +13,14 @@ import java.util.*;
 
 @Data
 public class KeyFlowReport {
+    private final ReverseEngineeringModel model;
+
     // key is actor
     private Map<String, List<KeyFlowEntry>> keyFlows = new TreeMap<>();
+
+    public KeyFlowReport(ReverseEngineeringModel model) {
+        this.model = model;
+    }
 
     public void register(KeyFlowEntry entry) {
         final String actor = entry.actor();

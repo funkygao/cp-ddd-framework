@@ -17,21 +17,17 @@ public class ContainerDiff implements IAggregateRoot {
     private ContainerNo containerNo;
     @KeyElement(types = KeyElement.Type.Location)
     private Platform platform;
-    @Delegate
     @KeyElement(types = KeyElement.Type.Operational)
     private DiffReason reason;
     @Delegate
     @KeyRelation(whom = ContainerDiffItemBag.class, type = KeyRelation.Type.HasOne)
     private ContainerDiffItemBag itemBag;
 
-    @KeyBehavior
-    public void registerBroken() {
+    /**
+     * 登记差异.
+     */
+    @KeyBehavior(useRawArgs = true)
+    public void register(DiffReason reason) {
 
     }
-
-    @KeyBehavior
-    public void registerLost() {
-
-    }
-
 }

@@ -1,6 +1,6 @@
 package ddd.plus.showcase.wms.domain.task.spec;
 
-import ddd.plus.showcase.wms.domain.common.ExceptionCode;
+import ddd.plus.showcase.wms.domain.common.WmsException;
 import ddd.plus.showcase.wms.domain.task.Task;
 import io.github.dddplus.model.spcification.AbstractSpecification;
 import io.github.dddplus.model.spcification.Notification;
@@ -11,7 +11,7 @@ public class TaskCanPerformChecking extends AbstractSpecification<Task> {
     @Override
     public boolean isSatisfiedBy(Task task, Notification notification) {
         if (task.status().canPerformChecking()) {
-            notification.addError(ExceptionCode.TaskCannotPerform.error());
+            notification.addError(WmsException.Code.TaskCannotPerform.error());
             return false;
         }
 

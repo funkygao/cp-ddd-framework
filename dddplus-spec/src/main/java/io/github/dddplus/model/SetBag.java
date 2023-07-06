@@ -20,6 +20,10 @@ public abstract class SetBag<Entity> implements IBag {
         return items.size();
     }
 
+    public final Set<Entity> items() {
+        return items;
+    }
+
     public final boolean isEmpty() {
         return size() == 0;
     }

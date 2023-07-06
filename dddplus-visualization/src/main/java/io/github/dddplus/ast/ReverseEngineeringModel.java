@@ -25,12 +25,12 @@ import java.util.*;
  */
 @Getter
 public class ReverseEngineeringModel {
-    private AggregateReport aggregateReport = new AggregateReport();
+    private AggregateReport aggregateReport = new AggregateReport(this);
     private KeyModelReport keyModelReport = new KeyModelReport(this);
     private List<SimilarityEntry> similarities = new LinkedList<>();
     private List<SimilarityEntry> rawSimilarities = new LinkedList<>();
     private KeyBehaviorReport keyBehaviorReport = new KeyBehaviorReport();
-    private KeyFlowReport keyFlowReport = new KeyFlowReport();
+    private KeyFlowReport keyFlowReport = new KeyFlowReport(this);
     private KeyRuleReport keyRuleReport = new KeyRuleReport();
     private KeyEventReport keyEventReport = new KeyEventReport();
     private KeyUsecaseReport keyUsecaseReport = new KeyUsecaseReport();

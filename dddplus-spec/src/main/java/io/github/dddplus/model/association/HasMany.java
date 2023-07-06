@@ -5,16 +5,19 @@
  */
 package io.github.dddplus.model.association;
 
+import io.github.dddplus.model.IAggregateRoot;
 import io.github.dddplus.model.IBag;
 
 /**
- * 关联对象 1对多，用于处理实体之间的生命周期边界.
+ * 关联对象：1对多.
  *
- * <p>生命周期边界，是指相关联的对象是否同时出现/消失在内存中.</p>
- * <p>使用时赋予其具体业务语义，并提供关联对象的实现.</p>
+ * <p>关联对象用于处理实体之间的生命周期边界，生命周期边界是指相关联的对象是否同时出现/消失在内存中.</p>
+ * <p>对象关系，有2种：(聚合关系，引用关系)，前者通过{@link IAggregateRoot}实现；后者通过关联对象实现，从而避免逻辑泄露.</p>
+ * <p>设计上是把关联关系设计成对象(接口).</p>
  * <p>Example:</p>
  * <pre>
  * {@code
+ *
  * ℗lombok.Getter(AccessLevel.PACKAGE)
  * public class Task implements IAggregateRoot {
  *     public interface Orders extends HasMany<Order> {
@@ -29,8 +32,6 @@ import io.github.dddplus.model.IBag;
  * // 在infrastructure层实现
  * public TaskOrders implements Task.Orders {
  *     private final String taskNo;
- *     // autowired by AutowireObjectFactory in dddplus-mybatis module
- *     ℗Autowired
  *     private Dao dao;
  *     public TaskOrders(String taskNo) {
  *         this.taskNo = taskNo;

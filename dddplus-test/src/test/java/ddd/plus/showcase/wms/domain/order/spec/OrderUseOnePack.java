@@ -4,9 +4,9 @@ import ddd.plus.showcase.wms.domain.order.Order;
 import io.github.dddplus.model.spcification.AbstractSpecification;
 import io.github.dddplus.model.spcification.Notification;
 
-public class OrderUsesManualCheckFlow extends AbstractSpecification<Order> {
+public class OrderUseOnePack extends AbstractSpecification<Order> {
     @Override
-    public boolean isSatisfiedBy(Order candidate, Notification notification) {
-        return candidate.constraint().allowManualCheck();
+    public boolean isSatisfiedBy(Order order, Notification notification) {
+        return order.constraint().isUseOnePack();
     }
 }

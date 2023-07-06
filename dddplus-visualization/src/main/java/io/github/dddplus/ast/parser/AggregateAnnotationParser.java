@@ -5,6 +5,7 @@
  */
 package io.github.dddplus.ast.parser;
 
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.expr.*;
 import io.github.dddplus.ast.model.AggregateEntry;
@@ -33,9 +34,23 @@ public class AggregateAnnotationParser {
                     break;
 
                 case "root":
-                    // is Class[], but we get 1, that's enough for visualization
-                    ClassExpr classExpr = (ClassExpr) memberValuePair.getValue();
-                    entry.setRootClass(classExpr.getTypeAsString());
+                    if (memberValuePair.getValue() instanceof ArrayInitializerExpr) {
+                        ArrayInitializerExpr roots = (ArrayInitializerExpr) memberValuePair.getValue();
+                        boolean first = true;
+                        for (Node node : roots.getValues()) {
+                            ClassExpr classExpr = (ClassExpr) node;
+                            if (first) {
+                                entry.setRootClass(classExpr.getTypeAsString());
+                                first = false;
+                            } else {
+                                entry.addExtraRootClass(classExpr.getTypeAsString());
+                            }
+                        }
+                    } else {
+                        ClassExpr classExpr = (ClassExpr) memberValuePair.getValue();
+                        entry.setRootClass(classExpr.getTypeAsString());
+                    }
+
                     break;
             }
         }

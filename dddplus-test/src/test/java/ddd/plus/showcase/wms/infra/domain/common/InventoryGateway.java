@@ -1,6 +1,6 @@
 package ddd.plus.showcase.wms.infra.domain.common;
 
-import ddd.plus.showcase.wms.domain.common.IInventoryGateway;
+import ddd.plus.showcase.wms.domain.common.gateway.IInventoryGateway;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

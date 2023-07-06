@@ -1,18 +1,13 @@
 package ddd.plus.showcase.wms.infra.domain.order.association;
 
 import ddd.plus.showcase.wms.domain.order.Order;
-import ddd.plus.showcase.wms.domain.task.ContainerItemBag;
 import ddd.plus.showcase.wms.infra.dao.Dao;
-import ddd.plus.showcase.wms.infra.domain.task.ContainerItemPo;
-import ddd.plus.showcase.wms.infra.domain.task.convert.TaskConverter;
 import io.github.dddplus.dsl.KeyBehavior;
 import io.github.dddplus.dsl.KeyElement;
 import lombok.AllArgsConstructor;
 
-import java.util.List;
-
 @AllArgsConstructor
-public class OrderContainerItemsDb implements Order.OrderContainerItems {
+public class OrderCartonsDb implements Order.OrderCartons {
     /**
      * Repository加载时通过构造器注入进来
      */
@@ -26,8 +21,8 @@ public class OrderContainerItemsDb implements Order.OrderContainerItems {
      */
     @KeyBehavior
     @Override
-    public ContainerItemBag containerItemBag() {
-        List<ContainerItemPo> containerItemPoList = dao.listContainerItems(order.getOrderNo().value(), order.getWarehouseNo().value());
-        return ContainerItemBag.of(TaskConverter.INSTANCE.fromContainerItemPoList(containerItemPoList));
+    public int totalCartonizedQty() {
+        return 0;
     }
+
 }

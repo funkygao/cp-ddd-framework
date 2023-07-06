@@ -8,12 +8,12 @@ import lombok.NonNull;
 import java.util.List;
 
 /**
- * 货品编号.
+ * 货品.
  */
 @Getter
 public class Sku extends AbstractBusinessNo<String> {
     @KeyElement(types = KeyElement.Type.Structural, byType = true)
-    protected OwnerNo ownerNo;
+    protected Owner owner;
     @KeyElement(types = KeyElement.Type.Structural, byType = true)
     private PackCode packCode;
     @KeyElement(types = KeyElement.Type.Contextual, byType = true)

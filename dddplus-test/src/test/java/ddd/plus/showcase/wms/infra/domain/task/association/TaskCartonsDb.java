@@ -1,14 +1,15 @@
 package ddd.plus.showcase.wms.infra.domain.task.association;
 
-import ddd.plus.showcase.wms.domain.carton.CartonItemBag;
+import ddd.plus.showcase.wms.domain.common.UniqueCode;
 import ddd.plus.showcase.wms.domain.task.Task;
 import ddd.plus.showcase.wms.infra.dao.Dao;
 import io.github.dddplus.dsl.KeyBehavior;
 import io.github.dddplus.dsl.KeyElement;
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
 
 @AllArgsConstructor
-public class TaskCartonItemsDb implements Task.TaskCartonItems {
+public class TaskCartonsDb implements Task.TaskCartons {
     @KeyElement(types = KeyElement.Type.Structural, byType = true)
     private final Task task;
     @KeyElement(types = KeyElement.Type.Structural, byType = true)
@@ -17,11 +18,13 @@ public class TaskCartonItemsDb implements Task.TaskCartonItems {
     /**
      * 另外一个关联对象的实现.
      */
-    @Override
     @KeyBehavior
-    public CartonItemBag cartonItemBag() {
-        return dao.query("select * from ob_carton_item where warehouse_no=? and task_no=?",
+    @Override
+    public boolean contains(@NonNull UniqueCode uniqueCode) {
+        Integer rowId = dao.query("select id from ob_carton_item where warehouse_no=? and task_no=? and unique_code=? limit 1",
                 task.getWarehouseNo().value(),
-                task.getTaskNo().value());
+                task.getTaskNo().value(),
+                uniqueCode.value());
+        return rowId != null;
     }
 }
