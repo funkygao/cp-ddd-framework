@@ -122,7 +122,7 @@ ShippingManifest
 <<用户交互>>
 ManualCheckAppService
    recommendPlatformByTaskBacklog(taskNo) 提升拣货员去哪个复核台：按任务积压情况
-   recommendByOrder(orderNo) 提升拣货员去哪个复核台：按订单
+   recommendPlatformByOrder(orderNo) 提升拣货员去哪个复核台：按订单
    claimTask(containerNo) 复核员扫描容器领取复核任务.
    checkBySku(qty,skuNo) 复核装箱一体化：按货品维度.
    checkByOrder(orderNo) 把一个出库单的所有货品一次性放到入参指定的纸箱：爆品订单复核
