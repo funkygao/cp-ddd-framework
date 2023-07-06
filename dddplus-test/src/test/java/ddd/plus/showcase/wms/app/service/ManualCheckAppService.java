@@ -83,9 +83,8 @@ public class ManualCheckAppService implements IApplicationService {
         Map<Platform, List<Task>> taskMap = taskRepository.pendingTasksOfPlatforms(platforms);
         platforms.forEach(platform -> {
             TaskBag taskBag = TaskBag.of(taskMap.get(platform));
-            BigDecimal totalBacklogQty = taskBag.totalPendingQty();
             platform.setFinishedWorkload(taskBag.totalCheckedQty());
-            platform.setBacklog(totalBacklogQty);
+            platform.setBacklog(taskBag.totalPendingQty());
         });
 
         platforms = new ArrayList<>(taskMap.keySet());
@@ -122,18 +121,16 @@ public class ManualCheckAppService implements IApplicationService {
      */
     @KeyUsecase(in = "containerNo")
     public ApiResponse<Integer> claimTask(ClaimTaskRequest request) throws WmsException {
-        WarehouseNo warehouseNo = WarehouseNo.of(request.getWarehouseNo());
         Operator operator = Operator.of(request.getOperatorNo());
-        ContainerNo containerNo = ContainerNo.of(request.getContainerNo());
-        Platform platformNo = Platform.of(request.getPlatformNo());
 
-        // 该容器还没复核完，把它的任务加载
-        TaskOfContainerPending taskOfContainerPending = taskRepository.mustGet(containerNo, warehouseNo);
+        TaskOfContainerPending taskOfContainerPending = taskRepository.mustGet(
+                ContainerNo.of(request.getContainerNo()),
+                WarehouseNo.of(request.getWarehouseNo()));
         taskOfContainerPending.assureSatisfied(new TaskCanPerformChecking()
                 .and(new OperatorCannotBePicker(masterDataGateway, operator)));
-        taskOfContainerPending.claimedWith(operator, platformNo);
+        taskOfContainerPending.claimedWith(operator, Platform.of(request.getPlatformNo()));
 
-        // 通过association对象加载管理聚合根
+        // 通过关联对象加载引用关系的聚合
         OrderBag pendingOrderBag = taskOfContainerPending.orders().pendingOrders();
         pendingOrderBag.satisfy(new OrderUsesManualCheckFlow());
         // 逆向物流逻辑
@@ -150,19 +147,16 @@ public class ManualCheckAppService implements IApplicationService {
 
     /**
      * 复核装箱一体化：按货品维度.
-     * <p>
-     * <p>作业维度：(taskNo, orderNo, skuNo)</p>
-     * <p>即：某个任务的下某个订单的某种货品，它确实可以发货{n}件/each，因为他们的(质量，数量)都OK.</p>
      */
     @KeyUsecase(in = {"skuNo", "qty"})
     public ApiResponse<Void> checkBySku(CheckBySkuRequest request) throws WmsException {
         WarehouseNo warehouseNo = WarehouseNo.of(request.getWarehouseNo());
         Operator operator = Operator.of(request.getOperatorNo());
         OrderNo orderNo = OrderNo.of(request.getOrderNo());
-        Sku sku = Sku.of(request.getSkuNo());
         BigDecimal qty = new BigDecimal(request.getQty());
 
-        TaskOfSkuPending taskOfSkuPending = taskRepository.mustGet(TaskNo.of(request.getTaskNo()), orderNo, sku, warehouseNo);
+        TaskOfSkuPending taskOfSkuPending = taskRepository.mustGet(TaskNo.of(request.getTaskNo()),
+                orderNo, Sku.of(request.getSkuNo()), warehouseNo);
         taskOfSkuPending.assureSatisfied(new TaskCanPerformChecking()
                 .and(new UniqueCodeConstraint(UniqueCode.of(request.getUniqueCode())))
                 .and(new OperatorCannotBePicker(masterDataGateway, operator)));
@@ -172,7 +166,8 @@ public class ManualCheckAppService implements IApplicationService {
 
         // 此时复核员已经领取任务了，客单是不允许取消的，因此不必检查逆向逻辑
 
-        ContainerItemBag checkResult = taskOfSkuPending.confirmQty(qty, operator, Platform.of(request.getPlatformNo()));
+        ContainerItemBag checkResult = taskOfSkuPending.confirmQty(qty, operator,
+                Platform.of(request.getPlatformNo()));
 
         // 装箱，物理世界里，复核员已经清点数量，并把货品从容器里转移到箱，但人可能放错货品，运营要管控
         Carton carton = cartonRepository.mustGet(CartonNo.of(request.getCartonNo()), warehouseNo);
