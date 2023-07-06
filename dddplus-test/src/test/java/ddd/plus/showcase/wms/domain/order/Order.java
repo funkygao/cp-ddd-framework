@@ -65,7 +65,7 @@ public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainM
         PackBag packBag();
     }
 
-    @KeyRelation(whom = Pack.class, type = KeyRelation.Type.HasMany)
+    @KeyRelation(whom = OrderPacks.class, type = KeyRelation.Type.Associate)
     private OrderPacks packs;
 
     public OrderPacks packs() {
@@ -76,12 +76,13 @@ public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainM
         /**
          * 该订单已经装箱的货品件数总和.
          */
+        @KeyBehavior
         int totalCartonizedQty();
 
         CartonItemBag cartonItemBag();
     }
     @Delegate
-    @KeyRelation(whom = Order.OrderCartons.class, type = KeyRelation.Type.Associate)
+    @KeyRelation(whom = OrderCartons.class, type = KeyRelation.Type.Associate)
     private OrderCartons cartons;
 
     public interface OrderContainerItems extends HasMany<ContainerItem> {

@@ -9,9 +9,9 @@ import ddd.plus.showcase.wms.domain.carton.CartonNo;
 import ddd.plus.showcase.wms.domain.carton.ICartonRepository;
 import ddd.plus.showcase.wms.domain.carton.spec.CaronNotFull;
 import ddd.plus.showcase.wms.domain.common.*;
+import ddd.plus.showcase.wms.domain.common.flow.RecommendPlatformFlow;
 import ddd.plus.showcase.wms.domain.common.gateway.IMasterDataGateway;
 import ddd.plus.showcase.wms.domain.common.gateway.IOrderGateway;
-import ddd.plus.showcase.wms.domain.common.flow.RecommendPlatformFlow;
 import ddd.plus.showcase.wms.domain.order.*;
 import ddd.plus.showcase.wms.domain.order.spec.OrderNotCartonizedYet;
 import ddd.plus.showcase.wms.domain.order.spec.OrderNotFullyCartonized;
@@ -20,7 +20,6 @@ import ddd.plus.showcase.wms.domain.order.spec.OrderUsesManualCheckFlow;
 import ddd.plus.showcase.wms.domain.task.*;
 import ddd.plus.showcase.wms.domain.task.spec.OperatorCannotBePicker;
 import ddd.plus.showcase.wms.domain.task.spec.TaskCanPerformChecking;
-import ddd.plus.showcase.wms.domain.task.spec.TaskCanRecheck;
 import ddd.plus.showcase.wms.domain.task.spec.UniqueCodeConstraint;
 import io.github.dddplus.dsl.KeyUsecase;
 import io.github.dddplus.model.IApplicationService;
@@ -146,16 +145,6 @@ public class ManualCheckAppService implements IApplicationService {
         List<Carton> cartonList = CartonAppConverter.INSTANCE.fromDto(request);
         cartonList.stream().forEach(c -> c.fulfill(Operator.of(request.getOperatorNo()), Platform.of(request.getPlatformNo())));
         // ...
-        return ApiResponse.ofOk();
-    }
-
-    /**
-     * 重新复核.
-     */
-    @KeyUsecase(in = {"taskNo", "cartonNo"})
-    public ApiResponse<Void> recheck(RecheckRequest request) throws WmsException {
-        Task task = taskRepository.mustGetPending(TaskNo.of(request.getTaskNo()), WarehouseNo.of(request.getWarehouseNo()));
-        task.assureSatisfied(new TaskCanRecheck());
         return ApiResponse.ofOk();
     }
 

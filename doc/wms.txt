@@ -1,5 +1,46 @@
-标注覆盖率：Class(53/54.7%) Method(94/40.4%) Property(170/25.3%) Statement(155)
+标注覆盖率：Class(53/56.6%) Method(94/41.5%) Property(170/26.5%) Statement(155)
 模型债：
+<<Aggregate: 客户出库单>>
+Order 客户的出库单.
+   [属性]
+   Lifecycle     OrderStatus ProductionStatus
+   Operational   OrderConstraint
+   [行为]
+      asPresale() 切换到预售场景.
+   [规则]
+      recommendedPlatformNo() 该订单已经被推荐到哪一个复核台.
+   [流程]
+      recommendByOrder(RecommendPlatformRequest)  RecommendPlatformFlow
+Order.OrderCartons
+OrderContainerItems
+OrderLine 订单行.
+   [属性]
+   Structural    OrderLineNo Sku
+   Quantity      qty/要货量 shortageQty/缺货量
+OrderLineBag
+OrderOfPresale 出库单的预售场景.
+OrderBag
+   [行为]
+      subBagOfCanceled() 当前出库单集合里哪些已经在单据中心里被客户取消了.
+<<Aggregate: 包裹>>
+Pack 包裹.
+   [属性]
+   Structural    OrderNo WaybillNo
+   Lifecycle     PackStatus
+   Billing       totalVolume totalWeight
+<<Aggregate: 复核报差异>>
+ContainerDiff 复核过程中发现的容器差异.
+   [属性]
+   Structural    containerNo
+   Operational   reason
+   Location      platform
+   [行为]
+      registerBroken() 
+      registerLost() 
+ContainerDiffItem
+   [属性]
+   Structural    Sku
+ContainerDiffItemBag
 <<Aggregate: 装箱>>
 Carton 纸箱，它会成为包裹.
    [属性]
@@ -34,56 +75,6 @@ Sku 货品编号.
    [属性]
    Structural    OwnerNo PackCode
    Contextual    LotNo snList
-<<Aggregate: 复核报差异>>
-ContainerDiff 复核过程中发现的容器差异.
-   [属性]
-   Structural    containerNo
-   Operational   reason
-   Location      platform
-   [行为]
-      registerBroken() 
-      registerLost() 
-ContainerDiffItem
-   [属性]
-   Structural    Sku
-ContainerDiffItemBag
-<<Aggregate: 客户出库单>>
-Order 客户的出库单.
-   [属性]
-   Lifecycle     OrderStatus ProductionStatus
-   Operational   OrderConstraint
-   [行为]
-      asPresale() 切换到预售场景.
-   [规则]
-      recommendedPlatformNo() 该订单已经被推荐到哪一个复核台.
-   [流程]
-      recommendByOrder(RecommendPlatformRequest)  RecommendPlatformFlow
-Order.OrderCartons
-OrderContainerItems
-OrderLine 订单行.
-   [属性]
-   Structural    OrderLineNo Sku
-   Quantity      qty/要货量 shortageQty/缺货量
-OrderLineBag
-OrderOfPresale 出库单的预售场景.
-OrderBag
-   [行为]
-      subBagOfCanceled() 当前出库单集合里哪些已经在单据中心里被客户取消了.
-<<Aggregate: 包裹>>
-Pack 包裹.
-   [属性]
-   Structural    OrderNo WaybillNo
-   Lifecycle     PackStatus
-   Billing       totalVolume totalWeight
-<<Aggregate: 发货>>
-OrderLineManifest
-   [属性]
-   Structural    sku
-OrderManifest
-ShippingManifest
-   [属性]
-   Structural    carrierNo
-   Reserved      extInfo
 <<Aggregate: 出库复核任务>>
 Container 拣货容器.
    [属性]
@@ -101,6 +92,7 @@ Task 复核任务.
    Location      Platform
    [行为]
       claimedWith() 
+TaskBag
 TaskOfContainer
 TaskOfOrder
    [行为]
@@ -108,6 +100,17 @@ TaskOfOrder
 TaskOfSku
    [行为]
       confirmQty() 
+<<Aggregate: 发货>>
+OrderLineManifest
+   [属性]
+   Structural    OrderLineNo Sku
+OrderManifest
+   [属性]
+   Structural    OrderNo
+ShippingManifest
+   [属性]
+   Structural    carrierNo
+   Reserved      extInfo
 <<用户交互>>
 ManualCheckAppService
    recommendPlatform(taskNo) 拣货员应该去哪一个复核台进行复核?
@@ -119,6 +122,4 @@ ManualCheckAppService
 TaskSubmittedConsumer
    消费接收复核任务(json) 
 <<跨聚合复杂流程>>
-TaskBag
-   recommendByTaskBacklog(RecommendPlatformRequest) 
 <<领域事件>>

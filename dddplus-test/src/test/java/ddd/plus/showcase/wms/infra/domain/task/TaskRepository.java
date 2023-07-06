@@ -46,9 +46,13 @@ public class TaskRepository implements ITaskRepository {
      */
     @Override
     @KeyBehavior
-    public Task mustGetPending(TaskNo taskNo, WarehouseNo warehouseNo) throws WmsException {
+    public Task mustGet(TaskNo taskNo, WarehouseNo warehouseNo) throws WmsException {
         TaskPo po = dao.query("select inner join .. where warehouse_no=?",
                 warehouseNo.value());
+        if (po == null) {
+            // this is why we name must
+            throw new WmsException(WmsException.Code.TaskNotFound);
+        }
         // 1. po -> entity
         Task task = converter.fromPo(po);
 

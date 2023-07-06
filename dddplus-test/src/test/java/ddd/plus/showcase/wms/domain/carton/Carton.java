@@ -46,7 +46,7 @@ public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomai
     private TaskNo taskNo;
     @KeyRelation(whom = Order.class, type = KeyRelation.Type.BelongTo)
     private OrderNo orderNo;
-    @KeyRelation(whom = Pallet.class, type = KeyRelation.Type.BelongTo, contextual = true)
+    @KeyRelation(whom = Pallet.class, type = KeyRelation.Type.HasOne, contextual = true, remark = "物理世界是属于关系")
     private PalletNo palletNo;
     @KeyElement(types = KeyElement.Type.Operational)
     private CartonizationRule cartonizationRule;

@@ -7,7 +7,7 @@ import lombok.Setter;
 import java.math.BigDecimal;
 
 /**
- * 复核台(操作台)编号.
+ * 复核台(操作台).
  *
  * <p>对于一个规模大的仓库，复核台数量可能300+</p>
  */

@@ -24,14 +24,11 @@ public class ContainerDiff implements IAggregateRoot {
     @KeyRelation(whom = ContainerDiffItemBag.class, type = KeyRelation.Type.HasOne)
     private ContainerDiffItemBag itemBag;
 
-    @KeyBehavior
-    public void registerBroken() {
+    /**
+     * 登记差异.
+     */
+    @KeyBehavior(useRawArgs = true)
+    public void register(DiffReason reason) {
 
     }
-
-    @KeyBehavior
-    public void registerLost() {
-
-    }
-
 }

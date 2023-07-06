@@ -13,7 +13,7 @@ import java.util.Map;
 
 public interface ITaskRepository extends IRepository {
 
-    Task mustGetPending(TaskNo taskNo, WarehouseNo warehouseNo) throws WmsException;
+    Task mustGet(TaskNo taskNo, WarehouseNo warehouseNo) throws WmsException;
 
     TaskOfContainer mustGetPending(ContainerNo containerNo, WarehouseNo warehouseNo) throws WmsException;
 

@@ -22,6 +22,7 @@ public class WmsException extends RuntimeException {
         TaskCannotPerform("1100"), // i18n in resource bundle with messageId=errorCode
         OperatorDisallowed("1101"),
         InvalidOrderNo("1102"),
+        TaskNotFound("1103"),
         ;
 
         private String errorCode;
