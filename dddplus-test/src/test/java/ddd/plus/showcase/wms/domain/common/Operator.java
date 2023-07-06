@@ -4,7 +4,7 @@ import io.github.dddplus.model.AbstractBusinessNo;
 import lombok.NonNull;
 
 /**
- * 操作员编号.
+ * 操作员.
  */
 public class Operator extends AbstractBusinessNo<String> {
     protected Operator(@NonNull String value) {
