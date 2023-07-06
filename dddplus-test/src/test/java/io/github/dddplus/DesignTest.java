@@ -42,7 +42,6 @@ public class DesignTest {
     }
 
     void patternFilter() {
-        // TODO
     }
 
 }

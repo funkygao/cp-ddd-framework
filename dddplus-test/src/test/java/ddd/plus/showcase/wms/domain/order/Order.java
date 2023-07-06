@@ -1,7 +1,6 @@
 package ddd.plus.showcase.wms.domain.order;
 
 import ddd.plus.showcase.wms.domain.carton.Carton;
-import ddd.plus.showcase.wms.domain.carton.CartonItemBag;
 import ddd.plus.showcase.wms.domain.common.*;
 import ddd.plus.showcase.wms.domain.order.dict.OrderExchangeKey;
 import ddd.plus.showcase.wms.domain.order.dict.OrderStatus;
@@ -10,8 +9,6 @@ import ddd.plus.showcase.wms.domain.order.dict.ProductionStatus;
 import ddd.plus.showcase.wms.domain.pack.Pack;
 import ddd.plus.showcase.wms.domain.pack.PackBag;
 import ddd.plus.showcase.wms.domain.pack.WaybillNo;
-import ddd.plus.showcase.wms.domain.task.ContainerItem;
-import ddd.plus.showcase.wms.domain.task.ContainerItemBag;
 import ddd.plus.showcase.wms.domain.task.Task;
 import ddd.plus.showcase.wms.domain.task.TaskBag;
 import io.github.dddplus.dsl.KeyBehavior;
@@ -108,8 +105,6 @@ public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainM
          */
         @KeyBehavior
         int totalCartonizedQty();
-
-        CartonItemBag cartonItemBag();
     }
 
     @KeyRelation(whom = OrderCartons.class, type = KeyRelation.Type.Associate)
@@ -120,21 +115,6 @@ public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainM
     }
     public void injectOrderCartons(@NonNull Class<? extends IOrderRepository> __, OrderCartons orderCartons) {
         this.cartons = orderCartons;
-    }
-
-    public interface OrderContainerItems extends HasMany<ContainerItem> {
-        ContainerItemBag containerItemBag();
-    }
-
-    @KeyRelation(whom = OrderContainerItems.class, type = KeyRelation.Type.Associate)
-    private OrderContainerItems containerItems; // TODO
-
-    public OrderContainerItems containerItems() {
-        return containerItems;
-    }
-
-    public void injectOrderContainerItems(@NonNull Class<? extends IOrderRepository> __, OrderContainerItems orderContainerItems) {
-        this.containerItems = orderContainerItems;
     }
 
     @Override

@@ -9,7 +9,7 @@ import ddd.plus.showcase.wms.domain.task.*;
 import ddd.plus.showcase.wms.domain.task.hint.ConfirmQtyHint;
 import ddd.plus.showcase.wms.domain.task.hint.TaskDirtyHint;
 import ddd.plus.showcase.wms.infra.dao.Dao;
-import ddd.plus.showcase.wms.infra.domain.task.association.TaskCartonItemsDb;
+import ddd.plus.showcase.wms.infra.domain.task.association.TaskCartonsDb;
 import ddd.plus.showcase.wms.infra.domain.task.association.TaskOrdersDb;
 import ddd.plus.showcase.wms.infra.domain.task.convert.TaskConverter;
 import io.github.dddplus.dsl.KeyBehavior;
@@ -64,9 +64,17 @@ public class TaskRepository implements ITaskRepository {
         task.injectContainerBag(_self, ContainerBag.of(converter.fromContainerPoList(containerPos)));
 
         // 4. 实例化并注入 association implementation
-        task.injectCartonItems(_self, new TaskCartonItemsDb(task, dao));
-        task.injectOrders(_self, new TaskOrdersDb(task, dao));
+        injectAssociations(task);
         return task;
+    }
+
+    /**
+     * 实例化关联对象并注入实体
+     */
+    @KeyBehavior
+    private void injectAssociations(Task task) {
+        task.injectCartons(_self, new TaskCartonsDb(task, dao));
+        task.injectOrders(_self, new TaskOrdersDb(task, dao));
     }
 
     /**

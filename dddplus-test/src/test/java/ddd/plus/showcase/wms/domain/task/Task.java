@@ -1,11 +1,7 @@
 package ddd.plus.showcase.wms.domain.task;
 
-import ddd.plus.showcase.wms.domain.carton.CartonItem;
-import ddd.plus.showcase.wms.domain.carton.CartonItemBag;
-import ddd.plus.showcase.wms.domain.common.Operator;
-import ddd.plus.showcase.wms.domain.common.Platform;
-import ddd.plus.showcase.wms.domain.common.WarehouseNo;
-import ddd.plus.showcase.wms.domain.common.WmsException;
+import ddd.plus.showcase.wms.domain.carton.Carton;
+import ddd.plus.showcase.wms.domain.common.*;
 import ddd.plus.showcase.wms.domain.order.Order;
 import ddd.plus.showcase.wms.domain.order.OrderBag;
 import ddd.plus.showcase.wms.domain.order.OrderNo;
@@ -99,22 +95,23 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
         this.orders = orders;
     }
 
-    public interface TaskCartonItems extends HasMany<CartonItem> {
+    public interface TaskCartons extends HasMany<Carton> {
         /**
-         * 该任务已经装箱的货品明细.
+         * 该任务下所有纸箱里是否已经有该唯一码
          */
-        CartonItemBag cartonItemBag();
+        @KeyBehavior(useRawArgs = true)
+        boolean contains(@NonNull UniqueCode uniqueCode);
     }
 
-    @KeyRelation(whom = TaskCartonItems.class, type = KeyRelation.Type.Associate)
-    private TaskCartonItems cartonItems; // TODO
+    @KeyRelation(whom = TaskCartons.class, type = KeyRelation.Type.Associate)
+    private TaskCartons cartons;
 
-    public TaskCartonItems cartonItems() {
-        return cartonItems;
+    public TaskCartons cartons() {
+        return cartons;
     }
 
-    public void injectCartonItems(@NonNull Class<? extends ITaskRepository> __, TaskCartonItems cartonItems) {
-        this.cartonItems = cartonItems;
+    public void injectCartons(@NonNull Class<? extends ITaskRepository> __, TaskCartons taskCartons) {
+        this.cartons = taskCartons;
     }
 
     @Override
