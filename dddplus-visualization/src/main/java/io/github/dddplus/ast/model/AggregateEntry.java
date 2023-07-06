@@ -27,11 +27,16 @@ public class AggregateEntry {
      * {@link io.github.dddplus.model.IAggregateRoot} class name.
      */
     private String rootClass;
+    private List<String> extraRootClasses = new ArrayList<>();
 
     private transient List<KeyModelEntry> keyModelEntries = new ArrayList<>();
 
     public void addKeyModelEntry(KeyModelEntry entry) {
         keyModelEntries.add(entry);
+    }
+
+    public void addExtraRootClass(String className) {
+        extraRootClasses.add(className);
     }
 
     public List<KeyModelEntry> keyModels() {

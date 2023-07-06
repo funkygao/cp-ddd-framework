@@ -13,18 +13,18 @@ import java.util.Map;
 
 public interface ITaskRepository extends IRepository {
 
-    Task mustGetPending(TaskNo taskNo, WarehouseNo warehouseNo) throws WmsException;
+    Task mustGet(TaskNo taskNo, WarehouseNo warehouseNo) throws WmsException;
 
-    TaskOfContainer mustGetPending(ContainerNo containerNo, WarehouseNo warehouseNo) throws WmsException;
+    TaskOfContainerPending mustGet(ContainerNo containerNo, WarehouseNo warehouseNo) throws WmsException;
 
-    TaskOfSku mustGetPending(TaskNo taskNo, OrderNo orderNo, Sku sku, WarehouseNo warehouseNo) throws WmsException;
+    TaskOfSkuPending mustGet(TaskNo taskNo, OrderNo orderNo, Sku sku, WarehouseNo warehouseNo) throws WmsException;
+
+    TaskOfOrderPending mustGet(OrderNo orderNo, WarehouseNo warehouseNo) throws WmsException;
 
     Map<Platform, List<Task>> pendingTasksOfPlatforms(List<Platform> platformNos);
 
-    TaskBag tasksOfOrder(OrderNo orderNo, WarehouseNo warehouseNo);
+    void save(TaskOfSkuPending task);
 
-    void save(TaskOfSku task);
-
-    void save(TaskOfContainer task);
+    void save(TaskOfContainerPending task);
 
 }

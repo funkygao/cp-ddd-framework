@@ -4,7 +4,7 @@ import ddd.plus.showcase.wms.domain.carton.convert.CartonConverter;
 import ddd.plus.showcase.wms.domain.carton.dict.CartonStatus;
 import ddd.plus.showcase.wms.domain.carton.hint.CaronDirtyHint;
 import ddd.plus.showcase.wms.domain.carton.spec.CartonizationRule;
-import ddd.plus.showcase.wms.domain.common.IRuleGateway;
+import ddd.plus.showcase.wms.domain.common.gateway.IRuleGateway;
 import ddd.plus.showcase.wms.domain.common.Operator;
 import ddd.plus.showcase.wms.domain.common.Platform;
 import ddd.plus.showcase.wms.domain.common.WmsException;
@@ -46,7 +46,7 @@ public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomai
     private TaskNo taskNo;
     @KeyRelation(whom = Order.class, type = KeyRelation.Type.BelongTo)
     private OrderNo orderNo;
-    @KeyRelation(whom = Pallet.class, type = KeyRelation.Type.BelongTo, contextual = true)
+    @KeyRelation(whom = Pallet.class, type = KeyRelation.Type.HasOne, contextual = true, remark = "物理世界是属于关系")
     private PalletNo palletNo;
     @KeyElement(types = KeyElement.Type.Operational)
     private CartonizationRule cartonizationRule;
@@ -54,32 +54,30 @@ public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomai
     @Delegate
     private CartonStatus status;
     @KeyRelation(whom = CartonItemBag.class, type = KeyRelation.Type.HasOne)
+    @Delegate
     private CartonItemBag itemBag;
     @KeyRelation(whom = ConsumableBag.class, type = KeyRelation.Type.HasOne)
     private ConsumableBag consumableBag;
     @KeyElement(types = KeyElement.Type.Location, byType = true)
     private Platform platform;
     private Operator operator;
+    @KeyElement(types = KeyElement.Type.KPI)
     private LocalDateTime fulfillTime;
 
     private IRuleGateway ruleGateway;
-
-    public void injectRuleGateway(Class<? extends ICartonRepository> _any, IRuleGateway ruleGateway) {
+    public void injectRuleGateway(@NonNull Class<? extends ICartonRepository> __, IRuleGateway ruleGateway) {
         this.ruleGateway = ruleGateway;
     }
 
     public interface CartonOrder extends BelongTo<Order> {
     }
+    @KeyRelation(whom = CartonOrder.class, type = KeyRelation.Type.Associate)
     private CartonOrder order;
     public CartonOrder order() {
         return order;
     }
-
-    /**
-     * 是否空箱.
-     */
-    public boolean isEmpty() {
-        return itemBag.isEmpty();
+    public void injectCartonOrder(@NonNull Class<? extends ICartonRepository> __, CartonOrder cartonOrder) {
+        this.order = cartonOrder;
     }
 
     /**
@@ -118,7 +116,7 @@ public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomai
 
     @KeyBehavior(useRawArgs = true)
     public void transferFrom(ContainerItemBag containerItemBag) {
-        List<CartonItem> cartonItems = CartonConverter.INSTANCE.containerItem2CartonItem(containerItemBag.getItems());
+        List<CartonItem> cartonItems = CartonConverter.INSTANCE.containerItem2CartonItem(containerItemBag.items());
         itemBag.appendAll(cartonItems);
         // 这里 hint 与 bindOrder 合并
         CaronDirtyHint hint = new CaronDirtyHint(this, CaronDirtyHint.Type.TransferFrom);

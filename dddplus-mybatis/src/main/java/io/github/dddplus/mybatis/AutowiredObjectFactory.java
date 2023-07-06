@@ -21,7 +21,7 @@ import java.util.List;
  * </pre>
  */
 @Component
-public class AutowireObjectFactory extends DefaultObjectFactory implements ApplicationContextAware {
+public class AutowiredObjectFactory extends DefaultObjectFactory implements ApplicationContextAware {
     private ApplicationContext context;
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {

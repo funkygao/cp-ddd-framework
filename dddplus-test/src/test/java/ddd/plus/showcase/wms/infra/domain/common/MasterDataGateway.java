@@ -1,6 +1,6 @@
 package ddd.plus.showcase.wms.infra.domain.common;
 
-import ddd.plus.showcase.wms.domain.common.IMasterDataGateway;
+import ddd.plus.showcase.wms.domain.common.gateway.IMasterDataGateway;
 import ddd.plus.showcase.wms.domain.common.Operator;
 import ddd.plus.showcase.wms.domain.common.Platform;
 import ddd.plus.showcase.wms.domain.common.WarehouseNo;

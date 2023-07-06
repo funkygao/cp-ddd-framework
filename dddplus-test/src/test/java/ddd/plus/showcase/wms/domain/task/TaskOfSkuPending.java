@@ -9,16 +9,23 @@ import io.github.dddplus.dsl.KeyBehavior;
 import io.github.dddplus.dsl.KeyRelation;
 import io.github.dddplus.model.BoundedDomainModel;
 import io.github.dddplus.model.DirtyMemento;
+import lombok.NonNull;
+import lombok.experimental.Delegate;
 
 import java.math.BigDecimal;
 
 @KeyRelation(whom = Task.class, type = KeyRelation.Type.Contextual)
-public class TaskOfSku extends BoundedDomainModel<Task> {
+public class TaskOfSkuPending extends BoundedDomainModel<Task> {
     private final DirtyMemento memento;
     private final OrderNo orderNo;
     private final Sku sku;
 
-    public TaskOfSku(Class<? extends ITaskRepository> _any, Task task, OrderNo orderNo, Sku sku) {
+    @Delegate
+    public Task unbounded() {
+        return super.unbounded();
+    }
+
+    public TaskOfSkuPending(@NonNull Class<? extends ITaskRepository> __, Task task, OrderNo orderNo, Sku sku) {
         this.model = task;
         this.orderNo = orderNo;
         this.sku = sku;
@@ -30,8 +37,7 @@ public class TaskOfSku extends BoundedDomainModel<Task> {
         Task task = unbounded();
         task.platformNo = platformNo;
         task.operator = operator;
-        // lombok Delegate，只能在外边调用时，才会Decorate：这里不能绕过containerBag直接调用pendingItemBag()
-        ContainerItemBag checkResult = task.getContainerBag().pendingItemBag().confirmQty(qty);
+        ContainerItemBag checkResult = task.containerBag().pendingItemBag().confirmQty(qty);
         memento.register(new ConfirmQtyHint(task));
         return checkResult;
     }

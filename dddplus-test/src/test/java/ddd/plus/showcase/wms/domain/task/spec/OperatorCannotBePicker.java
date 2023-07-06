@@ -1,8 +1,8 @@
 package ddd.plus.showcase.wms.domain.task.spec;
 
-import ddd.plus.showcase.wms.domain.common.ExceptionCode;
-import ddd.plus.showcase.wms.domain.common.IMasterDataGateway;
 import ddd.plus.showcase.wms.domain.common.Operator;
+import ddd.plus.showcase.wms.domain.common.WmsException;
+import ddd.plus.showcase.wms.domain.common.gateway.IMasterDataGateway;
 import ddd.plus.showcase.wms.domain.task.Task;
 import io.github.dddplus.model.spcification.AbstractSpecification;
 import io.github.dddplus.model.spcification.Notification;
@@ -22,7 +22,7 @@ public class OperatorCannotBePicker extends AbstractSpecification<Task> {
 
     public boolean isSatisfiedBy(Task task, Notification notification) {
         if (!masterDataGateway.allowPerformChecking(candidate)) {
-            notification.addError(ExceptionCode.OperatorDisallowed.error());
+            notification.addError(WmsException.Code.OperatorDisallowed.error());
             return false;
         }
 

@@ -9,7 +9,7 @@ import ddd.plus.showcase.wms.domain.task.*;
 import ddd.plus.showcase.wms.domain.task.hint.ConfirmQtyHint;
 import ddd.plus.showcase.wms.domain.task.hint.TaskDirtyHint;
 import ddd.plus.showcase.wms.infra.dao.Dao;
-import ddd.plus.showcase.wms.infra.domain.task.association.TaskCartonItemsDb;
+import ddd.plus.showcase.wms.infra.domain.task.association.TaskCartonsDb;
 import ddd.plus.showcase.wms.infra.domain.task.association.TaskOrdersDb;
 import ddd.plus.showcase.wms.infra.domain.task.convert.TaskConverter;
 import io.github.dddplus.dsl.KeyBehavior;
@@ -46,9 +46,13 @@ public class TaskRepository implements ITaskRepository {
      */
     @Override
     @KeyBehavior
-    public Task mustGetPending(TaskNo taskNo, WarehouseNo warehouseNo) throws WmsException {
+    public Task mustGet(TaskNo taskNo, WarehouseNo warehouseNo) throws WmsException {
         TaskPo po = dao.query("select inner join .. where warehouse_no=?",
                 warehouseNo.value());
+        if (po == null) {
+            // this is why we name must
+            throw new WmsException(WmsException.Code.TaskNotFound);
+        }
         // 1. po -> entity
         Task task = converter.fromPo(po);
 
@@ -60,9 +64,17 @@ public class TaskRepository implements ITaskRepository {
         task.injectContainerBag(_self, ContainerBag.of(converter.fromContainerPoList(containerPos)));
 
         // 4. 实例化并注入 association implementation
-        task.injectCartonItems(_self, new TaskCartonItemsDb(task, dao));
-        task.injectOrders(_self, new TaskOrdersDb(task, dao));
+        injectAssociations(task);
         return task;
+    }
+
+    /**
+     * 实例化关联对象并注入实体
+     */
+    @KeyBehavior
+    private void injectAssociations(Task task) {
+        task.injectCartons(_self, new TaskCartonsDb(task, dao));
+        task.injectOrders(_self, new TaskOrdersDb(task, dao));
     }
 
     /**
@@ -77,19 +89,19 @@ public class TaskRepository implements ITaskRepository {
      */
     @Override
     @KeyBehavior(args = "TaskOfSku")
-    public void save(TaskOfSku taskOfSku) {
+    public void save(TaskOfSkuPending taskOfSkuPending) {
         // 1. 获取所有hint，这样才知道该如何落库
-        ConfirmQtyHint confirmQtyHint = taskOfSku.unbounded().firstHintOf(ConfirmQtyHint.class);
-        TaskDirtyHint taskDirtyHint = taskOfSku.unbounded().firstHintOf(TaskDirtyHint.class);
+        ConfirmQtyHint confirmQtyHint = taskOfSkuPending.firstHintOf(ConfirmQtyHint.class);
+        TaskDirtyHint taskDirtyHint = taskOfSkuPending.firstHintOf(TaskDirtyHint.class);
         taskDirtyHint.getDirtyFields();
 
         // 2. 这2个hint可以在Task这个维度合并，以降低数据库交互，从而提升性能
 
         // 3. 转换为po，为了(查询，报表)进行的字段冗余：denormalization
-        TaskPo po = TaskConverter.INSTANCE.toPo(taskOfSku);
+        TaskPo po = TaskConverter.INSTANCE.toPo(taskOfSkuPending);
 
         // 4. DDD里的更新绝大部分采用乐观锁：通过 Exchange 有效传递而不污染领域层
-        po.setVersion(taskOfSku.unbounded().xGet(Task.OptimisticLock, Short.class));
+        po.setVersion(taskOfSkuPending.xGet(Task.OptimisticLock, Short.class));
         dao.update(po);
     }
 
@@ -98,28 +110,33 @@ public class TaskRepository implements ITaskRepository {
      */
     @Override
     @KeyBehavior
-    public TaskOfContainer mustGetPending(ContainerNo containerNo, WarehouseNo warehouseNo) throws WmsException {
+    public TaskOfContainerPending mustGet(ContainerNo containerNo, WarehouseNo warehouseNo) throws WmsException {
         ContainerPo containerPo = dao.query("select * from ob_container inner join ob_container_item");
+        if (containerNo == null) {
+            // this is why we name must
+            throw new WmsException(WmsException.Code.ContainerNotFound);
+        }
+
         Container container = converter.fromPo(containerPo);
         TaskPo taskPo = dao.query("");
         Task task = converter.fromPo(taskPo);
-        TaskOfContainer taskOfContainer = new TaskOfContainer(task, container);
-        return taskOfContainer;
+        TaskOfContainerPending taskOfContainerPending = new TaskOfContainerPending(_self, task, container);
+        return taskOfContainerPending;
     }
 
     @Override
-    public TaskOfSku mustGetPending(TaskNo taskNo, OrderNo orderNo, Sku sku, WarehouseNo warehouseNo) throws WmsException {
+    public TaskOfSkuPending mustGet(TaskNo taskNo, OrderNo orderNo, Sku sku, WarehouseNo warehouseNo) throws WmsException {
         Task task = dao.query("");
-        return new TaskOfSku(_self, task, orderNo, sku);
+        return new TaskOfSkuPending(_self, task, orderNo, sku);
     }
 
     @Override
-    public Map<Platform, List<Task>> pendingTasksOfPlatforms(List<Platform> platformNos) {
+    public TaskOfOrderPending mustGet(OrderNo orderNo, WarehouseNo warehouseNo) throws WmsException {
         return null;
     }
 
     @Override
-    public TaskBag tasksOfOrder(OrderNo orderNo, WarehouseNo warehouseNo) {
+    public Map<Platform, List<Task>> pendingTasksOfPlatforms(List<Platform> platformNos) {
         return null;
     }
 
@@ -128,7 +145,7 @@ public class TaskRepository implements ITaskRepository {
      */
     @Override
     @KeyBehavior(args = "TaskOfContainer")
-    public void save(TaskOfContainer task) {
-        TaskPo po = converter.toPo(task.unbounded());
+    public void save(TaskOfContainerPending taskOfContainerPending) {
+        TaskPo po = converter.toPo(taskOfContainerPending.unbounded());
     }
 }

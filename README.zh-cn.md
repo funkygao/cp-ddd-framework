@@ -25,53 +25,26 @@ Languages： [English](README.md) | 中文
 
 DDDplus是轻量级DDD补充和增强的框架。
 
-它捕获了DDD里缺失的构造块；它为正向和逆向业务建模赋能；它可视化完整的业务知识；它连接了(架构师，产品经理，业务方，管理者)；它把(业务分析，设计，设计评审，开发实现，代码评审，测试)成为一个正反馈的闭环；它方便构建面向扩展的灵活软件架构；它降低了常见的DDD的错误理解。
+>它捕获了DDD里缺失的构造块；它为正向和逆向业务建模赋能；它把代码可视化成完整的业务知识；它连接了(架构师，产品经理，业务方，管理者)；它把(业务分析，设计，设计评审，开发实现，代码评审，测试)成为一个正反馈的闭环；它方便构建面向扩展的灵活平台架构；它纠正了常见的DDD的错误理解。
 
 简单地讲，DDDplus的`plus`最关键核心是：
 - 支持多种路由模式的[扩展点机制](/dddplus-spec/src/main/java/io/github/dddplus/ext)，应对复杂业务场景
 - [扩充](/dddplus-spec/src/main/java/io/github/dddplus/model)了DDD的building blocks，解决DDD落地难问题
 - 逆向建模的[DSL](/dddplus-spec/src/main/java/io/github/dddplus/dsl)，让代码可视化地表达完整业务模型
 
-具体内容：
-- 确定性问题
-   - [IBag](/dddplus-spec/src/main/java/io/github/dddplus/model/IBag.java)，封装集合逻辑
-   - ([IRule](/dddplus-spec/src/main/java/io/github/dddplus/model/IRule.java), [IBehavioralRule](/dddplus-spec/src/main/java/io/github/dddplus/model/IBehavioralRule.java)，[IDefinitionalRule](/dddplus-spec/src/main/java/io/github/dddplus/model/IDefinitionalRule.java))，业务规则对象
-   - ([IUnboundedDomainModel](/dddplus-spec/src/main/java/io/github/dddplus/model/IUnboundedDomainModel.java), [BoundedDomainModel](/dddplus-spec/src/main/java/io/github/dddplus/model/BoundedDomainModel.java))，上下文角色对象
-   - ([DirtyMemento](/dddplus-runtime/src/main/java/io/github/dddplus/buddy/DirtyMemento.java), [IDirtyHint](/dddplus-runtime/src/main/java/io/github/dddplus/buddy/IDirtyHint.java), [IMergeAwareDirtyHint](/dddplus-runtime/src/main/java/io/github/dddplus/buddy/IMergeAwareDirtyHint.java))，追踪领域对象状态变化，通过乐观锁实现落库
-   - [Exchange](/dddplus-runtime/src/main/java/io/github/dddplus/buddy/Exchange.java)，domain与infrastructure间传递非领域数据的容器
-   - [ISpecification](/dddplus-runtime/src/main/java/io/github/dddplus/buddy/specification/ISpecification.java)，业务校验和场景识别
-   - [INativeFlow](/dddplus-spec/src/main/java/io/github/dddplus/model/INativeFlow.java)，可复用的流程片段
-   - [AbstractBusinessNo](/dddplus-runtime/src/main/java/io/github/dddplus/buddy/vo/AbstractBusinessNo.java)，业务编号建模
-   - [IUnitOfWork](/dddplus-spec/src/main/java/io/github/dddplus/model/IUnitOfWork.java)，跨聚合根的事务
-- 不确定问题
-   - [IDomainExtension](/dddplus-spec/src/main/java/io/github/dddplus/ext/IDomainExtension.java)，扩展点
-   - [IIdentity](/dddplus-spec/src/main/java/io/github/dddplus/model/IIdentity.java)，业务身份
-   - ([Policy](/dddplus-spec/src/main/java/io/github/dddplus/ext/IPolicy.java), [Router](/dddplus-runtime/src/main/java/io/github/dddplus/runtime/BaseRouter.java))，扩展点的两种路由方式
-   - [Pattern](/dddplus-runtime/src/main/java/io/github/dddplus/annotation/Pattern.java)，全局业务模式
-   - [Interceptor](/dddplus-runtime/src/main/java/io/github/dddplus/annotation/Interceptor.java)，扩展点拦截器
-- 进程外依赖
-   - [IGateway](/dddplus-spec/src/main/java/io/github/dddplus/model/IGateway.java)，远程RPC的防腐层
-   - [IRepository](/dddplus-spec/src/main/java/io/github/dddplus/model/IRepository.java)，数据持久化
-- 技术组件
-   - [mapstruct](https://mapstruct.org/)，对象转换
-- 架构守护
-   - [DDDPlusEnforcer](/dddplus-enforce/src/main/java/io/github/dddplus/DDDPlusEnforcer.java)，业务建模规范的架构守护
-- 可视化逆向建模
-   - ([DomainModelAnalyzer](/dddplus-spec/src/main/java/io/github/dddplus/dsl/package-info.java), [PlantUmlBuilder](/dddplus-visualization/src/main/java/io/github/dddplus/ast/view/PlantUmlBuilder.java)), 分析Java AST自动生成逆向业务模型
+## 项目现状
 
-## Current status
+应用于多个大型核心复杂项目的生产环境。
 
-Used for several complex critical central platform projects in production environment.
-
-Latest `Maven Central` version is: `1.1.2`, under active development version is: `2.0.0-SNAPSHOT`.
+`Maven Central` 最新版本: `1.1.2`；正在积极开发的版本: `2.0.0-SNAPSHOT`。
 
 ## 快速入门
 
 ### 项目演示
 
-[正向和逆向建模的项目演示](dddplus-test/src/test/java/ddd/plus/showcase/README.zh-cn.md).
+[正向和逆向建模的项目演示 ->](dddplus-test/src/test/java/ddd/plus/showcase/README.zh-cn.md)
 
-### Dependencies
+### 正向建模
 
 ```xml
 <dependency>
@@ -80,7 +53,7 @@ Latest `Maven Central` version is: `1.1.2`, under active development version is:
 </dependency>
 ```
 
-### 与SpringBoot集成
+#### 与SpringBoot集成
 
 ```java
 @SpringBootApplication(scanBasePackages = {"${your base packages}", "io.github.dddplus"})
@@ -91,7 +64,7 @@ public class WebApplication {
 }
 ```
 
-### 扩展点路由原理
+#### 扩展点路由原理
 
 `Pattern`/`Partner`/`Policy`，都是`Extension#code`的提供者(它们有的通过`match(IIdentity)`方法，有的通过`extensionCode(IIdentity)`方法)，即准入规则，本质上都是把动态的业务场景转换为静态的`Extension#code`，而`Extension#code`被扩展点实例通过注解绑定，从而实现了扩展点的动态路由。
 

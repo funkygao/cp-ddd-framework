@@ -25,7 +25,7 @@ Languages： English | [中文](README.zh-cn.md)
 
 DDDplus, originally cp-ddd-framework(cp means Central Platform：中台), is a lightweight DDD Enhancement Framework for complex business architecture. 
 
-It captures DDD missing concepts and patches the building block. It empowers building domain model with forward and reverse modeling. It visualizes the complete domain knowledge. It connects frontline developers with (architect, product manager, business stakeholder, management team). It makes (analysis, design, design review, implementation, code review, test) a positive feedback closed-loop. It strengthens building extension oriented flexible software solution. It eliminates frequently encountered misunderstanding of DDD via thorough javadoc for each building block.
+>It captures DDD missing concepts and patches the building block. It empowers building domain model with forward and reverse modeling. It visualizes the complete domain knowledge from code. It connects frontline developers with (architect, product manager, business stakeholder, management team). It makes (analysis, design, design review, implementation, code review, test) a positive feedback closed-loop. It strengthens building extension oriented flexible software solution. It eliminates frequently encountered misunderstanding of DDD via thorough javadoc for each building block with detailed example.
 
 In short, the 3 most essential `plus` are:
 1. provide [extension point](/dddplus-spec/src/main/java/io/github/dddplus/ext) with multiple routing mechanism, suited for complex business scenarios
@@ -36,15 +36,15 @@ In short, the 3 most essential `plus` are:
 
 Used for several complex critical central platform projects in production environment.
 
-Latest Maven Central version: `1.1.2`, under active development version: `2.0.0-SNAPSHOT`.
+Latest Maven Central version: `1.1.2`; under active development version: `2.0.0-SNAPSHOT`.
 
 ## Quickstart
 
 ### Showcase
 
-[A full demo of DDDplus forward/reverse modeling ->](dddplus-test/src/test/java/ddd/plus/showcase/README.md).
+[A full demo of DDDplus forward/reverse modeling ->](dddplus-test/src/test/java/ddd/plus/showcase/README.md)
 
-### Dependencies
+### Forward modeling
 
 ```xml
 <dependency>
@@ -53,7 +53,7 @@ Latest Maven Central version: `1.1.2`, under active development version: `2.0.0-
 </dependency>
 ```
 
-### Integration with SpringBoot
+#### Integration with SpringBoot
 
 ```java
 @SpringBootApplication(scanBasePackages = {"${your base packages}", "io.github.dddplus"})

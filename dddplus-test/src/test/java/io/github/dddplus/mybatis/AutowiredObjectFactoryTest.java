@@ -13,7 +13,7 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath*:spring-test-design.xml"})
-public class AutowireObjectFactoryTest {
+public class AutowiredObjectFactoryTest {
 
     @Resource
     private FactoryWrapper autowireObjectFactory;

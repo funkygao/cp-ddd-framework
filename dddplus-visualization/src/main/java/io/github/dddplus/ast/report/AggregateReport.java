@@ -5,7 +5,9 @@
  */
 package io.github.dddplus.ast.report;
 
+import io.github.dddplus.ast.ReverseEngineeringModel;
 import io.github.dddplus.ast.model.AggregateEntry;
+import io.github.dddplus.ast.model.KeyModelEntry;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -16,7 +18,12 @@ import java.util.List;
  */
 @Data
 public class AggregateReport {
+    private final ReverseEngineeringModel model;
     private List<AggregateEntry> aggregateEntries = new ArrayList<>();
+
+    public AggregateReport(ReverseEngineeringModel model) {
+        this.model = model;
+    }
 
     public int size() {
         return aggregateEntries.size();
@@ -26,9 +33,18 @@ public class AggregateReport {
         return aggregateEntries.get(index);
     }
 
-    public AggregateReport add(AggregateEntry aggregateEntry) {
-        validate(aggregateEntry);
-        aggregateEntries.add(aggregateEntry);
+    public AggregateReport add(AggregateEntry entry) {
+        validate(entry);
+        aggregateEntries.add(entry);
+
+        // auto register key model
+        for (String actor : entry.getExtraRootClasses()) {
+            KeyModelEntry modelEntry = model.getKeyModelReport().getOrCreateKeyModelEntryForActor(actor);
+            if (modelEntry.getPackageName() == null || modelEntry.getPackageName().isEmpty()) {
+                modelEntry.setPackageName(entry.getPackageName());
+            }
+        }
+
         return this;
     }
 

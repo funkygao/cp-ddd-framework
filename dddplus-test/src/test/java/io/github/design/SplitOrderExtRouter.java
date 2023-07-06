@@ -14,7 +14,6 @@ public class SplitOrderExtRouter extends BaseRouter<ISplitOrderExt, ShipmentOrde
 
     // 一个Router可以支持多种路由模式：互斥 or 叠加
     public void splitOrderChained(ShipmentOrder shipmentOrder, CheckTask checkTask) {
-        // TODO
     }
 
     @Override

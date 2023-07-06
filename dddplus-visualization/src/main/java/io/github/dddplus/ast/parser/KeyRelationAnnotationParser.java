@@ -45,7 +45,23 @@ public class KeyRelationAnnotationParser {
                     break;
 
                 case "whom":
-                    entry.setRightClass(AnnotationFieldParser.stringFieldValue(memberValuePair));
+                    /*
+                    public class Order {
+                        public interface OrderLines extends HasMany<OrderLine> {
+                            @KeyBehavior
+                            int totalPrice();
+                        }
+                        @KeyRelation(whom = Order.OrderLines.class, type = Associate)
+                        private OrderLines orderLines;
+                    }
+
+                    这需要处理一下，因为 KeyBehavior 注册时，entry.className 是 OrderLines，而不是 Order.OrderLines
+                     */
+                    String rightClazz = AnnotationFieldParser.stringFieldValue(memberValuePair);
+                    if (rightClazz.contains(".")) {
+                        rightClazz = rightClazz.substring(rightClazz.lastIndexOf('.') + 1);
+                    }
+                    entry.setRightClass(rightClazz);
                     break;
             }
         }
