@@ -218,7 +218,7 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
         append(String.format(" <<(E,#9197DB) %s: %s>> ", tag, entry.getJavadoc()));
         append(" {").append(NEWLINE);
         if (entry.orphaned()) {
-            append(TAB).append("未通过@KeyBehavior标注生产者").append(NEWLINE);
+            append(TAB).append("未标注生产者").append(NEWLINE);
         }
         if (entry.hasRemark()) {
             append(TAB).append(entry.getRemark()).append(NEWLINE);
