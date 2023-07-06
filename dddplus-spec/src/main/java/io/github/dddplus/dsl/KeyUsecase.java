@@ -20,13 +20,16 @@ import java.lang.annotation.*;
  *     ℗PostMapping("a/b")
  *     public Response doSth(Request request) {}
  * }
+ *
+ * class OrderSubmittedConsumer {
+ *     ℗KeyUsecase(consumesKeyEvent = OrderSubmittedEvent.class)
+ *     void onMessage(String message) {}
+ * }
  * }
  * </pre>
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.SOURCE)
-@Documented
-@Inherited
 public @interface KeyUsecase {
 
     /**
@@ -38,6 +41,13 @@ public @interface KeyUsecase {
      * 补充说明.
      */
     String remark() default "";
+
+    /**
+     * 消费哪一个业务事件.
+     *
+     * @see KeyEvent
+     */
+    Class[] consumesKeyEvent() default {};
 
     /**
      * 关键的入参.
