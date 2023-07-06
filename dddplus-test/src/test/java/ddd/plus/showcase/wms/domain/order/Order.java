@@ -2,16 +2,14 @@ package ddd.plus.showcase.wms.domain.order;
 
 import ddd.plus.showcase.wms.domain.carton.Carton;
 import ddd.plus.showcase.wms.domain.carton.CartonItemBag;
-import ddd.plus.showcase.wms.domain.common.Operator;
-import ddd.plus.showcase.wms.domain.common.Platform;
-import ddd.plus.showcase.wms.domain.common.WarehouseNo;
-import ddd.plus.showcase.wms.domain.common.WmsException;
+import ddd.plus.showcase.wms.domain.common.*;
 import ddd.plus.showcase.wms.domain.order.dict.OrderExchangeKey;
 import ddd.plus.showcase.wms.domain.order.dict.OrderStatus;
 import ddd.plus.showcase.wms.domain.order.dict.OrderType;
 import ddd.plus.showcase.wms.domain.order.dict.ProductionStatus;
 import ddd.plus.showcase.wms.domain.pack.Pack;
 import ddd.plus.showcase.wms.domain.pack.PackBag;
+import ddd.plus.showcase.wms.domain.pack.WaybillNo;
 import ddd.plus.showcase.wms.domain.task.ContainerItem;
 import ddd.plus.showcase.wms.domain.task.ContainerItemBag;
 import io.github.dddplus.dsl.KeyBehavior;
@@ -91,6 +89,13 @@ public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainM
     @Delegate
     @KeyRelation(whom = OrderContainerItems.class, type = KeyRelation.Type.Associate)
     private OrderContainerItems containerItems;
+
+    @KeyElement(types = KeyElement.Type.Referential, byType = true)
+    private Carrier carrier;
+    private Supplier supplier;
+    private Consignee consignee;
+    @KeyElement(types = KeyElement.Type.Contextual, byType = true, remark = "OFC随单下发")
+    private WaybillNo waybillNo;
 
     @Override
     protected void whenNotSatisfied(Notification notification) {

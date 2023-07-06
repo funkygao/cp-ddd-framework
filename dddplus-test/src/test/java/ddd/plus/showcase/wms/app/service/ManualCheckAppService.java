@@ -78,15 +78,15 @@ public class ManualCheckAppService implements IApplicationService {
         containerTask.unbounded().claimedWith(operator, platformNo);
 
         // 通过association对象加载管理聚合根
-        OrderBag pendingOrders = containerTask.unbounded().pendingOrders();
-        pendingOrders.satisfy(new OrderUsesManualCheckFlow());
+        OrderBag pendingOrderBag = containerTask.unbounded().pendingOrders();
+        pendingOrderBag.satisfy(new OrderUsesManualCheckFlow());
         // 逆向物流逻辑
-        OrderBagCanceled canceledOrderBag = pendingOrders.subBagOfCanceled(orderGateway);
+        OrderBagCanceled canceledOrderBag = pendingOrderBag.canceledBag(orderGateway);
 
         uow.persist(containerTask, canceledOrderBag);
 
         if (request.getRecommendPackQty()) {
-            return ApiResponse.ofOk(pendingOrders.anyItem().recommendPackQty());
+            return ApiResponse.ofOk(pendingOrderBag.anyItem().recommendPackQty());
         }
 
         return ApiResponse.ofOk(0);
@@ -105,8 +105,6 @@ public class ManualCheckAppService implements IApplicationService {
         OrderNo orderNo = OrderNo.of(request.getOrderNo());
         Sku sku = Sku.of(request.getSkuNo());
         BigDecimal qty = new BigDecimal(request.getQty());
-
-        // 推荐复核台强约束？
 
         TaskOfSku taskOfSku = taskRepository.mustGetPending(TaskNo.of(request.getTaskNo()), orderNo, sku, warehouseNo);
         taskOfSku.unbounded().assureSatisfied(new TaskCanPerformChecking()

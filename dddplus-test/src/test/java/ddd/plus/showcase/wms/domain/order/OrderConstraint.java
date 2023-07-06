@@ -30,11 +30,8 @@ public class OrderConstraint {
      */
     private boolean autoShip;
 
-    /**
-     * 该出库单是否人工复核.
-     */
     @KeyRule
-    public boolean manualCheck() {
+    public boolean allowManualCheck() {
         return !autoCartonization;
     }
 

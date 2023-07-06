@@ -10,8 +10,8 @@ public class OrderBagCanceled extends BoundedDomainModel<OrderBag> {
     }
 
     @Delegate
-    OrderBag getModel() {
-        return model;
+    OrderBag model() {
+        return unbounded();
     }
 
 }

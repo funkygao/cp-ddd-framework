@@ -7,6 +7,6 @@ import io.github.dddplus.model.spcification.Notification;
 public class OrderUsesManualCheckFlow extends AbstractSpecification<Order> {
     @Override
     public boolean isSatisfiedBy(Order candidate, Notification notification) {
-        return candidate.constraint().manualCheck();
+        return candidate.constraint().allowManualCheck();
     }
 }
