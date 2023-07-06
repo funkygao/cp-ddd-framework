@@ -5,8 +5,6 @@
  */
 package io.github.dddplus.model;
 
-import lombok.Getter;
-
 /**
  * 统一定义的业务编号类.
  *
@@ -16,7 +14,6 @@ import lombok.Getter;
  * @param <T> 业务编号的数据类型
  */
 public abstract class AbstractBusinessNo<T> implements IBusinessNo<T> {
-    @Getter
     protected final T value;
 
     protected AbstractBusinessNo(T value) {
