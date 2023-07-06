@@ -1,5 +1,53 @@
-标注覆盖率：Class(52/65.4%) Method(99/38.4%) Property(177/28.8%) Statement(164)
+标注覆盖率：Class(54/64.8%) Method(103/37.9%) Property(183/27.9%) Statement(169)
 模型债：
+<<Aggregate: 装箱>>
+Carton 纸箱，它会成为包裹.
+   [属性]
+   Lifecycle     status
+   Operational   cartonizationRule
+   KPI           fulfillTime
+   Location      Platform
+   [行为]
+      bindOrder() 
+      fulfill() 箱满了
+      installConsumables() 向纸箱添加耗材.
+      transferFrom(ContainerItemBag) 
+   [规则]
+      cartonizationRule() 装箱规则，利用gateway延迟加载，规则也是规约.
+CartonItem
+   [属性]
+   Structural    sku
+   Referential   orderLineNo
+   Quantity      checkedQty
+CartonItemBag
+CartonOrder
+Consumable
+   [属性]
+   Structural    CartonNo OrderNo TaskNo
+   Location      Platform
+ConsumableBag
+Pallet
+   [属性]
+   Structural    PalletNo TaskNo
+   [行为]
+      fulfill() 
+<<Aggregate: 通用子域>>
+Sku 货品.
+   [属性]
+   Structural    Owner PackCode
+   Contextual    LotNo snList
+<<Aggregate: 复核报差异>>
+ContainerDiff 复核过程中发现的容器差异.
+   [属性]
+   Structural    containerNo
+   Operational   reason
+   Location      platform
+   [行为]
+      register(DiffReason) 登记差异.
+ContainerDiffItem
+   [属性]
+   Structural    Sku
+ContainerDiffItemBag
 <<Aggregate: 客户出库单>>
 Order 客户的出库单.
    [属性]
@@ -31,54 +79,17 @@ Pack 包裹.
    Structural    OrderNo WaybillNo
    Lifecycle     PackStatus
    Billing       totalVolume totalWeight
-<<Aggregate: 复核报差异>>
-ContainerDiff 复核过程中发现的容器差异.
+<<Aggregate: 发货>>
+OrderLineManifest
    [属性]
-   Structural    containerNo
-   Operational   reason
-   Location      platform
-   [行为]
-      register(DiffReason) 登记差异.
-ContainerDiffItem
+   Structural    OrderLineNo Sku
+OrderManifest
    [属性]
-   Structural    Sku
-ContainerDiffItemBag
-<<Aggregate: 装箱>>
-Carton 纸箱，它会成为包裹.
+   Structural    OrderNo
+ShippingManifest
    [属性]
-   Lifecycle     status
-   Operational   cartonizationRule
-   KPI           fulfillTime
-   Location      Platform
-   [行为]
-      bindOrder() 
-      fulfill() 箱满了
-      transferFrom(ContainerItemBag) 
-      useConsumables() 向纸箱添加耗材.
-   [规则]
-      cartonizationRule() 装箱规则，利用gateway延迟加载，规则也是规约.
-CartonItem
-   [属性]
-   Structural    sku
-   Referential   orderLineNo
-   Quantity      checkedQty
-CartonItemBag
-CartonOrder
-Consumable
-   [属性]
-   Structural    CartonNo OrderNo TaskNo
-   Location      Platform
-ConsumableBag
-Pallet
-   [属性]
-   Structural    PalletNo TaskNo
-   [行为]
-      fulfill() 
-<<Aggregate: 通用子域>>
-Sku 货品.
-   [属性]
-   Structural    Owner PackCode
-   Contextual    LotNo snList
+   Structural    Carrier
+   Reserved      extInfo
 <<Aggregate: 出库复核任务>>
 Container 拣货容器.
    [属性]
@@ -108,18 +119,9 @@ TaskOfSkuPending
    [行为]
       confirmQty() 
 TaskOrders
-<<Aggregate: 发货>>
-OrderLineManifest
-   [属性]
-   Structural    OrderLineNo Sku
-OrderManifest
-   [属性]
-   Structural    OrderNo
-ShippingManifest
-   [属性]
-   Structural    Carrier
-   Reserved      extInfo
 <<用户交互>>
+FlowAutoExecutionConsumer
+   onMessage() 
 ManualCheckAppService
    recommendPlatformByTaskBacklog(taskNo) 提升拣货员去哪个复核台：按任务积压情况
    recommendPlatformByOrder(orderNo) 提升拣货员去哪个复核台：按订单
@@ -131,3 +133,4 @@ TaskSubmittedConsumer
    消费接收复核任务(json) 
 <<跨聚合复杂流程>>
 <<领域事件>>
+   CartonFulfilledEvent 

@@ -66,13 +66,13 @@ public class CartonRepository implements ICartonRepository {
 
         if (hint.has(CaronDirtyHint.Type.FromContainer)) {
             // insert ob_carton_item
-            List<CartonItemPo> cartonItemPoList = converter.toPo(carton.items());
+            List<CartonItemPo> cartonItemPoList = converter.toCartonItemPo(carton.items());
             dao.insert(cartonItemPoList);
         }
 
         if (hint.has(CaronDirtyHint.Type.InstallConsumables)) {
             // insert ob_carton_consumable
-            List<ConsumablePo> consumablePoList = CartonConverter.INSTANCE.toPo(carton.getConsumableBag().items());
+            List<ConsumablePo> consumablePoList = CartonConverter.INSTANCE.toConsumablePo(carton.getConsumableBag().items());
             dao.insert(consumablePoList);
         }
     }

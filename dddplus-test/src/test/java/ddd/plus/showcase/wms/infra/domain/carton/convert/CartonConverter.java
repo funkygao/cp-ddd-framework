@@ -17,7 +17,7 @@ public interface CartonConverter {
 
     Carton fromPo(CartonPo po);
 
-    List<ConsumablePo> toPo(List<Consumable> consumables);
+    List<ConsumablePo> toConsumablePo(List<Consumable> consumables);
 
-    List<CartonItemPo> toPo(List<CartonItem> cartonItems);
+    List<CartonItemPo> toCartonItemPo(List<CartonItem> cartonItems);
 }

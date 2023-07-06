@@ -126,8 +126,10 @@ public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomai
         this.fulfillTime = LocalDateTime.now();
         mergeDirtyWith(new CaronDirtyHint(this, CaronDirtyHint.Type.Fulfill));
 
-        // with transactional mbox
-        eventPublisher.publish(new CartonFulfilledEvent(cartonNo.value()));
+        // with transactional mailbox pattern
+        CartonFulfilledEvent event = new CartonFulfilledEvent();
+        event.setCartonNo(cartonNo.value());
+        eventPublisher.publish(event);
     }
 
     @Override
