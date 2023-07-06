@@ -44,7 +44,7 @@ public @interface KeyEvent {
         /**
          * 基于MQ Broker的消息消费.
          */
-        RemoteConsuming,
+        RemoteConsuming, // TODO
 
         /**
          * 基于MQ Broker的消息生产.

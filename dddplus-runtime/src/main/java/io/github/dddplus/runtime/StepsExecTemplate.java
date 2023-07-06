@@ -190,7 +190,8 @@ public abstract class StepsExecTemplate<Step extends IDomainStep, Model extends 
         }
         ResolvableType stepsExecType = ResolvableType.forClass(thisClass);
         ResolvableType templateType = stepsExecType.getSuperType();
-        // 处理StepsExecTemplate的多层继承 TODO 目前不够严谨，它假定了实现了IDomainStep的中间类不能再定义泛型
+        // 处理StepsExecTemplate的多层继承
+        // 目前不够严谨，它假定了实现了IDomainStep的中间类不能再定义泛型
         while (templateType.getGenerics().length == 0) {
             templateType = templateType.getSuperType();
         }
