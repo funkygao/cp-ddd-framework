@@ -26,12 +26,12 @@ import java.util.Map;
 
 @Repository
 public class TaskRepository implements ITaskRepository {
-    @Resource
-    private Dao dao;
-
-    private static TaskConverter converter = TaskConverter.INSTANCE;
     @KeyElement(types = KeyElement.Type.Structural, remark = "如何克服Java访问权限控制粒度问题")
     private static Class _self = TaskRepository.class;
+    private static TaskConverter converter = TaskConverter.INSTANCE;
+
+    @Resource
+    private Dao dao;
 
     /**
      * 如何把数据库里的数据转换为充血模型的{@link IDomainModel}，并注入关联对象

@@ -8,7 +8,7 @@ Order 客户的出库单.
    Operational   OrderConstraint
    Contextual    WaybillNo/OFC随单下发
    [行为]
-      asPresale() 切换到预售场景.
+      recommendPackQty() 推荐该订单使用几个包裹：Pack.
    [规则]
       recommendedPlatform() 该订单已经被推荐到哪一个复核台.
 OrderCartons

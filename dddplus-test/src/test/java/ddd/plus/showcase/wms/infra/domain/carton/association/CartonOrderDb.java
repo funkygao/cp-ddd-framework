@@ -5,12 +5,15 @@ import ddd.plus.showcase.wms.domain.order.Order;
 import ddd.plus.showcase.wms.infra.dao.Dao;
 import io.github.dddplus.dsl.KeyBehavior;
 import io.github.dddplus.dsl.KeyElement;
-import lombok.AllArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CartonOrderDb implements Carton.CartonOrder {
+    @NonNull
     @KeyElement(types = KeyElement.Type.Structural, byType = true)
     private final Carton carton;
+    @NonNull
     private final Dao dao;
 
     private Order cache;
