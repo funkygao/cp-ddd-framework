@@ -31,10 +31,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 业务用例：人工复核.
@@ -55,6 +52,8 @@ public class ManualCheckAppService implements IApplicationService {
     private ICartonRepository cartonRepository;
     private UnitOfWork uow;
 
+    private Random random = new Random();
+
     /**
      * 拣货员应该去哪一个复核台进行复核?
      */
@@ -71,39 +70,43 @@ public class ManualCheckAppService implements IApplicationService {
     }
 
     private Platform recommendByTaskBacklog(RecommendPlatformRequest request) {
-        List<Platform> platformNoList = masterDataGateway.candidatePlatforms(OrderType.valueOf(request.getOrderType()), TaskMode.valueOf(request.getTaskMode()), WarehouseNo.of(request.getWarehouseNo()));
-        if (platformNoList.size() == 1) {
-            return platformNoList.get(0);
+        List<Platform> platforms = masterDataGateway.candidatePlatforms(
+                OrderType.valueOf(request.getOrderType()),
+                TaskMode.valueOf(request.getTaskMode()),
+                WarehouseNo.of(request.getWarehouseNo()));
+        if (platforms.size() == 1) {
+            // bingo!
+            return platforms.get(0);
         }
 
         // sort and find the best according to backlog
-        Map<Platform, List<Task>> taskMap = taskRepository.pendingTasksOfPlatforms(platformNoList);
-        platformNoList.forEach(platform -> {
+        Map<Platform, List<Task>> taskMap = taskRepository.pendingTasksOfPlatforms(platforms);
+        platforms.forEach(platform -> {
             TaskBag taskBag = TaskBag.of(taskMap.get(platform));
             BigDecimal totalBacklogQty = taskBag.totalPendingQty();
-            platform.setEffort(taskBag.totalCheckedQty());
+            platform.setFinishedWorkload(taskBag.totalCheckedQty());
             platform.setBacklog(totalBacklogQty);
         });
 
-        platformNoList = new ArrayList<>(taskMap.keySet());
-        platformNoList.stream().sorted(comparator);
-        return platformNoList.get(0);
+        platforms = new ArrayList<>(taskMap.keySet());
+        platforms.stream().sorted(comparator);
+        return platforms.get(0);
     }
 
     private Platform recommendByOrder(RecommendPlatformRequest request) {
         WarehouseNo warehouseNo = WarehouseNo.of(request.getWarehouseNo());
         Order order = orderRepository.mustGet(OrderNo.of(request.getOrderNo()), warehouseNo);
-        Platform platformNo = order.recommendedPlatformNo();
-        if (platformNo.isPresent()) {
+        Platform platform = order.recommendedPlatform();
+        if (platform.isPresent()) {
             // 这个订单之前已经推荐了，仍使用原来的复核台
-            return platformNo;
+            return platform;
         }
 
-        // TODO use association object
-        TaskBag tasksOfOrder = taskRepository.tasksOfOrder(order.getOrderNo(), warehouseNo);
-        List<Platform> platformNos = tasksOfOrder.platformNos();
-        if (!platformNos.isEmpty()) {
-            return platformNos.get(0);
+        TaskBag tasksOfOrder = order.tasks().taskBag();
+        List<Platform> platforms = tasksOfOrder.platforms();
+        if (!platforms.isEmpty()) {
+            // shuffle
+            return platforms.get(random.nextInt(platforms.size()));
         }
 
         // 业务兜底

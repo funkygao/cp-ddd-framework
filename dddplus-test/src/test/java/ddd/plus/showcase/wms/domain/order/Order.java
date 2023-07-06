@@ -12,6 +12,8 @@ import ddd.plus.showcase.wms.domain.pack.PackBag;
 import ddd.plus.showcase.wms.domain.pack.WaybillNo;
 import ddd.plus.showcase.wms.domain.task.ContainerItem;
 import ddd.plus.showcase.wms.domain.task.ContainerItemBag;
+import ddd.plus.showcase.wms.domain.task.Task;
+import ddd.plus.showcase.wms.domain.task.TaskBag;
 import io.github.dddplus.dsl.KeyBehavior;
 import io.github.dddplus.dsl.KeyElement;
 import io.github.dddplus.dsl.KeyRelation;
@@ -47,9 +49,17 @@ public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainM
     @KeyElement(types = KeyElement.Type.Lifecycle, byType = true)
     private ProductionStatus productionStatus;
 
+    @KeyElement(types = KeyElement.Type.Referential, byType = true)
+    private Carrier carrier;
+    @KeyElement(types = KeyElement.Type.Referential, byType = true)
+    private Supplier supplier;
+    @KeyElement(types = KeyElement.Type.Referential, byType = true)
+    private Consignee consignee;
+    @KeyElement(types = KeyElement.Type.Contextual, byType = true, remark = "OFC随单下发")
+    private WaybillNo waybillNo;
+
     @KeyElement(types = KeyElement.Type.Operational, byType = true)
     private OrderConstraint constraint;
-
     public OrderConstraint constraint() {
         return constraint;
     }
@@ -58,7 +68,10 @@ public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainM
     @KeyRelation(whom = OrderLineBag.class, type = KeyRelation.Type.HasOne)
     private OrderLineBag orderLineBag;
 
+    // ============
     // associations
+    // ============
+
     public interface OrderPacks extends HasMany<Pack> {
         PackBag packBag();
     }
@@ -70,6 +83,25 @@ public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainM
         return packs;
     }
 
+    public void injectOrderPacks(@NonNull Class<? extends IOrderRepository> __, OrderPacks orderPacks) {
+        this.packs = orderPacks;
+    }
+
+    public interface OrderTasks extends HasMany<Task> {
+        TaskBag taskBag();
+    }
+
+    @KeyRelation(whom = OrderTasks.class, type = KeyRelation.Type.Associate)
+    private OrderTasks tasks;
+
+    public OrderTasks tasks() {
+        return tasks;
+    }
+
+    public void injectOrderTasks(@NonNull Class<? extends IOrderRepository> __, OrderTasks orderTasks) {
+        this.tasks = orderTasks;
+    }
+
     public interface OrderCartons extends HasMany<Carton> {
         /**
          * 该订单已经装箱的货品件数总和.
@@ -79,25 +111,31 @@ public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainM
 
         CartonItemBag cartonItemBag();
     }
+
     @KeyRelation(whom = OrderCartons.class, type = KeyRelation.Type.Associate)
     private OrderCartons cartons;
 
     public OrderCartons cartons() {
         return cartons;
     }
+    public void injectOrderCartons(@NonNull Class<? extends IOrderRepository> __, OrderCartons orderCartons) {
+        this.cartons = orderCartons;
+    }
 
     public interface OrderContainerItems extends HasMany<ContainerItem> {
         ContainerItemBag containerItemBag();
     }
-    @KeyRelation(whom = OrderContainerItems.class, type = KeyRelation.Type.Associate)
-    private OrderContainerItems containerItems;
 
-    @KeyElement(types = KeyElement.Type.Referential, byType = true)
-    private Carrier carrier;
-    private Supplier supplier;
-    private Consignee consignee;
-    @KeyElement(types = KeyElement.Type.Contextual, byType = true, remark = "OFC随单下发")
-    private WaybillNo waybillNo;
+    @KeyRelation(whom = OrderContainerItems.class, type = KeyRelation.Type.Associate)
+    private OrderContainerItems containerItems; // TODO
+
+    public OrderContainerItems containerItems() {
+        return containerItems;
+    }
+
+    public void injectOrderContainerItems(@NonNull Class<? extends IOrderRepository> __, OrderContainerItems orderContainerItems) {
+        this.containerItems = orderContainerItems;
+    }
 
     @Override
     protected void whenNotSatisfied(Notification notification) {
@@ -131,7 +169,8 @@ public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainM
      * 该订单已经被推荐到哪一个复核台.
      */
     @KeyRule
-    public Platform recommendedPlatformNo() {
+    public Platform recommendedPlatform() {
         return Platform.of(xGet(RecommendedPlatformNo, String.class));
     }
+
 }

@@ -65,16 +65,19 @@ public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomai
     private LocalDateTime fulfillTime;
 
     private IRuleGateway ruleGateway;
-
     public void injectRuleGateway(@NonNull Class<? extends ICartonRepository> __, IRuleGateway ruleGateway) {
         this.ruleGateway = ruleGateway;
     }
 
     public interface CartonOrder extends BelongTo<Order> {
     }
+    @KeyRelation(whom = CartonOrder.class, type = KeyRelation.Type.Associate)
     private CartonOrder order;
     public CartonOrder order() {
         return order;
+    }
+    public void injectCartonOrder(@NonNull Class<? extends ICartonRepository> __, CartonOrder cartonOrder) {
+        this.order = cartonOrder;
     }
 
     /**

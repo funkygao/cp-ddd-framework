@@ -32,5 +32,5 @@ public class Platform extends AbstractBusinessNo<String> {
      */
     @Getter
     @Setter
-    private BigDecimal effort = BigDecimal.ZERO;
+    private BigDecimal finishedWorkload = BigDecimal.ZERO;
 }

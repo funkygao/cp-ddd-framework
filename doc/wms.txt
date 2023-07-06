@@ -1,4 +1,4 @@
-标注覆盖率：Class(52/59.6%) Method(91/37.4%) Property(176/27.8%) Statement(157)
+标注覆盖率：Class(52/61.5%) Method(86/43.0%) Property(178/27.5%) Statement(152)
 模型债：
 <<Aggregate: 客户出库单>>
 Order 客户的出库单.
@@ -10,7 +10,7 @@ Order 客户的出库单.
    [行为]
       asPresale() 切换到预售场景.
    [规则]
-      recommendedPlatformNo() 该订单已经被推荐到哪一个复核台.
+      recommendedPlatform() 该订单已经被推荐到哪一个复核台.
 OrderCartons
    [行为]
       totalCartonizedQty() 该订单已经装箱的货品件数总和.
@@ -22,6 +22,7 @@ OrderLine 订单行.
 OrderLineBag
 OrderOfPresale 出库单的预售场景.
 OrderPacks
+OrderTasks
 OrderBag
    [行为]
       canceledBag() 当前出库单集合里哪些已经在单据中心里被客户取消了.

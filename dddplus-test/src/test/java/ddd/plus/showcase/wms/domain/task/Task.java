@@ -88,15 +88,13 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
         Order pendingOrder(OrderNo orderNo) throws WmsException;
     }
 
+    @KeyRelation(whom = TaskOrders.class, type = KeyRelation.Type.Associate)
     private TaskOrders orders;
 
     public TaskOrders orders() {
         return orders;
     }
 
-    /**
-     * Note：确保不滥用，只能{@link ITaskRepository}才能调用
-     */
     public void injectOrders(@NonNull Class<? extends ITaskRepository> __, TaskOrders orders) {
         this.orders = orders;
     }
@@ -108,7 +106,8 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
         CartonItemBag cartonItemBag();
     }
 
-    private TaskCartonItems cartonItems;
+    @KeyRelation(whom = TaskCartonItems.class, type = KeyRelation.Type.Associate)
+    private TaskCartonItems cartonItems; // TODO
 
     public TaskCartonItems cartonItems() {
         return cartonItems;
