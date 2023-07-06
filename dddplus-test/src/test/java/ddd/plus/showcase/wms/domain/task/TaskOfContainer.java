@@ -8,7 +8,7 @@ import lombok.NonNull;
 public class TaskOfContainer extends BoundedDomainModel<Task> {
     private final Container container;
 
-    public TaskOfContainer(@NonNull Class<? extends ITaskRepository> _any, Task task, Container container) {
+    public TaskOfContainer(@NonNull Class<? extends ITaskRepository> __, Task task, Container container) {
         this.model = task;
         this.container = container;
     }

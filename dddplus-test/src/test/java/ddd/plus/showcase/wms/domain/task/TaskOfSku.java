@@ -19,7 +19,7 @@ public class TaskOfSku extends BoundedDomainModel<Task> {
     private final OrderNo orderNo;
     private final Sku sku;
 
-    public TaskOfSku(@NonNull Class<? extends ITaskRepository> _any, Task task, OrderNo orderNo, Sku sku) {
+    public TaskOfSku(@NonNull Class<? extends ITaskRepository> __, Task task, OrderNo orderNo, Sku sku) {
         this.model = task;
         this.orderNo = orderNo;
         this.sku = sku;

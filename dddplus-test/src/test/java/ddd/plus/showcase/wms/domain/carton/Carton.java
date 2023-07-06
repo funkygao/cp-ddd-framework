@@ -65,7 +65,7 @@ public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomai
 
     private IRuleGateway ruleGateway;
 
-    public void injectRuleGateway(@NonNull Class<? extends ICartonRepository> _any, IRuleGateway ruleGateway) {
+    public void injectRuleGateway(@NonNull Class<? extends ICartonRepository> __, IRuleGateway ruleGateway) {
         this.ruleGateway = ruleGateway;
     }
 

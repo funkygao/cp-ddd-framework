@@ -64,7 +64,7 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
     @KeyRelation(whom = ContainerBag.class, type = KeyRelation.Type.HasOne)
     private ContainerBag containerBag;
 
-    public void injectContainerBag(@NonNull Class<? extends ITaskRepository> _any, ContainerBag containerBag) {
+    public void injectContainerBag(@NonNull Class<? extends ITaskRepository> __, ContainerBag containerBag) {
         this.containerBag = containerBag;
     }
 
@@ -95,7 +95,7 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
     /**
      * Note：确保不滥用，只能{@link ITaskRepository}才能调用
      */
-    public void injectOrders(@NonNull Class<? extends ITaskRepository> _any, TaskOrders orders) {
+    public void injectOrders(@NonNull Class<? extends ITaskRepository> __, TaskOrders orders) {
         this.orders = orders;
     }
 
@@ -109,7 +109,7 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
     @lombok.experimental.Delegate
     private TaskCartonItems cartonItems;
 
-    public void injectCartonItems(@NonNull Class<? extends ITaskRepository> _any, TaskCartonItems cartonItems) {
+    public void injectCartonItems(@NonNull Class<? extends ITaskRepository> __, TaskCartonItems cartonItems) {
         this.cartonItems = cartonItems;
     }
 
