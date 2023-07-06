@@ -59,7 +59,6 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
         return this.memento;
     }
 
-
     @lombok.experimental.Delegate
     @KeyRelation(whom = ContainerBag.class, type = KeyRelation.Type.HasOne)
     private ContainerBag containerBag;
@@ -89,8 +88,11 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
         Order pendingOrder(OrderNo orderNo) throws WmsException;
     }
 
-    @lombok.experimental.Delegate
     private TaskOrders orders;
+
+    public TaskOrders orders() {
+        return orders;
+    }
 
     /**
      * Note：确保不滥用，只能{@link ITaskRepository}才能调用
@@ -106,8 +108,11 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
         CartonItemBag cartonItemBag();
     }
 
-    @lombok.experimental.Delegate
     private TaskCartonItems cartonItems;
+
+    public TaskCartonItems cartonItems() {
+        return cartonItems;
+    }
 
     public void injectCartonItems(@NonNull Class<? extends ITaskRepository> __, TaskCartonItems cartonItems) {
         this.cartonItems = cartonItems;

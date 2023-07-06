@@ -54,6 +54,7 @@ public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomai
     @Delegate
     private CartonStatus status;
     @KeyRelation(whom = CartonItemBag.class, type = KeyRelation.Type.HasOne)
+    @Delegate
     private CartonItemBag itemBag;
     @KeyRelation(whom = ConsumableBag.class, type = KeyRelation.Type.HasOne)
     private ConsumableBag consumableBag;
@@ -74,13 +75,6 @@ public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomai
     private CartonOrder order;
     public CartonOrder order() {
         return order;
-    }
-
-    /**
-     * 是否空箱.
-     */
-    public boolean isEmpty() {
-        return itemBag.isEmpty();
     }
 
     /**
@@ -119,7 +113,7 @@ public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomai
 
     @KeyBehavior(useRawArgs = true)
     public void transferFrom(ContainerItemBag containerItemBag) {
-        List<CartonItem> cartonItems = CartonConverter.INSTANCE.containerItem2CartonItem(containerItemBag.getItems());
+        List<CartonItem> cartonItems = CartonConverter.INSTANCE.containerItem2CartonItem(containerItemBag.items());
         itemBag.appendAll(cartonItems);
         // 这里 hint 与 bindOrder 合并
         CaronDirtyHint hint = new CaronDirtyHint(this, CaronDirtyHint.Type.TransferFrom);

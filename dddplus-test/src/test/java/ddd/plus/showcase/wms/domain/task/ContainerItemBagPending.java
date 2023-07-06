@@ -3,8 +3,6 @@ package ddd.plus.showcase.wms.domain.task;
 import io.github.dddplus.model.BoundedDomainModel;
 import lombok.experimental.Delegate;
 
-import java.util.List;
-
 public class ContainerItemBagPending extends BoundedDomainModel<ContainerItemBag> {
 
     ContainerItemBagPending(ContainerItemBag bag) {
@@ -12,11 +10,8 @@ public class ContainerItemBagPending extends BoundedDomainModel<ContainerItemBag
     }
 
     @Delegate
-    ContainerItemBag getModel() {
-        return model;
+    ContainerItemBag model() {
+        return unbounded();
     }
 
-    public List<ContainerItem> items() {
-        return model.getItems();
-    }
 }

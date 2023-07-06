@@ -1,6 +1,5 @@
 package io.github.dddplus.model;
 
-import lombok.Getter;
 import lombok.NonNull;
 
 import java.util.List;
@@ -11,7 +10,6 @@ import java.util.List;
  * @param <Entity> The entity type
  */
 public abstract class ListBag<Entity> implements IBag {
-    @Getter
     protected final List<Entity> items;
 
     protected ListBag(@NonNull List<Entity> items) {
@@ -24,6 +22,10 @@ public abstract class ListBag<Entity> implements IBag {
 
     public final boolean isEmpty() {
         return size() == 0;
+    }
+
+    public final List<Entity> items() {
+        return items;
     }
 
     /**

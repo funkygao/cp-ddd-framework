@@ -52,7 +52,7 @@ public class ContainerItemBag extends ListBag<ContainerItem> implements IUnbound
         return orderNos;
     }
 
-    public ContainerItemBagPending pendingBag() {
+    public ContainerItemBagPending pendingItemBag() {
         List<ContainerItem> list = new ArrayList<>();
         for (ContainerItem item : items) {
             if (!item.done()) {

@@ -54,7 +54,7 @@ public class ContainerBag extends ListBag<Container> {
     ContainerItemBagPending pendingItemBag() {
         List<ContainerItem> containerItems = new ArrayList<>();
         for (Container container : items) {
-            containerItems.addAll(container.pendingBag().items());
+            containerItems.addAll(container.pendingItemBag().items());
         }
         return new ContainerItemBagPending(ContainerItemBag.of(containerItems));
     }

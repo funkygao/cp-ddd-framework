@@ -31,7 +31,6 @@ public class TaskOfSku extends BoundedDomainModel<Task> {
         Task task = unbounded();
         task.platformNo = platformNo;
         task.operator = operator;
-        // lombok Delegate，只能在外边调用时，才会Decorate：这里不能绕过containerBag直接调用pendingItemBag()
         ContainerItemBag checkResult = task.getContainerBag().pendingItemBag().confirmQty(qty);
         memento.register(new ConfirmQtyHint(task));
         return checkResult;

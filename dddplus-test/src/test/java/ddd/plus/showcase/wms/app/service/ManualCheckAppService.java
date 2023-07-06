@@ -72,18 +72,18 @@ public class ManualCheckAppService implements IApplicationService {
         Platform platformNo = Platform.of(request.getPlatformNo());
 
         // 该容器还没复核完，把它的任务加载
-        TaskOfContainer containerTask = taskRepository.mustGetPending(containerNo, warehouseNo);
-        containerTask.unbounded().assureSatisfied(new TaskCanPerformChecking()
+        TaskOfContainer taskOfContainer = taskRepository.mustGetPending(containerNo, warehouseNo);
+        taskOfContainer.unbounded().assureSatisfied(new TaskCanPerformChecking()
                 .and(new OperatorCannotBePicker(masterDataGateway, operator)));
-        containerTask.unbounded().claimedWith(operator, platformNo);
+        taskOfContainer.unbounded().claimedWith(operator, platformNo);
 
         // 通过association对象加载管理聚合根
-        OrderBag pendingOrderBag = containerTask.unbounded().pendingOrders();
+        OrderBag pendingOrderBag = taskOfContainer.unbounded().orders().pendingOrders();
         pendingOrderBag.satisfy(new OrderUsesManualCheckFlow());
         // 逆向物流逻辑
         OrderBagCanceled canceledOrderBag = pendingOrderBag.canceledBag(orderGateway);
 
-        uow.persist(containerTask, canceledOrderBag);
+        uow.persist(taskOfContainer, canceledOrderBag);
 
         if (request.getRecommendPackQty()) {
             return ApiResponse.ofOk(pendingOrderBag.anyItem().recommendPackQty());
@@ -111,8 +111,10 @@ public class ManualCheckAppService implements IApplicationService {
                 .and(new UniqueCodeConstraint(UniqueCode.of(request.getUniqueCode())))
                 .and(new OperatorCannotBePicker(masterDataGateway, operator)));
 
-        Order order = taskOfSku.unbounded().pendingOrder(orderNo);
+        Order order = taskOfSku.unbounded().orders().pendingOrder(orderNo);
         order.assureSatisfied(new OrderNotFullyCartonized());
+
+        // 此时复核员已经领取任务了，客单是不允许取消的，因此不必检查逆向逻辑
 
         ContainerItemBag checkResult = taskOfSku.confirmQty(qty, operator, Platform.of(request.getPlatformNo()));
 

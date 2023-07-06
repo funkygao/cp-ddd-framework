@@ -17,7 +17,6 @@ public class ContainerDiff implements IAggregateRoot {
     private ContainerNo containerNo;
     @KeyElement(types = KeyElement.Type.Location)
     private Platform platform;
-    @Delegate
     @KeyElement(types = KeyElement.Type.Operational)
     private DiffReason reason;
     @Delegate

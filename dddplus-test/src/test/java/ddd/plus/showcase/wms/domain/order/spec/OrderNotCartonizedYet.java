@@ -7,6 +7,6 @@ import io.github.dddplus.model.spcification.Notification;
 public class OrderNotCartonizedYet extends AbstractSpecification<Order> {
     @Override
     public boolean isSatisfiedBy(Order order, Notification notification) {
-        return order.totalCartonizedQty() == 0;
+        return order.cartons().totalCartonizedQty() == 0;
     }
 }

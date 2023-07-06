@@ -40,10 +40,10 @@ public class OrderBag extends SetBag<Order> implements IUnboundedDomainModel {
     @KeyBehavior
     public OrderBagCanceled canceledBag(IOrderGateway gateway) {
         Set<OrderNo> canceledSet = gateway.canceledSubSet(orderNos(), warehouseNo());
-        return new OrderBagCanceled(subBagOf(canceledSet));
+        return new OrderBagCanceled(bagOf(canceledSet));
     }
 
-    private OrderBag subBagOf(Set<OrderNo> orderNoSet) {
+    private OrderBag bagOf(Set<OrderNo> orderNoSet) {
         return OrderBag.of(items.stream().filter(o -> orderNoSet.contains(o.getOrderNo())).collect(Collectors.toSet()));
     }
 

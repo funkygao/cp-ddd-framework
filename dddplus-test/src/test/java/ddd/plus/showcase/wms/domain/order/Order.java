@@ -79,14 +79,16 @@ public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainM
 
         CartonItemBag cartonItemBag();
     }
-    @Delegate
     @KeyRelation(whom = OrderCartons.class, type = KeyRelation.Type.Associate)
     private OrderCartons cartons;
+
+    public OrderCartons cartons() {
+        return cartons;
+    }
 
     public interface OrderContainerItems extends HasMany<ContainerItem> {
         ContainerItemBag containerItemBag();
     }
-    @Delegate
     @KeyRelation(whom = OrderContainerItems.class, type = KeyRelation.Type.Associate)
     private OrderContainerItems containerItems;
 
@@ -111,7 +113,7 @@ public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainM
         }
 
         if (constraint.isCollectConsumables()) {
-            return totalCartonizedQty();
+            return cartons.totalCartonizedQty();
         }
 
         return 0;

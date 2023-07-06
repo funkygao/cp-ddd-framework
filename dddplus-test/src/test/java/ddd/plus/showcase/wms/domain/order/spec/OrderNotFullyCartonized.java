@@ -10,7 +10,7 @@ public class OrderNotFullyCartonized extends AbstractSpecification<Order> {
     @Override
     public boolean isSatisfiedBy(Order order, Notification notification) {
         BigDecimal expectedQty = order.totalExpectedQty();
-        BigDecimal cartonizedQty = BigDecimal.valueOf(order.totalCartonizedQty());
+        BigDecimal cartonizedQty = BigDecimal.valueOf(order.cartons().totalCartonizedQty());
         return expectedQty.compareTo(cartonizedQty) > 0;
     }
 }
