@@ -25,25 +25,24 @@ import java.io.Serializable;
  *     private final Order order;
  *     private BigDecimal price;
  *
- *     public CaronDirtyHint(Order order, Type type) {
+ *     public OrderDirtyHint(Order order, Type type) {
  *         this.order = order;
  *         this.dirtyMap.set(type.bit);
  *     }
  *
- *     @Override
  *     public void onMerge(IDirtyHint thatHint) {
  *         OrderDirtyHint that = (OrderDirtyHint) thatHint;
- *         that.dirtyMap.or(this.dirtyMap);
- *         if (this.price != null) {
- *             that.price = this.price;
+ *         that.dirtyMap.or(dirtyMap);
+ *         if (price != null) {
+ *             that.price = price;
  *         }
  *     }
  *
- *     @Override
  *     public Long getId() {
  *         return order.getId();
  *     }
  * }
+ *
  * }
  * </pre>
  *
