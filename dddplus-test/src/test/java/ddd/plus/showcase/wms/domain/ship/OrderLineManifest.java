@@ -15,7 +15,8 @@ import lombok.NoArgsConstructor;
 public class OrderLineManifest implements IDomainModel {
     private Long id;
 
+    @KeyElement(types = KeyElement.Type.Structural, byType = true)
     private OrderLineNo orderLineNo;
-    @KeyElement(types = KeyElement.Type.Structural)
+    @KeyElement(types = KeyElement.Type.Structural, byType = true)
     private Sku sku;
 }

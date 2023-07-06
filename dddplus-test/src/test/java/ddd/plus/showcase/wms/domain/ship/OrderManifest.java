@@ -2,6 +2,7 @@ package ddd.plus.showcase.wms.domain.ship;
 
 import ddd.plus.showcase.wms.domain.carton.Carton;
 import ddd.plus.showcase.wms.domain.order.OrderNo;
+import io.github.dddplus.dsl.KeyElement;
 import io.github.dddplus.dsl.KeyRelation;
 import io.github.dddplus.model.IDomainModel;
 import lombok.AccessLevel;
@@ -18,6 +19,7 @@ import java.util.List;
 public class OrderManifest implements IDomainModel {
     private Long id;
 
+    @KeyElement(types = KeyElement.Type.Structural, byType = true)
     private OrderNo orderNo;
 
     @KeyRelation(whom = OrderLineManifest.class, type = KeyRelation.Type.HasMany, contextual = true, remark = "包裹明细采集")

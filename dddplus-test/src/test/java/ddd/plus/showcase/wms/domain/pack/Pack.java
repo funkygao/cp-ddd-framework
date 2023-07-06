@@ -1,9 +1,11 @@
 package ddd.plus.showcase.wms.domain.pack;
 
+import ddd.plus.showcase.wms.domain.carton.Carton;
 import ddd.plus.showcase.wms.domain.common.WmsException;
 import ddd.plus.showcase.wms.domain.order.OrderNo;
 import ddd.plus.showcase.wms.domain.pack.dict.PackStatus;
 import io.github.dddplus.dsl.KeyElement;
+import io.github.dddplus.dsl.KeyRelation;
 import io.github.dddplus.model.BaseAggregateRoot;
 import io.github.dddplus.model.IUnboundedDomainModel;
 import io.github.dddplus.model.spcification.Notification;
@@ -20,6 +22,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Slf4j
 @Getter(AccessLevel.PACKAGE)
+@KeyRelation(whom = Carton.class, contextual = true, type = KeyRelation.Type.From, remark = "包裹明细采集")
 public class Pack extends BaseAggregateRoot<Pack> implements IUnboundedDomainModel {
     @KeyElement(types = KeyElement.Type.Structural, byType = true)
     private WaybillNo waybillNo;
