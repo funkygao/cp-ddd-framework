@@ -57,7 +57,7 @@ public class ManualCheckAppService implements IApplicationService {
     public ApiResponse<String> recommendPlatform(RecommendPlatformRequest request) {
         Platform platform;
         if (request.getOrderNo() != null) {
-            platform = recommendByOrder(request);
+            platform = recommendPlatformByOrder(request);
         } else {
             platform = recommendPlatformByTaskBacklog(request);
         }
@@ -97,7 +97,7 @@ public class ManualCheckAppService implements IApplicationService {
      * 提升拣货员去哪个复核台：按订单
      */
     @KeyUsecase(in = {"orderNo"})
-    private Platform recommendByOrder(RecommendPlatformRequest request) {
+    private Platform recommendPlatformByOrder(RecommendPlatformRequest request) {
         WarehouseNo warehouseNo = WarehouseNo.of(request.getWarehouseNo());
         Order order = orderRepository.mustGet(OrderNo.of(request.getOrderNo()), warehouseNo);
         Platform platform = order.recommendedPlatform();
