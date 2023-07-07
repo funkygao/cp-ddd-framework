@@ -2,12 +2,14 @@ package ddd.plus.showcase.wms.domain.carton;
 
 import ddd.plus.showcase.wms.domain.carton.convert.CartonConverter;
 import ddd.plus.showcase.wms.domain.carton.dict.CartonStatus;
+import ddd.plus.showcase.wms.domain.carton.event.CartonFulfilledEvent;
 import ddd.plus.showcase.wms.domain.carton.hint.CaronDirtyHint;
 import ddd.plus.showcase.wms.domain.carton.spec.CartonizationRule;
 import ddd.plus.showcase.wms.domain.common.gateway.IRuleGateway;
 import ddd.plus.showcase.wms.domain.common.Operator;
 import ddd.plus.showcase.wms.domain.common.Platform;
 import ddd.plus.showcase.wms.domain.common.WmsException;
+import ddd.plus.showcase.wms.domain.common.publisher.IEventPublisher;
 import ddd.plus.showcase.wms.domain.order.Order;
 import ddd.plus.showcase.wms.domain.order.OrderNo;
 import ddd.plus.showcase.wms.domain.task.ContainerItemBag;
@@ -44,27 +46,34 @@ public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomai
 
     @KeyRelation(whom = Task.class, type = KeyRelation.Type.BelongTo)
     private TaskNo taskNo;
+    @Getter
     @KeyRelation(whom = Order.class, type = KeyRelation.Type.BelongTo)
     private OrderNo orderNo;
     @KeyRelation(whom = Pallet.class, type = KeyRelation.Type.HasOne, contextual = true, remark = "物理世界是属于关系")
     private PalletNo palletNo;
     @KeyElement(types = KeyElement.Type.Operational)
     private CartonizationRule cartonizationRule;
+    @Getter
     @KeyElement(types = KeyElement.Type.Lifecycle)
     @Delegate
     private CartonStatus status;
     @KeyRelation(whom = CartonItemBag.class, type = KeyRelation.Type.HasOne)
     @Delegate
     private CartonItemBag itemBag;
+    @Getter
     @KeyRelation(whom = ConsumableBag.class, type = KeyRelation.Type.HasOne)
     private ConsumableBag consumableBag;
+    @Getter
     @KeyElement(types = KeyElement.Type.Location, byType = true)
     private Platform platform;
+    @Getter
     private Operator operator;
+    @Getter
     @KeyElement(types = KeyElement.Type.KPI)
     private LocalDateTime fulfillTime;
 
     private IRuleGateway ruleGateway;
+    private IEventPublisher eventPublisher;
 
     @KeyRelation(whom = CartonOrder.class, type = KeyRelation.Type.Associate)
     private CartonOrder order;
@@ -73,10 +82,10 @@ public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomai
      * 向纸箱添加耗材.
      */
     @KeyBehavior
-    public void useConsumables(List<Consumable> consumables) {
+    public void installConsumables(List<Consumable> consumables) {
         consumables.forEach(c -> c.bind(this));
         this.consumableBag = new ConsumableBag(consumables);
-        mergeDirty(new CaronDirtyHint(this, CaronDirtyHint.Type.UseConsumables));
+        mergeDirtyWith(new CaronDirtyHint(this, CaronDirtyHint.Type.InstallConsumables));
     }
 
     /**
@@ -95,34 +104,32 @@ public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomai
         this.orderNo = orderNo;
         CaronDirtyHint hint = new CaronDirtyHint(this, CaronDirtyHint.Type.BindOrder);
         hint.setCheckedQty(checkedQty);
-        mergeDirty(hint);
+        mergeDirtyWith(hint);
     }
 
     @KeyBehavior(useRawArgs = true)
     public void transferFrom(ContainerItemBag containerItemBag) {
         List<CartonItem> cartonItems = CartonConverter.INSTANCE.containerItem2CartonItem(containerItemBag.items());
         itemBag.appendAll(cartonItems);
-        // 这里 hint 与 bindOrder 合并
-        CaronDirtyHint hint = new CaronDirtyHint(this, CaronDirtyHint.Type.TransferFrom);
-        mergeDirty(hint);
+        CaronDirtyHint hint = new CaronDirtyHint(this, CaronDirtyHint.Type.FromContainer);
+        mergeDirtyWith(hint);
     }
 
     /**
      * 箱满了
      */
-    @KeyBehavior
+    @KeyBehavior(produceEvent = CartonFulfilledEvent.class, async = true)
     public void fulfill(Operator operator, Platform platform) {
         this.operator = operator;
         this.platform = platform;
         this.status = CartonStatus.Full;
         this.fulfillTime = LocalDateTime.now();
-        mergeDirty(new CaronDirtyHint(this, CaronDirtyHint.Type.UseConsumables));
+        mergeDirtyWith(new CaronDirtyHint(this, CaronDirtyHint.Type.Fulfill));
 
-        if (order.get().constraint().isAutoShip()) {
-            // 运营要求这个订单自动发货
-            // 触发后续流程自动执行
-            mergeDirty(new CaronDirtyHint(this, CaronDirtyHint.Type.Ship));
-        }
+        // with transactional mailbox pattern
+        CartonFulfilledEvent event = new CartonFulfilledEvent();
+        event.setCartonNo(cartonNo.value());
+        eventPublisher.publish(event);
     }
 
     @Override
@@ -143,5 +150,9 @@ public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomai
 
     public void injectRuleGateway(@NonNull Class<? extends ICartonRepository> __, IRuleGateway ruleGateway) {
         this.ruleGateway = ruleGateway;
+    }
+
+    public void injectEventPublisher(@NonNull Class<? extends ICartonRepository> __, IEventPublisher eventPublisher) {
+        this.eventPublisher = eventPublisher;
     }
 }

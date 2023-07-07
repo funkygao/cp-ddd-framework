@@ -60,7 +60,7 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
     public void claimedWith(Operator operator, Platform platformNo) {
         this.platformNo = platformNo;
         this.operator = operator;
-        mergeDirty(new TaskDirtyHint(this).dirty("operator", "platform_no"));
+        mergeDirtyWith(new TaskDirtyHint(this).dirty("operator", "platform_no"));
     }
 
     @Override

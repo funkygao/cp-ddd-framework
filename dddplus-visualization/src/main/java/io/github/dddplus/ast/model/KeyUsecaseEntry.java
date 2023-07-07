@@ -18,6 +18,7 @@ public class KeyUsecaseEntry {
     private List<String> in;
     private List<String> out;
     private String javadoc;
+    private String keyEvent;
 
     public KeyUsecaseEntry(String className, String methodName) {
         this.className = className;
@@ -31,6 +32,14 @@ public class KeyUsecaseEntry {
         }
 
         return methodName + "/" + remark;
+    }
+
+    public boolean hasJavadoc() {
+        return javadoc != null && !javadoc.isEmpty();
+    }
+
+    public boolean isConsumer() {
+        return keyEvent != null && !keyEvent.isEmpty();
     }
 
     public String displayIn() {

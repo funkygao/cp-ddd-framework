@@ -42,7 +42,7 @@ import java.util.*;
 @Service
 @Setter(onMethod_ = {@Resource})
 @Slf4j
-public class ManualCheckAppService implements IApplicationService {
+public class CheckingAppService implements IApplicationService {
     private IMasterDataGateway masterDataGateway;
     private IOrderGateway orderGateway;
     private Comparator<Platform> comparator;
@@ -174,7 +174,7 @@ public class ManualCheckAppService implements IApplicationService {
         carton.assureSatisfied(new CaronNotFull()
                 .and(carton.cartonizationRule())); // 业务规则本身也可以是规约
         carton.bindOrder(orderNo, qty);
-        carton.transferFrom(checkResult);
+        carton.transferFrom(checkResult); // TODO
 
         uow.persist(taskOfSkuPending, carton);
         return ApiResponse.ofOk();
@@ -213,7 +213,7 @@ public class ManualCheckAppService implements IApplicationService {
         Order order = carton.order().get();
         if (order.constraint().isCollectConsumables()) {
             // 该订单要记录使用了哪些耗材，以便独立核算成本
-            carton.useConsumables(null); // request里定义耗材信息，mapstruct转换：这样了省略细节
+            carton.installConsumables(null); // request里定义耗材信息，mapstruct转换：这样了省略细节
         }
 
         carton.fulfill(Operator.of(request.getOperatorNo()), Platform.of(request.getPlatformNo()));

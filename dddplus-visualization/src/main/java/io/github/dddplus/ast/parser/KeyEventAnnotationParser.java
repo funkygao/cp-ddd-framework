@@ -33,11 +33,11 @@ public class KeyEventAnnotationParser {
         for (MemberValuePair memberValuePair : normalAnnotationExpr.getPairs()) {
             switch (memberValuePair.getNameAsString()) {
                 case "type":
-                    result.setType(KeyEvent.Type.valueOf(AnnotationFieldParser.stringFieldValue(memberValuePair)));
+                    result.setType(KeyEvent.Type.valueOf(AnnotationFieldParser.singleFieldValue(memberValuePair)));
                     break;
 
                 case "remark":
-                    result.setRemark(AnnotationFieldParser.stringFieldValue(memberValuePair));
+                    result.setRemark(AnnotationFieldParser.singleFieldValue(memberValuePair));
                     break;
             }
         }

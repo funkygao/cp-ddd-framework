@@ -50,11 +50,11 @@ public class KeyElementAnnotationParser {
         for (MemberValuePair memberValuePair : keyElementExpr.getPairs()) {
             switch (memberValuePair.getNameAsString()) {
                 case "name":
-                    entry.setName(AnnotationFieldParser.stringFieldValue(memberValuePair));
+                    entry.setName(AnnotationFieldParser.singleFieldValue(memberValuePair));
                     break;
 
                 case "remark":
-                    entry.setRemark(AnnotationFieldParser.stringFieldValue(memberValuePair));
+                    entry.setRemark(AnnotationFieldParser.singleFieldValue(memberValuePair));
                     break;
 
                 case "types":

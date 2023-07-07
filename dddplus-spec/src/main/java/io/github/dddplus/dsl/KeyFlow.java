@@ -23,8 +23,6 @@ import java.lang.annotation.*;
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.SOURCE)
-@Documented
-@Inherited
 public @interface KeyFlow {
 
     /**

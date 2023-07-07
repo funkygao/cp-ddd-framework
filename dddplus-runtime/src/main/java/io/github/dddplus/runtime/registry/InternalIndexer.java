@@ -360,7 +360,7 @@ public class InternalIndexer {
         if (partnerDefPrepared == null) {
             // implicit ordering: 框架内部永远会先 prepare(partnerDef)，再 prepare(extensionDef)
             // 由于这个顺序不会暴露外部，这个隐含的条件还OK
-            throw BootstrapException.ofMessage("Partner must reside in Plugin Jar with its extensions!"); // TODO Partner的定义没有出现在Plugin Jar的场景可能也需要支持
+            throw BootstrapException.ofMessage("Partner must reside in Plugin Jar with its extensions!");
         }
 
         partnerDefPrepared.registerExtensionDef(extensionDef);

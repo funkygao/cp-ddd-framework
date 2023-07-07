@@ -19,7 +19,7 @@ public abstract class BaseAggregateRoot<Entity> implements IAggregateRoot {
         memento.register(hint);
     }
 
-    protected final void mergeDirty(IMergeAwareDirtyHint hint) {
+    protected final void mergeDirtyWith(IMergeAwareDirtyHint hint) {
         memento.merge(hint);
     }
 

@@ -27,8 +27,8 @@ import java.util.Map;
 @Repository
 public class TaskRepository implements ITaskRepository {
     @KeyElement(types = KeyElement.Type.Structural, remark = "如何克服Java访问权限控制粒度问题")
-    private static Class _self = TaskRepository.class;
-    private static TaskConverter converter = TaskConverter.INSTANCE;
+    private static final Class _self = TaskRepository.class;
+    private static final TaskConverter converter = TaskConverter.INSTANCE;
 
     @Resource
     private Dao dao;
