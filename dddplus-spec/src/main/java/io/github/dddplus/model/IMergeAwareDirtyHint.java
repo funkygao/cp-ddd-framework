@@ -15,19 +15,31 @@ import java.io.Serializable;
  * {@code
  *
  * public class OrderDirtyHint implements IMergeAwareDirtyHint<Long> {
+ *     private static int BITS = 8;
  *     public enum Type {
- *         BindOrder(0),
- *         TransferFrom(1);
+ *         Type1(0),
+ *         Type2(1),
+ *         Type3(2);
  *         int bit;
+ *
+ *         BitSet dirtyMap() {
+ *             BitSet s = new BitSet(BITS);
+ *             s.set(bit);
+ *             return s;
+ *         }
  *     }
  *
- *     private BitSet dirtyMap = new BitSet(8);
+ *     private final BitSet dirtyMap = new BitSet(BITS);
  *     private final Order order;
  *     private BigDecimal price;
  *
  *     public OrderDirtyHint(Order order, Type type) {
  *         this.order = order;
  *         this.dirtyMap.set(type.bit);
+ *     }
+ *
+ *     public boolean has(Type type) {
+ *         return dirtyMap.intersects(type.dirtyMap());
  *     }
  *
  *     public void onMerge(IDirtyHint thatHint) {

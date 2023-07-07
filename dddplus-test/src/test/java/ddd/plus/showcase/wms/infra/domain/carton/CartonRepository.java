@@ -3,7 +3,7 @@ package ddd.plus.showcase.wms.infra.domain.carton;
 import ddd.plus.showcase.wms.domain.carton.Carton;
 import ddd.plus.showcase.wms.domain.carton.CartonNo;
 import ddd.plus.showcase.wms.domain.carton.ICartonRepository;
-import ddd.plus.showcase.wms.domain.carton.hint.CaronDirtyHint;
+import ddd.plus.showcase.wms.domain.carton.hint.CartonDirtyHint;
 import ddd.plus.showcase.wms.domain.common.WarehouseNo;
 import ddd.plus.showcase.wms.domain.common.WmsException;
 import ddd.plus.showcase.wms.domain.common.gateway.IRuleGateway;
@@ -48,14 +48,14 @@ public class CartonRepository implements ICartonRepository {
     @KeyBehavior
     public void save(Carton carton) {
         CartonPo cartonPo = new CartonPo(); // 此时所有字段为空
-        CaronDirtyHint hint = carton.firstHintOf(CaronDirtyHint.class);
-        if (hint.has(CaronDirtyHint.Type.BindOrder)) {
+        CartonDirtyHint hint = carton.firstHintOf(CartonDirtyHint.class);
+        if (hint.has(CartonDirtyHint.Type.BindOrder)) {
             // update ob_carton
             cartonPo.setOrderNo(carton.getOrderNo().value());
             cartonPo.setCheckedQty(hint.getCheckedQty());
         }
 
-        if (hint.has(CaronDirtyHint.Type.Fulfill)) {
+        if (hint.has(CartonDirtyHint.Type.Fulfill)) {
             cartonPo.setCartonStatus(carton.getStatus());
             cartonPo.setPlatformNo(carton.getPlatform().value());
             cartonPo.setOperatorNo(carton.getOperator().value());
@@ -64,13 +64,13 @@ public class CartonRepository implements ICartonRepository {
             dao.update(cartonPo);
         }
 
-        if (hint.has(CaronDirtyHint.Type.FromContainer)) {
+        if (hint.has(CartonDirtyHint.Type.FromContainer)) {
             // insert ob_carton_item
             List<CartonItemPo> cartonItemPoList = converter.toCartonItemPo(carton.items());
             dao.insert(cartonItemPoList);
         }
 
-        if (hint.has(CaronDirtyHint.Type.InstallConsumables)) {
+        if (hint.has(CartonDirtyHint.Type.InstallConsumables)) {
             // insert ob_carton_consumable
             List<ConsumablePo> consumablePoList = CartonConverter.INSTANCE.toConsumablePo(carton.getConsumableBag().items());
             dao.insert(consumablePoList);

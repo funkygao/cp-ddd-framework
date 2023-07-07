@@ -12,11 +12,11 @@ import java.math.BigDecimal;
 import java.util.BitSet;
 
 @Getter
-public class CaronDirtyHint implements IMergeAwareDirtyHint<Long> {
+public class CartonDirtyHint implements IMergeAwareDirtyHint<Long> {
     private static int BITS = 8;
 
     @Getter(AccessLevel.PRIVATE)
-    private BitSet dirtyMap = new BitSet(BITS);
+    private final BitSet dirtyMap = new BitSet(BITS);
 
     @AllArgsConstructor
     public enum Type {
@@ -38,7 +38,7 @@ public class CaronDirtyHint implements IMergeAwareDirtyHint<Long> {
     @Setter
     private BigDecimal checkedQty; // 冗余字段，该箱总计货品数量：为了便于数据库查询、排序
 
-    public CaronDirtyHint(Carton carton, Type type) {
+    public CartonDirtyHint(Carton carton, Type type) {
         this.carton = carton;
         this.dirtyMap.set(type.bit);
     }
@@ -52,7 +52,7 @@ public class CaronDirtyHint implements IMergeAwareDirtyHint<Long> {
 
     @Override
     public void onMerge(IDirtyHint thatHint) {
-        CaronDirtyHint that = (CaronDirtyHint) thatHint;
+        CartonDirtyHint that = (CartonDirtyHint) thatHint;
         that.dirtyMap.or(this.dirtyMap);
         if (this.checkedQty != null) {
             that.checkedQty = this.checkedQty;
