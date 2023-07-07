@@ -42,7 +42,7 @@ import java.util.*;
 @Service
 @Setter(onMethod_ = {@Resource})
 @Slf4j
-public class ManualCheckAppService implements IApplicationService {
+public class CheckingAppService implements IApplicationService {
     private IMasterDataGateway masterDataGateway;
     private IOrderGateway orderGateway;
     private Comparator<Platform> comparator;
