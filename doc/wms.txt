@@ -1,50 +1,5 @@
 标注覆盖率：Class(59/62.7%) Method(105/47.6%) Property(203/25.1%) Statement(201)
 模型债：
-<<Aggregate: 客户出库单>>
-Order 客户的出库单.
-   [属性]
-   Referential   Carrier Consignee Supplier
-   Lifecycle     OrderStatus ProductionStatus
-   Operational   OrderConstraint
-   Contextual    WaybillNo/OFC随单下发
-   [行为]
-      checkedBy(Operator) 
-      recommendPackQty() 推荐该订单使用几个包裹：Pack.
-   [规则]
-      totalExpectedQty() 
-      recommendedPlatform() 该订单已经被推荐到哪一个复核台.
-OrderCartons
-   [行为]
-      totalCartonizedQty() 该订单已经装箱的货品件数总和.
-OrderLine 订单行.
-   [属性]
-   Structural    OrderLineNo Sku
-   Quantity      qty/要货量 shortageQty/缺货量
-OrderLineBag
-OrderOfPresale 出库单的预售场景.
-OrderPacks
-OrderTasks
-OrderBag
-   [行为]
-      canceledBag() 当前出库单集合里哪些已经在单据中心里被客户取消了.
-<<Aggregate: 包裹>>
-Pack 包裹.
-   [属性]
-   Structural    OrderNo WaybillNo
-   Lifecycle     PackStatus
-   Billing       totalVolume totalWeight
-<<Aggregate: 复核报差异>>
-ContainerDiff 复核过程中发现的容器差异.
-   [属性]
-   Structural    containerNo
-   Operational   reason
-   Location      platform
-   [行为]
-      register(DiffReason) 登记差异.
-ContainerDiffItem
-   [属性]
-   Structural    Sku
-ContainerDiffItemBag
 <<Aggregate: 装箱>>
 Carton 纸箱，它会成为包裹.
    [属性]
@@ -87,6 +42,62 @@ Sku 货品.
    [属性]
    Structural    Owner PackCode
    Contextual    LotNo snList
+<<Aggregate: 复核报差异>>
+ContainerDiff 复核过程中发现的容器差异.
+   [属性]
+   Structural    containerNo
+   Operational   reason
+   Location      platform
+   [行为]
+      register(DiffReason) 登记差异.
+ContainerDiffItem
+   [属性]
+   Structural    Sku
+ContainerDiffItemBag
+<<Aggregate: 客户出库单>>
+Order 客户的出库单.
+   [属性]
+   Referential   Carrier Consignee Supplier
+   Lifecycle     OrderStatus ProductionStatus
+   Operational   OrderConstraint
+   Contextual    WaybillNo/OFC随单下发
+   [行为]
+      checkedBy(Operator) 
+      recommendPackQty() 推荐该订单使用几个包裹：Pack.
+   [规则]
+      totalExpectedQty() 
+      recommendedPlatform() 该订单已经被推荐到哪一个复核台.
+OrderCartons
+   [行为]
+      totalCartonizedQty() 该订单已经装箱的货品件数总和.
+OrderLine 订单行.
+   [属性]
+   Structural    OrderLineNo Sku
+   Quantity      qty/要货量 shortageQty/缺货量
+OrderLineBag
+OrderOfPresale 出库单的预售场景.
+OrderPacks
+OrderTasks
+OrderBag
+   [行为]
+      canceledBag() 当前出库单集合里哪些已经在单据中心里被客户取消了.
+<<Aggregate: 包裹>>
+Pack 包裹.
+   [属性]
+   Structural    OrderNo WaybillNo
+   Lifecycle     PackStatus
+   Billing       totalVolume totalWeight
+<<Aggregate: 发货>>
+OrderLineManifest
+   [属性]
+   Structural    OrderLineNo Sku
+OrderManifest
+   [属性]
+   Structural    OrderNo
+ShippingManifest
+   [属性]
+   Structural    Carrier
+   Reserved      extInfo
 <<Aggregate: 出库复核任务>>
 Container 拣货容器.
    [属性]
@@ -130,17 +141,6 @@ TaskOfSkuPending
    [行为]
       confirmQty() 
 TaskOrders
-<<Aggregate: 发货>>
-OrderLineManifest
-   [属性]
-   Structural    OrderLineNo Sku
-OrderManifest
-   [属性]
-   Structural    OrderNo
-ShippingManifest
-   [属性]
-   Structural    Carrier
-   Reserved      extInfo
 <<用户交互>>
 CheckingAppService
    recommendPlatformByTaskBacklog(taskNo) 提升拣货员去哪个复核台：按任务积压情况
@@ -157,5 +157,5 @@ TaskSubmittedConsumer
 ObFlowAutomator
    orchestrate(IFlowAutomationEvent) 
 <<领域事件>>
-   OrderCheckedEvent 
    CartonFulfilledEvent 
+   OrderCheckedEvent 
