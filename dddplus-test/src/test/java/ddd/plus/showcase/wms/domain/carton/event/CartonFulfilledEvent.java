@@ -13,6 +13,6 @@ public class CartonFulfilledEvent implements IFlowAutomationEvent {
 
     @Override
     public Integer getEventType() {
-        return TypeCaronFulfilled;
+        return TypeCartonFulfilled;
     }
 }

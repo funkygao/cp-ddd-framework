@@ -7,7 +7,7 @@ import ddd.plus.showcase.wms.app.service.dto.base.ApiResponse;
 import ddd.plus.showcase.wms.domain.carton.Carton;
 import ddd.plus.showcase.wms.domain.carton.CartonNo;
 import ddd.plus.showcase.wms.domain.carton.ICartonRepository;
-import ddd.plus.showcase.wms.domain.carton.spec.CaronNotFull;
+import ddd.plus.showcase.wms.domain.carton.spec.CartonNotFull;
 import ddd.plus.showcase.wms.domain.common.*;
 import ddd.plus.showcase.wms.domain.common.gateway.IMasterDataGateway;
 import ddd.plus.showcase.wms.domain.common.gateway.IOrderGateway;
@@ -171,7 +171,7 @@ public class CheckingAppService implements IApplicationService {
 
         // 装箱，物理世界里，复核员已经清点数量，并把货品从容器里转移到箱，但人可能放错货品，运营要管控
         Carton carton = cartonRepository.mustGet(CartonNo.of(request.getCartonNo()), warehouseNo);
-        carton.assureSatisfied(new CaronNotFull()
+        carton.assureSatisfied(new CartonNotFull()
                 .and(carton.cartonizationRule())); // 业务规则本身也可以是规约
         carton.bindOrder(orderNo, qty);
         carton.transferFrom(checkResult); // TODO
@@ -205,7 +205,7 @@ public class CheckingAppService implements IApplicationService {
     @KeyUsecase(in = {"orderNo", "cartonNo", "consumables"})
     public ApiResponse<Void> fulfillCarton(CartonFullRequest request) throws WmsException {
         Carton carton = cartonRepository.mustGet(CartonNo.of(request.getCartonNo()), WarehouseNo.of(request.getWarehouseNo()));
-        carton.assureSatisfied(new CaronNotFull());
+        carton.assureSatisfied(new CartonNotFull());
         if (carton.isEmpty()) {
             // 复核员说这个空箱满了？
         }

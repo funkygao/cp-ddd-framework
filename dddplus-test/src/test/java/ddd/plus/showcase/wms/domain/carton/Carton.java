@@ -3,7 +3,7 @@ package ddd.plus.showcase.wms.domain.carton;
 import ddd.plus.showcase.wms.domain.carton.convert.CartonConverter;
 import ddd.plus.showcase.wms.domain.carton.dict.CartonStatus;
 import ddd.plus.showcase.wms.domain.carton.event.CartonFulfilledEvent;
-import ddd.plus.showcase.wms.domain.carton.hint.CaronDirtyHint;
+import ddd.plus.showcase.wms.domain.carton.hint.CartonDirtyHint;
 import ddd.plus.showcase.wms.domain.carton.spec.CartonizationRule;
 import ddd.plus.showcase.wms.domain.common.gateway.IRuleGateway;
 import ddd.plus.showcase.wms.domain.common.Operator;
@@ -85,7 +85,7 @@ public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomai
     public void installConsumables(List<Consumable> consumables) {
         consumables.forEach(c -> c.bind(this));
         this.consumableBag = new ConsumableBag(consumables);
-        mergeDirtyWith(new CaronDirtyHint(this, CaronDirtyHint.Type.InstallConsumables));
+        mergeDirtyWith(new CartonDirtyHint(this, CartonDirtyHint.Type.InstallConsumables));
     }
 
     /**
@@ -102,7 +102,7 @@ public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomai
     @KeyBehavior
     public void bindOrder(@NonNull OrderNo orderNo, @NonNull BigDecimal checkedQty) {
         this.orderNo = orderNo;
-        CaronDirtyHint hint = new CaronDirtyHint(this, CaronDirtyHint.Type.BindOrder);
+        CartonDirtyHint hint = new CartonDirtyHint(this, CartonDirtyHint.Type.BindOrder);
         hint.setCheckedQty(checkedQty);
         mergeDirtyWith(hint);
     }
@@ -111,7 +111,7 @@ public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomai
     public void transferFrom(ContainerItemBag containerItemBag) {
         List<CartonItem> cartonItems = CartonConverter.INSTANCE.containerItem2CartonItem(containerItemBag.items());
         itemBag.appendAll(cartonItems);
-        CaronDirtyHint hint = new CaronDirtyHint(this, CaronDirtyHint.Type.FromContainer);
+        CartonDirtyHint hint = new CartonDirtyHint(this, CartonDirtyHint.Type.FromContainer);
         mergeDirtyWith(hint);
     }
 
@@ -124,7 +124,7 @@ public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomai
         this.platform = platform;
         this.status = CartonStatus.Full;
         this.fulfillTime = LocalDateTime.now();
-        mergeDirtyWith(new CaronDirtyHint(this, CaronDirtyHint.Type.Fulfill));
+        mergeDirtyWith(new CartonDirtyHint(this, CartonDirtyHint.Type.Fulfill));
 
         // with transactional mailbox pattern
         CartonFulfilledEvent event = new CartonFulfilledEvent();
