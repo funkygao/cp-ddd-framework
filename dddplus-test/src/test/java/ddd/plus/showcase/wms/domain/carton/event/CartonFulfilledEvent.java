@@ -9,6 +9,7 @@ import java.util.Map;
 @KeyEvent(type = KeyEvent.Type.Local)
 public class CartonFulfilledEvent implements IFlowAutomationEvent {
     private String cartonNo;
+    private String warehouseNo;
     private Map<String, Object> reserved;
 
     @Override
