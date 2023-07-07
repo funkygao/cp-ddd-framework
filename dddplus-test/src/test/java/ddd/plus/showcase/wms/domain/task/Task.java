@@ -12,6 +12,7 @@ import ddd.plus.showcase.wms.domain.task.hint.TaskDirtyHint;
 import io.github.dddplus.dsl.KeyBehavior;
 import io.github.dddplus.dsl.KeyElement;
 import io.github.dddplus.dsl.KeyRelation;
+import io.github.dddplus.dsl.KeyRule;
 import io.github.dddplus.model.BaseAggregateRoot;
 import io.github.dddplus.model.DirtyMemento;
 import io.github.dddplus.model.IUnboundedDomainModel;
@@ -19,6 +20,8 @@ import io.github.dddplus.model.association.HasMany;
 import io.github.dddplus.model.spcification.Notification;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Set;
 
 /**
  * 复核任务.
@@ -61,6 +64,11 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
         this.platformNo = platformNo;
         this.operator = operator;
         mergeDirtyWith(new TaskDirtyHint(this).dirty("operator", "platform_no"));
+    }
+
+    @KeyRule
+    public Set<OrderNo> orderNoSet() {
+        return containerBag().orderNoSet();
     }
 
     @Override

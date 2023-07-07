@@ -9,7 +9,6 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.experimental.Delegate;
 
 /**
  * 拣货容器.
@@ -28,7 +27,6 @@ public class Container implements IDomainModel {
     @KeyElement(types = KeyElement.Type.Operational, byType = true)
     private ContainerType type;
 
-    @Delegate
     @KeyRelation(whom = ContainerItemBag.class, type = KeyRelation.Type.HasOne)
     private ContainerItemBag containerItemBag;
 

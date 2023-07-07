@@ -1,6 +1,7 @@
 package ddd.plus.showcase.wms.domain.task;
 
 import ddd.plus.showcase.wms.domain.order.OrderNo;
+import io.github.dddplus.dsl.KeyBehavior;
 import io.github.dddplus.dsl.KeyRelation;
 import io.github.dddplus.dsl.KeyRule;
 import io.github.dddplus.model.ListBag;
@@ -29,7 +30,7 @@ public class ContainerBag extends ListBag<Container> {
     public int totalSku() {
         int total = 0;
         for (Container container : items) {
-            total += container.totalSku();
+            total += container.getContainerItemBag().totalSku();
         }
         return total;
     }
@@ -39,34 +40,41 @@ public class ContainerBag extends ListBag<Container> {
      */
     @KeyRule
     public BigDecimal totalQty() {
-        return items.stream().map(Container::totalQty).reduce(BigDecimal.ZERO, BigDecimal::add);
+        return items.stream()
+                .map(Container::getContainerItemBag)
+                .map(ContainerItemBag::totalQty)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     @KeyRule
     public BigDecimal totalPendingQty() {
-        return items.stream().map(Container::totalPendingQty).reduce(BigDecimal.ZERO, BigDecimal::add);
+        return items.stream()
+                .map(Container::getContainerItemBag)
+                .map(ContainerItemBag::totalPendingQty)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    /**
-     * 待复核的所有容器明细.
-     */
-    @KeyRule
-    ContainerItemBagPending pendingItemBag() {
+    private ContainerItemBagPending pendingItemBag() {
         List<ContainerItem> containerItems = new ArrayList<>();
         for (Container container : items) {
-            containerItems.addAll(container.pendingItemBag().items());
+            containerItems.addAll(container.getContainerItemBag().pendingItems());
         }
         return new ContainerItemBagPending(ContainerItemBag.of(containerItems));
+    }
+
+    @KeyBehavior
+    ContainerItemBag confirmQty(BigDecimal qty) {
+        return pendingItemBag().confirmQty(qty);
     }
 
     /**
      * 所有的出库单号.
      */
     @KeyRule
-    public Set<OrderNo> orderNoSet() {
+    Set<OrderNo> orderNoSet() {
         Set<OrderNo> orderNos = new HashSet<>(size());
         for (Container container : items) {
-            orderNos.addAll(container.orderNoSet());
+            orderNos.addAll(container.getContainerItemBag().orderNoSet());
         }
         return orderNos;
     }
