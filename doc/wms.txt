@@ -1,4 +1,4 @@
-标注覆盖率：Class(54/64.8%) Method(97/41.2%) Property(183/27.9%) Statement(173)
+标注覆盖率：Class(57/61.4%) Method(101/40.6%) Property(190/26.8%) Statement(181)
 模型债：
 <<Aggregate: 客户出库单>>
 Order 客户的出库单.
@@ -141,5 +141,7 @@ FlowAutoExecutionConsumer
 TaskSubmittedConsumer
    消费接收复核任务(json)
 <<跨聚合复杂流程>>
+ObFlowAutomator
+   orchestrate(IFlowAutomationEvent) 
 <<领域事件>>
    CartonFulfilledEvent 
