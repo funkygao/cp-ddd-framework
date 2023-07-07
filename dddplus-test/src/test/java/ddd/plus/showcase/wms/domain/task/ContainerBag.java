@@ -27,7 +27,7 @@ public class ContainerBag extends ListBag<Container> {
      * 该容器的总商品种类(品数).
      */
     @KeyRule
-    public int totalSku() {
+    int totalSku() {
         int total = 0;
         for (Container container : items) {
             total += container.getContainerItemBag().totalSku();
@@ -39,7 +39,7 @@ public class ContainerBag extends ListBag<Container> {
      * 该容器的总要货量.
      */
     @KeyRule
-    public BigDecimal totalQty() {
+    BigDecimal totalQty() {
         return items.stream()
                 .map(Container::getContainerItemBag)
                 .map(ContainerItemBag::totalQty)
@@ -47,7 +47,7 @@ public class ContainerBag extends ListBag<Container> {
     }
 
     @KeyRule
-    public BigDecimal totalPendingQty() {
+    BigDecimal totalPendingQty() {
         return items.stream()
                 .map(Container::getContainerItemBag)
                 .map(ContainerItemBag::totalPendingQty)

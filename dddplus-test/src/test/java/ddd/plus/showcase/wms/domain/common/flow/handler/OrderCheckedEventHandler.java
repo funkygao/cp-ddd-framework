@@ -13,7 +13,7 @@ public class OrderCheckedEventHandler extends AbstractEventHandler {
     private IOrderRepository orderRepository;
 
     @Override
-    public void processMyEvent(IFlowAutomationEvent request) {
+    protected void processMyEvent(IFlowAutomationEvent request) {
         OrderCheckedEvent event = (OrderCheckedEvent) request;
         Order order = orderRepository.mustGet(OrderNo.of(event.getOrderNo()), WarehouseNo.of(event.getWarehouseNo()));
         if (!order.constraint().isAutoPack()) {

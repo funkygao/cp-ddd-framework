@@ -27,10 +27,6 @@ public class WmsException extends RuntimeException {
         ;
 
         private String errorCode;
-
-        public String error() {
-            return errorCode;
-        }
     }
 
 }

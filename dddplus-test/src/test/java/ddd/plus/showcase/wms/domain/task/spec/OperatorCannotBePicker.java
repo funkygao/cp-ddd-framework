@@ -22,7 +22,7 @@ public class OperatorCannotBePicker extends AbstractSpecification<Task> {
 
     public boolean isSatisfiedBy(Task task, Notification notification) {
         if (!masterDataGateway.allowPerformChecking(candidate)) {
-            notification.addError(WmsException.Code.OperatorDisallowed.error());
+            notification.addError(WmsException.Code.OperatorDisallowed.getErrorCode());
             return false;
         }
 

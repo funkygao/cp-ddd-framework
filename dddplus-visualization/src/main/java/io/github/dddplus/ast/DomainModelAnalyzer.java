@@ -2,13 +2,11 @@ package io.github.dddplus.ast;
 
 import io.github.dddplus.ast.algorithm.JaccardModelSimilarity;
 import io.github.dddplus.ast.model.*;
+import io.github.dddplus.ast.report.EncapsulationReport;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Domain model analyzer, generating {@link ReverseEngineeringModel}.
@@ -55,6 +53,17 @@ public class DomainModelAnalyzer {
 
     public ReverseEngineeringModel analyze() {
         return analyze(null);
+    }
+
+    public EncapsulationReport analyzeEncapsulation(FileWalker.Filter filter) {
+        FileWalker.Filter actualFilter = new ActualFilter(filter);
+        EncapsulationReport report = new EncapsulationReport();
+        for (File dir : dirs) {
+            new FileWalker(actualFilter, (level, path, file) -> {
+                new PublicMethodAstNodeVisitor().visit(FileWalker.silentParse(file), report);
+            }).walkFrom(dir);
+        }
+        return report;
     }
 
     public ReverseEngineeringModel analyze(FileWalker.Filter filter) {

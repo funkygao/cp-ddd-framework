@@ -50,11 +50,11 @@ public class ContainerItem implements IDomainModel {
      * 复核作业发现的差异数量.
      */
     @KeyRule
-    public BigDecimal diffQty() {
+    BigDecimal diffQty() {
         return expectedQty.subtract(givenQty);
     }
 
-    public boolean done() {
+    boolean done() {
         return pendingQty.compareTo(BigDecimal.ZERO) == 0;
     }
 

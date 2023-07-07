@@ -4,6 +4,7 @@ import io.github.dddplus.ast.DomainModelAnalyzer;
 import io.github.dddplus.ast.DomainModelAnalyzerTest;
 import io.github.dddplus.ast.FileWalker;
 import io.github.dddplus.ast.ReverseEngineeringModel;
+import io.github.dddplus.ast.report.EncapsulationReport;
 import io.github.dddplus.ast.view.PlainTextBuilder;
 import io.github.dddplus.ast.view.PlantUmlBuilder;
 import org.junit.jupiter.api.Disabled;
@@ -53,6 +54,14 @@ class WmsReverseModelingTest {
         new PlainTextBuilder()
                 .build(model)
                 .render("../doc/wms.txt");
+    }
+
+    @Test
+    void generateEncapsulationReport() throws IOException {
+        EncapsulationReport report = new DomainModelAnalyzer()
+                .scan(root)
+                .analyzeEncapsulation(domainLayerFilter);
+        report.dump(new File("../doc/encapsulation.txt"));
     }
 
     private static class DomainLayerFilter implements FileWalker.Filter {

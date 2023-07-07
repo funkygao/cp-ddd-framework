@@ -33,7 +33,7 @@ public class OrderLine implements IDomainModel {
     private BigDecimal shortageQty = BigDecimal.ZERO;
 
     @KeyRule(remark = "要货量-缺货量")
-    public BigDecimal expectedQty() {
+    BigDecimal expectedQty() {
         return qty.subtract(shortageQty);
     }
 

@@ -1,4 +1,4 @@
-标注覆盖率：Class(60/61.7%) Method(110/40.9%) Property(201/25.4%) Statement(195)
+标注覆盖率：Class(59/62.7%) Method(105/47.6%) Property(203/25.1%) Statement(201)
 模型债：
 <<Aggregate: 客户出库单>>
 Order 客户的出库单.
@@ -11,6 +11,7 @@ Order 客户的出库单.
       checkedBy(Operator) 
       recommendPackQty() 推荐该订单使用几个包裹：Pack.
    [规则]
+      totalExpectedQty() 
       recommendedPlatform() 该订单已经被推荐到哪一个复核台.
 OrderCartons
    [行为]
@@ -53,6 +54,7 @@ Carton 纸箱，它会成为包裹.
    Location      Platform
    [行为]
       bindOrder() 
+      deductConsumableInventory() 
       fulfill() 箱满了
       installConsumables() 向纸箱添加耗材.
       transferFrom(CheckResult) 
@@ -77,6 +79,7 @@ Pallet
       fulfill() 
 CartonBag
    [行为]
+      deductConsumableInventory() 
       fulfill() 
       putOnPallet() 
 <<Aggregate: 通用子域>>
@@ -109,6 +112,9 @@ Task 复核任务.
    [行为]
       claimedWith() 
    [规则]
+      totalSku() 
+      totalQty() 
+      totalPendingQty() 
       orderNoSet() 
 TaskBag
 TaskCartons

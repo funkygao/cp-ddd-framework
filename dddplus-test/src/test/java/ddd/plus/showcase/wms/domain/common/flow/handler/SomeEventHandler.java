@@ -4,7 +4,7 @@ import ddd.plus.showcase.wms.domain.carton.event.IFlowAutomationEvent;
 
 public class SomeEventHandler extends AbstractEventHandler {
     @Override
-    public void processMyEvent(IFlowAutomationEvent event) {
+    protected void processMyEvent(IFlowAutomationEvent event) {
 
     }
 

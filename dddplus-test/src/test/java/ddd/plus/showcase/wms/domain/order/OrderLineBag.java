@@ -20,11 +20,9 @@ public class OrderLineBag extends ListBag<OrderLine> {
      * <p>要货量 - 缺货量</p>
      */
     @KeyRule
-    public BigDecimal totalExpectedQty() {
-        BigDecimal total = BigDecimal.ZERO;
-        for (OrderLine orderLine : items) {
-            total = total.add(orderLine.expectedQty());
-        }
-        return total;
+    BigDecimal totalExpectedQty() {
+        return items.stream()
+                .map(OrderLine::expectedQty)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

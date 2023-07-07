@@ -26,6 +26,7 @@ import lombok.*;
 import lombok.experimental.Delegate;
 import lombok.extern.slf4j.Slf4j;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -110,6 +111,11 @@ public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainM
 
     public OrderOfPresale asPresale() {
         return new OrderOfPresale(this);
+    }
+
+    @KeyRule
+    public BigDecimal totalExpectedQty() {
+        return orderLineBag.totalExpectedQty();
     }
 
     /**
