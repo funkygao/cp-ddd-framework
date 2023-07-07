@@ -13,7 +13,7 @@ public class CartonFulfilledEventHandler extends AbstractEventHandler {
     private ICartonRepository cartonRepository;
 
     @Override
-    public void processMyEvent(IFlowAutomationEvent request) {
+    protected void processMyEvent(IFlowAutomationEvent request) {
         CartonFulfilledEvent event = (CartonFulfilledEvent) request;
         Carton carton = cartonRepository.mustGet(CartonNo.of(event.getCartonNo()),
                 WarehouseNo.of(event.getWarehouseNo()));

@@ -4,9 +4,7 @@ import ddd.plus.showcase.wms.app.UnitOfWork;
 import ddd.plus.showcase.wms.app.convert.CartonAppConverter;
 import ddd.plus.showcase.wms.app.service.dto.*;
 import ddd.plus.showcase.wms.app.service.dto.base.ApiResponse;
-import ddd.plus.showcase.wms.domain.carton.Carton;
-import ddd.plus.showcase.wms.domain.carton.CartonNo;
-import ddd.plus.showcase.wms.domain.carton.ICartonRepository;
+import ddd.plus.showcase.wms.domain.carton.*;
 import ddd.plus.showcase.wms.domain.carton.spec.CartonNotFull;
 import ddd.plus.showcase.wms.domain.common.*;
 import ddd.plus.showcase.wms.domain.common.gateway.IMasterDataGateway;
@@ -106,7 +104,7 @@ public class CheckingAppService implements IApplicationService {
         }
 
         // 通过order.tasks()这个关联对象指针获取该订单的所有任务很直观
-        // 如果 TaskRepository.listTasks(OrderNo)，这种关联关系被技术割裂
+        // 如果 TaskRepository.listTasks(OrderNo)，这种关联关系被断开
         TaskBag tasksOfOrder = order.tasks().taskBag();
         List<Platform> platforms = tasksOfOrder.platforms();
         if (!platforms.isEmpty()) {
@@ -141,7 +139,7 @@ public class CheckingAppService implements IApplicationService {
         uow.persist(taskOfContainerPending, canceledOrderBag);
 
         if (request.getRecommendPackQty()) {
-            return ApiResponse.ofOk(pendingOrderBag.anyItem().recommendPackQty());
+            return ApiResponse.ofOk(pendingOrderBag.anyOne().recommendPackQty());
         }
 
         return ApiResponse.ofOk(0);
@@ -168,15 +166,15 @@ public class CheckingAppService implements IApplicationService {
 
         // 此时复核员已经领取任务了，客单是不允许取消的，因此不必检查逆向逻辑
 
-        ContainerItemBag checkResult = taskOfSkuPending.confirmQty(qty, operator,
+        CheckResult checkResult = taskOfSkuPending.confirmQty(qty, operator,
                 Platform.of(request.getPlatformNo()));
 
         // 装箱，物理世界里，复核员已经清点数量，并把货品从容器里转移到箱，但人可能放错货品，运营要管控
         Carton carton = cartonRepository.mustGet(CartonNo.of(request.getCartonNo()), warehouseNo);
         carton.assureSatisfied(new CartonNotFull()
-                .and(carton.cartonizationRule())); // 业务规则本身也可以是规约
+                .and(carton.cartonizationRule()));
         carton.bindOrder(orderNo, qty);
-        carton.transferFrom(checkResult); // TODO
+        carton.transferFrom(checkResult);
 
         uow.persist(taskOfSkuPending, carton);
         return ApiResponse.ofOk();
@@ -188,16 +186,32 @@ public class CheckingAppService implements IApplicationService {
     @KeyUsecase(in = {"orderNo"})
     public ApiResponse<Void> checkByOrder(CheckByOrderRequest request) throws WmsException {
         WarehouseNo warehouseNo = WarehouseNo.of(request.getWarehouseNo());
+        Operator operator = Operator.of(request.getOperatorNo());
+
         Order order = orderRepository.mustGet(OrderNo.of(request.getOrderNo()), warehouseNo);
         order.assureSatisfied(new OrderUseOnePack()
                 .and(new OrderNotCartonizedYet()));
 
         TaskOfOrderPending taskOfOrderPending = taskRepository.mustGet(order.getOrderNo(), warehouseNo);
-        taskOfOrderPending.confirmQty(Operator.of(request.getOperatorNo()), Platform.of(request.getPlatformNo()));
+        taskOfOrderPending.confirmQty(operator, Platform.of(request.getPlatformNo()));
 
-        List<Carton> cartonList = CartonAppConverter.INSTANCE.fromDto(request);
-        cartonList.stream().forEach(c -> c.fulfill(Operator.of(request.getOperatorNo()), Platform.of(request.getPlatformNo())));
+        CartonBag cartonBag = CartonBag.of(CartonAppConverter.INSTANCE.fromDto(request));
+        cartonBag.fulfill(Operator.of(request.getOperatorNo()), Platform.of(request.getPlatformNo()));
+
+        if (request.getPalletNo() != null) {
+            // 物理世界里：把这些纸箱放到的某一个栈板上
+            PalletNo palletNo = PalletNo.of(request.getPalletNo());
+            cartonBag.putOnPallet(palletNo);
+        }
+
+        order.checkedBy(operator);
+
+        if (order.constraint().isCollectConsumables()) {
+            cartonBag.deductConsumableInventory();
+        }
+
         // ...
+        uow.persist(taskOfOrderPending, order, cartonBag);
         return ApiResponse.ofOk();
     }
 

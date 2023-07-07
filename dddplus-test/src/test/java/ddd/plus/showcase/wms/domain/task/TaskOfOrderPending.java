@@ -2,6 +2,7 @@ package ddd.plus.showcase.wms.domain.task;
 
 import ddd.plus.showcase.wms.domain.common.Operator;
 import ddd.plus.showcase.wms.domain.common.Platform;
+import ddd.plus.showcase.wms.domain.order.Order;
 import ddd.plus.showcase.wms.domain.order.OrderNo;
 import io.github.dddplus.dsl.KeyBehavior;
 import io.github.dddplus.dsl.KeyRelation;
@@ -17,7 +18,8 @@ public class TaskOfOrderPending extends BoundedDomainModel<Task> {
     }
 
     @KeyBehavior
-    public void confirmQty(Operator operator, Platform platformNo) {
-
+    public CheckResult confirmQty(Operator operator, Platform platform) {
+        Order order = unbounded().orders().pendingOrder(orderNo);
+        return null;
     }
 }

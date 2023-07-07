@@ -1,11 +1,14 @@
 package ddd.plus.showcase.wms.app;
 
 import ddd.plus.showcase.wms.domain.carton.Carton;
+import ddd.plus.showcase.wms.domain.carton.CartonBag;
 import ddd.plus.showcase.wms.domain.carton.ICartonRepository;
 import ddd.plus.showcase.wms.domain.order.IOrderRepository;
+import ddd.plus.showcase.wms.domain.order.Order;
 import ddd.plus.showcase.wms.domain.order.OrderBagCanceled;
 import ddd.plus.showcase.wms.domain.task.ITaskRepository;
 import ddd.plus.showcase.wms.domain.task.TaskOfContainerPending;
+import ddd.plus.showcase.wms.domain.task.TaskOfOrderPending;
 import ddd.plus.showcase.wms.domain.task.TaskOfSkuPending;
 import io.github.dddplus.model.IUnitOfWork;
 import lombok.NonNull;
@@ -27,6 +30,13 @@ public class UnitOfWork implements IUnitOfWork {
     public void persist(@NonNull TaskOfSkuPending task, @NonNull Carton carton) {
         taskRepository.save(task);
         cartonRepository.save(carton);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void persist(@NonNull TaskOfOrderPending task, @NonNull Order order, @NonNull CartonBag cartonBag) {
+        orderRepository.save(order);
+        taskRepository.save(task);
+        cartonRepository.save(cartonBag);
     }
 
     @Transactional(rollbackFor = Exception.class)

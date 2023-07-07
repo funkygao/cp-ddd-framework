@@ -9,9 +9,14 @@ public class Pallet {
     private PalletNo palletNo;
     @KeyElement(types = KeyElement.Type.Structural, byType = true)
     private TaskNo taskNo;
+    private Integer cartonTotal;
 
     @KeyBehavior
     void fulfill() {
 
+    }
+
+    void addCarton() {
+        cartonTotal++;
     }
 }

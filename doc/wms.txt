@@ -1,4 +1,4 @@
-标注覆盖率：Class(57/61.4%) Method(101/40.6%) Property(190/26.8%) Statement(181)
+标注覆盖率：Class(59/62.7%) Method(105/47.6%) Property(203/25.1%) Statement(201)
 模型债：
 <<Aggregate: 客户出库单>>
 Order 客户的出库单.
@@ -8,8 +8,10 @@ Order 客户的出库单.
    Operational   OrderConstraint
    Contextual    WaybillNo/OFC随单下发
    [行为]
+      checkedBy(Operator) 
       recommendPackQty() 推荐该订单使用几个包裹：Pack.
    [规则]
+      totalExpectedQty() 
       recommendedPlatform() 该订单已经被推荐到哪一个复核台.
 OrderCartons
    [行为]
@@ -52,9 +54,10 @@ Carton 纸箱，它会成为包裹.
    Location      Platform
    [行为]
       bindOrder() 
+      deductConsumableInventory() 
       fulfill() 箱满了
       installConsumables() 向纸箱添加耗材.
-      transferFrom(ContainerItemBag) 
+      transferFrom(CheckResult) 
    [规则]
       cartonizationRule() 装箱规则，利用gateway延迟加载，规则也是规约.
 CartonItem
@@ -74,6 +77,11 @@ Pallet
    Structural    PalletNo TaskNo
    [行为]
       fulfill() 
+CartonBag
+   [行为]
+      deductConsumableInventory() 
+      fulfill() 
+      putOnPallet() 
 <<Aggregate: 通用子域>>
 Sku 货品.
    [属性]
@@ -104,12 +112,17 @@ Task 复核任务.
    [行为]
       claimedWith() 
    [规则]
+      totalSku() 
+      totalQty() 
+      totalPendingQty() 
       orderNoSet() 
 TaskBag
 TaskCartons
    [行为]
       contains(UniqueCode) 该任务下所有纸箱里是否已经有该唯一码
 TaskOfContainerPending
+   [行为]
+      confirmQty() 
 TaskOfOrderPending
    [行为]
       confirmQty() 
@@ -144,4 +157,5 @@ TaskSubmittedConsumer
 ObFlowAutomator
    orchestrate(IFlowAutomationEvent) 
 <<领域事件>>
+   OrderCheckedEvent 
    CartonFulfilledEvent 

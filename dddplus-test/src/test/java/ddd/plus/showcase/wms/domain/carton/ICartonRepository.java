@@ -8,4 +8,6 @@ public interface ICartonRepository extends IRepository {
     Carton mustGet(CartonNo cartonNo, WarehouseNo warehouseNo) throws WmsException;
 
     void save(Carton carton);
+
+    void save(CartonBag cartonBag);
 }

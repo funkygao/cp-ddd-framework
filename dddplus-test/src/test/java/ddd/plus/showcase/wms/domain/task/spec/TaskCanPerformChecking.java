@@ -11,7 +11,7 @@ public class TaskCanPerformChecking extends AbstractSpecification<Task> {
     @Override
     public boolean isSatisfiedBy(Task task, Notification notification) {
         if (task.status().canPerformChecking()) {
-            notification.addError(WmsException.Code.TaskCannotPerform.error());
+            notification.addError(WmsException.Code.TaskCannotPerform.getErrorCode());
             return false;
         }
 

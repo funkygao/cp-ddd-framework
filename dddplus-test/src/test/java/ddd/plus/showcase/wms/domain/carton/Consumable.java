@@ -7,9 +7,12 @@ import ddd.plus.showcase.wms.domain.order.OrderNo;
 import ddd.plus.showcase.wms.domain.task.TaskNo;
 import io.github.dddplus.dsl.KeyElement;
 import io.github.dddplus.dsl.KeyRelation;
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NonNull;
 
 @KeyRelation(whom = Sku.class, type = KeyRelation.Type.Extends)
+@Getter(AccessLevel.PACKAGE)
 public class Consumable extends Sku {
     @KeyElement(types = KeyElement.Type.Structural, byType = true)
     private TaskNo taskNo;
@@ -20,6 +23,8 @@ public class Consumable extends Sku {
     @KeyElement(types = KeyElement.Type.Location, byType = true)
     private Platform platform;
     private Operator operator;
+    // 该耗材是否有库存管理
+    private boolean inventory;
 
     protected Consumable(@NonNull String skuNo) {
         super(skuNo);
