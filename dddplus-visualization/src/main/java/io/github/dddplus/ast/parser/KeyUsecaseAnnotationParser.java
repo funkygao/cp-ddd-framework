@@ -42,12 +42,16 @@ public class KeyUsecaseAnnotationParser {
         for (MemberValuePair memberValuePair : normalAnnotationExpr.getPairs()) {
             switch (memberValuePair.getNameAsString()) {
                 case "name":
-                    this.methodName = AnnotationFieldParser.stringFieldValue(memberValuePair);
+                    this.methodName = AnnotationFieldParser.singleFieldValue(memberValuePair);
                     entry.setMethodName(this.methodName);
                     break;
 
                 case "remark":
-                    entry.setRemark(AnnotationFieldParser.stringFieldValue(memberValuePair));
+                    entry.setRemark(AnnotationFieldParser.singleFieldValue(memberValuePair));
+                    break;
+
+                case "consumesKeyEvent":
+                    entry.setKeyEvent(AnnotationFieldParser.singleFieldValue(memberValuePair));
                     break;
 
                 case "in":

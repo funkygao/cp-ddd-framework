@@ -25,7 +25,6 @@ import java.lang.annotation.*;
  */
 @Target({ElementType.TYPE, ElementType.FIELD})
 @Retention(RetentionPolicy.SOURCE)
-@Documented
 @Repeatable(KeyRelations.class)
 public @interface KeyRelation {
 

@@ -12,6 +12,7 @@ import ddd.plus.showcase.wms.domain.task.hint.TaskDirtyHint;
 import io.github.dddplus.dsl.KeyBehavior;
 import io.github.dddplus.dsl.KeyElement;
 import io.github.dddplus.dsl.KeyRelation;
+import io.github.dddplus.dsl.KeyRule;
 import io.github.dddplus.model.BaseAggregateRoot;
 import io.github.dddplus.model.DirtyMemento;
 import io.github.dddplus.model.IUnboundedDomainModel;
@@ -19,6 +20,8 @@ import io.github.dddplus.model.association.HasMany;
 import io.github.dddplus.model.spcification.Notification;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Set;
 
 /**
  * 复核任务.
@@ -40,23 +43,46 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
     @KeyElement(types = KeyElement.Type.Lifecycle, byType = true)
     private TaskStatus status;
 
-    public TaskStatus status() {
-        return status;
-    }
-
     @KeyElement(types = KeyElement.Type.Location, byType = true)
     Platform platformNo;
-    // 该复核任务由哪一个操作员完成：1个任务只能1人完成
+    // 1个任务只能1人完成
     Operator operator;
     @Getter
     private WarehouseNo warehouseNo;
 
+    @KeyRelation(whom = ContainerBag.class, type = KeyRelation.Type.HasOne)
+    private ContainerBag containerBag;
+
+    @KeyRelation(whom = TaskOrders.class, type = KeyRelation.Type.Associate)
+    private TaskOrders orders;
+
+    @KeyRelation(whom = TaskCartons.class, type = KeyRelation.Type.Associate)
+    private TaskCartons cartons;
+
+    @KeyBehavior
+    public void claimedWith(Operator operator, Platform platformNo) {
+        this.platformNo = platformNo;
+        this.operator = operator;
+        mergeDirtyWith(new TaskDirtyHint(this).dirty("operator", "platform_no"));
+    }
+
+    @KeyRule
+    public Set<OrderNo> orderNoSet() {
+        return containerBag().orderNoSet();
+    }
+
+    @Override
+    protected void whenNotSatisfied(Notification notification) {
+        throw new WmsException(notification.first());
+    }
+
+    public TaskStatus status() {
+        return status;
+    }
+
     DirtyMemento dirtyMemento() {
         return this.memento;
     }
-
-    @KeyRelation(whom = ContainerBag.class, type = KeyRelation.Type.HasOne)
-    private ContainerBag containerBag;
 
     public ContainerBag containerBag() {
         return containerBag;
@@ -65,10 +91,6 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
     public void injectContainerBag(@NonNull Class<? extends ITaskRepository> __, ContainerBag containerBag) {
         this.containerBag = containerBag;
     }
-
-    // ============
-    // associations
-    // ============
 
     /**
      * 针对关联关系显式建模.
@@ -87,9 +109,6 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
         Order pendingOrder(OrderNo orderNo) throws WmsException;
     }
 
-    @KeyRelation(whom = TaskOrders.class, type = KeyRelation.Type.Associate)
-    private TaskOrders orders;
-
     public TaskOrders orders() {
         return orders;
     }
@@ -106,9 +125,6 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
         boolean contains(@NonNull UniqueCode uniqueCode);
     }
 
-    @KeyRelation(whom = TaskCartons.class, type = KeyRelation.Type.Associate)
-    private TaskCartons cartons;
-
     public TaskCartons cartons() {
         return cartons;
     }
@@ -116,17 +132,4 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
     public void injectCartons(@NonNull Class<? extends ITaskRepository> __, TaskCartons taskCartons) {
         this.cartons = taskCartons;
     }
-
-    @Override
-    protected void whenNotSatisfied(Notification notification) {
-        throw new WmsException(notification.first());
-    }
-
-    @KeyBehavior
-    public void claimedWith(Operator operator, Platform platformNo) {
-        this.platformNo = platformNo;
-        this.operator = operator;
-        mergeDirty(new TaskDirtyHint(this).dirty("operator", "platform_no"));
-    }
-
 }

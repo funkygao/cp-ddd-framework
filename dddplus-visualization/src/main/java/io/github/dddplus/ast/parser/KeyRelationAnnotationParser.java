@@ -33,11 +33,11 @@ public class KeyRelationAnnotationParser {
         for (MemberValuePair memberValuePair : normalAnnotationExpr.getPairs()) {
             switch (memberValuePair.getNameAsString()) {
                 case "type":
-                    entry.setTypeInString(AnnotationFieldParser.stringFieldValue(memberValuePair));
+                    entry.setTypeInString(AnnotationFieldParser.singleFieldValue(memberValuePair));
                     break;
 
                 case "remark":
-                    entry.setRemark(AnnotationFieldParser.stringFieldValue(memberValuePair));
+                    entry.setRemark(AnnotationFieldParser.singleFieldValue(memberValuePair));
                     break;
 
                 case "contextual":
@@ -57,7 +57,7 @@ public class KeyRelationAnnotationParser {
 
                     这需要处理一下，因为 KeyBehavior 注册时，entry.className 是 OrderLines，而不是 Order.OrderLines
                      */
-                    String rightClazz = AnnotationFieldParser.stringFieldValue(memberValuePair);
+                    String rightClazz = AnnotationFieldParser.singleFieldValue(memberValuePair);
                     if (rightClazz.contains(".")) {
                         rightClazz = rightClazz.substring(rightClazz.lastIndexOf('.') + 1);
                     }

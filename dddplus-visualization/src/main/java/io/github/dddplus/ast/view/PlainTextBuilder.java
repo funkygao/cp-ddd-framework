@@ -183,13 +183,18 @@ public class PlainTextBuilder implements IViewBuilder<PlainTextBuilder> {
                 append(entry.displayOut()).append(SPACE);
             }
 
-            append(entry.displayNameWithRemark())
-                    .append("(")
-                    .append(entry.displayIn())
-                    .append(")")
-                    .append(SPACE)
-                    .append(entry.getJavadoc())
-                    .append(NEWLINE);
+            if (entry.isConsumer()) {
+                append("on ").append(entry.getKeyEvent());
+            } else {
+                append(entry.displayNameWithRemark())
+                        .append("(")
+                        .append(entry.displayIn())
+                        .append(")");
+            }
+            if (entry.hasJavadoc()) {
+                append(SPACE).append(entry.getJavadoc());
+            }
+            append(NEWLINE);
         }
         return this;
     }

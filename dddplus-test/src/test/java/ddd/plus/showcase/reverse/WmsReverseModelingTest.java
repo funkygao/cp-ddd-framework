@@ -13,8 +13,8 @@ import java.io.File;
 import java.io.IOException;
 
 class WmsReverseModelingTest {
-    private final TargetDomainSource targetDomainSource = new TargetDomainSource();
-    private final TargetTechSource targetTechSource = new TargetTechSource();
+    private final DomainLayerFilter domainLayerFilter = new DomainLayerFilter();
+    private final InfrastructureLayerFilter infrastructureLayerFilter = new InfrastructureLayerFilter();
     private final File root = DomainModelAnalyzerTest.moduleRoot("dddplus-test");
 
     @Test
@@ -22,7 +22,7 @@ class WmsReverseModelingTest {
     void visualizeDomainModel() throws IOException {
         ReverseEngineeringModel model = new DomainModelAnalyzer()
                 .scan(root)
-                .analyze(targetDomainSource);
+                .analyze(domainLayerFilter);
         new PlantUmlBuilder()
                 .direction(PlantUmlBuilder.Direction.TopToBottom)
                 .skinParamPolyline()
@@ -35,7 +35,7 @@ class WmsReverseModelingTest {
     void highlightTheTechImplementation() throws IOException {
         ReverseEngineeringModel model = new DomainModelAnalyzer()
                 .scan(root)
-                .analyze(targetTechSource);
+                .analyze(infrastructureLayerFilter);
         new PlantUmlBuilder()
                 .title("技术实现细节指引")
                 .direction(PlantUmlBuilder.Direction.TopToBottom)
@@ -49,13 +49,13 @@ class WmsReverseModelingTest {
     void generateForwardModel() throws IOException {
         ReverseEngineeringModel model = new DomainModelAnalyzer()
                 .scan(root)
-                .analyze(targetDomainSource);
+                .analyze(domainLayerFilter);
         new PlainTextBuilder()
                 .build(model)
                 .render("../doc/wms.txt");
     }
 
-    private static class TargetDomainSource implements FileWalker.Filter {
+    private static class DomainLayerFilter implements FileWalker.Filter {
         @Override
         public boolean interested(int level, String path, File file) {
             // 去掉(单测，基础设施层)
@@ -63,9 +63,10 @@ class WmsReverseModelingTest {
         }
     }
 
-    private static class TargetTechSource implements FileWalker.Filter {
+    private static class InfrastructureLayerFilter implements FileWalker.Filter {
         @Override
         public boolean interested(int level, String path, File file) {
+            // 去掉(单测，领域层)，只保留基础设施层
             return path.contains("showcase") && path.contains("wms") && !path.contains("Test") && path.contains("infra");
         }
     }

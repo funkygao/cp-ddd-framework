@@ -17,13 +17,13 @@ class AnnotationFieldParser {
             }
         } else {
             // single value
-            result.add(stringFieldValue(memberValuePair));
+            result.add(singleFieldValue(memberValuePair));
         }
 
         return result;
     }
 
-    static String stringFieldValue(MemberValuePair memberValuePair) {
+    static String singleFieldValue(MemberValuePair memberValuePair) {
         Expression expression = memberValuePair.getValue();
         return expressionValue(expression);
     }

@@ -46,16 +46,16 @@ public class KeyFlowAnnotationParser {
         for (MemberValuePair memberValuePair : normalAnnotationExpr.getPairs()) {
             switch (memberValuePair.getNameAsString()) {
                 case "name":
-                    entry.setMethodName(AnnotationFieldParser.stringFieldValue(memberValuePair));
+                    entry.setMethodName(AnnotationFieldParser.singleFieldValue(memberValuePair));
                     break;
 
                 case "remark":
-                    entry.setRemark(AnnotationFieldParser.stringFieldValue(memberValuePair));
+                    entry.setRemark(AnnotationFieldParser.singleFieldValue(memberValuePair));
                     break;
 
                 case "actor":
                     // Class[] actor，只是为了注解值是可选的，实际使用只会用1个
-                    entry.setActor(AnnotationFieldParser.stringFieldValue(memberValuePair));
+                    entry.setActor(AnnotationFieldParser.singleFieldValue(memberValuePair));
                     break;
 
                 case "args":

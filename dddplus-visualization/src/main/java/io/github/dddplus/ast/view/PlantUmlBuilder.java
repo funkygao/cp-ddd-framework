@@ -256,6 +256,9 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
             if (!entry.displayOut().isEmpty()) {
                 append(entry.displayOut()).append(SPACE);
             }
+            if (entry.isConsumer()) {
+                // TODO
+            }
             append(entry.displayNameWithRemark())
                     .append(BRACKET_OPEN)
                     .append(entry.displayIn())

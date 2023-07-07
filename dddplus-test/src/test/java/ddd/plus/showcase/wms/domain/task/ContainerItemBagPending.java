@@ -1,7 +1,9 @@
 package ddd.plus.showcase.wms.domain.task;
 
 import io.github.dddplus.model.BoundedDomainModel;
-import lombok.experimental.Delegate;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 class ContainerItemBagPending extends BoundedDomainModel<ContainerItemBag> {
 
@@ -9,9 +11,12 @@ class ContainerItemBagPending extends BoundedDomainModel<ContainerItemBag> {
         this.model = bag;
     }
 
-    @Delegate
-    ContainerItemBag model() {
-        return unbounded();
+    ContainerItemBag confirmQty(BigDecimal qty) {
+        return model.confirmQty(qty);
+    }
+
+    List<ContainerItem> items() {
+        return model.items();
     }
 
 }

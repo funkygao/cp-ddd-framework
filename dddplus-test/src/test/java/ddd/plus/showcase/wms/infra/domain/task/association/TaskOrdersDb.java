@@ -26,7 +26,7 @@ public class TaskOrdersDb implements Task.TaskOrders {
     public OrderBag pendingOrders() {
         return dao.query("select * from ob_order where warehouse_no=? and order_no in ? and status in ?",
                 task.getWarehouseNo().value(),
-                task.containerBag().orderNoSet(),
+                task.orderNoSet(),
                 TaskStatus.allowCheckStatus());
     }
 
@@ -36,7 +36,7 @@ public class TaskOrdersDb implements Task.TaskOrders {
     @Override
     @KeyBehavior
     public Order pendingOrder(OrderNo orderNo) throws WmsException {
-        if (!task.containerBag().orderNoSet().contains(orderNo)) {
+        if (!task.orderNoSet().contains(orderNo)) {
             // 该出库单不属于该任务
             throw new WmsException(WmsException.Code.InvalidOrderNo);
         }

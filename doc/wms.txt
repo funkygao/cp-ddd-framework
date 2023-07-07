@@ -1,4 +1,4 @@
-标注覆盖率：Class(52/65.4%) Method(99/38.4%) Property(177/28.8%) Statement(164)
+标注覆盖率：Class(54/64.8%) Method(97/41.2%) Property(183/27.9%) Statement(173)
 模型债：
 <<Aggregate: 客户出库单>>
 Order 客户的出库单.
@@ -8,7 +8,7 @@ Order 客户的出库单.
    Operational   OrderConstraint
    Contextual    WaybillNo/OFC随单下发
    [行为]
-      asPresale() 切换到预售场景.
+      recommendPackQty() 推荐该订单使用几个包裹：Pack.
    [规则]
       recommendedPlatform() 该订单已经被推荐到哪一个复核台.
 OrderCartons
@@ -53,8 +53,8 @@ Carton 纸箱，它会成为包裹.
    [行为]
       bindOrder() 
       fulfill() 箱满了
+      installConsumables() 向纸箱添加耗材.
       transferFrom(ContainerItemBag) 
-      useConsumables() 向纸箱添加耗材.
    [规则]
       cartonizationRule() 装箱规则，利用gateway延迟加载，规则也是规约.
 CartonItem
@@ -85,6 +85,13 @@ Container 拣货容器.
    Operational   ContainerType
    DCU           containerNo/扫描枪可扫
 ContainerBag
+   [行为]
+      confirmQty() 
+   [规则]
+      totalSku() 该容器的总商品种类(品数).
+      totalQty() 该容器的总要货量.
+      totalPendingQty() 
+      orderNoSet() 所有的出库单号.
 ContainerItem 拣货容器里的商品和数量.
    [属性]
    Structural    OrderLineNo Sku
@@ -96,6 +103,8 @@ Task 复核任务.
    Location      Platform
    [行为]
       claimedWith() 
+   [规则]
+      orderNoSet() 
 TaskBag
 TaskCartons
    [行为]
@@ -120,14 +129,17 @@ ShippingManifest
    Structural    Carrier
    Reserved      extInfo
 <<用户交互>>
-ManualCheckAppService
+CheckingAppService
    recommendPlatformByTaskBacklog(taskNo) 提升拣货员去哪个复核台：按任务积压情况
    recommendPlatformByOrder(orderNo) 提升拣货员去哪个复核台：按订单
    claimTask(containerNo) 复核员扫描容器领取复核任务.
    checkBySku(qty,skuNo) 复核装箱一体化：按货品维度.
    checkByOrder(orderNo) 把一个出库单的所有货品一次性放到入参指定的纸箱：爆品订单复核
    fulfillCarton(cartonNo,consumables,orderNo) 复核员把拣货容器的货品放入箱，并使用耗材以便运输安全，该过程发现箱已满.
+FlowAutoExecutionConsumer
+   on CartonFulfilledEvent 根据不同消息自动链式触发流程自动化执行
 TaskSubmittedConsumer
-   消费接收复核任务(json) 
+   消费接收复核任务(json)
 <<跨聚合复杂流程>>
 <<领域事件>>
+   CartonFulfilledEvent 
