@@ -5,6 +5,7 @@ import ddd.plus.showcase.wms.domain.carton.dict.CartonStatus;
 import ddd.plus.showcase.wms.domain.carton.event.CartonFulfilledEvent;
 import ddd.plus.showcase.wms.domain.carton.hint.CartonDirtyHint;
 import ddd.plus.showcase.wms.domain.carton.spec.CartonizationRule;
+import ddd.plus.showcase.wms.domain.common.WarehouseNo;
 import ddd.plus.showcase.wms.domain.common.gateway.IRuleGateway;
 import ddd.plus.showcase.wms.domain.common.Operator;
 import ddd.plus.showcase.wms.domain.common.Platform;
@@ -68,6 +69,7 @@ public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomai
     private Platform platform;
     @Getter
     private Operator operator;
+    private WarehouseNo warehouseNo;
     @Getter
     @KeyElement(types = KeyElement.Type.KPI)
     private LocalDateTime fulfillTime;
@@ -129,6 +131,7 @@ public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomai
         // with transactional mailbox pattern
         CartonFulfilledEvent event = new CartonFulfilledEvent();
         event.setCartonNo(cartonNo.value());
+        event.setWarehouseNo(warehouseNo.value());
         eventPublisher.publish(event);
     }
 
