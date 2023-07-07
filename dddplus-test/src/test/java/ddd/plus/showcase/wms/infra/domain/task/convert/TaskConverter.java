@@ -31,9 +31,9 @@ public interface TaskConverter {
         TaskPo po = toPo(task);
 
         // 补充冗余字段内容
-        po.setTotalPendingQty(task.containerBag().totalPendingQty());
-        po.setTotalQty(task.containerBag().totalQty());
-        po.setTotalSku(task.containerBag().totalSku());
+        po.setTotalPendingQty(task.totalPendingQty());
+        po.setTotalQty(task.totalQty());
+        po.setTotalSku(task.totalSku());
         return po;
     }
 

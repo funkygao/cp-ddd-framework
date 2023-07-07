@@ -57,6 +57,6 @@ public class OrderBag extends SetBag<Order> implements IUnboundedDomainModel {
 
     private WarehouseNo warehouseNo() {
         // 这里的订单一定都在同一个仓库
-        return anyItem().getWarehouseNo();
+        return anyOne().getWarehouseNo();
     }
 }

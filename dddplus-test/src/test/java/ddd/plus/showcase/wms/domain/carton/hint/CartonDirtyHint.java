@@ -1,6 +1,7 @@
 package ddd.plus.showcase.wms.domain.carton.hint;
 
 import ddd.plus.showcase.wms.domain.carton.Carton;
+import ddd.plus.showcase.wms.domain.carton.Pallet;
 import io.github.dddplus.model.IDirtyHint;
 import io.github.dddplus.model.IMergeAwareDirtyHint;
 import lombok.AccessLevel;
@@ -23,7 +24,9 @@ public class CartonDirtyHint implements IMergeAwareDirtyHint<Long> {
         BindOrder(1),
         FromContainer(2),
         Fulfill(3),
-        InstallConsumables(4);
+        InstallConsumables(4),
+        PutOnPallet(5),
+        ;
         int bit;
 
         BitSet dirtyMap() {
@@ -35,6 +38,8 @@ public class CartonDirtyHint implements IMergeAwareDirtyHint<Long> {
 
     private final Carton carton;
 
+    @Setter
+    private Pallet pallet;
     @Setter
     private BigDecimal checkedQty; // 冗余字段，该箱总计货品数量：为了便于数据库查询、排序
 
@@ -56,6 +61,9 @@ public class CartonDirtyHint implements IMergeAwareDirtyHint<Long> {
         that.dirtyMap.or(this.dirtyMap);
         if (this.checkedQty != null) {
             that.checkedQty = this.checkedQty;
+        }
+        if (this.pallet != null) {
+            that.pallet = this.pallet;
         }
     }
 

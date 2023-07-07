@@ -26,6 +26,11 @@ public class OrderConstraint {
     private boolean collectConsumables;
 
     /**
+     * 是否自动打包.
+     */
+    private boolean autoPack;
+
+    /**
      * 自动发货，而无需人工操作：走数据流，与实物流分离
      */
     private boolean autoShip;

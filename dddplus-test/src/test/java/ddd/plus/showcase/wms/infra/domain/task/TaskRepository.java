@@ -88,7 +88,7 @@ public class TaskRepository implements ITaskRepository {
      * </ol>
      */
     @Override
-    @KeyBehavior(args = "TaskOfSku")
+    @KeyBehavior(useRawArgs = true)
     public void save(TaskOfSkuPending taskOfSkuPending) {
         // 1. 获取所有hint，这样才知道该如何落库
         ConfirmQtyHint confirmQtyHint = taskOfSkuPending.firstHintOf(ConfirmQtyHint.class);
@@ -103,6 +103,21 @@ public class TaskRepository implements ITaskRepository {
         // 4. DDD里的更新绝大部分采用乐观锁：通过 Exchange 有效传递而不污染领域层
         po.setVersion(taskOfSkuPending.xGet(Task.OptimisticLock, Short.class));
         dao.update(po);
+    }
+
+    /**
+     * 如何使用mapstruct
+     */
+    @Override
+    @KeyBehavior(useRawArgs = true)
+    public void save(TaskOfContainerPending taskOfContainerPending) {
+        TaskPo po = converter.toPo(taskOfContainerPending.unbounded());
+    }
+
+    @Override
+    @KeyBehavior(useRawArgs = true)
+    public void save(TaskOfOrderPending task) {
+
     }
 
     /**
@@ -138,14 +153,5 @@ public class TaskRepository implements ITaskRepository {
     @Override
     public Map<Platform, List<Task>> pendingTasksOfPlatforms(List<Platform> platformNos) {
         return null;
-    }
-
-    /**
-     * 如何使用mapstruct
-     */
-    @Override
-    @KeyBehavior(args = "TaskOfContainer")
-    public void save(TaskOfContainerPending taskOfContainerPending) {
-        TaskPo po = converter.toPo(taskOfContainerPending.unbounded());
     }
 }

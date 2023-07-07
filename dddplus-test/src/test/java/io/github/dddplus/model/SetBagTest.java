@@ -19,7 +19,7 @@ class SetBagTest {
         BookBag bag = new BookBag(books);
         assertEquals(bag.size(), 2);
         assertFalse(bag.isEmpty());
-        assertTrue(bag.anyItem().id > 0);
+        assertTrue(bag.anyOne().id > 0);
         assertTrue(bag.contains(book1));
         assertFalse(bag.contains(new Book(1L)));
     }

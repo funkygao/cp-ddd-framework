@@ -21,6 +21,7 @@ import io.github.dddplus.model.spcification.Notification;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 /**
@@ -44,7 +45,7 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
     private TaskStatus status;
 
     @KeyElement(types = KeyElement.Type.Location, byType = true)
-    Platform platformNo;
+    Platform platform;
     // 1个任务只能1人完成
     Operator operator;
     @Getter
@@ -61,9 +62,24 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
 
     @KeyBehavior
     public void claimedWith(Operator operator, Platform platformNo) {
-        this.platformNo = platformNo;
+        this.platform = platformNo;
         this.operator = operator;
         mergeDirtyWith(new TaskDirtyHint(this).dirty("operator", "platform_no"));
+    }
+
+    @KeyRule
+    public int totalSku() {
+        return containerBag.totalSku();
+    }
+
+    @KeyRule
+    public BigDecimal totalQty() {
+        return containerBag.totalQty();
+    }
+
+    @KeyRule
+    public BigDecimal totalPendingQty() {
+        return containerBag.totalPendingQty();
     }
 
     @KeyRule

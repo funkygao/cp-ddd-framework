@@ -8,7 +8,6 @@ import ddd.plus.showcase.wms.domain.task.hint.ConfirmQtyHint;
 import io.github.dddplus.dsl.KeyBehavior;
 import io.github.dddplus.dsl.KeyRelation;
 import io.github.dddplus.model.BoundedDomainModel;
-import io.github.dddplus.model.DirtyMemento;
 import lombok.NonNull;
 import lombok.experimental.Delegate;
 
@@ -16,7 +15,6 @@ import java.math.BigDecimal;
 
 @KeyRelation(whom = Task.class, type = KeyRelation.Type.Contextual)
 public class TaskOfSkuPending extends BoundedDomainModel<Task> {
-    private final DirtyMemento memento;
     private final OrderNo orderNo;
     private final Sku sku;
 
@@ -29,17 +27,16 @@ public class TaskOfSkuPending extends BoundedDomainModel<Task> {
         this.model = task;
         this.orderNo = orderNo;
         this.sku = sku;
-        this.memento = task.dirtyMemento();
     }
 
     @KeyBehavior
-    public ContainerItemBag confirmQty(BigDecimal qty, Operator operator, Platform platformNo) {
+    public CheckResult confirmQty(BigDecimal qty, Operator operator, Platform platform) {
         Task task = unbounded();
-        task.platformNo = platformNo;
+        task.platform = platform;
         task.operator = operator;
         ContainerItemBag checkResult = task.containerBag().confirmQty(qty);
-        memento.register(new ConfirmQtyHint(task));
-        return checkResult;
+        task.dirtyMemento().register(new ConfirmQtyHint(task));
+        return new CheckResult(checkResult);
     }
 
 }
