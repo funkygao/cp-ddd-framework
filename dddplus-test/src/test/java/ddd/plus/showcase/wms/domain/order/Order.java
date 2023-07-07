@@ -99,7 +99,7 @@ public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainM
         return 0;
     }
 
-    @KeyBehavior(useRawArgs = true, produceEvent = OrderCheckedEvent.class)
+    @KeyBehavior(useRawArgs = true, produceEvent = OrderCheckedEvent.class, async = true)
     public void checkedBy(Operator operator) {
         this.lastOperator = operator;
         this.updateTime = LocalDateTime.now();

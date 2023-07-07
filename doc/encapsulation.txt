@@ -13,6 +13,12 @@ CartonBag
     deductConsumableInventory
 CheckResult
     items: 本次复核完的货品清单
+ConsumableExtCostFirst
+    recommendFor
+ConsumableExtPolicy
+    extensionCode
+ConsumableExtSpeedFirst
+    recommendFor
 ContainerDiff
     register: 登记差异.
 Order
@@ -27,6 +33,7 @@ Order
     tasks
 OrderBag
     satisfy
+    consumableCostFirst
     canceledBag: 当前出库单集合里哪些已经在单据中心里被客户取消了.
 OrderConstraint
     allowManualCheck

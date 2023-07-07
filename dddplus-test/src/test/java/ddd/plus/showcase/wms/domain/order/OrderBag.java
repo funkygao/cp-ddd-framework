@@ -34,6 +34,10 @@ public class OrderBag extends SetBag<Order> implements IUnboundedDomainModel {
         }
     }
 
+    public boolean consumableCostFirst() {
+        return false;
+    }
+
     /**
      * 当前出库单集合里哪些已经在单据中心里被客户取消了.
      */

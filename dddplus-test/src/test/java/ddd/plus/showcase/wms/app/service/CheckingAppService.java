@@ -5,6 +5,8 @@ import ddd.plus.showcase.wms.app.convert.CartonAppConverter;
 import ddd.plus.showcase.wms.app.service.dto.*;
 import ddd.plus.showcase.wms.app.service.dto.base.ApiResponse;
 import ddd.plus.showcase.wms.domain.carton.*;
+import ddd.plus.showcase.wms.domain.carton.ext.ConsumableExt;
+import ddd.plus.showcase.wms.domain.carton.ext.ConsumableExtPolicy;
 import ddd.plus.showcase.wms.domain.carton.spec.CartonNotFull;
 import ddd.plus.showcase.wms.domain.common.*;
 import ddd.plus.showcase.wms.domain.common.gateway.IMasterDataGateway;
@@ -22,6 +24,7 @@ import ddd.plus.showcase.wms.domain.task.spec.TaskCanPerformChecking;
 import ddd.plus.showcase.wms.domain.task.spec.UniqueCodeConstraint;
 import io.github.dddplus.dsl.KeyUsecase;
 import io.github.dddplus.model.IApplicationService;
+import io.github.dddplus.runtime.DDD;
 import io.github.design.ContainerNo;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -114,6 +117,23 @@ public class CheckingAppService implements IApplicationService {
 
         // 业务兜底
         return recommendPlatformByTaskBacklog(request);
+    }
+
+    /**
+     * 为任务的某个纸箱推荐耗材种类和数量
+     */
+    @KeyUsecase(in = "cartonNo")
+    public ApiResponse<Void> recommendConsumable(RecommendConsumableRequest request) {
+        WarehouseNo warehouseNo = WarehouseNo.of(request.getWarehouseNo());
+        Carton carton = cartonRepository.mustGet(CartonNo.of(request.getCartonNo()), warehouseNo);
+        Task task = taskRepository.mustGet(TaskNo.of(request.getTaskNo()), warehouseNo);
+        ConsumableBag consumableBag = DDD.usePolicy(ConsumableExtPolicy.class, task)
+                .recommendFor(task, carton);
+        if (consumableBag == null) {
+            // 没有命中场景：不推荐耗材
+        }
+
+        return ApiResponse.ofOk();
     }
 
     /**

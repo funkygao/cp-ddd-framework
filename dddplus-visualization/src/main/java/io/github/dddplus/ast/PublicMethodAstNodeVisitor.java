@@ -61,7 +61,8 @@ public class PublicMethodAstNodeVisitor extends VoidVisitorAdapter<Encapsulation
         final String className = parentClass.getNameAsString();
         log.debug("{}: {}", className, methodDeclaration.getNameAsString());
 
-        if (!methodDeclaration.isPublic() || skipMethod(methodDeclaration, parentClass)) {
+        if (!JavaParserUtil.isMethodPublic(parentClass, methodDeclaration)
+                || skipMethod(methodDeclaration, parentClass)) {
             return;
         }
 

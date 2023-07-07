@@ -1,4 +1,4 @@
-标注覆盖率：Class(59/62.7%) Method(105/47.6%) Property(203/25.1%) Statement(201)
+标注覆盖率：Class(62/59.7%) Method(110/49.1%) Property(208/25.0%) Statement(206)
 模型债：
 <<Aggregate: 装箱>>
 Carton 纸箱，它会成为包裹.
@@ -15,6 +15,8 @@ Carton 纸箱，它会成为包裹.
       transferFrom(CheckResult) 
    [规则]
       cartonizationRule() 装箱规则，利用gateway延迟加载，规则也是规约.
+   [流程]
+      recommendFor(Carton,Task) 为纸箱推荐耗材 ConsumableExt
 CartonItem
    [属性]
    Structural    sku
@@ -25,6 +27,7 @@ CartonOrder
 Consumable
    [属性]
    Structural    CartonNo OrderNo TaskNo
+   Quantity      qty
    Location      Platform
 ConsumableBag
 Pallet
@@ -81,6 +84,8 @@ OrderTasks
 OrderBag
    [行为]
       canceledBag() 当前出库单集合里哪些已经在单据中心里被客户取消了.
+   [规则]
+      consumableCostFirst() 
 <<Aggregate: 包裹>>
 Pack 包裹.
    [属性]
@@ -145,6 +150,7 @@ TaskOrders
 CheckingAppService
    recommendPlatformByTaskBacklog(taskNo) 提升拣货员去哪个复核台：按任务积压情况
    recommendPlatformByOrder(orderNo) 提升拣货员去哪个复核台：按订单
+   recommendConsumable(cartonNo) 为任务的某个纸箱推荐耗材种类和数量
    claimTask(containerNo) 复核员扫描容器领取复核任务.
    checkBySku(qty,skuNo) 复核装箱一体化：按货品维度.
    checkByOrder(orderNo) 把一个出库单的所有货品一次性放到入参指定的纸箱：爆品订单复核

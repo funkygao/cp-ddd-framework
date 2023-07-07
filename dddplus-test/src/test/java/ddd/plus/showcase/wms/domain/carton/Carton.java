@@ -98,7 +98,7 @@ public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomai
 
     @KeyBehavior
     public void deductConsumableInventory() {
-        inventoryGateway.deductConsumableInventory(consumableBag.inventoryBag().items());
+        inventoryGateway.deductConsumableInventory(consumableBag.inventoryControlBag().items());
     }
 
     /**

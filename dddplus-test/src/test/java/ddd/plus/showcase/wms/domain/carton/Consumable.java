@@ -11,6 +11,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 
+import java.math.BigDecimal;
+
 @KeyRelation(whom = Sku.class, type = KeyRelation.Type.Extends)
 @Getter(AccessLevel.PACKAGE)
 public class Consumable extends Sku {
@@ -22,6 +24,8 @@ public class Consumable extends Sku {
     private CartonNo cartonNo;
     @KeyElement(types = KeyElement.Type.Location, byType = true)
     private Platform platform;
+    @KeyElement(types = KeyElement.Type.Quantity)
+    private BigDecimal qty;
     private Operator operator;
     // 该耗材是否有库存管理
     private boolean inventory;

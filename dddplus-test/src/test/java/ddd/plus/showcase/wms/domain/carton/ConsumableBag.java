@@ -12,7 +12,12 @@ public class ConsumableBag extends ListBag<Consumable> {
         super(items);
     }
 
-    ConsumableBag inventoryBag() {
-        return new ConsumableBag(items.stream().filter(Consumable::isInventory).collect(Collectors.toList()));
+    /**
+     * 受库存管理的耗材子集.
+     */
+    ConsumableBag inventoryControlBag() {
+        return new ConsumableBag(items.stream()
+                .filter(Consumable::isInventory)
+                .collect(Collectors.toList()));
     }
 }
