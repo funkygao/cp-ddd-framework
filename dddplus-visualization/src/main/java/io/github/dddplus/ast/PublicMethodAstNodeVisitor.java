@@ -15,7 +15,6 @@ import java.util.Set;
 
 @Slf4j
 public class PublicMethodAstNodeVisitor extends VoidVisitorAdapter<EncapsulationReport> {
-    private static final boolean ignoreEmptyParamsMethods = false;
     private static Set<String> ignoredMethodNames = new HashSet<>();
     private static Set<Class> ignoredMethodAnnotation = new HashSet<>();
     private static Set<Class> ignoredClassAnnotation = new HashSet<>();
@@ -75,10 +74,6 @@ public class PublicMethodAstNodeVisitor extends VoidVisitorAdapter<Encapsulation
     }
 
     private boolean skipMethod(MethodDeclaration methodDeclaration, ClassOrInterfaceDeclaration parentClass) {
-        if (ignoreEmptyParamsMethods && methodDeclaration.getParameters().size() == 0) {
-            return true;
-        }
-
         for (String ignoredPrefix : ignoredMethodNames) {
             if (methodDeclaration.getNameAsString().startsWith(ignoredPrefix)) {
                 return true;
