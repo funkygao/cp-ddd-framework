@@ -1,4 +1,4 @@
-package ddd.plus.showcase.wms.domain.carton.ext.impl;
+package ddd.plus.showcase.wms.plus.carton;
 
 import ddd.plus.showcase.wms.domain.carton.Carton;
 import ddd.plus.showcase.wms.domain.carton.ConsumableBag;
