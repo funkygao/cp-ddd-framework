@@ -44,7 +44,7 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
     private TaskStatus status;
 
     @KeyElement(types = KeyElement.Type.Location, byType = true)
-    Platform platformNo;
+    Platform platform;
     // 1个任务只能1人完成
     Operator operator;
     @Getter
@@ -61,7 +61,7 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
 
     @KeyBehavior
     public void claimedWith(Operator operator, Platform platformNo) {
-        this.platformNo = platformNo;
+        this.platform = platformNo;
         this.operator = operator;
         mergeDirtyWith(new TaskDirtyHint(this).dirty("operator", "platform_no"));
     }

@@ -1,15 +1,18 @@
 package ddd.plus.showcase.wms.infra.domain.carton;
 
 import ddd.plus.showcase.wms.domain.carton.Carton;
+import ddd.plus.showcase.wms.domain.carton.CartonBag;
 import ddd.plus.showcase.wms.domain.carton.CartonNo;
 import ddd.plus.showcase.wms.domain.carton.ICartonRepository;
 import ddd.plus.showcase.wms.domain.carton.hint.CartonDirtyHint;
 import ddd.plus.showcase.wms.domain.common.WarehouseNo;
 import ddd.plus.showcase.wms.domain.common.WmsException;
+import ddd.plus.showcase.wms.domain.common.gateway.IInventoryGateway;
 import ddd.plus.showcase.wms.domain.common.gateway.IRuleGateway;
 import ddd.plus.showcase.wms.domain.common.publisher.IEventPublisher;
 import ddd.plus.showcase.wms.infra.dao.Dao;
 import ddd.plus.showcase.wms.infra.domain.carton.association.CartonOrderDb;
+import ddd.plus.showcase.wms.infra.domain.carton.association.CartonPalletDb;
 import ddd.plus.showcase.wms.infra.domain.carton.convert.CartonConverter;
 import io.github.dddplus.dsl.KeyBehavior;
 import org.springframework.stereotype.Repository;
@@ -27,17 +30,20 @@ public class CartonRepository implements ICartonRepository {
 
     @Resource
     private IRuleGateway ruleGateway;
-
     @Resource
     private IEventPublisher kafkaProducer;
+    @Resource
+    private IInventoryGateway inventoryGateway;
 
     @Override
     public Carton mustGet(CartonNo cartonNo, WarehouseNo warehouseNo) throws WmsException {
         CartonPo po = dao.query(""); // eager load with items
         Carton carton = converter.fromPo(po);
         carton.injectRuleGateway(_self, ruleGateway);
-        carton.injectCartonOrder(_self, new CartonOrderDb(carton, dao));
+        carton.injectInventoryGateway(_self, inventoryGateway);
         carton.injectEventPublisher(_self, kafkaProducer);
+        carton.injectCartonOrder(_self, new CartonOrderDb(carton, dao));
+        carton.injectCartonPallet(_self, new CartonPalletDb(carton.getPalletNo(), dao));
         return carton;
     }
 
@@ -75,5 +81,14 @@ public class CartonRepository implements ICartonRepository {
             List<ConsumablePo> consumablePoList = CartonConverter.INSTANCE.toConsumablePo(carton.getConsumableBag().items());
             dao.insert(consumablePoList);
         }
+    }
+
+    /**
+     * Bag of root如何持久化
+     */
+    @Override
+    @KeyBehavior
+    public void save(CartonBag cartonBag) {
+        cartonBag.items().forEach(c -> this.save(c));
     }
 }

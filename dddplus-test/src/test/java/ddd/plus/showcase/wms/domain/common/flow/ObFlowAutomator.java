@@ -4,7 +4,9 @@ import ddd.plus.showcase.wms.domain.carton.ICartonRepository;
 import ddd.plus.showcase.wms.domain.carton.event.IFlowAutomationEvent;
 import ddd.plus.showcase.wms.domain.common.flow.handler.AbstractEventHandler;
 import ddd.plus.showcase.wms.domain.common.flow.handler.CartonFulfilledEventHandler;
+import ddd.plus.showcase.wms.domain.common.flow.handler.OrderCheckedEventHandler;
 import ddd.plus.showcase.wms.domain.common.flow.handler.SomeEventHandler;
+import ddd.plus.showcase.wms.domain.order.IOrderRepository;
 import io.github.dddplus.dsl.KeyFlow;
 import io.github.dddplus.model.INativeFlow;
 import lombok.Setter;
@@ -22,12 +24,11 @@ import javax.annotation.Resource;
 @Slf4j
 public class ObFlowAutomator implements INativeFlow, InitializingBean {
     private ICartonRepository cartonRepository;
+    private IOrderRepository orderRepository;
     private AbstractEventHandler head;
 
     @KeyFlow
     public void orchestrate(IFlowAutomationEvent event) {
-        log.info("event:{}", event.getEventType());
-
         head.processEvent(event);
     }
 
@@ -35,7 +36,9 @@ public class ObFlowAutomator implements INativeFlow, InitializingBean {
     public void afterPropertiesSet() throws Exception {
         AbstractEventHandler cartonFulfilledEventHandler = new CartonFulfilledEventHandler(cartonRepository);
         AbstractEventHandler someEventHandler = new SomeEventHandler();
-        cartonFulfilledEventHandler.setSuccessor(someEventHandler);
+        AbstractEventHandler orderCheckedEventHandler = new OrderCheckedEventHandler(orderRepository);
+        cartonFulfilledEventHandler.setSuccessor(orderCheckedEventHandler);
+        orderCheckedEventHandler.setSuccessor(someEventHandler);
 
         head = cartonFulfilledEventHandler;
     }

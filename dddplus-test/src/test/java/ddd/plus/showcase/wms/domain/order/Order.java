@@ -2,10 +2,13 @@ package ddd.plus.showcase.wms.domain.order;
 
 import ddd.plus.showcase.wms.domain.carton.Carton;
 import ddd.plus.showcase.wms.domain.common.*;
+import ddd.plus.showcase.wms.domain.common.publisher.IEventPublisher;
 import ddd.plus.showcase.wms.domain.order.dict.OrderExchangeKey;
 import ddd.plus.showcase.wms.domain.order.dict.OrderStatus;
 import ddd.plus.showcase.wms.domain.order.dict.OrderType;
 import ddd.plus.showcase.wms.domain.order.dict.ProductionStatus;
+import ddd.plus.showcase.wms.domain.order.event.OrderCheckedEvent;
+import ddd.plus.showcase.wms.domain.order.hint.OrderCheckedHint;
 import ddd.plus.showcase.wms.domain.pack.Pack;
 import ddd.plus.showcase.wms.domain.pack.PackBag;
 import ddd.plus.showcase.wms.domain.pack.WaybillNo;
@@ -23,6 +26,8 @@ import lombok.*;
 import lombok.experimental.Delegate;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.LocalDateTime;
+
 /**
  * 客户的出库单.
  */
@@ -39,6 +44,7 @@ public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainM
     private OrderType orderType;
     @Getter
     private WarehouseNo warehouseNo;
+    private LocalDateTime updateTime;
     private Operator lastOperator;
 
     @KeyElement(types = KeyElement.Type.Lifecycle, byType = true)
@@ -74,6 +80,8 @@ public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainM
     @KeyRelation(whom = OrderCartons.class, type = KeyRelation.Type.Associate)
     private OrderCartons cartons;
 
+    private IEventPublisher eventPublisher;
+
     /**
      * 推荐该订单使用几个包裹：{@link Pack}.
      */
@@ -88,6 +96,16 @@ public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainM
         }
 
         return 0;
+    }
+
+    @KeyBehavior(useRawArgs = true, produceEvent = OrderCheckedEvent.class)
+    public void checkedBy(Operator operator) {
+        this.lastOperator = operator;
+        this.updateTime = LocalDateTime.now();
+        this.productionStatus = ProductionStatus.Checked;
+        dirty(new OrderCheckedHint(this));
+
+        eventPublisher.publish(new OrderCheckedEvent(orderNo.value(), warehouseNo.value()));
     }
 
     public OrderOfPresale asPresale() {
@@ -145,6 +163,10 @@ public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainM
 
     public void injectOrderTasks(@NonNull Class<? extends IOrderRepository> __, OrderTasks orderTasks) {
         this.tasks = orderTasks;
+    }
+
+    public void injectEventPublisher(@NonNull Class<? extends IOrderRepository> __, IEventPublisher eventPublisher) {
+        this.eventPublisher = eventPublisher;
     }
 
 }

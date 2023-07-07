@@ -54,8 +54,8 @@ public class TaskBag extends ListBag<Task> {
     public List<Platform> platforms() {
         List<Platform> r = new ArrayList<>();
         for (Task task : items) {
-            if (task.getPlatformNo().isPresent()) {
-                r.add(task.getPlatformNo());
+            if (task.getPlatform().isPresent()) {
+                r.add(task.getPlatform());
             }
         }
         return r;

@@ -31,7 +31,7 @@ public abstract class SetBag<Entity> implements IBag {
     /**
      * 返回任意一个对象：在与具体对象无关场景使用.
      */
-    public final Entity anyItem() {
+    public final Entity anyOne() {
         return items.iterator().next();
     }
 

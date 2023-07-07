@@ -58,7 +58,7 @@ public class ContainerItem implements IDomainModel {
         return pendingQty.compareTo(BigDecimal.ZERO) == 0;
     }
 
-    public BigDecimal confirmQty(BigDecimal qty) {
+    BigDecimal confirmQty(BigDecimal qty) {
         pendingQty = pendingQty.subtract(qty);
         return pendingQty;
     }

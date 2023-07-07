@@ -32,7 +32,7 @@ class WmsReverseModelingTest {
 
     @Test
     @Disabled
-    void highlightTheTechImplementation() throws IOException {
+    void visualizeImplementation() throws IOException {
         ReverseEngineeringModel model = new DomainModelAnalyzer()
                 .scan(root)
                 .analyze(infrastructureLayerFilter);

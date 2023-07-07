@@ -11,9 +11,4 @@ public class CartonFulfilledEvent implements IFlowAutomationEvent {
     private String cartonNo;
     private String warehouseNo;
     private Map<String, Object> reserved;
-
-    @Override
-    public Integer getEventType() {
-        return TypeCartonFulfilled;
-    }
 }

@@ -5,15 +5,16 @@ import ddd.plus.showcase.wms.domain.carton.dict.CartonStatus;
 import ddd.plus.showcase.wms.domain.carton.event.CartonFulfilledEvent;
 import ddd.plus.showcase.wms.domain.carton.hint.CartonDirtyHint;
 import ddd.plus.showcase.wms.domain.carton.spec.CartonizationRule;
-import ddd.plus.showcase.wms.domain.common.WarehouseNo;
-import ddd.plus.showcase.wms.domain.common.gateway.IRuleGateway;
 import ddd.plus.showcase.wms.domain.common.Operator;
 import ddd.plus.showcase.wms.domain.common.Platform;
+import ddd.plus.showcase.wms.domain.common.WarehouseNo;
 import ddd.plus.showcase.wms.domain.common.WmsException;
+import ddd.plus.showcase.wms.domain.common.gateway.IInventoryGateway;
+import ddd.plus.showcase.wms.domain.common.gateway.IRuleGateway;
 import ddd.plus.showcase.wms.domain.common.publisher.IEventPublisher;
 import ddd.plus.showcase.wms.domain.order.Order;
 import ddd.plus.showcase.wms.domain.order.OrderNo;
-import ddd.plus.showcase.wms.domain.task.ContainerItemBag;
+import ddd.plus.showcase.wms.domain.task.CheckResult;
 import ddd.plus.showcase.wms.domain.task.Task;
 import ddd.plus.showcase.wms.domain.task.TaskNo;
 import io.github.dddplus.dsl.KeyBehavior;
@@ -23,6 +24,7 @@ import io.github.dddplus.dsl.KeyRule;
 import io.github.dddplus.model.BaseAggregateRoot;
 import io.github.dddplus.model.IUnboundedDomainModel;
 import io.github.dddplus.model.association.BelongTo;
+import io.github.dddplus.model.association.HasOne;
 import io.github.dddplus.model.spcification.Notification;
 import lombok.*;
 import lombok.experimental.Delegate;
@@ -50,7 +52,7 @@ public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomai
     @Getter
     @KeyRelation(whom = Order.class, type = KeyRelation.Type.BelongTo)
     private OrderNo orderNo;
-    @KeyRelation(whom = Pallet.class, type = KeyRelation.Type.HasOne, contextual = true, remark = "物理世界是属于关系")
+    @Getter
     private PalletNo palletNo;
     @KeyElement(types = KeyElement.Type.Operational)
     private CartonizationRule cartonizationRule;
@@ -75,10 +77,14 @@ public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomai
     private LocalDateTime fulfillTime;
 
     private IRuleGateway ruleGateway;
+    private IInventoryGateway inventoryGateway;
     private IEventPublisher eventPublisher;
 
     @KeyRelation(whom = CartonOrder.class, type = KeyRelation.Type.Associate)
     private CartonOrder order;
+
+    @KeyRelation(whom = Pallet.class, type = KeyRelation.Type.HasOne, contextual = true, remark = "物理世界是属于关系")
+    private CartonPallet pallet;
 
     /**
      * 向纸箱添加耗材.
@@ -88,6 +94,11 @@ public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomai
         consumables.forEach(c -> c.bind(this));
         this.consumableBag = new ConsumableBag(consumables);
         mergeDirtyWith(new CartonDirtyHint(this, CartonDirtyHint.Type.InstallConsumables));
+    }
+
+    @KeyBehavior
+    public void deductConsumableInventory() {
+        inventoryGateway.deductConsumableInventory(consumableBag.inventoryBag().items());
     }
 
     /**
@@ -109,9 +120,18 @@ public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomai
         mergeDirtyWith(hint);
     }
 
+    public void putOnPallet(PalletNo palletNo) {
+        this.palletNo = palletNo;
+        Pallet pallet = this.pallet.get();
+        pallet.addCarton();
+        CartonDirtyHint hint = new CartonDirtyHint(this, CartonDirtyHint.Type.PutOnPallet);
+        hint.setPallet(pallet);
+        mergeDirtyWith(hint);
+    }
+
     @KeyBehavior(useRawArgs = true)
-    public void transferFrom(ContainerItemBag containerItemBag) {
-        List<CartonItem> cartonItems = CartonConverter.INSTANCE.containerItem2CartonItem(containerItemBag.items());
+    public void transferFrom(CheckResult checkResult) {
+        List<CartonItem> cartonItems = CartonConverter.INSTANCE.containerItem2CartonItem(checkResult.items());
         itemBag.appendAll(cartonItems);
         CartonDirtyHint hint = new CartonDirtyHint(this, CartonDirtyHint.Type.FromContainer);
         mergeDirtyWith(hint);
@@ -140,6 +160,13 @@ public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomai
         throw new WmsException(notification.first());
     }
 
+    public interface CartonPallet extends HasOne<Pallet> {
+    }
+
+    public void injectCartonPallet(@NonNull Class<? extends ICartonRepository> __, CartonPallet cartonPallet) {
+        this.pallet = cartonPallet;
+    }
+
     public interface CartonOrder extends BelongTo<Order> {
     }
 
@@ -153,6 +180,10 @@ public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomai
 
     public void injectRuleGateway(@NonNull Class<? extends ICartonRepository> __, IRuleGateway ruleGateway) {
         this.ruleGateway = ruleGateway;
+    }
+
+    public void injectInventoryGateway(@NonNull Class<? extends ICartonRepository> __, IInventoryGateway inventoryGateway) {
+        this.inventoryGateway = inventoryGateway;
     }
 
     public void injectEventPublisher(@NonNull Class<? extends ICartonRepository> __, IEventPublisher eventPublisher) {

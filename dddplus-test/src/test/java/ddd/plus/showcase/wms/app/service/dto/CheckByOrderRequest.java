@@ -9,4 +9,5 @@ public class CheckByOrderRequest extends ApiRequest {
     private String orderNo;
     private String operatorNo;
     private String platformNo;
+    private String palletNo;
 }
