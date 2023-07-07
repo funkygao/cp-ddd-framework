@@ -8,10 +8,10 @@ import io.github.dddplus.model.ListBag;
 import lombok.NonNull;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @KeyRelation(whom = ContainerItem.class, type = KeyRelation.Type.HasMany)
 public class ContainerItemBag extends ListBag<ContainerItem> implements IUnboundedDomainModel {
@@ -27,7 +27,7 @@ public class ContainerItemBag extends ListBag<ContainerItem> implements IUnbound
      * 该容器的总商品种类(品数).
      */
     @KeyRule
-    public int totalSku() {
+    int totalSku() {
         return items.size();
     }
 
@@ -35,16 +35,16 @@ public class ContainerItemBag extends ListBag<ContainerItem> implements IUnbound
      * 该容器的总货量.
      */
     @KeyRule
-    public BigDecimal totalQty() {
+    BigDecimal totalQty() {
         return items.stream().map(ContainerItem::getExpectedQty).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     @KeyRule
-    public BigDecimal totalPendingQty() {
+    BigDecimal totalPendingQty() {
         return items.stream().map(ContainerItem::getPendingQty).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    public Set<OrderNo> orderNoSet() {
+    Set<OrderNo> orderNoSet() {
         Set<OrderNo> orderNos = new HashSet<>(size());
         for (ContainerItem item : items) {
             orderNos.add(item.getOrderLineNo().getOrderNo());
@@ -52,17 +52,18 @@ public class ContainerItemBag extends ListBag<ContainerItem> implements IUnbound
         return orderNos;
     }
 
-    public ContainerItemBagPending pendingItemBag() {
-        List<ContainerItem> list = new ArrayList<>();
-        for (ContainerItem item : items) {
-            if (!item.done()) {
-                list.add(item);
-            }
-        }
-        return new ContainerItemBagPending(ContainerItemBag.of(list));
+    List<ContainerItem> pendingItems() {
+        return pendingItemBag().items();
     }
 
-    public ContainerItemBag confirmQty(BigDecimal qty) {
+    private ContainerItemBagPending pendingItemBag() {
+        return new ContainerItemBagPending(ContainerItemBag.of(
+                items.stream()
+                        .filter(item -> !item.done())
+                        .collect(Collectors.toList())));
+    }
+
+    ContainerItemBag confirmQty(BigDecimal qty) {
         for (ContainerItem item : items) {
             if (item.getPendingQty().compareTo(qty) > 0) {
                 item.confirmQty(qty);

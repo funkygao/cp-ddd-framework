@@ -37,7 +37,7 @@ public class TaskOfSkuPending extends BoundedDomainModel<Task> {
         Task task = unbounded();
         task.platformNo = platformNo;
         task.operator = operator;
-        ContainerItemBag checkResult = task.containerBag().pendingItemBag().confirmQty(qty);
+        ContainerItemBag checkResult = task.containerBag().confirmQty(qty);
         memento.register(new ConfirmQtyHint(task));
         return checkResult;
     }

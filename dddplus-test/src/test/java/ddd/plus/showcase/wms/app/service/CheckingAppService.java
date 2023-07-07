@@ -105,6 +105,8 @@ public class CheckingAppService implements IApplicationService {
             return platform;
         }
 
+        // 通过order.tasks()这个关联对象指针获取该订单的所有任务很直观
+        // 如果 TaskRepository.listTasks(OrderNo)，这种关联关系被技术割裂
         TaskBag tasksOfOrder = order.tasks().taskBag();
         List<Platform> platforms = tasksOfOrder.platforms();
         if (!platforms.isEmpty()) {
@@ -133,7 +135,7 @@ public class CheckingAppService implements IApplicationService {
         // 通过关联对象加载引用关系的聚合
         OrderBag pendingOrderBag = taskOfContainerPending.orders().pendingOrders();
         pendingOrderBag.satisfy(new OrderUsesManualCheckFlow());
-        // 逆向物流逻辑
+        // 逆向物流逻辑，在领任务时控制运营成本最低
         OrderBagCanceled canceledOrderBag = pendingOrderBag.canceledBag(orderGateway);
 
         uow.persist(taskOfContainerPending, canceledOrderBag);

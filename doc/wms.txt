@@ -1,5 +1,48 @@
-标注覆盖率：Class(54/64.8%) Method(103/37.9%) Property(183/27.9%) Statement(169)
+标注覆盖率：Class(54/64.8%) Method(97/41.2%) Property(183/27.9%) Statement(173)
 模型债：
+<<Aggregate: 客户出库单>>
+Order 客户的出库单.
+   [属性]
+   Referential   Carrier Consignee Supplier
+   Lifecycle     OrderStatus ProductionStatus
+   Operational   OrderConstraint
+   Contextual    WaybillNo/OFC随单下发
+   [行为]
+      recommendPackQty() 推荐该订单使用几个包裹：Pack.
+   [规则]
+      recommendedPlatform() 该订单已经被推荐到哪一个复核台.
+OrderCartons
+   [行为]
+      totalCartonizedQty() 该订单已经装箱的货品件数总和.
+OrderLine 订单行.
+   [属性]
+   Structural    OrderLineNo Sku
+   Quantity      qty/要货量 shortageQty/缺货量
+OrderLineBag
+OrderOfPresale 出库单的预售场景.
+OrderPacks
+OrderTasks
+OrderBag
+   [行为]
+      canceledBag() 当前出库单集合里哪些已经在单据中心里被客户取消了.
+<<Aggregate: 包裹>>
+Pack 包裹.
+   [属性]
+   Structural    OrderNo WaybillNo
+   Lifecycle     PackStatus
+   Billing       totalVolume totalWeight
+<<Aggregate: 复核报差异>>
+ContainerDiff 复核过程中发现的容器差异.
+   [属性]
+   Structural    containerNo
+   Operational   reason
+   Location      platform
+   [行为]
+      register(DiffReason) 登记差异.
+ContainerDiffItem
+   [属性]
+   Structural    Sku
+ContainerDiffItemBag
 <<Aggregate: 装箱>>
 Carton 纸箱，它会成为包裹.
    [属性]
@@ -36,66 +79,19 @@ Sku 货品.
    [属性]
    Structural    Owner PackCode
    Contextual    LotNo snList
-<<Aggregate: 复核报差异>>
-ContainerDiff 复核过程中发现的容器差异.
-   [属性]
-   Structural    containerNo
-   Operational   reason
-   Location      platform
-   [行为]
-      register(DiffReason) 登记差异.
-ContainerDiffItem
-   [属性]
-   Structural    Sku
-ContainerDiffItemBag
-<<Aggregate: 客户出库单>>
-Order 客户的出库单.
-   [属性]
-   Referential   Carrier Consignee Supplier
-   Lifecycle     OrderStatus ProductionStatus
-   Operational   OrderConstraint
-   Contextual    WaybillNo/OFC随单下发
-   [行为]
-      recommendPackQty() 推荐该订单使用几个包裹：Pack.
-   [规则]
-      recommendedPlatform() 该订单已经被推荐到哪一个复核台.
-OrderCartons
-   [行为]
-      totalCartonizedQty() 该订单已经装箱的货品件数总和.
-OrderLine 订单行.
-   [属性]
-   Structural    OrderLineNo Sku
-   Quantity      qty/要货量 shortageQty/缺货量
-OrderLineBag
-OrderOfPresale 出库单的预售场景.
-OrderPacks
-OrderTasks
-OrderBag
-   [行为]
-      canceledBag() 当前出库单集合里哪些已经在单据中心里被客户取消了.
-<<Aggregate: 包裹>>
-Pack 包裹.
-   [属性]
-   Structural    OrderNo WaybillNo
-   Lifecycle     PackStatus
-   Billing       totalVolume totalWeight
-<<Aggregate: 发货>>
-OrderLineManifest
-   [属性]
-   Structural    OrderLineNo Sku
-OrderManifest
-   [属性]
-   Structural    OrderNo
-ShippingManifest
-   [属性]
-   Structural    Carrier
-   Reserved      extInfo
 <<Aggregate: 出库复核任务>>
 Container 拣货容器.
    [属性]
    Operational   ContainerType
    DCU           containerNo/扫描枪可扫
 ContainerBag
+   [行为]
+      confirmQty() 
+   [规则]
+      totalSku() 该容器的总商品种类(品数).
+      totalQty() 该容器的总要货量.
+      totalPendingQty() 
+      orderNoSet() 所有的出库单号.
 ContainerItem 拣货容器里的商品和数量.
    [属性]
    Structural    OrderLineNo Sku
@@ -107,6 +103,8 @@ Task 复核任务.
    Location      Platform
    [行为]
       claimedWith() 
+   [规则]
+      orderNoSet() 
 TaskBag
 TaskCartons
    [行为]
@@ -119,16 +117,27 @@ TaskOfSkuPending
    [行为]
       confirmQty() 
 TaskOrders
+<<Aggregate: 发货>>
+OrderLineManifest
+   [属性]
+   Structural    OrderLineNo Sku
+OrderManifest
+   [属性]
+   Structural    OrderNo
+ShippingManifest
+   [属性]
+   Structural    Carrier
+   Reserved      extInfo
 <<用户交互>>
-FlowAutoExecutionConsumer
-   on CartonFulfilledEvent 根据不同消息自动链式触发流程自动化执行
-ManualCheckAppService
+CheckingAppService
    recommendPlatformByTaskBacklog(taskNo) 提升拣货员去哪个复核台：按任务积压情况
    recommendPlatformByOrder(orderNo) 提升拣货员去哪个复核台：按订单
    claimTask(containerNo) 复核员扫描容器领取复核任务.
    checkBySku(qty,skuNo) 复核装箱一体化：按货品维度.
    checkByOrder(orderNo) 把一个出库单的所有货品一次性放到入参指定的纸箱：爆品订单复核
    fulfillCarton(cartonNo,consumables,orderNo) 复核员把拣货容器的货品放入箱，并使用耗材以便运输安全，该过程发现箱已满.
+FlowAutoExecutionConsumer
+   on CartonFulfilledEvent 根据不同消息自动链式触发流程自动化执行
 TaskSubmittedConsumer
    消费接收复核任务(json)
 <<跨聚合复杂流程>>
