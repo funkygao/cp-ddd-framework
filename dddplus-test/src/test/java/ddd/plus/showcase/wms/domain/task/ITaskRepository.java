@@ -29,4 +29,6 @@ public interface ITaskRepository extends IRepository {
 
     void save(TaskOfOrderPending task);
 
+    void insert(Task task);
+
 }

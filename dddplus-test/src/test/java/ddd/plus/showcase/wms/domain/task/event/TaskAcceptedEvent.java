@@ -1,4 +1,4 @@
-package ddd.plus.showcase.wms.domain.carton.event;
+package ddd.plus.showcase.wms.domain.task.event;
 
 import ddd.plus.showcase.wms.domain.common.publisher.IFlowAutomationEvent;
 import io.github.dddplus.dsl.KeyEvent;
@@ -8,8 +8,8 @@ import java.util.Map;
 
 @Data
 @KeyEvent(type = KeyEvent.Type.Local)
-public class CartonFulfilledEvent implements IFlowAutomationEvent {
-    private String cartonNo;
+public class TaskAcceptedEvent implements IFlowAutomationEvent {
+    private String taskNo;
     private String warehouseNo;
     private Map<String, Object> reserved;
 }

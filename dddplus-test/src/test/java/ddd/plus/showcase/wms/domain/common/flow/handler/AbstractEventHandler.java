@@ -1,9 +1,15 @@
 package ddd.plus.showcase.wms.domain.common.flow.handler;
 
-import ddd.plus.showcase.wms.domain.carton.event.IFlowAutomationEvent;
+import ddd.plus.showcase.wms.domain.common.publisher.IFlowAutomationEvent;
 
 public abstract class AbstractEventHandler<Event extends IFlowAutomationEvent> {
     protected AbstractEventHandler successor;
+
+    protected final void triggerSuccessor(IFlowAutomationEvent event) {
+        if (successor != null) {
+            successor.processEvent(event);
+        }
+    }
 
     public void setSuccessor(AbstractEventHandler successor) {
         this.successor = successor;

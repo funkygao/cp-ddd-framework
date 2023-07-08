@@ -1,12 +1,12 @@
 package ddd.plus.showcase.wms.app.worker.dto;
 
-import com.sun.istack.internal.NotNull;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import javax.validation.constraints.NotNull;
 
 /**
  * 拣货下发给复核任务的数据.

@@ -78,4 +78,8 @@ public class ContainerBag extends ListBag<Container> {
         }
         return orderNos;
     }
+
+    public List<ContainerItem> flatItems() {
+        return null;
+    }
 }

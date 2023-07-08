@@ -1,6 +1,6 @@
 package ddd.plus.showcase.wms.domain.common.flow.handler;
 
-import ddd.plus.showcase.wms.domain.carton.event.IFlowAutomationEvent;
+import ddd.plus.showcase.wms.domain.common.publisher.IFlowAutomationEvent;
 import ddd.plus.showcase.wms.domain.common.WarehouseNo;
 import ddd.plus.showcase.wms.domain.order.IOrderRepository;
 import ddd.plus.showcase.wms.domain.order.Order;
@@ -23,10 +23,7 @@ public class OrderCheckedEventHandler extends AbstractEventHandler<OrderCheckedE
 
         // 执行打包的数据流，与实物流分离
 
-        if (successor != null) {
-            // trigger successor
-            successor.processEvent(event);
-        }
+        triggerSuccessor(event);
     }
 
     @Override

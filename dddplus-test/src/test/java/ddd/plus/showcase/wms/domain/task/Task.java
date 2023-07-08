@@ -2,8 +2,11 @@ package ddd.plus.showcase.wms.domain.task;
 
 import ddd.plus.showcase.wms.domain.carton.Carton;
 import ddd.plus.showcase.wms.domain.common.*;
+import ddd.plus.showcase.wms.domain.common.gateway.IMasterDataGateway;
+import ddd.plus.showcase.wms.domain.common.publisher.IEventPublisher;
 import ddd.plus.showcase.wms.domain.order.Order;
 import ddd.plus.showcase.wms.domain.order.OrderBag;
+import ddd.plus.showcase.wms.domain.order.OrderLineNo;
 import ddd.plus.showcase.wms.domain.order.OrderNo;
 import ddd.plus.showcase.wms.domain.task.dict.TaskExchangeKey;
 import ddd.plus.showcase.wms.domain.task.dict.TaskMode;
@@ -22,6 +25,7 @@ import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -51,6 +55,19 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
     @Getter
     private WarehouseNo warehouseNo;
 
+    public void allocateTaskNo(Class who, @NonNull TaskNo taskNo) {
+        this.taskNo = taskNo;
+        this.status = TaskStatus.Submitted;
+    }
+
+    /**
+     * 初始化时指定复核生产计划
+     */
+    @KeyBehavior
+    public void plan() {
+        // 各种打标，把各种业务字段转换为各个作业动作的直接指令
+    }
+
     @KeyRelation(whom = ContainerBag.class, type = KeyRelation.Type.HasOne)
     private ContainerBag containerBag;
 
@@ -65,6 +82,38 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
         this.platform = platformNo;
         this.operator = operator;
         mergeDirtyWith(new TaskDirtyHint(this).dirty("operator", "platform_no"));
+    }
+
+    @KeyBehavior
+    public void removeOrderLines(Set<OrderLineNo> orderLineNos) {
+
+    }
+
+    public TaskMode mode() {
+        return taskMode;
+    }
+
+    public boolean isEmpty() {
+        return containerBag.isEmpty();
+    }
+
+    Set<Sku> skuSet() {
+        Set<Sku> skus = new HashSet<>();
+        for (Container container : containerBag.items()) {
+            skus.addAll(container.skuSet());
+        }
+        return skus;
+    }
+
+    /**
+     * 补全货品信息，例如供货商、类目、品牌等
+     */
+    public void enrichSkuInfo(IMasterDataGateway gateway) {
+
+    }
+
+    public void accept(IEventPublisher publisher) {
+
     }
 
     @KeyRule

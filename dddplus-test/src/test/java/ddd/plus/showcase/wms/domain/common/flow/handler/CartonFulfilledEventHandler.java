@@ -4,7 +4,7 @@ import ddd.plus.showcase.wms.domain.carton.Carton;
 import ddd.plus.showcase.wms.domain.carton.CartonNo;
 import ddd.plus.showcase.wms.domain.carton.ICartonRepository;
 import ddd.plus.showcase.wms.domain.carton.event.CartonFulfilledEvent;
-import ddd.plus.showcase.wms.domain.carton.event.IFlowAutomationEvent;
+import ddd.plus.showcase.wms.domain.common.publisher.IFlowAutomationEvent;
 import ddd.plus.showcase.wms.domain.common.WarehouseNo;
 import io.github.dddplus.dsl.KeyFlow;
 import lombok.AllArgsConstructor;
@@ -26,10 +26,7 @@ public class CartonFulfilledEventHandler extends AbstractEventHandler<CartonFulf
         // 执行自动发货
         // ...
 
-        if (successor != null) {
-            // trigger successor
-            successor.processEvent(event);
-        }
+        triggerSuccessor(event);
     }
 
     @Override

@@ -12,6 +12,7 @@ import ddd.plus.showcase.wms.domain.carton.spec.CartonNotFull;
 import ddd.plus.showcase.wms.domain.common.*;
 import ddd.plus.showcase.wms.domain.common.gateway.IMasterDataGateway;
 import ddd.plus.showcase.wms.domain.common.gateway.IOrderGateway;
+import ddd.plus.showcase.wms.domain.common.publisher.IEventPublisher;
 import ddd.plus.showcase.wms.domain.order.*;
 import ddd.plus.showcase.wms.domain.order.dict.OrderType;
 import ddd.plus.showcase.wms.domain.order.spec.OrderNotCartonizedYet;
@@ -54,6 +55,8 @@ public class CheckingAppService implements IApplicationService {
     private IUuidRepository uuidRepository;
     private IOrderRepository orderRepository;
     private ICartonRepository cartonRepository;
+    private ISequencer sequencer;
+    private IEventPublisher eventPublisher;
     private UnitOfWork uow;
 
     // 返回值是taskNo
@@ -67,8 +70,21 @@ public class CheckingAppService implements IApplicationService {
         }
 
         Task task = TaskAppConverter.INSTANCE.fromDto(dto); // orphan object
+        OrderBag pendingOrderBag = task.orders().pendingOrders();
+        // 任务下发过程中，客户可能取消订单了
+        OrderBagCanceled canceledOrderBag = pendingOrderBag.canceledBag(orderGateway);
+        // 从任务中移除这部分订单行
+        task.removeOrderLines(canceledOrderBag.orderLineNos());
+        if (task.isEmpty()) {
+            return ApiResponse.ofOk(null);
+        }
 
-        uow.persist(uuid);
+        task.allocateTaskNo(CheckingAppService.class, TaskNo.of(sequencer.next()));
+        task.enrichSkuInfo(masterDataGateway);
+        task.plan();
+        task.accept(eventPublisher);
+
+        uow.persist(task, canceledOrderBag, uuid);
         return ApiResponse.ofOk(task.getTaskNo().value());
     }
 

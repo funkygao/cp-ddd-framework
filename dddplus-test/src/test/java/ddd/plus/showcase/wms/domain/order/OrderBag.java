@@ -48,15 +48,23 @@ public class OrderBag extends SetBag<Order> implements IUnboundedDomainModel {
     }
 
     private OrderBag bagOf(Set<OrderNo> orderNoSet) {
-        return OrderBag.of(items.stream().filter(o -> orderNoSet.contains(o.getOrderNo())).collect(Collectors.toSet()));
+        Set<Order> orders = items.stream()
+                .filter(o -> orderNoSet.contains(o.getOrderNo()))
+                .collect(Collectors.toSet());
+        return OrderBag.of(orders);
     }
 
-    private Set<OrderNo> orderNos() {
-        Set<OrderNo> set = new HashSet<>(size());
-        for (Order order : items) {
-            set.add(order.getOrderNo());
-        }
-        return set;
+    Set<OrderNo> orderNos() {
+        return items.stream()
+                .map(Order::getOrderNo)
+                .collect(Collectors.toSet());
+    }
+
+    Set<OrderLineNo> orderLineNos() {
+        return items.stream()
+                .map(Order::items)
+                .map(OrderLine::getOrderLineNo)
+                .collect(Collectors.toSet());
     }
 
     private WarehouseNo warehouseNo() {

@@ -51,8 +51,10 @@ public class UnitOfWork implements IUnitOfWork {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void persist(@NonNull Uuid uuid) {
+    public void persist(@NonNull Task task, @NonNull OrderBagCanceled canceledBag, @NonNull Uuid uuid) {
         uuid.update();
+        taskRepository.insert(task);
+        orderRepository.switchToCanceledStatus(canceledBag);
     }
 
 }
