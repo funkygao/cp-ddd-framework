@@ -58,7 +58,6 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
 
     public void allocateTaskNo(Class who, @NonNull TaskNo taskNo) {
         this.taskNo = taskNo;
-        this.status = TaskStatus.Submitted;
     }
 
     /**
@@ -115,6 +114,7 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
 
     public void accept(IEventPublisher publisher) {
         this.assureSatisfied(null);
+        this.status = TaskStatus.Accepted;
 
         TaskAcceptedEvent event = new TaskAcceptedEvent();
         event.setTaskNo(taskNo.value());
