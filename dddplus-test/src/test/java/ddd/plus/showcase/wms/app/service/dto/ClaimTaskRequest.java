@@ -1,5 +1,6 @@
 package ddd.plus.showcase.wms.app.service.dto;
 
+import javax.validation.constraints.NotNull;
 import ddd.plus.showcase.wms.app.service.dto.base.ApiRequest;
 import lombok.Data;
 
@@ -8,7 +9,7 @@ import lombok.Data;
  */
 @Data
 public class ClaimTaskRequest extends ApiRequest {
-    // JSR303 ignored here
+    @NotNull
     private String containerNo;
     private String platformNo;
     // 领取任务时是否提示打成几个包裹

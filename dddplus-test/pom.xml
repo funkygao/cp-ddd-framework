@@ -21,6 +21,7 @@
         <liteflow.version>2.10.2</liteflow.version>
         <caliper.version>1.0-beta-2</caliper.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
+        <javax.validation.version>1.1.0.Final</javax.validation.version>
     </properties>
 
     <dependencies>
@@ -134,6 +135,11 @@
             <groupId>com.yomahub</groupId>
             <artifactId>liteflow-spring</artifactId>
             <version>${liteflow.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>${javax.validation.version}</version>
         </dependency>
     </dependencies>
 

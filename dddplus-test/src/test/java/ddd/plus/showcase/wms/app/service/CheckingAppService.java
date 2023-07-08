@@ -4,8 +4,8 @@ import ddd.plus.showcase.wms.app.UnitOfWork;
 import ddd.plus.showcase.wms.app.convert.CartonAppConverter;
 import ddd.plus.showcase.wms.app.service.dto.*;
 import ddd.plus.showcase.wms.app.service.dto.base.ApiResponse;
+import ddd.plus.showcase.wms.app.worker.dto.SubmitTaskDto;
 import ddd.plus.showcase.wms.domain.carton.*;
-import ddd.plus.showcase.wms.domain.carton.ext.ConsumableExt;
 import ddd.plus.showcase.wms.domain.carton.ext.ConsumableExtPolicy;
 import ddd.plus.showcase.wms.domain.carton.spec.CartonNotFull;
 import ddd.plus.showcase.wms.domain.common.*;
@@ -31,6 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -55,7 +56,11 @@ public class CheckingAppService implements IApplicationService {
 
     private Random random = new Random();
 
-    public ApiResponse<String> recommendPlatform(RecommendPlatformRequest request) {
+    public ApiResponse<Void> submitTask(@Valid SubmitTaskDto dto) {
+        return ApiResponse.ofOk();
+    }
+
+    public ApiResponse<String> recommendPlatform(@Valid RecommendPlatformRequest request) {
         Platform platform;
         if (request.getOrderNo() != null) {
             platform = recommendPlatformByOrder(request);
@@ -123,7 +128,7 @@ public class CheckingAppService implements IApplicationService {
      * 为任务的某个纸箱推荐耗材种类和数量
      */
     @KeyUsecase(in = "cartonNo")
-    public ApiResponse<Void> recommendConsumable(RecommendConsumableRequest request) {
+    public ApiResponse<Void> recommendConsumable(@Valid RecommendConsumableRequest request) {
         WarehouseNo warehouseNo = WarehouseNo.of(request.getWarehouseNo());
         Carton carton = cartonRepository.mustGet(CartonNo.of(request.getCartonNo()), warehouseNo);
         Task task = taskRepository.mustGet(TaskNo.of(request.getTaskNo()), warehouseNo);
@@ -140,7 +145,7 @@ public class CheckingAppService implements IApplicationService {
      * 复核员扫描容器领取复核任务.
      */
     @KeyUsecase(in = "containerNo")
-    public ApiResponse<Integer> claimTask(ClaimTaskRequest request) throws WmsException {
+    public ApiResponse<Integer> claimTask(@Valid ClaimTaskRequest request) throws WmsException {
         Operator operator = Operator.of(request.getOperatorNo());
 
         TaskOfContainerPending taskOfContainerPending = taskRepository.mustGet(
@@ -169,7 +174,7 @@ public class CheckingAppService implements IApplicationService {
      * 复核装箱一体化：按货品维度.
      */
     @KeyUsecase(in = {"skuNo", "qty"})
-    public ApiResponse<Void> checkBySku(CheckBySkuRequest request) throws WmsException {
+    public ApiResponse<Void> checkBySku(@Valid CheckBySkuRequest request) throws WmsException {
         WarehouseNo warehouseNo = WarehouseNo.of(request.getWarehouseNo());
         Operator operator = Operator.of(request.getOperatorNo());
         OrderNo orderNo = OrderNo.of(request.getOrderNo());
@@ -204,7 +209,7 @@ public class CheckingAppService implements IApplicationService {
      * 把一个出库单的所有货品一次性放到入参指定的纸箱：爆品订单复核
      */
     @KeyUsecase(in = {"orderNo"})
-    public ApiResponse<Void> checkByOrder(CheckByOrderRequest request) throws WmsException {
+    public ApiResponse<Void> checkByOrder(@Valid CheckByOrderRequest request) throws WmsException {
         WarehouseNo warehouseNo = WarehouseNo.of(request.getWarehouseNo());
         Operator operator = Operator.of(request.getOperatorNo());
 
@@ -239,7 +244,7 @@ public class CheckingAppService implements IApplicationService {
      * 复核员把拣货容器的货品放入箱，并使用耗材以便运输安全，该过程发现箱已满.
      */
     @KeyUsecase(in = {"orderNo", "cartonNo", "consumables"})
-    public ApiResponse<Void> fulfillCarton(CartonFullRequest request) throws WmsException {
+    public ApiResponse<Void> fulfillCarton(@Valid CartonFullRequest request) throws WmsException {
         Carton carton = cartonRepository.mustGet(CartonNo.of(request.getCartonNo()), WarehouseNo.of(request.getWarehouseNo()));
         carton.assureSatisfied(new CartonNotFull());
         if (carton.isEmpty()) {
