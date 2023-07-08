@@ -19,6 +19,7 @@ import io.github.dddplus.dsl.KeyRelation;
 import io.github.dddplus.dsl.KeyRule;
 import io.github.dddplus.model.BaseAggregateRoot;
 import io.github.dddplus.model.DirtyMemento;
+import io.github.dddplus.model.IApplicationService;
 import io.github.dddplus.model.IUnboundedDomainModel;
 import io.github.dddplus.model.association.HasMany;
 import io.github.dddplus.model.spcification.Notification;
@@ -57,7 +58,7 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
     @Getter
     private WarehouseNo warehouseNo;
 
-    public void allocateTaskNo(Class who, @NonNull TaskNo taskNo) {
+    public void allocateTaskNo(@NonNull Class<? extends IApplicationService> __, @NonNull TaskNo taskNo) {
         this.taskNo = taskNo;
     }
 
