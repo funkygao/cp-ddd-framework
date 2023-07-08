@@ -3,6 +3,7 @@ package ddd.plus.showcase.wms.domain.common;
 import io.github.dddplus.model.AbstractBusinessNo;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.Setter;
 
 /**
  * 通用的业务幂等对象.
@@ -22,6 +23,7 @@ public class Uuid extends AbstractBusinessNo<String> {
         ;
     }
 
+    @Setter
     private String bizNo;
     private Type type;
     private WarehouseNo warehouseNo;
@@ -32,9 +34,8 @@ public class Uuid extends AbstractBusinessNo<String> {
         super(value);
     }
 
-    public static Uuid of(@NonNull String uuidNo, Type type, String bizNo, WarehouseNo warehouseNo, IUuidRepository uuidRepository) {
+    public static Uuid of(@NonNull String uuidNo, Type type, WarehouseNo warehouseNo, IUuidRepository uuidRepository) {
         Uuid uuid = new Uuid(uuidNo);
-        uuid.bizNo = bizNo;
         uuid.type = type;
         uuid.warehouseNo = warehouseNo;
         uuid.repository = uuidRepository;

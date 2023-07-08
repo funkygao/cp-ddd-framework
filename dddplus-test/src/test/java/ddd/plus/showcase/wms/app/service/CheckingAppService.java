@@ -64,7 +64,7 @@ public class CheckingAppService implements IApplicationService {
         WarehouseNo warehouseNo = WarehouseNo.of(dto.getWarehouseNo());
 
         // 幂等性
-        Uuid uuid = Uuid.of(dto.getUuid(), Uuid.Type.Task, null, warehouseNo, uuidRepository);
+        Uuid uuid = Uuid.of(dto.getUuid(), Uuid.Type.Task, warehouseNo, uuidRepository);
         if (uuid.exists()) {
             return ApiResponse.ofOk(uuid.getBizNo());
         }
@@ -80,6 +80,7 @@ public class CheckingAppService implements IApplicationService {
         }
 
         task.allocateTaskNo(CheckingAppService.class, TaskNo.of(sequencer.next()));
+        uuid.setBizNo(task.getTaskNo().value());
         task.enrichSkuInfo(masterDataGateway);
         task.plan();
         task.accept(eventPublisher);
