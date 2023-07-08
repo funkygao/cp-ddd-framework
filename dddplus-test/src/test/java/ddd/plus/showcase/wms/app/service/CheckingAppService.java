@@ -2,6 +2,7 @@ package ddd.plus.showcase.wms.app.service;
 
 import ddd.plus.showcase.wms.app.UnitOfWork;
 import ddd.plus.showcase.wms.app.convert.CartonAppConverter;
+import ddd.plus.showcase.wms.app.convert.TaskAppConverter;
 import ddd.plus.showcase.wms.app.service.dto.*;
 import ddd.plus.showcase.wms.app.service.dto.base.ApiResponse;
 import ddd.plus.showcase.wms.app.worker.dto.SubmitTaskDto;
@@ -48,16 +49,27 @@ public class CheckingAppService implements IApplicationService {
     private IMasterDataGateway masterDataGateway;
     private IOrderGateway orderGateway;
     private Comparator<Platform> comparator;
-
+    private Random random = new Random();
     private ITaskRepository taskRepository;
+    private IUuidRepository uuidRepository;
     private IOrderRepository orderRepository;
     private ICartonRepository cartonRepository;
     private UnitOfWork uow;
 
-    private Random random = new Random();
+    // 返回值是taskNo
+    public ApiResponse<String> submitTask(@Valid SubmitTaskDto dto) {
+        WarehouseNo warehouseNo = WarehouseNo.of(dto.getWarehouseNo());
 
-    public ApiResponse<Void> submitTask(@Valid SubmitTaskDto dto) {
-        return ApiResponse.ofOk();
+        // 幂等性
+        Uuid uuid = Uuid.of(dto.getUuid(), Uuid.Type.Task, null, warehouseNo, uuidRepository);
+        if (uuid.exists()) {
+            return ApiResponse.ofOk(uuid.getBizNo());
+        }
+
+        Task task = TaskAppConverter.INSTANCE.fromDto(dto); // orphan object
+
+        uow.persist(uuid);
+        return ApiResponse.ofOk(task.getTaskNo().value());
     }
 
     public ApiResponse<String> recommendPlatform(@Valid RecommendPlatformRequest request) {

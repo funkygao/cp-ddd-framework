@@ -18,6 +18,8 @@ public class Sku extends AbstractBusinessNo<String> {
     private PackCode packCode;
     @KeyElement(types = KeyElement.Type.Contextual, byType = true)
     private LotNo lotNo;
+    @KeyElement(types = KeyElement.Type.Contextual)
+    private UniqueCode uniqueCode;
     /**
      * 货品的序列号/serial number.
      *

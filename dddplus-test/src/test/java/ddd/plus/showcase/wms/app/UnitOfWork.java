@@ -3,13 +3,11 @@ package ddd.plus.showcase.wms.app;
 import ddd.plus.showcase.wms.domain.carton.Carton;
 import ddd.plus.showcase.wms.domain.carton.CartonBag;
 import ddd.plus.showcase.wms.domain.carton.ICartonRepository;
+import ddd.plus.showcase.wms.domain.common.Uuid;
 import ddd.plus.showcase.wms.domain.order.IOrderRepository;
 import ddd.plus.showcase.wms.domain.order.Order;
 import ddd.plus.showcase.wms.domain.order.OrderBagCanceled;
-import ddd.plus.showcase.wms.domain.task.ITaskRepository;
-import ddd.plus.showcase.wms.domain.task.TaskOfContainerPending;
-import ddd.plus.showcase.wms.domain.task.TaskOfOrderPending;
-import ddd.plus.showcase.wms.domain.task.TaskOfSkuPending;
+import ddd.plus.showcase.wms.domain.task.*;
 import io.github.dddplus.model.IUnitOfWork;
 import lombok.NonNull;
 import lombok.Setter;
@@ -50,6 +48,11 @@ public class UnitOfWork implements IUnitOfWork {
     public void persist(@NonNull Carton carton) {
         // 内部会保存好几张表：carton, carton_item, consumable, ...
         cartonRepository.save(carton);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void persist(@NonNull Uuid uuid) {
+        uuid.update();
     }
 
 }
