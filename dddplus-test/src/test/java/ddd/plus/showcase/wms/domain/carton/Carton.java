@@ -163,7 +163,7 @@ public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomai
     public interface CartonPallet extends HasOne<Pallet> {
     }
 
-    public void injectCartonPallet(@NonNull Class<? extends ICartonRepository> __, CartonPallet cartonPallet) {
+    public void injectCartonPallet(@NonNull Class<ICartonRepository> __, CartonPallet cartonPallet) {
         this.pallet = cartonPallet;
     }
 
@@ -174,19 +174,19 @@ public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomai
         return order;
     }
 
-    public void injectCartonOrder(@NonNull Class<? extends ICartonRepository> __, CartonOrder cartonOrder) {
+    public void injectCartonOrder(@NonNull Class<ICartonRepository> __, CartonOrder cartonOrder) {
         this.order = cartonOrder;
     }
 
-    public void injectRuleGateway(@NonNull Class<? extends ICartonRepository> __, IRuleGateway ruleGateway) {
+    public void injectRuleGateway(@NonNull Class<ICartonRepository> __, IRuleGateway ruleGateway) {
         this.ruleGateway = ruleGateway;
     }
 
-    public void injectInventoryGateway(@NonNull Class<? extends ICartonRepository> __, IInventoryGateway inventoryGateway) {
+    public void injectInventoryGateway(@NonNull Class<ICartonRepository> __, IInventoryGateway inventoryGateway) {
         this.inventoryGateway = inventoryGateway;
     }
 
-    public void injectEventPublisher(@NonNull Class<? extends ICartonRepository> __, IEventPublisher eventPublisher) {
+    public void injectEventPublisher(@NonNull Class<ICartonRepository> __, IEventPublisher eventPublisher) {
         this.eventPublisher = eventPublisher;
     }
 }

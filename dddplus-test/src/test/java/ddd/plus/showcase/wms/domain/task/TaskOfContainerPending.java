@@ -12,7 +12,7 @@ import lombok.experimental.Delegate;
 public class TaskOfContainerPending extends BoundedDomainModel<Task> {
     private final Container container;
 
-    public TaskOfContainerPending(@NonNull Class<? extends ITaskRepository> __, Task task, Container container) {
+    public TaskOfContainerPending(@NonNull Class<ITaskRepository> __, Task task, Container container) {
         this.model = task;
         this.container = container;
     }

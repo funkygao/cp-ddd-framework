@@ -23,7 +23,7 @@ public class TaskOfSkuPending extends BoundedDomainModel<Task> {
         return super.unbounded();
     }
 
-    public TaskOfSkuPending(@NonNull Class<? extends ITaskRepository> __, Task task, OrderNo orderNo, Sku sku) {
+    public TaskOfSkuPending(@NonNull Class<ITaskRepository> __, Task task, OrderNo orderNo, Sku sku) {
         this.model = task;
         this.orderNo = orderNo;
         this.sku = sku;

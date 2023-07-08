@@ -143,7 +143,7 @@ public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainM
         return cartons;
     }
 
-    public void injectOrderCartons(@NonNull Class<? extends IOrderRepository> __, OrderCartons orderCartons) {
+    public void injectOrderCartons(@NonNull Class<IOrderRepository> __, OrderCartons orderCartons) {
         this.cartons = orderCartons;
     }
 
@@ -155,7 +155,7 @@ public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainM
         return packs;
     }
 
-    public void injectOrderPacks(@NonNull Class<? extends IOrderRepository> __, OrderPacks orderPacks) {
+    public void injectOrderPacks(@NonNull Class<IOrderRepository> __, OrderPacks orderPacks) {
         this.packs = orderPacks;
     }
 
@@ -167,11 +167,11 @@ public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainM
         return tasks;
     }
 
-    public void injectOrderTasks(@NonNull Class<? extends IOrderRepository> __, OrderTasks orderTasks) {
+    public void injectOrderTasks(@NonNull Class<IOrderRepository> __, OrderTasks orderTasks) {
         this.tasks = orderTasks;
     }
 
-    public void injectEventPublisher(@NonNull Class<? extends IOrderRepository> __, IEventPublisher eventPublisher) {
+    public void injectEventPublisher(@NonNull Class<IOrderRepository> __, IEventPublisher eventPublisher) {
         this.eventPublisher = eventPublisher;
     }
 

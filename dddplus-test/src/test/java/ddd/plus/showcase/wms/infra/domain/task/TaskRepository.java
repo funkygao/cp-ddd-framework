@@ -125,7 +125,8 @@ public class TaskRepository implements ITaskRepository {
         TaskPo taskPo = converter.toPo(task);
         // 通过mapstruct把container表里冗余的task字段传递过去
         List<ContainerPo> containerPoList = converter.toContainerPoList(task, task.containerBag().items());
-        List<ContainerItemPo> containerItemPoList = converter.toContainerItemPoList(task, task.containerBag().flatItems());
+        List<ContainerItemPo> containerItemPoList = converter.toContainerItemPoList(task,
+                task.containerBag().flatItems(_self));
         dao.insert(taskPo);
         dao.insert(containerPoList);
         dao.insert(containerItemPoList);

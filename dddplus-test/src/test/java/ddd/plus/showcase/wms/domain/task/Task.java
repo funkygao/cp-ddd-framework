@@ -26,8 +26,9 @@ import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 复核任务.
@@ -97,23 +98,23 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
         return containerBag.isEmpty();
     }
 
-    Set<Sku> skuSet() {
-        Set<Sku> skus = new HashSet<>();
-        for (Container container : containerBag.items()) {
-            skus.addAll(container.skuSet());
-        }
-        return skus;
+    private Set<String> skuNoSet() {
+        return containerBag.items().stream()
+                .flatMap(container -> container.skuNoSet().stream())
+                .collect(Collectors.toSet());
     }
 
     /**
      * 补全货品信息，例如供货商、类目、品牌等
      */
     public void enrichSkuInfo(IMasterDataGateway gateway) {
-
+        Set<String> skuSet = skuNoSet();
+        List<Sku> skuList = gateway.pullSkuBySkuNos(skuSet);
+        containerBag.enrichSkuInfo(skuList);
     }
 
     public void accept(IEventPublisher publisher) {
-        this.assureSatisfied(null);
+        this.assureSatisfied(null); // composition of specifications
         this.status = TaskStatus.Accepted;
 
         TaskAcceptedEvent event = new TaskAcceptedEvent();
@@ -159,7 +160,7 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
         return containerBag;
     }
 
-    public void injectContainerBag(@NonNull Class<? extends ITaskRepository> __, ContainerBag containerBag) {
+    public void injectContainerBag(@NonNull Class<ITaskRepository> __, ContainerBag containerBag) {
         this.containerBag = containerBag;
     }
 
@@ -184,7 +185,7 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
         return orders;
     }
 
-    public void injectOrders(@NonNull Class<? extends ITaskRepository> __, TaskOrders orders) {
+    public void injectOrders(@NonNull Class<ITaskRepository> __, TaskOrders orders) {
         this.orders = orders;
     }
 
@@ -200,7 +201,7 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
         return cartons;
     }
 
-    public void injectCartons(@NonNull Class<? extends ITaskRepository> __, TaskCartons taskCartons) {
+    public void injectCartons(@NonNull Class<ITaskRepository> __, TaskCartons taskCartons) {
         this.cartons = taskCartons;
     }
 }

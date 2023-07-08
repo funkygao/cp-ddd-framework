@@ -34,9 +34,10 @@ public class Container implements IDomainModel {
     @KeyRelation(whom = ContainerItemBag.class, type = KeyRelation.Type.HasOne)
     private ContainerItemBag containerItemBag;
 
-    Set<Sku> skuSet() {
+    Set<String> skuNoSet() {
         return containerItemBag.items().stream()
                 .map(ContainerItem::getSku)
+                .map(Sku::value)
                 .collect(Collectors.toSet());
     }
 }
