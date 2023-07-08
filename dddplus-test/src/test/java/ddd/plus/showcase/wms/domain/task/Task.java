@@ -11,6 +11,7 @@ import ddd.plus.showcase.wms.domain.order.OrderNo;
 import ddd.plus.showcase.wms.domain.task.dict.TaskExchangeKey;
 import ddd.plus.showcase.wms.domain.task.dict.TaskMode;
 import ddd.plus.showcase.wms.domain.task.dict.TaskStatus;
+import ddd.plus.showcase.wms.domain.task.event.TaskAcceptedEvent;
 import ddd.plus.showcase.wms.domain.task.hint.TaskDirtyHint;
 import io.github.dddplus.dsl.KeyBehavior;
 import io.github.dddplus.dsl.KeyElement;
@@ -113,7 +114,12 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
     }
 
     public void accept(IEventPublisher publisher) {
+        this.assureSatisfied(null);
 
+        TaskAcceptedEvent event = new TaskAcceptedEvent();
+        event.setTaskNo(taskNo.value());
+        event.setWarehouseNo(warehouseNo.value());
+        publisher.publish(event);
     }
 
     @KeyRule
