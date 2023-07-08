@@ -12,6 +12,9 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/**
+ * 一个订单的装车清单.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter(AccessLevel.PACKAGE)

@@ -4,6 +4,9 @@ import io.github.dddplus.model.BoundedDomainModel;
 
 import java.util.Set;
 
+/**
+ * 被客户取消的订单集合.
+ */
 public class OrderBagCanceled extends BoundedDomainModel<OrderBag> {
 
     OrderBagCanceled(OrderBag bag) {

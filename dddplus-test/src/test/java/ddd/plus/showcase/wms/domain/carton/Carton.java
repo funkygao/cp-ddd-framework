@@ -36,6 +36,9 @@ import java.util.List;
 
 /**
  * 纸箱，它会成为包裹.
+ *
+ * <p>复核后，把拣货容器里的货品，按照出库单分组放入纸箱.</p>
+ * <p>每个纸箱只属于一个出库单.</p>
  */
 @Builder
 @AllArgsConstructor

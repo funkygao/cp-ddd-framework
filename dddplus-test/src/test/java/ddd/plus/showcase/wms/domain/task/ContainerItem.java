@@ -16,6 +16,8 @@ import java.math.BigDecimal;
 
 /**
  * 拣货容器里的商品和数量.
+ *
+ * <p>每个货品属于一个订单行.</p>
  */
 @AllArgsConstructor
 @NoArgsConstructor

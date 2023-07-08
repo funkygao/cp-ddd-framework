@@ -13,6 +13,9 @@ import lombok.NonNull;
 
 import java.math.BigDecimal;
 
+/**
+ * 耗材，被放入纸箱，以便运输安全.
+ */
 @KeyRelation(whom = Sku.class, type = KeyRelation.Type.Extends)
 @Getter(AccessLevel.PACKAGE)
 public class Consumable extends Sku {
