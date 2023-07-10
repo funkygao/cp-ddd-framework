@@ -15,7 +15,6 @@ import java.util.Set;
 
 @Slf4j
 public class PublicMethodAstNodeVisitor extends VoidVisitorAdapter<EncapsulationReport> {
-    private static final boolean ignoreEmptyParamsMethods = false;
     private static Set<String> ignoredMethodNames = new HashSet<>();
     private static Set<Class> ignoredMethodAnnotation = new HashSet<>();
     private static Set<Class> ignoredClassAnnotation = new HashSet<>();
@@ -58,10 +57,11 @@ public class PublicMethodAstNodeVisitor extends VoidVisitorAdapter<Encapsulation
             return;
         }
 
-        final String className = parentClass.getNameAsString();
+        String className = parentClass.getNameAsString();
         log.debug("{}: {}", className, methodDeclaration.getNameAsString());
 
-        if (!methodDeclaration.isPublic() || skipMethod(methodDeclaration, parentClass)) {
+        if (!JavaParserUtil.isMethodPublic(parentClass, methodDeclaration)
+                || skipMethod(methodDeclaration, parentClass)) {
             return;
         }
 
@@ -70,14 +70,14 @@ public class PublicMethodAstNodeVisitor extends VoidVisitorAdapter<Encapsulation
         if (!comment.isEmpty()) {
             methodInfo.append(": ").append(comment);
         }
+        String javadoc = JavaParserUtil.javadocFirstLineOf(parentClass);
+        if (!javadoc.isEmpty()) {
+            className = className + " " + javadoc;
+        }
         report.registerMethodInfo(className, methodInfo.toString());
     }
 
     private boolean skipMethod(MethodDeclaration methodDeclaration, ClassOrInterfaceDeclaration parentClass) {
-        if (ignoreEmptyParamsMethods && methodDeclaration.getParameters().size() == 0) {
-            return true;
-        }
-
         for (String ignoredPrefix : ignoredMethodNames) {
             if (methodDeclaration.getNameAsString().startsWith(ignoredPrefix)) {
                 return true;

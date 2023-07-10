@@ -37,6 +37,11 @@ public interface TaskConverter {
         return po;
     }
 
+
+    List<ContainerPo> toContainerPoList(Task task, List<Container> containers);
+
+    List<ContainerItemPo> toContainerItemPoList(Task task, List<ContainerItem> items);
+
     Container fromPo(ContainerPo containerPo);
 
     List<Container> fromContainerPoList(List<ContainerPo> containerPos);

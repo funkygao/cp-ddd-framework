@@ -1,15 +1,19 @@
 package ddd.plus.showcase.wms.app.service.dto;
 
+import javax.validation.constraints.NotNull;
 import ddd.plus.showcase.wms.app.service.dto.base.ApiRequest;
 import lombok.Data;
 
 @Data
 public class CheckBySkuRequest extends ApiRequest {
+    @NotNull
     private String taskNo;
+    @NotNull
     private String orderNo;
 
     private String cartonNo;
 
+    @NotNull
     private String skuNo;
     private String lotNo;
     private String packCode;

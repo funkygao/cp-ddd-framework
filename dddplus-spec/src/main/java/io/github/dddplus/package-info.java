@@ -5,5 +5,7 @@
  */
 /**
  * DDD Enhancement Framework with forward and reverse modeling.
+ *
+ * <p>empowering extension oriented architecture.</p>
  */
 package io.github.dddplus;

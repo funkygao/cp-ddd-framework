@@ -1,5 +1,6 @@
 package ddd.plus.showcase.wms.domain.task;
 
+import ddd.plus.showcase.wms.domain.common.Sku;
 import ddd.plus.showcase.wms.domain.task.dict.ContainerType;
 import io.github.dddplus.dsl.KeyElement;
 import io.github.dddplus.dsl.KeyRelation;
@@ -9,6 +10,9 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 拣货容器.
@@ -30,4 +34,10 @@ public class Container implements IDomainModel {
     @KeyRelation(whom = ContainerItemBag.class, type = KeyRelation.Type.HasOne)
     private ContainerItemBag containerItemBag;
 
+    Set<String> skuNoSet() {
+        return containerItemBag.items().stream()
+                .map(ContainerItem::getSku)
+                .map(Sku::value)
+                .collect(Collectors.toSet());
+    }
 }

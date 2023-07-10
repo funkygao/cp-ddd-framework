@@ -5,6 +5,11 @@ import io.github.dddplus.model.BoundedDomainModel;
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * 待复核的货品集合.
+ *
+ * <p>它们可能属于不同的订单.</p>
+ */
 class ContainerItemBagPending extends BoundedDomainModel<ContainerItemBag> {
 
     ContainerItemBagPending(ContainerItemBag bag) {

@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License version 2.0, available at http://www.apache.org/licenses/LICENSE-2.0
  */
-package io.github.dddplus;
+package io.github.dddplus.runtime;
 
 /**
  * A marker interface applied on Exception：扩展点执行中抛出异常时进行弱日志打印.

@@ -1,12 +1,14 @@
 package ddd.plus.showcase.wms.domain.common.flow;
 
 import ddd.plus.showcase.wms.domain.carton.ICartonRepository;
-import ddd.plus.showcase.wms.domain.carton.event.IFlowAutomationEvent;
+import ddd.plus.showcase.wms.domain.common.flow.handler.TaskAcceptedEventHandler;
+import ddd.plus.showcase.wms.domain.common.publisher.IFlowAutomationEvent;
 import ddd.plus.showcase.wms.domain.common.flow.handler.AbstractEventHandler;
 import ddd.plus.showcase.wms.domain.common.flow.handler.CartonFulfilledEventHandler;
 import ddd.plus.showcase.wms.domain.common.flow.handler.OrderCheckedEventHandler;
-import ddd.plus.showcase.wms.domain.common.flow.handler.SomeEventHandler;
 import ddd.plus.showcase.wms.domain.order.IOrderRepository;
+import ddd.plus.showcase.wms.domain.task.ITaskRepository;
+import ddd.plus.showcase.wms.domain.task.event.TaskAcceptedEvent;
 import io.github.dddplus.dsl.KeyFlow;
 import io.github.dddplus.model.INativeFlow;
 import lombok.Setter;
@@ -25,6 +27,7 @@ import javax.annotation.Resource;
 public class ObFlowAutomator implements INativeFlow, InitializingBean {
     private ICartonRepository cartonRepository;
     private IOrderRepository orderRepository;
+    private ITaskRepository taskRepository;
     private AbstractEventHandler head;
 
     @KeyFlow
@@ -34,12 +37,12 @@ public class ObFlowAutomator implements INativeFlow, InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        AbstractEventHandler cartonFulfilledEventHandler = new CartonFulfilledEventHandler(cartonRepository);
-        AbstractEventHandler someEventHandler = new SomeEventHandler();
-        AbstractEventHandler orderCheckedEventHandler = new OrderCheckedEventHandler(orderRepository);
+        TaskAcceptedEventHandler taskAcceptedEventHandler = new TaskAcceptedEventHandler(taskRepository);
+        CartonFulfilledEventHandler cartonFulfilledEventHandler = new CartonFulfilledEventHandler(cartonRepository);
+        OrderCheckedEventHandler orderCheckedEventHandler = new OrderCheckedEventHandler(orderRepository);
+        taskAcceptedEventHandler.setSuccessor(cartonFulfilledEventHandler);
         cartonFulfilledEventHandler.setSuccessor(orderCheckedEventHandler);
-        orderCheckedEventHandler.setSuccessor(someEventHandler);
 
-        head = cartonFulfilledEventHandler;
+        head = taskAcceptedEventHandler;
     }
 }

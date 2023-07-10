@@ -13,6 +13,11 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 一辆货车的装车清单.
+ *
+ * <p>里面有很多订单：{@link OrderManifest}.</p>
+ */
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,6 +29,7 @@ public class ShippingManifest extends BaseAggregateRoot<ShippingManifest> implem
 
     @KeyElement(types = KeyElement.Type.Structural, byType = true)
     private Carrier carrier;
+    private String truckNo; // 车牌号
     @KeyRelation(whom = OrderManifest.class, type = KeyRelation.Type.HasMany)
     private List<OrderManifest> orderManifests;
     @KeyElement(types = KeyElement.Type.Reserved)

@@ -9,6 +9,9 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 一些复核任务.
+ */
 public class TaskBag extends ListBag<Task> {
     protected TaskBag(@NonNull List<Task> items) {
         super(items);

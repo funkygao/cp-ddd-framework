@@ -9,4 +9,9 @@ import lombok.Data;
  */
 @Data
 public class ContainerPo implements IPo {
+    private Long id;
+    private String taskNo;
+    private String containerNo;
+    private String warehouseNo;
+
 }

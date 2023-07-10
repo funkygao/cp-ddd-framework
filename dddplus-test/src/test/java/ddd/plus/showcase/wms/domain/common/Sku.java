@@ -12,12 +12,18 @@ import java.util.List;
  */
 @Getter
 public class Sku extends AbstractBusinessNo<String> {
+    private String name;
     @KeyElement(types = KeyElement.Type.Structural, byType = true)
     protected Owner owner;
     @KeyElement(types = KeyElement.Type.Structural, byType = true)
     private PackCode packCode;
     @KeyElement(types = KeyElement.Type.Contextual, byType = true)
     private LotNo lotNo;
+    @KeyElement(types = KeyElement.Type.Contextual)
+    private UniqueCode uniqueCode;
+    private Supplier supplier;
+    private String brand;
+
     /**
      * 货品的序列号/serial number.
      *

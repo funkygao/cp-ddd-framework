@@ -5,7 +5,6 @@
  */
 package io.github.dddplus.runtime;
 
-import io.github.dddplus.IExceptionWeakLogging;
 import io.github.dddplus.ext.IDomainExtension;
 import io.github.dddplus.model.IIdentity;
 import io.github.dddplus.runtime.interceptor.ExtensionContext;

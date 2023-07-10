@@ -9,6 +9,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * 发货的订单行，货品维度.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter(AccessLevel.PACKAGE)
