@@ -10,6 +10,7 @@ import ddd.plus.showcase.wms.domain.order.OrderLineNo;
 import ddd.plus.showcase.wms.domain.order.OrderNo;
 import ddd.plus.showcase.wms.domain.task.dict.TaskExchangeKey;
 import ddd.plus.showcase.wms.domain.task.dict.TaskMode;
+import ddd.plus.showcase.wms.domain.task.dict.TaskScenario;
 import ddd.plus.showcase.wms.domain.task.dict.TaskStatus;
 import ddd.plus.showcase.wms.domain.task.event.TaskAcceptedEvent;
 import ddd.plus.showcase.wms.domain.task.hint.TaskDirtyHint;
@@ -79,6 +80,16 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
     @KeyRelation(whom = TaskCartons.class, type = KeyRelation.Type.Associate)
     private TaskCartons cartons;
 
+    // 《Analysis Patterns》：14.2.4 Implementation by Delegation to a Hidden Class
+    private TaskOfSkuPending taskOfSkuPending;
+    // the flag to implement subtypes
+    private TaskScenario scenario;
+
+    public void inSkuPendingScenario(@NonNull Class<ITaskRepository> __, OrderNo orderNo, Sku sku) {
+        this.scenario = TaskScenario.TaskOfSkuPending;
+        this.taskOfSkuPending = new TaskOfSkuPending(this, orderNo, sku);
+    }
+
     @KeyBehavior
     public void claimedWith(Operator operator, Platform platformNo) {
         this.platform = platformNo;
@@ -89,6 +100,12 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
     @KeyBehavior
     public void removeOrderLines(Set<OrderLineNo> orderLineNos) {
 
+    }
+
+    // can be killed with lombok @Delegate
+    public CheckResult confirmQty(BigDecimal qty, Operator operator, Platform platform) {
+        assert scenario.equals(TaskScenario.TaskOfSkuPending);
+        return taskOfSkuPending.confirmQty(qty, operator, platform);
     }
 
     public TaskMode mode() {
