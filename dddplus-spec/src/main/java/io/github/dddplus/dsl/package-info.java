@@ -88,6 +88,11 @@
  *   </ul>
  * </li>
  * </ul>
+ * <ul>与{@code ArchiMate}/{@code BPMN}/{@code C4 Model}/{@code UML}/{@code TOGAF ADM}/{@code SysML}/{@code 4+1 View Model}等架构模型语言相比，本{@code DSL}：
+ * <li>简单，门槛低</li>
+ * <li>与代码强关联</li>
+ * <li>具有修正机制</li>
+ * </ul>
  *
  * @see <a href="https://xie.infoq.cn/article/3da89918c7d27ccc8e8f98ab7">面向对象设计的逆向建模方法和开源工具</a>
  * @see <a href="https://ieeexplore.ieee.org/document/723185/">Requirements for integrating software architecture and reengineering models</a>
