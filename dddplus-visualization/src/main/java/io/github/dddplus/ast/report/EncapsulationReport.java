@@ -15,12 +15,12 @@ public class EncapsulationReport {
     // {class: publicMethodSet}
     Map<String, List<String>> result = new TreeMap<>();
 
-    public void registerMethodInfo(String className, String methodInfo) {
-        if (!result.containsKey(className)) {
-            result.put(className, new ArrayList<>());
+    public void registerMethodInfo(String classInfo, String methodInfo) {
+        if (!result.containsKey(classInfo)) {
+            result.put(classInfo, new ArrayList<>());
         }
 
-        result.get(className).add(methodInfo);
+        result.get(classInfo).add(methodInfo);
     }
 
     public void dump(File file) throws IOException {
@@ -31,9 +31,9 @@ public class EncapsulationReport {
 
     private String content() {
         StringBuilder sb = new StringBuilder();
-        for (String className : result.keySet()) {
-            sb.append(className).append(NEWLINE);
-            for (String methodInfo : result.get(className)) {
+        for (String classInfo : result.keySet()) {
+            sb.append(classInfo).append(NEWLINE);
+            for (String methodInfo : result.get(classInfo)) {
                 sb.append("    ").append(methodInfo).append(NEWLINE);
             }
         }

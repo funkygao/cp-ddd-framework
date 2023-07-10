@@ -13,10 +13,6 @@ public class OrderBagCanceled extends BoundedDomainModel<OrderBag> {
         this.model = bag;
     }
 
-    public Set<OrderNo> orderNos() {
-        return unbounded().orderNos();
-    }
-
     public Set<OrderLineNo> orderLineNos() {
         return unbounded().orderLineNos();
     }

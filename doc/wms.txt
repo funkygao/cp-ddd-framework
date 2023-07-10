@@ -1,62 +1,5 @@
-标注覆盖率：Class(62/59.7%) Method(110/49.1%) Property(208/25.0%) Statement(206)
+标注覆盖率：Class(65/58.5%) Method(123/49.6%) Property(241/22.0%) Statement(227)
 模型债：
-<<Aggregate: 装箱>>
-Carton 纸箱，它会成为包裹.
-   [属性]
-   Lifecycle     status
-   Operational   cartonizationRule
-   KPI           fulfillTime
-   Location      Platform
-   [行为]
-      bindOrder() 
-      deductConsumableInventory() 
-      fulfill() 箱满了
-      installConsumables() 向纸箱添加耗材.
-      transferFrom(CheckResult) 
-   [规则]
-      cartonizationRule() 装箱规则，利用gateway延迟加载，规则也是规约.
-   [流程]
-      recommendFor(Carton,Task) 为纸箱推荐耗材 ConsumableExt
-CartonItem
-   [属性]
-   Structural    sku
-   Referential   orderLineNo
-   Quantity      checkedQty
-CartonItemBag
-CartonOrder
-Consumable
-   [属性]
-   Structural    CartonNo OrderNo TaskNo
-   Quantity      qty
-   Location      Platform
-ConsumableBag
-Pallet
-   [属性]
-   Structural    PalletNo TaskNo
-   [行为]
-      fulfill() 
-CartonBag
-   [行为]
-      deductConsumableInventory() 
-      fulfill() 
-      putOnPallet() 
-<<Aggregate: 通用子域>>
-Sku 货品.
-   [属性]
-   Structural    Owner PackCode
-   Contextual    LotNo snList
-<<Aggregate: 复核报差异>>
-ContainerDiff 复核过程中发现的容器差异.
-   [属性]
-   Structural    containerNo
-   Operational   reason
-   Location      platform
-   [行为]
-      register(DiffReason) 登记差异.
-ContainerDiffItem
-   [属性]
-   Structural    Sku
-ContainerDiffItemBag
 <<Aggregate: 客户出库单>>
 Order 客户的出库单.
    [属性]
@@ -70,6 +13,8 @@ Order 客户的出库单.
    [规则]
       totalExpectedQty() 
       recommendedPlatform() 该订单已经被推荐到哪一个复核台.
+   [流程]
+      processMyEvent(OrderCheckedEvent)  OrderCheckedEventHandler
 OrderCartons
    [行为]
       totalCartonizedQty() 该订单已经装箱的货品件数总和.
@@ -92,17 +37,64 @@ Pack 包裹.
    Structural    OrderNo WaybillNo
    Lifecycle     PackStatus
    Billing       totalVolume totalWeight
-<<Aggregate: 发货>>
-OrderLineManifest
+<<Aggregate: 复核报差异>>
+ContainerDiff 复核过程中发现的容器差异.
    [属性]
-   Structural    OrderLineNo Sku
-OrderManifest
+   Structural    containerNo
+   Operational   reason
+   Location      platform
+   [行为]
+      register(DiffReason) 登记差异.
+ContainerDiffItem
    [属性]
-   Structural    OrderNo
-ShippingManifest
+   Structural    Sku
+ContainerDiffItemBag
+<<Aggregate: 装箱>>
+Carton 纸箱，它会成为包裹.
    [属性]
-   Structural    Carrier
-   Reserved      extInfo
+   Lifecycle     status
+   Operational   cartonizationRule
+   KPI           fulfillTime
+   Location      Platform
+   [行为]
+      bindOrder() 
+      deductConsumableInventory() 
+      fulfill() 箱满了
+      installConsumables() 向纸箱添加耗材.
+      transferFrom(CheckResult) 
+   [规则]
+      cartonizationRule() 装箱规则，利用gateway延迟加载，规则也是规约.
+   [流程]
+      recommendFor(Carton,Task) 为纸箱推荐耗材 ConsumableExt
+      processMyEvent(CartonFulfilledEvent)  CartonFulfilledEventHandler
+CartonItem 纸箱里个某一种sku.
+   [属性]
+   Structural    sku
+   Referential   orderLineNo
+   Quantity      checkedQty
+CartonItemBag
+CartonOrder
+Consumable 耗材，被放入纸箱，以便运输安全.
+   [属性]
+   Structural    CartonNo OrderNo TaskNo
+   Quantity      qty
+   Location      Platform
+ConsumableBag
+Pallet 栈板，物流领域也称为托盘.
+   [属性]
+   Structural    PalletNo TaskNo
+   [行为]
+      fulfill() 
+CartonBag
+   [行为]
+      deductConsumableInventory() 
+      fulfill() 
+      putOnPallet() 
+<<Aggregate: 通用子域>>
+Sku 货品.
+   [属性]
+   Structural    Owner PackCode
+   Contextual    LotNo snList uniqueCode
 <<Aggregate: 出库复核任务>>
 Container 拣货容器.
    [属性]
@@ -127,7 +119,10 @@ Task 复核任务.
    Location      Platform
    [行为]
       claimedWith() 
+      plan() 初始化时指定复核生产计划
+      removeOrderLines() 
    [规则]
+      isEmpty() 
       totalSku() 
       totalQty() 
       totalPendingQty() 
@@ -146,6 +141,17 @@ TaskOfSkuPending
    [行为]
       confirmQty() 
 TaskOrders
+<<Aggregate: 发货>>
+OrderLineManifest 发货的订单行，货品维度.
+   [属性]
+   Structural    OrderLineNo Sku
+OrderManifest 一个订单的装车清单.
+   [属性]
+   Structural    OrderNo
+ShippingManifest 一辆货车的装车清单.
+   [属性]
+   Structural    Carrier
+   Reserved      extInfo
 <<用户交互>>
 CheckingAppService
    recommendPlatformByTaskBacklog(taskNo) 提升拣货员去哪个复核台：按任务积压情况
@@ -163,5 +169,6 @@ TaskSubmittedConsumer
 ObFlowAutomator
    orchestrate(IFlowAutomationEvent) 
 <<领域事件>>
-   CartonFulfilledEvent 
    OrderCheckedEvent 
+   CartonFulfilledEvent 
+   TaskAcceptedEvent 

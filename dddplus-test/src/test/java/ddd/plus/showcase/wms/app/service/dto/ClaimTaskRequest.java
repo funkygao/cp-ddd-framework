@@ -1,8 +1,9 @@
 package ddd.plus.showcase.wms.app.service.dto;
 
-import javax.validation.constraints.NotNull;
 import ddd.plus.showcase.wms.app.service.dto.base.ApiRequest;
 import lombok.Data;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * 操作员领取复核任务.

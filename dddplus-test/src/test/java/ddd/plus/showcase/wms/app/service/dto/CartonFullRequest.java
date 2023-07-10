@@ -12,7 +12,7 @@ import java.util.List;
  */
 @Data
 public class CartonFullRequest extends ApiRequest {
-    @NotNUll
+    @NotNull
     private String cartonNo;
     private String orderNo;
     private String platformNo;

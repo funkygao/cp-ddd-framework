@@ -61,10 +61,11 @@ public class OrderBag extends SetBag<Order> implements IUnboundedDomainModel {
     }
 
     Set<OrderLineNo> orderLineNos() {
-        return items.stream()
-                .map(Order::items)
-                .map(OrderLine::getOrderLineNo)
-                .collect(Collectors.toSet());
+        Set<OrderLineNo> orderLineNoSet = new HashSet<>();
+        for (Order order : items) {
+            orderLineNoSet.addAll(order.getOrderLineBag().orderLineNos());
+        }
+        return orderLineNoSet;
     }
 
     private WarehouseNo warehouseNo() {

@@ -57,7 +57,7 @@ public class PublicMethodAstNodeVisitor extends VoidVisitorAdapter<Encapsulation
             return;
         }
 
-        final String className = parentClass.getNameAsString();
+        String className = parentClass.getNameAsString();
         log.debug("{}: {}", className, methodDeclaration.getNameAsString());
 
         if (!JavaParserUtil.isMethodPublic(parentClass, methodDeclaration)
@@ -69,6 +69,10 @@ public class PublicMethodAstNodeVisitor extends VoidVisitorAdapter<Encapsulation
         final String comment = JavaParserUtil.javadocFirstLineOf(methodDeclaration);
         if (!comment.isEmpty()) {
             methodInfo.append(": ").append(comment);
+        }
+        String javadoc = JavaParserUtil.javadocFirstLineOf(parentClass);
+        if (!javadoc.isEmpty()) {
+            className = className + " " + javadoc;
         }
         report.registerMethodInfo(className, methodInfo.toString());
     }

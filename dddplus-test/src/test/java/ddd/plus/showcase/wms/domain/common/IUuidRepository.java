@@ -1,6 +1,7 @@
 package ddd.plus.showcase.wms.domain.common;
 
 import io.github.dddplus.model.IRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 public interface IUuidRepository extends IRepository {
 

@@ -2,11 +2,14 @@ package ddd.plus.showcase.wms.app.worker.dto;
 
 import lombok.Data;
 
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
-import javax.validation.constraints.NotNull;
 
 /**
  * 拣货下发给复核任务的数据.
@@ -21,6 +24,7 @@ public class SubmitTaskDto implements Serializable {
     private String warehouseNo;
 
     @NotNull(message = "{containerList.notNull}")
+    @Size(max = 200)
     private List<ContainerDto> containers;
 
     private Map<String, Object> extInfo;

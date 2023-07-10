@@ -6,6 +6,8 @@ import io.github.dddplus.model.ListBag;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @KeyRelation(whom = OrderLine.class, type = KeyRelation.Type.HasMany)
 public class OrderLineBag extends ListBag<OrderLine> {
@@ -24,5 +26,12 @@ public class OrderLineBag extends ListBag<OrderLine> {
         return items.stream()
                 .map(OrderLine::expectedQty)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    Set<OrderLineNo> orderLineNos() {
+        return items.stream()
+                .map(OrderLine::getOrderLineNo)
+                .collect(Collectors.toSet());
+
     }
 }
