@@ -51,7 +51,7 @@ Task 复核任务.
     inSkuPendingScenario
     claimedWith
     removeOrderLines
-    confirmQty
+    confirmQty: can be killed with lombok @Delegate
     mode
     isEmpty
     enrichSkuInfo: 补全货品信息，例如供货商、类目、品牌等

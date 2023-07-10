@@ -102,6 +102,7 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
 
     }
 
+    // can be killed with lombok @Delegate
     public CheckResult confirmQty(BigDecimal qty, Operator operator, Platform platform) {
         assert scenario.equals(TaskScenario.TaskOfSkuPending);
         return taskOfSkuPending.confirmQty(qty, operator, platform);
