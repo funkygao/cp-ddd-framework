@@ -16,4 +16,5 @@ io.github.dddplus.plugin
 io.github.dddplus.runtime
 io.github.dddplus.runtime.interceptor
 io.github.dddplus.runtime.registry
+io.github.dddplus.sre
 io.github.dddplus.step
