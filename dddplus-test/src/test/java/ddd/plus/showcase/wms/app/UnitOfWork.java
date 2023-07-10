@@ -25,7 +25,7 @@ public class UnitOfWork implements IUnitOfWork {
     private ICartonRepository cartonRepository;
 
     @Transactional(rollbackFor = Exception.class)
-    public void persist(@NonNull TaskOfSkuPending task, @NonNull Carton carton) {
+    public void persist(@NonNull Task task, @NonNull Carton carton) {
         taskRepository.save(task);
         cartonRepository.save(carton);
     }

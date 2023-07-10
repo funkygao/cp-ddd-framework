@@ -17,13 +17,13 @@ public interface ITaskRepository extends IRepository {
 
     TaskOfContainerPending mustGet(ContainerNo containerNo, WarehouseNo warehouseNo) throws WmsException;
 
-    TaskOfSkuPending mustGet(TaskNo taskNo, OrderNo orderNo, Sku sku, WarehouseNo warehouseNo) throws WmsException;
+    Task mustGet(TaskNo taskNo, OrderNo orderNo, Sku sku, WarehouseNo warehouseNo) throws WmsException;
 
     TaskOfOrderPending mustGet(OrderNo orderNo, WarehouseNo warehouseNo) throws WmsException;
 
     Map<Platform, List<Task>> pendingTasksOfPlatforms(List<Platform> platformNos);
 
-    void save(TaskOfSkuPending task);
+    void save(Task task);
 
     void save(TaskOfContainerPending task);
 

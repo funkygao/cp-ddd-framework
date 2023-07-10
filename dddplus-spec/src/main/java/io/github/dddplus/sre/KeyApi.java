@@ -25,13 +25,13 @@ public @interface KeyApi {
     /**
      * Throughput upper limit in tps.
      */
-    int throughput();
+    int throughput() default 0;
 
     /**
      * Availability in percentage.
      *
      * <p>e,g. 99.9 means 99.9%</p>
      */
-    float availability();
+    float availability() default 0;
 
 }
