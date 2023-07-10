@@ -1,5 +1,6 @@
 package ddd.plus.showcase.wms.domain.task;
 
+import ddd.plus.showcase.wms.domain.common.Sku;
 import ddd.plus.showcase.wms.domain.order.OrderNo;
 import io.github.dddplus.dsl.KeyBehavior;
 import io.github.dddplus.dsl.KeyRelation;
@@ -9,9 +10,9 @@ import lombok.NonNull;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @KeyRelation(whom = Container.class, type = KeyRelation.Type.HasMany)
 public class ContainerBag extends ListBag<Container> {
@@ -72,10 +73,16 @@ public class ContainerBag extends ListBag<Container> {
      */
     @KeyRule
     Set<OrderNo> orderNoSet() {
-        Set<OrderNo> orderNos = new HashSet<>(size());
-        for (Container container : items) {
-            orderNos.addAll(container.getContainerItemBag().orderNoSet());
-        }
-        return orderNos;
+        return items.stream()
+                .flatMap(container -> container.getContainerItemBag().orderNoSet().stream())
+                .collect(Collectors.toSet());
+    }
+
+    void enrichSkuInfo(List<Sku> skus) {
+        // 挂到各个 ContainerItem group by skuNo
+    }
+
+    public List<ContainerItem> flatItems(@NonNull Class<ITaskRepository> __) {
+        return null;
     }
 }

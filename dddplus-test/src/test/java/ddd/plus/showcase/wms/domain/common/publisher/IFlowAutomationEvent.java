@@ -1,4 +1,4 @@
-package ddd.plus.showcase.wms.domain.carton.event;
+package ddd.plus.showcase.wms.domain.common.publisher;
 
 import java.io.Serializable;
 

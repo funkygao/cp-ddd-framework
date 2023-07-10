@@ -1,6 +1,6 @@
 package ddd.plus.showcase.wms.domain.order.event;
 
-import ddd.plus.showcase.wms.domain.carton.event.IFlowAutomationEvent;
+import ddd.plus.showcase.wms.domain.common.publisher.IFlowAutomationEvent;
 import io.github.dddplus.dsl.KeyEvent;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

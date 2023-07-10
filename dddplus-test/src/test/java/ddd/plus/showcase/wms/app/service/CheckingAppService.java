@@ -2,13 +2,17 @@ package ddd.plus.showcase.wms.app.service;
 
 import ddd.plus.showcase.wms.app.UnitOfWork;
 import ddd.plus.showcase.wms.app.convert.CartonAppConverter;
+import ddd.plus.showcase.wms.app.convert.TaskAppConverter;
 import ddd.plus.showcase.wms.app.service.dto.*;
 import ddd.plus.showcase.wms.app.service.dto.base.ApiResponse;
+import ddd.plus.showcase.wms.app.worker.dto.SubmitTaskDto;
 import ddd.plus.showcase.wms.domain.carton.*;
+import ddd.plus.showcase.wms.domain.carton.ext.ConsumableExtPolicy;
 import ddd.plus.showcase.wms.domain.carton.spec.CartonNotFull;
 import ddd.plus.showcase.wms.domain.common.*;
 import ddd.plus.showcase.wms.domain.common.gateway.IMasterDataGateway;
 import ddd.plus.showcase.wms.domain.common.gateway.IOrderGateway;
+import ddd.plus.showcase.wms.domain.common.publisher.IEventPublisher;
 import ddd.plus.showcase.wms.domain.order.*;
 import ddd.plus.showcase.wms.domain.order.dict.OrderType;
 import ddd.plus.showcase.wms.domain.order.spec.OrderNotCartonizedYet;
@@ -22,12 +26,14 @@ import ddd.plus.showcase.wms.domain.task.spec.TaskCanPerformChecking;
 import ddd.plus.showcase.wms.domain.task.spec.UniqueCodeConstraint;
 import io.github.dddplus.dsl.KeyUsecase;
 import io.github.dddplus.model.IApplicationService;
+import io.github.dddplus.runtime.DDD;
 import io.github.design.ContainerNo;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -44,15 +50,46 @@ public class CheckingAppService implements IApplicationService {
     private IMasterDataGateway masterDataGateway;
     private IOrderGateway orderGateway;
     private Comparator<Platform> comparator;
-
+    private Random random = new Random();
     private ITaskRepository taskRepository;
+    private IUuidRepository uuidRepository;
     private IOrderRepository orderRepository;
     private ICartonRepository cartonRepository;
+    private ISequencer sequencer;
+    private IEventPublisher eventPublisher;
     private UnitOfWork uow;
 
-    private Random random = new Random();
+    // 返回值是taskNo
+    public ApiResponse<String> submitTask(@Valid SubmitTaskDto dto) {
+        WarehouseNo warehouseNo = WarehouseNo.of(dto.getWarehouseNo());
 
-    public ApiResponse<String> recommendPlatform(RecommendPlatformRequest request) {
+        // 幂等性
+        Uuid uuid = Uuid.of(dto.getUuid(), Uuid.Type.Task, warehouseNo, uuidRepository);
+        if (uuid.exists()) {
+            return ApiResponse.ofOk(uuid.getBizNo());
+        }
+
+        Task task = TaskAppConverter.INSTANCE.fromDto(dto); // orphan object
+        OrderBag pendingOrderBag = task.orders().pendingOrders();
+        // 任务下发过程中，客户可能取消订单了
+        OrderBagCanceled canceledOrderBag = pendingOrderBag.canceledBag(orderGateway);
+        // 从任务中移除这部分订单行
+        task.removeOrderLines(canceledOrderBag.orderLineNos());
+        if (task.isEmpty()) {
+            return ApiResponse.ofOk(null);
+        }
+
+        task.allocateTaskNo(CheckingAppService.class, TaskNo.of(sequencer.next()));
+        uuid.setBizNo(task.getTaskNo().value());
+        task.enrichSkuInfo(masterDataGateway);
+        task.plan();
+        task.accept(eventPublisher);
+
+        uow.persist(task, canceledOrderBag, uuid);
+        return ApiResponse.ofOk(task.getTaskNo().value());
+    }
+
+    public ApiResponse<String> recommendPlatform(@Valid RecommendPlatformRequest request) {
         Platform platform;
         if (request.getOrderNo() != null) {
             platform = recommendPlatformByOrder(request);
@@ -117,10 +154,27 @@ public class CheckingAppService implements IApplicationService {
     }
 
     /**
+     * 为任务的某个纸箱推荐耗材种类和数量
+     */
+    @KeyUsecase(in = "cartonNo")
+    public ApiResponse<Void> recommendConsumable(@Valid RecommendConsumableRequest request) {
+        WarehouseNo warehouseNo = WarehouseNo.of(request.getWarehouseNo());
+        Carton carton = cartonRepository.mustGet(CartonNo.of(request.getCartonNo()), warehouseNo);
+        Task task = taskRepository.mustGet(TaskNo.of(request.getTaskNo()), warehouseNo);
+        ConsumableBag consumableBag = DDD.usePolicy(ConsumableExtPolicy.class, task)
+                .recommendFor(task, carton);
+        if (consumableBag == null) {
+            // 没有命中场景：不推荐耗材
+        }
+
+        return ApiResponse.ofOk();
+    }
+
+    /**
      * 复核员扫描容器领取复核任务.
      */
     @KeyUsecase(in = "containerNo")
-    public ApiResponse<Integer> claimTask(ClaimTaskRequest request) throws WmsException {
+    public ApiResponse<Integer> claimTask(@Valid ClaimTaskRequest request) throws WmsException {
         Operator operator = Operator.of(request.getOperatorNo());
 
         TaskOfContainerPending taskOfContainerPending = taskRepository.mustGet(
@@ -149,7 +203,7 @@ public class CheckingAppService implements IApplicationService {
      * 复核装箱一体化：按货品维度.
      */
     @KeyUsecase(in = {"skuNo", "qty"})
-    public ApiResponse<Void> checkBySku(CheckBySkuRequest request) throws WmsException {
+    public ApiResponse<Void> checkBySku(@Valid CheckBySkuRequest request) throws WmsException {
         WarehouseNo warehouseNo = WarehouseNo.of(request.getWarehouseNo());
         Operator operator = Operator.of(request.getOperatorNo());
         OrderNo orderNo = OrderNo.of(request.getOrderNo());
@@ -184,7 +238,7 @@ public class CheckingAppService implements IApplicationService {
      * 把一个出库单的所有货品一次性放到入参指定的纸箱：爆品订单复核
      */
     @KeyUsecase(in = {"orderNo"})
-    public ApiResponse<Void> checkByOrder(CheckByOrderRequest request) throws WmsException {
+    public ApiResponse<Void> checkByOrder(@Valid CheckByOrderRequest request) throws WmsException {
         WarehouseNo warehouseNo = WarehouseNo.of(request.getWarehouseNo());
         Operator operator = Operator.of(request.getOperatorNo());
 
@@ -219,7 +273,7 @@ public class CheckingAppService implements IApplicationService {
      * 复核员把拣货容器的货品放入箱，并使用耗材以便运输安全，该过程发现箱已满.
      */
     @KeyUsecase(in = {"orderNo", "cartonNo", "consumables"})
-    public ApiResponse<Void> fulfillCarton(CartonFullRequest request) throws WmsException {
+    public ApiResponse<Void> fulfillCarton(@Valid CartonFullRequest request) throws WmsException {
         Carton carton = cartonRepository.mustGet(CartonNo.of(request.getCartonNo()), WarehouseNo.of(request.getWarehouseNo()));
         carton.assureSatisfied(new CartonNotFull());
         if (carton.isEmpty()) {

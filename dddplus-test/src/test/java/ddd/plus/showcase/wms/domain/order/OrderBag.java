@@ -34,6 +34,10 @@ public class OrderBag extends SetBag<Order> implements IUnboundedDomainModel {
         }
     }
 
+    public boolean consumableCostFirst() {
+        return false;
+    }
+
     /**
      * 当前出库单集合里哪些已经在单据中心里被客户取消了.
      */
@@ -44,15 +48,24 @@ public class OrderBag extends SetBag<Order> implements IUnboundedDomainModel {
     }
 
     private OrderBag bagOf(Set<OrderNo> orderNoSet) {
-        return OrderBag.of(items.stream().filter(o -> orderNoSet.contains(o.getOrderNo())).collect(Collectors.toSet()));
+        Set<Order> orders = items.stream()
+                .filter(o -> orderNoSet.contains(o.getOrderNo()))
+                .collect(Collectors.toSet());
+        return OrderBag.of(orders);
     }
 
-    private Set<OrderNo> orderNos() {
-        Set<OrderNo> set = new HashSet<>(size());
+    Set<OrderNo> orderNos() {
+        return items.stream()
+                .map(Order::getOrderNo)
+                .collect(Collectors.toSet());
+    }
+
+    Set<OrderLineNo> orderLineNos() {
+        Set<OrderLineNo> orderLineNoSet = new HashSet<>();
         for (Order order : items) {
-            set.add(order.getOrderNo());
+            orderLineNoSet.addAll(order.getOrderLineBag().orderLineNos());
         }
-        return set;
+        return orderLineNoSet;
     }
 
     private WarehouseNo warehouseNo() {

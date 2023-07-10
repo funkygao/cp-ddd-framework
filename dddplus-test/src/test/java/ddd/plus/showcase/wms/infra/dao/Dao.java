@@ -1,5 +1,6 @@
 package ddd.plus.showcase.wms.infra.dao;
 
+import ddd.plus.showcase.wms.domain.task.Task;
 import ddd.plus.showcase.wms.infra.domain.carton.CartonPo;
 import ddd.plus.showcase.wms.infra.domain.task.TaskPo;
 import io.github.dddplus.model.IPo;
@@ -12,6 +13,8 @@ import java.util.List;
  */
 public interface Dao {
     <T> T query(String sql, Object... params);
+
+    void insert(Task task);
 
     void insert(IPo po);
 

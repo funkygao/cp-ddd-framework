@@ -3,6 +3,7 @@ package ddd.plus.showcase.wms.app.service.dto;
 import ddd.plus.showcase.wms.app.service.dto.base.ApiRequest;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import java.util.List;
  */
 @Data
 public class CartonFullRequest extends ApiRequest {
+    @NotNull
     private String cartonNo;
     private String orderNo;
     private String platformNo;

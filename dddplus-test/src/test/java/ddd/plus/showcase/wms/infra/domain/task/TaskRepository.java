@@ -98,7 +98,7 @@ public class TaskRepository implements ITaskRepository {
         // 2. 这2个hint可以在Task这个维度合并，以降低数据库交互，从而提升性能
 
         // 3. 转换为po，为了(查询，报表)进行的字段冗余：denormalization
-        TaskPo po = TaskConverter.INSTANCE.toPo(taskOfSkuPending);
+        TaskPo po = converter.toPo(taskOfSkuPending);
 
         // 4. DDD里的更新绝大部分采用乐观锁：通过 Exchange 有效传递而不污染领域层
         po.setVersion(taskOfSkuPending.xGet(Task.OptimisticLock, Short.class));
@@ -118,6 +118,18 @@ public class TaskRepository implements ITaskRepository {
     @KeyBehavior(useRawArgs = true)
     public void save(TaskOfOrderPending task) {
 
+    }
+
+    @Override
+    public void insert(Task task) {
+        TaskPo taskPo = converter.toPo(task);
+        // 通过mapstruct把container表里冗余的task字段传递过去
+        List<ContainerPo> containerPoList = converter.toContainerPoList(task, task.containerBag().items());
+        List<ContainerItemPo> containerItemPoList = converter.toContainerItemPoList(task,
+                task.containerBag().flatItems(_self));
+        dao.insert(taskPo);
+        dao.insert(containerPoList);
+        dao.insert(containerItemPoList);
     }
 
     /**

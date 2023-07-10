@@ -79,6 +79,18 @@ public final class JavaParserUtil {
         return false;
     }
 
+    public static boolean isMethodPublic(ClassOrInterfaceDeclaration classOrInterfaceDeclaration, MethodDeclaration methodDeclaration) {
+        if (methodDeclaration.isPublic()) {
+            return true;
+        }
+
+        if (classOrInterfaceDeclaration.isInterface() && methodDeclaration.isDefault()) {
+            return true;
+        }
+
+        return false;
+    }
+
     static Set<String> extractMethodArguments(MethodDeclaration methodDeclaration) {
         if (methodDeclaration.getParameters() == null) {
             return emptySet;

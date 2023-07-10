@@ -5,13 +5,13 @@ import com.google.common.collect.Lists;
 import java.util.List;
 
 public enum TaskStatus {
-    Submitted,
-    Ongoing,
+    Accepted,
+    Claimed,
     Finished,
     Appending;
 
     public static List<TaskStatus> allowCheckStatus() {
-        return Lists.newArrayList(Submitted, Ongoing);
+        return Lists.newArrayList(Accepted, Claimed);
     }
 
     /**
@@ -19,9 +19,5 @@ public enum TaskStatus {
      */
     public boolean canPerformChecking() {
         return allowCheckStatus().contains(this);
-    }
-
-    public boolean canRecheck() {
-        return Submitted.equals(this) || Ongoing.equals(this);
     }
 }

@@ -9,6 +9,9 @@ import lombok.Getter;
 
 import java.math.BigDecimal;
 
+/**
+ * 纸箱里个某一种sku.
+ */
 public class CartonItem implements IDomainModel {
     private Long id;
 

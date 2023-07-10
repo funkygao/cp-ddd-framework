@@ -1,4 +1,4 @@
-标注覆盖率：Class(59/62.7%) Method(105/47.6%) Property(203/25.1%) Statement(201)
+标注覆盖率：Class(65/58.5%) Method(123/49.6%) Property(241/22.0%) Statement(227)
 模型债：
 <<Aggregate: 客户出库单>>
 Order 客户的出库单.
@@ -13,6 +13,8 @@ Order 客户的出库单.
    [规则]
       totalExpectedQty() 
       recommendedPlatform() 该订单已经被推荐到哪一个复核台.
+   [流程]
+      processMyEvent(OrderCheckedEvent)  OrderCheckedEventHandler
 OrderCartons
    [行为]
       totalCartonizedQty() 该订单已经装箱的货品件数总和.
@@ -27,6 +29,8 @@ OrderTasks
 OrderBag
    [行为]
       canceledBag() 当前出库单集合里哪些已经在单据中心里被客户取消了.
+   [规则]
+      consumableCostFirst() 
 <<Aggregate: 包裹>>
 Pack 包裹.
    [属性]
@@ -60,19 +64,23 @@ Carton 纸箱，它会成为包裹.
       transferFrom(CheckResult) 
    [规则]
       cartonizationRule() 装箱规则，利用gateway延迟加载，规则也是规约.
-CartonItem
+   [流程]
+      recommendFor(Carton,Task) 为纸箱推荐耗材 ConsumableExt
+      processMyEvent(CartonFulfilledEvent)  CartonFulfilledEventHandler
+CartonItem 纸箱里个某一种sku.
    [属性]
    Structural    sku
    Referential   orderLineNo
    Quantity      checkedQty
 CartonItemBag
 CartonOrder
-Consumable
+Consumable 耗材，被放入纸箱，以便运输安全.
    [属性]
    Structural    CartonNo OrderNo TaskNo
+   Quantity      qty
    Location      Platform
 ConsumableBag
-Pallet
+Pallet 栈板，物流领域也称为托盘.
    [属性]
    Structural    PalletNo TaskNo
    [行为]
@@ -86,7 +94,7 @@ CartonBag
 Sku 货品.
    [属性]
    Structural    Owner PackCode
-   Contextual    LotNo snList
+   Contextual    LotNo snList uniqueCode
 <<Aggregate: 出库复核任务>>
 Container 拣货容器.
    [属性]
@@ -111,7 +119,10 @@ Task 复核任务.
    Location      Platform
    [行为]
       claimedWith() 
+      plan() 初始化时指定复核生产计划
+      removeOrderLines() 
    [规则]
+      isEmpty() 
       totalSku() 
       totalQty() 
       totalPendingQty() 
@@ -131,13 +142,13 @@ TaskOfSkuPending
       confirmQty() 
 TaskOrders
 <<Aggregate: 发货>>
-OrderLineManifest
+OrderLineManifest 发货的订单行，货品维度.
    [属性]
    Structural    OrderLineNo Sku
-OrderManifest
+OrderManifest 一个订单的装车清单.
    [属性]
    Structural    OrderNo
-ShippingManifest
+ShippingManifest 一辆货车的装车清单.
    [属性]
    Structural    Carrier
    Reserved      extInfo
@@ -145,6 +156,7 @@ ShippingManifest
 CheckingAppService
    recommendPlatformByTaskBacklog(taskNo) 提升拣货员去哪个复核台：按任务积压情况
    recommendPlatformByOrder(orderNo) 提升拣货员去哪个复核台：按订单
+   recommendConsumable(cartonNo) 为任务的某个纸箱推荐耗材种类和数量
    claimTask(containerNo) 复核员扫描容器领取复核任务.
    checkBySku(qty,skuNo) 复核装箱一体化：按货品维度.
    checkByOrder(orderNo) 把一个出库单的所有货品一次性放到入参指定的纸箱：爆品订单复核
@@ -159,3 +171,4 @@ ObFlowAutomator
 <<领域事件>>
    OrderCheckedEvent 
    CartonFulfilledEvent 
+   TaskAcceptedEvent 

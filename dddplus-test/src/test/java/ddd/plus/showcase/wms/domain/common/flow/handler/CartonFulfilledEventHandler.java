@@ -4,17 +4,18 @@ import ddd.plus.showcase.wms.domain.carton.Carton;
 import ddd.plus.showcase.wms.domain.carton.CartonNo;
 import ddd.plus.showcase.wms.domain.carton.ICartonRepository;
 import ddd.plus.showcase.wms.domain.carton.event.CartonFulfilledEvent;
-import ddd.plus.showcase.wms.domain.carton.event.IFlowAutomationEvent;
+import ddd.plus.showcase.wms.domain.common.publisher.IFlowAutomationEvent;
 import ddd.plus.showcase.wms.domain.common.WarehouseNo;
+import io.github.dddplus.dsl.KeyFlow;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class CartonFulfilledEventHandler extends AbstractEventHandler {
+public class CartonFulfilledEventHandler extends AbstractEventHandler<CartonFulfilledEvent> {
     private ICartonRepository cartonRepository;
 
     @Override
-    protected void processMyEvent(IFlowAutomationEvent request) {
-        CartonFulfilledEvent event = (CartonFulfilledEvent) request;
+    @KeyFlow(actor = Carton.class)
+    protected void processMyEvent(CartonFulfilledEvent event) {
         Carton carton = cartonRepository.mustGet(CartonNo.of(event.getCartonNo()),
                 WarehouseNo.of(event.getWarehouseNo()));
         if (!carton.order().get().constraint().isAutoShip()) {
@@ -25,14 +26,12 @@ public class CartonFulfilledEventHandler extends AbstractEventHandler {
         // 执行自动发货
         // ...
 
-        if (successor != null) {
-            // trigger successor
-            successor.processEvent(request);
-        }
+        triggerSuccessor(event);
     }
 
     @Override
     protected boolean isMine(IFlowAutomationEvent event) {
         return event instanceof CartonFulfilledEvent;
     }
+
 }

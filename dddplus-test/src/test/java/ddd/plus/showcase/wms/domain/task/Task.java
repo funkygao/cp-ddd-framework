@@ -2,12 +2,16 @@ package ddd.plus.showcase.wms.domain.task;
 
 import ddd.plus.showcase.wms.domain.carton.Carton;
 import ddd.plus.showcase.wms.domain.common.*;
+import ddd.plus.showcase.wms.domain.common.gateway.IMasterDataGateway;
+import ddd.plus.showcase.wms.domain.common.publisher.IEventPublisher;
 import ddd.plus.showcase.wms.domain.order.Order;
 import ddd.plus.showcase.wms.domain.order.OrderBag;
+import ddd.plus.showcase.wms.domain.order.OrderLineNo;
 import ddd.plus.showcase.wms.domain.order.OrderNo;
 import ddd.plus.showcase.wms.domain.task.dict.TaskExchangeKey;
 import ddd.plus.showcase.wms.domain.task.dict.TaskMode;
 import ddd.plus.showcase.wms.domain.task.dict.TaskStatus;
+import ddd.plus.showcase.wms.domain.task.event.TaskAcceptedEvent;
 import ddd.plus.showcase.wms.domain.task.hint.TaskDirtyHint;
 import io.github.dddplus.dsl.KeyBehavior;
 import io.github.dddplus.dsl.KeyElement;
@@ -15,6 +19,7 @@ import io.github.dddplus.dsl.KeyRelation;
 import io.github.dddplus.dsl.KeyRule;
 import io.github.dddplus.model.BaseAggregateRoot;
 import io.github.dddplus.model.DirtyMemento;
+import io.github.dddplus.model.IApplicationService;
 import io.github.dddplus.model.IUnboundedDomainModel;
 import io.github.dddplus.model.association.HasMany;
 import io.github.dddplus.model.spcification.Notification;
@@ -22,7 +27,9 @@ import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 复核任务.
@@ -51,6 +58,18 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
     @Getter
     private WarehouseNo warehouseNo;
 
+    public void allocateTaskNo(@NonNull Class<? extends IApplicationService> __, @NonNull TaskNo taskNo) {
+        this.taskNo = taskNo;
+    }
+
+    /**
+     * 初始化时指定复核生产计划
+     */
+    @KeyBehavior
+    public void plan() {
+        // 各种打标，把各种业务字段转换为各个作业动作的直接指令
+    }
+
     @KeyRelation(whom = ContainerBag.class, type = KeyRelation.Type.HasOne)
     private ContainerBag containerBag;
 
@@ -65,6 +84,44 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
         this.platform = platformNo;
         this.operator = operator;
         mergeDirtyWith(new TaskDirtyHint(this).dirty("operator", "platform_no"));
+    }
+
+    @KeyBehavior
+    public void removeOrderLines(Set<OrderLineNo> orderLineNos) {
+
+    }
+
+    public TaskMode mode() {
+        return taskMode;
+    }
+
+    public boolean isEmpty() {
+        return containerBag.isEmpty();
+    }
+
+    private Set<String> skuNoSet() {
+        return containerBag.items().stream()
+                .flatMap(container -> container.skuNoSet().stream())
+                .collect(Collectors.toSet());
+    }
+
+    /**
+     * 补全货品信息，例如供货商、类目、品牌等
+     */
+    public void enrichSkuInfo(IMasterDataGateway gateway) {
+        Set<String> skuSet = skuNoSet();
+        List<Sku> skuList = gateway.pullSkuBySkuNos(skuSet);
+        containerBag.enrichSkuInfo(skuList);
+    }
+
+    public void accept(IEventPublisher publisher) {
+        this.assureSatisfied(null); // composition of specifications
+        this.status = TaskStatus.Accepted;
+
+        TaskAcceptedEvent event = new TaskAcceptedEvent();
+        event.setTaskNo(taskNo.value());
+        event.setWarehouseNo(warehouseNo.value());
+        publisher.publish(event);
     }
 
     @KeyRule
@@ -104,7 +161,7 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
         return containerBag;
     }
 
-    public void injectContainerBag(@NonNull Class<? extends ITaskRepository> __, ContainerBag containerBag) {
+    public void injectContainerBag(@NonNull Class<ITaskRepository> __, ContainerBag containerBag) {
         this.containerBag = containerBag;
     }
 
@@ -129,7 +186,7 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
         return orders;
     }
 
-    public void injectOrders(@NonNull Class<? extends ITaskRepository> __, TaskOrders orders) {
+    public void injectOrders(@NonNull Class<ITaskRepository> __, TaskOrders orders) {
         this.orders = orders;
     }
 
@@ -145,7 +202,7 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
         return cartons;
     }
 
-    public void injectCartons(@NonNull Class<? extends ITaskRepository> __, TaskCartons taskCartons) {
+    public void injectCartons(@NonNull Class<ITaskRepository> __, TaskCartons taskCartons) {
         this.cartons = taskCartons;
     }
 }
