@@ -3,7 +3,7 @@
 ## Incompatible changes
 
 - Removed
-   `IBaseTranslator`, `ApiResult`, `RequestProfile`, `IModelAttachmentExt`, `IDomainModelCreator`
+   - `IBaseTranslator`, `ApiResult`, `RequestProfile`, `IModelAttachmentExt`, `IDomainModelCreator`
 - Renamed
    - `IExtPolicy` -> `IPolicy`
    - `BaseDomainAbility` -> `BaseRouter`, `@DomainAbility` -> `@Router`
@@ -22,4 +22,4 @@
 
 ## Bug Fix
 
-- b90bd6a71b66f5b1c60460949bdd8b7ab833f854
+- [如果所有pattern扩展点叠加执行，导致 ClassCastException](https://github.com/dddplus/dddplus/commit/b90bd6a71b66f5b1c60460949bdd8b7ab833f854)
