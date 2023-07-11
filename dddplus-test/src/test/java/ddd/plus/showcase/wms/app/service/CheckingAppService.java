@@ -24,9 +24,12 @@ import ddd.plus.showcase.wms.domain.task.dict.TaskMode;
 import ddd.plus.showcase.wms.domain.task.spec.OperatorCannotBePicker;
 import ddd.plus.showcase.wms.domain.task.spec.TaskCanPerformChecking;
 import ddd.plus.showcase.wms.domain.task.spec.UniqueCodeConstraint;
+import ddd.plus.showcase.wms.infra.domain.task.ContainerItemPo;
+import ddd.plus.showcase.wms.infra.domain.task.TaskManager;
 import io.github.dddplus.dsl.KeyUsecase;
 import io.github.dddplus.model.IApplicationService;
 import io.github.dddplus.runtime.DDD;
+import io.github.dddplus.sre.KeyApi;
 import io.github.design.ContainerNo;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -55,6 +58,7 @@ public class CheckingAppService implements IApplicationService {
     private IUuidRepository uuidRepository;
     private IOrderRepository orderRepository;
     private ICartonRepository cartonRepository;
+    private TaskManager taskManager;
     private ISequencer sequencer;
     private IEventPublisher eventPublisher;
     private UnitOfWork uow;
@@ -203,24 +207,25 @@ public class CheckingAppService implements IApplicationService {
      * 复核装箱一体化：按货品维度.
      */
     @KeyUsecase(in = {"skuNo", "qty"})
+    @KeyApi(tp99 = 100)
     public ApiResponse<Void> checkBySku(@Valid CheckBySkuRequest request) throws WmsException {
         WarehouseNo warehouseNo = WarehouseNo.of(request.getWarehouseNo());
         Operator operator = Operator.of(request.getOperatorNo());
         OrderNo orderNo = OrderNo.of(request.getOrderNo());
         BigDecimal qty = new BigDecimal(request.getQty());
 
-        TaskOfSkuPending taskOfSkuPending = taskRepository.mustGet(TaskNo.of(request.getTaskNo()),
+        Task task = taskRepository.mustGet(TaskNo.of(request.getTaskNo()),
                 orderNo, Sku.of(request.getSkuNo()), warehouseNo);
-        taskOfSkuPending.assureSatisfied(new TaskCanPerformChecking()
+        task.assureSatisfied(new TaskCanPerformChecking()
                 .and(new UniqueCodeConstraint(UniqueCode.of(request.getUniqueCode())))
                 .and(new OperatorCannotBePicker(masterDataGateway, operator)));
 
-        Order order = taskOfSkuPending.orders().pendingOrder(orderNo);
+        Order order = task.orders().pendingOrder(orderNo);
         order.assureSatisfied(new OrderNotFullyCartonized());
 
         // 此时复核员已经领取任务了，客单是不允许取消的，因此不必检查逆向逻辑
 
-        CheckResult checkResult = taskOfSkuPending.confirmQty(qty, operator,
+        CheckResult checkResult = task.confirmQty(qty, operator,
                 Platform.of(request.getPlatformNo()));
 
         // 装箱，物理世界里，复核员已经清点数量，并把货品从容器里转移到箱，但人可能放错货品，运营要管控
@@ -230,7 +235,7 @@ public class CheckingAppService implements IApplicationService {
         carton.bindOrder(orderNo, qty);
         carton.transferFrom(checkResult);
 
-        uow.persist(taskOfSkuPending, carton);
+        uow.persist(task, carton);
         return ApiResponse.ofOk();
     }
 
@@ -290,5 +295,11 @@ public class CheckingAppService implements IApplicationService {
 
         uow.persist(carton);
         return ApiResponse.ofOk();
+    }
+
+    // 查询、报表类用例，跳过domain层
+    public ApiResponse<List<ContainerItemResult>> listContainerItems(String taskNo, String warehouseNo) {
+        List<ContainerItemPo> containerItemPoList = taskManager.listContainerItemsBy(TaskNo.of(taskNo), WarehouseNo.of(warehouseNo));
+        return ApiResponse.ofOk(TaskAppConverter.INSTANCE.containerItemPoList2Dto(containerItemPoList));
     }
 }

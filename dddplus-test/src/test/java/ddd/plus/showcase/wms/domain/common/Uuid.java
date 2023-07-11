@@ -4,6 +4,7 @@ import io.github.dddplus.model.AbstractBusinessNo;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import org.springframework.dao.DuplicateKeyException;
 
 /**
  * 通用的业务幂等对象.
@@ -43,10 +44,18 @@ public class Uuid extends AbstractBusinessNo<String> {
     }
 
     public boolean exists() {
-        return repository.tryInsert(this);
+        return repository.exists(this);
     }
 
-    public void update() {
-        repository.update(this);
+    /**
+     * 确保自身状态改变只发生一次.
+     */
+    public boolean assureVaryOnce() {
+        try {
+            repository.insert(this);
+            return true;
+        } catch (DuplicateKeyException ignored) {
+            return false;
+        }
     }
 }

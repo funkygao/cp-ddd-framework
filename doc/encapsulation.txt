@@ -48,8 +48,10 @@ PackBag
 Task 复核任务.
     allocateTaskNo
     plan: 初始化时指定复核生产计划
+    inSkuPendingScenario
     claimedWith
     removeOrderLines
+    confirmQty: can be killed with lombok @Delegate
     mode
     isEmpty
     enrichSkuInfo: 补全货品信息，例如供货商、类目、品牌等
@@ -72,9 +74,6 @@ TaskOfContainerPending
     confirmQty
 TaskOfOrderPending
     confirmQty
-TaskOfSkuPending
-    unbounded
-    confirmQty
 Uuid 通用的业务幂等对象.
     exists
-    update
+    assureVaryOnce: 确保自身状态改变只发生一次.

@@ -89,19 +89,19 @@ public class TaskRepository implements ITaskRepository {
      */
     @Override
     @KeyBehavior(useRawArgs = true)
-    public void save(TaskOfSkuPending taskOfSkuPending) {
+    public void save(Task task) {
         // 1. 获取所有hint，这样才知道该如何落库
-        ConfirmQtyHint confirmQtyHint = taskOfSkuPending.firstHintOf(ConfirmQtyHint.class);
-        TaskDirtyHint taskDirtyHint = taskOfSkuPending.firstHintOf(TaskDirtyHint.class);
+        ConfirmQtyHint confirmQtyHint = task.firstHintOf(ConfirmQtyHint.class);
+        TaskDirtyHint taskDirtyHint = task.firstHintOf(TaskDirtyHint.class);
         taskDirtyHint.getDirtyFields();
 
         // 2. 这2个hint可以在Task这个维度合并，以降低数据库交互，从而提升性能
 
         // 3. 转换为po，为了(查询，报表)进行的字段冗余：denormalization
-        TaskPo po = converter.toPo(taskOfSkuPending);
+        TaskPo po = converter.toPo(task);
 
         // 4. DDD里的更新绝大部分采用乐观锁：通过 Exchange 有效传递而不污染领域层
-        po.setVersion(taskOfSkuPending.xGet(Task.OptimisticLock, Short.class));
+        po.setVersion(task.xGet(Task.OptimisticLock, Short.class));
         dao.update(po);
     }
 
@@ -152,9 +152,10 @@ public class TaskRepository implements ITaskRepository {
     }
 
     @Override
-    public TaskOfSkuPending mustGet(TaskNo taskNo, OrderNo orderNo, Sku sku, WarehouseNo warehouseNo) throws WmsException {
+    public Task mustGet(TaskNo taskNo, OrderNo orderNo, Sku sku, WarehouseNo warehouseNo) throws WmsException {
         Task task = dao.query("");
-        return new TaskOfSkuPending(_self, task, orderNo, sku);
+        task.inSkuPendingScenario(_self, orderNo, sku);
+        return task;
     }
 
     @Override

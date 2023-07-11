@@ -1,4 +1,4 @@
-标注覆盖率：Class(65/58.5%) Method(123/49.6%) Property(241/22.0%) Statement(227)
+标注覆盖率：Class(64/59.4%) Method(124/49.2%) Property(250/21.2%) Statement(229)
 模型债：
 <<Aggregate: 客户出库单>>
 Order 客户的出库单.
@@ -137,7 +137,7 @@ TaskOfContainerPending
 TaskOfOrderPending
    [行为]
       confirmQty() 
-TaskOfSkuPending
+TaskOfSkuPending The hidden class
    [行为]
       confirmQty() 
 TaskOrders
