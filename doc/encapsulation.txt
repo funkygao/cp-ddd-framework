@@ -76,4 +76,4 @@ TaskOfOrderPending
     confirmQty
 Uuid 通用的业务幂等对象.
     exists
-    update
+    assureVaryOnce: 确保自身状态改变只发生一次.
