@@ -24,6 +24,8 @@ import ddd.plus.showcase.wms.domain.task.dict.TaskMode;
 import ddd.plus.showcase.wms.domain.task.spec.OperatorCannotBePicker;
 import ddd.plus.showcase.wms.domain.task.spec.TaskCanPerformChecking;
 import ddd.plus.showcase.wms.domain.task.spec.UniqueCodeConstraint;
+import ddd.plus.showcase.wms.infra.domain.task.ContainerItemPo;
+import ddd.plus.showcase.wms.infra.domain.task.TaskManager;
 import io.github.dddplus.dsl.KeyUsecase;
 import io.github.dddplus.model.IApplicationService;
 import io.github.dddplus.runtime.DDD;
@@ -56,6 +58,7 @@ public class CheckingAppService implements IApplicationService {
     private IUuidRepository uuidRepository;
     private IOrderRepository orderRepository;
     private ICartonRepository cartonRepository;
+    private TaskManager taskManager;
     private ISequencer sequencer;
     private IEventPublisher eventPublisher;
     private UnitOfWork uow;
@@ -292,5 +295,11 @@ public class CheckingAppService implements IApplicationService {
 
         uow.persist(carton);
         return ApiResponse.ofOk();
+    }
+
+    // 查询、报表类用例，跳过domain层
+    public ApiResponse<List<ContainerItemResult>> listContainerItems(String taskNo, String warehouseNo) {
+        List<ContainerItemPo> containerItemPoList = taskManager.listContainerItemsBy(TaskNo.of(taskNo), WarehouseNo.of(warehouseNo));
+        return ApiResponse.ofOk(TaskAppConverter.INSTANCE.containerItemPoList2Dto(containerItemPoList));
     }
 }
