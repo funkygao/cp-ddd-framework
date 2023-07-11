@@ -28,6 +28,10 @@ jdepend:
 	@mvn site
 	@find . -name jdepend-report.html
 
+doxygen:
+	@doxygen Doxyfile
+	@open target/callgraph/index.html
+
 deploy:
 ifeq ($(BRANCH), master)
 	@mvn clean deploy verify -Possrh -e
