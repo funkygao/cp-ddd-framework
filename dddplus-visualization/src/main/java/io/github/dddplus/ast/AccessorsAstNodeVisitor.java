@@ -18,7 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 class AccessorsAstNodeVisitor extends VoidVisitorAdapter<Void> {
@@ -52,8 +51,8 @@ class AccessorsAstNodeVisitor extends VoidVisitorAdapter<Void> {
         }
 
         final String methodName = methodCallExpr.getName().asString();
-        Optional<AccessorsEntry> accessorsEntry = findAccessorsEntry(methodName);
-        if (!accessorsEntry.isPresent()) {
+        List<AccessorsEntry> possibleEntries = findPossibleAccessorsEntries(methodName);
+        if (possibleEntries.isEmpty()) {
             return;
         }
 
@@ -64,22 +63,29 @@ class AccessorsAstNodeVisitor extends VoidVisitorAdapter<Void> {
         }
 
         // Order.setFoo 被标注为 @Accessors(IOrderRepository.class)
-        // FIXME 但调用setFoo是IOrderRepository的实现类：OrderRepository
+        // 但调用setFoo是IOrderRepository的实现类：OrderRepository
         final String accessorClassName = accessorClazz.getNameAsString();
-        log.debug("{} calls {}", accessorClassName, methodCallExpr.getNameAsString());
+        boolean satisfied = false;
+        for (AccessorsEntry entry : possibleEntries) {
+            if (entry.satisfy(accessorClazz)) {
+                satisfied = true;
+                break;
+            }
+        }
 
-        if (accessorsEntry.get().satisfy(accessorClassName)) {
+        if (!satisfied) {
             throw new RuntimeException(String.format("%s is not allowed for %s", methodName, accessorClassName));
         }
     }
 
-    private Optional<AccessorsEntry> findAccessorsEntry(String methodName) {
+    private List<AccessorsEntry> findPossibleAccessorsEntries(String methodName) {
+        List<AccessorsEntry> result = new ArrayList<>();
         for (AccessorsEntry entry : accessorsEntries) {
-            if (entry.getMethodName().equals(methodName)) {
-                return Optional.of(entry);
+            if (entry.getDeclaredMethodName().equals(methodName)) {
+                result.add(entry);
             }
         }
-        return Optional.empty();
+        return result;
     }
 
 }

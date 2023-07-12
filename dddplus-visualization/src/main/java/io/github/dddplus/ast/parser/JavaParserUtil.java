@@ -72,12 +72,15 @@ public final class JavaParserUtil {
     }
 
     public static boolean implementsInterface(ClassOrInterfaceDeclaration classOrInterfaceDeclaration, Class theInterface) {
+        return implementsInterface(classOrInterfaceDeclaration, theInterface.getSimpleName());
+    }
+
+    public static boolean implementsInterface(ClassOrInterfaceDeclaration classOrInterfaceDeclaration, String interfaceSimpleName) {
         for (ClassOrInterfaceType t : classOrInterfaceDeclaration.getImplementedTypes()) {
-            if (t.getNameAsString().equals(theInterface.getSimpleName())) {
+            if (t.getNameAsString().equals(interfaceSimpleName)) {
                 return true;
             }
         }
-
         return false;
     }
 

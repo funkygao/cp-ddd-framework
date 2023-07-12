@@ -19,8 +19,8 @@ public class AccessorsAnnotationParser {
         Set<String> accessorClasses = AnnotationFieldParser.arrayFieldValue(singleMemberAnnotationExpr.getMemberValue());
         AccessorsEntry entry = new AccessorsEntry();
         entry.setAccessorsClasses(accessorClasses);
-        entry.setClassName(classOrInterfaceDeclaration.getNameAsString());
-        entry.setMethodName(methodDeclaration.getNameAsString());
+        entry.setDeclaredClassName(classOrInterfaceDeclaration.getNameAsString());
+        entry.setDeclaredMethodName(methodDeclaration.getNameAsString());
         return entry;
     }
 

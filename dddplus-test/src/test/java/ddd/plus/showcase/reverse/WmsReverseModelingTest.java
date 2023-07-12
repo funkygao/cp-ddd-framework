@@ -1,7 +1,5 @@
 package ddd.plus.showcase.reverse;
 
-import ddd.plus.showcase.wms.domain.task.Task;
-import ddd.plus.showcase.wms.domain.task.TaskNo;
 import io.github.dddplus.ast.*;
 import io.github.dddplus.ast.report.EncapsulationReport;
 import io.github.dddplus.ast.view.PlainTextBuilder;
@@ -11,9 +9,6 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
 
 class WmsReverseModelingTest {
     private final DomainLayerFilter domainLayerFilter = new DomainLayerFilter();
@@ -72,22 +67,6 @@ class WmsReverseModelingTest {
         new AccessorsEnforcer()
                 .scan(root)
                 .enforce(showcaseFilter);
-    }
-
-    @Test
-    @Disabled // FIXME
-    void accessorsEnforcementBroken() {
-        try {
-            Task task = new Task();
-            task.allocateTaskNo(TaskNo.of("abc"));
-
-            new AccessorsEnforcer()
-                    .scan(root)
-                    .enforce(showcaseFilter);
-            fail();
-        } catch (RuntimeException expected) {
-            assertEquals(expected.getMessage(), "");
-        }
     }
 
     private static class DomainLayerFilter implements FileWalker.Filter {
