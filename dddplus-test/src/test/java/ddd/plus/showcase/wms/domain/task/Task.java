@@ -178,10 +178,6 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
         return containerBag;
     }
 
-    public void injectContainerBag(@NonNull Class<ITaskRepository> __, ContainerBag containerBag) {
-        this.containerBag = containerBag;
-    }
-
     /**
      * 针对关联关系显式建模.
      *
@@ -203,10 +199,6 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
         return orders;
     }
 
-    public void injectOrders(@NonNull Class<ITaskRepository> __, TaskOrders orders) {
-        this.orders = orders;
-    }
-
     public interface TaskCartons extends HasMany<Carton> {
         /**
          * 该任务下所有纸箱里是否已经有该唯一码
@@ -219,7 +211,11 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
         return cartons;
     }
 
-    public void injectCartons(@NonNull Class<ITaskRepository> __, TaskCartons taskCartons) {
+    public void injects(@NonNull Class<ITaskRepository> __,
+                        ContainerBag containerBag, TaskCartons taskCartons,
+                        TaskOrders taskOrders) {
+        this.containerBag = containerBag;
         this.cartons = taskCartons;
+        this.orders = taskOrders;
     }
 }

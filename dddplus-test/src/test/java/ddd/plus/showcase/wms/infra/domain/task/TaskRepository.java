@@ -61,20 +61,13 @@ public class TaskRepository implements ITaskRepository {
 
         // 3. 组装 bag 对象，但不希望被误用
         List<ContainerPo> containerPos = dao.query("select xxx");
-        task.injectContainerBag(_self, ContainerBag.of(converter.fromContainerPoList(containerPos)));
 
         // 4. 实例化并注入 association implementation
-        injectAssociations(task);
+        task.injects(_self,
+                ContainerBag.of(converter.fromContainerPoList(containerPos)),
+                new TaskCartonsDb(task, dao),
+                new TaskOrdersDb(task, dao));
         return task;
-    }
-
-    /**
-     * 实例化关联对象并注入实体
-     */
-    @KeyBehavior
-    private void injectAssociations(Task task) {
-        task.injectCartons(_self, new TaskCartonsDb(task, dao));
-        task.injectOrders(_self, new TaskOrdersDb(task, dao));
     }
 
     /**
