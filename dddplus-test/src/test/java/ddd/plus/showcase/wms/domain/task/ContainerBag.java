@@ -6,6 +6,7 @@ import io.github.dddplus.dsl.KeyBehavior;
 import io.github.dddplus.dsl.KeyRelation;
 import io.github.dddplus.dsl.KeyRule;
 import io.github.dddplus.model.ListBag;
+import io.github.dddplus.model.encapsulation.Accessors;
 import lombok.NonNull;
 
 import java.math.BigDecimal;
@@ -82,7 +83,8 @@ public class ContainerBag extends ListBag<Container> {
         // 挂到各个 ContainerItem group by skuNo
     }
 
-    public List<ContainerItem> flatItems(@NonNull Class<ITaskRepository> __) {
+    @Accessors(ITaskRepository.class)
+    public List<ContainerItem> flatItems() {
         return null;
     }
 }

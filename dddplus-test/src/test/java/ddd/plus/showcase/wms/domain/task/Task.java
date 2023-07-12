@@ -23,6 +23,7 @@ import io.github.dddplus.model.DirtyMemento;
 import io.github.dddplus.model.IApplicationService;
 import io.github.dddplus.model.IUnboundedDomainModel;
 import io.github.dddplus.model.association.HasMany;
+import io.github.dddplus.model.encapsulation.Accessors;
 import io.github.dddplus.model.spcification.Notification;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
@@ -59,7 +60,8 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
     @Getter
     private WarehouseNo warehouseNo;
 
-    public void allocateTaskNo(@NonNull Class<? extends IApplicationService> __, @NonNull TaskNo taskNo) {
+    @Accessors(IApplicationService.class)
+    public void allocateTaskNo(@NonNull TaskNo taskNo) {
         this.taskNo = taskNo;
     }
 
@@ -85,7 +87,8 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
     // the flag to implement subtypes
     private TaskScenario scenario;
 
-    public void inSkuPendingScenario(@NonNull Class<ITaskRepository> __, OrderNo orderNo, Sku sku) {
+    @Accessors(ITaskRepository.class)
+    public void inSkuPendingScenario(OrderNo orderNo, Sku sku) {
         this.scenario = TaskScenario.TaskOfSkuPending;
         this.taskOfSkuPending = new TaskOfSkuPending(this, orderNo, sku);
     }
@@ -211,8 +214,8 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
         return cartons;
     }
 
-    public void injects(@NonNull Class<ITaskRepository> __,
-                        ContainerBag containerBag, TaskCartons taskCartons,
+    @Accessors(ITaskRepository.class)
+    public void injects(ContainerBag containerBag, TaskCartons taskCartons,
                         TaskOrders taskOrders) {
         this.containerBag = containerBag;
         this.cartons = taskCartons;

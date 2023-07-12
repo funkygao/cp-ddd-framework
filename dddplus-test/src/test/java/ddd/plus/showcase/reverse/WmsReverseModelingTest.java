@@ -1,9 +1,8 @@
 package ddd.plus.showcase.reverse;
 
-import io.github.dddplus.ast.DomainModelAnalyzer;
-import io.github.dddplus.ast.DomainModelAnalyzerTest;
-import io.github.dddplus.ast.FileWalker;
-import io.github.dddplus.ast.ReverseEngineeringModel;
+import ddd.plus.showcase.wms.domain.task.Task;
+import ddd.plus.showcase.wms.domain.task.TaskNo;
+import io.github.dddplus.ast.*;
 import io.github.dddplus.ast.report.EncapsulationReport;
 import io.github.dddplus.ast.view.PlainTextBuilder;
 import io.github.dddplus.ast.view.PlantUmlBuilder;
@@ -12,6 +11,9 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 class WmsReverseModelingTest {
     private final DomainLayerFilter domainLayerFilter = new DomainLayerFilter();
@@ -62,6 +64,29 @@ class WmsReverseModelingTest {
                 .scan(root)
                 .analyzeEncapsulation(domainLayerFilter);
         report.dump(new File("../doc/encapsulation.txt"));
+    }
+
+    @Test
+    void enforceAccessors() {
+        new AccessorsEnforcer()
+                .scan(root)
+                .enforce(domainLayerFilter);
+    }
+
+    @Test
+    @Disabled // FIXME
+    void accessorsEnforcementBroken() {
+        try {
+            Task task = new Task();
+            task.allocateTaskNo(TaskNo.of("abc"));
+
+            new AccessorsEnforcer()
+                    .scan(root)
+                    .enforce(domainLayerFilter);
+            fail();
+        } catch (RuntimeException expected) {
+            assertEquals(expected.getMessage(), "");
+        }
     }
 
     private static class DomainLayerFilter implements FileWalker.Filter {

@@ -13,9 +13,11 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -89,6 +91,21 @@ public final class JavaParserUtil {
         }
 
         return false;
+    }
+
+    public static ClassOrInterfaceDeclaration getAccessor(MethodCallExpr methodCallExpr) {
+        Optional<Node> parentNode = methodCallExpr.getParentNode();
+        while (true) {
+            if (!parentNode.isPresent()) {
+                return null;
+            }
+
+            if (parentNode.get() instanceof ClassOrInterfaceDeclaration) {
+                return (ClassOrInterfaceDeclaration) parentNode.get();
+            }
+
+            parentNode = parentNode.get().getParentNode();
+        }
     }
 
     static Set<String> extractMethodArguments(MethodDeclaration methodDeclaration) {

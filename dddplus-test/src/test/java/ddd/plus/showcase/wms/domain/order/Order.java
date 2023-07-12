@@ -21,6 +21,7 @@ import io.github.dddplus.dsl.KeyRule;
 import io.github.dddplus.model.BaseAggregateRoot;
 import io.github.dddplus.model.IUnboundedDomainModel;
 import io.github.dddplus.model.association.HasMany;
+import io.github.dddplus.model.encapsulation.Accessors;
 import io.github.dddplus.model.spcification.Notification;
 import lombok.*;
 import lombok.experimental.Delegate;
@@ -159,8 +160,8 @@ public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainM
         return tasks;
     }
 
-    public void injects(@NonNull Class<IOrderRepository> __,
-                        OrderPacks orderPacks, OrderTasks orderTasks,
+    @Accessors(IOrderRepository.class)
+    public void injects(OrderPacks orderPacks, OrderTasks orderTasks,
                         OrderCartons orderCartons, IEventPublisher eventPublisher) {
         this.packs = orderPacks;
         this.tasks = orderTasks;

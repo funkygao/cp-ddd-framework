@@ -25,6 +25,7 @@ import io.github.dddplus.model.BaseAggregateRoot;
 import io.github.dddplus.model.IUnboundedDomainModel;
 import io.github.dddplus.model.association.BelongTo;
 import io.github.dddplus.model.association.HasOne;
+import io.github.dddplus.model.encapsulation.Accessors;
 import io.github.dddplus.model.spcification.Notification;
 import lombok.*;
 import lombok.experimental.Delegate;
@@ -166,10 +167,6 @@ public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomai
     public interface CartonPallet extends HasOne<Pallet> {
     }
 
-    public void injectCartonPallet(@NonNull Class<ICartonRepository> __, CartonPallet cartonPallet) {
-        this.pallet = cartonPallet;
-    }
-
     public interface CartonOrder extends BelongTo<Order> {
     }
 
@@ -177,19 +174,14 @@ public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomai
         return order;
     }
 
-    public void injectCartonOrder(@NonNull Class<ICartonRepository> __, CartonOrder cartonOrder) {
+    @Accessors(ICartonRepository.class)
+    public void injects(CartonOrder cartonOrder, CartonPallet cartonPallet,
+                        IRuleGateway ruleGateway, IInventoryGateway inventoryGateway,
+                        IEventPublisher eventPublisher) {
         this.order = cartonOrder;
-    }
-
-    public void injectRuleGateway(@NonNull Class<ICartonRepository> __, IRuleGateway ruleGateway) {
+        this.pallet = cartonPallet;
         this.ruleGateway = ruleGateway;
-    }
-
-    public void injectInventoryGateway(@NonNull Class<ICartonRepository> __, IInventoryGateway inventoryGateway) {
         this.inventoryGateway = inventoryGateway;
-    }
-
-    public void injectEventPublisher(@NonNull Class<ICartonRepository> __, IEventPublisher eventPublisher) {
         this.eventPublisher = eventPublisher;
     }
 }
