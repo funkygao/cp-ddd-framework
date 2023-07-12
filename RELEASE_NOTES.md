@@ -1,3 +1,24 @@
+## Release Notes - DDDplus - 2.0.0-SNAPSHOT
+
+* FIXED
+   * [如果所有pattern扩展点叠加执行，导致 ClassCastException](https://github.com/dddplus/dddplus/commit/b90bd6a71b66f5b1c60460949bdd8b7ab833f854)
+
+* Feature
+   * [Reverse Modeling DSL](/dddplus-spec/src/main/java/io/github/dddplus/dsl/package-info.java)
+   * Patches DDD with complete [building blocks](/dddplus-spec/src/main/java/io/github/dddplus/model/)
+   * [Pragmatic DDDplus Showcase Project](/dddplus-test/src/test/java/ddd/plus/showcase/)
+
+* Incompatible changes with 1.x.y
+   * Removed
+      * `IBaseTranslator`, `ApiResult`, `RequestProfile`, `IModelAttachmentExt`, `IDomainModelCreator`
+   * Renamed
+      * `IExtPolicy` -> `IPolicy`
+      * `BaseDomainAbility` -> `BaseRouter`, `@DomainAbility` -> `@Router`
+      * `DDD.findAbility` -> `DDD.useRouter`/`DDD.usePolicy`
+      * `Reducer` -> `IReducer`
+   * Function signature changed
+      * all `IDomainExtension` input argument changed from `IDomainModel` to `IIdentity`
+
 ## Release Notes - DDDplus - Version 1.1.1
 
 * FIXED
