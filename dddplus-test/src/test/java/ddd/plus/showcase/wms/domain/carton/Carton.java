@@ -46,7 +46,7 @@ import java.util.List;
 @NoArgsConstructor
 @Slf4j
 @Getter(AccessLevel.PACKAGE)
-public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomainModel {
+public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomainModel, ICarton {
     @Getter
     private Long id;
     private CartonNo cartonNo;

@@ -42,7 +42,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @Slf4j
 @Getter(AccessLevel.PACKAGE)
-public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainModel, TaskExchangeKey {
+public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainModel, ITask, TaskExchangeKey {
     @Getter
     private Long id;
 
