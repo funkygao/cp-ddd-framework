@@ -1,16 +1,16 @@
 package io.github.dddplus.ast;
 
-import io.github.dddplus.model.encapsulation.Accessors;
+import io.github.dddplus.model.encapsulation.AllowedAccessors;
 
 import java.io.File;
 
 /**
- * 确保代码符合{@link Accessors}规范.
+ * 确保代码符合{@link AllowedAccessors}规范.
  */
-public class AccessorsEnforcer {
+public class AllowedAccessorsEnforcer {
     private File[] dirs;
 
-    public AccessorsEnforcer scan(File... dirs) {
+    public AllowedAccessorsEnforcer scan(File... dirs) {
         this.dirs = dirs;
         return this;
     }
