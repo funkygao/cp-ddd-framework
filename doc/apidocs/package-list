@@ -10,6 +10,7 @@ io.github.dddplus.dsl
 io.github.dddplus.ext
 io.github.dddplus.model
 io.github.dddplus.model.association
+io.github.dddplus.model.encapsulation
 io.github.dddplus.model.spcification
 io.github.dddplus.mybatis
 io.github.dddplus.plugin
