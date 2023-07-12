@@ -7,13 +7,14 @@ import ddd.plus.showcase.wms.domain.order.OrderNo;
 import io.github.dddplus.dsl.KeyBehavior;
 import io.github.dddplus.dsl.KeyRelation;
 import io.github.dddplus.model.BoundedDomainModel;
-import lombok.NonNull;
+import io.github.dddplus.model.encapsulation.Accessors;
 
 @KeyRelation(whom = Task.class, type = KeyRelation.Type.Contextual)
 public class TaskOfOrderPending extends BoundedDomainModel<Task> {
     private final OrderNo orderNo;
 
-    public TaskOfOrderPending(@NonNull Class<ITaskRepository> __, Task task, OrderNo orderNo) {
+    @Accessors(ITaskRepository.class)
+    public TaskOfOrderPending(Task task, OrderNo orderNo) {
         this.model = task;
         this.orderNo = orderNo;
     }

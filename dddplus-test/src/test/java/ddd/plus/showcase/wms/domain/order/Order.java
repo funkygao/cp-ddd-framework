@@ -21,6 +21,7 @@ import io.github.dddplus.dsl.KeyRule;
 import io.github.dddplus.model.BaseAggregateRoot;
 import io.github.dddplus.model.IUnboundedDomainModel;
 import io.github.dddplus.model.association.HasMany;
+import io.github.dddplus.model.encapsulation.Accessors;
 import io.github.dddplus.model.spcification.Notification;
 import lombok.*;
 import lombok.experimental.Delegate;
@@ -143,20 +144,12 @@ public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainM
         return cartons;
     }
 
-    public void injectOrderCartons(@NonNull Class<IOrderRepository> __, OrderCartons orderCartons) {
-        this.cartons = orderCartons;
-    }
-
     public interface OrderPacks extends HasMany<Pack> {
         PackBag packBag();
     }
 
     public OrderPacks packs() {
         return packs;
-    }
-
-    public void injectOrderPacks(@NonNull Class<IOrderRepository> __, OrderPacks orderPacks) {
-        this.packs = orderPacks;
     }
 
     public interface OrderTasks extends HasMany<Task> {
@@ -167,12 +160,12 @@ public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainM
         return tasks;
     }
 
-    public void injectOrderTasks(@NonNull Class<IOrderRepository> __, OrderTasks orderTasks) {
+    @Accessors(IOrderRepository.class)
+    public void injects(OrderPacks orderPacks, OrderTasks orderTasks,
+                        OrderCartons orderCartons, IEventPublisher eventPublisher) {
+        this.packs = orderPacks;
         this.tasks = orderTasks;
-    }
-
-    public void injectEventPublisher(@NonNull Class<IOrderRepository> __, IEventPublisher eventPublisher) {
+        this.cartons = orderCartons;
         this.eventPublisher = eventPublisher;
     }
-
 }

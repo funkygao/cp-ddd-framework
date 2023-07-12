@@ -1,4 +1,4 @@
-标注覆盖率：Class(64/59.4%) Method(124/49.2%) Property(250/21.2%) Statement(229)
+标注覆盖率：Class(64/59.4%) Method(115/53.0%) Property(250/21.2%) Statement(220)
 模型债：
 <<Aggregate: 客户出库单>>
 Order 客户的出库单.
