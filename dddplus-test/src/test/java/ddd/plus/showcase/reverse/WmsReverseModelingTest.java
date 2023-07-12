@@ -18,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 class WmsReverseModelingTest {
     private final DomainLayerFilter domainLayerFilter = new DomainLayerFilter();
     private final InfrastructureLayerFilter infrastructureLayerFilter = new InfrastructureLayerFilter();
+    private final ShowcaseFilter showcaseFilter = new ShowcaseFilter();
     private final File root = DomainModelAnalyzerTest.moduleRoot("dddplus-test");
 
     @Test
@@ -70,7 +71,7 @@ class WmsReverseModelingTest {
     void enforceAccessors() {
         new AccessorsEnforcer()
                 .scan(root)
-                .enforce(domainLayerFilter);
+                .enforce(showcaseFilter);
     }
 
     @Test
@@ -82,7 +83,7 @@ class WmsReverseModelingTest {
 
             new AccessorsEnforcer()
                     .scan(root)
-                    .enforce(domainLayerFilter);
+                    .enforce(showcaseFilter);
             fail();
         } catch (RuntimeException expected) {
             assertEquals(expected.getMessage(), "");
@@ -102,6 +103,13 @@ class WmsReverseModelingTest {
         public boolean interested(int level, String path, File file) {
             // 去掉(单测，领域层)，只保留基础设施层
             return path.contains("showcase") && path.contains("wms") && !path.contains("Test") && path.contains("infra");
+        }
+    }
+
+    private static class ShowcaseFilter implements FileWalker.Filter {
+        @Override
+        public boolean interested(int level, String path, File file) {
+            return path.contains("showcase") && !path.contains("Test");
         }
     }
 
