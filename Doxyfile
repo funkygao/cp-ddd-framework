@@ -1,0 +1,46 @@
+#---------------------------------------------------------------------------
+# Generate call graph
+# PARAMS TO CHANGE: INPUT, DOT_PATH
+#---------------------------------------------------------------------------
+INPUT                  = dddplus-test/src/test/java/ddd/plus/showcase/wms/
+FILE_PATTERNS          = *.java
+RECURSIVE              = YES
+OUTPUT_DIRECTORY       = target/
+HTML_OUTPUT            = callgraph
+HTML_FILE_EXTENSION    = .html
+DOT_PATH               = /usr/local/bin
+OPTIMIZE_OUTPUT_JAVA   = YES
+TOC_INCLUDE_HEADINGS   = 5
+AUTOLINK_SUPPORT       = YES
+GENERATE_HTML          = YES
+GENERATE_LATEX         = NO
+GENERATE_RTF           = NO
+GENERATE_MAN           = NO
+GENERATE_XML           = NO
+GENERATE_DOCBOOK       = NO
+GENERATE_AUTOGEN_DEF   = NO
+HAVE_DOT               = YES
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = NO
+EXTRACT_STATIC         = NO
+DOT_NUM_THREADS        = 10
+CLASS_GRAPH            = YES
+COLLABORATION_GRAPH    = YES
+GROUP_GRAPHS           = YES
+UML_LOOK               = NO
+UML_LIMIT_NUM_FIELDS   = 10
+DOT_UML_DETAILS        = NO
+DOT_WRAP_THRESHOLD     = 17
+TEMPLATE_RELATIONS     = NO
+INCLUDE_GRAPH          = YES
+INCLUDED_BY_GRAPH      = YES
+CALL_GRAPH             = YES
+CALLER_GRAPH           = YES
+DISABLE_INDEX          = YES
+GENERATE_TREEVIEW      = YES 
+GRAPHICAL_HIERARCHY    = YES
+DIRECTORY_GRAPH        = YES
+DIR_GRAPH_MAX_DEPTH    = 1
+DOT_GRAPH_MAX_NODES    = 100
+MAX_DOT_GRAPH_DEPTH    = 0
+DOT_CLEANUP            = YES

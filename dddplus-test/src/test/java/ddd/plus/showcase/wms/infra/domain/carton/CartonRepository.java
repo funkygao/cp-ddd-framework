@@ -22,7 +22,6 @@ import java.util.List;
 
 @Repository
 public class CartonRepository implements ICartonRepository {
-    private static final Class _self = CartonRepository.class;
     private static final CartonConverter converter = CartonConverter.INSTANCE;
 
     @Resource
@@ -39,11 +38,8 @@ public class CartonRepository implements ICartonRepository {
     public Carton mustGet(CartonNo cartonNo, WarehouseNo warehouseNo) throws WmsException {
         CartonPo po = dao.query(""); // eager load with items
         Carton carton = converter.fromPo(po);
-        carton.injectRuleGateway(_self, ruleGateway);
-        carton.injectInventoryGateway(_self, inventoryGateway);
-        carton.injectEventPublisher(_self, kafkaProducer);
-        carton.injectCartonOrder(_self, new CartonOrderDb(carton, dao));
-        carton.injectCartonPallet(_self, new CartonPalletDb(carton.getPalletNo(), dao));
+        carton.injects(new CartonOrderDb(carton, dao), new CartonPalletDb(carton.getPalletNo(), dao),
+                ruleGateway, inventoryGateway, kafkaProducer);
         return carton;
     }
 

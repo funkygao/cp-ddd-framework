@@ -1,9 +1,6 @@
 package ddd.plus.showcase.reverse;
 
-import io.github.dddplus.ast.DomainModelAnalyzer;
-import io.github.dddplus.ast.DomainModelAnalyzerTest;
-import io.github.dddplus.ast.FileWalker;
-import io.github.dddplus.ast.ReverseEngineeringModel;
+import io.github.dddplus.ast.*;
 import io.github.dddplus.ast.report.EncapsulationReport;
 import io.github.dddplus.ast.view.PlainTextBuilder;
 import io.github.dddplus.ast.view.PlantUmlBuilder;
@@ -16,6 +13,7 @@ import java.io.IOException;
 class WmsReverseModelingTest {
     private final DomainLayerFilter domainLayerFilter = new DomainLayerFilter();
     private final InfrastructureLayerFilter infrastructureLayerFilter = new InfrastructureLayerFilter();
+    private final ShowcaseFilter showcaseFilter = new ShowcaseFilter();
     private final File root = DomainModelAnalyzerTest.moduleRoot("dddplus-test");
 
     @Test
@@ -64,6 +62,13 @@ class WmsReverseModelingTest {
         report.dump(new File("../doc/encapsulation.txt"));
     }
 
+    @Test
+    void enforceAccessors() {
+        new AccessorsEnforcer()
+                .scan(root)
+                .enforce(showcaseFilter);
+    }
+
     private static class DomainLayerFilter implements FileWalker.Filter {
         @Override
         public boolean interested(int level, String path, File file) {
@@ -77,6 +82,13 @@ class WmsReverseModelingTest {
         public boolean interested(int level, String path, File file) {
             // 去掉(单测，领域层)，只保留基础设施层
             return path.contains("showcase") && path.contains("wms") && !path.contains("Test") && path.contains("infra");
+        }
+    }
+
+    private static class ShowcaseFilter implements FileWalker.Filter {
+        @Override
+        public boolean interested(int level, String path, File file) {
+            return path.contains("showcase") && !path.contains("Test");
         }
     }
 

@@ -83,7 +83,7 @@ public class CheckingAppService implements IApplicationService {
             return ApiResponse.ofOk(null);
         }
 
-        task.allocateTaskNo(CheckingAppService.class, TaskNo.of(sequencer.next()));
+        task.allocateTaskNo(TaskNo.of(sequencer.next()));
         uuid.setBizNo(task.getTaskNo().value());
         task.enrichSkuInfo(masterDataGateway);
         task.plan();

@@ -27,7 +27,6 @@ import java.util.Map;
 @Repository
 public class TaskRepository implements ITaskRepository {
     @KeyElement(types = KeyElement.Type.Structural, remark = "如何克服Java访问权限控制粒度问题")
-    private static final Class _self = TaskRepository.class;
     private static final TaskConverter converter = TaskConverter.INSTANCE;
 
     @Resource
@@ -61,20 +60,12 @@ public class TaskRepository implements ITaskRepository {
 
         // 3. 组装 bag 对象，但不希望被误用
         List<ContainerPo> containerPos = dao.query("select xxx");
-        task.injectContainerBag(_self, ContainerBag.of(converter.fromContainerPoList(containerPos)));
 
         // 4. 实例化并注入 association implementation
-        injectAssociations(task);
+        task.injects(ContainerBag.of(converter.fromContainerPoList(containerPos)),
+                new TaskCartonsDb(task, dao),
+                new TaskOrdersDb(task, dao));
         return task;
-    }
-
-    /**
-     * 实例化关联对象并注入实体
-     */
-    @KeyBehavior
-    private void injectAssociations(Task task) {
-        task.injectCartons(_self, new TaskCartonsDb(task, dao));
-        task.injectOrders(_self, new TaskOrdersDb(task, dao));
     }
 
     /**
@@ -126,7 +117,7 @@ public class TaskRepository implements ITaskRepository {
         // 通过mapstruct把container表里冗余的task字段传递过去
         List<ContainerPo> containerPoList = converter.toContainerPoList(task, task.containerBag().items());
         List<ContainerItemPo> containerItemPoList = converter.toContainerItemPoList(task,
-                task.containerBag().flatItems(_self));
+                task.containerBag().flatItems());
         dao.insert(taskPo);
         dao.insert(containerPoList);
         dao.insert(containerItemPoList);
@@ -147,14 +138,14 @@ public class TaskRepository implements ITaskRepository {
         Container container = converter.fromPo(containerPo);
         TaskPo taskPo = dao.query("");
         Task task = converter.fromPo(taskPo);
-        TaskOfContainerPending taskOfContainerPending = new TaskOfContainerPending(_self, task, container);
+        TaskOfContainerPending taskOfContainerPending = new TaskOfContainerPending(task, container);
         return taskOfContainerPending;
     }
 
     @Override
     public Task mustGet(TaskNo taskNo, OrderNo orderNo, Sku sku, WarehouseNo warehouseNo) throws WmsException {
         Task task = dao.query("");
-        task.inSkuPendingScenario(_self, orderNo, sku);
+        task.inSkuPendingScenario(orderNo, sku);
         return task;
     }
 

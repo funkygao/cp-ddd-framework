@@ -7,20 +7,24 @@ import java.util.TreeSet;
 
 class AnnotationFieldParser {
 
-    static Set<String> arrayFieldValue(MemberValuePair memberValuePair) {
+    static Set<String> arrayFieldValue(Expression expression) {
         Set<String> result = new TreeSet<>();
-        if (memberValuePair.getValue() instanceof ArrayInitializerExpr) {
+        if (expression instanceof ArrayInitializerExpr) {
             // multiple values
-            ArrayInitializerExpr arrayInitializerExpr = (ArrayInitializerExpr) memberValuePair.getValue();
-            for (Expression expression : arrayInitializerExpr.getValues()) {
-                result.add(expressionValue(expression));
+            ArrayInitializerExpr arrayInitializerExpr = (ArrayInitializerExpr) expression;
+            for (Expression exp : arrayInitializerExpr.getValues()) {
+                result.add(expressionValue(exp));
             }
         } else {
             // single value
-            result.add(singleFieldValue(memberValuePair));
+            result.add(expressionValue(expression));
         }
 
         return result;
+    }
+
+    static Set<String> arrayFieldValue(MemberValuePair memberValuePair) {
+        return arrayFieldValue(memberValuePair.getValue());
     }
 
     static String singleFieldValue(MemberValuePair memberValuePair) {

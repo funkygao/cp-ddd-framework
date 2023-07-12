@@ -229,7 +229,7 @@ public class DomainModelAnalyzer {
         return model;
     }
 
-    private static class ActualFilter implements FileWalker.Filter {
+    static class ActualFilter implements FileWalker.Filter {
         private final FileWalker.Filter filter;
 
         ActualFilter(FileWalker.Filter filter) {
