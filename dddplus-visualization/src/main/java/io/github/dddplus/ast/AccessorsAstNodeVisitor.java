@@ -56,6 +56,34 @@ class AccessorsAstNodeVisitor extends VoidVisitorAdapter<Void> {
             return;
         }
 
+        final String methodCallFullStmt = methodCallExpr.getNameAsString();
+        if (methodCallFullStmt.startsWith("this.")) {
+            // 自己定义的方法，自己可以访问
+            return;
+        }
+        if (methodCallFullStmt.equals(methodName)) {
+            /*
+             * 自己调自己的方法, OK
+             *
+             * class Foo {
+             *     IBar bar;
+             *
+             *     void a() {
+             *     }
+             *
+             *     void b() {
+             *         a(); //methodCallFullStmt: a, methodName: a
+             *     }
+             *
+             *     void c() {
+             *         bar.egg(); // methodCallFullStmt: bar.egg, methodName: egg
+             *
+             *     }
+             * }
+             */
+            return;
+        }
+
         ClassOrInterfaceDeclaration accessorClazz = JavaParserUtil.getAccessor(methodCallExpr);
         if (accessorClazz == null) {
             log.error("method:{} cannot find accessor class", methodName);

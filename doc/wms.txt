@@ -1,4 +1,4 @@
-标注覆盖率：Class(64/59.4%) Method(115/53.0%) Property(250/21.2%) Statement(220)
+标注覆盖率：Class(64/59.4%) Method(116/52.6%) Property(252/21.0%) Statement(222)
 模型债：
 <<Aggregate: 出库复核任务>>
 Container 拣货容器.

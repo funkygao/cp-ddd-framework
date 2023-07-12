@@ -21,7 +21,6 @@ public class KeyRuleAnnotationParser {
     private final MethodDeclaration methodDeclaration;
     private final String className;
     private String methodName;
-    private String remark;
 
     public KeyRuleAnnotationParser(MethodDeclaration methodDeclaration, String className) {
         this.methodDeclaration = methodDeclaration;

@@ -1,6 +1,7 @@
 package ddd.plus.showcase.wms.domain.task;
 
 import ddd.plus.showcase.wms.domain.common.Sku;
+import ddd.plus.showcase.wms.domain.order.OrderLineNo;
 import ddd.plus.showcase.wms.domain.order.OrderNo;
 import io.github.dddplus.dsl.KeyBehavior;
 import io.github.dddplus.dsl.KeyRelation;
@@ -62,6 +63,10 @@ public class ContainerBag extends ListBag<Container> {
             containerItems.addAll(container.getContainerItemBag().pendingItems());
         }
         return new ContainerItemBagPending(ContainerItemBag.of(containerItems));
+    }
+
+    void remove(Set<OrderLineNo> orderLineNos) {
+        // TBD
     }
 
     @KeyBehavior

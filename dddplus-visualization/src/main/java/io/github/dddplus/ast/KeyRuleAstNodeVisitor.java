@@ -14,6 +14,7 @@ import io.github.dddplus.ast.parser.JavaParserUtil;
 import io.github.dddplus.ast.parser.KeyRuleAnnotationParser;
 import io.github.dddplus.ast.report.KeyRuleReport;
 import io.github.dddplus.dsl.KeyRule;
+import io.github.dddplus.model.encapsulation.Accessors;
 
 import java.util.Set;
 
@@ -34,6 +35,11 @@ class KeyRuleAstNodeVisitor extends VoidVisitorAdapter<KeyRuleReport> {
                     && !methodDeclaration.isAnnotationPresent(Deprecated.class)
                     && (methodDeclaration.getParameters() == null || methodDeclaration.getParameters().size() == 0)
                     && methodDeclaration.getTypeAsString().equalsIgnoreCase("boolean")) {
+                if (methodDeclaration.isAnnotationPresent(Accessors.class)) {
+                    // 指定类可访问的方法，忽略
+                    return;
+                }
+
                 ClassOrInterfaceDeclaration parentClass = JavaParserUtil.getClass(methodDeclaration.getParentNode().get());
                 if (parentClass == null) {
                     return;

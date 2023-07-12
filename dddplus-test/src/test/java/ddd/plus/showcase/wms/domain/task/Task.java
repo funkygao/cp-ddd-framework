@@ -13,6 +13,7 @@ import ddd.plus.showcase.wms.domain.task.dict.TaskMode;
 import ddd.plus.showcase.wms.domain.task.dict.TaskScenario;
 import ddd.plus.showcase.wms.domain.task.dict.TaskStatus;
 import ddd.plus.showcase.wms.domain.task.event.TaskAcceptedEvent;
+import ddd.plus.showcase.wms.domain.task.hint.RemoveContainerItemsHint;
 import ddd.plus.showcase.wms.domain.task.hint.TaskDirtyHint;
 import io.github.dddplus.dsl.KeyBehavior;
 import io.github.dddplus.dsl.KeyElement;
@@ -65,6 +66,11 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
         this.taskNo = taskNo;
     }
 
+    @Accessors(ITaskRepository.class)
+    public boolean virgin() {
+        return id == null;
+    }
+
     /**
      * 初始化时指定复核生产计划
      */
@@ -102,7 +108,10 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
 
     @KeyBehavior
     public void removeOrderLines(Set<OrderLineNo> orderLineNos) {
-
+        containerBag.remove(orderLineNos);
+        if (!virgin()) {
+            dirty(new RemoveContainerItemsHint(this, orderLineNos));
+        }
     }
 
     // can be killed with lombok @Delegate
