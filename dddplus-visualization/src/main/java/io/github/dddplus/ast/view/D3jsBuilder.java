@@ -2,6 +2,9 @@ package io.github.dddplus.ast.view;
 
 import io.github.dddplus.ast.ReverseEngineeringModel;
 
+/**
+ * DSL -> Reverse Engineering Model -> D3.js.
+ */
 public class D3jsBuilder implements IViewBuilder<D3jsBuilder> {
     private final StringBuilder content = new StringBuilder();
     private ReverseEngineeringModel model;
