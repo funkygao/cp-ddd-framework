@@ -1,5 +1,6 @@
 package io.github.dddplus.model;
 
+import io.github.dddplus.ext.AnyIdentity;
 import io.github.errcase.pattern.FooTask;
 import org.junit.jupiter.api.Test;
 

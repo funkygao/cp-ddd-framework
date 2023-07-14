@@ -7,7 +7,7 @@ package io.github.dddplus.runtime;
 
 import io.github.dddplus.ext.IDomainExtension;
 import io.github.dddplus.model.IDomainService;
-import io.github.dddplus.model.IIdentity;
+import io.github.dddplus.ext.IIdentity;
 import io.github.dddplus.runtime.registry.InternalIndexer;
 import lombok.NonNull;
 

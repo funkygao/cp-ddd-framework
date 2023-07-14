@@ -24,6 +24,9 @@ import java.util.*;
  * @see <a href="https://www.augmentedmind.de/2021/01/17/plantuml-layout-tutorial-styles/">PlantUml Layout Guide</a>
  */
 public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
+    /**
+     * Direction to render the plantuml.
+     */
     public enum Direction {
         TopToBottom,
         LeftToRight,

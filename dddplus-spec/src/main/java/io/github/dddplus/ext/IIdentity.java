@@ -3,12 +3,10 @@
  *
  * Licensed under the Apache License version 2.0, available at http://www.apache.org/licenses/LICENSE-2.0
  */
-package io.github.dddplus.model;
-
-import io.github.dddplus.ext.IIdentityResolver;
+package io.github.dddplus.ext;
 
 /**
- * 业务身份.
+ * 扩展点的业务身份.
  *
  * <p>从中可以获取业务特征，以便路由扩展点实例.</p>
  * <p>业务身份，本质是产生业务变化的来源，技术上表现为维度(字段的组合).</p>

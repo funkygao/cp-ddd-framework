@@ -7,7 +7,7 @@ package io.github.dddplus.runtime.registry;
 
 import io.github.dddplus.ext.IDomainExtension;
 import io.github.dddplus.ext.IPolicy;
-import io.github.dddplus.model.IIdentity;
+import io.github.dddplus.ext.IIdentity;
 import io.github.dddplus.runtime.BaseRouter;
 import io.github.dddplus.runtime.interceptor.IExtensionInterceptor;
 import lombok.NonNull;

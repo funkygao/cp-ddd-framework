@@ -5,7 +5,6 @@
  */
 package io.github.dddplus.ext;
 
-import io.github.dddplus.model.IIdentity;
 import lombok.NonNull;
 
 import java.util.List;

@@ -7,7 +7,7 @@ package io.github.dddplus.runtime.registry;
 
 import io.github.dddplus.ext.IDomainExtension;
 import io.github.dddplus.ext.IPolicy;
-import io.github.dddplus.model.IIdentity;
+import io.github.dddplus.ext.IIdentity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;

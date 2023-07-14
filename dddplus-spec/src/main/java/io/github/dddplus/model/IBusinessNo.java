@@ -5,6 +5,8 @@
  */
 package io.github.dddplus.model;
 
+import io.github.dddplus.ext.IIdentity;
+
 import java.io.Serializable;
 
 /**
@@ -12,7 +14,7 @@ import java.io.Serializable;
  *
  * @param <T> 业务编号的数据类型
  */
-public interface IBusinessNo<T> extends Serializable, IIdentity {
+public interface IBusinessNo<T> extends Serializable, IIdentity, IValueObject {
 
     T value();
 }

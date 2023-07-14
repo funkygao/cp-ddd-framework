@@ -12,6 +12,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * DSL -> Reverse Engineering Model -> Plain text file, git versioned.
+ */
 public class PlainTextBuilder implements IViewBuilder<PlainTextBuilder> {
     private static final String SPACE = " ";
     private static final String TAB = SPACE + SPACE + SPACE;
