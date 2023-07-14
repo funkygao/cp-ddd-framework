@@ -1,6 +1,6 @@
 package io.github.dddplus.runtime.pattern;
 
-import io.github.dddplus.model.IIdentity;
+import io.github.dddplus.ext.IIdentity;
 import lombok.Data;
 
 @Data

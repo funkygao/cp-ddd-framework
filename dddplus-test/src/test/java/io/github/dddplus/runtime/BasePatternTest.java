@@ -1,7 +1,7 @@
 package io.github.dddplus.runtime;
 
 import io.github.dddplus.annotation.Pattern;
-import io.github.dddplus.model.IIdentity;
+import io.github.dddplus.ext.IIdentity;
 import io.github.dddplus.runtime.pattern.ExCarton;
 import io.github.dddplus.runtime.pattern.ExOrder;
 import io.github.dddplus.runtime.pattern.ExTask;

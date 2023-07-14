@@ -2,7 +2,7 @@ package io.github.dddplus.runtime.registry.mock.pattern.extension;
 
 import io.github.dddplus.annotation.Extension;
 import io.github.dddplus.ext.IDecideStepsExt;
-import io.github.dddplus.model.IIdentity;
+import io.github.dddplus.ext.IIdentity;
 import io.github.dddplus.runtime.registry.mock.pattern.B2BPattern;
 import io.github.dddplus.runtime.registry.mock.step.Steps;
 import lombok.NonNull;

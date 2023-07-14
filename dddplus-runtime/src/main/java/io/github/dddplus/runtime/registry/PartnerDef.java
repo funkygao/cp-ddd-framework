@@ -8,7 +8,7 @@ package io.github.dddplus.runtime.registry;
 import io.github.dddplus.annotation.Partner;
 import io.github.dddplus.ext.IDomainExtension;
 import io.github.dddplus.ext.IIdentityResolver;
-import io.github.dddplus.model.IIdentity;
+import io.github.dddplus.ext.IIdentity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;

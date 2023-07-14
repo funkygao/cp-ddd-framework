@@ -6,7 +6,6 @@
 package io.github.dddplus.ext;
 
 import io.github.dddplus.model.IDomainService;
-import io.github.dddplus.model.IIdentity;
 import lombok.NonNull;
 
 /**

@@ -6,7 +6,7 @@
 package io.github.dddplus.runtime;
 
 import io.github.dddplus.ext.IDomainExtension;
-import io.github.dddplus.model.IIdentity;
+import io.github.dddplus.ext.IIdentity;
 import io.github.dddplus.runtime.interceptor.ExtensionContext;
 import io.github.dddplus.runtime.interceptor.IExtensionInterceptor;
 import io.github.dddplus.runtime.registry.ExtensionDef;

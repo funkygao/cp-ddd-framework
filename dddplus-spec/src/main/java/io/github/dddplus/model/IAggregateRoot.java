@@ -5,6 +5,8 @@
  */
 package io.github.dddplus.model;
 
+import io.github.dddplus.ext.IIdentity;
+
 /**
  * 聚合根，Aggregate Facade，(具有全局身份，负责维护聚合内一致性).
  *

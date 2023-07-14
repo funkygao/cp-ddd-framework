@@ -6,7 +6,7 @@
 package io.github.dddplus.annotation;
 
 import io.github.dddplus.ext.IDomainExtension;
-import io.github.dddplus.model.IIdentity;
+import io.github.dddplus.ext.IIdentity;
 import org.springframework.core.annotation.AliasFor;
 import org.springframework.stereotype.Component;
 
