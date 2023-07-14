@@ -13,7 +13,7 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import io.github.dddplus.ast.model.AccessorsEntry;
 import io.github.dddplus.ast.parser.AccessorsAnnotationParser;
 import io.github.dddplus.ast.parser.JavaParserUtil;
-import io.github.dddplus.model.encapsulation.Accessors;
+import io.github.dddplus.model.encapsulation.AllowedAccessors;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -31,12 +31,12 @@ class AccessorsAstNodeVisitor extends VoidVisitorAdapter<Void> {
             return;
         }
 
-        if (!methodDeclaration.isAnnotationPresent(Accessors.class)) {
+        if (!methodDeclaration.isAnnotationPresent(AllowedAccessors.class)) {
             return;
         }
 
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = JavaParserUtil.getClass(methodDeclaration);
-        AnnotationExpr annotationExpr = methodDeclaration.getAnnotationByClass(Accessors.class).get();
+        AnnotationExpr annotationExpr = methodDeclaration.getAnnotationByClass(AllowedAccessors.class).get();
         AccessorsEntry entry = new AccessorsAnnotationParser(classOrInterfaceDeclaration, methodDeclaration)
                 .parse(annotationExpr);
         accessorsEntries.add(entry);
@@ -56,13 +56,41 @@ class AccessorsAstNodeVisitor extends VoidVisitorAdapter<Void> {
             return;
         }
 
+        final String methodCallFullStmt = methodCallExpr.getNameAsString();
+        if (methodCallFullStmt.startsWith("this.")) {
+            // 自己定义的方法，自己可以访问
+            return;
+        }
+        if (methodCallFullStmt.equals(methodName)) {
+            /*
+             * 自己调自己的方法, OK
+             *
+             * class Foo {
+             *     IBar bar;
+             *
+             *     void a() {
+             *     }
+             *
+             *     void b() {
+             *         a(); //methodCallFullStmt: a, methodName: a
+             *     }
+             *
+             *     void c() {
+             *         bar.egg(); // methodCallFullStmt: bar.egg, methodName: egg
+             *
+             *     }
+             * }
+             */
+            return;
+        }
+
         ClassOrInterfaceDeclaration accessorClazz = JavaParserUtil.getAccessor(methodCallExpr);
         if (accessorClazz == null) {
             log.error("method:{} cannot find accessor class", methodName);
             return;
         }
 
-        // Order.setFoo 被标注为 @Accessors(IOrderRepository.class)
+        // Order.setFoo 被标注为 @AllowedAccessors(IOrderRepository.class)
         // 但调用setFoo是IOrderRepository的实现类：OrderRepository
         final String accessorClassName = accessorClazz.getNameAsString();
         boolean satisfied = false;

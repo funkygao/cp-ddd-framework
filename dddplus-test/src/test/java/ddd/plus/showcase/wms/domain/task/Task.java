@@ -13,6 +13,7 @@ import ddd.plus.showcase.wms.domain.task.dict.TaskMode;
 import ddd.plus.showcase.wms.domain.task.dict.TaskScenario;
 import ddd.plus.showcase.wms.domain.task.dict.TaskStatus;
 import ddd.plus.showcase.wms.domain.task.event.TaskAcceptedEvent;
+import ddd.plus.showcase.wms.domain.task.hint.RemoveContainerItemsHint;
 import ddd.plus.showcase.wms.domain.task.hint.TaskDirtyHint;
 import io.github.dddplus.dsl.KeyBehavior;
 import io.github.dddplus.dsl.KeyElement;
@@ -23,7 +24,7 @@ import io.github.dddplus.model.DirtyMemento;
 import io.github.dddplus.model.IApplicationService;
 import io.github.dddplus.model.IUnboundedDomainModel;
 import io.github.dddplus.model.association.HasMany;
-import io.github.dddplus.model.encapsulation.Accessors;
+import io.github.dddplus.model.encapsulation.AllowedAccessors;
 import io.github.dddplus.model.spcification.Notification;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +43,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @Slf4j
 @Getter(AccessLevel.PACKAGE)
-public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainModel, TaskExchangeKey {
+public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainModel, ITask, TaskExchangeKey {
     @Getter
     private Long id;
 
@@ -60,9 +61,14 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
     @Getter
     private WarehouseNo warehouseNo;
 
-    @Accessors(IApplicationService.class)
+    @AllowedAccessors(IApplicationService.class)
     public void allocateTaskNo(@NonNull TaskNo taskNo) {
         this.taskNo = taskNo;
+    }
+
+    @AllowedAccessors(ITaskRepository.class)
+    public boolean virgin() {
+        return id == null;
     }
 
     /**
@@ -87,7 +93,7 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
     // the flag to implement subtypes
     private TaskScenario scenario;
 
-    @Accessors(ITaskRepository.class)
+    @AllowedAccessors(ITaskRepository.class)
     public void inSkuPendingScenario(OrderNo orderNo, Sku sku) {
         this.scenario = TaskScenario.TaskOfSkuPending;
         this.taskOfSkuPending = new TaskOfSkuPending(this, orderNo, sku);
@@ -102,7 +108,10 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
 
     @KeyBehavior
     public void removeOrderLines(Set<OrderLineNo> orderLineNos) {
-
+        containerBag.remove(orderLineNos);
+        if (!virgin()) {
+            dirty(new RemoveContainerItemsHint(this, orderLineNos));
+        }
     }
 
     // can be killed with lombok @Delegate
@@ -214,7 +223,7 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
         return cartons;
     }
 
-    @Accessors(ITaskRepository.class)
+    @AllowedAccessors(ITaskRepository.class)
     public void injects(ContainerBag containerBag, TaskCartons taskCartons,
                         TaskOrders taskOrders) {
         this.containerBag = containerBag;

@@ -35,7 +35,7 @@ public class PlainTextBuilder implements IViewBuilder<PlainTextBuilder> {
 
         appendCoverage();
         appendModelDebt();
-        model.aggregates().forEach(a -> addAggregate(a));
+        model.sortedAggregates().forEach(a -> addAggregate(a));
         addKeyUsecases();
         addOrphanKeyFlows();
         addKeyEvents();
