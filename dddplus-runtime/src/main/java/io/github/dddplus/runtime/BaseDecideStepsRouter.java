@@ -6,7 +6,7 @@
 package io.github.dddplus.runtime;
 
 import io.github.dddplus.ext.IDecideStepsExt;
-import io.github.dddplus.model.IIdentity;
+import io.github.dddplus.ext.IIdentity;
 import lombok.NonNull;
 
 import java.util.Collections;

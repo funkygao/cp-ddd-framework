@@ -1,6 +1,6 @@
 package io.github.dddplus.runtime.policy;
 
-import io.github.dddplus.model.IIdentity;
+import io.github.dddplus.ext.IIdentity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

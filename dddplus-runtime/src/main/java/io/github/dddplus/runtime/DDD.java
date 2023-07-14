@@ -7,7 +7,7 @@ package io.github.dddplus.runtime;
 
 import io.github.dddplus.ext.IDomainExtension;
 import io.github.dddplus.ext.IPolicy;
-import io.github.dddplus.model.IIdentity;
+import io.github.dddplus.ext.IIdentity;
 import io.github.dddplus.runtime.registry.InternalIndexer;
 import io.github.dddplus.runtime.registry.StepDef;
 import io.github.dddplus.step.IDomainStep;

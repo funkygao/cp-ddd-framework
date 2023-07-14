@@ -2,7 +2,7 @@ package io.github.dddplus.runtime.registry.mock.pattern;
 
 import io.github.dddplus.annotation.Pattern;
 import io.github.dddplus.ext.IIdentityResolver;
-import io.github.dddplus.model.IIdentity;
+import io.github.dddplus.ext.IIdentity;
 import io.github.dddplus.runtime.registry.mock.model.FooModel;
 
 @Pattern(code = FooPattern.CODE, name = "foo模式", tags = Patterns.B2C)

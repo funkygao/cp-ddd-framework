@@ -7,7 +7,7 @@ package io.github.dddplus.runtime;
 
 import io.github.dddplus.annotation.Pattern;
 import io.github.dddplus.ext.IIdentityResolver;
-import io.github.dddplus.model.IIdentity;
+import io.github.dddplus.ext.IIdentity;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 

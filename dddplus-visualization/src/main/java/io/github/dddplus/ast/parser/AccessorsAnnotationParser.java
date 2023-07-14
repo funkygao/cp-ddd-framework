@@ -9,6 +9,9 @@ import lombok.AllArgsConstructor;
 
 import java.util.Set;
 
+/**
+ * {@link io.github.dddplus.model.encapsulation.AllowedAccessors}.
+ */
 @AllArgsConstructor
 public class AccessorsAnnotationParser {
     private final ClassOrInterfaceDeclaration classOrInterfaceDeclaration;

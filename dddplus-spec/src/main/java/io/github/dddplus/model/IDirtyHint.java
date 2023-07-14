@@ -8,7 +8,6 @@ package io.github.dddplus.model;
 /**
  * 脏数据提示.
  *
- * <p>{@link IDirtyHint} is part of our DDD building block.</p>
  * <p>它是聚合根改变状态时，由聚合根显式传递给{@code Repository}的待落库的脏数据携带者.</p>
  * <p>每个{@code IDirtyHint}包含了2层内容：</p>
  * <ul>
