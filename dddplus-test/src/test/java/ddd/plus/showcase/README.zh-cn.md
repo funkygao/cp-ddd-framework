@@ -30,10 +30,10 @@
 
 ### 1.4 正向模型
 
-- [应用层](wms/app/)
-   - 系统交互入口：[人工复核的业务用例](wms/app/service/ManualCheckAppService.java)
+- [应用层](wms/application/)
+   - 系统交互入口：[出库复核](wms/application/service/CheckingAppService.java)
 - [领域层](wms/domain/)
-- [基础设施层](wms/infra/)
+- [基础设施层](wms/infrastructure/)
 
 ### 1.5 技术细节
 

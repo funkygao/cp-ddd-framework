@@ -16,10 +16,10 @@ A warehouse management system (WMS) consists of software and processes that allo
 
 ### 1.3 Forward modeling
 
-- [Application Layer](wms/app/)
-   - entry point: [manual check servce](wms/app/service/ManualCheckAppService.java)
+- [Application Layer](wms/application/)
+   - entry point: [outbound checking](wms/application/service/CheckingAppService.java)
 - [Domain Layer](wms/domain/)
-- [Infrastructure Layer](wms/infra/)
+- [Infrastructure Layer](wms/infrastructure/)
 
 ### 1.4 Tech details
 
