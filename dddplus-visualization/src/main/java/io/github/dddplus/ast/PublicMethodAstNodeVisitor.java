@@ -6,6 +6,7 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import io.github.dddplus.ast.parser.JavaParserUtil;
 import io.github.dddplus.ast.report.EncapsulationReport;
 import io.github.dddplus.model.*;
+import io.github.dddplus.model.encapsulation.AllowedAccessors;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.Generated;
@@ -78,6 +79,11 @@ public class PublicMethodAstNodeVisitor extends VoidVisitorAdapter<Encapsulation
     }
 
     private boolean skipMethod(MethodDeclaration methodDeclaration, ClassOrInterfaceDeclaration parentClass) {
+        if (methodDeclaration.isAnnotationPresent(AllowedAccessors.class)) {
+            // 指定类可访问的方法，忽略
+            return true;
+        }
+
         for (String ignoredPrefix : ignoredMethodNames) {
             if (methodDeclaration.getNameAsString().startsWith(ignoredPrefix)) {
                 return true;

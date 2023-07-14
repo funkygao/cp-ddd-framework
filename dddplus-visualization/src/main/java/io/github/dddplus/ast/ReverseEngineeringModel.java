@@ -63,6 +63,12 @@ public class ReverseEngineeringModel {
         return aggregateReport.getAggregateEntries();
     }
 
+    public List<AggregateEntry> sortedAggregates() {
+        List<AggregateEntry> entries = aggregateReport.getAggregateEntries();
+        Collections.sort(entries, Comparator.comparing(AggregateEntry::getName));
+        return entries;
+    }
+
     public int annotatedModels() {
         return keyModelReport.models() + keyEventReport.size();
     }

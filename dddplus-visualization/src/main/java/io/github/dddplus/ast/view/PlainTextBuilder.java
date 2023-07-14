@@ -35,7 +35,7 @@ public class PlainTextBuilder implements IViewBuilder<PlainTextBuilder> {
 
         appendCoverage();
         appendModelDebt();
-        model.aggregates().forEach(a -> addAggregate(a));
+        model.sortedAggregates().forEach(a -> addAggregate(a));
         addKeyUsecases();
         addOrphanKeyFlows();
         addKeyEvents();
@@ -253,7 +253,7 @@ public class PlainTextBuilder implements IViewBuilder<PlainTextBuilder> {
 
     private PlainTextBuilder addKeyEvents() {
         content.append("<<领域事件>>").append(NEWLINE);
-        for (KeyEventEntry entry : model.getKeyEventReport().getEvents()) {
+        for (KeyEventEntry entry : model.getKeyEventReport().sortedEvents()) {
             append(TAB).writeClazzDefinition(entry);
         }
         return this;

@@ -25,7 +25,7 @@ import io.github.dddplus.model.BaseAggregateRoot;
 import io.github.dddplus.model.IUnboundedDomainModel;
 import io.github.dddplus.model.association.BelongTo;
 import io.github.dddplus.model.association.HasOne;
-import io.github.dddplus.model.encapsulation.Accessors;
+import io.github.dddplus.model.encapsulation.AllowedAccessors;
 import io.github.dddplus.model.spcification.Notification;
 import lombok.*;
 import lombok.experimental.Delegate;
@@ -46,7 +46,7 @@ import java.util.List;
 @NoArgsConstructor
 @Slf4j
 @Getter(AccessLevel.PACKAGE)
-public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomainModel {
+public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomainModel, ICarton {
     @Getter
     private Long id;
     private CartonNo cartonNo;
@@ -174,7 +174,7 @@ public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomai
         return order;
     }
 
-    @Accessors(ICartonRepository.class)
+    @AllowedAccessors(ICartonRepository.class)
     public void injects(CartonOrder cartonOrder, CartonPallet cartonPallet,
                         IRuleGateway ruleGateway, IInventoryGateway inventoryGateway,
                         IEventPublisher eventPublisher) {

@@ -1,6 +1,7 @@
 *.class
 target/
 *.swp
+*.swo
 *.iml
 *.ipr
 *.iws

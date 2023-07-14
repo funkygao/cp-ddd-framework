@@ -19,8 +19,6 @@ ConsumableExtPolicy
     extensionCode
 ConsumableExtSpeedFirst
     recommendFor
-ContainerBag
-    flatItems
 ContainerDiff 复核过程中发现的容器差异.
     register: 登记差异.
 Order 客户的出库单.
@@ -46,9 +44,7 @@ OrderOfPresale 出库单的预售场景.
 PackBag
     isOnePack
 Task 复核任务.
-    allocateTaskNo
     plan: 初始化时指定复核生产计划
-    inSkuPendingScenario
     claimedWith
     removeOrderLines
     confirmQty: can be killed with lombok @Delegate

@@ -64,7 +64,7 @@ class WmsReverseModelingTest {
 
     @Test
     void enforceAccessors() {
-        new AccessorsEnforcer()
+        new AllowedAccessorsEnforcer()
                 .scan(root)
                 .enforce(showcaseFilter);
     }

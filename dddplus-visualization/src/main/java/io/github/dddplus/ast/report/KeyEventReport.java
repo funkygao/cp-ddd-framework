@@ -9,6 +9,8 @@ import io.github.dddplus.ast.model.KeyEventEntry;
 import lombok.Data;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Data
@@ -18,6 +20,11 @@ public class KeyEventReport {
     public KeyEventReport register(KeyEventEntry entry) {
         events.add(entry);
         return this;
+    }
+
+    public List<KeyEventEntry> sortedEvents() {
+        Collections.sort(events, Comparator.comparing(KeyEventEntry::getClassName));
+        return events;
     }
 
     public int size() {
