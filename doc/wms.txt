@@ -1,4 +1,4 @@
-标注覆盖率：Class(64/59.4%) Method(116/52.6%) Property(252/21.0%) Statement(222)
+标注覆盖率：Class(64/59.4%) Method(116/53.4%) Property(252/21.0%) Statement(222)
 模型债：
 <<Aggregate: 出库复核任务>>
 Container 拣货容器.
@@ -154,6 +154,7 @@ Sku 货品.
    Contextual    LotNo snList uniqueCode
 <<用户交互>>
 CheckingAppService
+   submitTask() 提交复核任务
    recommendPlatformByTaskBacklog(taskNo) 提升拣货员去哪个复核台：按任务积压情况
    recommendPlatformByOrder(orderNo) 提升拣货员去哪个复核台：按订单
    recommendConsumable(cartonNo) 为任务的某个纸箱推荐耗材种类和数量
