@@ -148,7 +148,7 @@ public class PlainTextBuilder implements IViewBuilder<PlainTextBuilder> {
                     append(TAB).append(TAB)
                             .append(entry.getMethodName())
                             .append("(")
-                            .append(entry.displayArgsWithRules())
+                            .append(entry.displayEffectiveArgs())
                             .append(")")
                             .append(SPACE)
                             .append(entry.getJavadoc())
@@ -242,7 +242,7 @@ public class PlainTextBuilder implements IViewBuilder<PlainTextBuilder> {
         for (KeyFlowEntry entry : orphanFlowsOfActor) {
             append(TAB).append(entry.displayNameWithRemark())
                     .append("(")
-                    .append(entry.displayArgsWithRules())
+                    .append(entry.displayEffectiveArgs())
                     .append(")")
                     .append(SPACE)
                     .append(entry.getJavadoc());

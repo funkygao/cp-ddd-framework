@@ -375,7 +375,7 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
         append(" {method} ");
         append(entry.getMethodName())
                 .append(BRACKET_OPEN)
-                .append(entry.displayArgsWithRules())
+                .append(entry.displayEffectiveArgs())
                 .append(BRACKET_CLOSE)
                 .append(SPACE)
                 .append(entry.getJavadoc());

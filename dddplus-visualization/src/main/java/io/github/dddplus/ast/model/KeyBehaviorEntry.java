@@ -15,8 +15,6 @@ public class KeyBehaviorEntry {
     private String methodName;
     private String realMethodName;
     private String packageName;
-    private Set<String> rules = new HashSet<>();
-    private Set<String> modes = new HashSet<>();
     private List<String> args = new ArrayList<>();
     private Set<String> realArguments = new TreeSet<>();
     private Set<String> events = new TreeSet<>(); // 该行为产生哪些领域事件
