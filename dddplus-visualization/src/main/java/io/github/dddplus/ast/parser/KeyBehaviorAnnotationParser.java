@@ -57,27 +57,12 @@ public class KeyBehaviorAnnotationParser {
                     entry.setRemark(AnnotationFieldParser.singleFieldValue(memberValuePair));
                     break;
 
-                case "rules":
-                    rules = AnnotationFieldParser.arrayFieldValue(memberValuePair);
-                    entry.setRules(rules);
-                    break;
-
-                case "modes":
-                    modes = AnnotationFieldParser.arrayFieldValue(memberValuePair);
-                    entry.setModes(modes);
-                    break;
-
                 case "produceEvent":
                     entry.setEvents(AnnotationFieldParser.arrayFieldValue(memberValuePair));
                     break;
 
                 case "async":
                     entry.setAsync(true);
-                    break;
-
-                case "modeClass":
-                    modes.addAll(AnnotationFieldParser.arrayFieldValue(memberValuePair));
-                    entry.setModes(modes);
                     break;
 
                 case "args":

@@ -63,7 +63,8 @@ public class CheckingAppService implements IApplicationService {
     private IEventPublisher eventPublisher;
     private UnitOfWork uow;
 
-    // 返回值是taskNo
+    // 提交复核任务
+    @KeyUsecase
     public ApiResponse<String> submitTask(@Valid SubmitTaskDto dto) {
         WarehouseNo warehouseNo = WarehouseNo.of(dto.getWarehouseNo());
 
@@ -94,14 +95,13 @@ public class CheckingAppService implements IApplicationService {
     }
 
     public ApiResponse<String> recommendPlatform(@Valid RecommendPlatformRequest request) {
-        Platform platform;
         if (request.getOrderNo() != null) {
-            platform = recommendPlatformByOrder(request);
+            Platform platform = recommendPlatformByOrder(request);
+            return ApiResponse.ofOk(platform.value());
         } else {
-            platform = recommendPlatformByTaskBacklog(request);
+            Platform platform = recommendPlatformByTaskBacklog(request);
+            return ApiResponse.ofOk(platform.value());
         }
-
-        return ApiResponse.ofOk(platform.value());
     }
 
     /**

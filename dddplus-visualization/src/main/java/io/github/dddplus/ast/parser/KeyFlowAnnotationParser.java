@@ -15,7 +15,6 @@ import io.github.dddplus.ast.model.KeyFlowEntry;
 import lombok.Getter;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * {@link io.github.dddplus.dsl.KeyFlow}.
@@ -71,22 +70,8 @@ public class KeyFlowAnnotationParser {
                     entry.setPolymorphism(true);
                     break;
 
-                case "rules":
-                    entry.setRules(AnnotationFieldParser.arrayFieldValue(memberValuePair));
-                    break;
-
                 case "produceEvent":
                     entry.setEvents(AnnotationFieldParser.arrayFieldValue(memberValuePair));
-                    break;
-
-                case "modes":
-                    entry.setModes(AnnotationFieldParser.arrayFieldValue(memberValuePair));
-                    break;
-
-                case "modeClass":
-                    Set<String> tmp = entry.getModes();
-                    tmp.addAll(AnnotationFieldParser.arrayFieldValue(memberValuePair));
-                    entry.setModes(tmp);
                     break;
 
                 case "useRawArgs":

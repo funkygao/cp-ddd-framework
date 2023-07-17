@@ -74,24 +74,4 @@ public @interface KeyFlow {
      * <p>即一个方法有多个实现.</p>
      */
     boolean polymorphism() default false;
-
-    /**
-     * 业务规则约束对应的类.
-     */
-    @Deprecated
-    Class[] rules() default {};
-
-    /**
-     * 行为模式，即业务场景变化点.
-     */
-    @Deprecated
-    String[] modes() default {};
-
-    /**
-     * 行为模式对应的类，通常是业务字典类.
-     *
-     * <p>它与{@link #modes()}合并，共同定义行为模式.</p>
-     */
-    @Deprecated
-    Class[] modeClass() default {};
 }

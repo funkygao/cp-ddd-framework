@@ -61,7 +61,7 @@ public class CheckTask implements IAggregateRoot, IUnboundedDomainModel {
     @KeyElement(types = KeyElement.Type.Referential)
     private HasMany<ShipmentOrder> shipmentOrders;
 
-    @KeyBehavior(rules = {CheckBasicRule.class, CheckAdvancedRule.class}, modes = "x", modeClass = FooMode.class, name = "复核", remark = "ok")
+    @KeyBehavior(name = "复核", remark = "ok")
     void foo() {
     }
 

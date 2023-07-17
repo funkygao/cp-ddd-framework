@@ -19,9 +19,7 @@ public class KeyFlowEntry {
     private final String javadoc;
     private String actor;
     private String methodName;
-    private Set<String> rules;
     private Set<String> events = new TreeSet<>(); // 该流程产生哪些领域事件
-    private Set<String> modes;
     private List<String> args;
     private Set<String> realArguments;
     private String remark;
@@ -36,8 +34,6 @@ public class KeyFlowEntry {
         this.javadoc = javadoc;
 
         this.actor = "";
-        this.rules = new TreeSet<>();
-        this.modes = new TreeSet<>();
     }
 
     public String actor() {
@@ -83,9 +79,8 @@ public class KeyFlowEntry {
         return String.join(",", args);
     }
 
-    public String displayArgsWithRules() {
+    public String displayEffectiveArgs() {
         String args = displayArgs();
-        String rules = displayRules();
         List<String> l = new ArrayList<>();
         if (realArguments != null && !realArguments.isEmpty()) {
             l.addAll(realArguments);
@@ -93,18 +88,7 @@ public class KeyFlowEntry {
         if (!args.isEmpty()) {
             l.add(args);
         }
-        if (!rules.isEmpty()) {
-            l.add(rules);
-        }
         return String.join(",", l);
-    }
-
-    private String displayRules() {
-        if (rules == null || rules.isEmpty()) {
-            return "";
-        }
-
-        return String.join(",", rules);
     }
 
     public String displayNameWithRemark() {
