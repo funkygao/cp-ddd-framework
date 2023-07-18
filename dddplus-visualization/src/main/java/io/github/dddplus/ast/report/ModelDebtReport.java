@@ -6,6 +6,7 @@
 package io.github.dddplus.ast.report;
 
 import io.github.dddplus.ast.ReverseEngineeringModel;
+import io.github.dddplus.ast.model.KeyModelEntry;
 import lombok.Data;
 
 /**
@@ -72,8 +73,25 @@ import lombok.Data;
 public class ModelDebtReport {
     private final ReverseEngineeringModel model;
 
+    private int problematicalFields = 0;
+    private int orphanFlows = 0;
+    private AggregateDensity aggregateDensity;
+    private int rawSimilarModels = 0;
+
     public ModelDebtReport(ReverseEngineeringModel model) {
         this.model = model;
+    }
+
+    public ModelDebtReport build() {
+        aggregateDensity = model.getAggregateReport().density();
+
+        for (KeyModelEntry modelEntry : model.getKeyModelReport().getData().values()) {
+            orphanFlows += modelEntry.orphanFlows();
+            problematicalFields += modelEntry.problematicalPropertiesN();
+        }
+
+        rawSimilarModels = model.getRawSimilarities().size();
+        return this;
     }
 
 }

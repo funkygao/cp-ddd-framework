@@ -9,6 +9,8 @@ import io.github.dddplus.ast.ReverseEngineeringModel;
 import io.github.dddplus.ast.model.AggregateEntry;
 import io.github.dddplus.ast.model.KeyModelEntry;
 import lombok.Data;
+import org.apache.commons.math3.stat.descriptive.moment.Mean;
+import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +66,30 @@ public class AggregateReport {
                 throw new IllegalStateException(String.format("Aggregate overlaps (%s, %s)", entry.getName(), newEntry.getName()));
             }
         }
+    }
+
+    AggregateDensity density() {
+        List<Integer> modelsOfAggregate = new ArrayList<>();
+        List<Integer> methodDensity = new ArrayList<>();
+        for (AggregateEntry aggregateEntry : aggregateEntries) {
+            modelsOfAggregate.add(aggregateEntry.modelsN());
+            methodDensity.add(aggregateEntry.methodDensity());
+        }
+
+        AggregateDensity density = new AggregateDensity();
+        density.setModelsMean(new Mean().evaluate(toDoubleArray(modelsOfAggregate)));
+        density.setModelsStandardDeviation(new StandardDeviation().evaluate(toDoubleArray(modelsOfAggregate)));
+        density.setMethodDensityMean(new Mean().evaluate(toDoubleArray(methodDensity)));
+        density.setMethodDensityStandardDeviation(new StandardDeviation().evaluate(toDoubleArray(methodDensity)));
+        return density;
+    }
+
+    private double[] toDoubleArray(List<Integer> values) {
+        double[] ds = new double[values.size()];
+        for (int i = 0; i < ds.length; i++) {
+            ds[i] = values.get(i);
+        }
+        return ds;
     }
 
 }
