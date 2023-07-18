@@ -55,8 +55,8 @@ public class DomainModelAnalyzerTest {
                 .scan(moduleRoot("dddplus-test"));
         ReverseEngineeringModel model = analyzer.analyze((level, path, file) -> path.contains("design"));
         new PlainTextBuilder()
-                .build(model)
                 .showRawSimilarities()
+                .build(model)
                 .render("../doc/model.txt");
     }
 
