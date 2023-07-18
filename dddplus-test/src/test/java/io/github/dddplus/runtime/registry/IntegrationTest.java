@@ -106,7 +106,7 @@ public class IntegrationTest {
         IllegalRouter illegalRouter = InternalIndexer.findRouter(IllegalRouter.class);
         assertNull(illegalRouter);
 
-        assertNotNull(DDD.findRouter(PartnerRouter.class));
+        assertNotNull(DDD.useRouter(PartnerRouter.class));
     }
 
     @Test
@@ -118,14 +118,14 @@ public class IntegrationTest {
 
     @Test
     public void noImplementationExtAndNoDefaultExt() {
-        NotImplementedRouter1 router = DDD.findRouter(NotImplementedRouter1.class);
+        NotImplementedRouter1 router = DDD.useRouter(NotImplementedRouter1.class);
         assertNotNull(router);
         router.ping(fooModel);
     }
 
     @Test
     public void reducerFirstOf() {
-        BarRouter router = DDD.findRouter(BarRouter.class);
+        BarRouter router = DDD.useRouter(BarRouter.class);
         String result = router.submit(fooModel);
         // submit里执行了Reducer.firstOf，对应的扩展点是：B2CExt, PartnerExt
         // 应该返回 PartnerExt 的结果
@@ -141,7 +141,7 @@ public class IntegrationTest {
 
     @Test
     public void reducerAll() {
-        BarRouter router = DDD.findRouter(BarRouter.class);
+        BarRouter router = DDD.useRouter(BarRouter.class);
         String result = router.submit2(fooModel);
         assertEquals(String.valueOf(B2CExt.RESULT), result);
     }
@@ -203,7 +203,7 @@ public class IntegrationTest {
     @Test
     public void routerThrowsException() {
         try {
-            BarRouter router = DDD.findRouter(BarRouter.class);
+            BarRouter router = DDD.useRouter(BarRouter.class);
             router.throwsEx(fooModel);
             fail();
         } catch (RuntimeException expected) {
@@ -409,7 +409,7 @@ public class IntegrationTest {
 
     @Test
     public void defaultExtensionComponent() {
-        assertEquals(198, DDD.findRouter(BazRouter.class).guess(fooModel).intValue());
+        assertEquals(198, DDD.useRouter(BazRouter.class).guess(fooModel).intValue());
     }
 
     @Test
@@ -425,12 +425,12 @@ public class IntegrationTest {
     @Test
     public void decideSteps() {
         // fooModel不是B2B模式，匹配不了B2BDecideStepsExt
-        assertNotNull(DDD.findRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity));
-        assertEquals(0, DDD.findRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity).size());
+        assertNotNull(DDD.useRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity));
+        assertEquals(0, DDD.useRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity).size());
 
         fooModel.setB2c(false);
         // B2BDecideStepsExt
-        List<String> b2bSubmitSteps = DDD.findRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity);
+        List<String> b2bSubmitSteps = DDD.useRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity);
         assertEquals(3, b2bSubmitSteps.size());
     }
 
@@ -439,7 +439,7 @@ public class IntegrationTest {
         fooModel.setB2c(false);
         fooModel.setRedecide(true);
         fooModel.setStepsRevised(false);
-        List<String> steps = DDD.findRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity);
+        List<String> steps = DDD.useRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity);
         // B2BDecideStepsExt: FooStep -> BarStep(if redecide then add Baz & Ham) -> BazStep -> HamStep
         submitStepsExec.execute(Steps.Submit.Activity, steps, fooModel);
         assertTrue(fooModel.isStepsRevised());
@@ -461,7 +461,7 @@ public class IntegrationTest {
         fooModel.setRedecide(false);
         fooModel.setStepsRevised(false);
         fooModel.setSleepExtTimeout(true);
-        List<String> steps = DDD.findRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity);
+        List<String> steps = DDD.useRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity);
         // BazStep FooStep
         // FooStep调用一个扩展点超时，会抛出 ExtTimeoutException，不确定状态：抛出到外面，框架层不做回滚
         try {
@@ -477,7 +477,7 @@ public class IntegrationTest {
         fooModel.setB2c(false);
         fooModel.setRedecide(true);
         fooModel.setStepsRevised(false);
-        List<String> steps = DDD.findRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity);
+        List<String> steps = DDD.useRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity);
         // B2BDecideStepsExt: FooStep -> BarStep(if redecide then add Baz & Ham) -> BazStep -> HamStep
         Set<String> asyncSteps = new HashSet<>();
         submitStepsExec.execute(Steps.Submit.Activity, steps, fooModel, null, asyncSteps);
@@ -496,7 +496,7 @@ public class IntegrationTest {
         fooModel.setWillSleepLong(true);
         fooModel.setRedecide(false);
         fooModel.setStepsRevised(false);
-        List<String> steps = DDD.findRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity);
+        List<String> steps = DDD.useRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity);
         // B2BDecideStepsExt: FooStep -> BarStep(if redecide then add Baz & Ham) -> BazStep -> HamStep
         Set<String> asyncSteps = new HashSet<>();
         asyncSteps.add(Steps.Submit.FooStep);
@@ -515,7 +515,7 @@ public class IntegrationTest {
         fooModel.setWillSleepLong(true);
         fooModel.setRedecide(false);
         fooModel.setStepsRevised(false);
-        List<String> steps = DDD.findRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity);
+        List<String> steps = DDD.useRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity);
         log.info("steps:{}", steps); // Baz, Foo, Bar
         Set<String> asyncSteps = new HashSet<>();
         asyncSteps.add(Steps.Submit.FooStep);
@@ -531,7 +531,7 @@ public class IntegrationTest {
         fooModel.setRedecide(false);
         fooModel.setStepsRevised(false);
         fooModel.setLetFooThrowException(true);
-        List<String> steps = DDD.findRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity);
+        List<String> steps = DDD.useRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity);
         log.info("steps:{}", steps); // Baz, Foo, Bar
         Set<String> asyncSteps = new HashSet<>();
         asyncSteps.add(Steps.Submit.FooStep);
@@ -546,7 +546,7 @@ public class IntegrationTest {
         fooModel.setB2c(false);
         fooModel.setRedecideDeadLoop(true); // dead loop on purpose
         fooModel.setStepsRevised(false);
-        List<String> steps = DDD.findRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity);
+        List<String> steps = DDD.useRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity);
         // B2BDecideStepsExt: FooStep -> BarStep(if redecideDeadLoop then add BarStep)
         try {
             submitStepsExec.execute(Steps.Submit.Activity, steps, fooModel);
@@ -560,7 +560,7 @@ public class IntegrationTest {
     public void stepsExecTemplateWithRollback() throws IOException {
         fooModel.setB2c(false);
         fooModel.setWillRollback(true);
-        List<String> steps = DDD.findRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity);
+        List<String> steps = DDD.useRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity);
         log.info("steps: {}", steps); // Baz, Foo, Bar
         try {
             submitStepsExec.execute(Steps.Submit.Activity, steps, fooModel);
@@ -578,7 +578,7 @@ public class IntegrationTest {
     public void stepsExecTemplateWithInvalidRollback() {
         fooModel.setB2c(false);
         fooModel.setWillRollbackInvalid(true);
-        List<String> steps = DDD.findRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity);
+        List<String> steps = DDD.useRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity);
         log.info("steps: {}", steps);
         try {
             submitStepsExec.execute(Steps.Submit.Activity, steps, fooModel);

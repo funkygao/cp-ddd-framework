@@ -25,20 +25,6 @@ public final class DDD {
     }
 
     /**
-     * Alias for {@link #useRouter(Class)}.
-     *
-     * @param routerClazz 扩展点路由器类型
-     * @param <T>         扩展点路由器类型
-     * @return null if bug found：研发忘记使用注解{@link io.github.dddplus.annotation.Router}了
-     * @deprecated use {@link #useRouter(Class)}
-     */
-    @NonNull
-    @Deprecated
-    public static <T extends BaseRouter> T findRouter(@NonNull Class<? extends T> routerClazz) {
-        return useRouter(routerClazz);
-    }
-
-    /**
      * 定位一个扩展点路由实例.
      *
      * @param routerClazz 扩展点路由器类型
@@ -78,7 +64,6 @@ public final class DDD {
      * @param identity 业务身份，用于定位扩展点
      * @param <Ext>    扩展点
      */
-    @Deprecated
     public static <Ext extends IDomainExtension> Ext firstExtension(@NonNull Class<Ext> extClazz, @NonNull IIdentity identity) {
         return firstExtension(extClazz, identity, 0);
     }

@@ -19,7 +19,7 @@ public class FooStep extends SubmitStep {
         log.info("submit: {}", model);
 
         if (model.isSleepExtTimeout()) {
-            DDD.findRouter(SleepRouter.class).sleepTooLong(model);
+            DDD.useRouter(SleepRouter.class).sleepTooLong(model);
         }
 
         if (model.isWillSleepLong()) {
