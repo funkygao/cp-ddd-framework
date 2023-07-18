@@ -55,6 +55,18 @@ import lombok.Data;
  *   </ul>
  * </li>
  * </ol>
+ * <ol>根据论文检索，被研究次数排名top 10的代码坏味道：
+ * <li>Feature envy</li>
+ * <li>Long method</li>
+ * <li>God class</li>
+ * <li>Data class</li>
+ * <li>Duplicated code</li>
+ * <li>Refused bequest</li>
+ * <li>Blob class</li>
+ * <li>Shotgun surgery</li>
+ * <li>Long parameter list</li>
+ * <li>Spaghetti code</li>
+ * </ol>
  */
 @Data
 public class ModelDebtReport {
