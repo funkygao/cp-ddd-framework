@@ -22,11 +22,15 @@ public class JaccardModelSimilarity implements IKeyModelSimilarity {
     }
 
     public double rawModelSimilarity(KeyModelEntry model1, KeyModelEntry model2) {
-        return jaccardSimilarity(model1.getRawFields(), model2.getRawFields());
+        return jaccardSimilarity(model1.getRawFields(), model2.getRawFields()) * 100;
     }
 
 
     private double jaccardSimilarity(Set<String> set1, Set<String> set2) {
+        if (set1.isEmpty() || set2.isEmpty()) {
+            return 0;
+        }
+
         Set<String> intersection = new HashSet<>(set1);
         intersection.retainAll(set2);
         int intersectionSize = intersection.size();
