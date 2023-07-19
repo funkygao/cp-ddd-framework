@@ -35,8 +35,17 @@ class KeyElementAstNodeVisitor extends VoidVisitorAdapter<KeyModelReport> {
     public void visit(final FieldDeclaration fieldDeclaration, final KeyModelReport report) {
         super.visit(fieldDeclaration, report);
 
+        ClassOrInterfaceDeclaration parentClass = JavaParserUtil.getClass(fieldDeclaration.getParentNode().get());
+        if (parentClass == null) {
+            return;
+        }
+
         if (parseRawModel) {
-            parseRawModel(fieldDeclaration, report);
+            if (!parentClass.isInterface()
+                    && !parentClass.isAbstract()
+                    && !fieldDeclaration.isStatic()) {
+                parseRawModel(fieldDeclaration, report);
+            }
         }
 
         if (!fieldDeclaration.isAnnotationPresent(KeyElement.class)) {
@@ -55,10 +64,7 @@ class KeyElementAstNodeVisitor extends VoidVisitorAdapter<KeyModelReport> {
             }
         }
 
-        ClassOrInterfaceDeclaration parentClass = JavaParserUtil.getClass(fieldDeclaration.getParentNode().get());
-        if (parentClass == null) {
-            return;
-        }
+
 
         final String packageName = JavaParserUtil.packageName(parentClass);
         final String className = parentClass.getNameAsString();

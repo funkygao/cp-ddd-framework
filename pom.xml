@@ -111,7 +111,7 @@ under the License.
                             <packages>io.github.dddplus</packages>
                         </group>
                         <group>
-                            <title>DDD Forward Modeling</title>
+                            <title>Forward Modeling of Domain Knowledge</title>
                             <packages>io.github.dddplus.model*:io.github.dddplus.step</packages>
                         </group>
                         <group>
@@ -123,7 +123,7 @@ under the License.
                             <packages>io.github.dddplus.ext*</packages>
                         </group>
                         <group>
-                            <title>Runtime</title>
+                            <title>Runtime Implementation Details</title>
                             <packages>io.github.dddplus.annotation:io.github.dddplus.runtime*:io.github.dddplus.plugin</packages>
                         </group>
                         <group>

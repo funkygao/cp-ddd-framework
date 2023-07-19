@@ -6,6 +6,6 @@
 /**
  * Site Reliability Engineering modelling language.
  *
- * <p>You label your code with {@code sre} modeling language, and the reverse engineering automate the Observability process.</p>
+ * <p>You annotate your code with {@code sre} modeling language, and the reverse engineering automate the Observability process.</p>
  */
 package io.github.dddplus.sre;

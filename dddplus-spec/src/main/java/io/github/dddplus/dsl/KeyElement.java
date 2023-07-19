@@ -87,7 +87,7 @@ public @interface KeyElement {
          *
          * <p>在标注过程中发现的非领域概念被放在了领域模型.</p>
          * <ul>常见原因：
-         * <li>为了数据库查询而产生的Entity内字段冗余，但与领域逻辑无关</li>
+         * <li>为了数据库查询/reporting而产生的Entity内字段冗余，但与领域逻辑无关</li>
          * <li>Entity在处理请求过程中产生的中间结果，需要个地方保存</li>
          * <li>过早设计：想当然的需求，却无实际落地场景，产生僵尸(数据，逻辑)</li>
          * <li>直接把Entity等同于DTO，没有做领域层抽象，自然就不会有实质意义上的隔离和分层</li>
@@ -106,13 +106,6 @@ public @interface KeyElement {
          * data collection unit.
          */
         DCU,
-
-        /**
-         * 传播类.
-         *
-         * <p>例如：后续流程使用该属性，为了保证数据项获取顺畅，需要本模型进行手递手传播.</p>
-         */
-        Propagational,
 
         /**
          * 数量类.

@@ -55,7 +55,7 @@ public class CheckTask implements IAggregateRoot, IUnboundedDomainModel {
     @KeyElement(types = {KeyElement.Type.Referential, KeyElement.Type.Structural})
     private String containerNo;
 
-    @KeyElement(types = KeyElement.Type.Propagational)
+    @KeyElement(types = KeyElement.Type.Location)
     private String locationNo;
 
     @KeyElement(types = KeyElement.Type.Referential)
