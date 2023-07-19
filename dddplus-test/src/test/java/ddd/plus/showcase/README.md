@@ -25,3 +25,7 @@ A warehouse management system (WMS) consists of software and processes that allo
 
 ![](/doc/tech.svg)
 
+#### 1.5 Call graph
+
+![](/doc/callgraph.svg)
+
