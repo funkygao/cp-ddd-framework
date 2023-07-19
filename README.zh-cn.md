@@ -36,8 +36,6 @@ DDDplus是轻量级DDD补充和增强的框架。
 
 应用于多个大型核心复杂项目的生产环境。
 
-`Maven Central` 最新版本: `1.1.2`；正在积极开发的版本: `2.0.0-SNAPSHOT`。
-
 ## 快速入门
 
 ### 项目演示
@@ -79,7 +77,7 @@ public class WebApplication {
 </dependency>
 ```
 
-通过[DSL](/dddplus-spec/src/main/java/io/github/dddplus/dsl)在代码进行标注后，即可自动PlantUML类图形式的业务模型：
+通过[DSL](/dddplus-spec/src/main/java/io/github/dddplus/dsl)在代码进行标注后，自动生成多视角视图。
 
 ```java
 class ReverseModelingTest {

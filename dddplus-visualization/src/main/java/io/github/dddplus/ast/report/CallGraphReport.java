@@ -3,16 +3,13 @@ package io.github.dddplus.ast.report;
 import io.github.dddplus.ast.ReverseEngineeringModel;
 import io.github.dddplus.ast.model.CallGraphEntry;
 import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * call graph report.
  */
 @Data
-@Slf4j
 public class CallGraphReport {
     private final ReverseEngineeringModel model;
     private List<CallGraphEntry> entries = new ArrayList<>();
@@ -25,8 +22,35 @@ public class CallGraphReport {
         return model.getKeyModelReport().hasKeyMethod(declarationClazz, methodName);
     }
 
+    public Collection<Record> calleeRecords() {
+        Map<String, Record> map = new HashMap<>();
+        for (CallGraphEntry entry : entries) {
+            final String calleeClazz = entry.getCalleeClazz();
+            if (!map.containsKey(calleeClazz)) {
+                map.put(entry.getCalleeClazz(), new Record(calleeClazz));
+            }
+
+            map.get(calleeClazz).addMethod(entry.getCalleeMethod());
+        }
+
+        return map.values();
+    }
+
     public void register(String callerClazz, String callerMethod, String calleeClazz, String calleeMethod) {
-        entries.add(new CallGraphEntry(callerClazz, calleeMethod, calleeClazz, calleeMethod));
-        log.info("{}.{} -> {}.{}", callerClazz, callerMethod, calleeClazz, calleeMethod);
+        entries.add(new CallGraphEntry(callerClazz, callerMethod, calleeClazz, calleeMethod));
+    }
+
+    @Data
+    public static class Record {
+        private final String clazz;
+        private Set<String> methods = new HashSet<>();
+
+        Record(String clazz) {
+            this.clazz = clazz;
+        }
+
+        void addMethod(String method) {
+            methods.add(method);
+        }
     }
 }

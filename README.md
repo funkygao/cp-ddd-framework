@@ -36,8 +36,6 @@ In short, the 3 most essential `plus` are:
 
 Used for several complex critical central platform projects in production environment.
 
-Latest Maven Central version: `1.1.2`; under active development version: `2.0.0-SNAPSHOT`.
-
 ## Quickstart
 
 ### Showcase
@@ -73,7 +71,7 @@ public class Application {
 </dependency>
 ```
 
-Annotate your code With [DSL](/dddplus-spec/src/main/java/io/github/dddplus/dsl), DDDplus can render domain model in `PlantUML`.
+Annotate your code With [DSL](/dddplus-spec/src/main/java/io/github/dddplus/dsl), DDDplus can render domain model in multiple view.
 
 ```java
 class ReverseModelingTest {
