@@ -83,17 +83,20 @@ public class WebApplication {
 
 ```java
 class ReverseModelingTest {
+    ReverseEngineeringModel model;
     @Test
-    void reverseModeling() {
-        DomainModelAnalyzer domainModelAnalyzer = new DomainModelAnalyzer();
-        ReverseEngineeringModel domainModel = domainModelAnalyzer.scan("{your module root}")
-            .analyze();
-        new PlantUmlBuilder()
-            .build(domainModel)
-            .renderSvg("myModel.svg"); // read-only searchable graph
-        new PlainTextBuilder()
-            .build(domainModel)
-            .render("model.txt"); // mutable, integrated with forward modeling design process
+    void visualizeDomainModel() {
+        model = new DomainModelAnalyzer()
+                        .scan("{your module root}")
+                        .analyze();
+        new PlantUmlRenderer()
+            .build(model)
+            .classDiagramSvgFilename("model.svg")
+            .render(); // read-only searchable graph
+        new PlainTextRenderer()
+            .build(model)
+            .targetFilename("model.txt")
+            .render(); // mutable, integrated with forward modeling design process
     }
 }
 ```

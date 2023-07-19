@@ -83,12 +83,14 @@ class ReverseModelingTest {
         model = new DomainModelAnalyzer()
                         .scan("{your module root}")
                         .analyze();
-        new PlantUmlBuilder()
+        new PlantUmlRenderer()
             .build(model)
-            .renderSvg("model.svg"); // read-only searchable graph
-        new PlainTextBuilder()
-            .build(domainModel)
-            .render("model.txt"); // mutable, integrated with forward modeling design process
+            .classDiagramSvgFilename("model.svg")
+            .render(); // read-only searchable graph
+        new PlainTextRenderer()
+            .build(model)
+            .targetFilename("model.txt")
+            .render(); // mutable, integrated with forward modeling design process
     }
 }
 ```
