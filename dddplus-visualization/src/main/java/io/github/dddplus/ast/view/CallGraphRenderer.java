@@ -12,9 +12,15 @@ import java.io.IOException;
 public class CallGraphRenderer implements IModelRenderer<CallGraphRenderer> {
     private CallGraphReport callGraphReport;
     private String targetDotFilename;
+    private boolean edgeShowsCallerMethod = false;
 
     public CallGraphRenderer targetDotFilename(String targetFile) {
         this.targetDotFilename = targetFile;
+        return this;
+    }
+
+    public CallGraphRenderer edgeShowsCallerMethod() {
+        this.edgeShowsCallerMethod = true;
         return this;
     }
 
@@ -26,7 +32,6 @@ public class CallGraphRenderer implements IModelRenderer<CallGraphRenderer> {
 
     @Override
     public void render() throws IOException {
-        // https://www.graphviz.org/pdf/dotguide.pdf
         StringBuilder content = new StringBuilder();
         content.append("digraph G {").append(NEWLINE);
         content.append(TAB).append("label=\"Call Graph\";").append(NEWLINE);
@@ -35,13 +40,16 @@ public class CallGraphRenderer implements IModelRenderer<CallGraphRenderer> {
 
         for (CallGraphEntry entry : callGraphReport.getEntries()) {
             content.append(TAB).append(entry.getCallerClazz()).append(" -> ")
-                    .append(entry.calleeNode())
-                    .append(" [label=\"")
-                    .append(entry.getCallerMethod())
-                    .append("\"];")
-                    .append(NEWLINE);
+                    .append(entry.calleeNode());
+            if (edgeShowsCallerMethod) {
+                content.append(" [label=\"")
+                        .append(entry.getCallerMethod())
+                        .append("\"];");
+            }
+            content.append(NEWLINE);
         }
         content.append("}");
+
         File file = new File(targetDotFilename);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.append(content);
