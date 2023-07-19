@@ -13,7 +13,7 @@ import io.github.dddplus.runtime.registry.mock.model.FooModel;
 public class FooDomainService implements IDomainService {
 
     public void submitOrder(FooModel model) {
-        FooRouter router = DDD.findRouter(FooRouter.class);
+        FooRouter router = DDD.useRouter(FooRouter.class);
         log.info(router.submit(model));
     }
 

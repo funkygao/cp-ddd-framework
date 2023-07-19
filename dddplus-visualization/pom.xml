@@ -35,6 +35,7 @@ under the License.
         <java.graphviz.version>0.18.1</java.graphviz.version>
         <java.markdown.version>1.3.2</java.markdown.version>
         <plantuml.verion>8059</plantuml.verion>
+        <commons.math.version>3.6.1</commons.math.version>
     </properties>
 
     <dependencies>
@@ -53,14 +54,11 @@ under the License.
             <optional>true</optional>
         </dependency>
 
-        <!-- NLP -->
-        <!--
         <dependency>
-            <groupId>com.github.haifengl</groupId>
-            <artifactId>smile-core</artifactId>
-            <version>3.0.1</version>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-math3</artifactId>
+            <version>${commons.math.version}</version>
         </dependency>
-        -->
 
         <!-- visualization -->
         <dependency>

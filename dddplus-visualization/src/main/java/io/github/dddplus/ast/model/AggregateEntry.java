@@ -61,4 +61,16 @@ public class AggregateEntry {
 
         return false;
     }
+
+    public int modelsN() {
+        return keyModelEntries.size();
+    }
+
+    public int methodDensity() {
+        int n = 0;
+        for (KeyModelEntry modelEntry : getKeyModelEntries()) {
+            n += modelEntry.methodDensity();
+        }
+        return n;
+    }
 }

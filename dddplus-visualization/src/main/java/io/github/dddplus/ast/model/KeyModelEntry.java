@@ -35,12 +35,23 @@ public class KeyModelEntry {
         this.properties = new TreeMap<>();
     }
 
+    public int methodDensity() {
+        return keyBehaviorEntries.size() + keyRuleEntries.size() + keyFlowEntries.size();
+    }
+
     public int propertiesN() {
         int n = 0;
         for (KeyElement.Type type : properties.keySet()) {
             n += properties.get(type).size();
         }
         return n;
+    }
+
+    public int problematicalPropertiesN() {
+        if (!properties.containsKey(KeyElement.Type.Problematical)) {
+            return 0;
+        }
+        return properties.get(KeyElement.Type.Problematical).size();
     }
 
     public int methods() {
@@ -174,6 +185,16 @@ public class KeyModelEntry {
         }
 
         this.keyFlowEntries.addAll(entries);
+    }
+
+    public int orphanFlows() {
+        int n = 0;
+        for (KeyFlowEntry flowEntry : getKeyFlowEntries()) {
+            if (flowEntry.isOrphan()) {
+                n++;
+            }
+        }
+        return n;
     }
 
     public List<List<String>> methodClusters() {

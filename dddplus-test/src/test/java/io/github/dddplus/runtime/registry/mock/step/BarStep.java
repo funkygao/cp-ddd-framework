@@ -38,7 +38,7 @@ public class BarStep extends SubmitStep {
             throw new FooReviseStepsException().withSubsequentSteps(revisedSteps);
         }
 
-        List<String> revisedSteps = DDD.findRouter(ReviseStepsRouter.class).revisedSteps(model);
+        List<String> revisedSteps = DDD.useRouter(ReviseStepsRouter.class).revisedSteps(model);
         if (revisedSteps != null && !revisedSteps.isEmpty()) {
             log.info("重新编排步骤，增加步骤：{}", revisedSteps);
 

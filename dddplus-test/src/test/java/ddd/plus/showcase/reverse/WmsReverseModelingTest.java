@@ -48,8 +48,12 @@ class WmsReverseModelingTest {
     void generateForwardModel() throws IOException {
         ReverseEngineeringModel model = new DomainModelAnalyzer()
                 .scan(root)
+                .rawSimilarity()
+                .similarityThreshold(55)
                 .analyze(domainLayerFilter);
         new PlainTextBuilder()
+                .showRawSimilarities()
+                .clustering()
                 .build(model)
                 .render("../doc/wms.txt");
     }
