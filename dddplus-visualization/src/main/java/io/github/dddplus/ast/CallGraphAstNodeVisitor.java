@@ -10,8 +10,9 @@ import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import com.github.javaparser.resolution.types.ResolvedType;
+import io.github.dddplus.ast.parser.JavaParserUtil;
 import io.github.dddplus.ast.report.CallGraphReport;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,17 +24,16 @@ class CallGraphAstNodeVisitor extends VoidVisitorAdapter<CallGraphReport> {
         super.visit(methodCallExpr, report);
 
         final String methodName = methodCallExpr.getName().asString();
-        if (!report.interestedInMethod(methodName)) {
+        Expression scope = methodCallExpr.getScope().orElse(null);
+        if (scope == null) {
+            // 自己调用自己，不出现在call graph
             return;
         }
 
-        Expression scope = methodCallExpr.getScope().orElse(null);
-        if (scope != null) {
-            if (scope instanceof NameExpr) {
-                NameExpr nameExpr = (NameExpr) scope;
-            } else {
-                // e,g. DDD.usePolicy(Foo.class, task).recommend()
-            }
+        ResolvedType resolvedType = scope.calculateResolvedType();
+        String declarationClazz = JavaParserUtil.resolvedTypeAsString(resolvedType.describe());
+        if (!report.interestedInMethod(declarationClazz, methodName)) {
+            return;
         }
 
         MethodDeclaration accessorMethod = methodCallExpr.findAncestor(MethodDeclaration.class).get();
@@ -46,7 +46,7 @@ class CallGraphAstNodeVisitor extends VoidVisitorAdapter<CallGraphReport> {
             accessorClassName = accessorClazz.getNameAsString();
         }
 
-        report.register(accessorClassName, accessorMethod.getNameAsString(), methodName);
+        report.register(accessorClassName, accessorMethod.getNameAsString(), declarationClazz, methodName);
     }
 
 }

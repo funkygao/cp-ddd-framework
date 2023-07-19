@@ -34,9 +34,9 @@ public class KeyModelReport {
         return rawModels.get(className);
     }
 
-    public boolean hasKeyMethod(String methodName) {
+    public boolean hasKeyMethod(String declarationClazz, String methodName) {
         for (KeyModelEntry modelEntry : data.values()) {
-            if (modelEntry.hasKeyMethod(methodName)) {
+            if (modelEntry.getClassName().equals(declarationClazz) && modelEntry.hasKeyMethod(methodName)) {
                 return true;
             }
         }
