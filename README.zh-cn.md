@@ -97,6 +97,10 @@ class ReverseModelingTest {
             .build(model)
             .targetFilename("model.txt")
             .render(); // mutable, integrated with forward modeling design process
+        new CallGraphRenderer()
+            .targetDotFilename("callgraph.dot")
+            .build(model)
+            .render(); // the call graph of your domain model
     }
 }
 ```
