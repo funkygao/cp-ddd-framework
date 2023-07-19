@@ -101,6 +101,7 @@
  *   <ul>
  *       <li>{@code DDDplus} is not going to re-invent the wheel</li>
  *       <li>{@code IDEA Sequence Diagram plugin}/BPMN等工具已经具备这类能力</li>
+ *       <li>{@code CallGraphReport}会绘制关键方法的调用关系</li>
  *   </ul>
  * </li>
  * <li>业务约束/规则上貌似只是罗列，缺少场景表现力？

@@ -6,6 +6,7 @@
 package io.github.dddplus.ast;
 
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
@@ -84,9 +85,10 @@ class AccessorsAstNodeVisitor extends VoidVisitorAdapter<Void> {
             return;
         }
 
-        ClassOrInterfaceDeclaration accessorClazz = JavaParserUtil.getAccessor(methodCallExpr);
+        ClassOrInterfaceDeclaration accessorClazz = methodCallExpr.findAncestor(ClassOrInterfaceDeclaration.class).orElse(null);
         if (accessorClazz == null) {
-            log.error("method:{} cannot find accessor class", methodName);
+            EnumDeclaration accessorEnum = methodCallExpr.findAncestor(EnumDeclaration.class).get();
+            log.debug("method:{} called by enum:{}", methodName, accessorEnum.getNameAsString());
             return;
         }
 

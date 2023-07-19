@@ -37,7 +37,7 @@ public class ReverseEngineeringModel {
     private KeyRelationReport keyRelationReport = new KeyRelationReport(this);
     private ClassMethodReport classMethodReport = new ClassMethodReport(this);
     private ModelDebtReport modelDebtReport = new ModelDebtReport(this);
-
+    private CallGraphReport callGraphReport = new CallGraphReport(this);
 
     public List<SimilarityEntry> sortedSimilarities() {
         Collections.sort(similarities, Comparator.comparing(SimilarityEntry::getSimilarity));
