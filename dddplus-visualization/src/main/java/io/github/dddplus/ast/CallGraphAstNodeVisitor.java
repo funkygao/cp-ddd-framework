@@ -11,7 +11,6 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
-import com.github.javaparser.resolution.types.ResolvedType;
 import io.github.dddplus.ast.parser.JavaParserUtil;
 import io.github.dddplus.ast.report.CallGraphReport;
 import lombok.extern.slf4j.Slf4j;
@@ -30,8 +29,15 @@ class CallGraphAstNodeVisitor extends VoidVisitorAdapter<CallGraphReport> {
             return;
         }
 
-        ResolvedType resolvedType = scope.calculateResolvedType();
-        String declarationClazz = JavaParserUtil.resolvedTypeAsString(resolvedType.describe());
+        String resolvedTypeDescribe;
+        try {
+            resolvedTypeDescribe = scope.calculateResolvedType().describe();
+        } catch (Exception ignored) {
+            log.error(ignored.getMessage());
+            return;
+        }
+
+        String declarationClazz = JavaParserUtil.resolvedTypeAsString(resolvedTypeDescribe);
         if (!report.interestedInMethod(declarationClazz, methodName)) {
             return;
         }
