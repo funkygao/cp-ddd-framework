@@ -34,6 +34,16 @@ public class KeyModelReport {
         return rawModels.get(className);
     }
 
+    public boolean hasKeyMethod(String methodName) {
+        for (KeyModelEntry modelEntry : data.values()) {
+            if (modelEntry.hasKeyMethod(methodName)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public KeyModelEntry getOrCreateKeyModelEntryForActor(String actor) {
         if (!data.containsKey(actor)) {
             data.put(actor, new KeyModelEntry(actor));

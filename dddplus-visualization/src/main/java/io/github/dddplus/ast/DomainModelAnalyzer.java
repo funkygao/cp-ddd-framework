@@ -226,6 +226,13 @@ public class DomainModelAnalyzer {
             }
         }
 
+        for (File dir : dirs) {
+            log.debug("parsing {}", CallGraphAstNodeVisitor.class.getSimpleName());
+            new FileWalker(actualFilter, (level, path, file) -> {
+                new CallGraphAstNodeVisitor().visit(FileWalker.silentParse(file), model.getCallGraphReport());
+            }).walkFrom(dir);
+        }
+
         return model;
     }
 

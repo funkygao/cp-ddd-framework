@@ -35,6 +35,25 @@ public class KeyModelEntry {
         this.properties = new TreeMap<>();
     }
 
+    public boolean hasKeyMethod(String methodName) {
+        for (KeyBehaviorEntry entry : keyBehaviorEntries) {
+            if (entry.getRealMethodName().equals(methodName)) {
+                return true;
+            }
+        }
+        for (KeyRuleEntry entry : keyRuleEntries) {
+            if (entry.getRealMethodName().equals(methodName)) {
+                return true;
+            }
+        }
+        for (KeyFlowEntry entry : keyFlowEntries) {
+            if (entry.getRealMethodName().equals(methodName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public int methodDensity() {
         return keyBehaviorEntries.size() + keyRuleEntries.size() + keyFlowEntries.size();
     }
