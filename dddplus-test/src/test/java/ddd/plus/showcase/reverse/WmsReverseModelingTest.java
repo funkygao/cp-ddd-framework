@@ -2,6 +2,7 @@ package ddd.plus.showcase.reverse;
 
 import io.github.dddplus.ast.*;
 import io.github.dddplus.ast.report.EncapsulationReport;
+import io.github.dddplus.ast.view.GraphvizRenderer;
 import io.github.dddplus.ast.view.PlainTextRenderer;
 import io.github.dddplus.ast.view.PlantUmlRenderer;
 import org.junit.jupiter.api.Disabled;
@@ -27,6 +28,10 @@ class WmsReverseModelingTest {
                 .skinParamPolyline()
                 .build(model)
                 .classDiagramSvgFilename("../doc/wms.svg")
+                .render();
+        new GraphvizRenderer()
+                .targetFile("../doc/callgraph.svg")
+                .build(model)
                 .render();
     }
 

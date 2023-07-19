@@ -11,10 +11,6 @@ public class CallGraphEntry {
     private String calleeClazz;
     private String calleeMethod;
 
-    public String callerNode() {
-        return callerClazz + "." + callerMethod;
-    }
-
     public String calleeNode() {
         return calleeClazz + "." + calleeMethod;
     }

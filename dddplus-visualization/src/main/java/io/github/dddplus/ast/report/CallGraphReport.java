@@ -6,9 +6,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * call graph report.
@@ -30,14 +28,5 @@ public class CallGraphReport {
     public void register(String callerClazz, String callerMethod, String calleeClazz, String calleeMethod) {
         entries.add(new CallGraphEntry(callerClazz, calleeMethod, calleeClazz, calleeMethod));
         log.info("{}.{} -> {}.{}", callerClazz, callerMethod, calleeClazz, calleeMethod);
-    }
-
-    public Set<String> nodes() {
-        Set<String> result = new HashSet<>();
-        for (CallGraphEntry entry : entries) {
-            result.add(entry.calleeNode());
-            result.add(entry.callerNode());
-        }
-        return result;
     }
 }
