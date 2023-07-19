@@ -13,13 +13,13 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.LineComment;
-import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Java AST Node 工具.
@@ -27,6 +27,7 @@ import java.util.TreeSet;
 public final class JavaParserUtil {
     private static final String BLANK = "";
     private static final Set<String> emptySet = new HashSet<>();
+    private static Pattern resolvedTypePattern = Pattern.compile("(?:[?][\\s]*super[\\s]*)?((?:[\\w]+\\.)+[\\w]+)");
     private static final Set<String> ignoredArgument = new HashSet<>();
     static {
         ignoredArgument.add("String");
@@ -96,18 +97,14 @@ public final class JavaParserUtil {
         return false;
     }
 
-    public static ClassOrInterfaceDeclaration getAccessor(MethodCallExpr methodCallExpr) {
-        Optional<Node> parentNode = methodCallExpr.getParentNode();
-        while (true) {
-            if (!parentNode.isPresent()) {
-                return null;
-            }
-
-            if (parentNode.get() instanceof ClassOrInterfaceDeclaration) {
-                return (ClassOrInterfaceDeclaration) parentNode.get();
-            }
-
-            parentNode = parentNode.get().getParentNode();
+    public static String resolvedTypeAsString(String resolvedTypeDescribed) {
+        Matcher matcher = resolvedTypePattern.matcher(resolvedTypeDescribed);
+        if (matcher.find()) {
+            String fullTypeName = matcher.group(1);
+            String[] nameParts = fullTypeName.split("\\.");
+            return nameParts[nameParts.length - 1];
+        } else {
+            return resolvedTypeDescribed;
         }
     }
 

@@ -36,9 +36,6 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
     private static final String ENDUML = "@enduml";
     private static final String BRACE_OPEN = "{";
     private static final String BRACE_CLOSE = "}";
-    private static final String SPACE = " ";
-    private static final String TAB = SPACE + SPACE;
-    private static final String NEWLINE = System.getProperty("line.separator");
     private static final String QUOTE = "\"";
     private static final String HASHTAG = "#";
     private static final String PACKAGE_TMPL = "package {0} <<{1}>>";

@@ -17,10 +17,6 @@ import java.util.List;
  * DSL -> Reverse Engineering Model -> Plain text file, git versioned.
  */
 public class PlainTextRenderer implements IModelRenderer<PlainTextRenderer> {
-    private static final String SPACE = " ";
-    private static final String TAB = SPACE + SPACE + SPACE;
-    private static final String NEWLINE = System.getProperty("line.separator");
-
     private String targetFilename;
 
     private boolean clustering = false;
