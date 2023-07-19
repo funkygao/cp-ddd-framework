@@ -1,3 +1,19 @@
+<h1 align="center">DDDplus落地演示</h1>
+
+<div align="center">
+
+如何使用DDDplus进行(正向，逆向)建模。
+
+</div>
+
+<div align="center">
+
+Languages： [English](README.md) | 中文
+
+</div>
+
+----
+
 # DDDplus落地演示
 
 ## 一、供应链WMS出库系统
@@ -20,7 +36,8 @@
 
 1. 通过逆向模型<sup>[1.3]</sup>，了解具体的业务模型和代码结构
 2. 进入正向模型<sup>[1.4]</sup>，了解业务模型是如何具体实现的
-3. 进入技术细节<sup>[1.5]</sup>，了解具体的技术实现细节
+3. 进入正向模型<sup>[1.5]</sup>，了解业务对象间的调用关系图
+4. 进入技术细节<sup>[1.6]</sup>，了解具体的技术实现细节
 
 ### 1.3 逆向模型
 
@@ -35,13 +52,13 @@
 - [领域层](wms/domain/)
 - [基础设施层](wms/infrastructure/)
 
-### 1.5 技术细节
-
-![](/doc/tech.svg)
-
-### 1.6 领域行为调用关系
+### 1.5 领域行为调用关系
 
 ![](/doc/callgraph.svg)
+
+### 1.6 技术细节
+
+![](/doc/tech.svg)
 
 ## 二、订单履约中台
 
