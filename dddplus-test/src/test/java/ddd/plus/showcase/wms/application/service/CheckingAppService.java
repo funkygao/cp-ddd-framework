@@ -74,7 +74,7 @@ public class CheckingAppService implements IApplicationService {
             return ApiResponse.ofOk(uuid.getBizNo());
         }
 
-        Task task = TaskAppConverter.INSTANCE.fromDto(dto); // orphan object
+        Task task = TaskAppConverter.INSTANCE.fromDto(dto); // dangling object
         OrderBag pendingOrderBag = task.orders().pendingOrders();
         // 任务下发过程中，客户可能取消订单了
         OrderBagCanceled canceledOrderBag = pendingOrderBag.canceledBag(orderGateway);

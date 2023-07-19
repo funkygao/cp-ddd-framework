@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class PlainTextBuilderTest {
+class PlainTextRendererTest {
 
     @Test
     void keyElementTypeMaxLength() {

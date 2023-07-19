@@ -2,6 +2,7 @@ package io.github.dddplus.ast.view;
 
 import io.github.dddplus.ast.ReverseEngineeringModel;
 import io.github.dddplus.ast.model.*;
+import io.github.dddplus.ast.report.AggregateDensity;
 import io.github.dddplus.ast.report.CoverageReport;
 import io.github.dddplus.ast.report.ModelDebtReport;
 import io.github.dddplus.dsl.KeyElement;
@@ -15,10 +16,8 @@ import java.util.List;
 /**
  * DSL -> Reverse Engineering Model -> Plain text file, git versioned.
  */
-public class PlainTextBuilder implements IViewBuilder<PlainTextBuilder> {
-    private static final String SPACE = " ";
-    private static final String TAB = SPACE + SPACE + SPACE;
-    private static final String NEWLINE = System.getProperty("line.separator");
+public class PlainTextRenderer implements IModelRenderer<PlainTextRenderer> {
+    private String targetFilename;
 
     private boolean clustering = false;
     private boolean showNotLabeledElements = false;
@@ -27,13 +26,19 @@ public class PlainTextBuilder implements IViewBuilder<PlainTextBuilder> {
     private final StringBuilder content = new StringBuilder();
     private ReverseEngineeringModel model;
 
-    public PlainTextBuilder clustering() {
+    public PlainTextRenderer clustering() {
+        assureNotBuiltYet();
         this.clustering = true;
         return this;
     }
 
+    public PlainTextRenderer targetFilename(String targetFilename) {
+        this.targetFilename = targetFilename;
+        return this;
+    }
+
     @Override
-    public PlainTextBuilder build(ReverseEngineeringModel model) {
+    public PlainTextRenderer build(ReverseEngineeringModel model) {
         this.model = model;
 
         appendCoverage();
@@ -49,29 +54,51 @@ public class PlainTextBuilder implements IViewBuilder<PlainTextBuilder> {
         return this;
     }
 
+    private void assureNotBuiltYet() {
+        if (model != null) {
+            throw new RuntimeException("Call me before build()");
+        }
+    }
+
     private void addRawModelSimilarities() {
-        append("<<相似度>>").append(NEWLINE);
+        append("<<相似类>>").append(NEWLINE);
         for (SimilarityEntry entry : model.sortedRawSimilarities()) {
             append(entry.getLeftClass()).append(SPACE).append(entry.getRightClass()).append(SPACE);
             append(String.format("%.0f", entry.getSimilarity())).append(NEWLINE);
         }
     }
 
-    public void render(String txtFilename) throws IOException {
-        File file = new File(txtFilename);
+    @Override
+    public void render() throws IOException {
+        File file = new File(targetFilename);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.append(content);
         }
     }
 
-    private PlainTextBuilder appendModelDebt() {
-        ModelDebtReport report = model.getModelDebtReport();
+    private PlainTextRenderer appendModelDebt() {
+        ModelDebtReport report = model.getModelDebtReport().build();
         append("模型债：");
+        AggregateDensity density = report.getAggregateDensity();
+        if (report.getProblematicalFields() > 0) {
+            append(String.format("问题字段:%d ", report.getProblematicalFields()));
+        }
+        if (report.getOrphanFlows() > 0) {
+            append(String.format("孤儿流程:%d ", report.getOrphanFlows()));
+        }
+        if (report.getRawSimilarModels() > 0) {
+            append(String.format("相似类:%d ", report.getRawSimilarModels()));
+        }
+        append(String.format("聚合分布[类:(Mean:%.2f SD:%.2f) 方法:(Mean:%.2f SD:%.2f)]",
+                density.getModelsMean(),
+                density.getModelsStandardDeviation(),
+                density.getMethodDensityMean(),
+                density.getMethodDensityStandardDeviation()));
         append(NEWLINE);
         return this;
     }
 
-    private PlainTextBuilder appendCoverage() {
+    private PlainTextRenderer appendCoverage() {
         CoverageReport report = model.coverageReport();
         append("标注覆盖率：")
                 .append(String.format("Class(%d/%.1f%%)", report.getPublicClazzN(), report.clazzCoverage()))
@@ -85,7 +112,7 @@ public class PlainTextBuilder implements IViewBuilder<PlainTextBuilder> {
         return this;
     }
 
-    private PlainTextBuilder addAggregate(AggregateEntry aggregate) {
+    private PlainTextRenderer addAggregate(AggregateEntry aggregate) {
         append("<<Aggregate: ").append(aggregate.getName()).append(">>").append(NEWLINE);
         for (KeyModelEntry clazz : aggregate.keyModels()) {
             writeClazzDefinition(clazz, aggregate.isRoot(clazz));
@@ -93,7 +120,7 @@ public class PlainTextBuilder implements IViewBuilder<PlainTextBuilder> {
         return this;
     }
 
-    private PlainTextBuilder writeClazzDefinition(KeyModelEntry keyModelEntry, boolean isAggregateRoot) {
+    private PlainTextRenderer writeClazzDefinition(KeyModelEntry keyModelEntry, boolean isAggregateRoot) {
         append(keyModelEntry.getClassName());
         if (keyModelEntry.hasJavadoc()) {
             append(SPACE).append(keyModelEntry.getJavadoc());
@@ -178,7 +205,7 @@ public class PlainTextBuilder implements IViewBuilder<PlainTextBuilder> {
         return this;
     }
 
-    private PlainTextBuilder writeKeyUsecaseClazzDefinition(String actor) {
+    private PlainTextRenderer writeKeyUsecaseClazzDefinition(String actor) {
         append(actor).append(NEWLINE);
         for (KeyUsecaseEntry entry : model.getKeyUsecaseReport().actorKeyUsecases(actor)) {
             append(TAB);
@@ -202,17 +229,19 @@ public class PlainTextBuilder implements IViewBuilder<PlainTextBuilder> {
         return this;
     }
 
-    public PlainTextBuilder showNotLabeledElements() {
+    public PlainTextRenderer showNotLabeledElements() {
+        assureNotBuiltYet();
         this.showNotLabeledElements = true;
         return this;
     }
 
-    public PlainTextBuilder showRawSimilarities() {
+    public PlainTextRenderer showRawSimilarities() {
+        assureNotBuiltYet();
         this.showRawSimilarities = true;
         return this;
     }
 
-    private PlainTextBuilder addKeyUsecases() {
+    private PlainTextRenderer addKeyUsecases() {
         append("<<用户交互>>").append(NEWLINE);
         for (String actor : model.getKeyUsecaseReport().getData().keySet()) {
             writeKeyUsecaseClazzDefinition(actor);
@@ -220,7 +249,7 @@ public class PlainTextBuilder implements IViewBuilder<PlainTextBuilder> {
         return this;
     }
 
-    private PlainTextBuilder addOrphanKeyFlows() {
+    private PlainTextRenderer addOrphanKeyFlows() {
         append("<<跨聚合复杂流程>>").append(NEWLINE);
         for (String actor : model.getKeyFlowReport().actors()) {
             writeOrphanFlowClazzDefinition(actor);
@@ -228,7 +257,7 @@ public class PlainTextBuilder implements IViewBuilder<PlainTextBuilder> {
         return this;
     }
 
-    private PlainTextBuilder writeOrphanFlowClazzDefinition(String actor) {
+    private PlainTextRenderer writeOrphanFlowClazzDefinition(String actor) {
         if (model.getKeyModelReport().containsActor(actor)) {
             return this;
         }
@@ -254,7 +283,7 @@ public class PlainTextBuilder implements IViewBuilder<PlainTextBuilder> {
         return this;
     }
 
-    private PlainTextBuilder addKeyEvents() {
+    private PlainTextRenderer addKeyEvents() {
         content.append("<<领域事件>>").append(NEWLINE);
         for (KeyEventEntry entry : model.getKeyEventReport().sortedEvents()) {
             append(TAB).writeClazzDefinition(entry);
@@ -262,7 +291,7 @@ public class PlainTextBuilder implements IViewBuilder<PlainTextBuilder> {
         return this;
     }
 
-    private PlainTextBuilder writeClazzDefinition(KeyEventEntry entry) {
+    private PlainTextRenderer writeClazzDefinition(KeyEventEntry entry) {
         append(entry.getClassName());
         if (entry.hasRemark()) {
             append(SPACE).append(entry.getRemark());
@@ -271,7 +300,7 @@ public class PlainTextBuilder implements IViewBuilder<PlainTextBuilder> {
         return this;
     }
 
-    private PlainTextBuilder append(String s) {
+    private PlainTextRenderer append(String s) {
         content.append(s);
         return this;
     }

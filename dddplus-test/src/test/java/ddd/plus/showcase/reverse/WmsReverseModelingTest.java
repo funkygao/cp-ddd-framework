@@ -2,8 +2,9 @@ package ddd.plus.showcase.reverse;
 
 import io.github.dddplus.ast.*;
 import io.github.dddplus.ast.report.EncapsulationReport;
-import io.github.dddplus.ast.view.PlainTextBuilder;
-import io.github.dddplus.ast.view.PlantUmlBuilder;
+import io.github.dddplus.ast.view.CallGraphRenderer;
+import io.github.dddplus.ast.view.PlainTextRenderer;
+import io.github.dddplus.ast.view.PlantUmlRenderer;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -22,11 +23,16 @@ class WmsReverseModelingTest {
         ReverseEngineeringModel model = new DomainModelAnalyzer()
                 .scan(root)
                 .analyze(domainLayerFilter);
-        new PlantUmlBuilder()
-                .direction(PlantUmlBuilder.Direction.TopToBottom)
+        new PlantUmlRenderer()
+                .direction(PlantUmlRenderer.Direction.TopToBottom)
                 .skinParamPolyline()
                 .build(model)
-                .renderSvg("../doc/wms.svg");
+                .classDiagramSvgFilename("../doc/wms.svg")
+                .render();
+        new CallGraphRenderer()
+                .targetDotFilename("../doc/callgraph.dot")
+                .build(model)
+                .render();
     }
 
     @Test
@@ -35,23 +41,29 @@ class WmsReverseModelingTest {
         ReverseEngineeringModel model = new DomainModelAnalyzer()
                 .scan(root)
                 .analyze(infrastructureLayerFilter);
-        new PlantUmlBuilder()
+        new PlantUmlRenderer()
                 .title("技术实现细节指引")
-                .direction(PlantUmlBuilder.Direction.TopToBottom)
+                .direction(PlantUmlRenderer.Direction.TopToBottom)
                 .disableCoverage()
                 .skinParamPolyline()
                 .build(model)
-                .renderSvg("../doc/tech.svg");
+                .classDiagramSvgFilename("../doc/tech.svg")
+                .render();
     }
 
     @Test // integrated CI flow and auto generate pull request: reviewer check the diff
     void generateForwardModel() throws IOException {
         ReverseEngineeringModel model = new DomainModelAnalyzer()
                 .scan(root)
+                .rawSimilarity()
+                .similarityThreshold(55)
                 .analyze(domainLayerFilter);
-        new PlainTextBuilder()
+        new PlainTextRenderer()
+                .showRawSimilarities()
+                .clustering()
+                .targetFilename("../doc/wms.txt")
                 .build(model)
-                .render("../doc/wms.txt");
+                .render();
     }
 
     @Test

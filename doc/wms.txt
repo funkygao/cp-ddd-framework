@@ -1,5 +1,5 @@
 标注覆盖率：Class(64/59.4%) Method(116/53.4%) Property(252/21.0%) Statement(222)
-模型债：
+模型债：孤儿流程:3 相似类:5 聚合分布[类:(Mean:5.00 SD:3.96) 方法:(Mean:6.86 SD:9.25)]
 <<Aggregate: 出库复核任务>>
 Container 拣货容器.
    [属性]
@@ -173,3 +173,9 @@ ObFlowAutomator
    CartonFulfilledEvent 
    OrderCheckedEvent 
    TaskAcceptedEvent 
+<<相似类>>
+CartonItem OrderLineManifest 60
+OrderLine OrderLineManifest 60
+ContainerDiffItem OrderLineManifest 67
+ObFlowAutomator UnitOfWork 75
+OrderLineNo TaskOfOrderPending 100

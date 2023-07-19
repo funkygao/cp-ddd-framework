@@ -35,4 +35,13 @@ class JavaParserUtilTest {
         assertEquals(JavaParserUtil.extractJavadocContent(comment), "只加载一个Container的Task.");
     }
 
+    @Test
+    void resolvedTypeAsString() {
+        assertEquals(JavaParserUtil.resolvedTypeAsString("ddd.plus.showcase.wms.domain.order.OrderBag"), "OrderBag");
+        assertEquals(JavaParserUtil.resolvedTypeAsString("java.util.List<ddd.plus.showcase.wms.domain.common.Platform>"), "List");
+        assertEquals(JavaParserUtil.resolvedTypeAsString("Ext"), "Ext");
+        assertEquals(JavaParserUtil.resolvedTypeAsString("java.util.Set<ddd.plus.showcase.wms.domain.order.OrderNo>"), "Set");
+        assertEquals(JavaParserUtil.resolvedTypeAsString("? super ddd.plus.showcase.wms.domain.carton.Carton"), "Carton");
+    }
+
 }

@@ -67,7 +67,7 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
     }
 
     @AllowedAccessors(ITaskRepository.class)
-    public boolean virgin() {
+    public boolean dangling() {
         return id == null;
     }
 
@@ -109,7 +109,7 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
     @KeyBehavior
     public void removeOrderLines(Set<OrderLineNo> orderLineNos) {
         containerBag.remove(orderLineNos);
-        if (!virgin()) {
+        if (!dangling()) {
             dirty(new RemoveContainerItemsHint(this, orderLineNos));
         }
     }

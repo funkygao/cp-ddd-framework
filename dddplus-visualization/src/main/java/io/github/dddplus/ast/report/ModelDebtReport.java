@@ -6,6 +6,7 @@
 package io.github.dddplus.ast.report;
 
 import io.github.dddplus.ast.ReverseEngineeringModel;
+import io.github.dddplus.ast.model.KeyModelEntry;
 import lombok.Data;
 
 /**
@@ -55,13 +56,42 @@ import lombok.Data;
  *   </ul>
  * </li>
  * </ol>
+ * <ol>根据论文检索，被研究次数排名top 10的代码坏味道：
+ * <li>Feature envy</li>
+ * <li>Long method</li>
+ * <li>God class</li>
+ * <li>Data class</li>
+ * <li>Duplicated code</li>
+ * <li>Refused bequest</li>
+ * <li>Blob class</li>
+ * <li>Shotgun surgery</li>
+ * <li>Long parameter list</li>
+ * <li>Spaghetti code</li>
+ * </ol>
  */
 @Data
 public class ModelDebtReport {
     private final ReverseEngineeringModel model;
 
+    private int problematicalFields = 0;
+    private int orphanFlows = 0;
+    private AggregateDensity aggregateDensity;
+    private int rawSimilarModels = 0;
+
     public ModelDebtReport(ReverseEngineeringModel model) {
         this.model = model;
+    }
+
+    public ModelDebtReport build() {
+        aggregateDensity = model.getAggregateReport().density();
+
+        for (KeyModelEntry modelEntry : model.getKeyModelReport().getData().values()) {
+            orphanFlows += modelEntry.orphanFlows();
+            problematicalFields += modelEntry.problematicalPropertiesN();
+        }
+
+        rawSimilarModels = model.getRawSimilarities().size();
+        return this;
     }
 
 }
