@@ -2,8 +2,8 @@ package io.github.dddplus.ast;
 
 import io.github.dddplus.ast.model.AggregateEntry;
 import io.github.dddplus.ast.model.KeyModelEntry;
-import io.github.dddplus.ast.view.PlainTextBuilder;
-import io.github.dddplus.ast.view.PlantUmlBuilder;
+import io.github.dddplus.ast.view.PlainTextRenderer;
+import io.github.dddplus.ast.view.PlantUmlRenderer;
 import io.github.dddplus.runtime.registry.IntegrationTest;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -34,14 +34,14 @@ public class DomainModelAnalyzerTest {
         AggregateEntry firstAggregate = model.getAggregateReport().get(0);
         assertEquals(firstAggregate.getName(), "foo");
         // render
-        PlantUmlBuilder pb = new PlantUmlBuilder()
+        PlantUmlRenderer pb = new PlantUmlRenderer()
                 .header("header")
                 .footer("footer")
                 .title("title")
                 .appendNote("abc")
                 .appendNote("dc")
                 .skinParam("ranksep 150")
-                .direction(PlantUmlBuilder.Direction.LeftToRight)
+                .direction(PlantUmlRenderer.Direction.LeftToRight)
                 .build(model);
         String uml = pb.umlContent();
         assertFalse(uml.isEmpty());
@@ -54,10 +54,11 @@ public class DomainModelAnalyzerTest {
                 .similarityThreshold(0)
                 .scan(moduleRoot("dddplus-test"));
         ReverseEngineeringModel model = analyzer.analyze((level, path, file) -> path.contains("design"));
-        new PlainTextBuilder()
+        new PlainTextRenderer()
                 .showRawSimilarities()
                 .build(model)
-                .render("../doc/model.txt");
+                .targetFilename("../doc/model.txt")
+                .render();
     }
 
     @Test
@@ -68,12 +69,14 @@ public class DomainModelAnalyzerTest {
                 .rawSimilarity()
                 .scan(moduleRoot("dddplus-test"))
                 .analyze((level, path, file) -> path.contains("design"));
-        new PlantUmlBuilder()
+        new PlantUmlRenderer()
                 .appendNote("abc")
                 .appendNote("dc")
                 .skipParamHandWrittenStyle()
                 .skinParamPolyline()
-                .build(model).renderSvg("../test.svg");
+                .classDiagramSvgFilename("../test.svg")
+                .build(model)
+                .render();
     }
 
     public static File moduleRoot(String module) {
