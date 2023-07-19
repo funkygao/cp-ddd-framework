@@ -8,6 +8,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CallGraphRenderer implements IModelRenderer<CallGraphRenderer> {
     private CallGraphReport callGraphReport;
@@ -37,6 +39,21 @@ public class CallGraphRenderer implements IModelRenderer<CallGraphRenderer> {
         content.append(TAB).append("label=\"Call Graph\";").append(NEWLINE);
         content.append(TAB).append("labelloc = \"t\";").append(NEWLINE);
         content.append(TAB).append("rankdir=LR;").append(NEWLINE);
+        content.append(TAB).append("node [shape=record];").append(NEWLINE).append(NEWLINE);
+
+        for (CallGraphReport.Record calleeClazz : callGraphReport.calleeRecords()) {
+            content.append(TAB).append(calleeClazz.getClazz())
+                    .append(" [label=\"");
+            List<String> list = new ArrayList<>();
+            list.add(String.format("<%s> %s", calleeClazz.getClazz(), calleeClazz.getClazz()));
+            for (String method : calleeClazz.getMethods()) {
+                list.add(String.format("<%s> %s", method, method));
+            }
+            content.append(String.join("|", list));
+            content.append("\"];").append(NEWLINE);
+        }
+
+        content.append(NEWLINE);
 
         for (CallGraphEntry entry : callGraphReport.getEntries()) {
             content.append(TAB).append(entry.getCallerClazz()).append(" -> ")

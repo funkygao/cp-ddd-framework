@@ -12,6 +12,6 @@ public class CallGraphEntry {
     private String calleeMethod;
 
     public String calleeNode() {
-        return "\"" + calleeClazz + "." + calleeMethod + "\"";
+        return calleeClazz + ":" + calleeMethod;
     }
 }
