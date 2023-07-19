@@ -2,7 +2,7 @@
 
 <div align="center">
 
-如何使用DDDplus进行(正向，逆向)建模。
+如何使用DDDplus进行(正向，逆向)建模，实现一个供应链仓储管理系统WMS。
 
 </div>
 
