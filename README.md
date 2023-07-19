@@ -71,7 +71,7 @@ public class Application {
 </dependency>
 ```
 
-Annotate your code With [DSL](/dddplus-spec/src/main/java/io/github/dddplus/dsl), DDDplus can render domain model in `PlantUML`.
+Annotate your code With [DSL](/dddplus-spec/src/main/java/io/github/dddplus/dsl), DDDplus can render domain model in multiple view.
 
 ```java
 class ReverseModelingTest {

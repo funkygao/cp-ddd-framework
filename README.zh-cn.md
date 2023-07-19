@@ -77,7 +77,7 @@ public class WebApplication {
 </dependency>
 ```
 
-通过[DSL](/dddplus-spec/src/main/java/io/github/dddplus/dsl)在代码进行标注后，即可自动PlantUML类图形式的业务模型：
+通过[DSL](/dddplus-spec/src/main/java/io/github/dddplus/dsl)在代码进行标注后，自动生成多视角视图。
 
 ```java
 class ReverseModelingTest {
