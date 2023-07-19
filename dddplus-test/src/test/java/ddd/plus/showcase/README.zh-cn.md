@@ -2,7 +2,7 @@
 
 <div align="center">
 
-如何使用DDDplus进行(正向，逆向)建模，实现一个供应链仓储管理系统WMS。
+使用DDDplus进行(正向，逆向)建模，实现一个供应链仓储管理系统WMS。
 
 </div>
 
@@ -14,11 +14,7 @@ Languages： [English](README.md) | 中文
 
 ----
 
-# DDDplus落地演示
-
 ## 一、供应链WMS出库系统
-
->演示内容：如何使用DDDplus进行(正向，逆向)建模
 
 作为供应链执行层的`WMS`(Warehouse Management System)，负责(收，发，存，退)：`B2C`处理商家到消费者的末端，`B2B`处理商品的流通端。
 我们如何透过杂乱无章的碎片化业务细节问题摸清本质，梳理并实现反映本质问题的业务模型?
