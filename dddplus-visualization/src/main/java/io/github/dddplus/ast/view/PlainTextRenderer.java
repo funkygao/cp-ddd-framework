@@ -16,10 +16,12 @@ import java.util.List;
 /**
  * DSL -> Reverse Engineering Model -> Plain text file, git versioned.
  */
-public class PlainTextBuilder implements IViewBuilder<PlainTextBuilder> {
+public class PlainTextRenderer implements IModelRenderer<PlainTextRenderer> {
     private static final String SPACE = " ";
     private static final String TAB = SPACE + SPACE + SPACE;
     private static final String NEWLINE = System.getProperty("line.separator");
+
+    private String targetFilename;
 
     private boolean clustering = false;
     private boolean showNotLabeledElements = false;
@@ -28,14 +30,19 @@ public class PlainTextBuilder implements IViewBuilder<PlainTextBuilder> {
     private final StringBuilder content = new StringBuilder();
     private ReverseEngineeringModel model;
 
-    public PlainTextBuilder clustering() {
+    public PlainTextRenderer clustering() {
         assureNotBuiltYet();
         this.clustering = true;
         return this;
     }
 
+    public PlainTextRenderer targetFilename(String targetFilename) {
+        this.targetFilename = targetFilename;
+        return this;
+    }
+
     @Override
-    public PlainTextBuilder build(ReverseEngineeringModel model) {
+    public PlainTextRenderer build(ReverseEngineeringModel model) {
         this.model = model;
 
         appendCoverage();
@@ -65,14 +72,15 @@ public class PlainTextBuilder implements IViewBuilder<PlainTextBuilder> {
         }
     }
 
-    public void render(String txtFilename) throws IOException {
-        File file = new File(txtFilename);
+    @Override
+    public void render() throws IOException {
+        File file = new File(targetFilename);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.append(content);
         }
     }
 
-    private PlainTextBuilder appendModelDebt() {
+    private PlainTextRenderer appendModelDebt() {
         ModelDebtReport report = model.getModelDebtReport().build();
         append("模型债：");
         AggregateDensity density = report.getAggregateDensity();
@@ -94,7 +102,7 @@ public class PlainTextBuilder implements IViewBuilder<PlainTextBuilder> {
         return this;
     }
 
-    private PlainTextBuilder appendCoverage() {
+    private PlainTextRenderer appendCoverage() {
         CoverageReport report = model.coverageReport();
         append("标注覆盖率：")
                 .append(String.format("Class(%d/%.1f%%)", report.getPublicClazzN(), report.clazzCoverage()))
@@ -108,7 +116,7 @@ public class PlainTextBuilder implements IViewBuilder<PlainTextBuilder> {
         return this;
     }
 
-    private PlainTextBuilder addAggregate(AggregateEntry aggregate) {
+    private PlainTextRenderer addAggregate(AggregateEntry aggregate) {
         append("<<Aggregate: ").append(aggregate.getName()).append(">>").append(NEWLINE);
         for (KeyModelEntry clazz : aggregate.keyModels()) {
             writeClazzDefinition(clazz, aggregate.isRoot(clazz));
@@ -116,7 +124,7 @@ public class PlainTextBuilder implements IViewBuilder<PlainTextBuilder> {
         return this;
     }
 
-    private PlainTextBuilder writeClazzDefinition(KeyModelEntry keyModelEntry, boolean isAggregateRoot) {
+    private PlainTextRenderer writeClazzDefinition(KeyModelEntry keyModelEntry, boolean isAggregateRoot) {
         append(keyModelEntry.getClassName());
         if (keyModelEntry.hasJavadoc()) {
             append(SPACE).append(keyModelEntry.getJavadoc());
@@ -201,7 +209,7 @@ public class PlainTextBuilder implements IViewBuilder<PlainTextBuilder> {
         return this;
     }
 
-    private PlainTextBuilder writeKeyUsecaseClazzDefinition(String actor) {
+    private PlainTextRenderer writeKeyUsecaseClazzDefinition(String actor) {
         append(actor).append(NEWLINE);
         for (KeyUsecaseEntry entry : model.getKeyUsecaseReport().actorKeyUsecases(actor)) {
             append(TAB);
@@ -225,19 +233,19 @@ public class PlainTextBuilder implements IViewBuilder<PlainTextBuilder> {
         return this;
     }
 
-    public PlainTextBuilder showNotLabeledElements() {
+    public PlainTextRenderer showNotLabeledElements() {
         assureNotBuiltYet();
         this.showNotLabeledElements = true;
         return this;
     }
 
-    public PlainTextBuilder showRawSimilarities() {
+    public PlainTextRenderer showRawSimilarities() {
         assureNotBuiltYet();
         this.showRawSimilarities = true;
         return this;
     }
 
-    private PlainTextBuilder addKeyUsecases() {
+    private PlainTextRenderer addKeyUsecases() {
         append("<<用户交互>>").append(NEWLINE);
         for (String actor : model.getKeyUsecaseReport().getData().keySet()) {
             writeKeyUsecaseClazzDefinition(actor);
@@ -245,7 +253,7 @@ public class PlainTextBuilder implements IViewBuilder<PlainTextBuilder> {
         return this;
     }
 
-    private PlainTextBuilder addOrphanKeyFlows() {
+    private PlainTextRenderer addOrphanKeyFlows() {
         append("<<跨聚合复杂流程>>").append(NEWLINE);
         for (String actor : model.getKeyFlowReport().actors()) {
             writeOrphanFlowClazzDefinition(actor);
@@ -253,7 +261,7 @@ public class PlainTextBuilder implements IViewBuilder<PlainTextBuilder> {
         return this;
     }
 
-    private PlainTextBuilder writeOrphanFlowClazzDefinition(String actor) {
+    private PlainTextRenderer writeOrphanFlowClazzDefinition(String actor) {
         if (model.getKeyModelReport().containsActor(actor)) {
             return this;
         }
@@ -279,7 +287,7 @@ public class PlainTextBuilder implements IViewBuilder<PlainTextBuilder> {
         return this;
     }
 
-    private PlainTextBuilder addKeyEvents() {
+    private PlainTextRenderer addKeyEvents() {
         content.append("<<领域事件>>").append(NEWLINE);
         for (KeyEventEntry entry : model.getKeyEventReport().sortedEvents()) {
             append(TAB).writeClazzDefinition(entry);
@@ -287,7 +295,7 @@ public class PlainTextBuilder implements IViewBuilder<PlainTextBuilder> {
         return this;
     }
 
-    private PlainTextBuilder writeClazzDefinition(KeyEventEntry entry) {
+    private PlainTextRenderer writeClazzDefinition(KeyEventEntry entry) {
         append(entry.getClassName());
         if (entry.hasRemark()) {
             append(SPACE).append(entry.getRemark());
@@ -296,7 +304,7 @@ public class PlainTextBuilder implements IViewBuilder<PlainTextBuilder> {
         return this;
     }
 
-    private PlainTextBuilder append(String s) {
+    private PlainTextRenderer append(String s) {
         content.append(s);
         return this;
     }

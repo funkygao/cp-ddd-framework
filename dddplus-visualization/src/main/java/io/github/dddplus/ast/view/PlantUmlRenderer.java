@@ -23,7 +23,7 @@ import java.util.*;
  *
  * @see <a href="https://www.augmentedmind.de/2021/01/17/plantuml-layout-tutorial-styles/">PlantUml Layout Guide</a>
  */
-public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
+public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
     /**
      * Direction to render the plantuml.
      */
@@ -53,6 +53,8 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
     private static final String COLOR_BEHAVIOR_PRODUCE_EVENT = "Violet";
     private static final String COLOR_FLOW_ACTUAL_CLASS = "Olive";
 
+    private String classDiagramSvgFilename;
+
     private final Map<KeyRelation.Type, String> connections;
     private Set<KeyElement.Type> ignored;
     private ReverseEngineeringModel model;
@@ -66,7 +68,7 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
     private boolean showNotLabeledElements = false;
     private boolean showCoverage = true;
 
-    public PlantUmlBuilder() {
+    public PlantUmlRenderer() {
         connections = new HashMap<>();
         connections.put(KeyRelation.Type.Union, "x--x");
 
@@ -93,12 +95,17 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
         }
     }
 
-    public PlantUmlBuilder showNotLabeledElements() {
+    public PlantUmlRenderer classDiagramSvgFilename(String classDiagramSvgFilename) {
+        this.classDiagramSvgFilename = classDiagramSvgFilename;
+        return this;
+    }
+
+    public PlantUmlRenderer showNotLabeledElements() {
         this.showNotLabeledElements = true;
         return this;
     }
 
-    public PlantUmlBuilder disableCoverage() {
+    public PlantUmlRenderer disableCoverage() {
         this.showCoverage = false;
         return this;
     }
@@ -112,11 +119,11 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
     }
 
     @Override
-    public PlantUmlBuilder build(ReverseEngineeringModel model) {
+    public PlantUmlRenderer build(ReverseEngineeringModel model) {
         return build(model, Sets.newHashSet());
     }
 
-    public PlantUmlBuilder build(ReverseEngineeringModel model, Set<KeyElement.Type> ignored) {
+    public PlantUmlRenderer build(ReverseEngineeringModel model, Set<KeyElement.Type> ignored) {
         this.model = model;
         this.ignored = ignored;
 
@@ -144,17 +151,18 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
         return this;
     }
 
-    public void renderSvg(String svgFilename) throws IOException {
+    @Override
+    public void render() throws IOException {
         SourceStringReader reader = new SourceStringReader(content.toString());
         final ByteArrayOutputStream os = new ByteArrayOutputStream();
         reader.generateImage(os, new FileFormatOption(FileFormat.SVG));
-        try (OutputStream outputStream = new FileOutputStream(svgFilename)) {
+        try (OutputStream outputStream = new FileOutputStream(this.classDiagramSvgFilename)) {
             os.writeTo(outputStream);
             os.close();
         }
     }
 
-    private PlantUmlBuilder addNotes() {
+    private PlantUmlRenderer addNotes() {
         if (notes.isEmpty()) {
             return this;
         }
@@ -167,7 +175,7 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
         return this;
     }
 
-    private PlantUmlBuilder addClassMethodReport() {
+    private PlantUmlRenderer addClassMethodReport() {
         ClassMethodReport report = model.getClassMethodReport();
         append("note as ClassMethodReportNote").append(NEWLINE);
         append(String.format("  Class: annotated(%d) public(%d) deprecated(%d)",
@@ -190,12 +198,12 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
         return this;
     }
 
-    private PlantUmlBuilder start() {
+    private PlantUmlRenderer start() {
         append(STARTUML).append(NEWLINE).append(NEWLINE);
         return this;
     }
 
-    private PlantUmlBuilder end() {
+    private PlantUmlRenderer end() {
         append(NEWLINE).append(ENDUML);
         return this;
     }
@@ -204,7 +212,7 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
         return QUOTE + value + QUOTE;
     }
 
-    private PlantUmlBuilder writeClazzDefinition(KeyEventEntry entry) {
+    private PlantUmlRenderer writeClazzDefinition(KeyEventEntry entry) {
         append("class ").append(entry.getClassName());
         String tag = "E";
         switch (entry.getType()) {
@@ -230,7 +238,7 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
         return this;
     }
 
-    private PlantUmlBuilder writeOrphanFlowClazzDefinition(String actor) {
+    private PlantUmlRenderer writeOrphanFlowClazzDefinition(String actor) {
         if (model.getKeyModelReport().containsActor(actor)) {
             return this;
         }
@@ -251,7 +259,7 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
         return this;
     }
 
-    private PlantUmlBuilder writeKeyUsecaseClazzDefinition(String actor) {
+    private PlantUmlRenderer writeKeyUsecaseClazzDefinition(String actor) {
         append("class ").append(actor);
         append(" {").append(NEWLINE);
         for (KeyUsecaseEntry entry : model.getKeyUsecaseReport().actorKeyUsecases(actor)) {
@@ -274,7 +282,7 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
         return this;
     }
 
-    private PlantUmlBuilder writeClazzDefinition(KeyModelEntry keyModelEntry, boolean isAggregateRoot) {
+    private PlantUmlRenderer writeClazzDefinition(KeyModelEntry keyModelEntry, boolean isAggregateRoot) {
         append("class ").append(keyModelEntry.getClassName());
         if (isAggregateRoot) {
             if (keyModelEntry.hasJavadoc()) {
@@ -392,14 +400,14 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
         }
     }
 
-    private PlantUmlBuilder append(String s) {
+    private PlantUmlRenderer append(String s) {
         if (s != null) {
             content.append(s);
         }
         return this;
     }
 
-    private PlantUmlBuilder appendHeader() {
+    private PlantUmlRenderer appendHeader() {
         append("header").append(NEWLINE);
         if (header != null && !header.isEmpty()) {
             append(header).append(NEWLINE);
@@ -415,12 +423,12 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
         return this;
     }
 
-    public PlantUmlBuilder appendNote(String note) {
+    public PlantUmlRenderer appendNote(String note) {
         notes.add(note);
         return this;
     }
 
-    private PlantUmlBuilder appendSkinParam() {
+    private PlantUmlRenderer appendSkinParam() {
         if (!skinParams.isEmpty()) {
             for (String skin : skinParams) {
                 append("skinparam").append(SPACE).append(skin).append(NEWLINE);
@@ -430,7 +438,7 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
         return this;
     }
 
-    private PlantUmlBuilder appendDirection() {
+    private PlantUmlRenderer appendDirection() {
         if (direction != null) {
             switch (direction) {
                 case LeftToRight:
@@ -445,7 +453,7 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
         return this;
     }
 
-    private PlantUmlBuilder appendTitle() {
+    private PlantUmlRenderer appendTitle() {
         if (title != null && !title.isEmpty()) {
             append("title").append(SPACE).append(title)
                     .append(NEWLINE).append(NEWLINE);
@@ -453,7 +461,7 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
         return this;
     }
 
-    private PlantUmlBuilder appendFooter() {
+    private PlantUmlRenderer appendFooter() {
         if (footer != null && !footer.isEmpty()) {
             append("footer").append(NEWLINE).append(footer).append(NEWLINE)
                     .append("endfooter").append(NEWLINE).append(NEWLINE);
@@ -461,7 +469,7 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
         return this;
     }
 
-    private PlantUmlBuilder addAggregate(AggregateEntry aggregate) {
+    private PlantUmlRenderer addAggregate(AggregateEntry aggregate) {
         append(MessageFormat.format(PACKAGE_TMPL, "Aggregate：" + aggregate.getName(), aggregate.getPackageName()));
         append(SPACE).append(BRACE_OPEN).append(NEWLINE);
         for (KeyModelEntry clazz : aggregate.keyModels()) {
@@ -473,7 +481,7 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
         return this;
     }
 
-    private PlantUmlBuilder addSimilarities() {
+    private PlantUmlRenderer addSimilarities() {
         append(MessageFormat.format(PACKAGE_TMPL, "相似度", "%"));
         append(SPACE).append(BRACE_OPEN).append(NEWLINE);
         for (SimilarityEntry entry : model.sortedSimilarities()) {
@@ -487,7 +495,7 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
         return this;
     }
 
-    private PlantUmlBuilder addKeyRelations() {
+    private PlantUmlRenderer addKeyRelations() {
         for (KeyRelationEntry entry : model.getKeyRelationReport().getRelationEntries()) {
             append(entry.getLeftClass())
                     .append(SPACE).append(connections.get(entry.getType())).append(SPACE)
@@ -503,7 +511,7 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
         return this;
     }
 
-    private PlantUmlBuilder addKeyEvents() {
+    private PlantUmlRenderer addKeyEvents() {
         if (model.getKeyEventReport().isEmpty()) {
             return this;
         }
@@ -520,7 +528,7 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
         return this;
     }
 
-    private PlantUmlBuilder addOrphanKeyFlows() {
+    private PlantUmlRenderer addOrphanKeyFlows() {
         if (!model.getKeyFlowReport().hasOrphanFlowEntries()) {
             return this;
         }
@@ -537,7 +545,7 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
         return this;
     }
 
-    private PlantUmlBuilder addKeyUsecases() {
+    private PlantUmlRenderer addKeyUsecases() {
         if (model.getKeyUsecaseReport().getData().isEmpty()) {
             return this;
         }
@@ -553,17 +561,17 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
         return this;
     }
 
-    public PlantUmlBuilder header(String header) {
+    public PlantUmlRenderer header(String header) {
         this.header = header;
         return this;
     }
 
-    public PlantUmlBuilder footer(String footer) {
+    public PlantUmlRenderer footer(String footer) {
         this.footer = footer;
         return this;
     }
 
-    public PlantUmlBuilder direction(Direction direction) {
+    public PlantUmlRenderer direction(Direction direction) {
         this.direction = direction;
         return this;
     }
@@ -582,27 +590,27 @@ public class PlantUmlBuilder implements IViewBuilder<PlantUmlBuilder> {
      *
      * @see <a href="https://plantuml.com/en/skinparam">skinparam reference</a>
      */
-    public PlantUmlBuilder skinParam(String skinParam) {
+    public PlantUmlRenderer skinParam(String skinParam) {
         this.skinParams.add(skinParam);
         return this;
     }
 
-    public PlantUmlBuilder skinParamPolyline() {
+    public PlantUmlRenderer skinParamPolyline() {
         this.skinParam("linetype polyline");
         return this;
     }
 
-    public PlantUmlBuilder skinParamOrtholine() {
+    public PlantUmlRenderer skinParamOrtholine() {
         this.skinParam("linetype ortho");
         return this;
     }
 
-    public PlantUmlBuilder skipParamHandWrittenStyle() {
+    public PlantUmlRenderer skipParamHandWrittenStyle() {
         this.skinParam("handwritten true");
         return this;
     }
 
-    public PlantUmlBuilder title(String title) {
+    public PlantUmlRenderer title(String title) {
         this.title = title;
         return this;
     }
