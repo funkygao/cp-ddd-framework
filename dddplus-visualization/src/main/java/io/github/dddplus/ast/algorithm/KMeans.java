@@ -13,6 +13,8 @@ public class KMeans {
     private static final int MAX_ITERATIONS = 100;
     private static final double THRESHOLD = 0.001;
 
+    private static Random random = new Random();
+
     private int numClusters; // 簇的数量
     private int maxIterations; // 最大迭代次数
     private double threshold; // 收敛阈值
@@ -30,7 +32,6 @@ public class KMeans {
     public List<List<String>> cluster(List<double[]> vectors, List<String> labels, Map<String, double[]> vectorMap) {
         // 随机初始化簇中心
         List<double[]> centroids = new ArrayList<>();
-        Random random = new Random();
         for (int i = 0; i < numClusters; i++) {
             centroids.add(vectors.get(random.nextInt(vectors.size())));
         }

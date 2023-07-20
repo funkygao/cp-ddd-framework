@@ -285,13 +285,13 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
             if (keyModelEntry.hasJavadoc()) {
                 append(String.format(" <<(R,#FF7700) %s>> ", keyModelEntry.getJavadoc()));
             } else {
-                append(String.format(" <<(R,#FF7700)>> "));
+                append(" <<(R,#FF7700)>> ");
             }
         } else if (keyModelEntry.isBehaviorOnly()) {
             if (keyModelEntry.hasJavadoc()) {
                 append(String.format(" <<(B,#9197DB) %s>> ", keyModelEntry.getJavadoc()));
             } else {
-                append(String.format(" <<(B,#9197DB)>> "));
+                append(" <<(B,#9197DB)>> ");
             }
         } else {
             if (keyModelEntry.hasJavadoc()) {
