@@ -31,6 +31,7 @@ class WmsReverseModelingTest {
                 .render();
         new CallGraphRenderer()
                 .targetDotFilename("../doc/callgraph.dot")
+                .splines("polyline")
                 .build(model)
                 .render();
     }

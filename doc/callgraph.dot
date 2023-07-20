@@ -2,7 +2,9 @@ digraph G {
    label="Call Graph";
    labelloc = "t";
    rankdir=LR;
+   splines = polyline;
    node [shape=record];
+   edge [style = dashed, fontsize=10];
 
    Order [label="<Order> Order|<recommendPackQty> recommendPackQty|<checkedBy> checkedBy|<totalExpectedQty> totalExpectedQty|<recommendedPlatform> recommendedPlatform"];
    TaskOfOrderPending [label="<TaskOfOrderPending> TaskOfOrderPending|<confirmQty> confirmQty"];

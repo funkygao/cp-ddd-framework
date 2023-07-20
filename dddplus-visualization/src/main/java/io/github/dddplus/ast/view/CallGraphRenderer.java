@@ -15,6 +15,7 @@ public class CallGraphRenderer implements IModelRenderer<CallGraphRenderer> {
     private CallGraphReport callGraphReport;
     private String targetDotFilename;
     private boolean edgeShowsCallerMethod = false;
+    private String splines = null;
 
     public CallGraphRenderer targetDotFilename(String targetFile) {
         this.targetDotFilename = targetFile;
@@ -23,6 +24,17 @@ public class CallGraphRenderer implements IModelRenderer<CallGraphRenderer> {
 
     public CallGraphRenderer edgeShowsCallerMethod() {
         this.edgeShowsCallerMethod = true;
+        return this;
+    }
+
+    /**
+     * 控制edge的线条布局.
+     *
+     * @param splines ortho | spline | polyline
+     * @return
+     */
+    public CallGraphRenderer splines(String splines) {
+        this.splines = splines;
         return this;
     }
 
@@ -39,7 +51,12 @@ public class CallGraphRenderer implements IModelRenderer<CallGraphRenderer> {
         content.append(TAB).append("label=\"Call Graph\";").append(NEWLINE);
         content.append(TAB).append("labelloc = \"t\";").append(NEWLINE);
         content.append(TAB).append("rankdir=LR;").append(NEWLINE);
-        content.append(TAB).append("node [shape=record];").append(NEWLINE).append(NEWLINE);
+        if (splines != null) {
+            content.append(TAB).append(String.format("splines = %s;", splines)).append(NEWLINE);
+        }
+        content.append(TAB).append("node [shape=record];").append(NEWLINE);
+        content.append(TAB).append("edge [style = dashed, fontsize=10];").append(NEWLINE);
+        content.append(NEWLINE);
 
         for (CallGraphReport.Record calleeClazz : callGraphReport.calleeRecords()) {
             content.append(TAB).append(calleeClazz.getClazz())
