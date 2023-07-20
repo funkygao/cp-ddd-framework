@@ -40,6 +40,7 @@ Used for several complex critical central platform projects in production enviro
 
 - Technical solutions built for specific business problems are not reusable in a fluid business landscape
 - We encounter different behaviours for the same entity more often than we encounter new entities
+- Since platform service are unaware of the products built on top of them, they should ideally not have code to invoke those components directly
 
 Changes to business will either result in ever increasing “if-else” or recurring rewrites. It is difficult to change behaviour of the system without touching core codebase.
 
