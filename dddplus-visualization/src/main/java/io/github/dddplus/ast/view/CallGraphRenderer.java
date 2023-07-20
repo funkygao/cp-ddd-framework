@@ -9,7 +9,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class CallGraphRenderer implements IModelRenderer<CallGraphRenderer> {
     private CallGraphReport callGraphReport;
@@ -72,7 +74,17 @@ public class CallGraphRenderer implements IModelRenderer<CallGraphRenderer> {
 
         content.append(NEWLINE);
 
+        Set<String> edges = new HashSet<>();
         for (CallGraphEntry entry : callGraphReport.getEntries()) {
+            if (!edgeShowsCallerMethod) {
+                // A的多个方法可能调用同一个callee：merge
+                String key = entry.getCallerClazz() + ":" + entry.calleeNode();
+                if (edges.contains(key)) {
+                    continue;
+                }
+                edges.add(key);
+            }
+
             content.append(TAB).append(entry.getCallerClazz()).append(" -> ")
                     .append(entry.calleeNode());
             if (edgeShowsCallerMethod) {

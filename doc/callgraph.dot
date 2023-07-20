@@ -28,7 +28,6 @@ digraph G {
    CheckingAppService -> TaskBag:totalPendingQty
    CheckingAppService -> Order:recommendedPlatform
    CheckingAppService -> TaskBag:platforms
-   CheckingAppService -> OrderBag:canceledBag
    CheckingAppService -> Order:recommendPackQty
    CheckingAppService -> Carton:cartonizationRule
    CheckingAppService -> Carton:bindOrder

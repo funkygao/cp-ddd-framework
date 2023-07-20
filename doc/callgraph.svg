@@ -31,7 +31,7 @@
 <text text-anchor="middle" x="499.242" y="-811.3" font-family="Times,serif" font-size="14.00">totalCartonizedQty</text>
 </g>
 <!-- Order&#45;&gt;OrderCartons -->
-<g id="edge24" class="edge"><title>Order&#45;&gt;OrderCartons:totalCartonizedQty</title>
+<g id="edge23" class="edge"><title>Order&#45;&gt;OrderCartons:totalCartonizedQty</title>
 <path fill="none" stroke="black" stroke-dasharray="5,2" d="M357.865,-767.344C385.585,-784.376 413.947,-801.802 427.708,-810.257"/>
 <polygon fill="black" stroke="black" points="425.89,-813.247 436.242,-815.5 429.554,-807.283 425.89,-813.247"/>
 </g>
@@ -43,7 +43,7 @@
 <text text-anchor="middle" x="499.242" y="-719.3" font-family="Times,serif" font-size="14.00">totalExpectedQty</text>
 </g>
 <!-- Order&#45;&gt;OrderLineBag -->
-<g id="edge25" class="edge"><title>Order&#45;&gt;OrderLineBag:totalExpectedQty</title>
+<g id="edge24" class="edge"><title>Order&#45;&gt;OrderLineBag:totalExpectedQty</title>
 <path fill="none" stroke="black" stroke-dasharray="5,2" d="M357.985,-723.5C386.492,-723.5 416.072,-723.5 431.123,-723.5"/>
 <polygon fill="black" stroke="black" points="431.242,-727 441.242,-723.5 431.242,-720 431.242,-727"/>
 </g>
@@ -73,7 +73,7 @@
 <text text-anchor="middle" x="499.242" y="-580.3" font-family="Times,serif" font-size="14.00">confirmQty</text>
 </g>
 <!-- Task&#45;&gt;TaskOfSkuPending -->
-<g id="edge31" class="edge"><title>Task&#45;&gt;TaskOfSkuPending:confirmQty</title>
+<g id="edge30" class="edge"><title>Task&#45;&gt;TaskOfSkuPending:confirmQty</title>
 <path fill="none" stroke="black" stroke-dasharray="5,2" d="M346.545,-559.341C376.813,-567.831 410.448,-577.265 426.58,-581.79"/>
 <polygon fill="black" stroke="black" points="425.669,-585.169 436.242,-584.5 427.559,-578.429 425.669,-585.169"/>
 </g>
@@ -93,27 +93,27 @@
 <text text-anchor="middle" x="677.998" y="-496.3" font-family="Times,serif" font-size="14.00">totalSku</text>
 </g>
 <!-- Task&#45;&gt;ContainerBag -->
-<g id="edge32" class="edge"><title>Task&#45;&gt;ContainerBag:totalSku</title>
+<g id="edge31" class="edge"><title>Task&#45;&gt;ContainerBag:totalSku</title>
 <path fill="none" stroke="black" stroke-dasharray="5,2" d="M346.624,-518.232C378.184,-505.493 410.373,-492.5 410.373,-492.5 410.373,-492.5 588.111,-492.5 588.111,-492.5 588.111,-492.5 603.615,-495.945 614.274,-498.314"/>
 <polygon fill="black" stroke="black" points="613.59,-501.747 624.111,-500.5 615.109,-494.914 613.59,-501.747"/>
 </g>
 <!-- Task&#45;&gt;ContainerBag -->
-<g id="edge33" class="edge"><title>Task&#45;&gt;ContainerBag:totalQty</title>
+<g id="edge32" class="edge"><title>Task&#45;&gt;ContainerBag:totalQty</title>
 <path fill="none" stroke="black" stroke-dasharray="5,2" d="M346.472,-542.855C429.655,-543.348 574.305,-544.205 613.862,-544.439"/>
 <polygon fill="black" stroke="black" points="614.091,-547.941 624.111,-544.5 614.132,-540.941 614.091,-547.941"/>
 </g>
 <!-- Task&#45;&gt;ContainerBag -->
-<g id="edge34" class="edge"><title>Task&#45;&gt;ContainerBag:totalPendingQty</title>
+<g id="edge33" class="edge"><title>Task&#45;&gt;ContainerBag:totalPendingQty</title>
 <path fill="none" stroke="black" stroke-dasharray="5,2" d="M346.472,-538.947C429.655,-534.02 574.305,-525.451 613.862,-523.107"/>
 <polygon fill="black" stroke="black" points="614.336,-526.585 624.111,-522.5 613.922,-519.598 614.336,-526.585"/>
 </g>
 <!-- Task&#45;&gt;ContainerBag -->
-<g id="edge35" class="edge"><title>Task&#45;&gt;ContainerBag:orderNoSet</title>
+<g id="edge34" class="edge"><title>Task&#45;&gt;ContainerBag:orderNoSet</title>
 <path fill="none" stroke="black" stroke-dasharray="5,2" d="M346.571,-578.73C362.016,-588.047 374.373,-595.5 374.373,-595.5 374.373,-595.5 410.373,-626.5 410.373,-626.5 410.373,-626.5 588.111,-626.5 588.111,-626.5 588.111,-626.5 606.709,-606.869 617.17,-595.827"/>
 <polygon fill="black" stroke="black" points="619.775,-598.167 624.111,-588.5 614.693,-593.352 619.775,-598.167"/>
 </g>
 <!-- TaskOfSkuPending&#45;&gt;ContainerBag -->
-<g id="edge36" class="edge"><title>TaskOfSkuPending&#45;&gt;ContainerBag:confirmQty</title>
+<g id="edge35" class="edge"><title>TaskOfSkuPending&#45;&gt;ContainerBag:confirmQty</title>
 <path fill="none" stroke="black" stroke-dasharray="5,2" d="M561.814,-581.085C582.215,-576.309 602.669,-571.52 614.32,-568.792"/>
 <polygon fill="black" stroke="black" points="615.172,-572.187 624.111,-566.5 613.577,-565.372 615.172,-572.187"/>
 </g>
@@ -146,12 +146,12 @@
 <text text-anchor="middle" x="499.242" y="-292.3" font-family="Times,serif" font-size="14.00">bindOrder</text>
 </g>
 <!-- CartonBag&#45;&gt;Carton -->
-<g id="edge21" class="edge"><title>CartonBag&#45;&gt;Carton:fulfill</title>
+<g id="edge20" class="edge"><title>CartonBag&#45;&gt;Carton:fulfill</title>
 <path fill="none" stroke="black" stroke-dasharray="5,2" d="M374.545,-319.078C384.791,-318.913 393.87,-318.766 400.325,-318.662"/>
 <polygon fill="black" stroke="black" points="400.431,-322.161 410.373,-318.5 400.318,-315.162 400.431,-322.161"/>
 </g>
 <!-- CartonBag&#45;&gt;Carton -->
-<g id="edge22" class="edge"><title>CartonBag&#45;&gt;Carton:deductConsumableInventory</title>
+<g id="edge21" class="edge"><title>CartonBag&#45;&gt;Carton:deductConsumableInventory</title>
 <path fill="none" stroke="black" stroke-dasharray="5,2" d="M352.2,-364.612C364.913,-373.148 374.373,-379.5 374.373,-379.5 374.373,-379.5 391.389,-392.262 402.023,-400.238"/>
 <polygon fill="black" stroke="black" points="400.273,-403.3 410.373,-406.5 404.473,-397.7 400.273,-403.3"/>
 </g>
@@ -190,113 +190,108 @@
 <text text-anchor="middle" x="285.504" y="-99.3" font-family="Times,serif" font-size="14.00">platforms</text>
 </g>
 <!-- ContainerBag&#45;&gt;ContainerItemBag -->
-<g id="edge29" class="edge"><title>ContainerBag&#45;&gt;ContainerItemBag:totalSku</title>
+<g id="edge28" class="edge"><title>ContainerBag&#45;&gt;ContainerItemBag:totalSku</title>
 <path fill="none" stroke="black" stroke-dasharray="5,2" d="M731.987,-555.5C741.802,-555.5 751.039,-555.5 757.685,-555.5"/>
 <polygon fill="black" stroke="black" points="757.884,-559 767.884,-555.5 757.884,-552 757.884,-559"/>
 </g>
 <!-- CheckingAppService -->
 <g id="node14" class="node"><title>CheckingAppService</title>
-<polygon fill="none" stroke="black" points="12.4448,-344.5 12.4448,-380.5 148.19,-380.5 148.19,-344.5 12.4448,-344.5"/>
-<text text-anchor="middle" x="80.3174" y="-358.3" font-family="Times,serif" font-size="14.00">CheckingAppService</text>
+<polygon fill="none" stroke="black" points="12.4448,-375.5 12.4448,-411.5 148.19,-411.5 148.19,-375.5 12.4448,-375.5"/>
+<text text-anchor="middle" x="80.3174" y="-389.3" font-family="Times,serif" font-size="14.00">CheckingAppService</text>
 </g>
 <!-- CheckingAppService&#45;&gt;Order -->
 <g id="edge7" class="edge"><title>CheckingAppService&#45;&gt;Order:recommendedPlatform</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M88.3574,-380.571C113.395,-444.837 196.635,-658.5 196.635,-658.5 196.635,-658.5 201.939,-665.519 206.414,-671.441"/>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M89.2436,-411.715C115.297,-471.586 196.635,-658.5 196.635,-658.5 196.635,-658.5 201.939,-665.519 206.414,-671.441"/>
 <polygon fill="black" stroke="black" points="203.683,-673.632 212.504,-679.5 209.267,-669.412 203.683,-673.632"/>
 </g>
 <!-- CheckingAppService&#45;&gt;Order -->
-<g id="edge10" class="edge"><title>CheckingAppService&#45;&gt;Order:recommendPackQty</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M87.5565,-380.715C110.776,-448.505 191.746,-684.896 209.18,-735.796"/>
-<polygon fill="black" stroke="black" points="205.952,-737.174 212.504,-745.5 212.575,-734.905 205.952,-737.174"/>
+<g id="edge9" class="edge"><title>CheckingAppService&#45;&gt;Order:recommendPackQty</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M88.1858,-411.929C112.121,-476.151 191.356,-688.756 209.001,-736.1"/>
+<polygon fill="black" stroke="black" points="205.732,-737.352 212.504,-745.5 212.291,-734.907 205.732,-737.352"/>
 </g>
 <!-- CheckingAppService&#45;&gt;Order -->
-<g id="edge17" class="edge"><title>CheckingAppService&#45;&gt;Order:checkedBy</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M88.0033,-380.898C111.708,-446.13 191.265,-665.055 208.985,-713.818"/>
-<polygon fill="black" stroke="black" points="205.799,-715.297 212.504,-723.5 212.378,-712.906 205.799,-715.297"/>
+<g id="edge16" class="edge"><title>CheckingAppService&#45;&gt;Order:checkedBy</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M88.5574,-411.712C112.836,-472.786 190.846,-669.021 208.797,-714.174"/>
+<polygon fill="black" stroke="black" points="205.557,-715.5 212.504,-723.5 212.062,-712.914 205.557,-715.5"/>
 </g>
 <!-- CheckingAppService&#45;&gt;TaskOfOrderPending -->
-<g id="edge14" class="edge"><title>CheckingAppService&#45;&gt;TaskOfOrderPending:confirmQty</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M90.3661,-380.783C117.551,-435.711 196.635,-595.5 196.635,-595.5 196.635,-595.5 203.639,-602.903 209.331,-608.919"/>
+<g id="edge13" class="edge"><title>CheckingAppService&#45;&gt;TaskOfOrderPending:confirmQty</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M91.7544,-411.782C120.141,-461.507 196.635,-595.5 196.635,-595.5 196.635,-595.5 203.639,-602.903 209.331,-608.919"/>
 <polygon fill="black" stroke="black" points="207.089,-611.642 216.504,-616.5 212.173,-606.831 207.089,-611.642"/>
 </g>
 <!-- CheckingAppService&#45;&gt;Task -->
 <g id="edge2" class="edge"><title>CheckingAppService&#45;&gt;Task:removeOrderLines</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M96.5338,-380.586C127.196,-417.031 195.321,-498.002 216.849,-523.59"/>
-<polygon fill="black" stroke="black" points="214.388,-526.101 223.504,-531.5 219.744,-521.595 214.388,-526.101"/>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M99.9058,-411.541C131.522,-442.226 194.439,-503.29 216.028,-524.245"/>
+<polygon fill="black" stroke="black" points="213.89,-527.047 223.504,-531.5 218.766,-522.024 213.89,-527.047"/>
 </g>
 <!-- CheckingAppService&#45;&gt;Task -->
 <g id="edge3" class="edge"><title>CheckingAppService&#45;&gt;Task:isEmpty</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M94.9508,-380.814C124.978,-421.15 195.853,-516.357 217.268,-545.124"/>
-<polygon fill="black" stroke="black" points="214.725,-547.569 223.504,-553.5 220.34,-543.389 214.725,-547.569"/>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M97.3516,-411.543C128.291,-446.359 195.078,-521.512 216.641,-545.777"/>
+<polygon fill="black" stroke="black" points="214.245,-548.35 223.504,-553.5 219.477,-543.7 214.245,-548.35"/>
 </g>
 <!-- CheckingAppService&#45;&gt;Task -->
 <g id="edge4" class="edge"><title>CheckingAppService&#45;&gt;Task:plan</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M98.5816,-380.615C130.751,-414.37 196.635,-483.5 196.635,-483.5 196.635,-483.5 208.206,-494.697 216.162,-502.395"/>
-<polygon fill="black" stroke="black" points="213.884,-505.061 223.504,-509.5 218.751,-500.031 213.884,-505.061"/>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M103.534,-411.625C135.87,-438.005 194.352,-485.717 215.555,-503.015"/>
+<polygon fill="black" stroke="black" points="213.543,-505.89 223.504,-509.5 217.968,-500.467 213.543,-505.89"/>
 </g>
 <!-- CheckingAppService&#45;&gt;CartonBag -->
-<g id="edge15" class="edge"><title>CheckingAppService&#45;&gt;CartonBag:fulfill</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M120.681,-344.409C144.431,-333.493 172.801,-320.454 187.218,-313.828"/>
-<polygon fill="black" stroke="black" points="189.01,-316.856 196.635,-309.5 186.087,-310.496 189.01,-316.856"/>
+<g id="edge14" class="edge"><title>CheckingAppService&#45;&gt;CartonBag:fulfill</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M106.056,-375.48C131.998,-356.583 171.312,-327.946 188.315,-315.56"/>
+<polygon fill="black" stroke="black" points="190.613,-318.217 196.635,-309.5 186.491,-312.559 190.613,-318.217"/>
 </g>
 <!-- CheckingAppService&#45;&gt;CartonBag -->
-<g id="edge16" class="edge"><title>CheckingAppService&#45;&gt;CartonBag:putOnPallet</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M109.233,-344.345C134.829,-327.697 171.194,-304.046 187.777,-293.261"/>
-<polygon fill="black" stroke="black" points="190.16,-295.886 196.635,-287.5 186.344,-290.018 190.16,-295.886"/>
+<g id="edge15" class="edge"><title>CheckingAppService&#45;&gt;CartonBag:putOnPallet</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M101.141,-375.278C127.157,-351.364 171.573,-310.537 189.153,-294.377"/>
+<polygon fill="black" stroke="black" points="191.641,-296.844 196.635,-287.5 186.904,-291.691 191.641,-296.844"/>
 </g>
 <!-- CheckingAppService&#45;&gt;CartonBag -->
-<g id="edge18" class="edge"><title>CheckingAppService&#45;&gt;CartonBag:deductConsumableInventory</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M148.398,-344.467C163.461,-340.418 177.642,-336.606 186.678,-334.177"/>
-<polygon fill="black" stroke="black" points="187.886,-337.476 196.635,-331.5 186.069,-330.716 187.886,-337.476"/>
+<g id="edge17" class="edge"><title>CheckingAppService&#45;&gt;CartonBag:deductConsumableInventory</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M114.982,-375.4C139.978,-361.961 172.297,-344.585 187.703,-336.302"/>
+<polygon fill="black" stroke="black" points="189.484,-339.318 196.635,-331.5 186.17,-333.153 189.484,-339.318"/>
 </g>
 <!-- CheckingAppService&#45;&gt;OrderBag -->
 <g id="edge1" class="edge"><title>CheckingAppService&#45;&gt;OrderBag:canceledBag</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M87.5173,-344.158C111.47,-280.287 196.635,-73.5 196.635,-73.5 196.635,-73.5 204.384,-57.9038 210.439,-47.7558"/>
-<polygon fill="black" stroke="black" points="213.035,-50.1063 217.504,-40.5 208.02,-45.2228 213.035,-50.1063"/>
-</g>
-<!-- CheckingAppService&#45;&gt;OrderBag -->
-<g id="edge9" class="edge"><title>CheckingAppService&#45;&gt;OrderBag:canceledBag</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M90.3661,-344.418C117.551,-283.521 196.635,-91.5 196.635,-91.5 196.635,-91.5 209.225,-66.1608 214.848,-50.6284"/>
-<polygon fill="black" stroke="black" points="218.234,-51.5144 217.489,-40.9458 211.48,-49.6722 218.234,-51.5144"/>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M88.0158,-375.435C112.627,-309.06 196.635,-82.5 196.635,-82.5 196.635,-82.5 206.724,-62.1947 212.872,-49.8212"/>
+<polygon fill="black" stroke="black" points="216.188,-51.0129 217.504,-40.5 209.92,-47.898 216.188,-51.0129"/>
 </g>
 <!-- CheckingAppService&#45;&gt;TaskBag -->
 <g id="edge5" class="edge"><title>CheckingAppService&#45;&gt;TaskBag:totalCheckedQty</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M93.9517,-344.169C124.608,-299.691 202.014,-187.384 223.749,-155.85"/>
-<polygon fill="black" stroke="black" points="226.711,-157.72 229.504,-147.5 220.947,-153.747 226.711,-157.72"/>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M91.9595,-375.228C120.507,-326.211 196.635,-195.5 196.635,-195.5 196.635,-195.5 214.361,-169.613 223.779,-155.861"/>
+<polygon fill="black" stroke="black" points="226.742,-157.728 229.504,-147.5 220.966,-153.773 226.742,-157.728"/>
 </g>
 <!-- CheckingAppService&#45;&gt;TaskBag -->
 <g id="edge6" class="edge"><title>CheckingAppService&#45;&gt;TaskBag:totalPendingQty</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M92.6993,-344.297C122.519,-296.604 202.12,-169.296 223.918,-134.434"/>
-<polygon fill="black" stroke="black" points="227.17,-135.835 229.504,-125.5 221.235,-132.123 227.17,-135.835"/>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M91.2704,-375.5C120.213,-323.157 203.624,-172.304 224.648,-134.282"/>
+<polygon fill="black" stroke="black" points="227.728,-135.945 229.504,-125.5 221.602,-132.558 227.728,-135.945"/>
 </g>
 <!-- CheckingAppService&#45;&gt;TaskBag -->
 <g id="edge8" class="edge"><title>CheckingAppService&#45;&gt;TaskBag:platforms</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M91.7376,-344.288C120.988,-293.164 203.109,-149.632 224.407,-112.408"/>
-<polygon fill="black" stroke="black" points="227.576,-113.918 229.504,-103.5 221.5,-110.442 227.576,-113.918"/>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M90.5871,-375.359C118.974,-319.807 204.042,-153.329 224.865,-112.577"/>
+<polygon fill="black" stroke="black" points="228.07,-113.997 229.504,-103.5 221.837,-110.812 228.07,-113.997"/>
 </g>
 <!-- CheckingAppService&#45;&gt;Carton -->
-<g id="edge11" class="edge"><title>CheckingAppService&#45;&gt;Carton:cartonizationRule</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M106.34,-380.51C140.255,-404.921 196.635,-445.5 196.635,-445.5 196.635,-445.5 374.373,-445.5 374.373,-445.5 374.373,-445.5 395.261,-410.107 405.215,-393.24"/>
+<g id="edge10" class="edge"><title>CheckingAppService&#45;&gt;Carton:cartonizationRule</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M121.326,-411.541C154.633,-426.56 196.635,-445.5 196.635,-445.5 196.635,-445.5 374.373,-445.5 374.373,-445.5 374.373,-445.5 395.261,-410.107 405.215,-393.24"/>
 <polygon fill="black" stroke="black" points="408.305,-394.891 410.373,-384.5 402.276,-391.333 408.305,-394.891"/>
 </g>
 <!-- CheckingAppService&#45;&gt;Carton -->
-<g id="edge12" class="edge"><title>CheckingAppService&#45;&gt;Carton:bindOrder</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M97.595,-344.291C129.382,-308.732 196.635,-233.5 196.635,-233.5 196.635,-233.5 374.373,-233.5 374.373,-233.5 374.373,-233.5 395.476,-270.429 405.367,-287.74"/>
+<g id="edge11" class="edge"><title>CheckingAppService&#45;&gt;Carton:bindOrder</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M94.3216,-375.457C124.48,-333.613 196.635,-233.5 196.635,-233.5 196.635,-233.5 374.373,-233.5 374.373,-233.5 374.373,-233.5 395.476,-270.429 405.367,-287.74"/>
 <polygon fill="black" stroke="black" points="402.373,-289.554 410.373,-296.5 408.45,-286.081 402.373,-289.554"/>
 </g>
 <!-- CheckingAppService&#45;&gt;Carton -->
-<g id="edge13" class="edge"><title>CheckingAppService&#45;&gt;Carton:transferFrom</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M148.398,-368.899C173.767,-371.319 196.635,-373.5 196.635,-373.5 196.635,-373.5 374.373,-373.5 374.373,-373.5 374.373,-373.5 392.171,-357.185 402.738,-347.498"/>
+<g id="edge12" class="edge"><title>CheckingAppService&#45;&gt;Carton:transferFrom</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M148.55,-388.912C235.07,-383.007 374.373,-373.5 374.373,-373.5 374.373,-373.5 392.171,-357.185 402.738,-347.498"/>
 <polygon fill="black" stroke="black" points="405.367,-349.837 410.373,-340.5 400.636,-344.677 405.367,-349.837"/>
 </g>
 <!-- CheckingAppService&#45;&gt;Carton -->
-<g id="edge19" class="edge"><title>CheckingAppService&#45;&gt;Carton:installConsumables</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M148.398,-377.043C173.767,-382.542 196.635,-387.5 196.635,-387.5 196.635,-387.5 374.373,-387.5 374.373,-387.5 374.373,-387.5 391.389,-375.684 402.023,-368.298"/>
-<polygon fill="black" stroke="black" points="404.156,-371.079 410.373,-362.5 400.163,-365.329 404.156,-371.079"/>
+<g id="edge18" class="edge"><title>CheckingAppService&#45;&gt;Carton:installConsumables</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M148.55,-393.5C235.07,-393.5 374.373,-393.5 374.373,-393.5 374.373,-393.5 392.171,-378.174 402.738,-369.074"/>
+<polygon fill="black" stroke="black" points="405.079,-371.677 410.373,-362.5 400.511,-366.373 405.079,-371.677"/>
 </g>
 <!-- CheckingAppService&#45;&gt;Carton -->
-<g id="edge20" class="edge"><title>CheckingAppService&#45;&gt;Carton:fulfill</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M103.008,-344.443C136.412,-316.634 196.635,-266.5 196.635,-266.5 196.635,-266.5 374.373,-266.5 374.373,-266.5 374.373,-266.5 394.203,-295.144 404.428,-309.913"/>
+<g id="edge19" class="edge"><title>CheckingAppService&#45;&gt;Carton:fulfill</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M97.8396,-375.304C129.726,-340.187 196.635,-266.5 196.635,-266.5 196.635,-266.5 374.373,-266.5 374.373,-266.5 374.373,-266.5 394.203,-295.144 404.428,-309.913"/>
 <polygon fill="black" stroke="black" points="401.803,-312.27 410.373,-318.5 407.559,-308.286 401.803,-312.27"/>
 </g>
 <!-- ConsumableExtPolicy -->
@@ -305,7 +300,7 @@
 <text text-anchor="middle" x="80.3174" y="-14.3" font-family="Times,serif" font-size="14.00">ConsumableExtPolicy</text>
 </g>
 <!-- ConsumableExtPolicy&#45;&gt;OrderBag -->
-<g id="edge23" class="edge"><title>ConsumableExtPolicy&#45;&gt;OrderBag:consumableCostFirst</title>
+<g id="edge22" class="edge"><title>ConsumableExtPolicy&#45;&gt;OrderBag:consumableCostFirst</title>
 <path fill="none" stroke="black" stroke-dasharray="5,2" d="M151.006,-18.5C172.995,-18.5 194.762,-18.5 207.128,-18.5"/>
 <polygon fill="black" stroke="black" points="207.504,-22.0001 217.504,-18.5 207.504,-15.0001 207.504,-22.0001"/>
 </g>
@@ -315,7 +310,7 @@
 <text text-anchor="middle" x="285.504" y="-811.3" font-family="Times,serif" font-size="14.00">OrderNotCartonizedYet</text>
 </g>
 <!-- OrderNotCartonizedYet&#45;&gt;OrderCartons -->
-<g id="edge26" class="edge"><title>OrderNotCartonizedYet&#45;&gt;OrderCartons:totalCartonizedQty</title>
+<g id="edge25" class="edge"><title>OrderNotCartonizedYet&#45;&gt;OrderCartons:totalCartonizedQty</title>
 <path fill="none" stroke="black" stroke-dasharray="5,2" d="M360.496,-815.5C386.137,-815.5 411.915,-815.5 425.798,-815.5"/>
 <polygon fill="black" stroke="black" points="426.242,-819 436.242,-815.5 426.242,-812 426.242,-819"/>
 </g>
@@ -325,12 +320,12 @@
 <text text-anchor="middle" x="80.3174" y="-770.3" font-family="Times,serif" font-size="14.00">OrderNotFullyCartonized</text>
 </g>
 <!-- OrderNotFullyCartonized&#45;&gt;Order -->
-<g id="edge27" class="edge"><title>OrderNotFullyCartonized&#45;&gt;Order:totalExpectedQty</title>
+<g id="edge26" class="edge"><title>OrderNotFullyCartonized&#45;&gt;Order:totalExpectedQty</title>
 <path fill="none" stroke="black" stroke-dasharray="5,2" d="M113.746,-756.455C143.489,-739.904 185.578,-716.483 203.673,-706.414"/>
 <polygon fill="black" stroke="black" points="205.468,-709.421 212.504,-701.5 202.064,-703.304 205.468,-709.421"/>
 </g>
 <!-- OrderNotFullyCartonized&#45;&gt;OrderCartons -->
-<g id="edge28" class="edge"><title>OrderNotFullyCartonized&#45;&gt;OrderCartons:totalCartonizedQty</title>
+<g id="edge27" class="edge"><title>OrderNotFullyCartonized&#45;&gt;OrderCartons:totalCartonizedQty</title>
 <path fill="none" stroke="black" stroke-dasharray="5,2" d="M111.918,-792.544C146.081,-812.69 196.635,-842.5 196.635,-842.5 196.635,-842.5 374.373,-842.5 374.373,-842.5 374.373,-842.5 409.538,-827.154 426.846,-819.601"/>
 <polygon fill="black" stroke="black" points="428.477,-822.708 436.242,-815.5 425.677,-816.292 428.477,-822.708"/>
 </g>
@@ -340,7 +335,7 @@
 <text text-anchor="middle" x="80.3174" y="-898.3" font-family="Times,serif" font-size="14.00">UniqueCodeConstraint</text>
 </g>
 <!-- UniqueCodeConstraint&#45;&gt;TaskCartons -->
-<g id="edge30" class="edge"><title>UniqueCodeConstraint&#45;&gt;TaskCartons:contains</title>
+<g id="edge29" class="edge"><title>UniqueCodeConstraint&#45;&gt;TaskCartons:contains</title>
 <path fill="none" stroke="black" stroke-dasharray="5,2" d="M152.977,-902.5C183.466,-902.5 215.602,-902.5 231.451,-902.5"/>
 <polygon fill="black" stroke="black" points="231.504,-906 241.504,-902.5 231.504,-899 231.504,-906"/>
 </g>
