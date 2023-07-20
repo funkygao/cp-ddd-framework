@@ -33,11 +33,7 @@ doxygen:
 	@open target/callgraph/index.html
 
 deploy:
-ifeq ($(BRANCH), master)
 	@mvn clean deploy verify -Possrh -e
-else
-	@echo $(BRANCH) cannot deploy
-endif
 
 deploy-snapshot:
 	@mvn clean deploy verify -Dskip.dddplus.plugin.module=false -Possrh -e
