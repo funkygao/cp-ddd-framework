@@ -36,11 +36,22 @@ In short, the 3 most essential `plus` are:
 
 Used for several complex critical central platform projects in production environment.
 
-## Quickstart
+## Insight
 
-### Showcase
+- Technical solutions built for specific business problems are not reusable in a fluid business landscape
+- We encounter different behaviours for the same entity more often than we encounter new entities
+
+Changes to business will either result in ever increasing “if-else” or recurring rewrites. It is difficult to change behaviour of the system without touching core codebase.
+
+Characteristics of platform:
+- Built first, then reused forever : Has to be built agnostic of specific business needs, and then used for addressing business needs
+- Externally programmable : Must expose hooks to build customizable experiences on top of it
+
+## Showcase
 
 [A full demo of DDDplus forward/reverse modeling ->](dddplus-test/src/test/java/ddd/plus/showcase/README.md)
+
+## Quickstart
 
 ### Forward modeling
 

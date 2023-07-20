@@ -36,11 +36,11 @@ DDDplus是轻量级DDD补充和增强的框架。
 
 应用于多个大型核心复杂项目的生产环境。
 
-## 快速入门
-
-### 项目演示
+## 项目演示
 
 [正向和逆向建模的项目演示 ->](dddplus-test/src/test/java/ddd/plus/showcase/README.zh-cn.md)
+
+## 快速入门
 
 ### 正向建模
 
