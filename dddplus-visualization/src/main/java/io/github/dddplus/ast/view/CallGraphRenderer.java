@@ -50,7 +50,6 @@ public class CallGraphRenderer implements IModelRenderer<CallGraphRenderer> {
     public void render() throws IOException {
         StringBuilder content = new StringBuilder();
         content.append("digraph G {").append(NEWLINE);
-        content.append(TAB).append("label=\"Call Graph\";").append(NEWLINE);
         content.append(TAB).append("labelloc = \"t\";").append(NEWLINE);
         content.append(TAB).append("rankdir=LR;").append(NEWLINE);
         if (splines != null) {
@@ -75,7 +74,7 @@ public class CallGraphRenderer implements IModelRenderer<CallGraphRenderer> {
         content.append(NEWLINE);
 
         Set<String> edges = new HashSet<>();
-        for (CallGraphEntry entry : callGraphReport.getEntries()) {
+        for (CallGraphEntry entry : callGraphReport.sortedEntries()) {
             if (!edgeShowsCallerMethod) {
                 // A的多个方法可能调用同一个callee：merge
                 String key = entry.getCallerClazz() + ":" + entry.calleeNode();

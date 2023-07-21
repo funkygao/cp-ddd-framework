@@ -22,8 +22,13 @@ public class CallGraphReport {
         return model.getKeyModelReport().hasKeyMethod(declarationClazz, methodName);
     }
 
+    public List<CallGraphEntry> sortedEntries() {
+        Collections.sort(entries, Comparator.comparing(c -> c.getCallerClazz() + c.getCallerMethod()));
+        return entries;
+    }
+
     public Collection<Record> calleeRecords() {
-        Map<String, Record> map = new HashMap<>();
+        Map<String, Record> map = new TreeMap<>();
         for (CallGraphEntry entry : entries) {
             final String calleeClazz = entry.getCalleeClazz();
             if (!map.containsKey(calleeClazz)) {
