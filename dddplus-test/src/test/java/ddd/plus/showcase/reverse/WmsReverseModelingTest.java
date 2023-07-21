@@ -29,6 +29,13 @@ class WmsReverseModelingTest {
                 .build(model)
                 .classDiagramSvgFilename("../doc/wms.svg")
                 .render();
+    }
+
+    @Test
+    void callGraph() throws IOException {
+        ReverseEngineeringModel model = new DomainModelAnalyzer()
+                .scan(root)
+                .analyze(domainLayerFilter);
         new CallGraphRenderer()
                 .targetDotFilename("../doc/callgraph.dot")
                 .splines("polyline")
