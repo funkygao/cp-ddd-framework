@@ -1,10 +1,5 @@
 package io.github.dddplus.ast;
 
-import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.symbolsolver.JavaSymbolSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import io.github.dddplus.ast.algorithm.JaccardModelSimilarity;
 import io.github.dddplus.ast.model.*;
 import io.github.dddplus.ast.report.EncapsulationReport;
@@ -235,17 +230,11 @@ public class DomainModelAnalyzer {
         }
 
         // call graph
-        // as we need to resolve the declaration class from MethodCallExpr, we need setup the symbol resolver
-        CombinedTypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(false));
-        for (File dir : dirs) {
-            typeSolver.add(new JavaParserTypeSolver(dir));
-        }
-        JavaSymbolSolver symbolSolver = new JavaSymbolSolver(typeSolver);
-        StaticJavaParser.getConfiguration().setSymbolResolver(symbolSolver);
+        CallGraphAstNodeVisitor callGraphAstNodeVisitor = new CallGraphAstNodeVisitor(dirs);
         for (File dir : dirs) {
             log.debug("parsing {}", CallGraphAstNodeVisitor.class.getSimpleName());
             new FileWalker(actualFilter, (level, path, file) -> {
-                new CallGraphAstNodeVisitor().visit(FileWalker.silentParse(file), model.getCallGraphReport());
+                callGraphAstNodeVisitor.visit(FileWalker.silentParse(file), model.getCallGraphReport());
             }).walkFrom(dir);
         }
 
