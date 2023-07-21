@@ -22,6 +22,9 @@ import io.github.dddplus.ast.report.CallGraphReport;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Slf4j
 class CallGraphAstNodeVisitor extends VoidVisitorAdapter<CallGraphReport> {
@@ -46,6 +49,21 @@ class CallGraphAstNodeVisitor extends VoidVisitorAdapter<CallGraphReport> {
         if (scope == null) {
             // 自己用自己，不出现在call graph
             return;
+        }
+
+        List<String> chainedMethodInvocations = new ArrayList<>();
+        while (scope != null && scope instanceof MethodCallExpr) {
+            // 方法调用是链式的
+            // items.stream().map(OrderLine::expectedQty).reduce(BigDecimal.ZERO, BigDecimal::add)
+            // methodCallExpr只能visit到两个node: map, reduce，访问不到expectedQty
+            chainedMethodInvocations.add(((MethodCallExpr) scope).getNameAsString() + "()");
+
+            scope = ((MethodCallExpr) scope).getScope().orElse(null);
+        }
+        if (chainedMethodInvocations.size() > 0) {
+            Collections.reverse(chainedMethodInvocations);
+            log.warn("method:{} with chained method invocation: {}", methodName,
+                    String.join(".", chainedMethodInvocations));
         }
 
         SymbolReference<ResolvedMethodDeclaration> methodDeclaration;
