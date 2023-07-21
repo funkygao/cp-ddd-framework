@@ -21,6 +21,20 @@ package io.github.dddplus.ext;
  * <p>如果觉得判空不优雅，也可以提供扩展点的兜底实现，这样预埋处就不必判空了</p>
  * <p>!!! ATTENTION !!!</p>
  * <p>扩展点方法的返回值必须是Java包装类或void，不能是int/boolean等primitive types，否则可能抛出NPE!</p>
+ * <p>可以使用{@code ExtensionMethodNPEEnforcer}自动检测，避免线上风险</p>
+ * <pre>
+ * {@code
+ *
+ * class Test {
+ *     ℗Test
+ *     void enforceExtensionMethodSignature() {
+ *         new ExtensionMethodSignatureEnforcer()
+ *                 .scan(root)
+ *                 .enforce();
+ *     }
+ * }
+ * }
+ * </pre>
  * <p>扩展点方法的入参，有时候平台传递的是像{@code Order}这样的大对象，但又担心BP擅自调用大对象的写方法产生{@code unexpected side effect}，可以这样：</p>
  * <pre>
  * {@code

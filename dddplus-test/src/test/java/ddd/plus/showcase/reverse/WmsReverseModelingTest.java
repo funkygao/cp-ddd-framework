@@ -82,6 +82,13 @@ class WmsReverseModelingTest {
                 .enforce(showcaseFilter);
     }
 
+    @Test
+    void enforceExtensionMethodSignature() throws IOException {
+        new ExtensionMethodSignatureEnforcer()
+                .scan(root)
+                .enforce();
+    }
+
     private static class DomainLayerFilter implements FileWalker.Filter {
         @Override
         public boolean interested(int level, String path, File file) {

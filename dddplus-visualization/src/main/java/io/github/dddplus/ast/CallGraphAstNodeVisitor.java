@@ -48,7 +48,14 @@ class CallGraphAstNodeVisitor extends VoidVisitorAdapter<CallGraphReport> {
             return;
         }
 
-        SymbolReference<ResolvedMethodDeclaration> methodDeclaration = javaParserFacade.solve(methodCallExpr);
+        SymbolReference<ResolvedMethodDeclaration> methodDeclaration;
+        try {
+            methodDeclaration = javaParserFacade.solve(methodCallExpr);
+        } catch (Exception ignored) {
+            log.warn("method:{} {}", methodCallExpr.getNameAsString(), ignored.getMessage());
+            return;
+        }
+
         if (!methodDeclaration.isSolved()) {
             log.error("method {} cannot be solved", methodCallExpr.getNameAsString());
             return;
