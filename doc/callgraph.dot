@@ -8,12 +8,12 @@ digraph G {
    Carton [label="<Carton> Carton|<deductConsumableInventory> deductConsumableInventory|<cartonizationRule> cartonizationRule|<installConsumables> installConsumables|<transferFrom> transferFrom|<fulfill> fulfill|<bindOrder> bindOrder"];
    CartonBag [label="<CartonBag> CartonBag|<deductConsumableInventory> deductConsumableInventory|<fulfill> fulfill|<putOnPallet> putOnPallet"];
    ContainerBag [label="<ContainerBag> ContainerBag|<orderNoSet> orderNoSet|<confirmQty> confirmQty|<totalQty> totalQty|<totalPendingQty> totalPendingQty|<totalSku> totalSku"];
-   ContainerItemBag [label="<ContainerItemBag> ContainerItemBag|<totalSku> totalSku"];
+   ContainerItemBag [label="<ContainerItemBag> ContainerItemBag|<totalQty> totalQty|<totalPendingQty> totalPendingQty|<totalSku> totalSku"];
    Order [label="<Order> Order|<recommendPackQty> recommendPackQty|<checkedBy> checkedBy|<totalExpectedQty> totalExpectedQty|<recommendedPlatform> recommendedPlatform"];
    OrderBag [label="<OrderBag> OrderBag|<canceledBag> canceledBag|<consumableCostFirst> consumableCostFirst"];
    OrderCartons [label="<OrderCartons> OrderCartons|<totalCartonizedQty> totalCartonizedQty"];
    OrderLineBag [label="<OrderLineBag> OrderLineBag|<totalExpectedQty> totalExpectedQty"];
-   Task [label="<Task> Task|<isEmpty> isEmpty|<removeOrderLines> removeOrderLines|<plan> plan"];
+   Task [label="<Task> Task|<claimedWith> claimedWith|<orderNoSet> orderNoSet|<totalQty> totalQty|<isEmpty> isEmpty|<totalPendingQty> totalPendingQty|<plan> plan|<removeOrderLines> removeOrderLines|<totalSku> totalSku"];
    TaskBag [label="<TaskBag> TaskBag|<totalCheckedQty> totalCheckedQty|<totalPendingQty> totalPendingQty|<platforms> platforms"];
    TaskCartons [label="<TaskCartons> TaskCartons|<contains> contains"];
    TaskOfOrderPending [label="<TaskOfOrderPending> TaskOfOrderPending|<confirmQty> confirmQty"];
