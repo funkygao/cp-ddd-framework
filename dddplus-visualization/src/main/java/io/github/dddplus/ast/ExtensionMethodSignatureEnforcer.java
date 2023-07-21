@@ -43,7 +43,7 @@ public class ExtensionMethodSignatureEnforcer {
                 }
 
                 ClassOrInterfaceDeclaration extInterface = (ClassOrInterfaceDeclaration) clazz;
-                if (!isDomainExtension(extInterface)) {
+                if (!extInterface.isInterface() || !isDomainExtension(extInterface)) {
                     continue;
                 }
 
