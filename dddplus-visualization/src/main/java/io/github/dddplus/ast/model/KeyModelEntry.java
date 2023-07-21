@@ -54,7 +54,7 @@ public class KeyModelEntry {
         return false;
     }
 
-    public Set<String> keyMethods() {
+    public Set<String> realKeyMethods() {
         Set<String> s = new TreeSet<>();
         for (KeyBehaviorEntry entry : keyBehaviorEntries) {
             s.add(entry.getMethodName());
@@ -63,7 +63,17 @@ public class KeyModelEntry {
             s.add(entry.getMethodName());
         }
         for (KeyFlowEntry entry : keyFlowEntries) {
-            s.add(entry.getMethodName());
+            /**
+             * class FooService {
+             *     @KeyFlow(actor = Order.class)
+             *     void bar() {}
+             * }
+             *
+             * 那么 Order里会记录该KeyFlowEntry，因此这里要排除
+             */
+            if (!entry.isOrphan()) {
+                s.add(entry.getMethodName());
+            }
         }
         return s;
     }

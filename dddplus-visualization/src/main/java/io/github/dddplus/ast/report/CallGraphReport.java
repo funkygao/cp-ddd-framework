@@ -39,7 +39,7 @@ public class CallGraphReport {
         List<Record> records = new ArrayList<>();
         for (String calleeClass : calleeClasses()) {
             Record record = new Record(calleeClass);
-            record.addMethods(model.getKeyModelReport().keyModelEntryOfActor(calleeClass).keyMethods());
+            record.addMethods(model.getKeyModelReport().keyModelEntryOfActor(calleeClass).realKeyMethods());
 
             records.add(record);
         }
