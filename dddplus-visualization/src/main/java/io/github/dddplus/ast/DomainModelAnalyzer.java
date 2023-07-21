@@ -245,10 +245,10 @@ public class DomainModelAnalyzer {
         return model;
     }
 
-    static class ActualFilter implements FileWalker.Filter {
+    public static class ActualFilter implements FileWalker.Filter {
         private final FileWalker.Filter filter;
 
-        ActualFilter(FileWalker.Filter filter) {
+        public ActualFilter(FileWalker.Filter filter) {
             this.filter = filter;
         }
 

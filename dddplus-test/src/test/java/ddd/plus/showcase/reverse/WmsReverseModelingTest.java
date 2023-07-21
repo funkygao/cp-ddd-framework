@@ -1,6 +1,8 @@
 package ddd.plus.showcase.reverse;
 
 import io.github.dddplus.ast.*;
+import io.github.dddplus.ast.enforcer.AllowedAccessorsEnforcer;
+import io.github.dddplus.ast.enforcer.ExtensionMethodSignatureEnforcer;
 import io.github.dddplus.ast.view.CallGraphRenderer;
 import io.github.dddplus.ast.view.EncapsulationRenderer;
 import io.github.dddplus.ast.view.PlainTextRenderer;
