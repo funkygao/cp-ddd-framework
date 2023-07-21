@@ -3,12 +3,8 @@
  *
  * Licensed under the Apache License version 2.0, available at http://www.apache.org/licenses/LICENSE-2.0
  */
-package io.github.dddplus.ast;
+package io.github.dddplus.ast.model;
 
-import io.github.dddplus.ast.model.AggregateEntry;
-import io.github.dddplus.ast.model.KeyEventEntry;
-import io.github.dddplus.ast.model.KeyFlowEntry;
-import io.github.dddplus.ast.model.SimilarityEntry;
 import io.github.dddplus.ast.report.*;
 import lombok.Getter;
 

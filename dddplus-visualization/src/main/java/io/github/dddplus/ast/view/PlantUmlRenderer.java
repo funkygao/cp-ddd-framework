@@ -6,7 +6,7 @@
 package io.github.dddplus.ast.view;
 
 import com.google.common.collect.Sets;
-import io.github.dddplus.ast.ReverseEngineeringModel;
+import io.github.dddplus.ast.model.ReverseEngineeringModel;
 import io.github.dddplus.ast.model.*;
 import io.github.dddplus.ast.report.ClassMethodReport;
 import io.github.dddplus.ast.report.CoverageReport;

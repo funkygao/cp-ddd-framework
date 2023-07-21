@@ -5,7 +5,7 @@
  */
 package io.github.dddplus.ast.report;
 
-import io.github.dddplus.ast.ReverseEngineeringModel;
+import io.github.dddplus.ast.model.ReverseEngineeringModel;
 import io.github.dddplus.ast.model.CallGraphEntry;
 import io.github.dddplus.ast.model.KeyModelEntry;
 import lombok.Data;

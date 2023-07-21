@@ -5,7 +5,7 @@
  */
 package io.github.dddplus.ast.view;
 
-import io.github.dddplus.ast.ReverseEngineeringModel;
+import io.github.dddplus.ast.model.ReverseEngineeringModel;
 import io.github.dddplus.ast.report.EncapsulationReport;
 
 import java.io.BufferedWriter;
