@@ -84,7 +84,7 @@ public class CallGraphRenderer implements IModelRenderer<CallGraphRenderer> {
                 edges.add(key);
             }
 
-            content.append(TAB).append(entry.getCallerClazz()).append(" -> ")
+            content.append(TAB).append(entry.callerNode(callGraphReport)).append(" -> ")
                     .append(entry.calleeNode());
             if (edgeShowsCallerMethod) {
                 content.append(" [label=\"")

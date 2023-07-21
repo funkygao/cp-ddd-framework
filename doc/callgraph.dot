@@ -8,24 +8,24 @@ digraph G {
    Carton [label="<Carton> Carton|<deductConsumableInventory> deductConsumableInventory|<cartonizationRule> cartonizationRule|<installConsumables> installConsumables|<transferFrom> transferFrom|<fulfill> fulfill|<bindOrder> bindOrder"];
    CartonBag [label="<CartonBag> CartonBag|<deductConsumableInventory> deductConsumableInventory|<fulfill> fulfill|<putOnPallet> putOnPallet"];
    Consumable [label="<Consumable> Consumable|<isInventory> isInventory"];
-   Container [label="<Container> Container|<getContainerItemBag> getContainerItemBag"];
+   Container [label="<Container> Container|<skuNoSet> skuNoSet|<getContainerItemBag> getContainerItemBag"];
    ContainerBag [label="<ContainerBag> ContainerBag|<orderNoSet> orderNoSet|<confirmQty> confirmQty|<totalQty> totalQty|<totalPendingQty> totalPendingQty|<totalSku> totalSku"];
    ContainerItem [label="<ContainerItem> ContainerItem|<getExpectedQty> getExpectedQty|<getPendingQty> getPendingQty|<diffQty> diffQty|<getSku> getSku"];
    ContainerItemBag [label="<ContainerItemBag> ContainerItemBag|<totalQty> totalQty|<totalPendingQty> totalPendingQty|<totalSku> totalSku"];
    Order [label="<Order> Order|<getOrderNo> getOrderNo|<recommendPackQty> recommendPackQty|<checkedBy> checkedBy|<totalExpectedQty> totalExpectedQty|<recommendedPlatform> recommendedPlatform"];
-   OrderBag [label="<OrderBag> OrderBag|<canceledBag> canceledBag|<consumableCostFirst> consumableCostFirst"];
+   OrderBag [label="<OrderBag> OrderBag|<canceledBag> canceledBag|<consumableCostFirst> consumableCostFirst|<orderNos> orderNos"];
    OrderCartons [label="<OrderCartons> OrderCartons|<totalCartonizedQty> totalCartonizedQty"];
    OrderLine [label="<OrderLine> OrderLine|<getOrderLineNo> getOrderLineNo|<expectedQty> expectedQty"];
-   OrderLineBag [label="<OrderLineBag> OrderLineBag|<totalExpectedQty> totalExpectedQty"];
+   OrderLineBag [label="<OrderLineBag> OrderLineBag|<orderLineNos> orderLineNos|<totalExpectedQty> totalExpectedQty"];
    Sku [label="<Sku> Sku|<value> value"];
-   Task [label="<Task> Task|<claimedWith> claimedWith|<orderNoSet> orderNoSet|<containerBag> containerBag|<totalQty> totalQty|<isEmpty> isEmpty|<totalPendingQty> totalPendingQty|<plan> plan|<removeOrderLines> removeOrderLines|<totalSku> totalSku"];
-   TaskBag [label="<TaskBag> TaskBag|<totalCheckedQty> totalCheckedQty|<totalPendingQty> totalPendingQty|<platforms> platforms"];
+   Task [label="<Task> Task|<claimedWith> claimedWith|<orderNoSet> orderNoSet|<containerBag> containerBag|<confirmQty> confirmQty|<totalQty> totalQty|<isEmpty> isEmpty|<totalPendingQty> totalPendingQty|<plan> plan|<removeOrderLines> removeOrderLines|<totalSku> totalSku"];
+   TaskBag [label="<TaskBag> TaskBag|<totalQty> totalQty|<totalCheckedQty> totalCheckedQty|<totalPendingQty> totalPendingQty|<platforms> platforms"];
    TaskCartons [label="<TaskCartons> TaskCartons|<contains> contains"];
    TaskOfOrderPending [label="<TaskOfOrderPending> TaskOfOrderPending|<confirmQty> confirmQty"];
    TaskOfSkuPending [label="<TaskOfSkuPending> TaskOfSkuPending|<confirmQty> confirmQty"];
 
-   CartonBag -> Carton:deductConsumableInventory
-   CartonBag -> Carton:fulfill
+   CartonBag:deductConsumableInventory -> Carton:deductConsumableInventory
+   CartonBag:fulfill -> Carton:fulfill
    CheckingAppService -> TaskOfOrderPending:confirmQty
    CheckingAppService -> CartonBag:fulfill
    CheckingAppService -> CartonBag:putOnPallet
@@ -45,32 +45,32 @@ digraph G {
    CheckingAppService -> Task:removeOrderLines
    CheckingAppService -> Task:isEmpty
    CheckingAppService -> Task:plan
-   ConsumableBag -> Consumable:isInventory
+   ConsumableBag:inventoryControlBag -> Consumable:isInventory
    ConsumableExtPolicy -> OrderBag:consumableCostFirst
-   ContainerBag -> ContainerItemBag:totalPendingQty
-   ContainerBag -> Container:getContainerItemBag
-   ContainerBag -> ContainerItemBag:totalQty
-   ContainerBag -> ContainerItemBag:totalSku
-   ContainerItemBag -> ContainerItem:getPendingQty
-   ContainerItemBag -> ContainerItem:getExpectedQty
-   Container -> Sku:value
-   Container -> ContainerItem:getSku
-   OrderBag -> Order:getOrderNo
-   OrderLineBag -> OrderLine:getOrderLineNo
-   OrderLineBag -> OrderLine:expectedQty
+   ContainerBag:totalPendingQty -> ContainerItemBag:totalPendingQty
+   ContainerBag:totalPendingQty -> Container:getContainerItemBag
+   ContainerBag:totalQty -> ContainerItemBag:totalQty
+   ContainerBag:totalSku -> ContainerItemBag:totalSku
+   ContainerItemBag:totalPendingQty -> ContainerItem:getPendingQty
+   ContainerItemBag:totalQty -> ContainerItem:getExpectedQty
+   Container:skuNoSet -> Sku:value
+   Container:skuNoSet -> ContainerItem:getSku
+   OrderBag:orderNos -> Order:getOrderNo
+   OrderLineBag:orderLineNos -> OrderLine:getOrderLineNo
+   OrderLineBag:totalExpectedQty -> OrderLine:expectedQty
    OrderNotCartonizedYet -> OrderCartons:totalCartonizedQty
    OrderNotFullyCartonized -> Order:totalExpectedQty
    OrderNotFullyCartonized -> OrderCartons:totalCartonizedQty
-   Order -> OrderCartons:totalCartonizedQty
-   Order -> OrderLineBag:totalExpectedQty
-   TaskBag -> ContainerBag:totalPendingQty
-   TaskBag -> Task:containerBag
-   TaskBag -> ContainerBag:totalQty
-   TaskOfSkuPending -> ContainerBag:confirmQty
-   Task -> TaskOfSkuPending:confirmQty
-   Task -> ContainerBag:orderNoSet
-   Task -> ContainerBag:totalPendingQty
-   Task -> ContainerBag:totalQty
-   Task -> ContainerBag:totalSku
+   Order:recommendPackQty -> OrderCartons:totalCartonizedQty
+   Order:totalExpectedQty -> OrderLineBag:totalExpectedQty
+   TaskBag:totalPendingQty -> ContainerBag:totalPendingQty
+   TaskBag:totalPendingQty -> Task:containerBag
+   TaskBag:totalQty -> ContainerBag:totalQty
+   TaskOfSkuPending:confirmQty -> ContainerBag:confirmQty
+   Task:confirmQty -> TaskOfSkuPending:confirmQty
+   Task:orderNoSet -> ContainerBag:orderNoSet
+   Task:totalPendingQty -> ContainerBag:totalPendingQty
+   Task:totalQty -> ContainerBag:totalQty
+   Task:totalSku -> ContainerBag:totalSku
    UniqueCodeConstraint -> TaskCartons:contains
 }

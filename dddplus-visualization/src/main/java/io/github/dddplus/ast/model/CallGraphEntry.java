@@ -1,5 +1,6 @@
 package io.github.dddplus.ast.model;
 
+import io.github.dddplus.ast.report.CallGraphReport;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -10,6 +11,15 @@ public class CallGraphEntry {
     private String callerMethod;
     private String calleeClazz;
     private String calleeMethod;
+
+    public String callerNode(CallGraphReport report) {
+        if (report.isKeyModel(callerClazz)) {
+            return callerClazz + ":" + callerMethod;
+        }
+
+        return callerClazz;
+
+    }
 
     public String calleeNode() {
         return calleeClazz + ":" + calleeMethod;

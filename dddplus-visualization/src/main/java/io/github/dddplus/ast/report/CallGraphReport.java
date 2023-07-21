@@ -28,6 +28,10 @@ public class CallGraphReport {
         return entries;
     }
 
+    public boolean isKeyModel(String clazz) {
+        return model.getKeyModelReport().containsActor(clazz);
+    }
+
     private Set<String> calleeClasses() {
         Set<String> r = new TreeSet<>();
         for (CallGraphEntry entry : entries) {
@@ -53,10 +57,15 @@ public class CallGraphReport {
             return;
         }
 
-        KeyModelEntry keyModelEntry = model.getKeyModelReport().keyModelEntryOfActor(calleeClazz);
-        if (!keyModelEntry.hasKeyMethod(calleeMethod)) {
-            keyModelEntry.registerMethodFodCallGraph(calleeMethod);
+        KeyModelEntry calleeModel = model.getKeyModelReport().keyModelEntryOfActor(calleeClazz);
+        if (!calleeModel.hasKeyMethod(calleeMethod)) {
+            calleeModel.registerMethodFodCallGraph(calleeMethod);
         }
+        KeyModelEntry callerModel = model.getKeyModelReport().keyModelEntryOfActor(callerClazz);
+        if (callerModel != null && !callerModel.hasKeyMethod(callerMethod)) {
+            callerModel.registerMethodFodCallGraph(callerMethod);
+        }
+
         entries.add(new CallGraphEntry(callerClazz, callerMethod, calleeClazz, calleeMethod));
     }
 
