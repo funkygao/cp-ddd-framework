@@ -2,6 +2,7 @@ package io.github.dddplus.ast.report;
 
 import io.github.dddplus.ast.ReverseEngineeringModel;
 import io.github.dddplus.ast.model.CallGraphEntry;
+import io.github.dddplus.ast.model.KeyModelEntry;
 import lombok.Data;
 
 import java.util.*;
@@ -47,6 +48,15 @@ public class CallGraphReport {
     }
 
     public void register(String callerClazz, String callerMethod, String calleeClazz, String calleeMethod) {
+        if (!model.getKeyModelReport().containsActor(calleeClazz)) {
+            // 被调用的方法不是我们标注的，例如 BigDecimal::add
+            return;
+        }
+
+        KeyModelEntry keyModelEntry = model.getKeyModelReport().keyModelEntryOfActor(calleeClazz);
+        if (!keyModelEntry.hasKeyMethod(calleeMethod)) {
+            keyModelEntry.registerMethodFodCallGraph(calleeMethod);
+        }
         entries.add(new CallGraphEntry(callerClazz, callerMethod, calleeClazz, calleeMethod));
     }
 

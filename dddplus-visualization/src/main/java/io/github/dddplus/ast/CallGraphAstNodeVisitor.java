@@ -5,11 +5,14 @@
  */
 package io.github.dddplus.ast;
 
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.expr.MethodReferenceExpr;
+import com.github.javaparser.ast.expr.TypeExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
@@ -22,9 +25,7 @@ import io.github.dddplus.ast.report.CallGraphReport;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 class CallGraphAstNodeVisitor extends VoidVisitorAdapter<CallGraphReport> {
@@ -41,6 +42,35 @@ class CallGraphAstNodeVisitor extends VoidVisitorAdapter<CallGraphReport> {
     }
 
     @Override
+    public void visit(final MethodReferenceExpr methodReferenceExpr, final CallGraphReport report) {
+        super.visit(methodReferenceExpr, report);
+
+        if (!(methodReferenceExpr.getScope() instanceof TypeExpr)) {
+            return;
+        }
+
+        Optional<Node> parentNode = methodReferenceExpr.getParentNode();
+        if (!parentNode.isPresent() || !(parentNode.get() instanceof MethodCallExpr)) {
+            return;
+        }
+
+        MethodCallExpr methodCallExpr = (MethodCallExpr) parentNode.get();
+        MethodDeclaration accessorMethod = methodCallExpr.findAncestor(MethodDeclaration.class).get();
+        ClassOrInterfaceDeclaration accessorClazz = accessorMethod.findAncestor(ClassOrInterfaceDeclaration.class).orElse(null);
+        if (accessorClazz == null) {
+            return;
+        }
+
+        // chained method invocation
+        // items.stream().map(OrderLine::expectedQty).reduce(BigDecimal.ZERO, BigDecimal::add)
+        final String methodName = methodReferenceExpr.getIdentifier();
+        final TypeExpr declaredClazz = (TypeExpr) methodReferenceExpr.getScope();
+
+        report.register(accessorClazz.getNameAsString(), accessorMethod.getNameAsString(),
+                declaredClazz.getTypeAsString(), methodName);
+    }
+
+    @Override
     public void visit(final MethodCallExpr methodCallExpr, final CallGraphReport report) {
         super.visit(methodCallExpr, report);
 
@@ -51,24 +81,9 @@ class CallGraphAstNodeVisitor extends VoidVisitorAdapter<CallGraphReport> {
             return;
         }
 
-        List<String> chainedMethodInvocations = new ArrayList<>();
-        while (scope != null && scope instanceof MethodCallExpr) {
-            // 方法调用是链式的
-            // items.stream().map(OrderLine::expectedQty).reduce(BigDecimal.ZERO, BigDecimal::add)
-            // methodCallExpr只能visit到两个node: map, reduce，访问不到expectedQty
-            chainedMethodInvocations.add(((MethodCallExpr) scope).getNameAsString() + "()");
-
-            scope = ((MethodCallExpr) scope).getScope().orElse(null);
-        }
-        if (chainedMethodInvocations.size() > 0) {
-            Collections.reverse(chainedMethodInvocations);
-            log.warn("method:{} with chained method invocation: {}", methodName,
-                    String.join(".", chainedMethodInvocations));
-        }
-
         SymbolReference<ResolvedMethodDeclaration> methodDeclaration;
         try {
-            methodDeclaration = javaParserFacade.solve(methodCallExpr);
+            methodDeclaration = javaParserFacade.solve(methodCallExpr, true);
         } catch (Exception ignored) {
             log.warn("method:{} {}", methodCallExpr.getNameAsString(), ignored.getMessage());
             return;
@@ -98,7 +113,8 @@ class CallGraphAstNodeVisitor extends VoidVisitorAdapter<CallGraphReport> {
             accessorClassName = accessorClazz.getNameAsString();
         }
 
-        report.register(accessorClassName, accessorMethod.getNameAsString(), finalDeclarationClazz, methodName);
+        report.register(accessorClassName, accessorMethod.getNameAsString(),
+                finalDeclarationClazz, methodName);
     }
 
 }
