@@ -29,7 +29,6 @@ import ddd.plus.showcase.wms.infrastructure.domain.task.TaskManager;
 import io.github.dddplus.dsl.KeyUsecase;
 import io.github.dddplus.model.IApplicationService;
 import io.github.dddplus.runtime.DDD;
-import io.github.dddplus.sre.KeyApi;
 import io.github.design.ContainerNo;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -207,7 +206,6 @@ public class CheckingAppService implements IApplicationService {
      * 复核装箱一体化：按货品维度.
      */
     @KeyUsecase(in = {"skuNo", "qty"})
-    @KeyApi(tp99 = 100)
     public ApiResponse<Void> checkBySku(@Valid CheckBySkuRequest request) throws WmsException {
         WarehouseNo warehouseNo = WarehouseNo.of(request.getWarehouseNo());
         Operator operator = Operator.of(request.getOperatorNo());
