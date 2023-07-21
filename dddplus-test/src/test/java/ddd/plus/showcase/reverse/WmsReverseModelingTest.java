@@ -1,8 +1,8 @@
 package ddd.plus.showcase.reverse;
 
 import io.github.dddplus.ast.*;
-import io.github.dddplus.ast.report.EncapsulationReport;
 import io.github.dddplus.ast.view.CallGraphRenderer;
+import io.github.dddplus.ast.view.EncapsulationRenderer;
 import io.github.dddplus.ast.view.PlainTextRenderer;
 import io.github.dddplus.ast.view.PlantUmlRenderer;
 import org.junit.jupiter.api.Disabled;
@@ -76,10 +76,13 @@ class WmsReverseModelingTest {
 
     @Test
     void generateEncapsulationReport() throws IOException {
-        EncapsulationReport report = new DomainModelAnalyzer()
+        ReverseEngineeringModel model = new DomainModelAnalyzer()
                 .scan(root)
                 .analyzeEncapsulation(domainLayerFilter);
-        report.dump(new File("../doc/encapsulation.txt"));
+        new EncapsulationRenderer()
+                .build(model)
+                .targetFilename("../doc/encapsulation.txt")
+                .render();
     }
 
     @Test

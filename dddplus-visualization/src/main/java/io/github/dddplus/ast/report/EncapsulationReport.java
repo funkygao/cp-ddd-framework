@@ -1,9 +1,5 @@
 package io.github.dddplus.ast.report;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -23,13 +19,7 @@ public class EncapsulationReport {
         result.get(classInfo).add(methodInfo);
     }
 
-    public void dump(File file) throws IOException {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            writer.append(content());
-        }
-    }
-
-    private String content() {
+    public String content() {
         StringBuilder sb = new StringBuilder();
         for (String classInfo : result.keySet()) {
             sb.append(classInfo).append(NEWLINE);

@@ -2,7 +2,6 @@ package io.github.dddplus.ast;
 
 import io.github.dddplus.ast.algorithm.JaccardModelSimilarity;
 import io.github.dddplus.ast.model.*;
-import io.github.dddplus.ast.report.EncapsulationReport;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -54,19 +53,19 @@ public class DomainModelAnalyzer {
         return this;
     }
 
-    public ReverseEngineeringModel analyze() {
-        return analyze(null);
-    }
-
-    public EncapsulationReport analyzeEncapsulation(FileWalker.Filter filter) {
+    public ReverseEngineeringModel analyzeEncapsulation(FileWalker.Filter filter) {
+        ReverseEngineeringModel model = new ReverseEngineeringModel();
         FileWalker.Filter actualFilter = new ActualFilter(filter);
-        EncapsulationReport report = new EncapsulationReport();
         for (File dir : dirs) {
             new FileWalker(actualFilter, (level, path, file) -> {
-                new PublicMethodAstNodeVisitor().visit(FileWalker.silentParse(file), report);
+                new PublicMethodAstNodeVisitor().visit(FileWalker.silentParse(file), model.getEncapsulationReport());
             }).walkFrom(dir);
         }
-        return report;
+        return model;
+    }
+
+    public ReverseEngineeringModel analyze() {
+        return analyze(null);
     }
 
     public ReverseEngineeringModel analyze(FileWalker.Filter filter) {

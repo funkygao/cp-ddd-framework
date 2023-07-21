@@ -38,6 +38,7 @@ public class ReverseEngineeringModel {
     private ClassMethodReport classMethodReport = new ClassMethodReport(this);
     private ModelDebtReport modelDebtReport = new ModelDebtReport(this);
     private CallGraphReport callGraphReport = new CallGraphReport(this);
+    private EncapsulationReport encapsulationReport = new EncapsulationReport();
 
     public List<SimilarityEntry> sortedSimilarities() {
         Collections.sort(similarities, Comparator.comparing(SimilarityEntry::getSimilarity));
