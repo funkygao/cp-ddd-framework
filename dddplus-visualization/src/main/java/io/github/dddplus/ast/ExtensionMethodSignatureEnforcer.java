@@ -35,7 +35,6 @@ public class ExtensionMethodSignatureEnforcer {
             }).walkFrom(dir);
         }
 
-        // 查找继承了IFoo接口的所有接口
         for (CompilationUnit compilationUnit : compilationUnits) {
             List<TypeDeclaration<?>> clazzs = compilationUnit.getTypes();
             for (TypeDeclaration<?> clazz : clazzs) {
