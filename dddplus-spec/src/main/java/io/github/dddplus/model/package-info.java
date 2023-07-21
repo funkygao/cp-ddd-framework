@@ -34,6 +34,12 @@
  * <li>形而上指抽象的、超越感性的、理性的世界，即我们所不能感知到的世界，是一种高级的、本质的、普遍的存在</li>
  * </ul>
  * <p>抽象，是指从具体的事物中主动抛弃非核心细节从而提取出共性的概念或特征，形成一个更为一般化的简化表示，同时向程序员提供最相关的信息。做抽象需要善于归纳和总结，辨别共性和差异.</p>
+ * <ul>Insight
+ * <li>Technical solutions built for specific business problems are not reusable in a fluid business landscape</li>
+ * <li>We encounter different behaviours for the same entity more often than we encounter new entities</li>
+ * <li>Since platform service are unaware of the products built on top of them, they should ideally not have code to invoke those components directly</li>
+ * <li>Changes to business will either result in ever increasing “if-else” or recurring rewrites. It is difficult to change behaviour of the system without touching core codebase</li>
+ * </ul>
  * @see <a href="https://enterprisecraftsmanship.com/posts/domain-model-purity-completeness/">DDD Entity Trilemma</a>
  */
 package io.github.dddplus.model;
