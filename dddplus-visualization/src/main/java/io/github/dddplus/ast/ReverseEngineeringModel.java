@@ -1,3 +1,8 @@
+/*
+ * Copyright DDDplus Authors.
+ *
+ * Licensed under the Apache License version 2.0, available at http://www.apache.org/licenses/LICENSE-2.0
+ */
 package io.github.dddplus.ast;
 
 import io.github.dddplus.ast.model.AggregateEntry;
@@ -13,15 +18,7 @@ import java.util.*;
  * 逆向模型.
  *
  * <p>模型与程序语言主要的区别不在于图形化，也不在于抽象的程度，而在于表达方式突破了程序设计语言“单一顺序/一维”的限制，模型可以更容易和直接地表达复杂的多维结构.</p>
- * <pre>
- * RelationEntry
- * KeyEventEntry
- * AggregateEntry
- *     KeyElementEntry
- *         KeyBehaviorEntry
- *         KeyRuleEntry
- *         KeyFlowEntry
- * </pre>
+ * <p>通过AST分析，把代码变成结构化数据.</p>
  */
 @Getter
 public class ReverseEngineeringModel {
