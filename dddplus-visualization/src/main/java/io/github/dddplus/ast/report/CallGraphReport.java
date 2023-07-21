@@ -27,18 +27,23 @@ public class CallGraphReport {
         return entries;
     }
 
-    public Collection<Record> calleeRecords() {
-        Map<String, Record> map = new TreeMap<>();
+    private Set<String> calleeClasses() {
+        Set<String> r = new TreeSet<>();
         for (CallGraphEntry entry : entries) {
-            final String calleeClazz = entry.getCalleeClazz();
-            if (!map.containsKey(calleeClazz)) {
-                map.put(entry.getCalleeClazz(), new Record(calleeClazz));
-            }
-
-            map.get(calleeClazz).addMethod(entry.getCalleeMethod());
+            r.add(entry.getCalleeClazz());
         }
+        return r;
+    }
 
-        return map.values();
+    public Collection<Record> calleeRecords() {
+        List<Record> records = new ArrayList<>();
+        for (String calleeClass : calleeClasses()) {
+            Record record = new Record(calleeClass);
+            record.addMethods(model.getKeyModelReport().keyModelEntryOfActor(calleeClass).keyMethods());
+
+            records.add(record);
+        }
+        return records;
     }
 
     public void register(String callerClazz, String callerMethod, String calleeClazz, String calleeMethod) {
@@ -54,8 +59,8 @@ public class CallGraphReport {
             this.clazz = clazz;
         }
 
-        void addMethod(String method) {
-            methods.add(method);
+        void addMethods(Set<String> methods) {
+            this.methods.addAll(methods);
         }
     }
 }

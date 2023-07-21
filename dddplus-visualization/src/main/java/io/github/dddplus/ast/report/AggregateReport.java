@@ -27,10 +27,6 @@ public class AggregateReport {
         this.model = model;
     }
 
-    public int size() {
-        return aggregateEntries.size();
-    }
-
     public AggregateEntry get(int index) {
         return aggregateEntries.get(index);
     }

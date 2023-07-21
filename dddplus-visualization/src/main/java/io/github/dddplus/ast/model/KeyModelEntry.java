@@ -54,6 +54,20 @@ public class KeyModelEntry {
         return false;
     }
 
+    public Set<String> keyMethods() {
+        Set<String> s = new TreeSet<>();
+        for (KeyBehaviorEntry entry : keyBehaviorEntries) {
+            s.add(entry.getMethodName());
+        }
+        for (KeyRuleEntry entry : keyRuleEntries) {
+            s.add(entry.getMethodName());
+        }
+        for (KeyFlowEntry entry : keyFlowEntries) {
+            s.add(entry.getMethodName());
+        }
+        return s;
+    }
+
     public int methodDensity() {
         return keyBehaviorEntries.size() + keyRuleEntries.size() + keyFlowEntries.size();
     }
