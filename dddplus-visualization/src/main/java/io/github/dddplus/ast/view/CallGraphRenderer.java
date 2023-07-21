@@ -1,3 +1,8 @@
+/*
+ * Copyright DDDplus Authors.
+ *
+ * Licensed under the Apache License version 2.0, available at http://www.apache.org/licenses/LICENSE-2.0
+ */
 package io.github.dddplus.ast.view;
 
 import io.github.dddplus.ast.ReverseEngineeringModel;
@@ -13,6 +18,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * DSL -> Reverse Engineering Model -> method call -> dot DSL.
+ */
 public class CallGraphRenderer implements IModelRenderer<CallGraphRenderer> {
     private CallGraphReport callGraphReport;
     private String targetDotFilename;
