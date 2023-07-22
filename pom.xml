@@ -129,7 +129,7 @@ under the License.
                             <packages>io.github.dddplus.annotation:io.github.dddplus.runtime*:io.github.dddplus.plugin</packages>
                         </group>
                         <group>
-                            <title>DDDplus Mavn Plugin</title>
+                            <title>DDDplus Maven Plugin</title>
                             <packages>io.github.dddplus.maven*</packages>
                         </group>
                         <group>
