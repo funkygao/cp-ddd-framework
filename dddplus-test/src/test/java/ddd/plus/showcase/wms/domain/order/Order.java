@@ -9,6 +9,7 @@ import ddd.plus.showcase.wms.domain.order.dict.OrderType;
 import ddd.plus.showcase.wms.domain.order.dict.ProductionStatus;
 import ddd.plus.showcase.wms.domain.order.event.OrderCheckedEvent;
 import ddd.plus.showcase.wms.domain.order.hint.OrderCheckedHint;
+import ddd.plus.showcase.wms.domain.order.hint.OrderShippedHint;
 import ddd.plus.showcase.wms.domain.pack.Pack;
 import ddd.plus.showcase.wms.domain.pack.PackBag;
 import ddd.plus.showcase.wms.domain.pack.WaybillNo;
@@ -51,6 +52,7 @@ public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainM
 
     @KeyElement(types = KeyElement.Type.Lifecycle, byType = true)
     private OrderStatus status;
+    @Getter
     @KeyElement(types = KeyElement.Type.Lifecycle, byType = true)
     private ProductionStatus productionStatus;
 
@@ -108,6 +110,16 @@ public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainM
         dirty(new OrderCheckedHint(this));
 
         eventPublisher.publish(new OrderCheckedEvent(orderNo.value(), warehouseNo.value()));
+    }
+
+    @KeyBehavior
+    public void ship(Operator operator) {
+        productionStatus = ProductionStatus.Shipped;
+        lastOperator = operator;
+
+        // 回传上游系统
+        dirty(new OrderShippedHint(this));
+
     }
 
     public OrderOfPresale asPresale() {

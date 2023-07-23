@@ -7,7 +7,12 @@ import ddd.plus.showcase.wms.domain.common.Uuid;
 import ddd.plus.showcase.wms.domain.order.IOrderRepository;
 import ddd.plus.showcase.wms.domain.order.Order;
 import ddd.plus.showcase.wms.domain.order.OrderBagCanceled;
-import ddd.plus.showcase.wms.domain.task.*;
+import ddd.plus.showcase.wms.domain.ship.IShipRepository;
+import ddd.plus.showcase.wms.domain.ship.ShipManifest;
+import ddd.plus.showcase.wms.domain.task.ITaskRepository;
+import ddd.plus.showcase.wms.domain.task.Task;
+import ddd.plus.showcase.wms.domain.task.TaskOfContainerPending;
+import ddd.plus.showcase.wms.domain.task.TaskOfOrderPending;
 import io.github.dddplus.model.IUnitOfWork;
 import lombok.NonNull;
 import lombok.Setter;
@@ -23,6 +28,7 @@ public class UnitOfWork implements IUnitOfWork {
     private ITaskRepository taskRepository;
     private IOrderRepository orderRepository;
     private ICartonRepository cartonRepository;
+    private IShipRepository shipRepository;
 
     @Transactional(rollbackFor = Exception.class)
     public void persist(@NonNull Task task, @NonNull Carton carton) {
@@ -58,6 +64,12 @@ public class UnitOfWork implements IUnitOfWork {
 
         taskRepository.insert(task);
         orderRepository.switchToCanceledStatus(canceledBag);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void persist(@NonNull ShipManifest shipManifest, @NonNull Order order) {
+        shipRepository.save(shipManifest);
+        orderRepository.save(order);
     }
 
 }

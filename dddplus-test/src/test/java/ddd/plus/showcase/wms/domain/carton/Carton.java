@@ -49,6 +49,7 @@ import java.util.List;
 public class Carton extends BaseAggregateRoot<Carton> implements IUnboundedDomainModel, ICarton {
     @Getter
     private Long id;
+    @Getter
     private CartonNo cartonNo;
 
     @KeyRelation(whom = Task.class, type = KeyRelation.Type.BelongTo)
