@@ -12,11 +12,12 @@ digraph G {
    ContainerBag [label="<ContainerBag> ContainerBag|<orderNoSet> orderNoSet|<confirmQty> confirmQty|<totalQty> totalQty|<totalPendingQty> totalPendingQty|<totalSku> totalSku"];
    ContainerItem [label="<ContainerItem> ContainerItem|<getExpectedQty> getExpectedQty|<getPendingQty> getPendingQty|<diffQty> diffQty|<getSku> getSku"];
    ContainerItemBag [label="<ContainerItemBag> ContainerItemBag|<totalQty> totalQty|<totalPendingQty> totalPendingQty|<totalSku> totalSku"];
-   Order [label="<Order> Order|<getOrderNo> getOrderNo|<recommendPackQty> recommendPackQty|<checkedBy> checkedBy|<totalExpectedQty> totalExpectedQty|<recommendedPlatform> recommendedPlatform"];
+   Order [label="<Order> Order|<getOrderNo> getOrderNo|<recommendPackQty> recommendPackQty|<checkedBy> checkedBy|<ship> ship|<totalExpectedQty> totalExpectedQty|<recommendedPlatform> recommendedPlatform"];
    OrderBag [label="<OrderBag> OrderBag|<canceledBag> canceledBag|<consumableCostFirst> consumableCostFirst|<orderNos> orderNos"];
    OrderCartons [label="<OrderCartons> OrderCartons|<totalCartonizedQty> totalCartonizedQty"];
    OrderLine [label="<OrderLine> OrderLine|<getOrderLineNo> getOrderLineNo|<expectedQty> expectedQty"];
    OrderLineBag [label="<OrderLineBag> OrderLineBag|<orderLineNos> orderLineNos|<totalExpectedQty> totalExpectedQty"];
+   ShipManifest [label="<ShipManifest> ShipManifest|<ship> ship|<loadForOrder> loadForOrder"];
    Sku [label="<Sku> Sku|<value> value"];
    Task [label="<Task> Task|<claimedWith> claimedWith|<orderNoSet> orderNoSet|<containerBag> containerBag|<confirmQty> confirmQty|<totalQty> totalQty|<isEmpty> isEmpty|<totalPendingQty> totalPendingQty|<plan> plan|<removeOrderLines> removeOrderLines|<totalSku> totalSku"];
    TaskBag [label="<TaskBag> TaskBag|<totalQty> totalQty|<totalCheckedQty> totalCheckedQty|<totalPendingQty> totalPendingQty|<platforms> platforms"];
@@ -63,6 +64,9 @@ digraph G {
    OrderNotFullyCartonized -> OrderCartons:totalCartonizedQty
    Order:recommendPackQty -> OrderCartons:totalCartonizedQty
    Order:totalExpectedQty -> OrderLineBag:totalExpectedQty
+   ShippingAppService -> ShipManifest:loadForOrder
+   ShippingAppService -> ShipManifest:ship
+   ShippingAppService -> Order:ship
    TaskBag:totalPendingQty -> ContainerBag:totalPendingQty
    TaskBag:totalPendingQty -> Task:containerBag
    TaskBag:totalQty -> ContainerBag:totalQty

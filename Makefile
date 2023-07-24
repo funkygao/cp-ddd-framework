@@ -46,6 +46,9 @@ visualize-wms-model:
 	@mvn io.github.dddplus:dddplus-maven-plugin:ModelingVisualization -DrootDir=./dddplus-test/src/test/java/ddd/plus/showcase/wms/ -DcallGraph=./doc/callgraph.dot -DplantUml=./doc/wms.svg
 	@dot -Tsvg doc/callgraph.dot -o doc/callgraph.svg
 
+enforce-dddplus:
+	@mvn io.github.dddplus:dddplus-maven-plugin:DDDPlusEnforcer -DrootPackage=ddd.plus.showcase.wms
+
 release-javadoc:install
 	@git checkout gh-pages
 	@git pull

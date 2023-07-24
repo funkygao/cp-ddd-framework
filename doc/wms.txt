@@ -1,5 +1,5 @@
-标注覆盖率：Class(64/59.4%) Method(116/53.4%) Property(252/21.0%) Statement(222)
-模型债：孤儿流程:3 相似类:5 聚合分布[类:(Mean:5.00 SD:3.96) 方法:(Mean:6.86 SD:9.25)]
+标注覆盖率：Class(72/54.2%) Method(126/52.4%) Property(275/19.6%) Statement(235)
+模型债：孤儿流程:3 相似类:7 聚合分布[类:(Mean:5.00 SD:3.96) 方法:(Mean:7.29 SD:9.11)]
 <<Aggregate: 出库复核任务>>
 Container 拣货容器.
    [属性]
@@ -53,16 +53,20 @@ Pack 包裹.
    Lifecycle     PackStatus
    Billing       totalVolume totalWeight
 <<Aggregate: 发货>>
+OrderCarton 一个订单的装车清单：纸箱维度.
+   [属性]
+   Structural    OrderNo
 OrderLineManifest 发货的订单行，货品维度.
    [属性]
    Structural    OrderLineNo Sku
-OrderManifest 一个订单的装车清单.
-   [属性]
-   Structural    OrderNo
-ShippingManifest 一辆货车的装车清单.
+ShipManifest 一辆货车的装车清单.
    [属性]
    Structural    Carrier
+   Lifecycle     shipStatus
    Reserved      extInfo
+   [行为]
+      loadForOrder(CartonBag,Order) 为订单装车
+      ship() 发货.
 <<Aggregate: 复核报差异>>
 ContainerDiff 复核过程中发现的容器差异.
    [属性]
@@ -85,6 +89,7 @@ Order 客户的出库单.
    [行为]
       checkedBy(Operator) 
       recommendPackQty() 推荐该订单使用几个包裹：Pack.
+      ship() 
    [规则]
       totalExpectedQty() 
       recommendedPlatform() 该订单已经被推荐到哪一个复核台.
@@ -122,7 +127,7 @@ Carton 纸箱，它会成为包裹.
    [规则]
       cartonizationRule() 装箱规则，利用gateway延迟加载，规则也是规约.
    [流程]
-      recommendFor(ICarton,ITask) 为纸箱推荐耗材 ConsumableExt
+      recommendFor(ICarton,ITask) 为纸箱推荐耗材 IConsumableExt
       processMyEvent(CartonFulfilledEvent)  CartonFulfilledEventHandler
 CartonItem 纸箱里个某一种sku.
    [属性]
@@ -164,6 +169,8 @@ CheckingAppService
    fulfillCarton(cartonNo,consumables,orderNo) 复核员把拣货容器的货品放入箱，并使用耗材以便运输安全，该过程发现箱已满.
 FlowAutoExecutionConsumer
    on CartonFulfilledEvent 根据不同消息自动链式触发流程自动化执行
+ShippingAppService
+   shipOrder() 整单发货.
 TaskSubmittedConsumer
    消费接收复核任务(json)
 <<跨聚合复杂流程>>
@@ -172,10 +179,13 @@ ObFlowAutomator
 <<领域事件>>
    CartonFulfilledEvent 
    OrderCheckedEvent 
+   OrderShippedEvent 
    TaskAcceptedEvent 
 <<相似类>>
 CartonItem OrderLineManifest 60
+ObFlowAutomator UnitOfWork 60
 OrderLine OrderLineManifest 60
 ContainerDiffItem OrderLineManifest 67
-ObFlowAutomator UnitOfWork 75
+OrderCheckedEvent OrderShippedEvent 100
+OrderCheckedHint OrderShippedHint 100
 OrderLineNo TaskOfOrderPending 100

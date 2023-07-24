@@ -25,12 +25,20 @@ Order 客户的出库单.
     constraint
     recommendPackQty: 推荐该订单使用几个包裹：Pack.
     checkedBy
+    ship
     asPresale
     totalExpectedQty
     recommendedPlatform: 该订单已经被推荐到哪一个复核台.
     cartons
     packs
     tasks
+OrderAllowShipExtPledge
+    allow
+OrderAllowShipExtPresale
+    allow
+OrderAllowShipExtRouter
+    allowShip
+    defaultExtension
 OrderBag
     satisfy
     consumableCostFirst
@@ -43,6 +51,9 @@ OrderOfPresale 出库单的预售场景.
     isFinalPaid: 尾款已结清?
 PackBag
     isOnePack
+ShipManifest 一辆货车的装车清单.
+    ship: 发货.
+    loadForOrder: 为订单装车
 Task 复核任务.
     plan: 初始化时指定复核生产计划
     claimedWith
