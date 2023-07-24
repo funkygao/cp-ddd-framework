@@ -26,7 +26,7 @@ A warehouse management system (WMS) consists of software and processes that allo
 
 ### 3.1 Reverse modeling
 
-![](/doc/wms.svg)
+![](/doc/showcase/wms.svg)
 
 [The reverse modeling source code ->](reverse/WmsReverseModelingTest.java)
 
@@ -39,9 +39,9 @@ A warehouse management system (WMS) consists of software and processes that allo
 
 ### 3.3 Call graph
 
-![](/doc/callgraph.svg)
+![](/doc/showcase/callgraph.svg)
 
 ### 3.4 Tech details
 
-![](/doc/tech.svg)
+![](/doc/showcase/tech.svg)
 
