@@ -42,6 +42,10 @@ setver:
 	@echo mvn versions:set -DnewVersion=VER
 	@echo mvn versions:commit
 
+visualize-wms-model:
+	@mvn io.github.dddplus:dddplus-maven-plugin:ModelingVisualization -DrootDir=./dddplus-test/src/test/java/ddd/plus/showcase/wms/ -DcallGraph=./doc/callgraph.dot -DplantUml=./doc/wms.svg
+	@dot -Tsvg doc/callgraph.dot -o doc/callgraph.svg
+
 release-javadoc:install
 	@git checkout gh-pages
 	@git pull

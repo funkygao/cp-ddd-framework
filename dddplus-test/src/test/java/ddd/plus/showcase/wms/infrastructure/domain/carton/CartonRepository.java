@@ -10,6 +10,7 @@ import ddd.plus.showcase.wms.domain.common.WmsException;
 import ddd.plus.showcase.wms.domain.common.gateway.IInventoryGateway;
 import ddd.plus.showcase.wms.domain.common.gateway.IRuleGateway;
 import ddd.plus.showcase.wms.domain.common.publisher.IEventPublisher;
+import ddd.plus.showcase.wms.domain.order.OrderNo;
 import ddd.plus.showcase.wms.infrastructure.dao.Dao;
 import ddd.plus.showcase.wms.infrastructure.domain.carton.association.CartonOrderDb;
 import ddd.plus.showcase.wms.infrastructure.domain.carton.association.CartonPalletDb;
@@ -41,6 +42,11 @@ public class CartonRepository implements ICartonRepository {
         carton.injects(new CartonOrderDb(carton, dao), new CartonPalletDb(carton.getPalletNo(), dao),
                 ruleGateway, inventoryGateway, kafkaProducer);
         return carton;
+    }
+
+    @Override
+    public CartonBag mustGet(OrderNo orderNo, WarehouseNo warehouseNo) throws WmsException {
+        return null;
     }
 
     /**

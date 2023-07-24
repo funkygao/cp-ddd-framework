@@ -10,7 +10,7 @@ public enum ProductionStatus {
     Cartonized, // 已装箱
     Loaded, // 已装车
     Shipping, // 正在发货
-    Shipped, // 已发货
+    Shipped, // 已发货，订单的终态
 
 
 }

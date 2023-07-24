@@ -8,7 +8,9 @@ import ddd.plus.showcase.wms.domain.order.dict.OrderStatus;
 import ddd.plus.showcase.wms.domain.order.dict.OrderType;
 import ddd.plus.showcase.wms.domain.order.dict.ProductionStatus;
 import ddd.plus.showcase.wms.domain.order.event.OrderCheckedEvent;
+import ddd.plus.showcase.wms.domain.order.event.OrderShippedEvent;
 import ddd.plus.showcase.wms.domain.order.hint.OrderCheckedHint;
+import ddd.plus.showcase.wms.domain.order.hint.OrderShippedHint;
 import ddd.plus.showcase.wms.domain.pack.Pack;
 import ddd.plus.showcase.wms.domain.pack.PackBag;
 import ddd.plus.showcase.wms.domain.pack.WaybillNo;
@@ -38,7 +40,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Slf4j
 @Getter(AccessLevel.PACKAGE)
-public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainModel, OrderExchangeKey {
+public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainModel, OrderExchangeKey, IOrder {
     private Long id;
 
     @Getter
@@ -48,9 +50,12 @@ public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainM
     private WarehouseNo warehouseNo;
     private LocalDateTime updateTime;
     private Operator lastOperator;
+    @Getter
+    private String feature; // 特征向量
 
     @KeyElement(types = KeyElement.Type.Lifecycle, byType = true)
     private OrderStatus status;
+    @Getter
     @KeyElement(types = KeyElement.Type.Lifecycle, byType = true)
     private ProductionStatus productionStatus;
 
@@ -108,6 +113,17 @@ public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainM
         dirty(new OrderCheckedHint(this));
 
         eventPublisher.publish(new OrderCheckedEvent(orderNo.value(), warehouseNo.value()));
+    }
+
+    @KeyBehavior
+    public void ship(Operator operator) {
+        productionStatus = ProductionStatus.Shipped;
+        lastOperator = operator;
+
+        dirty(new OrderShippedHint(this));
+
+        // 回传上游系统
+        eventPublisher.publish(new OrderShippedEvent(orderNo.value(), warehouseNo.value()));
     }
 
     public OrderOfPresale asPresale() {
