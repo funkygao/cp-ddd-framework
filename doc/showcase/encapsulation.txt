@@ -49,6 +49,8 @@ OrderConstraint 出库单生产约束，是业务规则.
     allowManualCheck
 OrderOfPresale 出库单的预售场景.
     isFinalPaid: 尾款已结清?
+Pack 包裹.
+    fromCarton
 PackBag
     isOnePack
 ShipManifest 一辆货车的装车清单.

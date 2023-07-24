@@ -1,5 +1,5 @@
-标注覆盖率：Class(72/54.2%) Method(126/52.4%) Property(275/19.6%) Statement(235)
-模型债：孤儿流程:3 相似类:7 聚合分布[类:(Mean:5.00 SD:3.96) 方法:(Mean:7.29 SD:9.11)]
+标注覆盖率：Class(72/54.2%) Method(127/52.8%) Property(276/19.9%) Statement(236)
+模型债：孤儿流程:3 相似类:7 聚合分布[类:(Mean:5.00 SD:3.96) 方法:(Mean:7.43 SD:8.98)]
 <<Aggregate: 出库复核任务>>
 Container 拣货容器.
    [属性]
@@ -51,7 +51,10 @@ Pack 包裹.
    [属性]
    Structural    OrderNo WaybillNo
    Lifecycle     PackStatus
+   Contextual    cartonNo/包裹明细采集场景
    Billing       totalVolume totalWeight
+   [行为]
+      fromCarton() 
 <<Aggregate: 发货>>
 OrderCarton 一个订单的装车清单：纸箱维度.
    [属性]
