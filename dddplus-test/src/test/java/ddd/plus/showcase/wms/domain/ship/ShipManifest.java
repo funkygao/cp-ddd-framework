@@ -4,6 +4,7 @@ import ddd.plus.showcase.wms.domain.common.Carrier;
 import ddd.plus.showcase.wms.domain.common.WmsException;
 import ddd.plus.showcase.wms.domain.ship.dict.ShipStatus;
 import ddd.plus.showcase.wms.domain.ship.hint.ShippedHint;
+import io.github.dddplus.dsl.KeyBehavior;
 import io.github.dddplus.dsl.KeyElement;
 import io.github.dddplus.dsl.KeyRelation;
 import io.github.dddplus.model.BaseAggregateRoot;

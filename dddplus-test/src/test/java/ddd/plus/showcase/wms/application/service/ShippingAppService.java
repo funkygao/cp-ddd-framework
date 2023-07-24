@@ -15,12 +15,14 @@ import ddd.plus.showcase.wms.domain.order.OrderNo;
 import ddd.plus.showcase.wms.domain.order.spec.OrderShippingReady;
 import ddd.plus.showcase.wms.domain.ship.OrderCarton;
 import ddd.plus.showcase.wms.domain.ship.ShipManifest;
+import io.github.dddplus.dsl.KeyUsecase;
 import io.github.dddplus.model.IApplicationService;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 import java.util.List;
 
 /**
