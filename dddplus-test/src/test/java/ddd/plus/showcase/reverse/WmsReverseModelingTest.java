@@ -1,5 +1,6 @@
 package ddd.plus.showcase.reverse;
 
+import io.github.dddplus.DDDPlusEnforcer;
 import io.github.dddplus.ast.*;
 import io.github.dddplus.ast.enforcer.AllowedAccessorsEnforcer;
 import io.github.dddplus.ast.enforcer.ExtensionMethodSignatureEnforcer;
@@ -99,6 +100,13 @@ class WmsReverseModelingTest {
     void enforceExtensionMethodSignature() throws IOException {
         new ExtensionMethodSignatureEnforcer()
                 .scan(root)
+                .enforce();
+    }
+
+    @Test
+    void dddplusEnforce() {
+        new DDDPlusEnforcer()
+                .scanPackages("ddd.plus.showcase.wms")
                 .enforce();
     }
 

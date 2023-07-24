@@ -7,7 +7,7 @@ import ddd.plus.showcase.wms.domain.task.ITask;
 import io.github.dddplus.dsl.KeyFlow;
 import io.github.dddplus.ext.IDomainExtension;
 
-public interface ConsumableExt extends IDomainExtension {
+public interface IConsumableExt extends IDomainExtension {
 
     /**
      * 为纸箱推荐耗材

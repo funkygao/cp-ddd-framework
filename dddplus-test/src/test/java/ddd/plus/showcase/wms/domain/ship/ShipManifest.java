@@ -1,7 +1,10 @@
 package ddd.plus.showcase.wms.domain.ship;
 
+import ddd.plus.showcase.wms.domain.carton.Carton;
+import ddd.plus.showcase.wms.domain.carton.CartonBag;
 import ddd.plus.showcase.wms.domain.common.Carrier;
 import ddd.plus.showcase.wms.domain.common.WmsException;
+import ddd.plus.showcase.wms.domain.order.Order;
 import ddd.plus.showcase.wms.domain.ship.dict.ShipStatus;
 import ddd.plus.showcase.wms.domain.ship.hint.ShippedHint;
 import io.github.dddplus.dsl.KeyBehavior;
@@ -13,6 +16,7 @@ import io.github.dddplus.model.spcification.Notification;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -51,9 +55,21 @@ public class ShipManifest extends BaseAggregateRoot<ShipManifest> implements IUn
      * 发货.
      */
     @KeyBehavior
-    public void ship(List<OrderCarton> orderCartons) {
-        this.orderCartons = orderCartons;
+    public void ship() {
         shipStatus = ShipStatus.Shipped;
         dirty(new ShippedHint(this));
+    }
+
+    // 为订单装车
+    @KeyBehavior(useRawArgs = true)
+    public void loadForOrder(Order order, CartonBag cartonBag) {
+        List<OrderCarton> orderCartons = new ArrayList<>(cartonBag.size());
+        for (Carton carton : cartonBag.items()) {
+            OrderCarton orderCarton = new OrderCarton();
+            orderCarton.setCartonNo(carton.getCartonNo());
+            orderCarton.setOrderNo(order.getOrderNo());
+            // ...
+        }
+        this.orderCartons = orderCartons;
     }
 }
