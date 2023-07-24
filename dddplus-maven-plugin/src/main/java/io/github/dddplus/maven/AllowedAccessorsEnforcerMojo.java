@@ -9,26 +9,39 @@ import io.github.dddplus.ast.enforcer.AllowedAccessorsEnforcer;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 
 import java.io.File;
 
 /**
  * 确保{@link io.github.dddplus.model.encapsulation.AllowedAccessors}规范执行.
- * <p>
- * <p>Usage:</p>
- * {@code mvn io.github.dddplus:dddplus-maven-plugin:AllowedAccessorsEnforcer}
  */
 @Mojo(name = "AllowedAccessorsEnforcer", aggregator = true)
 public class AllowedAccessorsEnforcerMojo extends AbstractMojo {
 
+    /**
+     * Colon separated directories.
+     */
     @Parameter(property = "rootDir")
-    private File rootDir;
+    private String rootDir;
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
+        if (rootDir == null) {
+            getLog().error("Usage: mvn io.github.dddplus:dddplus-maven-plugin:AllowedAccessorsEnforcer -DrootDir=${colon separated dirs}");
+            return;
+        }
+
+        String[] dirPaths = rootDir.split(";");
+        File[] dirs = new File[dirPaths.length];
+        for (int i = 0; i < dirPaths.length; i++) {
+            dirs[i] = new File(dirPaths[i]);
+        }
         new AllowedAccessorsEnforcer()
-                .scan(rootDir)
+                .scan(dirs)
                 .enforce(null);
 
+        getLog().info("AllowedAccessorsEnforcer result: OK");
     }
 }
