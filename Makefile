@@ -47,9 +47,7 @@ visualize-wms-model:
 	@dot -Tsvg doc/callgraph.dot -o doc/callgraph.svg
 
 enforce-wms-model:
-	@mvn io.github.dddplus:dddplus-maven-plugin:DDDPlusEnforcer -DrootPackage=ddd.plus.showcase.wms
-	@mvn io.github.dddplus:dddplus-maven-plugin:AllowedAccessorsEnforcer -DrootDir=./dddplus-test/src/test/java/ddd/plus/showcase/wms/
-	@mvn io.github.dddplus:dddplus-maven-plugin:ExtensionMethodSignatureEnforcer -DrootDir=./dddplus-test/src/test/java/ddd/plus/showcase/wms/
+	@mvn io.github.dddplus:dddplus-maven-plugin:Enforcer -DrootPackage=ddd.plus.showcase.wms -DrootDir=./dddplus-test/src/test/java/ddd/plus/showcase/wms/
 
 release-javadoc:install
 	@git checkout gh-pages

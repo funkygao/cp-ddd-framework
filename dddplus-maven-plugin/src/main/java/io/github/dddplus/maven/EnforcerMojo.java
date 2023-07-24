@@ -5,6 +5,8 @@
  */
 package io.github.dddplus.maven;
 
+import io.github.dddplus.DDDPlusEnforcer;
+import io.github.dddplus.ast.enforcer.AllowedAccessorsEnforcer;
 import io.github.dddplus.ast.enforcer.ExtensionMethodSignatureEnforcer;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -16,10 +18,13 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * 检查{@link io.github.dddplus.ext.IDomainExtension}方法签名的返回值不能primitive type，避免NPE.
+ * 确保{@link io.github.dddplus.DDDPlusEnforcer}, {@link AllowedAccessorsEnforcer}，{@link ExtensionMethodSignatureEnforcer}规范被执行.
  */
-@Mojo(name = "ExtensionMethodSignatureEnforcer", aggregator = true)
-public class ExtensionMethodSignatureEnforcerMojo extends AbstractMojo {
+@Mojo(name = "Enforcer", aggregator = true)
+public class EnforcerMojo extends AbstractMojo {
+
+    @Parameter(property = "rootPackage")
+    private String rootPackage;
 
     /**
      * Colon separated directories.
@@ -29,10 +34,15 @@ public class ExtensionMethodSignatureEnforcerMojo extends AbstractMojo {
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
-        if (rootDir == null) {
-            getLog().error("Usage: mvn io.github.dddplus:dddplus-maven-plugin:ExtensionMethodSignatureEnforcer -DrootDir=${colon separated dirs}");
+        if (rootPackage == null || rootDir == null) {
+            getLog().error("Usage: mvn io.github.dddplus:dddplus-maven-plugin:Enforcer -DrootPackage=${pkgname} -DrootDir=${colon separated dirs}");
             return;
         }
+
+        new DDDPlusEnforcer()
+                .scanPackages(rootPackage)
+                .enforce();
+        getLog().info("DDDPlusEnforcer OK");
 
         try {
             String[] dirPaths = rootDir.split(";");
@@ -40,11 +50,16 @@ public class ExtensionMethodSignatureEnforcerMojo extends AbstractMojo {
             for (int i = 0; i < dirPaths.length; i++) {
                 dirs[i] = new File(dirPaths[i]);
             }
+
             new ExtensionMethodSignatureEnforcer()
                     .scan(dirs)
                     .enforce();
+            getLog().info("ExtensionMethodSignatureEnforcer OK");
 
-            getLog().info("ExtensionMethodSignatureEnforcer result: OK");
+            new AllowedAccessorsEnforcer()
+                    .scan(dirs)
+                    .enforce(null);
+            getLog().info("AllowedAccessorsEnforcer OK");
         } catch (IOException e) {
             throw new MojoExecutionException(e.getMessage(), e);
         }
