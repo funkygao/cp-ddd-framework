@@ -8,6 +8,8 @@ package io.github.dddplus.maven;
 import io.github.dddplus.ast.DomainModelAnalyzer;
 import io.github.dddplus.ast.model.ReverseEngineeringModel;
 import io.github.dddplus.ast.view.CallGraphRenderer;
+import io.github.dddplus.ast.view.EncapsulationRenderer;
+import io.github.dddplus.ast.view.PlainTextRenderer;
 import io.github.dddplus.ast.view.PlantUmlRenderer;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -19,7 +21,7 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * 业务模型可视化：逆向业务模型，Call graph.
+ * 业务模型可视化.
  */
 @Mojo(name = "ModelingVisualization", aggregator = true)
 public class ModelingVisualizationMojo extends AbstractMojo {
@@ -34,11 +36,15 @@ public class ModelingVisualizationMojo extends AbstractMojo {
     private String targetCallGraph;
     @Parameter(property = "plantUml")
     private String targetPlantUml;
+    @Parameter(property = "encapsulation")
+    private String targetEncapsulation;
+    @Parameter(property = "textModel")
+    private String targetTextModel;
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
-        if (rootDir == null || targetCallGraph == null || targetCallGraph == null) {
-            getLog().error("Usage: mvn io.github.dddplus:dddplus-maven-plugin:ModelingVisualization -DrootDir=xx -DcallGraph=xx -DplantUml=xx");
+        if (rootDir == null) {
+            getLog().error("Usage: mvn io.github.dddplus:dddplus-maven-plugin:ModelingVisualization -DrootDir=xx -DcallGraph=xx.dot -DplantUml=xx.svg -Dencapsulation=xxx.txt -DtextModel=xx.txt");
             return;
         }
 
@@ -52,21 +58,39 @@ public class ModelingVisualizationMojo extends AbstractMojo {
             ReverseEngineeringModel model = new DomainModelAnalyzer()
                     .scan(dirs)
                     .analyze();
-            new PlantUmlRenderer()
-                    .direction(PlantUmlRenderer.Direction.TopToBottom)
-                    .skinParamPolyline()
-                    .build(model)
-                    .classDiagramSvgFilename(targetPlantUml)
-                    .render();
-            new CallGraphRenderer()
-                    .targetDotFilename(targetCallGraph)
-                    .splines("polyline")
-                    .build(model)
-                    .render();
+            if (targetPlantUml != null) {
+                new PlantUmlRenderer()
+                        .direction(PlantUmlRenderer.Direction.TopToBottom)
+                        .skinParamPolyline()
+                        .build(model)
+                        .classDiagramSvgFilename(targetPlantUml)
+                        .render();
+            }
+            if (targetCallGraph != null) {
+                new CallGraphRenderer()
+                        .targetDotFilename(targetCallGraph)
+                        .splines("polyline")
+                        .build(model)
+                        .render();
+            }
+            if (targetEncapsulation != null) {
+                new EncapsulationRenderer()
+                        .build(model)
+                        .targetFilename(targetEncapsulation)
+                        .render();
+            }
+            if (targetTextModel != null) {
+                new PlainTextRenderer()
+                        .showRawSimilarities()
+                        .targetFilename(targetTextModel)
+                        .build(model)
+                        .render();
+            }
 
-            getLog().info("dot -Tsvg callgraph.dot -o callgraph.svg");
+            getLog().info("OK");
         } catch (IOException e) {
             throw new MojoExecutionException(e.getMessage(), e);
         }
     }
+
 }
