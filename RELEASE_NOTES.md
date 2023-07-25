@@ -1,10 +1,22 @@
-## Release Notes - DDDplus - 2.0.1-SNAPSHOT
+## Release Notes - DDDplus - 2.0.2
+
+* Feature
+   * 
+
+## Release Notes - DDDplus - 2.0.1-RELEASE
+
+* 新功能
+   * 从代码里自动生成方法的call graph图，用于评估代码改动的影响范围和风险，从宏观上对代码结构和类之间关系有了洞察
+      * 由于只关注DSL标注的方法，去除了噪音，这样的图才不会混乱
+   * 从代码里自动分析包之间的交叉引用图，用于发现不合理依赖关系，包的设计是否合理
+   * 新增dddplus-maven-plugin模块，把静态检查、代码可视化等功能集成到maven插件里，方便使用和集成
+   * 扩展点的方法返回值不能为primitive type，以避免NPE，之前只是规范说明，目前增加了ExtensionMethodSignatureEnforcer，结合CI可以彻底杜绝此类问题
 
 * Feature
    * add ExtensionMethodSignatureEnforcer to avoid NPE risk
    * call graph complete and exact click through
-   - add dddplus-maven-plugin
-   - visualize package cross reference in svg file
+   * add dddplus-maven-plugin
+   * visualize package cross reference in svg file
 
 ## Release Notes - DDDplus - 2.0.0-SNAPSHOT
 
