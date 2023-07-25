@@ -15,8 +15,8 @@ import com.github.javaparser.ast.expr.MethodReferenceExpr;
 import com.github.javaparser.ast.expr.TypeExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
@@ -68,6 +68,10 @@ class CallGraphAstNodeVisitor extends VoidVisitorAdapter<CallGraphReport> {
 
         report.register(accessorClazz.getNameAsString(), accessorMethod.getNameAsString(),
                 declaredClazz.getTypeAsString(), methodName);
+
+        final String callerPackage = JavaParserUtil.packageName(accessorClazz);
+        ResolvedMethodDeclaration calleeMethodDeclaration = javaParserFacade.solve(methodReferenceExpr).getCorrespondingDeclaration();
+        report.addPackageCrossRef(callerPackage, calleeMethodDeclaration.getPackageName());
     }
 
     @Override

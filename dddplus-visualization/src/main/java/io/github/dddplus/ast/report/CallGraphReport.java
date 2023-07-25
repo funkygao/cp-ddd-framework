@@ -77,6 +77,11 @@ public class CallGraphReport {
     }
 
     public void addPackageCrossRef(String callerPackage, String calleePackage) {
+        if (callerPackage.equals(calleePackage)) {
+            // only add cross packages relations
+            return;
+        }
+
         packageCrossRefEntries.add(new PackageCrossRefEntry(callerPackage, calleePackage));
     }
 
