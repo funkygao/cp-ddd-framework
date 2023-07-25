@@ -42,6 +42,13 @@ setver:
 	@echo mvn versions:set -DnewVersion=VER
 	@echo mvn versions:commit
 
+visualize-showcase:
+	@mvn io.github.dddplus:dddplus-maven-plugin:visualize -DrootDir=./dddplus-test/src/test/java/ddd/plus/showcase/wms/ -DpkgRef=doc/showcase/pkgref.dot -DcallGraph=./doc/showcase/callgraph.dot -DplantUml=./doc/showcase/wms.svg -Dencapsulation=./doc/showcase/encapsulation.txt -DtextModel=./doc/showcase/wms.txt
+	@dot -Tsvg doc/showcase/callgraph.dot -o doc/showcase/callgraph.svg
+
+enforce-showcase:
+	@mvn io.github.dddplus:dddplus-maven-plugin:enforce -DrootPackage=ddd.plus.showcase.wms -DrootDir=./dddplus-test/src/test/java/ddd/plus/showcase/wms/
+
 release-javadoc:install
 	@git checkout gh-pages
 	@git pull

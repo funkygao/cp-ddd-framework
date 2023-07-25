@@ -6,7 +6,7 @@
 
 [![CI](https://github.com/funkygao/cp-ddd-framework/workflows/CI/badge.svg?branch=master)](https://github.com/funkygao/cp-ddd-framework/actions?query=branch%3Amaster+workflow%3ACI)
 [![Javadoc](https://img.shields.io/badge/javadoc-Reference-blue.svg)](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/)
-[![Mavenn Central](https://img.shields.io/maven-central/v/io.github.dddplus/dddplus.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:io.github.dddplus)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.dddplus/dddplus.svg?label=Maven%20Central)](https://central.sonatype.com/namespace/io.github.dddplus)
 ![Requirement](https://img.shields.io/badge/JDK-8+-blue.svg)
 [![Coverage Status](https://img.shields.io/codecov/c/github/funkygao/cp-ddd-framework.svg)](https://codecov.io/gh/funkygao/cp-ddd-framework)
 [![Mentioned in Awesome DDD](https://awesome.re/mentioned-badge.svg)](https://github.com/heynickc/awesome-ddd#jvm)
@@ -28,19 +28,19 @@ DDDplus是轻量级DDD补充和增强的框架。
 >它捕获了DDD里缺失的构造块；它为正向和逆向业务建模赋能；它把代码可视化成完整的业务知识；它连接了(架构师，产品经理，业务方，管理者)；它把(业务分析，设计，设计评审，开发实现，代码评审，测试)成为一个正反馈的闭环；它方便构建面向扩展的灵活平台架构；它纠正了常见的DDD的错误理解。
 
 简单地讲，DDDplus的`plus`最关键核心是：
-- 支持多种路由模式的[扩展点机制](/dddplus-spec/src/main/java/io/github/dddplus/ext)，应对复杂业务场景
 - [扩充](/dddplus-spec/src/main/java/io/github/dddplus/model)了DDD的building blocks，解决DDD落地难问题
 - 逆向建模的[DSL](/dddplus-spec/src/main/java/io/github/dddplus/dsl)，让代码可视化地表达完整业务模型
+- 支持多种路由模式的[扩展点机制](/dddplus-spec/src/main/java/io/github/dddplus/ext)，应对复杂业务场景
 
 ## 项目现状
 
 应用于多个大型核心复杂项目的生产环境。
 
-## 快速入门
-
-### 项目演示
+## 项目演示
 
 [正向和逆向建模的项目演示 ->](dddplus-test/src/test/java/ddd/plus/showcase/README.zh-cn.md)
+
+## 快速入门
 
 ### 正向建模
 

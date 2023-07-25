@@ -7,7 +7,7 @@ import io.github.dddplus.ext.IPolicy;
 import lombok.NonNull;
 
 @Policy
-public class ConsumableExtPolicy implements IPolicy<ConsumableExt, Task> {
+public class ConsumableExtPolicy implements IPolicy<IConsumableExt, Task> {
     public static final String CostFirst = "成本优先";
     public static final String SpeedFirst = "速度优先";
 

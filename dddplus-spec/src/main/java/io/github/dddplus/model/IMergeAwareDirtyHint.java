@@ -69,5 +69,5 @@ public interface IMergeAwareDirtyHint<ID extends Serializable> extends IDirtyHin
      *
      * @param thatHint {@link DirtyMemento}里现存的该hint
      */
-    void onMerge(IDirtyHint thatHint);
+    default void onMerge(IDirtyHint thatHint) {}
 }

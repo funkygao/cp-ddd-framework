@@ -1,3 +1,8 @@
+/*
+ * Copyright DDDplus Authors.
+ *
+ * Licensed under the Apache License version 2.0, available at http://www.apache.org/licenses/LICENSE-2.0
+ */
 package io.github.dddplus.ast.algorithm;
 
 import java.util.ArrayList;
@@ -12,6 +17,8 @@ public class KMeans {
     private static final int NUM_CLUSTERS = 3;
     private static final int MAX_ITERATIONS = 100;
     private static final double THRESHOLD = 0.001;
+
+    private static Random random = new Random();
 
     private int numClusters; // 簇的数量
     private int maxIterations; // 最大迭代次数
@@ -30,7 +37,6 @@ public class KMeans {
     public List<List<String>> cluster(List<double[]> vectors, List<String> labels, Map<String, double[]> vectorMap) {
         // 随机初始化簇中心
         List<double[]> centroids = new ArrayList<>();
-        Random random = new Random();
         for (int i = 0; i < numClusters; i++) {
             centroids.add(vectors.get(random.nextInt(vectors.size())));
         }

@@ -21,7 +21,7 @@ under the License.
     <groupId>io.github.dddplus</groupId>
     <artifactId>dddplus</artifactId>
     <packaging>pom</packaging>
-    <version>2.0.0</version>
+    <version>2.0.1-SNAPSHOT</version>
     <name>DDDplus Framework</name>
     <description>A lightweight flexible development framework for complex business architecture with full ecosystem!</description>
     <url>https://github.com/dddplus/dddplus</url>
@@ -34,11 +34,13 @@ under the License.
         <module>dddplus-enforce</module>
         <module>dddplus-mybatis</module>
         <module>dddplus-visualization</module>
+        <module>dddplus-maven-plugin</module>
     </modules>
 
     <properties>
         <!-- build configs -->
         <jdk.version>1.8</jdk.version>
+        <maven.version>3.8.1</maven.version>
         <maven.compiler.failOnError>true</maven.compiler.failOnError>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.jacoco.version>0.8.5</maven.jacoco.version>
@@ -81,7 +83,7 @@ under the License.
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>${maven.version}</version>
                 <configuration>
                     <source>${jdk.version}</source>
                     <target>${jdk.version}</target>
@@ -125,6 +127,10 @@ under the License.
                         <group>
                             <title>Runtime Implementation Details</title>
                             <packages>io.github.dddplus.annotation:io.github.dddplus.runtime*:io.github.dddplus.plugin</packages>
+                        </group>
+                        <group>
+                            <title>DDDplus Maven Plugin</title>
+                            <packages>io.github.dddplus.maven*</packages>
                         </group>
                         <group>
                             <title>Integration With MyBatis</title>

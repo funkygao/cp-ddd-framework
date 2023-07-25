@@ -1,7 +1,14 @@
+/*
+ * Copyright DDDplus Authors.
+ *
+ * Licensed under the Apache License version 2.0, available at http://www.apache.org/licenses/LICENSE-2.0
+ */
 package io.github.dddplus.ast.report;
 
-import io.github.dddplus.ast.ReverseEngineeringModel;
+import io.github.dddplus.ast.model.PackageCrossRefEntry;
+import io.github.dddplus.ast.model.ReverseEngineeringModel;
 import io.github.dddplus.ast.model.CallGraphEntry;
+import io.github.dddplus.ast.model.KeyModelEntry;
 import lombok.Data;
 
 import java.util.*;
@@ -13,6 +20,7 @@ import java.util.*;
 public class CallGraphReport {
     private final ReverseEngineeringModel model;
     private List<CallGraphEntry> entries = new ArrayList<>();
+    private Set<PackageCrossRefEntry> packageCrossRefEntries = new TreeSet<>();
 
     public CallGraphReport(ReverseEngineeringModel model) {
         this.model = model;
@@ -22,22 +30,62 @@ public class CallGraphReport {
         return model.getKeyModelReport().hasKeyMethod(declarationClazz, methodName);
     }
 
-    public Collection<Record> calleeRecords() {
-        Map<String, Record> map = new HashMap<>();
+    public List<CallGraphEntry> sortedEntries() {
+        Collections.sort(entries, Comparator.comparing(c -> c.getCallerClazz() + c.getCallerMethod()));
+        return entries;
+    }
+
+    public boolean isKeyModel(String clazz) {
+        return model.getKeyModelReport().containsActor(clazz);
+    }
+
+    private Set<String> calleeClasses() {
+        Set<String> r = new TreeSet<>();
         for (CallGraphEntry entry : entries) {
-            final String calleeClazz = entry.getCalleeClazz();
-            if (!map.containsKey(calleeClazz)) {
-                map.put(entry.getCalleeClazz(), new Record(calleeClazz));
-            }
-
-            map.get(calleeClazz).addMethod(entry.getCalleeMethod());
+            r.add(entry.getCalleeClazz());
         }
+        return r;
+    }
 
-        return map.values();
+    public Collection<Record> calleeRecords() {
+        List<Record> records = new ArrayList<>();
+        for (String calleeClass : calleeClasses()) {
+            Record record = new Record(calleeClass);
+            record.addMethods(model.getKeyModelReport().keyModelEntryOfActor(calleeClass).realKeyMethods());
+
+            records.add(record);
+        }
+        return records;
     }
 
     public void register(String callerClazz, String callerMethod, String calleeClazz, String calleeMethod) {
+        if (!model.getKeyModelReport().containsActor(calleeClazz)) {
+            // 被调用的方法不是我们标注的，例如 BigDecimal::add
+            return;
+        }
+
+        KeyModelEntry calleeModel = model.getKeyModelReport().keyModelEntryOfActor(calleeClazz);
+        if (!calleeModel.hasKeyMethod(calleeMethod)) {
+            calleeModel.registerMethodFodCallGraph(calleeMethod);
+        }
+        KeyModelEntry callerModel = model.getKeyModelReport().keyModelEntryOfActor(callerClazz);
+        if (callerModel != null && !callerModel.hasKeyMethod(callerMethod)) {
+            callerModel.registerMethodFodCallGraph(callerMethod);
+        }
+
         entries.add(new CallGraphEntry(callerClazz, callerMethod, calleeClazz, calleeMethod));
+    }
+
+    public void addPackageCrossRef(String callerPackage, String calleePackage) {
+        if (callerPackage.equals(calleePackage)) {
+            // only add cross packages relations
+            return;
+        }
+        if (!model.hasPackage(calleePackage) || !model.hasPackage(callerPackage)) {
+            return;
+        }
+
+        packageCrossRefEntries.add(new PackageCrossRefEntry(callerPackage, calleePackage));
     }
 
     @Data
@@ -49,8 +97,8 @@ public class CallGraphReport {
             this.clazz = clazz;
         }
 
-        void addMethod(String method) {
-            methods.add(method);
+        void addMethods(Set<String> methods) {
+            this.methods.addAll(methods);
         }
     }
 }

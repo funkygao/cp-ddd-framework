@@ -2,6 +2,7 @@ package io.github.dddplus.ast;
 
 import io.github.dddplus.ast.model.AggregateEntry;
 import io.github.dddplus.ast.model.KeyModelEntry;
+import io.github.dddplus.ast.model.ReverseEngineeringModel;
 import io.github.dddplus.ast.view.PlainTextRenderer;
 import io.github.dddplus.ast.view.PlantUmlRenderer;
 import io.github.dddplus.runtime.registry.IntegrationTest;

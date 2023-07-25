@@ -37,7 +37,7 @@ Languages： [English](README.md) | 中文
 
 ### 1.3 逆向模型
 
-![](/doc/wms.svg)
+![](/doc/showcase/wms.svg)
 
 [逆向建模源代码 ->](reverse/WmsReverseModelingTest.java)
 
@@ -50,11 +50,16 @@ Languages： [English](README.md) | 中文
 
 ### 1.5 领域行为调用关系
 
-![](/doc/callgraph.svg)
+![](/doc/showcase/callgraph.svg)
 
-### 1.6 技术细节
 
-![](/doc/tech.svg)
+### 1.6 包间依赖图
+
+![](/doc/showcase/pkgref.svg)
+
+### 1.7 技术细节
+
+![](/doc/showcase/tech.svg)
 
 ## 二、订单履约中台
 

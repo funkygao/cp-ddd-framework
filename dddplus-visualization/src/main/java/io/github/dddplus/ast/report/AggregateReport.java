@@ -5,7 +5,7 @@
  */
 package io.github.dddplus.ast.report;
 
-import io.github.dddplus.ast.ReverseEngineeringModel;
+import io.github.dddplus.ast.model.ReverseEngineeringModel;
 import io.github.dddplus.ast.model.AggregateEntry;
 import io.github.dddplus.ast.model.KeyModelEntry;
 import lombok.Data;
@@ -25,10 +25,6 @@ public class AggregateReport {
 
     public AggregateReport(ReverseEngineeringModel model) {
         this.model = model;
-    }
-
-    public int size() {
-        return aggregateEntries.size();
     }
 
     public AggregateEntry get(int index) {

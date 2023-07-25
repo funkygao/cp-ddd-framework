@@ -1,0 +1,88 @@
+Carton 纸箱，它会成为包裹.
+    installConsumables: 向纸箱添加耗材.
+    deductConsumableInventory
+    cartonizationRule: 装箱规则，利用gateway延迟加载，规则也是规约.
+    bindOrder
+    putOnPallet
+    transferFrom
+    fulfill: 箱满了
+    order
+CartonBag
+    fulfill
+    putOnPallet
+    deductConsumableInventory
+CheckResult 复核结果.
+    items: 本次复核完的货品清单
+ConsumableExtCostFirst
+    recommendFor
+ConsumableExtPolicy
+    extensionCode
+ConsumableExtSpeedFirst
+    recommendFor
+ContainerDiff 复核过程中发现的容器差异.
+    register: 登记差异.
+Order 客户的出库单.
+    constraint
+    recommendPackQty: 推荐该订单使用几个包裹：Pack.
+    checkedBy
+    ship
+    asPresale
+    totalExpectedQty
+    recommendedPlatform: 该订单已经被推荐到哪一个复核台.
+    cartons
+    packs
+    tasks
+OrderAllowShipExtPledge
+    allow
+OrderAllowShipExtPresale
+    allow
+OrderAllowShipExtRouter
+    allowShip
+    defaultExtension
+OrderBag
+    satisfy
+    consumableCostFirst
+    canceledBag: 当前出库单集合里哪些已经在单据中心里被客户取消了.
+OrderBagCanceled 被客户取消的订单集合.
+    orderLineNos
+OrderConstraint 出库单生产约束，是业务规则.
+    allowManualCheck
+OrderOfPresale 出库单的预售场景.
+    isFinalPaid: 尾款已结清?
+Pack 包裹.
+    fromCarton
+PackBag
+    isOnePack
+ShipManifest 一辆货车的装车清单.
+    ship: 发货
+    loadForOrder: 为订单装车
+Task 复核任务.
+    plan: 初始化时指定复核生产计划
+    claimedWith
+    removeOrderLines
+    confirmQty: can be killed with lombok @Delegate
+    mode
+    isEmpty
+    enrichSkuInfo: 补全货品信息，例如供货商、类目、品牌等
+    accept
+    totalSku
+    totalQty
+    totalPendingQty
+    orderNoSet
+    status
+    containerBag
+    orders
+    cartons
+TaskBag 一些复核任务.
+    totalQty: 总要货量.
+    totalPendingQty: 待复核货品总数
+    totalCheckedQty: 已复核货品总数
+    platforms: 这些复核任务在哪些复核台.
+TaskOfContainerPending
+    unbounded
+    confirmQty
+TaskOfOrderPending
+    confirmQty
+Uuid 通用的业务幂等对象.
+    exists
+    assureVaryOnce: 确保自身状态改变只发生一次.

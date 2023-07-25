@@ -24,6 +24,7 @@ public class WmsException extends RuntimeException {
         InvalidOrderNo("1102"),
         TaskNotFound("1103"),
         ContainerNotFound("1104"),
+        ShipNotAllowed("1105"),
         ;
 
         private String errorCode;

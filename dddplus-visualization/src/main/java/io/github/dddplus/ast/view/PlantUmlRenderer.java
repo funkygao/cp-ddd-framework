@@ -1,7 +1,12 @@
+/*
+ * Copyright DDDplus Authors.
+ *
+ * Licensed under the Apache License version 2.0, available at http://www.apache.org/licenses/LICENSE-2.0
+ */
 package io.github.dddplus.ast.view;
 
 import com.google.common.collect.Sets;
-import io.github.dddplus.ast.ReverseEngineeringModel;
+import io.github.dddplus.ast.model.ReverseEngineeringModel;
 import io.github.dddplus.ast.model.*;
 import io.github.dddplus.ast.report.ClassMethodReport;
 import io.github.dddplus.ast.report.CoverageReport;
@@ -285,13 +290,13 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
             if (keyModelEntry.hasJavadoc()) {
                 append(String.format(" <<(R,#FF7700) %s>> ", keyModelEntry.getJavadoc()));
             } else {
-                append(String.format(" <<(R,#FF7700)>> "));
+                append(" <<(R,#FF7700)>> ");
             }
         } else if (keyModelEntry.isBehaviorOnly()) {
             if (keyModelEntry.hasJavadoc()) {
                 append(String.format(" <<(B,#9197DB) %s>> ", keyModelEntry.getJavadoc()));
             } else {
-                append(String.format(" <<(B,#9197DB)>> "));
+                append(" <<(B,#9197DB)>> ");
             }
         } else {
             if (keyModelEntry.hasJavadoc()) {

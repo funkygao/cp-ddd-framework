@@ -143,7 +143,7 @@ public final class Container {
 
     File createLocalFile(@NonNull URL jarUrl) throws IOException {
         String prefix = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date());
-        String suffix = jarUrl.getPath().substring(jarUrl.getPath().lastIndexOf("/") + 1);
+        String suffix = jarUrl.getPath().substring(jarUrl.getPath().lastIndexOf('/') + 1);
         return File.createTempFile(prefix, "." + suffix);
     }
 

@@ -1,8 +1,14 @@
 package ddd.plus.showcase.reverse;
 
-import io.github.dddplus.ast.*;
-import io.github.dddplus.ast.report.EncapsulationReport;
+import io.github.dddplus.DDDPlusEnforcer;
+import io.github.dddplus.ast.DomainModelAnalyzer;
+import io.github.dddplus.ast.DomainModelAnalyzerTest;
+import io.github.dddplus.ast.FileWalker;
+import io.github.dddplus.ast.enforcer.AllowedAccessorsEnforcer;
+import io.github.dddplus.ast.enforcer.ExtensionMethodSignatureEnforcer;
+import io.github.dddplus.ast.model.ReverseEngineeringModel;
 import io.github.dddplus.ast.view.CallGraphRenderer;
+import io.github.dddplus.ast.view.EncapsulationRenderer;
 import io.github.dddplus.ast.view.PlainTextRenderer;
 import io.github.dddplus.ast.view.PlantUmlRenderer;
 import org.junit.jupiter.api.Disabled;
@@ -27,10 +33,19 @@ class WmsReverseModelingTest {
                 .direction(PlantUmlRenderer.Direction.TopToBottom)
                 .skinParamPolyline()
                 .build(model)
-                .classDiagramSvgFilename("../doc/wms.svg")
+                .classDiagramSvgFilename("../doc/showcase/wms.svg")
                 .render();
+    }
+
+    @Test
+    void callGraph() throws IOException {
+        ReverseEngineeringModel model = new DomainModelAnalyzer()
+                .scan(root)
+                .analyze(domainLayerFilter);
         new CallGraphRenderer()
-                .targetDotFilename("../doc/callgraph.dot")
+                .targetCallGraphDotFile("../doc/showcase/callgraph.dot")
+                .targetPackageCrossRefDotFile("../doc/showcase/pkgref.dot")
+                .splines("polyline")
                 .build(model)
                 .render();
     }
@@ -47,7 +62,7 @@ class WmsReverseModelingTest {
                 .disableCoverage()
                 .skinParamPolyline()
                 .build(model)
-                .classDiagramSvgFilename("../doc/tech.svg")
+                .classDiagramSvgFilename("../doc/showcase/tech.svg")
                 .render();
     }
 
@@ -61,17 +76,20 @@ class WmsReverseModelingTest {
         new PlainTextRenderer()
                 .showRawSimilarities()
                 .clustering()
-                .targetFilename("../doc/wms.txt")
+                .targetFilename("../doc/showcase/wms.txt")
                 .build(model)
                 .render();
     }
 
     @Test
     void generateEncapsulationReport() throws IOException {
-        EncapsulationReport report = new DomainModelAnalyzer()
+        ReverseEngineeringModel model = new DomainModelAnalyzer()
                 .scan(root)
                 .analyzeEncapsulation(domainLayerFilter);
-        report.dump(new File("../doc/encapsulation.txt"));
+        new EncapsulationRenderer()
+                .build(model)
+                .targetFilename("../doc/showcase/encapsulation.txt")
+                .render();
     }
 
     @Test
@@ -79,6 +97,20 @@ class WmsReverseModelingTest {
         new AllowedAccessorsEnforcer()
                 .scan(root)
                 .enforce(showcaseFilter);
+    }
+
+    @Test
+    void enforceExtensionMethodSignature() throws IOException {
+        new ExtensionMethodSignatureEnforcer()
+                .scan(root)
+                .enforce();
+    }
+
+    @Test
+    void dddplusEnforce() {
+        new DDDPlusEnforcer()
+                .scanPackages("ddd.plus.showcase.wms")
+                .enforce();
     }
 
     private static class DomainLayerFilter implements FileWalker.Filter {

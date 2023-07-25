@@ -30,6 +30,9 @@ public class KeyModelEntry {
     private transient List<KeyRuleEntry> keyRuleEntries = new ArrayList<>();
     private transient List<KeyFlowEntry> keyFlowEntries = new ArrayList<>();
 
+    // 这些方法本来没有通过DSL标注，但call graph时被调用，为了图的完整性临时增加这些节点
+    private Set<String> methodsForCallGraph = new HashSet<>();
+
     public KeyModelEntry(String className) {
         this.className = className;
         this.properties = new TreeMap<>();
@@ -52,6 +55,34 @@ public class KeyModelEntry {
             }
         }
         return false;
+    }
+
+    public void registerMethodFodCallGraph(String methodName) {
+        methodsForCallGraph.add(methodName);
+    }
+
+    public Set<String> realKeyMethods() {
+        Set<String> s = new TreeSet<>(methodsForCallGraph);
+        for (KeyBehaviorEntry entry : keyBehaviorEntries) {
+            s.add(entry.getMethodName());
+        }
+        for (KeyRuleEntry entry : keyRuleEntries) {
+            s.add(entry.getMethodName());
+        }
+        for (KeyFlowEntry entry : keyFlowEntries) {
+            /**
+             * class FooService {
+             *     @KeyFlow(actor = Order.class)
+             *     void bar() {}
+             * }
+             *
+             * 那么 Order里会记录该KeyFlowEntry，因此这里要排除
+             */
+            if (!entry.isOrphan()) {
+                s.add(entry.getMethodName());
+            }
+        }
+        return s;
     }
 
     public int methodDensity() {

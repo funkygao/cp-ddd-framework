@@ -20,13 +20,13 @@ A warehouse management system (WMS) consists of software and processes that allo
 
 ## 二、How to read the demo
 
->3.1(learn from reverse model) -> 3.2(learn code implementation from entry point) -> 3.3(domain object call graph) -> 3.4(tech details)
+>3.1(learn from reverse model) -> 3.2(learn code implementation from entry point) -> 3.3(domain object call graph) -> 3.5(tech details)
 
 ## 三、Details
 
 ### 3.1 Reverse modeling
 
-![](/doc/wms.svg)
+![](/doc/showcase/wms.svg)
 
 [The reverse modeling source code ->](reverse/WmsReverseModelingTest.java)
 
@@ -39,9 +39,13 @@ A warehouse management system (WMS) consists of software and processes that allo
 
 ### 3.3 Call graph
 
-![](/doc/callgraph.svg)
+![](/doc/showcase/callgraph.svg)
 
-### 3.4 Tech details
+### 3.4 Package reference graph
 
-![](/doc/tech.svg)
+![](/doc/showcase/pkgref.svg)
+
+### 3.5 Tech details
+
+![](/doc/showcase/tech.svg)
 

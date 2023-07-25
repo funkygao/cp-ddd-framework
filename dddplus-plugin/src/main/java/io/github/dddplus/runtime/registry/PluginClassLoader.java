@@ -91,13 +91,11 @@ final class PluginClassLoader extends URLClassLoader {
         } catch (ClassNotFoundException ignored) {
         }
 
-        // 如果Plugin加载器无法加载，fallback to 中台Container加载器
-        if (clazz == null) {
-            clazz = containerClassLoader.loadClass(className); // might throw ClassNotFoundException
-            if (clazz != null) {
-                log.debug("loaded {} with {}", className, containerClassLoader);
-                return clazz;
-            }
+        // Plugin加载器无法加载，fallback to 中台Container加载器
+        clazz = containerClassLoader.loadClass(className); // might throw ClassNotFoundException
+        if (clazz != null) {
+            log.debug("loaded {} with {}", className, containerClassLoader);
+            return clazz;
         }
 
         // null

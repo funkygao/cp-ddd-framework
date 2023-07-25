@@ -1,13 +1,14 @@
+/*
+ * Copyright DDDplus Authors.
+ *
+ * Licensed under the Apache License version 2.0, available at http://www.apache.org/licenses/LICENSE-2.0
+ */
 package io.github.dddplus.ast;
 
-import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.symbolsolver.JavaSymbolSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.PackageDeclaration;
 import io.github.dddplus.ast.algorithm.JaccardModelSimilarity;
 import io.github.dddplus.ast.model.*;
-import io.github.dddplus.ast.report.EncapsulationReport;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -59,23 +60,36 @@ public class DomainModelAnalyzer {
         return this;
     }
 
+    public ReverseEngineeringModel analyzeEncapsulation(FileWalker.Filter filter) {
+        ReverseEngineeringModel model = new ReverseEngineeringModel();
+        FileWalker.Filter actualFilter = new ActualFilter(filter);
+        for (File dir : dirs) {
+            new FileWalker(actualFilter, (level, path, file) -> {
+                new PublicMethodAstNodeVisitor().visit(FileWalker.silentParse(file), model.getEncapsulationReport());
+            }).walkFrom(dir);
+        }
+        return model;
+    }
+
     public ReverseEngineeringModel analyze() {
         return analyze(null);
     }
 
-    public EncapsulationReport analyzeEncapsulation(FileWalker.Filter filter) {
-        FileWalker.Filter actualFilter = new ActualFilter(filter);
-        EncapsulationReport report = new EncapsulationReport();
-        for (File dir : dirs) {
-            new FileWalker(actualFilter, (level, path, file) -> {
-                new PublicMethodAstNodeVisitor().visit(FileWalker.silentParse(file), report);
-            }).walkFrom(dir);
-        }
-        return report;
-    }
-
     public ReverseEngineeringModel analyze(FileWalker.Filter filter) {
         ReverseEngineeringModel model = new ReverseEngineeringModel();
+        // all the packages
+        List<CompilationUnit> compilationUnits = new ArrayList<>();
+        for (File dir : dirs) {
+            new FileWalker(new DomainModelAnalyzer.ActualFilter(null), (level, path, file) -> {
+                compilationUnits.add(FileWalker.silentParse(file));
+            }).walkFrom(dir);
+        }
+        for (CompilationUnit cu : compilationUnits) {
+            for (PackageDeclaration packageDeclaration : cu.findAll(PackageDeclaration.class)) {
+                model.registerPackage(packageDeclaration.getNameAsString());
+            }
+        }
+
         FileWalker.Filter actualFilter = new ActualFilter(filter);
         for (File dir : dirs) {
             log.debug("enter dir: {}", dir.getAbsolutePath());
@@ -140,7 +154,6 @@ public class DomainModelAnalyzer {
         JaccardModelSimilarity similarityAnalyzer = new JaccardModelSimilarity();
         List<KeyModelEntry> keyModelEntries = new ArrayList<>(model.getKeyModelReport().getData().values());
         for (int i = 0; i < keyModelEntries.size(); i++) {
-            log.debug("fan out similarity of {}", keyModelEntries.get(i).getClassName());
             for (int j = i + 1; j < keyModelEntries.size(); j++) {
                 KeyModelEntry model1 = keyModelEntries.get(i);
                 KeyModelEntry model2 = keyModelEntries.get(j);
@@ -162,7 +175,6 @@ public class DomainModelAnalyzer {
             log.debug("calculating raw models similarity");
             List<KeyModelEntry> rawModels = new ArrayList<>(model.getKeyModelReport().getRawModels().values());
             for (int i = 0; i < rawModels.size(); i++) {
-                log.debug("fan out similarity of raw model {}", rawModels.get(i).getClassName());
                 for (int j = i + 1; j < rawModels.size(); j++) {
                     KeyModelEntry model1 = rawModels.get(i);
                     KeyModelEntry model2 = rawModels.get(j);
@@ -235,27 +247,21 @@ public class DomainModelAnalyzer {
         }
 
         // call graph
-        // as we need to resolve the declaration class from MethodCallExpr, we need setup the symbol resolver
-        CombinedTypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(false));
-        for (File dir : dirs) {
-            typeSolver.add(new JavaParserTypeSolver(dir));
-        }
-        JavaSymbolSolver symbolSolver = new JavaSymbolSolver(typeSolver);
-        StaticJavaParser.getConfiguration().setSymbolResolver(symbolSolver);
+        CallGraphAstNodeVisitor callGraphAstNodeVisitor = new CallGraphAstNodeVisitor(dirs);
         for (File dir : dirs) {
             log.debug("parsing {}", CallGraphAstNodeVisitor.class.getSimpleName());
             new FileWalker(actualFilter, (level, path, file) -> {
-                new CallGraphAstNodeVisitor().visit(FileWalker.silentParse(file), model.getCallGraphReport());
+                callGraphAstNodeVisitor.visit(FileWalker.silentParse(file), model.getCallGraphReport());
             }).walkFrom(dir);
         }
 
         return model;
     }
 
-    static class ActualFilter implements FileWalker.Filter {
+    public static class ActualFilter implements FileWalker.Filter {
         private final FileWalker.Filter filter;
 
-        ActualFilter(FileWalker.Filter filter) {
+        public ActualFilter(FileWalker.Filter filter) {
             this.filter = filter;
         }
 

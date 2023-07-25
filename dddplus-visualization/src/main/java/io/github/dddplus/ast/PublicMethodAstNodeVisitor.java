@@ -1,3 +1,8 @@
+/*
+ * Copyright DDDplus Authors.
+ *
+ * Licensed under the Apache License version 2.0, available at http://www.apache.org/licenses/LICENSE-2.0
+ */
 package io.github.dddplus.ast;
 
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -59,7 +64,6 @@ public class PublicMethodAstNodeVisitor extends VoidVisitorAdapter<Encapsulation
         }
 
         String className = parentClass.getNameAsString();
-        log.debug("{}: {}", className, methodDeclaration.getNameAsString());
 
         if (!JavaParserUtil.isMethodPublic(parentClass, methodDeclaration)
                 || skipMethod(methodDeclaration, parentClass)) {
