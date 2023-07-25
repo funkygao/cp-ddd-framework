@@ -23,7 +23,7 @@ import java.io.IOException;
 /**
  * 业务模型可视化.
  */
-@Mojo(name = "ModelingVisualization", aggregator = true)
+@Mojo(name = "visualize", aggregator = true)
 public class ModelingVisualizationMojo extends AbstractMojo {
 
     /**
@@ -44,7 +44,7 @@ public class ModelingVisualizationMojo extends AbstractMojo {
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         if (rootDir == null) {
-            getLog().error("Usage: mvn io.github.dddplus:dddplus-maven-plugin:ModelingVisualization -DrootDir=xx -DcallGraph=xx.dot -DplantUml=xx.svg -Dencapsulation=xxx.txt -DtextModel=xx.txt");
+            getLog().error("Usage: mvn io.github.dddplus:dddplus-maven-plugin:visualize -DrootDir=xx -DcallGraph=xx.dot -DplantUml=xx.svg -Dencapsulation=xxx.txt -DtextModel=xx.txt");
             return;
         }
 

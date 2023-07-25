@@ -20,7 +20,7 @@ import java.io.IOException;
 /**
  * 确保{@link io.github.dddplus.DDDPlusEnforcer}, {@link AllowedAccessorsEnforcer}，{@link ExtensionMethodSignatureEnforcer}规范被执行.
  */
-@Mojo(name = "Enforcer", aggregator = true)
+@Mojo(name = "enforce", aggregator = true)
 public class EnforcerMojo extends AbstractMojo {
 
     @Parameter(property = "rootPackage")
@@ -35,7 +35,7 @@ public class EnforcerMojo extends AbstractMojo {
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         if (rootPackage == null || rootDir == null) {
-            getLog().error("Usage: mvn io.github.dddplus:dddplus-maven-plugin:Enforcer -DrootPackage=${pkgname} -DrootDir=${colon separated dirs}");
+            getLog().error("Usage: mvn io.github.dddplus:dddplus-maven-plugin:enforce -DrootPackage=${pkgname} -DrootDir=${colon separated dirs}");
             return;
         }
 

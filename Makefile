@@ -42,12 +42,12 @@ setver:
 	@echo mvn versions:set -DnewVersion=VER
 	@echo mvn versions:commit
 
-visualize-wms-model:
-	@mvn io.github.dddplus:dddplus-maven-plugin:ModelingVisualization -DrootDir=./dddplus-test/src/test/java/ddd/plus/showcase/wms/ -DcallGraph=./doc/showcase/callgraph.dot -DplantUml=./doc/showcase/wms.svg -Dencapsulation=./doc/showcase/encapsulation.txt -DtextModel=./doc/showcase/wms.txt
+visualize-showcase:
+	@mvn io.github.dddplus:dddplus-maven-plugin:visualize -DrootDir=./dddplus-test/src/test/java/ddd/plus/showcase/wms/ -DcallGraph=./doc/showcase/callgraph.dot -DplantUml=./doc/showcase/wms.svg -Dencapsulation=./doc/showcase/encapsulation.txt -DtextModel=./doc/showcase/wms.txt
 	@dot -Tsvg doc/showcase/callgraph.dot -o doc/showcase/callgraph.svg
 
-enforce-wms-model:
-	@mvn io.github.dddplus:dddplus-maven-plugin:Enforcer -DrootPackage=ddd.plus.showcase.wms -DrootDir=./dddplus-test/src/test/java/ddd/plus/showcase/wms/
+enforce-showcase:
+	@mvn io.github.dddplus:dddplus-maven-plugin:enforce -DrootPackage=ddd.plus.showcase.wms -DrootDir=./dddplus-test/src/test/java/ddd/plus/showcase/wms/
 
 release-javadoc:install
 	@git checkout gh-pages
