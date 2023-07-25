@@ -2,7 +2,7 @@
 
 <div align="center">
 
-轻量级DDD增强框架！
+DDDplus，轻量级DDD正向/逆向业务建模框架，支撑复杂业务系统的架构演化！
 
 [![CI](https://github.com/funkygao/cp-ddd-framework/workflows/CI/badge.svg?branch=master)](https://github.com/funkygao/cp-ddd-framework/actions?query=branch%3Amaster+workflow%3ACI)
 [![Javadoc](https://img.shields.io/badge/javadoc-Reference-blue.svg)](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/)
@@ -23,7 +23,13 @@ Languages： [English](README.md) | 中文
 
 ## DDDplus是什么
 
-DDDplus是轻量级DDD补充和增强的框架。
+DDDplus是轻量级DDD正向/逆向业务建模框架，支撑复杂业务系统的架构演化！
+
+软件开发不仅仅是业务交付的生产过程，本质上是系统化的知识工程，大型复杂软件开发的核心难点是如何处理隐藏在业务知识中的核心复杂度，除了清晰地理解业务诉求之外，还需要通过建模的方式对这种复杂度进行简化与精炼。
+
+作为软件交付最终产品的代码，由于具有(可运行，包含完全细节，演进过程完整追溯，自我修复)特点而成为业务的唯一事实真相，但代码如何以易于理解的形式直观反映业务知识一直是业界难题。
+
+DDDplus扩充了DDD，通过正向的DDD建模，以及基于DSL声明式标注从而让代码自动生成业务模型的逆向建模过程，实现了：代码与模型统一，统一语言，抑制熵增。
 
 >它捕获了DDD里缺失的构造块；它为正向和逆向业务建模赋能；它把代码可视化成完整的业务知识；它连接了(架构师，产品经理，业务方，管理者)；它把(业务分析，设计，设计评审，开发实现，代码评审，测试)成为一个正反馈的闭环；它方便构建面向扩展的灵活平台架构；它纠正了常见的DDD的错误理解。
 

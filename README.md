@@ -2,7 +2,7 @@
 
 <div align="center">
 
-A lightweight DDD(Domain Driven Design) Enhancement Framework for complex business architecture.
+A lightweight DDD(Domain Driven Design) enhancement framework for forward/reverse business modeling, supporting complex system architecture evolution!
 
 [![CI](https://github.com/funkygao/cp-ddd-framework/workflows/CI/badge.svg?branch=master)](https://github.com/funkygao/cp-ddd-framework/actions?query=branch%3Amaster+workflow%3ACI)
 [![Javadoc](https://img.shields.io/badge/javadoc-Reference-blue.svg)](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/)
@@ -23,7 +23,7 @@ Languages： English | [中文](README.zh-cn.md)
 
 ## What is DDDplus?
 
-DDDplus, originally cp-ddd-framework(cp means Central Platform：中台), is a lightweight DDD Enhancement Framework for complex business architecture. 
+DDDplus, originally cp-ddd-framework(cp means Central Platform：中台), is a lightweight DDD(Domain Driven Design) enhancement framework for forward/reverse business modeling, supporting complex system architecture evolution!
 
 >It captures DDD missing concepts and patches the building block. It empowers building domain model with forward and reverse modeling. It visualizes the complete domain knowledge from code. It connects frontline developers with (architect, product manager, business stakeholder, management team). It makes (analysis, design, design review, implementation, code review, test) a positive feedback closed-loop. It strengthens building extension oriented flexible software solution. It eliminates frequently encountered misunderstanding of DDD via thorough javadoc for each building block with detailed example.
 
