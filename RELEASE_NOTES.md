@@ -4,6 +4,7 @@
    * add ExtensionMethodSignatureEnforcer to avoid NPE risk
    * call graph complete and exact click through
    - add dddplus-maven-plugin
+   - visualize package cross reference in svg file
 
 ## Release Notes - DDDplus - 2.0.0-SNAPSHOT
 
