@@ -1,4 +1,4 @@
-标注覆盖率：Class(72/54.2%) Method(127/52.8%) Property(276/19.9%) Statement(236)
+标注覆盖率：Class(73/53.4%) Method(128/52.3%) Property(276/19.9%) Statement(237)
 模型债：孤儿流程:3 相似类:7 聚合分布[类:(Mean:5.00 SD:3.96) 方法:(Mean:7.43 SD:8.98)]
 <<Aggregate: 出库复核任务>>
 Container 拣货容器.
@@ -69,7 +69,7 @@ ShipManifest 一辆货车的装车清单.
    Reserved      extInfo
    [行为]
       loadForOrder(CartonBag,Order) 为订单装车
-      ship() 发货.
+      ship() 发货
 <<Aggregate: 复核报差异>>
 ContainerDiff 复核过程中发现的容器差异.
    [属性]

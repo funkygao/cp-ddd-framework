@@ -51,13 +51,11 @@ public class ShipManifest extends BaseAggregateRoot<ShipManifest> implements IUn
         throw new WmsException(notification.first());
     }
 
-    /**
-     * 发货.
-     */
+    // 发货
     @KeyBehavior
     public void ship() {
         shipStatus = ShipStatus.Shipped;
-        dirty(new ShippedHint(this));
+        mergeDirtyWith(new ShippedHint(this));
     }
 
     // 为订单装车
@@ -71,5 +69,6 @@ public class ShipManifest extends BaseAggregateRoot<ShipManifest> implements IUn
             // ...
         }
         this.orderCartons = orderCartons;
+        mergeDirtyWith(new ShippedHint(this));
     }
 }

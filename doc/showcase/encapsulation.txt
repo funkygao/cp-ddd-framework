@@ -54,7 +54,7 @@ Pack 包裹.
 PackBag
     isOnePack
 ShipManifest 一辆货车的装车清单.
-    ship: 发货.
+    ship: 发货
     loadForOrder: 为订单装车
 Task 复核任务.
     plan: 初始化时指定复核生产计划

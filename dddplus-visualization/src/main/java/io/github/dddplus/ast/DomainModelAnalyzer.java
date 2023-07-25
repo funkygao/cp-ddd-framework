@@ -154,7 +154,6 @@ public class DomainModelAnalyzer {
         JaccardModelSimilarity similarityAnalyzer = new JaccardModelSimilarity();
         List<KeyModelEntry> keyModelEntries = new ArrayList<>(model.getKeyModelReport().getData().values());
         for (int i = 0; i < keyModelEntries.size(); i++) {
-            log.debug("fan out similarity of {}", keyModelEntries.get(i).getClassName());
             for (int j = i + 1; j < keyModelEntries.size(); j++) {
                 KeyModelEntry model1 = keyModelEntries.get(i);
                 KeyModelEntry model2 = keyModelEntries.get(j);
@@ -176,7 +175,6 @@ public class DomainModelAnalyzer {
             log.debug("calculating raw models similarity");
             List<KeyModelEntry> rawModels = new ArrayList<>(model.getKeyModelReport().getRawModels().values());
             for (int i = 0; i < rawModels.size(); i++) {
-                log.debug("fan out similarity of raw model {}", rawModels.get(i).getClassName());
                 for (int j = i + 1; j < rawModels.size(); j++) {
                     KeyModelEntry model1 = rawModels.get(i);
                     KeyModelEntry model2 = rawModels.get(j);
