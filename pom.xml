@@ -23,7 +23,7 @@ under the License.
     <packaging>pom</packaging>
     <version>2.0.2-SNAPSHOT</version>
     <name>DDDplus Framework</name>
-    <description>A lightweight DDD forward/reverse modeling framework!</description>
+    <description>A lightweight DDD forward/reverse business modeling framework!</description>
     <url>https://github.com/dddplus/dddplus</url>
     <inceptionYear>2020</inceptionYear>
 
