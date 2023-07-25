@@ -71,7 +71,7 @@ public class Application {
 </dependency>
 ```
 
-Annotate your code With [DSL](/dddplus-spec/src/main/java/io/github/dddplus/dsl), DDDplus can render domain model in multiple view.
+Annotate your code With [DSL](/dddplus-spec/src/main/java/io/github/dddplus/dsl), DDDplus can render domain model in multiple views.
 
 ```java
 class ReverseModelingTest {
@@ -83,41 +83,29 @@ class ReverseModelingTest {
                         .analyze();
         new PlantUmlRenderer()
             .build(model)
-            .classDiagramSvgFilename("model.svg")
-            .render(); // read-only searchable graph
+            .classDiagramSvgFilename("model.svg") // structure/relations of your business model
+            .render();
         new PlainTextRenderer()
             .build(model)
-            .targetFilename("model.txt")
-            .render(); // mutable, integrated with forward modeling design process
+            .targetFilename("model.txt") // new feature design starts from here, change it as you design
+            .render();
         new CallGraphRenderer()
-            .targetDotFilename("callgraph.dot")
+            .targetDotFilename("callgraph.dot") // the method call graph
+            .targetPackageCrossRefDotFile("pkgref.dot") // the package cross reference relationship
             .build(model)
-            .render(); // the call graph of your domain model
+            .render();
+        new EncapsulationRenderer()
+            .build(model)
+            .targetFilename("encapsulation.txt") // did you have good encapsulation?
+            .render();
     }
 }
 ```
 
 ### Architecture Guard
 
-```xml
-<dependency>
-    <groupId>io.github.dddplus</groupId>
-    <artifactId>dddplus-enforce</artifactId>
-    <scope>test</scope>
-</dependency>
-```
-
-Enable it by writing unit test and integrate it with CI flow.
-
-```java
-class ArchitectureGuardTest {
-    @Test
-    void enforcement() {
-        new DDDPlusEnforcer()
-                .scanPackages("${your base package}")
-                .enforce();
-    }
-}
+```bash
+mvn io.github.dddplus:dddplus-maven-plugin:enforce -DrootPackage={your pkg} -DrootDir={your src dir}
 ```
 
 ## Contribution

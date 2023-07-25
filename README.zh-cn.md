@@ -95,16 +95,21 @@ class ReverseModelingTest {
                         .analyze();
         new PlantUmlRenderer()
             .build(model)
-            .classDiagramSvgFilename("model.svg")
-            .render(); // read-only searchable graph
+            .classDiagramSvgFilename("model.svg") // structure/relations of your business model
+            .render();
         new PlainTextRenderer()
             .build(model)
-            .targetFilename("model.txt")
-            .render(); // mutable, integrated with forward modeling design process
+            .targetFilename("model.txt") // new feature design starts from here, change it as you design
+            .render();
         new CallGraphRenderer()
-            .targetDotFilename("callgraph.dot")
+            .targetDotFilename("callgraph.dot") // the method call graph
+            .targetPackageCrossRefDotFile("pkgref.dot") // the package cross reference relationship
             .build(model)
-            .render(); // the call graph of your domain model
+            .render();
+        new EncapsulationRenderer()
+            .build(model)
+            .targetFilename("encapsulation.txt") // did you have good encapsulation?
+            .render();
     }
 }
 ```
@@ -113,25 +118,8 @@ class ReverseModelingTest {
 
 为了避免错误使用造成的线上事故，建议CI流水线里增加DDDplus的错误使用卡控。
 
-```xml
-<dependency>
-    <groupId>io.github.dddplus</groupId>
-    <artifactId>dddplus-enforce</artifactId>
-    <scope>test</scope>
-</dependency>
-```
-
-通过单测执行DDDplus enforcement：
-
-```java
-public class DDDPlusEnforcerTest {
-    @Test
-    public void enforce() {
-        DDDPlusEnforcer enforcer = new DDDPlusEnforcer();
-        enforcer.scanPackages("${your base package}")
-                .enforce();
-    }
-}
+```bash
+mvn io.github.dddplus:dddplus-maven-plugin:enforce -DrootPackage={your pkg} -DrootDir={your src dir}
 ```
 
 ## Contribution
