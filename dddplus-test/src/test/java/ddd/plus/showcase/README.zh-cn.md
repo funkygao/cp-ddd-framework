@@ -52,7 +52,12 @@ Languages： [English](README.md) | 中文
 
 ![](/doc/showcase/callgraph.svg)
 
-### 1.6 技术细节
+
+### 1.6 包间依赖图
+
+![](/doc/showcase/pkgref.svg)
+
+### 1.7 技术细节
 
 ![](/doc/showcase/tech.svg)
 

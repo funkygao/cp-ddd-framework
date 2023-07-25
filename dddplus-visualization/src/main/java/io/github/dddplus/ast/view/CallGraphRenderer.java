@@ -5,8 +5,9 @@
  */
 package io.github.dddplus.ast.view;
 
-import io.github.dddplus.ast.model.ReverseEngineeringModel;
 import io.github.dddplus.ast.model.CallGraphEntry;
+import io.github.dddplus.ast.model.PackageCrossRefEntry;
+import io.github.dddplus.ast.model.ReverseEngineeringModel;
 import io.github.dddplus.ast.report.CallGraphReport;
 
 import java.io.BufferedWriter;
@@ -23,12 +24,19 @@ import java.util.Set;
  */
 public class CallGraphRenderer implements IModelRenderer<CallGraphRenderer> {
     private CallGraphReport callGraphReport;
-    private String targetDotFilename;
+    private String targetCallGraphDotFile;
+    private String targetPackageCrossRefDotFile;
+
     private String splines = null;
     private StringBuilder content = new StringBuilder();
 
-    public CallGraphRenderer targetDotFilename(String targetFile) {
-        this.targetDotFilename = targetFile;
+    public CallGraphRenderer targetCallGraphDotFile(String targetFile) {
+        this.targetCallGraphDotFile = targetFile;
+        return this;
+    }
+
+    public CallGraphRenderer targetPackageCrossRefDotFile(String targetFile) {
+        this.targetPackageCrossRefDotFile = targetFile;
         return this;
     }
 
@@ -51,6 +59,17 @@ public class CallGraphRenderer implements IModelRenderer<CallGraphRenderer> {
 
     @Override
     public void render() throws IOException {
+        if (targetCallGraphDotFile != null) {
+            renderCallGraph();
+        }
+
+        if (targetPackageCrossRefDotFile != null) {
+            content.setLength(0);
+            renderPackageCrossRef();
+        }
+    }
+
+    private void renderCallGraph() throws IOException {
         append("digraph G {")
                 .append(NEWLINE)
                 .setupSkin()
@@ -59,12 +78,30 @@ public class CallGraphRenderer implements IModelRenderer<CallGraphRenderer> {
                 .renderEdges()
                 .append("}");
 
-        File file = new File(targetDotFilename);
+        File file = new File(targetCallGraphDotFile);
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            writer.append(content);
+        }
+    }
+
+    private void renderPackageCrossRef() throws IOException {
+        append("digraph G {")
+                .append(NEWLINE)
+                .setupSkin();
+        for (PackageCrossRefEntry entry : callGraphReport.getPackageCrossRefEntries()) {
+            append(TAB)
+                    .append("\"").append(entry.getCallerPackage()).append("\"")
+                    .append(" -> ")
+                    .append("\"").append(entry.getCalleePackage()).append("\"")
+                    .append(NEWLINE);
+        }
+        append("}");
+
+        File file = new File(targetPackageCrossRefDotFile);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.append(content);
         }
 
-        // dot -Tsvg a.dot -o a.svg
     }
 
     private CallGraphRenderer setupSkin() {

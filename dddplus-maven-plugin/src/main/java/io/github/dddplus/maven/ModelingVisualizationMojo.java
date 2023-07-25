@@ -34,6 +34,8 @@ public class ModelingVisualizationMojo extends AbstractMojo {
 
     @Parameter(property = "callGraph")
     private String targetCallGraph;
+    @Parameter(property = "pkgRef")
+    private String targetPackageRef;
     @Parameter(property = "plantUml")
     private String targetPlantUml;
     @Parameter(property = "encapsulation")
@@ -44,7 +46,7 @@ public class ModelingVisualizationMojo extends AbstractMojo {
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         if (rootDir == null) {
-            getLog().error("Usage: mvn io.github.dddplus:dddplus-maven-plugin:visualize -DrootDir=xx -DcallGraph=xx.dot -DplantUml=xx.svg -Dencapsulation=xxx.txt -DtextModel=xx.txt");
+            getLog().error("Usage: mvn io.github.dddplus:dddplus-maven-plugin:visualize -DrootDir=xx -DcallGraph=xx.dot -DpkgRef=xx.dot -DplantUml=xx.svg -Dencapsulation=xxx.txt -DtextModel=xx.txt");
             return;
         }
 
@@ -68,7 +70,8 @@ public class ModelingVisualizationMojo extends AbstractMojo {
             }
             if (targetCallGraph != null) {
                 new CallGraphRenderer()
-                        .targetDotFilename(targetCallGraph)
+                        .targetCallGraphDotFile(targetCallGraph)
+                        .targetPackageCrossRefDotFile(targetPackageRef)
                         .splines("polyline")
                         .build(model)
                         .render();

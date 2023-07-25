@@ -1,7 +1,9 @@
 package ddd.plus.showcase.reverse;
 
 import io.github.dddplus.DDDPlusEnforcer;
-import io.github.dddplus.ast.*;
+import io.github.dddplus.ast.DomainModelAnalyzer;
+import io.github.dddplus.ast.DomainModelAnalyzerTest;
+import io.github.dddplus.ast.FileWalker;
 import io.github.dddplus.ast.enforcer.AllowedAccessorsEnforcer;
 import io.github.dddplus.ast.enforcer.ExtensionMethodSignatureEnforcer;
 import io.github.dddplus.ast.model.ReverseEngineeringModel;
@@ -41,7 +43,8 @@ class WmsReverseModelingTest {
                 .scan(root)
                 .analyze(domainLayerFilter);
         new CallGraphRenderer()
-                .targetDotFilename("../doc/showcase/callgraph.dot")
+                .targetCallGraphDotFile("../doc/showcase/callgraph.dot")
+                .targetPackageCrossRefDotFile("../doc/showcase/pkgref.dot")
                 .splines("polyline")
                 .build(model)
                 .render();

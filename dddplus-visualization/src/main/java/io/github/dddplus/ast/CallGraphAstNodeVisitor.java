@@ -115,6 +115,13 @@ class CallGraphAstNodeVisitor extends VoidVisitorAdapter<CallGraphReport> {
 
         report.register(accessorClassName, accessorMethod.getNameAsString(),
                 finalDeclarationClazz, methodName);
+
+        String calleePackage = methodDeclaration.getCorrespondingDeclaration()
+                .getPackageName();
+        String callerPackage = JavaParserUtil.packageName(accessorClazz);
+        if (!callerPackage.equals(calleePackage)) {
+            report.addPackageCrossRef(callerPackage, calleePackage);
+        }
     }
 
 }

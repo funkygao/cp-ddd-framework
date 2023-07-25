@@ -1,0 +1,15 @@
+digraph G {
+   labelloc = "t";
+   rankdir=LR;
+   splines = polyline;
+   node [shape=record];
+   edge [style = dashed, fontsize=10];
+
+   "ddd.plus.showcase.wms.application.service" -> "ddd.plus.showcase.wms.domain.carton"
+   "ddd.plus.showcase.wms.application.service" -> "ddd.plus.showcase.wms.domain.order"
+   "ddd.plus.showcase.wms.application.service" -> "ddd.plus.showcase.wms.domain.ship"
+   "ddd.plus.showcase.wms.application.service" -> "ddd.plus.showcase.wms.domain.task"
+   "ddd.plus.showcase.wms.domain.carton.ext" -> "ddd.plus.showcase.wms.domain.order"
+   "ddd.plus.showcase.wms.domain.order.spec" -> "ddd.plus.showcase.wms.domain.order"
+   "ddd.plus.showcase.wms.domain.task.spec" -> "ddd.plus.showcase.wms.domain.task"
+}

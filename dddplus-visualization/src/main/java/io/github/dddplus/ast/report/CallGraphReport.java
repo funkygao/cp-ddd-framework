@@ -5,6 +5,7 @@
  */
 package io.github.dddplus.ast.report;
 
+import io.github.dddplus.ast.model.PackageCrossRefEntry;
 import io.github.dddplus.ast.model.ReverseEngineeringModel;
 import io.github.dddplus.ast.model.CallGraphEntry;
 import io.github.dddplus.ast.model.KeyModelEntry;
@@ -19,6 +20,7 @@ import java.util.*;
 public class CallGraphReport {
     private final ReverseEngineeringModel model;
     private List<CallGraphEntry> entries = new ArrayList<>();
+    private Set<PackageCrossRefEntry> packageCrossRefEntries = new TreeSet<>();
 
     public CallGraphReport(ReverseEngineeringModel model) {
         this.model = model;
@@ -72,6 +74,10 @@ public class CallGraphReport {
         }
 
         entries.add(new CallGraphEntry(callerClazz, callerMethod, calleeClazz, calleeMethod));
+    }
+
+    public void addPackageCrossRef(String callerPackage, String calleePackage) {
+        packageCrossRefEntries.add(new PackageCrossRefEntry(callerPackage, calleePackage));
     }
 
     @Data
