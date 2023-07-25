@@ -2,12 +2,14 @@ io.github.dddplus
 io.github.dddplus.annotation
 io.github.dddplus.ast
 io.github.dddplus.ast.algorithm
+io.github.dddplus.ast.enforcer
 io.github.dddplus.ast.model
 io.github.dddplus.ast.parser
 io.github.dddplus.ast.report
 io.github.dddplus.ast.view
 io.github.dddplus.dsl
 io.github.dddplus.ext
+io.github.dddplus.maven
 io.github.dddplus.model
 io.github.dddplus.model.association
 io.github.dddplus.model.encapsulation
@@ -17,5 +19,4 @@ io.github.dddplus.plugin
 io.github.dddplus.runtime
 io.github.dddplus.runtime.interceptor
 io.github.dddplus.runtime.registry
-io.github.dddplus.sre
 io.github.dddplus.step
