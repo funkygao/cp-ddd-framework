@@ -81,6 +81,9 @@ public class CallGraphReport {
             // only add cross packages relations
             return;
         }
+        if (!model.hasPackage(calleePackage) || !model.hasPackage(callerPackage)) {
+            return;
+        }
 
         packageCrossRefEntries.add(new PackageCrossRefEntry(callerPackage, calleePackage));
     }

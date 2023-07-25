@@ -5,6 +5,8 @@
  */
 package io.github.dddplus.ast;
 
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.PackageDeclaration;
 import io.github.dddplus.ast.algorithm.JaccardModelSimilarity;
 import io.github.dddplus.ast.model.*;
 import lombok.extern.slf4j.Slf4j;
@@ -75,6 +77,19 @@ public class DomainModelAnalyzer {
 
     public ReverseEngineeringModel analyze(FileWalker.Filter filter) {
         ReverseEngineeringModel model = new ReverseEngineeringModel();
+        // all the packages
+        List<CompilationUnit> compilationUnits = new ArrayList<>();
+        for (File dir : dirs) {
+            new FileWalker(new DomainModelAnalyzer.ActualFilter(null), (level, path, file) -> {
+                compilationUnits.add(FileWalker.silentParse(file));
+            }).walkFrom(dir);
+        }
+        for (CompilationUnit cu : compilationUnits) {
+            for (PackageDeclaration packageDeclaration : cu.findAll(PackageDeclaration.class)) {
+                model.registerPackage(packageDeclaration.getNameAsString());
+            }
+        }
+
         FileWalker.Filter actualFilter = new ActualFilter(filter);
         for (File dir : dirs) {
             log.debug("enter dir: {}", dir.getAbsolutePath());

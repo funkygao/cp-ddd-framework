@@ -32,10 +32,19 @@ public class ReverseEngineeringModel {
     private ModelDebtReport modelDebtReport = new ModelDebtReport(this);
     private CallGraphReport callGraphReport = new CallGraphReport(this);
     private EncapsulationReport encapsulationReport = new EncapsulationReport();
+    private Set<String> packages = new TreeSet<>();
 
     public List<SimilarityEntry> sortedSimilarities() {
         Collections.sort(similarities, Comparator.comparing(SimilarityEntry::getSimilarity));
         return similarities;
+    }
+
+    public void registerPackage(String packageName) {
+        packages.add(packageName);
+    }
+
+    public boolean hasPackage(String packageName) {
+        return packages.contains(packageName);
     }
 
     public ReverseEngineeringModel addSimilarityEntry(SimilarityEntry similarityEntry) {
