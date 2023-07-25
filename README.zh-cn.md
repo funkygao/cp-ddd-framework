@@ -2,7 +2,7 @@
 
 <div align="center">
 
-DDDplus，轻量级DDD正向/逆向业务建模框架，支撑复杂业务系统的架构演化！
+轻量级DDD正向/逆向业务建模框架，支撑复杂业务系统的架构演化！
 
 [![CI](https://github.com/funkygao/cp-ddd-framework/workflows/CI/badge.svg?branch=master)](https://github.com/funkygao/cp-ddd-framework/actions?query=branch%3Amaster+workflow%3ACI)
 [![Javadoc](https://img.shields.io/badge/javadoc-Reference-blue.svg)](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/)
