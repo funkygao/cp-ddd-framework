@@ -36,6 +36,7 @@ class CallGraphAstNodeVisitor extends VoidVisitorAdapter<CallGraphReport> {
         // 常见的类型推断：JavaParserTypeSolver、ReflectionTypeSolver、
         CombinedTypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(false));
         for (File dir : dirs) {
+            // JavaParserTypeSolver looks for classes defined in source files
             typeSolver.add(new JavaParserTypeSolver(dir));
         }
         javaParserFacade = JavaParserFacade.get(typeSolver);
