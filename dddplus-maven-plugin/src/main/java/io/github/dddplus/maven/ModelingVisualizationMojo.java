@@ -51,7 +51,7 @@ public class ModelingVisualizationMojo extends AbstractMojo {
         }
 
         try {
-            String[] dirPaths = rootDir.split(";");
+            String[] dirPaths = rootDir.split(":");
             File[] dirs = new File[dirPaths.length];
             for (int i = 0; i < dirPaths.length; i++) {
                 dirs[i] = new File(dirPaths[i]);
