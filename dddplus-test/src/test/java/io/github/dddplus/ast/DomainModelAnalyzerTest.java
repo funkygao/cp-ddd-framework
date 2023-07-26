@@ -66,7 +66,6 @@ public class DomainModelAnalyzerTest {
     @Disabled
     void renderUml() throws IOException {
         ReverseEngineeringModel model = new DomainModelAnalyzer()
-                .debug()
                 .rawSimilarity()
                 .scan(moduleRoot("dddplus-test"))
                 .analyze((level, path, file) -> path.contains("design"));
