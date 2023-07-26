@@ -8,8 +8,7 @@ package io.github.dddplus.ast.report;
 import io.github.dddplus.ast.model.ReverseEngineeringModel;
 import lombok.Data;
 
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 /**
  * 类和方法的分布情况.
@@ -35,6 +34,20 @@ public class ClassMethodReport {
         return methodInfo.publicMethods.size();
     }
 
+    public Map<Integer, String> topTenBigMethods() {
+        Map<Integer, String> result = new TreeMap<>(Collections.reverseOrder());
+        int i = 0;
+        for (Integer loc : methodInfo.getBigMethods().keySet()) {
+            i++;
+            if (i == 10) {
+                break;
+            }
+
+            result.put(loc, methodInfo.getBigMethods().get(loc));
+        }
+        return result;
+    }
+
     @Data
     public static class ClassInfo {
         private Set<String> publicClasses = new TreeSet<>();
@@ -55,6 +68,7 @@ public class ClassMethodReport {
         private Set<String> abstractMethods = new TreeSet<>();
         private Set<String> staticMethods = new TreeSet<>();
         private Set<String> deprecatedMethods = new TreeSet<>();
+        private Map<Integer, String> bigMethods = new TreeMap<>(Collections.reverseOrder());
     }
 
     public void incrStatement() {

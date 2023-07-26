@@ -114,6 +114,11 @@ public class PlainTextRenderer implements IModelRenderer<PlainTextRenderer> {
                 .append(SPACE)
                 .append(String.format("Statement(%d)", model.getClassMethodReport().getStatementN()))
                 .append(NEWLINE);
+        append("大方法Top10").append(NEWLINE);
+        for (Integer loc : model.getClassMethodReport().topTenBigMethods().keySet()) {
+            append(TAB).append(model.getClassMethodReport().getMethodInfo().getBigMethods().get(loc))
+                    .append(" ").append(String.valueOf(loc)).append(NEWLINE);
+        }
         return this;
     }
 
