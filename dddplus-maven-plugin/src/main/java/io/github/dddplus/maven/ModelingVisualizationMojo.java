@@ -19,6 +19,8 @@ import org.apache.maven.plugins.annotations.Parameter;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 业务模型可视化.
@@ -44,6 +46,8 @@ public class ModelingVisualizationMojo extends AbstractMojo {
     private String targetTextModel;
     @Parameter(property = "rawClassSimilarity")
     private Boolean rawClassSimilarity = false;
+    @Parameter(property = "similarityThreshold")
+    private Integer similarityThreshold = 70;
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
@@ -52,7 +56,7 @@ public class ModelingVisualizationMojo extends AbstractMojo {
             return;
         }
 
-        getLog().info("Reverse modeling starting...");
+        getLog().info("Reverse modeling starting ...");
         try {
             String[] dirPaths = rootDir.split(":");
             File[] dirs = new File[dirPaths.length];
@@ -63,10 +67,15 @@ public class ModelingVisualizationMojo extends AbstractMojo {
             DomainModelAnalyzer analyzer = new DomainModelAnalyzer()
                     .scan(dirs);
             if (rawClassSimilarity) {
-                analyzer.rawSimilarity();
+                analyzer.rawSimilarity()
+                        .similarityThreshold(similarityThreshold);
             }
             ReverseEngineeringModel model = analyzer.analyze();
+
+            getLog().info("Rendering ...");
+            List<String> artifacts = new ArrayList<>();
             if (targetPlantUml != null) {
+                artifacts.add(targetPlantUml);
                 new PlantUmlRenderer()
                         .direction(PlantUmlRenderer.Direction.TopToBottom)
                         .skinParamPolyline()
@@ -75,6 +84,7 @@ public class ModelingVisualizationMojo extends AbstractMojo {
                         .render();
             }
             if (targetCallGraph != null) {
+                artifacts.add(targetCallGraph);
                 new CallGraphRenderer()
                         .targetCallGraphDotFile(targetCallGraph)
                         .targetPackageCrossRefDotFile(targetPackageRef)
@@ -83,12 +93,14 @@ public class ModelingVisualizationMojo extends AbstractMojo {
                         .render();
             }
             if (targetEncapsulation != null) {
+                artifacts.add(targetEncapsulation);
                 new EncapsulationRenderer()
                         .build(model)
                         .targetFilename(targetEncapsulation)
                         .render();
             }
             if (targetTextModel != null) {
+                artifacts.add(targetTextModel);
                 new PlainTextRenderer()
                         .showRawSimilarities()
                         .targetFilename(targetTextModel)
@@ -96,7 +108,8 @@ public class ModelingVisualizationMojo extends AbstractMojo {
                         .render();
             }
 
-            getLog().info("OK");
+            getLog().info("Reverse Modeling Executed OK");
+            getLog().info("Please check out your modeling artifacts: " + String.join(" ", artifacts));
         } catch (IOException e) {
             throw new MojoExecutionException(e.getMessage(), e);
         }
