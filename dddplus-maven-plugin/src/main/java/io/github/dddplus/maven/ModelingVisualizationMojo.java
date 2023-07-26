@@ -32,22 +32,22 @@ public class ModelingVisualizationMojo extends AbstractMojo {
      * Colon separated directories.
      */
     @Parameter(property = "rootDir")
-    private String rootDir;
+    String rootDir;
 
     @Parameter(property = "callGraph")
-    private String targetCallGraph;
+    String targetCallGraph;
     @Parameter(property = "pkgRef")
-    private String targetPackageRef;
+    String targetPackageRef;
     @Parameter(property = "plantUml")
-    private String targetPlantUml;
+    String targetPlantUml;
     @Parameter(property = "encapsulation")
-    private String targetEncapsulation;
+    String targetEncapsulation;
     @Parameter(property = "textModel")
-    private String targetTextModel;
+    String targetTextModel;
     @Parameter(property = "rawClassSimilarity")
-    private Boolean rawClassSimilarity = false;
+    Boolean rawClassSimilarity = false;
     @Parameter(property = "similarityThreshold")
-    private Integer similarityThreshold = 70;
+    Integer similarityThreshold = 70;
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
