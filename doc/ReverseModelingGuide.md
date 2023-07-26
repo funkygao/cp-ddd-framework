@@ -133,7 +133,7 @@ public class OrderShippedEvent {
 >Since the recovered diagrams are intended to be inspected by a human, the presentation modes should take into account the cognitive limitations of humans explicitly. 
 
 - 标注过程，不要一次性做全，可以做一点看一点，试探性摸索，熟悉后再做彻底标注
-- 图形的有效性的前提是不能有太多元素，主动忽略非关键细节
+- 图形有效的前提是不能有太多元素，请主动忽略非关键细节
 
 ## 三、DSL标注后执行dddplus-maven-plugin
 
