@@ -70,7 +70,7 @@ package ddd.plus.showcase.wms.domain.diff;
 - KeyElement 关键业务字段
 - KeyRelation 业务实体间重要关系
 - KeyBehavior 该实体的关键业务行为
-- KeyRule 该实现的关键业务规则
+- KeyRule 该实体的关键业务规则
 
 #### 2.2.3 标注服务与流程片段类
 
@@ -115,7 +115,10 @@ public class OrderShippedEvent {
 
 #### 2.2.6 标注建议
 
-标注过程，不要一次性做全，可以做一点看一点，试探性摸索，熟悉后再做彻底标注。
+>Since the recovered diagrams are intended to be inspected by a human, the presentation modes should take into account the cognitive limitations of humans explicitly. 
+
+- 标注过程，不要一次性做全，可以做一点看一点，试探性摸索，熟悉后再做彻底标注
+- 图形的有效性的前提是不能有太多元素，主动忽略非关键细节
 
 ## 三、DSL标注后执行dddplus-maven-plugin
 
