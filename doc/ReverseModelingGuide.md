@@ -38,7 +38,7 @@ mvn io.github.dddplus:dddplus-maven-plugin:visualize \
 
 在需要标注的代码模块都需要引入`dddplus-spec`依赖：可以放心使用，它不会引入任何间接依赖。
 
-所有的DSL注解，都是`RetentionPolicy.SOURCE`，不会污染被标注代码。
+所有的DSL注解的有效范围都是`RetentionPolicy.SOURCE`，不会污染被标注代码。
 
 ```xml
 <dependency>
@@ -53,7 +53,20 @@ mvn io.github.dddplus:dddplus-maven-plugin:visualize \
 
 #### 2.2.1 从 `@Aggregate` 开始标注
 
-逆向建模自动生成的业务模型，是以`Aggregate`为边界进行组织的，因此先划分边界。
+逆向建模自动生成的业务模型，是以`Aggregate`为边界进行组织的。
+
+```
+Aggregate
+  ├── KeyEvent
+  ├── KeyUsecase
+  └── KeyModel
+      ├── KeyBehavior
+      ├── KeyElement
+      ├── KeyFlow
+      ├── KeyRelation
+      ├── KeyRule
+      └── KeyUsecase
+```
 
 `Aggregate`与`DDD`里的聚合概念一致，是业务边界；非DDD项目可以理解为模块。
 
