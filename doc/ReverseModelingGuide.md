@@ -30,13 +30,15 @@ mvn io.github.dddplus:dddplus-maven-plugin:visualize \
 - 规模最大的方法 top 10
 - 相似度超过`88%`的相似类
 
-但此时由于还未标注，生成的业务模型`doc/myapp.svg`只有基础的汇总信息，看不到模型。call graph也是空的，因为我们只关注人工标注的方法。
+但此时由于还未标注，生成的业务模型`doc/myapp.svg`只有基础的汇总信息，看不到模型，call graph也是空的。
 
 ## 二、开始DSL标注
 
 ### 2.1 引入pom依赖
 
 在需要标注的代码模块都需要引入`dddplus-spec`依赖：可以放心使用，它不会引入任何间接依赖。
+
+所有的DSL注解，都是`RetentionPolicy.SOURCE`，不会污染被标注代码。
 
 ```xml
 <dependency>
@@ -47,7 +49,7 @@ mvn io.github.dddplus:dddplus-maven-plugin:visualize \
 
 ### 2.2 开始DSL标注
 
-请参考[DSL javadoc](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/io/github/dddplus/dsl/package-summary.html)。
+请参考[DSL参考手册](https://funkygao.github.io/cp-ddd-framework/doc/apidocs/io/github/dddplus/dsl/package-summary.html)。
 
 #### 2.2.1 从 `@Aggregate` 开始标注
 
