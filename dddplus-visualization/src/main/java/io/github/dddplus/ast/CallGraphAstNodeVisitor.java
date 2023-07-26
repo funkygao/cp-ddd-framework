@@ -112,7 +112,10 @@ class CallGraphAstNodeVisitor extends VoidVisitorAdapter<CallGraphReport> {
             return;
         }
 
-        MethodDeclaration accessorMethod = methodCallExpr.findAncestor(MethodDeclaration.class).get();
+        MethodDeclaration accessorMethod = methodCallExpr.findAncestor(MethodDeclaration.class).orElse(null);
+        if (accessorMethod == null) {
+            return;
+        }
         ClassOrInterfaceDeclaration accessorClazz = accessorMethod.findAncestor(ClassOrInterfaceDeclaration.class).orElse(null);
         String accessorClassName;
         if (accessorClazz == null) {
