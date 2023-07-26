@@ -25,7 +25,7 @@ mvn io.github.dddplus:dddplus-maven-plugin:visualize \
 ```
 
 执行后，就可以在doc目录下看到一些自动生成的报告。例如，在`doc/myapp.txt`文件，会看到：
-- DSL标注覆盖度
+- DSL标注覆盖率
 - 代码规模：多少个类，多少个方法，多少个属性，多少条语句
 - 规模最大的方法 top 10
 - 相似度超过`88%`的相似类
