@@ -28,18 +28,18 @@ public class KeyRuleAnnotationParser {
         this.methodName = methodDeclaration.getNameAsString();
     }
 
-    public KeyRuleEntry parse(AnnotationExpr keyFlow) {
+    public KeyRuleEntry parse(AnnotationExpr keyRule) {
         KeyRuleEntry entry = new KeyRuleEntry();
         entry.setClassName(this.className);
         entry.setMethodName(this.methodName);
         entry.setRealMethodName(this.methodName);
         entry.setJavadoc(JavaParserUtil.javadocFirstLineOf(methodDeclaration));
 
-        if (keyFlow instanceof MarkerAnnotationExpr) {
+        if (keyRule instanceof MarkerAnnotationExpr) {
             return entry;
         }
 
-        NormalAnnotationExpr normalAnnotationExpr = (NormalAnnotationExpr) keyFlow;
+        NormalAnnotationExpr normalAnnotationExpr = (NormalAnnotationExpr) keyRule;
         for (MemberValuePair memberValuePair : normalAnnotationExpr.getPairs()) {
             switch (memberValuePair.getNameAsString()) {
                 case "name":

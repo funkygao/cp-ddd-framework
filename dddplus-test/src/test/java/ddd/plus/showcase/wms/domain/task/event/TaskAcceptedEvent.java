@@ -7,7 +7,7 @@ import lombok.Data;
 import java.util.Map;
 
 @Data
-@KeyEvent(type = KeyEvent.Type.Local)
+@KeyEvent
 public class TaskAcceptedEvent implements IFlowAutomationEvent {
     private String taskNo;
     private String warehouseNo;

@@ -7,7 +7,7 @@ import lombok.Data;
 import java.util.Map;
 
 @Data
-@KeyEvent(type = KeyEvent.Type.Local)
+@KeyEvent
 public class CartonFulfilledEvent implements IFlowAutomationEvent {
     private String cartonNo;
     private String warehouseNo;

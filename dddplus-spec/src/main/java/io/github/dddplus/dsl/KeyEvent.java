@@ -22,33 +22,9 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.SOURCE)
 public @interface KeyEvent {
-    /**
-     * 事件类型.
-     */
-    Type type();
 
     /**
      * 补充说明.
      */
     String remark() default "";
-
-    /**
-     * 领域事件在技术视角的分类.
-     */
-    enum Type {
-        /**
-         * 基于内存本地事件.
-         */
-        Local,
-
-        /**
-         * 基于MQ Broker的消息消费.
-         */
-        RemoteConsuming, // TODO
-
-        /**
-         * 基于MQ Broker的消息生产.
-         */
-        RemoteProducing,
-    }
 }
