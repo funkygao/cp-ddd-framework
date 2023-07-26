@@ -247,6 +247,7 @@ public class DomainModelAnalyzer {
         }
 
         // call graph
+        log.debug("call graph");
         CallGraphAstNodeVisitor callGraphAstNodeVisitor = new CallGraphAstNodeVisitor(dirs);
         for (File dir : dirs) {
             log.debug("parsing {}", CallGraphAstNodeVisitor.class.getSimpleName());
