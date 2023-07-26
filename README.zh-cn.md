@@ -70,6 +70,8 @@ public class WebApplication {
 
 `DDDplus`里的基于DDD的正向建模，与基于AST静态分析的逆向建模是相互独立的。如果你觉得DDD落地太难，那么可以只使用逆向建模部分，即使一个遗留系统，也可以使用逆向建模功能：让代码承载领域知识，生成业务洞见，还原架构设计，识别代码设计缺陷，为需求分析提供依据。
 
+请参考[逆向建模指南](doc/ReverseModelingGuide.md)。
+
 ```xml
 <dependency>
     <groupId>io.github.dddplus</groupId>

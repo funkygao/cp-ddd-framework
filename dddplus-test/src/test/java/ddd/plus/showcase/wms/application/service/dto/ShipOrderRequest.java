@@ -6,7 +6,7 @@ import lombok.Data;
 import javax.validation.constraints.NotEmpty;
 
 /**
- * 操作员领取复核任务.
+ * 按单发货请求.
  */
 @Data
 public class ShipOrderRequest extends ApiRequest {

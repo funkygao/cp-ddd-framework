@@ -64,6 +64,8 @@ public class Application {
 
 ### Reverse Modeling
 
+Please check out the [step by step guide](doc/ReverseModelingGuide.md).
+
 ```xml
 <dependency>
     <groupId>io.github.dddplus</groupId>

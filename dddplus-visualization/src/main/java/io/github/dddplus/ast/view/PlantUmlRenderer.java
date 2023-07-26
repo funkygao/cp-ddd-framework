@@ -217,17 +217,6 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
     private PlantUmlRenderer writeClazzDefinition(KeyEventEntry entry) {
         append("class ").append(entry.getClassName());
         String tag = "E";
-        switch (entry.getType()) {
-            case Local:
-                tag = "L";
-                break;
-            case RemoteConsuming:
-                tag = "RC";
-                break;
-            case RemoteProducing:
-                tag = "RP";
-                break;
-        }
         append(String.format(" <<(E,#9197DB) %s: %s>> ", tag, entry.getJavadoc()));
         append(" {").append(NEWLINE);
         if (entry.orphaned()) {

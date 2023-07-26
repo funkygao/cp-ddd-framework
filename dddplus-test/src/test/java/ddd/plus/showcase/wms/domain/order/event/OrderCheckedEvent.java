@@ -5,7 +5,7 @@ import io.github.dddplus.dsl.KeyEvent;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@KeyEvent(type = KeyEvent.Type.Local)
+@KeyEvent
 @AllArgsConstructor
 @Getter
 public class OrderCheckedEvent implements IFlowAutomationEvent {

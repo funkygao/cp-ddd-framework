@@ -45,7 +45,7 @@ public class EnforcerMojo extends AbstractMojo {
         getLog().info("DDDPlusEnforcer OK");
 
         try {
-            String[] dirPaths = rootDir.split(";");
+            String[] dirPaths = rootDir.split(":");
             File[] dirs = new File[dirPaths.length];
             for (int i = 0; i < dirPaths.length; i++) {
                 dirs[i] = new File(dirPaths[i]);

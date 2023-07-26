@@ -30,15 +30,15 @@ public class KeyUsecaseAnnotationParser {
         this.methodName = methodDeclaration.getNameAsString();
     }
 
-    public KeyUsecaseEntry parse(AnnotationExpr keyBehavior) {
+    public KeyUsecaseEntry parse(AnnotationExpr keyUsecase) {
         KeyUsecaseEntry entry = new KeyUsecaseEntry(className, methodName);
         entry.setJavadoc(JavaParserUtil.javadocFirstLineOf(methodDeclaration));
-        if (keyBehavior instanceof MarkerAnnotationExpr) {
+        if (keyUsecase instanceof MarkerAnnotationExpr) {
             // 标注时没有指定任何属性
             return entry;
         }
 
-        NormalAnnotationExpr normalAnnotationExpr = (NormalAnnotationExpr) keyBehavior;
+        NormalAnnotationExpr normalAnnotationExpr = (NormalAnnotationExpr) keyUsecase;
         for (MemberValuePair memberValuePair : normalAnnotationExpr.getPairs()) {
             switch (memberValuePair.getNameAsString()) {
                 case "name":

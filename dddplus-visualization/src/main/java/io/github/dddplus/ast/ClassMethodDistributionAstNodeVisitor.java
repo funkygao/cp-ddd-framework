@@ -5,6 +5,7 @@
  */
 package io.github.dddplus.ast;
 
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -87,6 +88,11 @@ class ClassMethodDistributionAstNodeVisitor extends VoidVisitorAdapter<ClassMeth
         ClassMethodReport.MethodInfo methodInfo = report.getMethodInfo();
         final String className = parentClass.getFullyQualifiedName().get();
         final String methodName = className + "#" + methodDeclaration.getNameAsString();
+        Range range = methodDeclaration.getRange().orElse(null);
+        if (range != null) {
+            int methodLineOfCode = range.end.line - range.begin.line;
+            methodInfo.getBigMethods().put(methodLineOfCode, methodName);
+        }
         if (methodDeclaration.isAnnotationPresent(Deprecated.class)) {
             methodInfo.getDeprecatedMethods().add(methodName);
         }

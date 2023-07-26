@@ -7,10 +7,10 @@ package io.github.dddplus.ast.parser;
 
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
 import com.github.javaparser.ast.expr.MemberValuePair;
 import com.github.javaparser.ast.expr.NormalAnnotationExpr;
 import io.github.dddplus.ast.model.KeyEventEntry;
-import io.github.dddplus.dsl.KeyEvent;
 import lombok.Getter;
 
 /**
@@ -24,18 +24,17 @@ public class KeyEventAnnotationParser {
         this.classDeclaration = classDeclaration;
     }
 
-    public KeyEventEntry parse(AnnotationExpr keyRelation) {
+    public KeyEventEntry parse(AnnotationExpr keyEvent) {
         KeyEventEntry result = new KeyEventEntry();
         result.setClassName(classDeclaration.getNameAsString());
         result.setJavadoc(JavaParserUtil.javadocFirstLineOf(classDeclaration));
+        if (keyEvent instanceof MarkerAnnotationExpr) {
+            return result;
+        }
 
-        NormalAnnotationExpr normalAnnotationExpr = (NormalAnnotationExpr) keyRelation;
+        NormalAnnotationExpr normalAnnotationExpr = (NormalAnnotationExpr) keyEvent;
         for (MemberValuePair memberValuePair : normalAnnotationExpr.getPairs()) {
             switch (memberValuePair.getNameAsString()) {
-                case "type":
-                    result.setType(KeyEvent.Type.valueOf(AnnotationFieldParser.singleFieldValue(memberValuePair)));
-                    break;
-
                 case "remark":
                     result.setRemark(AnnotationFieldParser.singleFieldValue(memberValuePair));
                     break;
