@@ -1,7 +1,10 @@
 ## Release Notes - DDDplus - 2.0.2
 
 * Feature
-   * 
+   * 提供详细的《逆向建模教程》
+   * ClassMethodReport 增加大方法的自动发现
+* Fix
+   * CallGraphAstNodeVisitor 运行是抛出异常导致无法继续执行
 
 ## Release Notes - DDDplus - 2.0.1-RELEASE
 
