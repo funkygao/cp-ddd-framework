@@ -42,6 +42,8 @@ public class ModelingVisualizationMojo extends AbstractMojo {
     private String targetEncapsulation;
     @Parameter(property = "textModel")
     private String targetTextModel;
+    @Parameter(property = "rawClassSimilarity")
+    private Boolean rawClassSimilarity = false;
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
@@ -50,6 +52,7 @@ public class ModelingVisualizationMojo extends AbstractMojo {
             return;
         }
 
+        getLog().info("Reverse modeling starting...");
         try {
             String[] dirPaths = rootDir.split(":");
             File[] dirs = new File[dirPaths.length];
@@ -57,9 +60,12 @@ public class ModelingVisualizationMojo extends AbstractMojo {
                 dirs[i] = new File(dirPaths[i]);
             }
 
-            ReverseEngineeringModel model = new DomainModelAnalyzer()
-                    .scan(dirs)
-                    .analyze();
+            DomainModelAnalyzer analyzer = new DomainModelAnalyzer()
+                    .scan(dirs);
+            if (rawClassSimilarity) {
+                analyzer.rawSimilarity();
+            }
+            ReverseEngineeringModel model = analyzer.analyze();
             if (targetPlantUml != null) {
                 new PlantUmlRenderer()
                         .direction(PlantUmlRenderer.Direction.TopToBottom)
