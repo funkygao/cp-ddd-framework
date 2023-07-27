@@ -2,6 +2,8 @@
 
 ```
 Annotation your code with DSL --> DDDplus maven plugin --> Your visualized business model
+            |                             |                           |
+        meta model                   parse AST                  domain knowledge
 ```
 
 ## 一、用dddplus-maven-plugin跑一遍代码
