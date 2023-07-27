@@ -1,5 +1,9 @@
 # DSL标注代码教程
 
+>没有领域模型设计的软件，工程师往往会过多的关注到技术问题上，而忽视了产品设计和业务的目标。
+>
+>领域建模对于商业软件来说是非常重要的一环，也是工程师消化行业领域知识的重要方法。
+
 ```
 Annotation your code with DSL --> DDDplus maven plugin --> Your visualized business model
             |                             |                           |
