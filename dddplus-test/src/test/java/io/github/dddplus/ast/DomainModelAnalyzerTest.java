@@ -52,7 +52,7 @@ public class DomainModelAnalyzerTest {
     void renderText() throws IOException {
         DomainModelAnalyzer analyzer = new DomainModelAnalyzer();
         analyzer.rawSimilarity()
-                .similarityThreshold(0)
+                .similarityThreshold(60)
                 .scan(moduleRoot("dddplus-test"));
         ReverseEngineeringModel model = analyzer.analyze((level, path, file) -> path.contains("design"));
         new PlainTextRenderer()

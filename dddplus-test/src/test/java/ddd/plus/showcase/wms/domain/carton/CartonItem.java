@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 public class CartonItem implements IDomainModel {
     private Long id;
 
-    @KeyElement(types = KeyElement.Type.Structural)
+    @KeyElement
     private Sku sku;
     /**
      * 已复核数量.

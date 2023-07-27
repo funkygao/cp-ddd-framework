@@ -64,7 +64,7 @@ public class Application {
 
 ### Reverse Modeling
 
-Please check out the [step by step guide](doc/ReverseModelingGuide.md).
+Please check out the [《step by step guide》](doc/ReverseModelingGuide.md).
 
 ```xml
 <dependency>
@@ -73,7 +73,7 @@ Please check out the [step by step guide](doc/ReverseModelingGuide.md).
 </dependency>
 ```
 
-Annotate your code With [DSL](/dddplus-spec/src/main/java/io/github/dddplus/dsl), DDDplus can render domain model in multiple views.
+Annotate your code With [DSL](/dddplus-spec/src/main/java/io/github/dddplus/dsl), DDDplus will parse AST and render domain model in multiple views.
 
 ```java
 class ReverseModelingTest {
