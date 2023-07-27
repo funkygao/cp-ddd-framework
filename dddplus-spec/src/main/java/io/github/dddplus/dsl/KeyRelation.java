@@ -59,7 +59,10 @@ public @interface KeyRelation {
         Associate,
 
         /**
-         * @deprecated 如果使用，容易导致生成的类图显示混乱.
+         * 面向对象构想的信息结构是树形，而关系模型是集合，它们有一个天然的鸿沟.
+         *
+         * <p>模型之间本质上没有多对多关系，如果有，说明存在一个隐含的成员关系，这个关系没有被充分的分析出来.</p>
+         * @deprecated
          */
         @Deprecated
         Many2Many,
