@@ -29,7 +29,7 @@ public @interface KeyElement {
     /**
      * 该属性属于哪些分类.
      */
-    Type[] types();
+    Type[] types() default Type.Structural;
 
     /**
      * 该属性名称在逆向建模时被修正为哪一个统一语言名称.

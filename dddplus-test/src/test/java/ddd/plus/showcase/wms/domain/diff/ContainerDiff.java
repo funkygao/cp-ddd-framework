@@ -13,7 +13,7 @@ import lombok.experimental.Delegate;
  * 复核过程中发现的容器差异.
  */
 public class ContainerDiff implements IAggregateRoot {
-    @KeyElement(types = KeyElement.Type.Structural)
+    @KeyElement
     private ContainerNo containerNo;
     @KeyElement(types = KeyElement.Type.Location)
     private Platform platform;

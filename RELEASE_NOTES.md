@@ -3,6 +3,7 @@
 * Feature
    * 提供详细的《逆向建模教程》
    * ClassMethodReport 增加大方法的自动发现
+   * KeyElement#types 增加默认值，降低DSL标注成本
 * Fix
    * CallGraphAstNodeVisitor 运行是抛出异常导致无法继续执行
 
