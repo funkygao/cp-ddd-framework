@@ -1,5 +1,6 @@
 package io.github.dddplus.runtime.registry;
 
+import com.google.caliper.model.Run;
 import io.github.dddplus.plugin.IContainerContext;
 import io.github.dddplus.runtime.registry.mock.router.BarRouter;
 import org.junit.Test;
@@ -40,6 +41,41 @@ public class ContainerContextTest {
             fail();
         } catch (NoSuchBeanDefinitionException expected) {
             assertEquals("No qualifying bean of type 'java.util.Date' available", expected.getMessage());
+        }
+
+        try {
+            containerContext.getBean("unknown", String.class);
+            fail();
+        } catch (RuntimeException expected) {
+
+        }
+
+        try {
+            containerContext.getBean(null);
+            fail();
+        } catch (NullPointerException expected) {
+
+        }
+
+        try {
+            containerContext.getBean(null, String.class);
+            fail();
+        } catch (NullPointerException expected) {
+
+        }
+
+        try {
+            containerContext.getBean(null, null);
+            fail();
+        } catch (NullPointerException expected) {
+
+        }
+
+        try {
+            containerContext.getBean("xxx", null);
+            fail();
+        } catch (NullPointerException expected) {
+
         }
     }
 
