@@ -51,6 +51,11 @@ class AnyIdentityTest {
             fail();
         } catch (NullPointerException expected) {
         }
+        try {
+            identity.get("xxx", null);
+            fail();
+        } catch (NullPointerException expected) {
+        }
     }
 
 }

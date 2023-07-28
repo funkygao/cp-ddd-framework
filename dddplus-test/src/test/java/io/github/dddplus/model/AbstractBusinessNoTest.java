@@ -25,6 +25,9 @@ class AbstractBusinessNoTest {
     void present() {
         Foo foo = new Foo(null);
         assertFalse(foo.isPresent());
+        foo = new Foo(19);
+        assertTrue(foo.isPresent());
+        assertFalse(foo.toString().isEmpty());
     }
 
     @Test
