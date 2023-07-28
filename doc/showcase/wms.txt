@@ -1,4 +1,4 @@
-标注覆盖率：Class(73/53.4%) Method(128/52.3%) Property(276/19.9%) Statement(237)
+标注覆盖率：Class(73/53.4%) Method(128/52.3%) Property(276/19.9%) Calls(558/11.0%) Statement(237)
 大方法Top10
    ddd.plus.showcase.wms.application.service.ShippingAppService#shipOrder 31
    ddd.plus.showcase.wms.application.service.CheckingAppService#checkByOrder 30
