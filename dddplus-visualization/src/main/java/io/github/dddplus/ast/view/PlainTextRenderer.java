@@ -25,7 +25,6 @@ public class PlainTextRenderer implements IModelRenderer<PlainTextRenderer> {
     private String targetFilename;
 
     private boolean clustering = false;
-    private boolean showNotLabeledElements = false;
     private boolean showRawSimilarities = false;
 
     private final StringBuilder content = new StringBuilder();
@@ -146,12 +145,6 @@ public class PlainTextRenderer implements IModelRenderer<PlainTextRenderer> {
                         .append(String.format("%-13s %s", type, keyModelEntry.displayFieldByType(type)))
                         .append(NEWLINE);
             }
-
-            if (this.showNotLabeledElements && !keyModelEntry.undefinedTypes().isEmpty()) {
-                append(TAB)
-                        .append(String.format("%-13s %s", "-NotLabeled-", keyModelEntry.displayUndefinedTypes()))
-                        .append(NEWLINE);
-            }
         }
 
         if (!keyModelEntry.getKeyBehaviorEntries().isEmpty()) {
@@ -238,12 +231,6 @@ public class PlainTextRenderer implements IModelRenderer<PlainTextRenderer> {
             }
             append(NEWLINE);
         }
-        return this;
-    }
-
-    public PlainTextRenderer showNotLabeledElements() {
-        assureNotBuiltYet();
-        this.showNotLabeledElements = true;
         return this;
     }
 

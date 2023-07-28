@@ -6,9 +6,7 @@
 package io.github.dddplus.ast.view;
 
 import com.google.common.collect.Sets;
-import io.github.dddplus.ast.model.ReverseEngineeringModel;
 import io.github.dddplus.ast.model.*;
-import io.github.dddplus.ast.report.ClassMethodReport;
 import io.github.dddplus.ast.report.CoverageReport;
 import io.github.dddplus.dsl.KeyElement;
 import io.github.dddplus.dsl.KeyRelation;
@@ -67,7 +65,6 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
     private Direction direction;
     private Set<String> skinParams = new HashSet<>();
     private Set<String> notes = new TreeSet<>();
-    private boolean showNotLabeledElements = false;
     private boolean showCoverage = true;
 
     public PlantUmlRenderer() {
@@ -102,11 +99,6 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
         return this;
     }
 
-    public PlantUmlRenderer showNotLabeledElements() {
-        this.showNotLabeledElements = true;
-        return this;
-    }
-
     public PlantUmlRenderer disableCoverage() {
         this.showCoverage = false;
         return this;
@@ -135,7 +127,6 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
             appendHeader();
         }
 
-        //addClassMethodReport();
         addNotes();
 
         // aggregates
@@ -143,7 +134,6 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
         model.aggregates().forEach(a -> addAggregate(a));
         append(BRACE_CLOSE).append(NEWLINE);
 
-        //addSimilarities();
         addKeyUsecases();
         addOrphanKeyFlows();
         addKeyRelations();
@@ -173,29 +163,6 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
         for (String note : notes) {
             append(TAB).append(note).append(NEWLINE);
         }
-        append("end note").append(NEWLINE).append(NEWLINE);
-        return this;
-    }
-
-    private PlantUmlRenderer addClassMethodReport() {
-        ClassMethodReport report = model.getClassMethodReport();
-        append("note as ClassMethodReportNote").append(NEWLINE);
-        append(String.format("  Class: annotated(%d) public(%d) deprecated(%d)",
-                model.annotatedModels(),
-                report.getClassInfo().getPublicClasses().size(),
-                report.getClassInfo().getDeprecatedClasses().size()
-                )).append(NEWLINE);
-        append(String.format("  Method: annotated(%d) public(%d) default(%d) private(%d) protected(%d) static(%d) deprecated(%d)",
-                model.annotatedMethods(),
-                report.getMethodInfo().getPublicMethods().size(),
-                report.getMethodInfo().getDefaultMethods().size(),
-                report.getMethodInfo().getPrivateMethods().size(),
-                report.getMethodInfo().getProtectedMethods().size(),
-                report.getMethodInfo().getStaticMethods().size(),
-                report.getMethodInfo().getDeprecatedMethods().size()
-                )).append(NEWLINE);
-        append(String.format("  Statements: %d", report.getStatementN()))
-                .append(NEWLINE);
         append("end note").append(NEWLINE).append(NEWLINE);
         return this;
     }
@@ -301,11 +268,6 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
 
                 append(String.format("    __ %s __", type)).append(NEWLINE);
                 append("    {field} ").append(keyModelEntry.displayFieldByType(type)).append(NEWLINE);
-            }
-
-            if (showNotLabeledElements && !keyModelEntry.undefinedTypes().isEmpty()) {
-                append("    __ NotLabeled __").append(NEWLINE);
-                append("    {field} ").append(keyModelEntry.displayUndefinedTypes()).append(NEWLINE);
             }
         }
 
@@ -465,20 +427,6 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
         append(SPACE).append(BRACE_OPEN).append(NEWLINE);
         for (KeyModelEntry clazz : aggregate.keyModels()) {
             append(TAB).writeClazzDefinition(clazz, aggregate.isRoot(clazz)).append(NEWLINE);
-        }
-        append(BRACE_CLOSE);
-        append(NEWLINE).append(NEWLINE);
-
-        return this;
-    }
-
-    private PlantUmlRenderer addSimilarities() {
-        append(MessageFormat.format(PACKAGE_TMPL, "相似度", "%"));
-        append(SPACE).append(BRACE_OPEN).append(NEWLINE);
-        for (SimilarityEntry entry : model.sortedSimilarities()) {
-            append(TAB).append(entry.getLeftClass()).append(" .. ").append(entry.getRightClass())
-                    .append(": ").append(String.format("%.0f", entry.getSimilarity()))
-                    .append(NEWLINE);
         }
         append(BRACE_CLOSE);
         append(NEWLINE).append(NEWLINE);

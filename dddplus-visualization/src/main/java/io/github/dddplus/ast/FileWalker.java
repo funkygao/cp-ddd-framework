@@ -7,11 +7,9 @@ package io.github.dddplus.ast;
 
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
-import lombok.NonNull;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.List;
 
 /**
  * 文件系统遍历器.
@@ -68,17 +66,6 @@ public class FileWalker {
      * @param roots root dirs
      */
     public void walkFrom(File ...roots) {
-        for (File root : roots) {
-            walkFrom(0, "", root);
-        }
-    }
-
-    /**
-     * 从指定目录列表开始递归遍历.
-     *
-     * @param roots root dirs
-     */
-    public void walkFrom(@NonNull List<File> roots) {
         for (File root : roots) {
             walkFrom(0, "", root);
         }
