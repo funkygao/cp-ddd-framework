@@ -432,6 +432,18 @@ public class IntegrationTest {
         // B2BDecideStepsExt
         List<String> b2bSubmitSteps = DDD.useRouter(DecideStepsRouter.class).decideSteps(fooModel, Steps.Submit.Activity);
         assertEquals(3, b2bSubmitSteps.size());
+
+        try {
+            DDD.useRouter(DecideStepsRouter.class).decideSteps(null, Steps.Submit.Activity);
+            fail();
+        } catch (NullPointerException expected) {
+        }
+        try {
+            DDD.useRouter(DecideStepsRouter.class).defaultExtension(null);
+            fail();
+        } catch (NullPointerException expected) {
+
+        }
     }
 
     @Test
