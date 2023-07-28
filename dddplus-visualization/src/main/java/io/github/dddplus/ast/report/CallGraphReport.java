@@ -21,6 +21,7 @@ public class CallGraphReport {
     private final ReverseEngineeringModel model;
     private List<CallGraphEntry> entries = new ArrayList<>();
     private Set<PackageCrossRefEntry> packageCrossRefEntries = new TreeSet<>();
+    private int calls = 0;
 
     public CallGraphReport(ReverseEngineeringModel model) {
         this.model = model;
@@ -28,6 +29,10 @@ public class CallGraphReport {
 
     public boolean interestedInMethod(String declarationClazz, String methodName) {
         return model.getKeyModelReport().hasKeyMethod(declarationClazz, methodName);
+    }
+
+    public void increment() {
+        calls++;
     }
 
     public List<CallGraphEntry> sortedEntries() {

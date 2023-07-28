@@ -113,6 +113,8 @@ public class PlainTextRenderer implements IModelRenderer<PlainTextRenderer> {
                 .append(String.format("Property(%d/%.1f%%)", report.getPropertyN(), report.propertyCoverage()))
                 .append(SPACE)
                 .append(String.format("Statement(%d)", model.getClassMethodReport().getStatementN()))
+                .append(SPACE)
+                .append(String.format("Call(%d)", model.getCallGraphReport().getCalls()))
                 .append(NEWLINE);
         append("大方法Top10").append(NEWLINE);
         for (Integer loc : model.getClassMethodReport().topTenBigMethods().keySet()) {

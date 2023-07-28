@@ -43,6 +43,8 @@ class CallGraphAstNodeVisitor extends VoidVisitorAdapter<CallGraphReport> {
     public void visit(final MethodReferenceExpr methodReferenceExpr, final CallGraphReport report) {
         super.visit(methodReferenceExpr, report);
 
+        report.increment();
+
         if (!(methodReferenceExpr.getScope() instanceof TypeExpr)) {
             return;
         }
@@ -82,6 +84,8 @@ class CallGraphAstNodeVisitor extends VoidVisitorAdapter<CallGraphReport> {
     @Override
     public void visit(final MethodCallExpr methodCallExpr, final CallGraphReport report) {
         super.visit(methodCallExpr, report);
+
+        report.increment();
 
         final String methodName = methodCallExpr.getName().asString();
         Expression scope = methodCallExpr.getScope().orElse(null);
