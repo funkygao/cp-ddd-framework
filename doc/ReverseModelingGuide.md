@@ -13,9 +13,8 @@ Annotation your code with DSL --> DDDplus maven plugin --> Your visualized busin
 ## 一、用dddplus-maven-plugin跑一遍代码
 
 ```bash
-cd ${your java source code repo}
 mvn io.github.dddplus:dddplus-maven-plugin:visualize \
-    -DrootDir=${冒号分隔的目录名称} \
+    -DrootDir=${冒号分隔的源代码目录名称} \
     -DpkgRef=${包级别交叉调用报告输出到哪一个文件, dot格式} \
     -DcallGraph=${核心方法调用关系报告输出到哪一个文件, dot格式} \
     -DplantUml=${业务模型输出到哪一个文件, svg格式} \
