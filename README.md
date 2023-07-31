@@ -69,11 +69,26 @@ Please check out the [《step by step guide》](doc/ReverseModelingGuide.md).
 ```xml
 <dependency>
     <groupId>io.github.dddplus</groupId>
-    <artifactId>dddplus-visualization</artifactId>
+    <artifactId>dddplus-spec</artifactId>
 </dependency>
 ```
 
 Annotate your code With [DSL](/dddplus-spec/src/main/java/io/github/dddplus/dsl), DDDplus will parse AST and render domain model in multiple views.
+
+To render the reverse model, you have 2 options:
+
+Option 1: use dddplus maven plugin
+
+```bash
+mvn io.github.dddplus:dddplus-maven-plugin:visualize \
+    -DrootDir=${colon separated source code dirs} \
+    -DpkgRef=${target package reference dot file} \
+    -DcallGraph=${target call graph dot flle} \
+    -DplantUml=${target business model in svg format} \
+    -DtextModel=${target business model in txt format}
+```
+
+Option 2: integrate with unit test
 
 ```java
 class ReverseModelingTest {
