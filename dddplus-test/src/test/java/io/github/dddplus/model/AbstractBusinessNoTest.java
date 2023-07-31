@@ -2,6 +2,9 @@ package io.github.dddplus.model;
 
 import lombok.NonNull;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Disabled;
+
+import nl.jqno.equalsverifier.EqualsVerifier;
 
 import java.util.Date;
 
@@ -49,6 +52,12 @@ class AbstractBusinessNoTest {
         assertNotEquals(bar, foo);
         assertFalse(foo.equals(bar));
         assertFalse(bar.equals(foo));
+    }
+
+    @Test
+    @Disabled
+    void equalsContract() {
+        //EqualsVerifier.forClass(Foo.class).verify();
     }
 
 }
