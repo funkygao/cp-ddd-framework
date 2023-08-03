@@ -27,30 +27,32 @@ digraph G {
 
    CartonBag:deductConsumableInventory -> Carton:deductConsumableInventory
    CartonBag:fulfill -> Carton:fulfill
-   CheckingAppService -> TaskOfOrderPending:confirmQty
-   CheckingAppService -> CartonBag:fulfill
-   CheckingAppService -> CartonBag:putOnPallet
-   CheckingAppService -> Order:checkedBy
-   CheckingAppService -> CartonBag:deductConsumableInventory
-   CheckingAppService -> Carton:cartonizationRule
-   CheckingAppService -> Carton:bindOrder
-   CheckingAppService -> Carton:transferFrom
-   CheckingAppService -> OrderBag:canceledBag
-   CheckingAppService -> Order:recommendPackQty
-   CheckingAppService -> Carton:installConsumables
-   CheckingAppService -> Carton:fulfill
-   CheckingAppService -> Order:recommendedPlatform
-   CheckingAppService -> TaskBag:platforms
-   CheckingAppService -> TaskBag:totalCheckedQty
-   CheckingAppService -> TaskBag:totalPendingQty
-   CheckingAppService -> Task:removeOrderLines
-   CheckingAppService -> Task:isEmpty
-   CheckingAppService -> Task:plan
+   CheckingAppService -> TaskOfOrderPending:confirmQty [label="checkByOrder"];
+   CheckingAppService -> CartonBag:fulfill [label="checkByOrder"];
+   CheckingAppService -> CartonBag:putOnPallet [label="checkByOrder"];
+   CheckingAppService -> Order:checkedBy [label="checkByOrder"];
+   CheckingAppService -> CartonBag:deductConsumableInventory [label="checkByOrder"];
+   CheckingAppService -> Carton:cartonizationRule [label="checkBySku"];
+   CheckingAppService -> Carton:bindOrder [label="checkBySku"];
+   CheckingAppService -> Carton:transferFrom [label="checkBySku"];
+   CheckingAppService -> OrderBag:canceledBag [label="claimTask"];
+   CheckingAppService -> Order:recommendPackQty [label="claimTask"];
+   CheckingAppService -> Carton:installConsumables [label="fulfillCarton"];
+   CheckingAppService -> Carton:fulfill [label="fulfillCarton"];
+   CheckingAppService -> Order:recommendedPlatform [label="recommendPlatformByOrder"];
+   CheckingAppService -> TaskBag:platforms [label="recommendPlatformByOrder"];
+   CheckingAppService -> TaskBag:totalCheckedQty [label="recommendPlatformByTaskBacklog"];
+   CheckingAppService -> TaskBag:totalPendingQty [label="recommendPlatformByTaskBacklog"];
+   CheckingAppService -> OrderBag:canceledBag [label="submitTask"];
+   CheckingAppService -> Task:removeOrderLines [label="submitTask"];
+   CheckingAppService -> Task:isEmpty [label="submitTask"];
+   CheckingAppService -> Task:plan [label="submitTask"];
    ConsumableBag:inventoryControlBag -> Consumable:isInventory
-   ConsumableExtPolicy -> OrderBag:consumableCostFirst
+   ConsumableExtPolicy -> OrderBag:consumableCostFirst [label="extensionCode"];
    ContainerBag:totalPendingQty -> ContainerItemBag:totalPendingQty
    ContainerBag:totalPendingQty -> Container:getContainerItemBag
    ContainerBag:totalQty -> ContainerItemBag:totalQty
+   ContainerBag:totalQty -> Container:getContainerItemBag
    ContainerBag:totalSku -> ContainerItemBag:totalSku
    ContainerItemBag:totalPendingQty -> ContainerItem:getPendingQty
    ContainerItemBag:totalQty -> ContainerItem:getExpectedQty
@@ -59,22 +61,23 @@ digraph G {
    OrderBag:orderNos -> Order:getOrderNo
    OrderLineBag:orderLineNos -> OrderLine:getOrderLineNo
    OrderLineBag:totalExpectedQty -> OrderLine:expectedQty
-   OrderNotCartonizedYet -> OrderCartons:totalCartonizedQty
-   OrderNotFullyCartonized -> Order:totalExpectedQty
-   OrderNotFullyCartonized -> OrderCartons:totalCartonizedQty
+   OrderNotCartonizedYet -> OrderCartons:totalCartonizedQty [label="isSatisfiedBy"];
+   OrderNotFullyCartonized -> Order:totalExpectedQty [label="isSatisfiedBy"];
+   OrderNotFullyCartonized -> OrderCartons:totalCartonizedQty [label="isSatisfiedBy"];
    Order:recommendPackQty -> OrderCartons:totalCartonizedQty
    Order:totalExpectedQty -> OrderLineBag:totalExpectedQty
-   ShippingAppService -> ShipManifest:loadForOrder
-   ShippingAppService -> ShipManifest:ship
-   ShippingAppService -> Order:ship
+   ShippingAppService -> ShipManifest:loadForOrder [label="shipOrder"];
+   ShippingAppService -> ShipManifest:ship [label="shipOrder"];
+   ShippingAppService -> Order:ship [label="shipOrder"];
    TaskBag:totalPendingQty -> ContainerBag:totalPendingQty
    TaskBag:totalPendingQty -> Task:containerBag
    TaskBag:totalQty -> ContainerBag:totalQty
+   TaskBag:totalQty -> Task:containerBag
    TaskOfSkuPending:confirmQty -> ContainerBag:confirmQty
    Task:confirmQty -> TaskOfSkuPending:confirmQty
    Task:orderNoSet -> ContainerBag:orderNoSet
    Task:totalPendingQty -> ContainerBag:totalPendingQty
    Task:totalQty -> ContainerBag:totalQty
    Task:totalSku -> ContainerBag:totalSku
-   UniqueCodeConstraint -> TaskCartons:contains
+   UniqueCodeConstraint -> TaskCartons:contains [label="isSatisfiedBy"];
 }

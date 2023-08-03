@@ -45,6 +45,7 @@ class WmsReverseModelingTest {
         new CallGraphRenderer()
                 .targetCallGraphDotFile("../doc/showcase/callgraph.dot")
                 .targetPackageCrossRefDotFile("../doc/showcase/pkgref.dot")
+                .edgeShowsCallerMethod()
                 .splines("polyline")
                 .build(model)
                 .render();
