@@ -31,7 +31,7 @@ public class ModelingVisualizationMojo extends AbstractMojo {
     /**
      * Colon separated directories.
      */
-    @Parameter(property = "rootDir")
+    @Parameter(property = "rootDir", required = true)
     String rootDir;
 
     @Parameter(property = "callGraph")
@@ -48,14 +48,11 @@ public class ModelingVisualizationMojo extends AbstractMojo {
     Boolean rawClassSimilarity = false;
     @Parameter(property = "similarityThreshold")
     Integer similarityThreshold = 70;
+    @Parameter(property = "sqliteDb")
+    String sqliteDb;
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
-        if (rootDir == null) {
-            getLog().error("Usage: mvn io.github.dddplus:dddplus-maven-plugin:visualize -DrootDir=xx -DcallGraph=xx.dot -DpkgRef=xx.dot -DplantUml=xx.svg -Dencapsulation=xxx.txt -DtextModel=xx.txt");
-            return;
-        }
-
         getLog().info("Reverse modeling starting ...");
         try {
             String[] dirPaths = rootDir.split(":");

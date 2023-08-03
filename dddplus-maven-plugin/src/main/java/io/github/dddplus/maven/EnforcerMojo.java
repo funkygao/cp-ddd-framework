@@ -23,22 +23,17 @@ import java.io.IOException;
 @Mojo(name = "enforce", aggregator = true)
 public class EnforcerMojo extends AbstractMojo {
 
-    @Parameter(property = "rootPackage")
+    @Parameter(property = "rootPackage", required = true)
     private String rootPackage;
 
     /**
      * Colon separated directories.
      */
-    @Parameter(property = "rootDir")
+    @Parameter(property = "rootDir", required = true)
     private String rootDir;
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
-        if (rootPackage == null || rootDir == null) {
-            getLog().error("Usage: mvn io.github.dddplus:dddplus-maven-plugin:enforce -DrootPackage=${pkgname} -DrootDir=${colon separated dirs}");
-            return;
-        }
-
         new DDDPlusEnforcer()
                 .scanPackages(rootPackage)
                 .enforce();
