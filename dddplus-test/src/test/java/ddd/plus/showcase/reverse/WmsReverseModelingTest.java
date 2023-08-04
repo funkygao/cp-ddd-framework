@@ -52,6 +52,14 @@ class WmsReverseModelingTest {
     }
 
     @Test
+    void dumpModel() throws Exception {
+        ReverseEngineeringModel model = new DomainModelAnalyzer()
+                .scan(root)
+                .analyze(domainLayerFilter);
+        model.dump("../doc/model.db");
+    }
+
+    @Test
     @Disabled
     void visualizeImplementation() throws IOException {
         ReverseEngineeringModel model = new DomainModelAnalyzer()

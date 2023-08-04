@@ -5,6 +5,7 @@
  */
 package io.github.dddplus.ast.model;
 
+import io.github.dddplus.ast.model.dump.ModelDumper;
 import io.github.dddplus.ast.report.*;
 import lombok.Getter;
 
@@ -90,6 +91,10 @@ public class ReverseEngineeringModel {
         report.setAnnotatedPropertyN(keyModelReport.propertiesN());
 
         return report;
+    }
+
+    public void dump(String sqliteDbFile) throws Exception {
+        new ModelDumper(sqliteDbFile, this).dump();
     }
 
     /**

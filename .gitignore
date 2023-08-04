@@ -22,3 +22,4 @@ id_file
 .deploy
 test.svg
 model.txt
+doc/model.db

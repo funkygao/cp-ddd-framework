@@ -108,7 +108,13 @@ public class ModelingVisualizationMojo extends AbstractMojo {
 
             getLog().info("Reverse Modeling Executed OK");
             getLog().info("Please check out your modeling artifacts: " + String.join(", ", artifacts));
-        } catch (IOException e) {
+
+            if (sqliteDb != null) {
+                getLog().info("Dump model to sqlite:" + sqliteDb);
+                model.dump(sqliteDb);
+                getLog().info("Please check out your model in sqlite:" + sqliteDb);
+            }
+        } catch (Exception e) {
             throw new MojoExecutionException(e.getMessage(), e);
         }
     }
