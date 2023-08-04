@@ -13,8 +13,14 @@ public class ModelDumper {
 
     public void dump() throws SQLException, ClassNotFoundException, IOException {
         SqliteHelper db = new SqliteHelper(sqliteDb);
+        prepareTables(db)
+                .dumpKeyElements(db)
+                .dumpCallGraph(db);
+    }
+
+    private ModelDumper prepareTables(SqliteHelper db) throws SQLException, ClassNotFoundException, IOException {
         StringBuilder sql = new StringBuilder();
-        try (InputStream inputStream = ModelDumper.class.getClassLoader().getResourceAsStream("callgraph.sql")) {
+        try (InputStream inputStream = ModelDumper.class.getClassLoader().getResourceAsStream("model.sql")) {
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
             String line;
             while ((line = reader.readLine()) != null) {
@@ -23,5 +29,14 @@ public class ModelDumper {
         }
 
         db.executeUpdate(sql.toString());
+        return this;
+    }
+
+    private ModelDumper dumpCallGraph(SqliteHelper db) {
+        return this;
+    }
+
+    private ModelDumper dumpKeyElements(SqliteHelper db) {
+        return this;
     }
 }
