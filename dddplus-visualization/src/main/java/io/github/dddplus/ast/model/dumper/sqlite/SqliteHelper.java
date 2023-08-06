@@ -1,4 +1,4 @@
-package io.github.dddplus.ast.model.dump;
+package io.github.dddplus.ast.model.dumper.sqlite;
 
 import java.sql.*;
 import java.util.List;

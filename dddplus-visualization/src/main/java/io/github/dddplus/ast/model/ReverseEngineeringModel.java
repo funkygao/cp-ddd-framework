@@ -5,7 +5,7 @@
  */
 package io.github.dddplus.ast.model;
 
-import io.github.dddplus.ast.model.dump.ModelDumper;
+import io.github.dddplus.ast.model.dumper.sqlite.SqliteDumper;
 import io.github.dddplus.ast.report.*;
 import lombok.Getter;
 
@@ -94,7 +94,7 @@ public class ReverseEngineeringModel {
     }
 
     public void dump(String sqliteDbFile) throws Exception {
-        new ModelDumper(sqliteDbFile, this).dump();
+        new SqliteDumper(sqliteDbFile).dump(this);
     }
 
     /**

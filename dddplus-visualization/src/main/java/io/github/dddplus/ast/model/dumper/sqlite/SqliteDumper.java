@@ -1,26 +1,27 @@
-package io.github.dddplus.ast.model.dump;
+package io.github.dddplus.ast.model.dumper.sqlite;
 
 import io.github.dddplus.ast.model.ReverseEngineeringModel;
+import io.github.dddplus.ast.model.dumper.ModelDumper;
 import lombok.AllArgsConstructor;
 
 import java.io.*;
 import java.sql.SQLException;
 
 @AllArgsConstructor
-public class ModelDumper {
+public class SqliteDumper implements ModelDumper {
     private final String sqliteDb;
-    private final ReverseEngineeringModel model;
 
-    public void dump() throws SQLException, ClassNotFoundException, IOException {
+    @Override
+    public void dump(ReverseEngineeringModel model) throws Exception {
         SqliteHelper db = new SqliteHelper(sqliteDb);
         prepareTables(db)
                 .dumpKeyElements(db)
                 .dumpCallGraph(db);
     }
 
-    private ModelDumper prepareTables(SqliteHelper db) throws SQLException, ClassNotFoundException, IOException {
+    private SqliteDumper prepareTables(SqliteHelper db) throws SQLException, ClassNotFoundException, IOException {
         StringBuilder sql = new StringBuilder();
-        try (InputStream inputStream = ModelDumper.class.getClassLoader().getResourceAsStream("model.sql")) {
+        try (InputStream inputStream = SqliteDumper.class.getClassLoader().getResourceAsStream("model.sql")) {
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
             String line;
             while ((line = reader.readLine()) != null) {
@@ -32,11 +33,11 @@ public class ModelDumper {
         return this;
     }
 
-    private ModelDumper dumpCallGraph(SqliteHelper db) {
+    private SqliteDumper dumpCallGraph(SqliteHelper db) {
         return this;
     }
 
-    private ModelDumper dumpKeyElements(SqliteHelper db) {
+    private SqliteDumper dumpKeyElements(SqliteHelper db) {
         return this;
     }
 }
