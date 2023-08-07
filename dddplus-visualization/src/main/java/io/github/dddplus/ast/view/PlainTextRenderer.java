@@ -126,12 +126,12 @@ public class PlainTextRenderer implements IModelRenderer<PlainTextRenderer> {
     private PlainTextRenderer addAggregate(AggregateEntry aggregate) {
         append("<<Aggregate: ").append(aggregate.getName()).append(">>").append(NEWLINE);
         for (KeyModelEntry clazz : aggregate.keyModels()) {
-            writeClazzDefinition(clazz, aggregate.isRoot(clazz));
+            writeClazzDefinition(clazz);
         }
         return this;
     }
 
-    private PlainTextRenderer writeClazzDefinition(KeyModelEntry keyModelEntry, boolean isAggregateRoot) {
+    private PlainTextRenderer writeClazzDefinition(KeyModelEntry keyModelEntry) {
         append(keyModelEntry.getClassName());
         if (keyModelEntry.hasJavadoc()) {
             append(SPACE).append(keyModelEntry.getJavadoc());
