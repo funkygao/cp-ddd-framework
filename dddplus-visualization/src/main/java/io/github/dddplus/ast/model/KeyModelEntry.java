@@ -31,13 +31,15 @@ public class KeyModelEntry {
     private transient List<KeyFlowEntry> keyFlowEntries = new ArrayList<>();
 
     // 这些方法本来没有通过DSL标注，但call graph时被调用，为了图的完整性临时增加这些节点
-    private Set<String> methodsForCallGraph = new HashSet<>();
+    // TODO 这里没有处理方法重载：在一个类中定义多个同名的方法，但要求每个方法具有不同的参数的类型或参数的个数
+    private transient Set<String> methodsForCallGraph = new HashSet<>();
 
     public KeyModelEntry(String className) {
         this.className = className;
         this.properties = new TreeMap<>();
     }
 
+    // TODO 这里没有处理方法重载
     public boolean hasKeyMethod(String methodName) {
         for (KeyBehaviorEntry entry : keyBehaviorEntries) {
             if (entry.getRealMethodName().equals(methodName)) {
@@ -61,6 +63,7 @@ public class KeyModelEntry {
         methodsForCallGraph.add(methodName);
     }
 
+    // TODO 这里没有处理方法重载
     public Set<String> realKeyMethods() {
         Set<String> s = new TreeSet<>(methodsForCallGraph);
         for (KeyBehaviorEntry entry : keyBehaviorEntries) {
