@@ -27,7 +27,8 @@ public class KeyRelationReport {
         // dup check
         for (KeyRelationEntry relationEntry : relationEntries) {
             if (relationEntry.sameAs(entry)) {
-                throw new RuntimeException(String.format("Dup Key Relation annotated with javadoc: %s/%s", relationEntry.getJavadoc(), entry.getJavadoc()));
+                throw new RuntimeException(String.format("Dup Key Relation: existed %s, new entry %s",
+                        relationEntry.toString(), entry.toString()));
             }
         }
 
