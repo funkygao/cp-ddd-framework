@@ -38,4 +38,9 @@ public @interface Aggregate {
      * {@link io.github.dddplus.model.IAggregateRoot}.
      */
     Class[] root() default {};
+
+    /**
+     * 目前的模块划分是否存在问题.
+     */
+    boolean problematical() default false;
 }

@@ -74,6 +74,7 @@ public class ModelDebtReport {
     private final ReverseEngineeringModel model;
 
     private int problematicalFields = 0;
+    private int problematicalAggregates = 0;
     private int orphanFlows = 0;
     private AggregateDensity aggregateDensity;
     private int rawSimilarModels = 0;

@@ -93,7 +93,8 @@ public class PlainTextRenderer implements IModelRenderer<PlainTextRenderer> {
         if (report.getRawSimilarModels() > 0) {
             append(String.format("相似类:%d ", report.getRawSimilarModels()));
         }
-        append(String.format("聚合分布[类:(Mean:%.2f SD:%.2f) 方法:(Mean:%.2f SD:%.2f)]",
+        append(String.format("聚合分布[问题聚合:%d 类:(Mean:%.2f SD:%.2f) 方法:(Mean:%.2f SD:%.2f)]",
+                density.getProblems(),
                 density.getModelsMean(),
                 density.getModelsStandardDeviation(),
                 density.getMethodDensityMean(),

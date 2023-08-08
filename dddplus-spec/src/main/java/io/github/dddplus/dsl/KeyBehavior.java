@@ -62,4 +62,9 @@ public @interface KeyBehavior {
      * <p>这意味着内部状态变化可能不实时，可能最终一致.</p>
      */
     boolean async() default false;
+
+    /**
+     * 该行为是否是抽象行为，由子类实现.
+     */
+    boolean abstracted() default false;
 }

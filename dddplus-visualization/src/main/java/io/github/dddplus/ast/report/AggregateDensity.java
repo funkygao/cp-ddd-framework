@@ -9,6 +9,8 @@ import lombok.Data;
 
 @Data
 public class AggregateDensity {
+    private int problems = 0;
+
     private double modelsMean;
     private double modelsStandardDeviation;
 

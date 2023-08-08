@@ -9,7 +9,7 @@
    ddd.plus.showcase.wms.application.service.CheckingAppService#fulfillCarton 18
    ddd.plus.showcase.wms.domain.common.flow.handler.CartonFulfilledEventHandler#processMyEvent 14
    ddd.plus.showcase.wms.domain.carton.Carton#fulfill 13
-模型债：孤儿流程:3 相似类:7 聚合分布[类:(Mean:5.00 SD:3.96) 方法:(Mean:7.43 SD:8.98)]
+模型债：孤儿流程:3 相似类:7 聚合分布[问题聚合:0 类:(Mean:5.00 SD:3.96) 方法:(Mean:7.43 SD:8.98)]
 <<Aggregate: 出库复核任务>>
 Container 拣货容器.
    [属性]

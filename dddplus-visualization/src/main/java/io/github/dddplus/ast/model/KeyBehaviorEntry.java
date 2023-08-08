@@ -22,6 +22,7 @@ public class KeyBehaviorEntry {
     private String javadoc;
     private boolean async = false;
     private boolean useRawArgs = false;
+    private boolean abstracted = false;
 
     public KeyBehaviorEntry(String className, String methodName) {
         this.className = className;
