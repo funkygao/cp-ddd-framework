@@ -64,6 +64,9 @@ public class ModelingVisualizationMojo extends AbstractMojo {
 
             DomainModelAnalyzer analyzer = new DomainModelAnalyzer()
                     .scan(dirs);
+            if (targetCallGraph == null) {
+                analyzer.disableCallGraph();
+            }
             if (rawClassSimilarity) {
                 analyzer.rawSimilarity()
                         .similarityThreshold(similarityThreshold);

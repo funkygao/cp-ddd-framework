@@ -26,6 +26,7 @@ public class DomainModelAnalyzer {
     private double similarityThreshold = 25; // 25%
     private Set<String> ignoredAnnotations = new HashSet<>(); // in simpleName
     private boolean rawSimilarity = false;
+    private boolean disableCallGraph = false;
 
     public DomainModelAnalyzer scan(File... dirs) {
         this.dirs = dirs;
@@ -34,6 +35,11 @@ public class DomainModelAnalyzer {
 
     public DomainModelAnalyzer rawSimilarity() {
         this.rawSimilarity = true;
+        return this;
+    }
+
+    public DomainModelAnalyzer disableCallGraph() {
+        this.disableCallGraph = true;
         return this;
     }
 
@@ -241,13 +247,15 @@ public class DomainModelAnalyzer {
         }
 
         // call graph
-        log.debug("call graph");
-        CallGraphAstNodeVisitor callGraphAstNodeVisitor = new CallGraphAstNodeVisitor(dirs);
-        for (File dir : dirs) {
-            log.debug("parsing {}", CallGraphAstNodeVisitor.class.getSimpleName());
-            new FileWalker(actualFilter, (level, path, file) -> {
-                callGraphAstNodeVisitor.visit(FileWalker.silentParse(file), model.getCallGraphReport());
-            }).walkFrom(dir);
+        if (!disableCallGraph) {
+            log.debug("call graph");
+            CallGraphAstNodeVisitor callGraphAstNodeVisitor = new CallGraphAstNodeVisitor(dirs);
+            for (File dir : dirs) {
+                log.debug("parsing {}", CallGraphAstNodeVisitor.class.getSimpleName());
+                new FileWalker(actualFilter, (level, path, file) -> {
+                    callGraphAstNodeVisitor.visit(FileWalker.silentParse(file), model.getCallGraphReport());
+                }).walkFrom(dir);
+            }
         }
 
         return model;

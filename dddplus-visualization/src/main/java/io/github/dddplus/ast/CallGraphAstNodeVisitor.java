@@ -103,7 +103,7 @@ class CallGraphAstNodeVisitor extends VoidVisitorAdapter<CallGraphReport> {
         }
 
         if (!methodDeclaration.isSolved()) {
-            log.error("method:{} methodCallExpr:{} cannot be solved", methodCallExpr.getNameAsString(), methodCallExpr.toString());
+            log.debug("method:{} methodCallExpr:{} cannot be solved", methodCallExpr.getNameAsString(), methodCallExpr.toString());
             return;
         }
 
