@@ -18,6 +18,7 @@ public class KeyRelationEntry {
     private KeyRelation.Type type;
     private String remark;
     private String leftClassPackageName;
+    private String rightClassPackageName;
     private String javadoc;
     private boolean contextual = false;
 

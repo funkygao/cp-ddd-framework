@@ -1,3 +1,13 @@
+## Release Notes - DDDplus - 2.0.3
+
+* Feature
+   * 根据源代码AST分析，形成结构化数据，导出到sqlite数据库
+   * 生成原始的plantuml文件
+
+* Bug Fix
+   * 逆向分析时，KeyRelation会把一个类放在了错误的package
+
+
 ## Release Notes - DDDplus - 2.0.2
 
 * Feature

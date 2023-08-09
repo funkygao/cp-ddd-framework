@@ -6,6 +6,7 @@
 package io.github.dddplus.ast.parser;
 
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
@@ -13,9 +14,12 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.expr.ClassExpr;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
@@ -70,6 +74,38 @@ public final class JavaParserUtil {
         }
 
         return (ClassOrInterfaceDeclaration) node;
+    }
+
+    public static String packageOfKeyRelationRightClass(AnnotationExpr keyRelation, ClassExpr rightClassExpr) {
+        CompilationUnit cu = null;
+        Node node = keyRelation.getParentNode().get();
+        for (; ; ) {
+            Optional<Node> parent = node.getParentNode();
+            if (!parent.isPresent()) {
+                break;
+            }
+
+            Node parentNode = parent.get();
+            if (parentNode instanceof CompilationUnit) {
+                cu = (CompilationUnit) parentNode;
+                break;
+            }
+
+            node = node.getParentNode().orElse(null);
+            if (node == null) {
+                break;
+            }
+        }
+
+        if (cu != null) {
+            for (ImportDeclaration id : cu.getImports()) {
+                if (id.getNameAsString().endsWith("." + rightClassExpr.getTypeAsString())) {
+                    return id.getNameAsString();
+                }
+            }
+        }
+
+        return "";
     }
 
     public static boolean implementsInterface(ClassOrInterfaceDeclaration classOrInterfaceDeclaration, Class theInterface) {

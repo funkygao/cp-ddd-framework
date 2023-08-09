@@ -87,7 +87,7 @@ public class KeyModelReport {
     public List<KeyModelEntry> keyModelsOfPackage(String packageName) {
         List<KeyModelEntry> result = new ArrayList<>();
         for (KeyModelEntry entry : data.values()) {
-            if (entry.getPackageName().startsWith(packageName)) {
+            if (entry.getPackageName() != null && entry.getPackageName().startsWith(packageName)) {
                 result.add(entry);
             }
         }
