@@ -18,7 +18,6 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +39,8 @@ public class ModelingVisualizationMojo extends AbstractMojo {
     String targetPackageRef;
     @Parameter(property = "plantUml")
     String targetPlantUml;
+    @Parameter(property = "plantUmlSrc")
+    String targetPlantUmlSrc;
     @Parameter(property = "encapsulation")
     String targetEncapsulation;
     @Parameter(property = "textModel")
@@ -73,12 +74,16 @@ public class ModelingVisualizationMojo extends AbstractMojo {
             List<String> artifacts = new ArrayList<>();
             if (targetPlantUml != null) {
                 artifacts.add(targetPlantUml);
-                new PlantUmlRenderer()
+                PlantUmlRenderer renderer = new PlantUmlRenderer()
                         .direction(PlantUmlRenderer.Direction.TopToBottom)
                         .skinParamPolyline()
                         .build(model)
-                        .classDiagramSvgFilename(targetPlantUml)
-                        .render();
+                        .classDiagramSvgFilename(targetPlantUml);
+                if (targetPlantUmlSrc != null) {
+                    renderer.plantUmlFilename(targetPlantUmlSrc);
+                    artifacts.add(targetPlantUmlSrc);
+                }
+                renderer.render();
             }
             if (targetCallGraph != null) {
                 artifacts.add(targetCallGraph);

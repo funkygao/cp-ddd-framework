@@ -33,6 +33,7 @@ class WmsReverseModelingTest {
                 .direction(PlantUmlRenderer.Direction.TopToBottom)
                 .skinParamPolyline()
                 .build(model)
+                .plantUmlFilename("../doc/showcase/wms.puml")
                 .classDiagramSvgFilename("../doc/showcase/wms.svg")
                 .render();
     }

@@ -14,10 +14,7 @@ import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.SourceStringReader;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.text.MessageFormat;
 import java.util.*;
 
@@ -54,6 +51,7 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
     private static final String COLOR_FLOW_ACTUAL_CLASS = "Olive";
 
     private String classDiagramSvgFilename;
+    private String plantUmlFilename;
 
     private final Map<KeyRelation.Type, String> connections;
     private Set<KeyElement.Type> ignored;
@@ -96,6 +94,11 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
 
     public PlantUmlRenderer classDiagramSvgFilename(String classDiagramSvgFilename) {
         this.classDiagramSvgFilename = classDiagramSvgFilename;
+        return this;
+    }
+
+    public PlantUmlRenderer plantUmlFilename(String plantUmlFilename) {
+        this.plantUmlFilename = plantUmlFilename;
         return this;
     }
 
@@ -151,6 +154,12 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
         try (OutputStream outputStream = new FileOutputStream(this.classDiagramSvgFilename)) {
             os.writeTo(outputStream);
             os.close();
+        }
+
+        if (plantUmlFilename != null) {
+            try (FileWriter writer = new FileWriter(plantUmlFilename)) {
+                new BufferedWriter(writer).write(umlContent());
+            }
         }
     }
 
