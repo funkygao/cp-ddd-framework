@@ -11,7 +11,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Data
-public class KeyPropertyEntry {
+public class KeyPropertyEntry implements Comparable<KeyPropertyEntry> {
     private String className;
     private String name;
     private String realName;
@@ -30,5 +30,10 @@ public class KeyPropertyEntry {
         }
 
         return String.join("/", parts);
+    }
+
+    @Override
+    public int compareTo(KeyPropertyEntry that) {
+        return name.compareTo(that.name);
     }
 }
