@@ -41,6 +41,21 @@ public class KeyModelEntry {
         this.properties = new TreeMap<>();
     }
 
+    public List<KeyBehaviorEntry> sortedKeyBehaviorEntries() {
+        Collections.sort(keyBehaviorEntries, Comparator.comparing(KeyBehaviorEntry::getMethodName));
+        return keyBehaviorEntries;
+    }
+
+    public List<KeyRuleEntry> sortedKeyRuleEntries() {
+        Collections.sort(keyRuleEntries, Comparator.comparing(KeyRuleEntry::getMethodName));
+        return keyRuleEntries;
+    }
+
+    public List<KeyFlowEntry> sortedKeyFlowEntries() {
+        Collections.sort(keyFlowEntries, Comparator.comparing(KeyFlowEntry::getMethodName));
+        return keyFlowEntries;
+    }
+
     // TODO 这里没有处理方法重载
     public boolean hasKeyMethod(String methodName) {
         for (KeyBehaviorEntry entry : keyBehaviorEntries) {

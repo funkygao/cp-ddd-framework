@@ -282,7 +282,7 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
 
         if (!keyModelEntry.getKeyRuleEntries().isEmpty()) {
             append("    __ 规则 __").append(NEWLINE);
-            for (KeyRuleEntry entry : keyModelEntry.getKeyRuleEntries()) {
+            for (KeyRuleEntry entry : keyModelEntry.sortedKeyRuleEntries()) {
                 append("    {method} ");
                 append(entry.displayNameWithRemark())
                         .append(BRACKET_OPEN)
@@ -296,7 +296,7 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
 
         if (!keyModelEntry.getKeyBehaviorEntries().isEmpty()) {
             append("    __ 行为 __").append(NEWLINE);
-            for (KeyBehaviorEntry entry : keyModelEntry.getKeyBehaviorEntries()) {
+            for (KeyBehaviorEntry entry : keyModelEntry.sortedKeyBehaviorEntries()) {
                 append(TAB);
                 if (entry.isAsync()) {
                     append(" {abstract} ");
@@ -319,7 +319,7 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
 
         if (!keyModelEntry.getKeyFlowEntries().isEmpty()) {
             append("    __ 流程 __").append(NEWLINE);
-            for (KeyFlowEntry entry : keyModelEntry.getKeyFlowEntries()) {
+            for (KeyFlowEntry entry : keyModelEntry.sortedKeyFlowEntries()) {
                 append(TAB);
                 append(entry, keyModelEntry);
                 append(NEWLINE);
