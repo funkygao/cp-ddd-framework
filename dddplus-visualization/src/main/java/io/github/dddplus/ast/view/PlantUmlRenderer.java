@@ -229,7 +229,7 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
     private PlantUmlRenderer writeKeyUsecaseClazzDefinition(String actor) {
         append("class ").append(actor);
         append(" {").append(NEWLINE);
-        for (KeyUsecaseEntry entry : model.getKeyUsecaseReport().actorKeyUsecases(actor)) {
+        for (KeyUsecaseEntry entry : model.getKeyUsecaseReport().sortedActorKeyUsecases(actor)) {
             append("    {method} ");
             if (!entry.displayOut().isEmpty()) {
                 append(entry.displayOut()).append(SPACE);

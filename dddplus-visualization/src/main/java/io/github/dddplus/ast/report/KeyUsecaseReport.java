@@ -8,10 +8,7 @@ package io.github.dddplus.ast.report;
 import io.github.dddplus.ast.model.KeyUsecaseEntry;
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 @Data
 public class KeyUsecaseReport {
@@ -25,8 +22,10 @@ public class KeyUsecaseReport {
         data.get(entry.getClassName()).add(entry);
     }
 
-    public List<KeyUsecaseEntry> actorKeyUsecases(String actor) {
-        return data.get(actor);
+    public List<KeyUsecaseEntry> sortedActorKeyUsecases(String actor) {
+        List<KeyUsecaseEntry> entries = data.get(actor);
+        Collections.sort(entries, Comparator.comparing(KeyUsecaseEntry::getMethodName));
+        return entries;
     }
 
     public int methods() {

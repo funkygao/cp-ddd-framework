@@ -213,7 +213,7 @@ public class PlainTextRenderer implements IModelRenderer<PlainTextRenderer> {
 
     private PlainTextRenderer writeKeyUsecaseClazzDefinition(String actor) {
         append(actor).append(NEWLINE);
-        for (KeyUsecaseEntry entry : model.getKeyUsecaseReport().actorKeyUsecases(actor)) {
+        for (KeyUsecaseEntry entry : model.getKeyUsecaseReport().sortedActorKeyUsecases(actor)) {
             append(TAB);
             if (!entry.displayOut().isEmpty()) {
                 append(entry.displayOut()).append(SPACE);
