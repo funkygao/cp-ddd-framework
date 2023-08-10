@@ -33,6 +33,11 @@ public class CallGraphReport {
     }
 
     public double callCoverage() {
+        if (calls == 0) {
+            // user might disable call graph
+            return 0;
+        }
+
         return parsedCalls * 100 / calls;
     }
 
