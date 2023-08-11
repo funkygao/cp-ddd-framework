@@ -151,7 +151,7 @@ CartonItemBag
 CartonOrder
 Consumable 耗材，被放入纸箱，以便运输安全.
    [属性]
-   Structural    CartonNo OrderNo TaskNo
+   Structural    CartonNo OrderNo TaskNo/任务号
    Quantity      qty
    Location      Platform
 ConsumableBag
