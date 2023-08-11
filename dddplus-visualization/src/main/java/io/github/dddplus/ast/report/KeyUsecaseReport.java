@@ -13,6 +13,7 @@ import java.util.*;
 @Data
 public class KeyUsecaseReport {
     private Map<String, List<KeyUsecaseEntry>> data = new TreeMap<>();
+    private Map<String, String> actorJavadoc = new HashMap<>();
 
     public void register(KeyUsecaseEntry entry) {
         if (!data.containsKey(entry.getClassName())) {
@@ -20,6 +21,14 @@ public class KeyUsecaseReport {
         }
 
         data.get(entry.getClassName()).add(entry);
+    }
+
+    public void registerActorJavadoc(String actor, String javadoc) {
+        actorJavadoc.put(actor, javadoc);
+    }
+
+    public String actorJavadoc(String actor) {
+        return actorJavadoc.get(actor);
     }
 
     public List<KeyUsecaseEntry> sortedActorKeyUsecases(String actor) {

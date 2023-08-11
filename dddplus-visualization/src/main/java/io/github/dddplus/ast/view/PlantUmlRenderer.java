@@ -228,6 +228,10 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
 
     private PlantUmlRenderer writeKeyUsecaseClazzDefinition(String actor) {
         append("class ").append(actor);
+        String actorJavadoc = model.getKeyUsecaseReport().actorJavadoc(actor);
+        if (actorJavadoc != null && !actorJavadoc.isEmpty()) {
+            append(String.format(" <<(C,#9197DB) %s>> ", actorJavadoc));
+        }
         append(" {").append(NEWLINE);
         for (KeyUsecaseEntry entry : model.getKeyUsecaseReport().sortedActorKeyUsecases(actor)) {
             append("    {method} ");

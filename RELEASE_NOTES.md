@@ -4,6 +4,7 @@
    * 根据源代码AST分析，形成结构化数据，导出到sqlite数据库
    * 生成原始的plantuml文件
    * 可以修改实体所在的包
+   * KeyUsecase图里显示类的javadoc
 
 * Bug Fix
    * 逆向分析时，KeyRelation会把一个类放在了错误的package
