@@ -5,6 +5,7 @@
    * 生成原始的plantuml文件
    * 可以修改实体所在的包
    * KeyUsecase图里显示类的javadoc
+   * 业务字典，枚举类，也可以使用 KeyElement 进行标注
 
 * Bug Fix
    * 逆向分析时，KeyRelation会把一个类放在了错误的package

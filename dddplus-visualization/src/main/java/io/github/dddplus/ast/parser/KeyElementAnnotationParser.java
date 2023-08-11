@@ -5,8 +5,10 @@
  */
 package io.github.dddplus.ast.parser;
 
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.BodyDeclaration;
+import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
 import com.github.javaparser.ast.expr.MemberValuePair;
@@ -29,22 +31,34 @@ import java.util.regex.Pattern;
 public class KeyElementAnnotationParser {
     private static Pattern pattern = Pattern.compile("(\\w+)<(\\w+)>");
 
-    private final ClassOrInterfaceDeclaration classOrInterfaceDeclaration;
-    private final FieldDeclaration fieldDeclaration;
+    private final TypeDeclaration typeDeclaration;
+    private final BodyDeclaration bodyDeclaration;
+    private FieldDeclaration fieldDeclaration;
+    private EnumConstantDeclaration enumConstantDeclaration;
     private final String className;
     private KeyPropertyEntry propertyEntry;
 
-    public KeyElementAnnotationParser(ClassOrInterfaceDeclaration classOrInterfaceDeclaration, FieldDeclaration fieldDeclaration, String className) {
-        this.classOrInterfaceDeclaration = classOrInterfaceDeclaration;
-        this.fieldDeclaration = fieldDeclaration;
+    public KeyElementAnnotationParser(TypeDeclaration classOrInterfaceDeclaration, BodyDeclaration bodyDeclaration, String className) {
+        this.typeDeclaration = classOrInterfaceDeclaration;
+        this.bodyDeclaration = bodyDeclaration;
+        if (bodyDeclaration instanceof FieldDeclaration) {
+            this.fieldDeclaration = (FieldDeclaration) bodyDeclaration;
+        }
+        if (bodyDeclaration instanceof EnumConstantDeclaration) {
+            enumConstantDeclaration = (EnumConstantDeclaration) bodyDeclaration;
+        }
         this.className = className;
     }
 
     public Map<KeyElement.Type, KeyPropertyEntry> parse(AnnotationExpr keyElement) {
         List<KeyElement.Type> types = new ArrayList<>();
         KeyPropertyEntry entry = new KeyPropertyEntry();
-        entry.setJavadoc(JavaParserUtil.javadocFirstLineOf(fieldDeclaration));
-        entry.setRealName(fieldDeclaration.getVariable(0).getNameAsString());
+        entry.setJavadoc(JavaParserUtil.javadocFirstLineOf(bodyDeclaration));
+        if (fieldDeclaration != null) {
+            entry.setRealName(fieldDeclaration.getVariable(0).getNameAsString());
+        } else {
+            entry.setRealName(enumConstantDeclaration.getNameAsString());
+        }
         entry.setName(entry.getRealName());
         entry.setClassName(this.className);
         if (keyElement instanceof MarkerAnnotationExpr) {
@@ -74,7 +88,9 @@ public class KeyElementAnnotationParser {
                     case "byType":
                         // we assume 'if byType is specified it is always true'
                         // will overwrite `name`
-                        entry.setName(fieldDeclaration.getElementType().asString());
+                        if (fieldDeclaration != null) {
+                            entry.setName(fieldDeclaration.getElementType().asString());
+                        }
                         break;
                 }
             }
@@ -90,6 +106,10 @@ public class KeyElementAnnotationParser {
     }
 
     public Optional<KeyRelationEntry> extractKeyRelation() {
+        if (fieldDeclaration == null) {
+            return Optional.empty();
+        }
+
         RelationToClazz typeToClazz = keyRelationTypeOf(fieldDeclaration.getElementType().asString());
         if (typeToClazz == null) {
             return Optional.empty();
@@ -99,7 +119,7 @@ public class KeyElementAnnotationParser {
         KeyRelationEntry entry = new KeyRelationEntry();
         entry.setJavadoc(propertyEntry.getJavadoc());
         entry.setRemark(propertyEntry.getRemark());
-        entry.setLeftClassPackageName(JavaParserUtil.packageName(classOrInterfaceDeclaration));
+        entry.setLeftClassPackageName(JavaParserUtil.packageName(typeDeclaration));
         entry.setLeftClass(propertyEntry.getClassName());
         entry.setRightClass(typeToClazz.rightClass);
         entry.setType(KeyRelation.Type.valueOf(typeToClazz.relationType));

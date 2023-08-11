@@ -5,9 +5,10 @@ left to right direction
 skinparam linetype polyline
 
 header
-公共类：73，标注：39，覆盖率：53.4%
+Legend R:聚合根 B:BehaviorOnly D:Dict C:Class E:Event
+公共类：73，标注：40，覆盖率：54.8%
 公共方法：128，标注：67，覆盖率：52.3%
-字段属性：276，标注：55，覆盖率：19.9%
+字段属性：276，标注：57，覆盖率：20.7%
 endheader
 
 package 逆向业务模型 {
@@ -22,8 +23,8 @@ package Aggregate：客户出库单 <<ddd.plus.showcase.wms.domain.order>> {
     __ Contextual __
     {field} WaybillNo/OFC随单下发
     __ 规则 __
-    {method} totalExpectedQty() 
     {method} recommendedPlatform() 该订单已经被推荐到哪一个复核台.
+    {method} totalExpectedQty() 
     __ 行为 __
     {abstract}  {method} checkedBy(Operator) <color:Violet> -> OrderCheckedEvent </color>
     {method} recommendPackQty() 推荐该订单使用几个包裹：Pack.
@@ -128,8 +129,8 @@ package Aggregate：装箱 <<ddd.plus.showcase.wms.domain.carton>> {
     {method} installConsumables() 向纸箱添加耗材.
     {method} transferFrom(CheckResult) 
     __ 流程 __
-    {method} recommendFor(ICarton,ITask) 为纸箱推荐耗材 <color:Olive>IConsumableExt </color>
     {method} processMyEvent(CartonFulfilledEvent)  <color:Olive>CartonFulfilledEventHandler </color>
+    {method} recommendFor(ICarton,ITask) 为纸箱推荐耗材 <color:Olive>IConsumableExt </color>
    }
 
    class CartonItem <<纸箱里个某一种sku.>>  {
@@ -149,7 +150,7 @@ package Aggregate：装箱 <<ddd.plus.showcase.wms.domain.carton>> {
 
    class Consumable <<耗材，被放入纸箱，以便运输安全.>>  {
     __ Structural __
-    {field} CartonNo OrderNo TaskNo
+    {field} CartonNo OrderNo TaskNo/任务号
     __ Quantity __
     {field} qty
     __ Location __
@@ -195,10 +196,10 @@ package Aggregate：出库复核任务 <<ddd.plus.showcase.wms.domain.task>> {
 
    class ContainerBag <<(B,#9197DB)>>  {
     __ 规则 __
-    {method} totalSku() 该容器的总商品种类(品数).
-    {method} totalQty() 该容器的总要货量.
-    {method} totalPendingQty() 
     {method} orderNoSet() 所有的出库单号.
+    {method} totalPendingQty() 
+    {method} totalQty() 该容器的总要货量.
+    {method} totalSku() 该容器的总商品种类(品数).
     __ 行为 __
     {method} confirmQty() 
    }
@@ -214,22 +215,20 @@ package Aggregate：出库复核任务 <<ddd.plus.showcase.wms.domain.task>> {
 
    class ContainerItemBag <<(B,#9197DB)>>  {
     __ 规则 __
-    {method} totalSku() 该容器的总商品种类(品数).
-    {method} totalQty() 该容器的总货量.
     {method} totalPendingQty() 
+    {method} totalQty() 该容器的总货量.
+    {method} totalSku() 该容器的总商品种类(品数).
    }
 
    class Task <<(R,#FF7700) 复核任务.>>  {
-    __ Lifecycle __
-    {field} TaskStatus
     __ Location __
     {field} Platform
     __ 规则 __
     {method} isEmpty() 
-    {method} totalSku() 
-    {method} totalQty() 
-    {method} totalPendingQty() 
     {method} orderNoSet() 
+    {method} totalPendingQty() 
+    {method} totalQty() 
+    {method} totalSku() 
     __ 行为 __
     {method} claimedWith() 
     {method} plan() 初始化时指定复核生产计划
@@ -238,9 +237,9 @@ package Aggregate：出库复核任务 <<ddd.plus.showcase.wms.domain.task>> {
 
    class TaskBag <<(B,#9197DB)>>  {
     __ 规则 __
-    {method} totalPendingQty() 待复核货品总数
-    {method} totalCheckedQty() 已复核货品总数
     {method} platforms() 这些复核任务在哪些复核台.
+    {method} totalCheckedQty() 已复核货品总数
+    {method} totalPendingQty() 待复核货品总数
    }
 
    class TaskCartons <<(B,#9197DB)>>  {
@@ -264,6 +263,11 @@ package Aggregate：出库复核任务 <<ddd.plus.showcase.wms.domain.task>> {
    }
 
    class TaskOrders <<(B,#9197DB)>>  {
+   }
+
+   class TaskStatus <<(D,#9197DB) 任务的生命周期.>>  {
+    __ Structural __
+    {field} Appending Claimed Finished
    }
 
 }
@@ -295,26 +299,26 @@ package Aggregate：发货 <<ddd.plus.showcase.wms.domain.ship>> {
 
 }
 package 交互 <<UseCase>> {
-   class CheckingAppService {
-    {method} submitTask() 提交复核任务
-    {method} recommendPlatformByTaskBacklog(taskNo) 提升拣货员去哪个复核台：按任务积压情况
-    {method} recommendPlatformByOrder(orderNo) 提升拣货员去哪个复核台：按订单
-    {method} recommendConsumable(cartonNo) 为任务的某个纸箱推荐耗材种类和数量
-    {method} claimTask(containerNo) 复核员扫描容器领取复核任务.
-    {method} checkBySku(qty,skuNo) 复核装箱一体化：按货品维度.
+   class CheckingAppService <<(C,#9197DB) 业务用例：人工复核.>>  {
     {method} checkByOrder(orderNo) 把一个出库单的所有货品一次性放到入参指定的纸箱：爆品订单复核
+    {method} checkBySku(qty,skuNo) 复核装箱一体化：按货品维度.
+    {method} claimTask(containerNo) 复核员扫描容器领取复核任务.
     {method} fulfillCarton(cartonNo,consumables,orderNo) 复核员把拣货容器的货品放入箱，并使用耗材以便运输安全，该过程发现箱已满.
+    {method} recommendConsumable(cartonNo) 为任务的某个纸箱推荐耗材种类和数量
+    {method} recommendPlatformByOrder(orderNo) 提升拣货员去哪个复核台：按订单
+    {method} recommendPlatformByTaskBacklog(taskNo) 提升拣货员去哪个复核台：按任务积压情况
+    {method} submitTask() 提交复核任务
    }
 
-   class FlowAutoExecutionConsumer {
+   class FlowAutoExecutionConsumer <<(C,#9197DB) 作业的流程自动化.>>  {
     {method} onMessage() 根据不同消息自动链式触发流程自动化执行
    }
 
-   class ShippingAppService {
+   class ShippingAppService <<(C,#9197DB) 业务用例：发货>>  {
     {method} shipOrder() 整单发货.
    }
 
-   class TaskSubmittedConsumer {
+   class TaskSubmittedConsumer <<(C,#9197DB) 提交复核任务的MQ消费者.>>  {
     {method} 消费接收复核任务(json) 
    }
 
@@ -340,11 +344,4 @@ ContainerDiff "1" *-- "1" ContainerDiffItemBag: HasOne
 ContainerDiffItem --|> OrderLine: BelongTo
 ContainerDiffItemBag "1" *-- "N" ContainerDiffItem: HasMany
 CartonItemBag "1" *-- "N" CartonItem: HasMany
-ConsumableBag "1" *-- "N" Consumable: HasMany
-Consumable --|> Sku: Extends
-Carton --|> Task: BelongTo
-Carton --|> Order: BelongTo
-Carton "1" *-- "1" CartonItemBag: HasOne
-Carton "1" *-- "1" ConsumableBag: HasOne
-Carton o-- CartonOrder: Associate
-Carton "1
+ConsumableBag "1" 

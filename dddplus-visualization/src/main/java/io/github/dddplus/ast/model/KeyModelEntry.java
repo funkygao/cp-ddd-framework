@@ -24,6 +24,9 @@ public class KeyModelEntry {
     private final String className;
     @Setter
     private String javadoc;
+    // 这个类是个枚举
+    @Setter
+    private boolean enumType = false;
 
     private final Map<KeyElement.Type, List<KeyPropertyEntry>> properties;
     private final Set<String> rawFields = new HashSet<>();

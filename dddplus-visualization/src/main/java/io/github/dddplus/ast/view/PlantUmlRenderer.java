@@ -267,6 +267,12 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
             } else {
                 append(" <<(B,#9197DB)>> ");
             }
+        } else if (keyModelEntry.isEnumType()) {
+            if (keyModelEntry.hasJavadoc()) {
+                append(String.format(" <<(D,#9197DB) %s>> ", keyModelEntry.getJavadoc()));
+            } else {
+                append(" <<(D,#9197DB)>> ");
+            }
         } else {
             if (keyModelEntry.hasJavadoc()) {
                 append(String.format(" <<%s>> ", keyModelEntry.getJavadoc()));
@@ -378,6 +384,8 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
         if (header != null && !header.isEmpty()) {
             append(header).append(NEWLINE);
         }
+        // legend
+        append("Legend R:聚合根 B:BehaviorOnly D:Dict C:Class E:Event").append(NEWLINE);
         CoverageReport report = model.coverageReport();
         append(String.format("公共类：%d，标注：%d，覆盖率：%.1f%%", report.getPublicClazzN(), report.getAnnotatedClazzN(), report.clazzCoverage()));
         append(NEWLINE);

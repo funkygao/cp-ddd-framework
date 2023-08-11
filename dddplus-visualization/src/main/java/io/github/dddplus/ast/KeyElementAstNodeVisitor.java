@@ -5,8 +5,7 @@
  */
 package io.github.dddplus.ast;
 
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import io.github.dddplus.ast.model.KeyModelEntry;
@@ -29,6 +28,38 @@ class KeyElementAstNodeVisitor extends VoidVisitorAdapter<KeyModelReport> {
     public KeyElementAstNodeVisitor(boolean parseRawModel, Set<String> ignoredAnnotations) {
         this.parseRawModel = parseRawModel;
         this.ignoredAnnotations = ignoredAnnotations;
+    }
+
+    @Override
+    public void visit(final EnumConstantDeclaration fieldDeclaration, final KeyModelReport report) {
+        super.visit(fieldDeclaration, report);
+
+        if (!fieldDeclaration.isAnnotationPresent(KeyElement.class)
+                || fieldDeclaration.isAnnotationPresent(Deprecated.class)) {
+            return;
+        }
+
+        TypeDeclaration typeDeclaration = JavaParserUtil.getTypeDeclaration(fieldDeclaration.getParentNode().get());
+        if (typeDeclaration == null || !(typeDeclaration instanceof EnumDeclaration)) {
+            // should never happen
+            return;
+        }
+
+        EnumDeclaration parentClass = (EnumDeclaration) typeDeclaration;
+        final String packageName = JavaParserUtil.packageName(parentClass);
+        final String className = parentClass.getNameAsString();
+        KeyModelEntry entry = report.getOrCreateKeyModelEntryForActor(className);
+        entry.setEnumType(true);
+        entry.setPackageName(packageName);
+        if (!entry.hasJavadoc()) {
+            entry.setJavadoc(JavaParserUtil.javadocFirstLineOf(parentClass));
+        }
+        AnnotationExpr annotationExpr = fieldDeclaration.getAnnotationByClass(KeyElement.class).get();
+        KeyElementAnnotationParser parser = new KeyElementAnnotationParser(parentClass, fieldDeclaration, className);
+        Map<KeyElement.Type, KeyPropertyEntry> properties = parser.parse(annotationExpr);
+        for (KeyElement.Type type : properties.keySet()) {
+            entry.addField(type, properties.get(type));
+        }
     }
 
     @Override
@@ -63,8 +94,6 @@ class KeyElementAstNodeVisitor extends VoidVisitorAdapter<KeyModelReport> {
                 return;
             }
         }
-
-
 
         final String packageName = JavaParserUtil.packageName(parentClass);
         final String className = parentClass.getNameAsString();

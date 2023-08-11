@@ -187,7 +187,7 @@ public final class JavaParserUtil {
         return info;
     }
 
-    public static String javadocFirstLineOf(FieldDeclaration fieldDeclaration) {
+    public static String javadocFirstLineOf(BodyDeclaration fieldDeclaration) {
         if (!fieldDeclaration.getComment().isPresent()) {
             return BLANK;
         }
