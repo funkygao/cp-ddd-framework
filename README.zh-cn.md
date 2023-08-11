@@ -110,7 +110,9 @@ class ReverseModelingTest {
 为了避免错误使用造成的线上事故，建议CI流水线里增加DDDplus的错误使用门禁。
 
 ```bash
-mvn io.github.dddplus:dddplus-maven-plugin:enforce -DrootPackage={your pkg} -DrootDir={your src dir}
+mvn io.github.dddplus:dddplus-maven-plugin:enforce \
+    -DrootPackage={your pkg} \
+    -DrootDir={your src dir}
 ```
 
 ## Contribution

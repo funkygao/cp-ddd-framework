@@ -117,7 +117,9 @@ class ReverseModelingTest {
 ### Architecture Guard
 
 ```bash
-mvn io.github.dddplus:dddplus-maven-plugin:enforce -DrootPackage={your pkg} -DrootDir={your src dir}
+mvn io.github.dddplus:dddplus-maven-plugin:enforce \
+    -DrootPackage={your pkg} \
+    -DrootDir={your src dir}
 ```
 
 ## Contribution
