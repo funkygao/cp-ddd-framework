@@ -8,10 +8,7 @@ package io.github.dddplus.ast.parser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -45,7 +42,7 @@ public final class JavaParserUtil {
     private JavaParserUtil() {
     }
 
-    public static String packageName(ClassOrInterfaceDeclaration classOrInterfaceDeclaration) {
+    public static String packageName(TypeDeclaration classOrInterfaceDeclaration) {
         Node node = classOrInterfaceDeclaration.getParentNode().get();
         for (; ; ) {
             if (node instanceof CompilationUnit) {
@@ -74,6 +71,19 @@ public final class JavaParserUtil {
         }
 
         return (ClassOrInterfaceDeclaration) node;
+    }
+
+    public static TypeDeclaration getTypeDeclaration(Node node) {
+        while (!(node instanceof TypeDeclaration)) {
+            if (node.getParentNode().isPresent()) {
+                node = node.getParentNode().get();
+            } else {
+                // node is not class nor interface
+                return null;
+            }
+        }
+
+        return (TypeDeclaration) node;
     }
 
     public static String packageOfKeyRelationRightClass(AnnotationExpr keyRelation, ClassExpr rightClassExpr) {
@@ -193,7 +203,7 @@ public final class JavaParserUtil {
         return extractJavadocContent(methodDeclaration.getComment().get());
     }
 
-    public static String javadocFirstLineOf(ClassOrInterfaceDeclaration classOrInterfaceDeclaration) {
+    public static String javadocFirstLineOf(TypeDeclaration classOrInterfaceDeclaration) {
         if (!classOrInterfaceDeclaration.getComment().isPresent()) {
             return BLANK;
         }
