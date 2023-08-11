@@ -19,6 +19,7 @@ import io.github.dddplus.dsl.KeyElement;
 import io.github.dddplus.dsl.KeyRelation;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -28,6 +29,7 @@ import java.util.regex.Pattern;
  * {@link io.github.dddplus.dsl.KeyElement}
  */
 @Getter
+@Slf4j
 public class KeyElementAnnotationParser {
     private static Pattern pattern = Pattern.compile("(\\w+)<(\\w+)>");
 
@@ -72,7 +74,11 @@ public class KeyElementAnnotationParser {
                         break;
 
                     case "nameFromJavadoc":
-                        entry.setName(entry.getJavadoc());
+                        if (entry.getJavadoc() == null || entry.getJavadoc().isEmpty()) {
+                            log.warn("empty javadoc on {}", entry.toString());
+                        } else {
+                            entry.setName(entry.getJavadoc());
+                        }
                         break;
 
                     case "remark":
@@ -80,7 +86,11 @@ public class KeyElementAnnotationParser {
                         break;
 
                     case "remarkFromJavadoc":
-                        entry.setRemark(entry.getJavadoc());
+                        if (entry.getJavadoc() == null || entry.getJavadoc().isEmpty()) {
+                            log.warn("empty javadoc on {}", entry.toString());
+                        } else {
+                            entry.setRemark(entry.getJavadoc());
+                        }
                         break;
 
                     case "types":

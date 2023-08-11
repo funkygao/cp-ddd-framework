@@ -98,7 +98,7 @@ ContainerDiffItemBag
 Order 客户的出库单.
    [属性]
    Referential   Carrier Consignee Supplier
-   Lifecycle     OrderStatus ProductionStatus
+   Lifecycle     ProductionStatus 订单状态
    Operational   OrderConstraint
    Contextual    WaybillNo/OFC随单下发
    [行为]
