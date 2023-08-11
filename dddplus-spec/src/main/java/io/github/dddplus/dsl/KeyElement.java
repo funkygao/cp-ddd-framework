@@ -54,6 +54,11 @@ public @interface KeyElement {
     String remark() default "";
 
     /**
+     * 使用源代码的Javadoc作为补充说明.
+     */
+    boolean remarkFromJavadoc() default false;
+
+    /**
      * 业务属性的分类.
      *
      * <p>分类，容易让我们更接近问题本质：分类是人类最重要的认知.</p>

@@ -61,6 +61,10 @@ public class KeyElementAnnotationParser {
                         entry.setRemark(AnnotationFieldParser.singleFieldValue(memberValuePair));
                         break;
 
+                    case "remarkFromJavadoc":
+                        entry.setRemark(entry.getJavadoc());
+                        break;
+
                     case "types":
                         for (String typeStr : AnnotationFieldParser.arrayFieldValue(memberValuePair)) {
                             types.add(KeyElement.Type.valueOf(typeStr));
