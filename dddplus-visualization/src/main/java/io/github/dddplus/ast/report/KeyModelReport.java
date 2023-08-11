@@ -35,6 +35,16 @@ public class KeyModelReport {
     }
 
     public void fixPackage(String fromPkg, String toPkg) {
+        if (!fromPkg.contains(".")) {
+            // fix a single entity pkg
+            String keyModelName = fromPkg;
+            KeyModelEntry entry = data.get(keyModelName);
+            if (entry != null) {
+                entry.setPackageName(toPkg);
+            }
+            return;
+        }
+
         for (KeyModelEntry entry : data.values()) {
             if (fromPkg.equals(entry.getPackageName())) {
                 entry.setPackageName(toPkg);
