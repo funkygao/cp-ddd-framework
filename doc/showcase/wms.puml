@@ -17,7 +17,7 @@ package Aggregate：客户出库单 <<ddd.plus.showcase.wms.domain.order>> {
     __ Referential __
     {field} Carrier Consignee Supplier
     __ Lifecycle __
-    {field} OrderStatus ProductionStatus
+    {field} ProductionStatus 订单状态
     __ Operational __
     {field} OrderConstraint
     __ Contextual __
@@ -344,4 +344,4 @@ ContainerDiff "1" *-- "1" ContainerDiffItemBag: HasOne
 ContainerDiffItem --|> OrderLine: BelongTo
 ContainerDiffItemBag "1" *-- "N" ContainerDiffItem: HasMany
 CartonItemBag "1" *-- "N" CartonItem: HasMany
-ConsumableBag "1" 
+ConsumableBag "1" *-- "N"

@@ -71,6 +71,10 @@ public class KeyElementAnnotationParser {
                         entry.setName(AnnotationFieldParser.singleFieldValue(memberValuePair));
                         break;
 
+                    case "nameFromJavadoc":
+                        entry.setName(entry.getJavadoc());
+                        break;
+
                     case "remark":
                         entry.setRemark(AnnotationFieldParser.singleFieldValue(memberValuePair));
                         break;
