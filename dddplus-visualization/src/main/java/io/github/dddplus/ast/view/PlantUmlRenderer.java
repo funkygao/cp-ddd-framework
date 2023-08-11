@@ -359,6 +359,9 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
                 .append(BRACKET_CLOSE)
                 .append(SPACE)
                 .append(entry.getJavadoc());
+        if (entry.getRemark() != null && !entry.getRemark().isEmpty()) {
+            append(SPACE).append(entry.getRemark());
+        }
         if (keyModelEntry != null && !keyModelEntry.getClassName().equals(entry.displayActualClass())) {
             append(SPACE)
                     .append(MessageFormat.format(COLOR_TMPL_OPEN, COLOR_FLOW_ACTUAL_CLASS))
