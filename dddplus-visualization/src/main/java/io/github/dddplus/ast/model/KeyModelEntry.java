@@ -208,19 +208,6 @@ public class KeyModelEntry {
         return new TreeSet<>(propertiesOfType);
     }
 
-    public String displayUndefinedTypes() {
-        List<KeyElement.Type> types = undefinedTypes();
-        if (types.isEmpty()) {
-            return "";
-        }
-
-        StringJoiner joiner = new StringJoiner(" ");
-        for (KeyElement.Type t : types) {
-            joiner.add(t.toString());
-        }
-        return joiner.toString();
-    }
-
     public String displayFieldByType(KeyElement.Type type) {
         Set<KeyPropertyEntry> propertyEntries = keyPropertiesByType(type);
         List<String> fields = new ArrayList<>();
