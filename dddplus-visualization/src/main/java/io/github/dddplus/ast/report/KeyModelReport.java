@@ -34,6 +34,14 @@ public class KeyModelReport {
         return rawModels.get(className);
     }
 
+    public void fixPackage(String fromPkg, String toPkg) {
+        for (KeyModelEntry entry : data.values()) {
+            if (fromPkg.equals(entry.getPackageName())) {
+                entry.setPackageName(toPkg);
+            }
+        }
+    }
+
     public boolean hasKeyMethod(String declarationClazz, String methodName) {
         for (KeyModelEntry modelEntry : data.values()) {
             if (modelEntry.getClassName().equals(declarationClazz) && modelEntry.hasKeyMethod(methodName)) {

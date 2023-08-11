@@ -12,10 +12,7 @@ import io.github.dddplus.ast.model.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Domain model analyzer, generating {@link ReverseEngineeringModel}.
@@ -27,9 +24,17 @@ public class DomainModelAnalyzer {
     private Set<String> ignoredAnnotations = new HashSet<>(); // in simpleName
     private boolean rawSimilarity = false;
     private boolean disableCallGraph = false;
+    private List<Map<String, String>> keyModelPackageFixes = new ArrayList<>();
 
     public DomainModelAnalyzer scan(File... dirs) {
         this.dirs = dirs;
+        return this;
+    }
+
+    public DomainModelAnalyzer fixKeyModelPackage(String fromPkg, String toPkg) {
+        Map<String, String> fix = new HashMap<>();
+        fix.put(fromPkg, toPkg);
+        keyModelPackageFixes.add(fix);
         return this;
     }
 
@@ -190,6 +195,15 @@ public class DomainModelAnalyzer {
                             .build();
                     model.addRawSimilarityEntry(entry);
                 }
+            }
+        }
+
+        if (!this.keyModelPackageFixes.isEmpty()) {
+            log.debug("fix key model packages");
+            for (Map<String, String> pair : this.keyModelPackageFixes) {
+                String fromPkg = pair.keySet().iterator().next();
+                String toPkg = pair.get(fromPkg);
+                model.getKeyModelReport().fixPackage(fromPkg, toPkg);
             }
         }
 

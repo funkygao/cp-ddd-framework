@@ -51,6 +51,8 @@ public class ModelingVisualizationMojo extends AbstractMojo {
     Integer similarityThreshold = 70;
     @Parameter(property = "sqliteDb")
     String sqliteDb;
+    @Parameter(property = "fixModelPkg")
+    String keyModelPkgFix;
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
@@ -64,6 +66,12 @@ public class ModelingVisualizationMojo extends AbstractMojo {
 
             DomainModelAnalyzer analyzer = new DomainModelAnalyzer()
                     .scan(dirs);
+            if (keyModelPkgFix != null) {
+                for (String pair : keyModelPkgFix.split(",")) {
+                    String[] pkgPair = pair.split(":");
+                    analyzer.fixKeyModelPackage(pkgPair[0], pkgPair[1]);
+                }
+            }
             if (targetCallGraph == null) {
                 analyzer.disableCallGraph();
             }
