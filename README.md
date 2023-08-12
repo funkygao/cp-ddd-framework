@@ -16,7 +16,6 @@ A lightweight DDD(Domain Driven Design) enhancement framework for forward/revers
 
 <div align="center">
 
-<img src="https://profile-counter.glitch.me/dddplus/count.svg" hidden />
 Languages： English | [中文](README.zh-cn.md)
 </div>
 
