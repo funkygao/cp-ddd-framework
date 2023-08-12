@@ -16,6 +16,7 @@
 
 <div align="center">
 
+<img src="https://profile-counter.glitch.me/dddplus/count.svg" hidden />
 Languages： [English](README.md) | 中文
 </div>
 
