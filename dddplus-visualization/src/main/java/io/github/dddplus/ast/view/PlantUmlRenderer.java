@@ -133,7 +133,7 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
         addNotes();
 
         // aggregates
-        append("package 逆向业务模型 {").append(NEWLINE);
+        append("package 业务模型层 {").append(NEWLINE);
         model.aggregates().forEach(a -> addAggregate(a));
         append(BRACE_CLOSE).append(NEWLINE);
 
@@ -447,7 +447,7 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
     }
 
     private PlantUmlRenderer addAggregate(AggregateEntry aggregate) {
-        append(MessageFormat.format(PACKAGE_TMPL, "Aggregate：" + aggregate.getName(), aggregate.getPackageName()));
+        append(MessageFormat.format(PACKAGE_TMPL, aggregate.getName(), aggregate.getPackageName()));
         append(SPACE).append(BRACE_OPEN).append(NEWLINE);
         for (KeyModelEntry clazz : aggregate.keyModels()) {
             append(TAB).writeClazzDefinition(clazz, aggregate.isRoot(clazz)).append(NEWLINE);
@@ -513,7 +513,7 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
             return this;
         }
 
-        append(MessageFormat.format(PACKAGE_TMPL, "交互", "UseCase"));
+        append(MessageFormat.format(PACKAGE_TMPL, "业务交互层", "UseCase"));
         append(SPACE).append(BRACE_OPEN).append(NEWLINE);
         for (String actor : model.getKeyUsecaseReport().getData().keySet()) {
             append(TAB).writeKeyUsecaseClazzDefinition(actor).append(NEWLINE);
