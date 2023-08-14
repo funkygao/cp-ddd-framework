@@ -108,6 +108,11 @@ public class KeyElementAnnotationParser {
                         break;
                 }
             }
+
+            if (types.isEmpty()) {
+                // @KeyElement(nameFromJavadoc = true)
+                types.add(KeyElement.Type.Structural);
+            }
         }
 
         propertyEntry = entry;
