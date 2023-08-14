@@ -26,6 +26,7 @@ public class KeyFlowEntry {
     private boolean async = false;
     private boolean polymorphism = false;
     private boolean useRawArgs = false;
+    private boolean usecase = false;
 
     public KeyFlowEntry(String className, String realMethodName, String javadoc) {
         this.className = className;

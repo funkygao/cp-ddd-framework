@@ -52,6 +52,10 @@ public class KeyFlowAnnotationParser {
                     entry.setRemark(AnnotationFieldParser.singleFieldValue(memberValuePair));
                     break;
 
+                case "usecase":
+                    entry.setUsecase(true);
+                    break;
+
                 case "actor":
                     // Class[] actor，只是为了注解值是可选的，实际使用只会用1个
                     entry.setActor(AnnotationFieldParser.singleFieldValue(memberValuePair));
