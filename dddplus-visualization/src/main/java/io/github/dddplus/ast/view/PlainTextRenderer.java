@@ -186,7 +186,7 @@ public class PlainTextRenderer implements IModelRenderer<PlainTextRenderer> {
                             .append(SPACE)
                             .append(entry.getJavadoc())
                             .append(SPACE)
-                            .append(entry.displayActualClass());
+                            .append(entry.plainDisplayActualClass());
                     if (entry.produceEvent()) {
                         append(String.format(" -> %s", entry.displayEvents()));
                     }

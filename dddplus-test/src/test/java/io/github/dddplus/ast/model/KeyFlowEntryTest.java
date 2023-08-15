@@ -8,15 +8,15 @@ import static org.junit.jupiter.api.Assertions.*;
 class KeyFlowEntryTest {
 
     @Test
-    void displayActualClass() {
+    void umlDisplayActualClass() {
         KeyFlowEntry entry = new KeyFlowEntry("Foo", "doSth", null);
         entry.setActor("Foo");
-        assertEquals(entry.displayActualClass(), "");
+        assertEquals(entry.umlDisplayActualClass(), "");
         entry.setAbsolutePath("/root/xxx/A.java");
         Position position = new Position(12, 5);
         entry.setPosition(position);
         entry.setActor("bar");
-        assertEquals(entry.displayActualClass(), "[[http://localhost:63342/api/file//root/xxx/A.java:12 Foo]]");
+        assertEquals(entry.umlDisplayActualClass(), "[[http://localhost:63342/api/file//root/xxx/A.java:12 Foo]]");
     }
 
 }

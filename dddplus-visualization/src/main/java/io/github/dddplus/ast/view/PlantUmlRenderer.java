@@ -367,9 +367,9 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
         if (entry.getRemark() != null && !entry.getRemark().isEmpty()) {
             append(SPACE).append(entry.getRemark());
         }
-        if (keyModelEntry != null && !keyModelEntry.getClassName().equals(entry.displayActualClass())) {
+        if (keyModelEntry != null && !keyModelEntry.getClassName().equals(entry.umlDisplayActualClass())) {
             // 以IDEA url link形式展示实际类的位置：可点击
-            append(SPACE).append(entry.displayActualClass()).append(SPACE);
+            append(SPACE).append(entry.umlDisplayActualClass()).append(SPACE);
         }
         if (entry.produceEvent()) {
             append(MessageFormat.format(COLOR_TMPL_OPEN, COLOR_BEHAVIOR_PRODUCE_EVENT));

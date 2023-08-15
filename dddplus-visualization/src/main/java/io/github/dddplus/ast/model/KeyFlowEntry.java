@@ -76,7 +76,15 @@ public class KeyFlowEntry {
         return !className.equals(actor);
     }
 
-    public String displayActualClass() {
+    public String plainDisplayActualClass() {
+        if (!actor.equals(className)) {
+            return className;
+        }
+
+        return "";
+    }
+
+    public String umlDisplayActualClass() {
         if (!actor.equals(className)) {
             if (position != null && absolutePath != null) {
                 // [[http://www.google.com theLabel]]
@@ -86,6 +94,7 @@ public class KeyFlowEntry {
                 return String.format("[[http://localhost:63342/api/file/%s:%d %s]]",
                         absolutePath, position.line, className);
             }
+
             return className;
         }
 

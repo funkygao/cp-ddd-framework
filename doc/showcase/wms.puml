@@ -30,7 +30,7 @@ package 客户出库单 <<ddd.plus.showcase.wms.domain.order>> {
     {method} recommendPackQty() 推荐该订单使用几个包裹：Pack.
     {method} ship() 
     __ 流程 __
-    {method} - processMyEvent(OrderCheckedEvent)  <color:Olive>OrderCheckedEventHandler </color>
+    {method} - processMyEvent(OrderCheckedEvent)  [[http://localhost:63342/api/file//Users/gaopeng8/wms-ng/dddplus/dddplus-test/src/test/java/ddd/plus/showcase/wms/domain/common/flow/handler/OrderCheckedEventHandler.java:17 OrderCheckedEventHandler]] 
    }
 
    class OrderCartons <<(B,#9197DB)>>  {
@@ -129,8 +129,8 @@ package 装箱 <<ddd.plus.showcase.wms.domain.carton>> {
     {method} installConsumables() 向纸箱添加耗材.
     {method} transferFrom(CheckResult) 
     __ 流程 __
-    {method} - processMyEvent(CartonFulfilledEvent)  <color:Olive>CartonFulfilledEventHandler </color>
-    {method} - recommendFor(ICarton,ITask) 为纸箱推荐耗材 <color:Olive>IConsumableExt </color>
+    {method} - processMyEvent(CartonFulfilledEvent)  [[http://localhost:63342/api/file//Users/gaopeng8/wms-ng/dddplus/dddplus-test/src/test/java/ddd/plus/showcase/wms/domain/common/flow/handler/CartonFulfilledEventHandler.java:17 CartonFulfilledEventHandler]] 
+    {method} - recommendFor(ICarton,ITask) 为纸箱推荐耗材 [[http://localhost:63342/api/file//Users/gaopeng8/wms-ng/dddplus/dddplus-test/src/test/java/ddd/plus/showcase/wms/domain/carton/ext/IConsumableExt.java:15 IConsumableExt]] 
    }
 
    class CartonItem <<纸箱里个某一种sku.>>  {
@@ -333,14 +333,4 @@ package 跨聚合复杂流程 <<Orphan Services>> {
    
 }
 
-Order "1" *-- "1" OrderLineBag: HasOne
-Order o-- OrderPacks: Associate
-Order o-- OrderTasks: Associate
-Order o-- OrderCartons: Associate
-OrderLineBag "1" *-- "N" OrderLine: HasMany
-OrderOfPresale --|> Order: Contextual
-Pack --> Carton: From/Contextual 包裹明细采集
-ContainerDiff "1" *-- "1" ContainerDiffItemBag: HasOne
-ContainerDiffItem --|> OrderLine: BelongTo
-ContainerDiffItemBag "1" *-- "N" ContainerDiffItem: HasMany
-CartonItemBag "1" *-- "N" CartonItem: HasMan
+Order "1" *-
