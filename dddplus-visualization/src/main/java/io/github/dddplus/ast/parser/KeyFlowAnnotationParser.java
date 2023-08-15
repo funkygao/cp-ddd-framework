@@ -85,6 +85,7 @@ public class KeyFlowAnnotationParser {
             }
         }
 
+        entry.setNonPublic(!methodDeclaration.isPublic());
         return entry;
     }
 }
