@@ -38,6 +38,18 @@ public class KeyFlowEntry {
         this.actor = "";
     }
 
+    public String getSortedKey() {
+        if (usecase) {
+            return "_" + methodName; // usecase排在前面
+        }
+
+        if (nonPublic) {
+            return "~" + methodName; // 非public方法排在后面
+        }
+
+        return methodName;
+    }
+
     public String actor() {
         if (actor.isEmpty()) {
             return className;

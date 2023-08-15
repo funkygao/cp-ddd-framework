@@ -55,7 +55,7 @@ public class KeyModelEntry {
     }
 
     public List<KeyFlowEntry> sortedKeyFlowEntries() {
-        Collections.sort(keyFlowEntries, Comparator.comparing(KeyFlowEntry::getMethodName));
+        Collections.sort(keyFlowEntries, Comparator.comparing(KeyFlowEntry::getSortedKey));
         return keyFlowEntries;
     }
 
