@@ -357,6 +357,9 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
         if (entry.isNonPublic()) {
             append("- ");
         }
+        if (entry.isUsecase()) {
+            append("+ ");
+        }
         append(entry.getMethodName())
                 .append(BRACKET_OPEN)
                 .append(entry.displayEffectiveArgs())
@@ -370,12 +373,6 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
             append(SPACE)
                     .append(MessageFormat.format(COLOR_TMPL_OPEN, COLOR_FLOW_ACTUAL_CLASS))
                     .append(entry.displayActualClass()).append(SPACE)
-                    .append(COLOR_TMPL_CLOSE);
-        }
-        if (entry.isUsecase()) {
-            append(SPACE)
-                    .append(MessageFormat.format(COLOR_TMPL_OPEN, COLOR_FLOW_USECASE))
-                    .append("UseCase").append(SPACE)
                     .append(COLOR_TMPL_CLOSE);
         }
         if (entry.produceEvent()) {

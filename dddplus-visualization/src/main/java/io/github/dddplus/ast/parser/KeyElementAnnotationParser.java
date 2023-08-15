@@ -73,7 +73,15 @@ public class KeyElementAnnotationParser {
                         entry.setName(AnnotationFieldParser.singleFieldValue(memberValuePair));
                         break;
 
-                    case "nameFromJavadoc":
+                    case "byType":
+                        // we assume 'if byType is specified it is always true'
+                        // will overwrite `name`
+                        if (fieldDeclaration != null) {
+                            entry.setName(fieldDeclaration.getElementType().asString());
+                        }
+                        break;
+
+                    case "byJavadoc":
                         if (entry.getJavadoc() == null || entry.getJavadoc().isEmpty()) {
                             log.warn("empty javadoc on {}", entry.toString());
                         } else {
@@ -98,19 +106,11 @@ public class KeyElementAnnotationParser {
                             types.add(KeyElement.Type.valueOf(typeStr));
                         }
                         break;
-
-                    case "byType":
-                        // we assume 'if byType is specified it is always true'
-                        // will overwrite `name`
-                        if (fieldDeclaration != null) {
-                            entry.setName(fieldDeclaration.getElementType().asString());
-                        }
-                        break;
                 }
             }
 
             if (types.isEmpty()) {
-                // @KeyElement(nameFromJavadoc = true)
+                // @KeyElement(byJavadoc = true)
                 types.add(KeyElement.Type.Structural);
             }
         }

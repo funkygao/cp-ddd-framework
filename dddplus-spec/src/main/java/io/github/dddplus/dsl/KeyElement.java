@@ -43,7 +43,7 @@ public @interface KeyElement {
     /**
      * 使用javadoc作为属性名称.
      */
-    boolean nameFromJavadoc() default false;
+    boolean byJavadoc() default false;
 
     /**
      * 该属性的名称是否根据类型来命名: 默认byName.

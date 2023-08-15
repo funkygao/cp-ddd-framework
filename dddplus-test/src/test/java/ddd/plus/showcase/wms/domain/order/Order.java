@@ -54,7 +54,7 @@ public class Order extends BaseAggregateRoot<Order> implements IUnboundedDomainM
     private String feature; // 特征向量
 
     // 订单状态
-    @KeyElement(types = KeyElement.Type.Lifecycle, byType = true, nameFromJavadoc = true)
+    @KeyElement(types = KeyElement.Type.Lifecycle, byJavadoc = true)
     private OrderStatus status;
     @Getter
     @KeyElement(types = KeyElement.Type.Lifecycle, byType = true)
