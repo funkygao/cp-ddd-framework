@@ -16,10 +16,19 @@ import io.github.dddplus.ast.report.KeyRuleReport;
 import io.github.dddplus.dsl.KeyRule;
 import io.github.dddplus.model.encapsulation.AllowedAccessors;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 class KeyRuleAstNodeVisitor extends VoidVisitorAdapter<KeyRuleReport> {
     private final Set<String> ignoredAnnotations;
+    private static final List<String> javaPrimitiveTypes = Arrays.asList(
+            "boolean",
+            "date",
+            "string",
+            "byte", "char",
+            "integer", "int", "long", "short", "bigdecimal", "double", "float"
+    );
 
     public KeyRuleAstNodeVisitor(Set<String> ignoredAnnotations) {
         this.ignoredAnnotations = ignoredAnnotations;
@@ -34,7 +43,7 @@ class KeyRuleAstNodeVisitor extends VoidVisitorAdapter<KeyRuleReport> {
             if (methodDeclaration.isPublic()
                     && !methodDeclaration.isAnnotationPresent(Deprecated.class)
                     && (methodDeclaration.getParameters() == null || methodDeclaration.getParameters().size() == 0)
-                    && methodDeclaration.getTypeAsString().equalsIgnoreCase("boolean")) {
+                    && isJavaPrimitiveType(methodDeclaration.getTypeAsString())) {
                 if (methodDeclaration.isAnnotationPresent(AllowedAccessors.class)) {
                     // 指定类可访问的方法，忽略
                     return;
@@ -77,6 +86,10 @@ class KeyRuleAstNodeVisitor extends VoidVisitorAdapter<KeyRuleReport> {
         AnnotationExpr annotationExpr = methodDeclaration.getAnnotationByClass(KeyRule.class).get();
         KeyRuleEntry entry = new KeyRuleAnnotationParser(methodDeclaration, className).parse(annotationExpr);
         report.register(entry);
+    }
+
+    private boolean isJavaPrimitiveType(String typeClass) {
+        return javaPrimitiveTypes.contains(typeClass.toLowerCase());
     }
 
 }
