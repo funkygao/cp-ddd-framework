@@ -57,6 +57,7 @@ class KeyFlowAstNodeVisitor extends VoidVisitorAdapter<KeyFlowReport> {
         final String className = parentClass.getNameAsString();
         AnnotationExpr annotationExpr = methodDeclaration.getAnnotationByClass(KeyFlow.class).get();
         KeyFlowEntry entry = new KeyFlowAnnotationParser(methodDeclaration, className).parse(annotationExpr);
+        entry.setNonPublic(!methodDeclaration.isPublic());
         report.register(entry);
     }
 

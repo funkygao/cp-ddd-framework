@@ -354,6 +354,9 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
             append(" {static} ");
         }
         append(" {method} ");
+        if (entry.isNonPublic()) {
+            append("- ");
+        }
         append(entry.getMethodName())
                 .append(BRACKET_OPEN)
                 .append(entry.displayEffectiveArgs())
