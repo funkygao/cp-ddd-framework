@@ -375,7 +375,7 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
         if (entry.isUsecase()) {
             append(SPACE)
                     .append(MessageFormat.format(COLOR_TMPL_OPEN, COLOR_FLOW_USECASE))
-                    .append("业务交互层").append(SPACE)
+                    .append("UseCase").append(SPACE)
                     .append(COLOR_TMPL_CLOSE);
         }
         if (entry.produceEvent()) {
