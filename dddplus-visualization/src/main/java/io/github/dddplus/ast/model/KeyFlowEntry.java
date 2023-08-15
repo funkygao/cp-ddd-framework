@@ -5,6 +5,7 @@
  */
 package io.github.dddplus.ast.model;
 
+import com.github.javaparser.Position;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -23,6 +24,8 @@ public class KeyFlowEntry {
     private List<String> args;
     private Set<String> realArguments;
     private String remark;
+    private Position position;
+    private String absolutePath;
     private boolean async = false;
     private boolean polymorphism = false;
     private boolean useRawArgs = false;
@@ -75,6 +78,14 @@ public class KeyFlowEntry {
 
     public String displayActualClass() {
         if (!actor.equals(className)) {
+            if (position != null && absolutePath != null) {
+                // [[http://www.google.com theLabel]]
+                // IDEA Settings:
+                // Build, Execution, Deployment | Debugger
+                // Allow unsigned requests, check it
+                return String.format("[[http://localhost:63342/api/file/%s:%d %s]]",
+                        absolutePath, position.line, className);
+            }
             return className;
         }
 

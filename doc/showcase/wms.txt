@@ -97,7 +97,7 @@ ContainerDiffItemBag
 <<Aggregate: 客户出库单>>
 Order 客户的出库单.
    [属性]
-   Referential   Carrier Consignee Supplier
+   Referential   <color:Red>Carrier</color> <color:Red>Consignee</color> <color:Red>Supplier</color>
    Lifecycle     ProductionStatus 订单状态
    Operational   OrderConstraint
    Contextual    WaybillNo/OFC随单下发
@@ -109,7 +109,7 @@ Order 客户的出库单.
       totalExpectedQty() 
       recommendedPlatform() 该订单已经被推荐到哪一个复核台.
    [流程]
-      processMyEvent(OrderCheckedEvent)  OrderCheckedEventHandler
+      processMyEvent(OrderCheckedEvent)  [[http://localhost:63342/api/file//Users/gaopeng8/wms-ng/dddplus/dddplus-test/src/test/java/ddd/plus/showcase/wms/domain/common/flow/handler/OrderCheckedEventHandler.java:17 OrderCheckedEventHandler]]
 OrderCartons
    [行为]
       totalCartonizedQty() 该订单已经装箱的货品件数总和.
@@ -142,12 +142,12 @@ Carton 纸箱，它会成为包裹.
    [规则]
       cartonizationRule() 装箱规则，利用gateway延迟加载，规则也是规约.
    [流程]
-      recommendFor(ICarton,ITask) 为纸箱推荐耗材 IConsumableExt
-      processMyEvent(CartonFulfilledEvent)  CartonFulfilledEventHandler
+      recommendFor(ICarton,ITask) 为纸箱推荐耗材 [[http://localhost:63342/api/file//Users/gaopeng8/wms-ng/dddplus/dddplus-test/src/test/java/ddd/plus/showcase/wms/domain/carton/ext/IConsumableExt.java:15 IConsumableExt]]
+      processMyEvent(CartonFulfilledEvent)  [[http://localhost:63342/api/file//Users/gaopeng8/wms-ng/dddplus/dddplus-test/src/test/java/ddd/plus/showcase/wms/domain/common/flow/handler/CartonFulfilledEventHandler.java:17 CartonFulfilledEventHandler]]
 CartonItem 纸箱里个某一种sku.
    [属性]
    Structural    sku
-   Referential   orderLineNo
+   Referential   <color:Red>orderLineNo</color>
    Quantity      checkedQty
 CartonItemBag
 CartonOrder

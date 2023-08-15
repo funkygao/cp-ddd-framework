@@ -5,6 +5,8 @@
  */
 package io.github.dddplus.ast.parser;
 
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
@@ -14,6 +16,7 @@ import com.google.common.collect.Lists;
 import io.github.dddplus.ast.model.KeyFlowEntry;
 import lombok.Getter;
 
+import java.nio.file.Path;
 import java.util.List;
 
 /**
@@ -86,6 +89,20 @@ public class KeyFlowAnnotationParser {
         }
 
         entry.setNonPublic(!methodDeclaration.isPublic());
+        entry.setPosition(normalAnnotationExpr.getRange().get().begin);
+        setUpAbsolutePath(entry);
         return entry;
+    }
+
+    private void setUpAbsolutePath(KeyFlowEntry entry) {
+        ClassOrInterfaceDeclaration classDeclaration = methodDeclaration.findAncestor(ClassOrInterfaceDeclaration.class).orElse(null);
+        if (classDeclaration == null) {
+            return;
+        }
+
+        CompilationUnit compilationUnit = classDeclaration.findCompilationUnit().get();
+        Path sourcePath = compilationUnit.getStorage().get().getPath();
+        String absolutePath = sourcePath.toAbsolutePath().toString();
+        entry.setAbsolutePath(absolutePath);
     }
 }

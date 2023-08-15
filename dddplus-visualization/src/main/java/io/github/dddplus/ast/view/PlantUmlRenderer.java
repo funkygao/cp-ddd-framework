@@ -48,8 +48,6 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
 
     // https://plantuml.com/zh/color
     private static final String COLOR_BEHAVIOR_PRODUCE_EVENT = "Violet";
-    private static final String COLOR_FLOW_ACTUAL_CLASS = "Olive";
-    private static final String COLOR_FLOW_USECASE = "Blue";
 
     private String classDiagramSvgFilename;
     private String plantUmlFilename;
@@ -370,10 +368,8 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
             append(SPACE).append(entry.getRemark());
         }
         if (keyModelEntry != null && !keyModelEntry.getClassName().equals(entry.displayActualClass())) {
-            append(SPACE)
-                    .append(MessageFormat.format(COLOR_TMPL_OPEN, COLOR_FLOW_ACTUAL_CLASS))
-                    .append(entry.displayActualClass()).append(SPACE)
-                    .append(COLOR_TMPL_CLOSE);
+            // 以IDEA url link形式展示实际类的位置：可点击
+            append(SPACE).append(entry.displayActualClass()).append(SPACE);
         }
         if (entry.produceEvent()) {
             append(MessageFormat.format(COLOR_TMPL_OPEN, COLOR_BEHAVIOR_PRODUCE_EVENT));

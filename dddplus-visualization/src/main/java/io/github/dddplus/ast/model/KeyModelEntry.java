@@ -216,7 +216,7 @@ public class KeyModelEntry {
         List<String> fields = new ArrayList<>();
         int n = 0;
         for (KeyPropertyEntry entry : propertyEntries) {
-            fields.add(entry.displayName());
+            fields.add(entry.displayName(type));
             n++;
             if (n % propertiesPerLine == 0) {
                 fields.add("\n");

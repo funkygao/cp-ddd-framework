@@ -8,14 +8,14 @@ header
 Legend R:聚合根 B:BehaviorOnly D:Dict C:Class E:Event
 公共类：73，标注：40，覆盖率：54.8%
 公共方法：128，标注：67，覆盖率：52.3%
-字段属性：276，标注：57，覆盖率：20.7%
+字段属性：276，标注：58，覆盖率：21.0%
 endheader
 
-package 逆向业务模型 {
-package Aggregate：客户出库单 <<ddd.plus.showcase.wms.domain.order>> {
+package 业务模型层 {
+package 客户出库单 <<ddd.plus.showcase.wms.domain.order>> {
    class Order <<(R,#FF7700) 客户的出库单.>>  {
     __ Referential __
-    {field} Carrier Consignee Supplier
+    {field} <color:Red>Carrier</color> <color:Red>Consignee</color> <color:Red>Supplier</color>
     __ Lifecycle __
     {field} ProductionStatus 订单状态
     __ Operational __
@@ -30,7 +30,7 @@ package Aggregate：客户出库单 <<ddd.plus.showcase.wms.domain.order>> {
     {method} recommendPackQty() 推荐该订单使用几个包裹：Pack.
     {method} ship() 
     __ 流程 __
-    {method} processMyEvent(OrderCheckedEvent)  <color:Olive>OrderCheckedEventHandler </color>
+    {method} - processMyEvent(OrderCheckedEvent)  <color:Olive>OrderCheckedEventHandler </color>
    }
 
    class OrderCartons <<(B,#9197DB)>>  {
@@ -72,7 +72,7 @@ package Aggregate：客户出库单 <<ddd.plus.showcase.wms.domain.order>> {
 
 }
 
-package Aggregate：包裹 <<ddd.plus.showcase.wms.domain.pack>> {
+package 包裹 <<ddd.plus.showcase.wms.domain.pack>> {
    class Pack <<(R,#FF7700) 包裹.>>  {
     __ Structural __
     {field} OrderNo WaybillNo
@@ -88,7 +88,7 @@ package Aggregate：包裹 <<ddd.plus.showcase.wms.domain.pack>> {
 
 }
 
-package Aggregate：复核报差异 <<ddd.plus.showcase.wms.domain.diff>> {
+package 复核报差异 <<ddd.plus.showcase.wms.domain.diff>> {
    class ContainerDiff <<(R,#FF7700) 复核过程中发现的容器差异.>>  {
     __ Structural __
     {field} containerNo
@@ -110,7 +110,7 @@ package Aggregate：复核报差异 <<ddd.plus.showcase.wms.domain.diff>> {
 
 }
 
-package Aggregate：装箱 <<ddd.plus.showcase.wms.domain.carton>> {
+package 装箱 <<ddd.plus.showcase.wms.domain.carton>> {
    class Carton <<(R,#FF7700) 纸箱，它会成为包裹.>>  {
     __ Lifecycle __
     {field} status
@@ -129,15 +129,15 @@ package Aggregate：装箱 <<ddd.plus.showcase.wms.domain.carton>> {
     {method} installConsumables() 向纸箱添加耗材.
     {method} transferFrom(CheckResult) 
     __ 流程 __
-    {method} processMyEvent(CartonFulfilledEvent)  <color:Olive>CartonFulfilledEventHandler </color>
-    {method} recommendFor(ICarton,ITask) 为纸箱推荐耗材 <color:Olive>IConsumableExt </color>
+    {method} - processMyEvent(CartonFulfilledEvent)  <color:Olive>CartonFulfilledEventHandler </color>
+    {method} - recommendFor(ICarton,ITask) 为纸箱推荐耗材 <color:Olive>IConsumableExt </color>
    }
 
    class CartonItem <<纸箱里个某一种sku.>>  {
     __ Structural __
     {field} sku
     __ Referential __
-    {field} orderLineNo
+    {field} <color:Red>orderLineNo</color>
     __ Quantity __
     {field} checkedQty
    }
@@ -176,7 +176,7 @@ package Aggregate：装箱 <<ddd.plus.showcase.wms.domain.carton>> {
 
 }
 
-package Aggregate：通用子域 <<ddd.plus.showcase.wms.domain.common>> {
+package 通用子域 <<ddd.plus.showcase.wms.domain.common>> {
    class Sku <<货品.>>  {
     __ Structural __
     {field} Owner PackCode
@@ -186,7 +186,7 @@ package Aggregate：通用子域 <<ddd.plus.showcase.wms.domain.common>> {
 
 }
 
-package Aggregate：出库复核任务 <<ddd.plus.showcase.wms.domain.task>> {
+package 出库复核任务 <<ddd.plus.showcase.wms.domain.task>> {
    class Container <<拣货容器.>>  {
     __ Operational __
     {field} ContainerType
@@ -267,12 +267,12 @@ package Aggregate：出库复核任务 <<ddd.plus.showcase.wms.domain.task>> {
 
    class TaskStatus <<(D,#9197DB) 任务的生命周期.>>  {
     __ Structural __
-    {field} Appending Claimed Finished
+    {field} Accepted/已接收 Appending Claimed Finished
    }
 
 }
 
-package Aggregate：发货 <<ddd.plus.showcase.wms.domain.ship>> {
+package 发货 <<ddd.plus.showcase.wms.domain.ship>> {
    class OrderCarton <<一个订单的装车清单：纸箱维度.>>  {
     __ Structural __
     {field} OrderNo
@@ -298,7 +298,7 @@ package Aggregate：发货 <<ddd.plus.showcase.wms.domain.ship>> {
 }
 
 }
-package 交互 <<UseCase>> {
+package 业务交互层 <<UseCase>> {
    class CheckingAppService <<(C,#9197DB) 业务用例：人工复核.>>  {
     {method} checkByOrder(orderNo) 把一个出库单的所有货品一次性放到入参指定的纸箱：爆品订单复核
     {method} checkBySku(qty,skuNo) 复核装箱一体化：按货品维度.
@@ -343,5 +343,4 @@ Pack --> Carton: From/Contextual 包裹明细采集
 ContainerDiff "1" *-- "1" ContainerDiffItemBag: HasOne
 ContainerDiffItem --|> OrderLine: BelongTo
 ContainerDiffItemBag "1" *-- "N" ContainerDiffItem: HasMany
-CartonItemBag "1" *-- "N" CartonItem: HasMany
-ConsumableBag "1" *-- "N"
+CartonItemBag "1" *-- "N" CartonItem: HasMan
