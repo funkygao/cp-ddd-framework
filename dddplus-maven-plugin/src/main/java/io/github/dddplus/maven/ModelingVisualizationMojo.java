@@ -53,6 +53,14 @@ public class ModelingVisualizationMojo extends AbstractMojo {
     String sqliteDb;
     @Parameter(property = "fixModelPkg")
     String keyModelPkgFix;
+    @Parameter(property = "classHierarchy")
+    String classHierarchy;
+    /**
+     * Colon separated ignored parent classes.
+     */
+    @Parameter(property = "classHierarchyIgnoreParents")
+    String[] classHierarchyIgnoreParents;
+
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
@@ -121,6 +129,16 @@ public class ModelingVisualizationMojo extends AbstractMojo {
                         .build(model)
                         .render();
             }
+            if (classHierarchy != null) {
+                artifacts.add(classHierarchy);
+
+                new ClassHierarchyRenderer()
+                        .ignores(classHierarchyIgnoreParents)
+                        .targetDotFile(classHierarchy)
+                        .build(model)
+                        .render();
+            }
+
 
             getLog().info("Reverse Modeling Executed OK");
             getLog().info("Please check out your modeling artifacts: " + String.join(", ", artifacts));
