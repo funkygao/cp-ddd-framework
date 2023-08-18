@@ -27,9 +27,12 @@ import java.lang.annotation.*;
  * }
  * }
  * </pre>
+ *
+ * @deprecated Please use {@link KeyFlow#usecase()}
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.SOURCE)
+@Deprecated
 public @interface KeyUsecase {
 
     /**

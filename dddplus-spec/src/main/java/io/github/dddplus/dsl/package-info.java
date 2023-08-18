@@ -41,7 +41,6 @@
  *     <li>{@link io.github.dddplus.dsl.KeyRule}</li>
  *     <li>{@link io.github.dddplus.dsl.KeyBehavior}</li>
  *     <li>{@link io.github.dddplus.dsl.KeyFlow}</li>
- *     <li>{@link io.github.dddplus.dsl.KeyUsecase}</li>
  * </ul>
  * </li>
  * <li>类级：
