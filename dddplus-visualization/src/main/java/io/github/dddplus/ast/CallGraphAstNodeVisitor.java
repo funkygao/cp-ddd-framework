@@ -89,7 +89,7 @@ class CallGraphAstNodeVisitor extends VoidVisitorAdapter<CallGraphReport> {
 
         final String methodName = methodCallExpr.getName().asString();
         Expression scope = methodCallExpr.getScope().orElse(null);
-        if (scope == null || scope instanceof SuperExpr) {
+        if (scope == null || scope instanceof SuperExpr || scope instanceof FieldAccessExpr) {
             // 自己用自己，不出现在call graph
             return;
         }
@@ -132,12 +132,15 @@ class CallGraphAstNodeVisitor extends VoidVisitorAdapter<CallGraphReport> {
         report.register(accessorClassName, accessorMethod.getNameAsString(),
                 finalDeclarationClazz, methodName);
 
-        String calleePackage = methodDeclaration.getCorrespondingDeclaration()
-                .getPackageName();
-        String callerPackage = JavaParserUtil.packageName(accessorClazz);
-        if (!callerPackage.equals(calleePackage)) {
-            report.addPackageCrossRef(callerPackage, calleePackage);
+        if (accessorClazz != null) {
+            String calleePackage = methodDeclaration.getCorrespondingDeclaration()
+                    .getPackageName();
+            String callerPackage = JavaParserUtil.packageName(accessorClazz);
+            if (!callerPackage.equals(calleePackage)) {
+                report.addPackageCrossRef(callerPackage, calleePackage);
+            }
         }
+
     }
 
 }
