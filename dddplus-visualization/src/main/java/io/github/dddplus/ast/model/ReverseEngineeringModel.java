@@ -30,6 +30,7 @@ public class ReverseEngineeringModel {
     private KeyUsecaseReport keyUsecaseReport = new KeyUsecaseReport();
     private KeyRelationReport keyRelationReport = new KeyRelationReport(this);
     private ClassMethodReport classMethodReport = new ClassMethodReport(this);
+    private ClassHierarchyReport classHierarchyReport = new ClassHierarchyReport();
     private ModelDebtReport modelDebtReport = new ModelDebtReport(this);
     private CallGraphReport callGraphReport = new CallGraphReport(this);
     private EncapsulationReport encapsulationReport = new EncapsulationReport();

@@ -7,10 +7,7 @@ import io.github.dddplus.ast.FileWalker;
 import io.github.dddplus.ast.enforcer.AllowedAccessorsEnforcer;
 import io.github.dddplus.ast.enforcer.ExtensionMethodSignatureEnforcer;
 import io.github.dddplus.ast.model.ReverseEngineeringModel;
-import io.github.dddplus.ast.view.CallGraphRenderer;
-import io.github.dddplus.ast.view.EncapsulationRenderer;
-import io.github.dddplus.ast.view.PlainTextRenderer;
-import io.github.dddplus.ast.view.PlantUmlRenderer;
+import io.github.dddplus.ast.view.*;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -50,6 +47,12 @@ class WmsReverseModelingTest {
                 .edgeShowsCallerMethod()
                 .splines("polyline")
                 .build(model)
+                .render();
+        new ClassHierarchyRenderer()
+                .targetDotFile("../doc/showcase/classlayer.dot")
+                .build(model)
+                .ignoreParent("BaseDto")
+                .ignoreParent("Serializable")
                 .render();
     }
 

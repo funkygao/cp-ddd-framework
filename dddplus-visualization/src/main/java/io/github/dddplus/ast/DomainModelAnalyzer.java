@@ -99,6 +99,10 @@ public class DomainModelAnalyzer {
         for (File dir : dirs) {
             log.debug("enter dir: {}", dir.getAbsolutePath());
 
+            new FileWalker(actualFilter, (level, path, file) -> {
+                new ClassHierarchyAstNodeVisitor().visit(FileWalker.silentParse(file), model.getClassHierarchyReport());
+            }).walkFrom(dir);
+
             // class method distribution
             log.debug("parsing {}", ClassMethodDistributionAstNodeVisitor.class.getSimpleName());
             new FileWalker(actualFilter, (level, path, file) -> {
