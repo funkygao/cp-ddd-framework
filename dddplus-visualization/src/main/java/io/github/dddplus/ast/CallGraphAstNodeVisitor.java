@@ -89,8 +89,13 @@ class CallGraphAstNodeVisitor extends VoidVisitorAdapter<CallGraphReport> {
 
         final String methodName = methodCallExpr.getName().asString();
         Expression scope = methodCallExpr.getScope().orElse(null);
-        if (scope == null || scope instanceof SuperExpr || scope instanceof FieldAccessExpr) {
-            // 自己用自己，不出现在call graph
+        if (scope == null || scope instanceof SuperExpr
+                || scope instanceof FieldAccessExpr
+                || scope instanceof ObjectCreationExpr
+                || scope instanceof ThisExpr
+                || scope instanceof ClassExpr
+                || scope instanceof EnclosedExpr
+                || scope instanceof MethodCallExpr) {
             return;
         }
 
