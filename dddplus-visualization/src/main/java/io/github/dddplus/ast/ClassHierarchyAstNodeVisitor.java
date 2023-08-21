@@ -17,6 +17,7 @@ class ClassHierarchyAstNodeVisitor extends VoidVisitorAdapter<ClassHierarchyRepo
     public void visit(final ClassOrInterfaceDeclaration classOrInterfaceDeclaration, final ClassHierarchyReport report) {
         super.visit(classOrInterfaceDeclaration, report);
 
+        // extends
         for (ClassOrInterfaceType parentClazz : classOrInterfaceDeclaration.getExtendedTypes()) {
             if (report.ignoreParentClass(parentClazz.getNameAsString())) {
                 continue;
@@ -25,6 +26,7 @@ class ClassHierarchyAstNodeVisitor extends VoidVisitorAdapter<ClassHierarchyRepo
             report.registerExtendsRelation(classOrInterfaceDeclaration.getNameAsString(), JavaParserUtil.javadocFirstLineOf(classOrInterfaceDeclaration), parentClazz.getNameAsString());
         }
 
+        // implements
         for (ClassOrInterfaceType parentClazz : classOrInterfaceDeclaration.getImplementedTypes()) {
             if (report.ignoreParentClass(parentClazz.getNameAsString())) {
                 continue;

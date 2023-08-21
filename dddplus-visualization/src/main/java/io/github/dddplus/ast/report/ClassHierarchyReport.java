@@ -26,29 +26,18 @@ public class ClassHierarchyReport {
     }
 
     public Set<Pair> extendsRelations() {
-        Set<Pair> result = new HashSet<>();
-        for (Pair pair : extendsRelations) {
-            if (ignoreParentClass(pair.getTo())) {
-                continue;
-            }
-
-            for (Pair pair1 : extendsRelations) {
-                if (pair.equals(pair1)) {
-                    continue;
-                }
-
-                if (pair.getTo().equals(pair1.getTo())) {
-                    result.add(pair);
-                }
-            }
-        }
-        return result;
+        return relationsOf(extendsRelations);
     }
 
     public Set<Pair> implementsRelations() {
+        return relationsOf(implementsRelations);
+    }
+
+    private Set<Pair> relationsOf(Set<Pair> relations) {
         Set<Pair> result = new HashSet<>();
-        for (Pair pair : implementsRelations) {
-            for (Pair pair1 : implementsRelations) {
+        for (Pair pair : relations) {
+            // find pairs of multiple 'from' to a 'to'
+            for (Pair pair1 : relations) {
                 if (ignoreParentClass(pair.getTo())) {
                     continue;
                 }
@@ -62,6 +51,10 @@ public class ClassHierarchyReport {
                 }
             }
         }
+
+        // B --+
+        //     |- A - X
+        // C --+
         return result;
     }
 
