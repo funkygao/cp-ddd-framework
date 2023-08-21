@@ -21,7 +21,6 @@ digraph G {
    Sku [label="<Sku> Sku|<value> value"];
    Task [label="<Task> Task|<claimedWith> claimedWith|<orderNoSet> orderNoSet|<containerBag> containerBag|<confirmQty> confirmQty|<totalQty> totalQty|<isEmpty> isEmpty|<totalPendingQty> totalPendingQty|<plan> plan|<removeOrderLines> removeOrderLines|<totalSku> totalSku"];
    TaskBag [label="<TaskBag> TaskBag|<totalQty> totalQty|<totalCheckedQty> totalCheckedQty|<totalPendingQty> totalPendingQty|<platforms> platforms"];
-   TaskCartons [label="<TaskCartons> TaskCartons|<contains> contains"];
    TaskOfOrderPending [label="<TaskOfOrderPending> TaskOfOrderPending|<confirmQty> confirmQty"];
    TaskOfSkuPending [label="<TaskOfSkuPending> TaskOfSkuPending|<confirmQty> confirmQty"];
 
@@ -36,7 +35,6 @@ digraph G {
    CheckingAppService -> Carton:bindOrder [label="checkBySku"];
    CheckingAppService -> Carton:transferFrom [label="checkBySku"];
    CheckingAppService -> OrderBag:canceledBag [label="claimTask"];
-   CheckingAppService -> Order:recommendPackQty [label="claimTask"];
    CheckingAppService -> Carton:installConsumables [label="fulfillCarton"];
    CheckingAppService -> Carton:fulfill [label="fulfillCarton"];
    CheckingAppService -> Order:recommendedPlatform [label="recommendPlatformByOrder"];
@@ -53,7 +51,6 @@ digraph G {
    ContainerBag:totalPendingQty -> Container:getContainerItemBag
    ContainerBag:totalQty -> ContainerItemBag:totalQty
    ContainerBag:totalQty -> Container:getContainerItemBag
-   ContainerBag:totalSku -> ContainerItemBag:totalSku
    ContainerItemBag:totalPendingQty -> ContainerItem:getPendingQty
    ContainerItemBag:totalQty -> ContainerItem:getExpectedQty
    Container:skuNoSet -> Sku:value
@@ -61,9 +58,7 @@ digraph G {
    OrderBag:orderNos -> Order:getOrderNo
    OrderLineBag:orderLineNos -> OrderLine:getOrderLineNo
    OrderLineBag:totalExpectedQty -> OrderLine:expectedQty
-   OrderNotCartonizedYet -> OrderCartons:totalCartonizedQty [label="isSatisfiedBy"];
    OrderNotFullyCartonized -> Order:totalExpectedQty [label="isSatisfiedBy"];
-   OrderNotFullyCartonized -> OrderCartons:totalCartonizedQty [label="isSatisfiedBy"];
    Order:recommendPackQty -> OrderCartons:totalCartonizedQty
    Order:totalExpectedQty -> OrderLineBag:totalExpectedQty
    ShippingAppService -> ShipManifest:loadForOrder [label="shipOrder"];
@@ -73,11 +68,8 @@ digraph G {
    TaskBag:totalPendingQty -> Task:containerBag
    TaskBag:totalQty -> ContainerBag:totalQty
    TaskBag:totalQty -> Task:containerBag
-   TaskOfSkuPending:confirmQty -> ContainerBag:confirmQty
    Task:confirmQty -> TaskOfSkuPending:confirmQty
-   Task:orderNoSet -> ContainerBag:orderNoSet
    Task:totalPendingQty -> ContainerBag:totalPendingQty
    Task:totalQty -> ContainerBag:totalQty
    Task:totalSku -> ContainerBag:totalSku
-   UniqueCodeConstraint -> TaskCartons:contains [label="isSatisfiedBy"];
 }
