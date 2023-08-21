@@ -7,8 +7,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 
 public class ClassHierarchyRenderer implements IModelRenderer<ClassHierarchyRenderer> {
     private ClassHierarchyReport report;
@@ -26,7 +24,9 @@ public class ClassHierarchyRenderer implements IModelRenderer<ClassHierarchyRend
     }
 
     public ClassHierarchyRenderer ignores(String[] ignored) {
-        List<String> l = Arrays.asList(ignored);
+        for (String parent : ignored) {
+            ignoreParent(parent);
+        }
         return this;
     }
 
