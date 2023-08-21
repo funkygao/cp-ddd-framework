@@ -17,12 +17,12 @@ public class ClassHierarchyReport {
         return ignoredParentClasses.contains(parentClass);
     }
 
-    public void registerExtendsRelation(String from, String to) {
-        extendsRelations.add(new Pair(from, to));
+    public void registerExtendsRelation(String from, String fromJavadoc, String to) {
+        extendsRelations.add(new Pair(from, fromJavadoc, to));
     }
 
-    public void registerImplementsRelation(String from, String to) {
-        implementsRelations.add(new Pair(from, to));
+    public void registerImplementsRelation(String from, String fromJavadoc, String to) {
+        implementsRelations.add(new Pair(from, fromJavadoc, to));
     }
 
     public Set<Pair> extendsRelations() {
@@ -69,6 +69,7 @@ public class ClassHierarchyReport {
     @AllArgsConstructor
     public static class Pair {
         private String from;
+        private String fromJavadoc;
         private String to;
     }
 

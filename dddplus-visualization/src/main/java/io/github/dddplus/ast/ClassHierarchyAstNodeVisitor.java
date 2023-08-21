@@ -8,6 +8,7 @@ package io.github.dddplus.ast;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import io.github.dddplus.ast.parser.JavaParserUtil;
 import io.github.dddplus.ast.report.ClassHierarchyReport;
 
 class ClassHierarchyAstNodeVisitor extends VoidVisitorAdapter<ClassHierarchyReport> {
@@ -21,7 +22,7 @@ class ClassHierarchyAstNodeVisitor extends VoidVisitorAdapter<ClassHierarchyRepo
                 continue;
             }
 
-            report.registerExtendsRelation(classOrInterfaceDeclaration.getNameAsString(), parentClazz.getNameAsString());
+            report.registerExtendsRelation(classOrInterfaceDeclaration.getNameAsString(), JavaParserUtil.javadocFirstLineOf(classOrInterfaceDeclaration), parentClazz.getNameAsString());
         }
 
         for (ClassOrInterfaceType parentClazz : classOrInterfaceDeclaration.getImplementedTypes()) {
@@ -29,7 +30,7 @@ class ClassHierarchyAstNodeVisitor extends VoidVisitorAdapter<ClassHierarchyRepo
                 continue;
             }
 
-            report.registerImplementsRelation(classOrInterfaceDeclaration.getNameAsString(), parentClazz.getNameAsString());
+            report.registerImplementsRelation(classOrInterfaceDeclaration.getNameAsString(), JavaParserUtil.javadocFirstLineOf(classOrInterfaceDeclaration), parentClazz.getNameAsString());
         }
     }
 

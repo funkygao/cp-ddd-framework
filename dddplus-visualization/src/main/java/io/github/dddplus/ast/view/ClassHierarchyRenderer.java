@@ -11,6 +11,9 @@ import java.io.IOException;
 public class ClassHierarchyRenderer implements IModelRenderer<ClassHierarchyRenderer> {
     private ClassHierarchyReport report;
     private String targetDotFile;
+    private static final String extendsEdgeTpl = " [color=red label=\"%s\"];";
+    private static final String implementssEdgeTpl = " [color=blue label=\"%s\"];";
+
     private StringBuilder content = new StringBuilder();
 
     public ClassHierarchyRenderer targetDotFile(String targetFile) {
@@ -59,11 +62,11 @@ public class ClassHierarchyRenderer implements IModelRenderer<ClassHierarchyRend
     private ClassHierarchyRenderer renderEdges() {
         for (ClassHierarchyReport.Pair pair : report.extendsRelations()) {
             append(pair.getFrom()).append(" -> ").append(pair.getTo()).append(SPACE);
-            append(" [ color=\"red\" ];").append(NEWLINE);
+            append(String.format(extendsEdgeTpl, pair.getFromJavadoc())).append(NEWLINE);
         }
         for (ClassHierarchyReport.Pair pair : report.implementsRelations()) {
             append(pair.getFrom()).append(" -> ").append(pair.getTo()).append(SPACE);
-            append(" [ color=\"blue\" ];").append(NEWLINE);
+            append(String.format(implementssEdgeTpl, pair.getFromJavadoc())).append(NEWLINE);
         }
         return this;
     }
