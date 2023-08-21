@@ -43,7 +43,7 @@ public class DomainModelAnalyzerTest {
                 .appendNote("dc")
                 .skinParam("ranksep 150")
                 .direction(PlantUmlRenderer.Direction.LeftToRight)
-                .build(model);
+                .withModel(model);
         String uml = pb.umlContent();
         assertFalse(uml.isEmpty());
     }
@@ -57,7 +57,7 @@ public class DomainModelAnalyzerTest {
         ReverseEngineeringModel model = analyzer.analyze((level, path, file) -> path.contains("design"));
         new PlainTextRenderer()
                 .showRawSimilarities()
-                .build(model)
+                .withModel(model)
                 .targetFilename("../doc/model.txt")
                 .render();
     }
@@ -75,7 +75,7 @@ public class DomainModelAnalyzerTest {
                 .skipParamHandWrittenStyle()
                 .skinParamPolyline()
                 .classDiagramSvgFilename("../test.svg")
-                .build(model)
+                .withModel(model)
                 .render();
     }
 

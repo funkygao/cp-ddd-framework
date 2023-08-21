@@ -14,7 +14,7 @@ interface IModelRenderer<T extends IModelRenderer> {
     String TAB = SPACE + SPACE + SPACE;
     String NEWLINE = System.getProperty("line.separator");
 
-    <T> T build(ReverseEngineeringModel model);
+    T withModel(ReverseEngineeringModel model);
 
     void render() throws IOException;
 }

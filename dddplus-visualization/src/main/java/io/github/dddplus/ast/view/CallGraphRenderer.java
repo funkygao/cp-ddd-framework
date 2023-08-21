@@ -58,7 +58,7 @@ public class CallGraphRenderer implements IModelRenderer<CallGraphRenderer> {
     }
 
     @Override
-    public CallGraphRenderer build(ReverseEngineeringModel model) {
+    public CallGraphRenderer withModel(ReverseEngineeringModel model) {
         this.callGraphReport = model.getCallGraphReport();
         return this;
     }

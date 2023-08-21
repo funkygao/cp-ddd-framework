@@ -42,7 +42,7 @@ public class PlainTextRenderer implements IModelRenderer<PlainTextRenderer> {
     }
 
     @Override
-    public PlainTextRenderer build(ReverseEngineeringModel model) {
+    public PlainTextRenderer withModel(ReverseEngineeringModel model) {
         this.model = model;
 
         appendCoverage();

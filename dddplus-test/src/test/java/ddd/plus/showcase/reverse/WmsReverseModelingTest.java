@@ -30,7 +30,7 @@ class WmsReverseModelingTest {
         new PlantUmlRenderer()
                 .direction(PlantUmlRenderer.Direction.TopToBottom)
                 .skinParamPolyline()
-                .build(model)
+                .withModel(model)
                 .plantUmlFilename("../doc/showcase/wms.puml")
                 .classDiagramSvgFilename("../doc/showcase/wms.svg")
                 .render();
@@ -46,11 +46,11 @@ class WmsReverseModelingTest {
                 .targetPackageCrossRefDotFile("../doc/showcase/pkgref.dot")
                 .edgeShowsCallerMethod()
                 .splines("polyline")
-                .build(model)
+                .withModel(model)
                 .render();
         new ClassHierarchyRenderer()
                 .targetDotFile("../doc/showcase/classlayer.dot")
-                .build(model)
+                .withModel(model)
                 .ignoreParent("BaseDto")
                 .ignoreParent("Serializable")
                 .render();
@@ -76,7 +76,7 @@ class WmsReverseModelingTest {
                 .direction(PlantUmlRenderer.Direction.TopToBottom)
                 .disableCoverage()
                 .skinParamPolyline()
-                .build(model)
+                .withModel(model)
                 .classDiagramSvgFilename("../doc/showcase/tech.svg")
                 .render();
     }
@@ -92,7 +92,7 @@ class WmsReverseModelingTest {
                 .showRawSimilarities()
                 .clustering()
                 .targetFilename("../doc/showcase/wms.txt")
-                .build(model)
+                .withModel(model)
                 .render();
     }
 
@@ -102,7 +102,7 @@ class WmsReverseModelingTest {
                 .scan(root)
                 .analyzeEncapsulation(domainLayerFilter);
         new EncapsulationRenderer()
-                .build(model)
+                .withModel(model)
                 .targetFilename("../doc/showcase/encapsulation.txt")
                 .render();
     }

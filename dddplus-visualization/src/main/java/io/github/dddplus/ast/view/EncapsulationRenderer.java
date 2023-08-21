@@ -25,7 +25,7 @@ public class EncapsulationRenderer implements IModelRenderer<EncapsulationRender
     }
 
     @Override
-    public EncapsulationRenderer build(ReverseEngineeringModel model) {
+    public EncapsulationRenderer withModel(ReverseEngineeringModel model) {
         encapsulationReport = model.getEncapsulationReport();
         return this;
     }

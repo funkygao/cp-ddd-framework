@@ -7,10 +7,7 @@ package io.github.dddplus.maven;
 
 import io.github.dddplus.ast.DomainModelAnalyzer;
 import io.github.dddplus.ast.model.ReverseEngineeringModel;
-import io.github.dddplus.ast.view.CallGraphRenderer;
-import io.github.dddplus.ast.view.EncapsulationRenderer;
-import io.github.dddplus.ast.view.PlainTextRenderer;
-import io.github.dddplus.ast.view.PlantUmlRenderer;
+import io.github.dddplus.ast.view.*;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -59,7 +56,7 @@ public class ModelingVisualizationMojo extends AbstractMojo {
      * Colon separated ignored parent classes.
      */
     @Parameter(property = "classHierarchyIgnoreParents")
-    String[] classHierarchyIgnoreParents;
+    String classHierarchyIgnoreParents;
 
 
     @Override
@@ -96,7 +93,7 @@ public class ModelingVisualizationMojo extends AbstractMojo {
                 PlantUmlRenderer renderer = new PlantUmlRenderer()
                         .direction(PlantUmlRenderer.Direction.TopToBottom)
                         .skinParamPolyline()
-                        .build(model)
+                        .withModel(model)
                         .classDiagramSvgFilename(targetPlantUml);
                 if (targetPlantUmlSrc != null) {
                     renderer.plantUmlFilename(targetPlantUmlSrc);
@@ -111,13 +108,13 @@ public class ModelingVisualizationMojo extends AbstractMojo {
                         .targetCallGraphDotFile(targetCallGraph)
                         .targetPackageCrossRefDotFile(targetPackageRef)
                         .splines("polyline")
-                        .build(model)
+                        .withModel(model)
                         .render();
             }
             if (targetEncapsulation != null) {
                 artifacts.add(targetEncapsulation);
                 new EncapsulationRenderer()
-                        .build(model)
+                        .withModel(model)
                         .targetFilename(targetEncapsulation)
                         .render();
             }
@@ -126,19 +123,20 @@ public class ModelingVisualizationMojo extends AbstractMojo {
                 new PlainTextRenderer()
                         .showRawSimilarities()
                         .targetFilename(targetTextModel)
-                        .build(model)
+                        .withModel(model)
                         .render();
             }
             if (classHierarchy != null) {
                 artifacts.add(classHierarchy);
-
+                if (classHierarchyIgnoreParents == null) {
+                    classHierarchyIgnoreParents = "";
+                }
                 new ClassHierarchyRenderer()
-                        .ignores(classHierarchyIgnoreParents)
+                        .ignores(classHierarchyIgnoreParents.split(","))
                         .targetDotFile(classHierarchy)
-                        .build(model)
+                        .withModel(model)
                         .render();
             }
-
 
             getLog().info("Reverse Modeling Executed OK");
             getLog().info("Please check out your modeling artifacts: " + String.join(", ", artifacts));

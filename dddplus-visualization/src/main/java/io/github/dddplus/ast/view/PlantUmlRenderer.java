@@ -116,7 +116,7 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
     }
 
     @Override
-    public PlantUmlRenderer build(ReverseEngineeringModel model) {
+    public PlantUmlRenderer withModel(ReverseEngineeringModel model) {
         return build(model, Sets.newHashSet());
     }
 

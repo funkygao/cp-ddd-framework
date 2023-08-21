@@ -31,7 +31,7 @@ public class ClassHierarchyRenderer implements IModelRenderer<ClassHierarchyRend
     }
 
     @Override
-    public ClassHierarchyRenderer build(ReverseEngineeringModel model) {
+    public ClassHierarchyRenderer withModel(ReverseEngineeringModel model) {
         this.report = model.getClassHierarchyReport();
         return this;
     }
