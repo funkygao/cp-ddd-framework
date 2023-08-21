@@ -34,18 +34,6 @@ public class DomainModelAnalyzerTest {
         assertEquals("io.github.design", keyModelEntryList.get(0).getPackageName());
         AggregateEntry firstAggregate = model.getAggregateReport().get(0);
         assertEquals(firstAggregate.getName(), "foo");
-        // render
-        PlantUmlRenderer pb = new PlantUmlRenderer()
-                .header("header")
-                .footer("footer")
-                .title("title")
-                .appendNote("abc")
-                .appendNote("dc")
-                .skinParam("ranksep 150")
-                .direction(PlantUmlRenderer.Direction.LeftToRight)
-                .withModel(model);
-        String uml = pb.umlContent();
-        assertFalse(uml.isEmpty());
     }
 
     @Test

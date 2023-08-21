@@ -91,9 +91,9 @@ public class ModelingVisualizationMojo extends AbstractMojo {
             if (targetPlantUml != null) {
                 artifacts.add(targetPlantUml);
                 PlantUmlRenderer renderer = new PlantUmlRenderer()
+                        .withModel(model)
                         .direction(PlantUmlRenderer.Direction.TopToBottom)
                         .skinParamPolyline()
-                        .withModel(model)
                         .classDiagramSvgFilename(targetPlantUml);
                 if (targetPlantUmlSrc != null) {
                     renderer.plantUmlFilename(targetPlantUmlSrc);
@@ -105,10 +105,10 @@ public class ModelingVisualizationMojo extends AbstractMojo {
                 artifacts.add(targetCallGraph);
                 artifacts.add(targetPackageRef);
                 new CallGraphRenderer()
+                        .withModel(model)
                         .targetCallGraphDotFile(targetCallGraph)
                         .targetPackageCrossRefDotFile(targetPackageRef)
                         .splines("polyline")
-                        .withModel(model)
                         .render();
             }
             if (targetEncapsulation != null) {
@@ -121,9 +121,9 @@ public class ModelingVisualizationMojo extends AbstractMojo {
             if (targetTextModel != null) {
                 artifacts.add(targetTextModel);
                 new PlainTextRenderer()
+                        .withModel(model)
                         .showRawSimilarities()
                         .targetFilename(targetTextModel)
-                        .withModel(model)
                         .render();
             }
             if (classHierarchy != null) {
@@ -132,9 +132,9 @@ public class ModelingVisualizationMojo extends AbstractMojo {
                     classHierarchyIgnoreParents = "";
                 }
                 new ClassHierarchyRenderer()
+                        .withModel(model)
                         .ignores(classHierarchyIgnoreParents.split(","))
                         .targetDotFile(classHierarchy)
-                        .withModel(model)
                         .render();
             }
 

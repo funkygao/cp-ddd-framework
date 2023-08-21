@@ -5,7 +5,6 @@
  */
 package io.github.dddplus.ast.view;
 
-import com.google.common.collect.Sets;
 import io.github.dddplus.ast.model.*;
 import io.github.dddplus.ast.report.CoverageReport;
 import io.github.dddplus.dsl.KeyElement;
@@ -54,7 +53,6 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
     private String plantUmlFilename;
 
     private final Map<KeyRelation.Type, String> connections;
-    private Set<KeyElement.Type> ignored;
     private ReverseEngineeringModel model;
     private final StringBuilder content = new StringBuilder();
     private String header;
@@ -117,13 +115,12 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
 
     @Override
     public PlantUmlRenderer withModel(ReverseEngineeringModel model) {
-        return build(model, Sets.newHashSet());
+        this.model = model;
+        return this;
     }
 
-    public PlantUmlRenderer build(ReverseEngineeringModel model, Set<KeyElement.Type> ignored) {
-        this.model = model;
-        this.ignored = ignored;
-
+    @Override
+    public void render() throws IOException {
         start().appendDirection().appendSkinParam().appendTitle();
 
         if (showCoverage) {
@@ -143,11 +140,7 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
         addKeyEvents();
 
         appendFooter().end();
-        return this;
-    }
 
-    @Override
-    public void render() throws IOException {
         SourceStringReader reader = new SourceStringReader(content.toString());
         final ByteArrayOutputStream os = new ByteArrayOutputStream();
         reader.generateImage(os, new FileFormatOption(FileFormat.SVG));
@@ -281,10 +274,6 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
         append(" {").append(NEWLINE);
         if (!keyModelEntry.types().isEmpty()) {
             for (KeyElement.Type type : keyModelEntry.types()) {
-                if (ignored.contains(type)) {
-                    continue;
-                }
-
                 append(String.format("    __ %s __", type)).append(NEWLINE);
                 append("    {field} ").append(keyModelEntry.displayFieldByType(type)).append(NEWLINE);
             }

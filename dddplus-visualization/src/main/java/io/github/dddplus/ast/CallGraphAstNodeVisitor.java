@@ -76,7 +76,7 @@ class CallGraphAstNodeVisitor extends VoidVisitorAdapter<CallGraphReport> {
         try {
             ResolvedMethodDeclaration calleeMethodDeclaration = javaParserFacade.solve(methodReferenceExpr).getCorrespondingDeclaration();
             report.addPackageCrossRef(callerPackage, calleeMethodDeclaration.getPackageName());
-        } catch (Exception ignored) {
+        } catch (Throwable ignored) {
             log.error("method:{}, methodReferenceExpr:{} {}", methodName, methodReferenceExpr.toString(), ignored.getMessage());
         }
     }
@@ -102,7 +102,7 @@ class CallGraphAstNodeVisitor extends VoidVisitorAdapter<CallGraphReport> {
         SymbolReference<ResolvedMethodDeclaration> methodDeclaration;
         try {
             methodDeclaration = javaParserFacade.solve(methodCallExpr, true);
-        } catch (Exception ignored) {
+        } catch (Throwable ignored) {
             log.debug("method:{} scope:{} {}", methodCallExpr.getNameAsString(), scope, ignored.getMessage());
             return;
         }

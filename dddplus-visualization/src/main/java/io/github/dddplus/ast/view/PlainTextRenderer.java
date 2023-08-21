@@ -31,7 +31,6 @@ public class PlainTextRenderer implements IModelRenderer<PlainTextRenderer> {
     private ReverseEngineeringModel model;
 
     public PlainTextRenderer clustering() {
-        assureNotBuiltYet();
         this.clustering = true;
         return this;
     }
@@ -44,24 +43,7 @@ public class PlainTextRenderer implements IModelRenderer<PlainTextRenderer> {
     @Override
     public PlainTextRenderer withModel(ReverseEngineeringModel model) {
         this.model = model;
-
-        appendCoverage();
-        appendModelDebt();
-        model.sortedAggregates().forEach(a -> addAggregate(a));
-        addKeyUsecases();
-        addOrphanKeyFlows();
-        addKeyEvents();
-        if (showRawSimilarities) {
-            addRawModelSimilarities();
-        }
-
         return this;
-    }
-
-    private void assureNotBuiltYet() {
-        if (model != null) {
-            throw new RuntimeException("Call me before build()");
-        }
     }
 
     private void addRawModelSimilarities() {
@@ -74,6 +56,16 @@ public class PlainTextRenderer implements IModelRenderer<PlainTextRenderer> {
 
     @Override
     public void render() throws IOException {
+        appendCoverage();
+        appendModelDebt();
+        model.sortedAggregates().forEach(a -> addAggregate(a));
+        addKeyUsecases();
+        addOrphanKeyFlows();
+        addKeyEvents();
+        if (showRawSimilarities) {
+            addRawModelSimilarities();
+        }
+
         File file = new File(targetFilename);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.append(content);
@@ -236,7 +228,6 @@ public class PlainTextRenderer implements IModelRenderer<PlainTextRenderer> {
     }
 
     public PlainTextRenderer showRawSimilarities() {
-        assureNotBuiltYet();
         this.showRawSimilarities = true;
         return this;
     }

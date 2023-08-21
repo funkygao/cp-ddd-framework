@@ -25,6 +25,10 @@ public class ClassHierarchyRenderer implements IModelRenderer<ClassHierarchyRend
 
     public ClassHierarchyRenderer ignores(String[] ignored) {
         for (String parent : ignored) {
+            if (parent.isEmpty()) {
+                continue;
+            }
+
             ignoreParent(parent);
         }
         return this;
