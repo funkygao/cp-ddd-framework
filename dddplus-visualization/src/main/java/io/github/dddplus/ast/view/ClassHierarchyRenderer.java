@@ -44,8 +44,9 @@ public class ClassHierarchyRenderer implements IModelRenderer<ClassHierarchyRend
     public void render() throws IOException {
         append("digraph G {")
                 .append(NEWLINE)
-                .append(TAB).append("rankdir=LR;")
-                .append(NEWLINE)
+                .append(TAB).append("rankdir=LR;").append(NEWLINE)
+                .append(TAB).append("splines = polyline;").append(NEWLINE)
+                .append(TAB).append("node [shape=none];").append(NEWLINE)
                 .renderEdges()
                 .append("}");
 
@@ -58,11 +59,11 @@ public class ClassHierarchyRenderer implements IModelRenderer<ClassHierarchyRend
     private ClassHierarchyRenderer renderEdges() {
         for (ClassHierarchyReport.Pair pair : report.extendsRelations()) {
             append(pair.getFrom()).append(" -> ").append(pair.getTo()).append(SPACE);
-            append(" [ label=\"继承\" ];").append(NEWLINE);
+            append(" [ color=\"red\" ];").append(NEWLINE);
         }
         for (ClassHierarchyReport.Pair pair : report.implementsRelations()) {
             append(pair.getFrom()).append(" -> ").append(pair.getTo()).append(SPACE);
-            append(" [ label=\"实现\" ];").append(NEWLINE);
+            append(" [ color=\"blue\" ];").append(NEWLINE);
         }
         return this;
     }
