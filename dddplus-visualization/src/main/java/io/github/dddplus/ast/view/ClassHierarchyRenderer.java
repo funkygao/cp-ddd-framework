@@ -12,7 +12,7 @@ public class ClassHierarchyRenderer implements IModelRenderer<ClassHierarchyRend
     private ClassHierarchyReport report;
     private String targetDotFile;
     private static final String extendsEdgeTpl = " [color=red label=\"%s\"];";
-    private static final String implementssEdgeTpl = " [color=blue label=\"%s\"];";
+    private static final String implementsEdgeTpl = " [color=blue style=dashed label=\"%s\"];";
 
     private StringBuilder content = new StringBuilder();
 
@@ -60,13 +60,18 @@ public class ClassHierarchyRenderer implements IModelRenderer<ClassHierarchyRend
     }
 
     private ClassHierarchyRenderer renderEdges() {
-        for (ClassHierarchyReport.Pair pair : report.extendsRelations()) {
+        for (ClassHierarchyReport.Pair pair : report.displayRelations()) {
             append(pair.getFrom()).append(" -> ").append(pair.getTo()).append(SPACE);
-            append(String.format(extendsEdgeTpl, pair.getFromJavadoc())).append(NEWLINE);
-        }
-        for (ClassHierarchyReport.Pair pair : report.implementsRelations()) {
-            append(pair.getFrom()).append(" -> ").append(pair.getTo()).append(SPACE);
-            append(String.format(implementssEdgeTpl, pair.getFromJavadoc())).append(NEWLINE);
+            switch (pair.getRelation()) {
+                case Extends:
+                    append(String.format(extendsEdgeTpl, pair.dotLabel()));
+                    break;
+
+                case Implements:
+                    append(String.format(implementsEdgeTpl, pair.dotLabel()));
+                    break;
+            }
+            append(NEWLINE);
         }
         return this;
     }

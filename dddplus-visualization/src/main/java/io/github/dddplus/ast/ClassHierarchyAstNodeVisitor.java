@@ -5,11 +5,16 @@
  */
 package io.github.dddplus.ast;
 
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import io.github.dddplus.ast.parser.JavaParserUtil;
 import io.github.dddplus.ast.report.ClassHierarchyReport;
+
+import java.util.ArrayList;
+import java.util.List;
 
 class ClassHierarchyAstNodeVisitor extends VoidVisitorAdapter<ClassHierarchyReport> {
 
@@ -19,21 +24,33 @@ class ClassHierarchyAstNodeVisitor extends VoidVisitorAdapter<ClassHierarchyRepo
 
         // extends
         for (ClassOrInterfaceType parentClazz : classOrInterfaceDeclaration.getExtendedTypes()) {
-            if (report.ignoreParentClass(parentClazz.getNameAsString())) {
-                continue;
-            }
-
-            report.registerExtendsRelation(classOrInterfaceDeclaration.getNameAsString(), JavaParserUtil.javadocFirstLineOf(classOrInterfaceDeclaration), parentClazz.getNameAsString());
+            report.registerExtendsRelation(classOrInterfaceDeclaration.getNameAsString(),
+                    JavaParserUtil.javadocFirstLineOf(classOrInterfaceDeclaration),
+                    specifiedGenericTypes(parentClazz),
+                    parentClazz.getNameAsString());
         }
 
         // implements
         for (ClassOrInterfaceType parentClazz : classOrInterfaceDeclaration.getImplementedTypes()) {
-            if (report.ignoreParentClass(parentClazz.getNameAsString())) {
-                continue;
-            }
-
-            report.registerImplementsRelation(classOrInterfaceDeclaration.getNameAsString(), JavaParserUtil.javadocFirstLineOf(classOrInterfaceDeclaration), parentClazz.getNameAsString());
+            report.registerImplementsRelation(classOrInterfaceDeclaration.getNameAsString(),
+                    JavaParserUtil.javadocFirstLineOf(classOrInterfaceDeclaration),
+                    specifiedGenericTypes(parentClazz),
+                    parentClazz.getNameAsString());
         }
+    }
+
+    private List<String> specifiedGenericTypes(ClassOrInterfaceType parentClazz) {
+        List<String> result = new ArrayList<>();
+        NodeList<Type> genericTypes = parentClazz.getTypeArguments().orElse(null);
+        if (genericTypes != null && genericTypes.isNonEmpty()) {
+            for (Type type : genericTypes) {
+                if (type instanceof ClassOrInterfaceType) {
+                    ClassOrInterfaceType genericType = (ClassOrInterfaceType) type;
+                    result.add(genericType.getNameAsString());
+                }
+            }
+        }
+        return result;
     }
 
 }

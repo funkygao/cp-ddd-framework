@@ -10,60 +10,99 @@ import java.util.*;
 public class ClassHierarchyReport {
     private List<String> ignoredParentClasses = new ArrayList<>();
 
-    private Set<Pair> extendsRelations = new HashSet<>();
-    private Set<Pair> implementsRelations = new HashSet<>();
+    private Set<Pair> relations = new HashSet<>();
 
-    public boolean ignoreParentClass(String parentClass) {
+    private boolean ignoreParentClass(String parentClass) {
         return ignoredParentClasses.contains(parentClass);
     }
 
-    public void registerExtendsRelation(String from, String fromJavadoc, String to) {
-        extendsRelations.add(new Pair(from, fromJavadoc, to));
+    public void registerExtendsRelation(String from, String fromJavadoc, List<String> genericTypes, String to) {
+        if (ignoreParentClass(to)) {
+            return;
+        }
+
+        relations.add(new Pair(from, to, Pair.Relation.Extends, fromJavadoc, genericTypes));
     }
 
-    public void registerImplementsRelation(String from, String fromJavadoc, String to) {
-        implementsRelations.add(new Pair(from, fromJavadoc, to));
+    void registerExtendsRelation(String from, String to) {
+        registerExtendsRelation(from, "", null, to);
     }
 
-    public Set<Pair> extendsRelations() {
-        return relationsOf(extendsRelations);
+    public void registerImplementsRelation(String from, String fromJavadoc, List<String> genericTypes, String to) {
+        if (ignoreParentClass(to)) {
+            return;
+        }
+
+        relations.add(new Pair(from, to, Pair.Relation.Implements, fromJavadoc, genericTypes));
     }
 
-    public Set<Pair> implementsRelations() {
-        return relationsOf(implementsRelations);
-    }
-
-    private Set<Pair> relationsOf(Set<Pair> relations) {
-        Set<Pair> result = new HashSet<>();
+    public Set<Pair> displayRelations() {
+        // 删除只有一层关系的Pair
+        Set<Pair> result = new TreeSet<>();
         for (Pair pair : relations) {
-            // find pairs of multiple 'from' to a 'to'
-            for (Pair pair1 : relations) {
-                if (ignoreParentClass(pair.getTo())) {
+            if (ignoreParentClass(pair.to)) {
+                continue;
+            }
+
+            for (Pair p : relations) {
+                if (p.equals(pair) || ignoreParentClass(p.to)) {
                     continue;
                 }
 
-                if (pair.equals(pair1)) {
-                    continue;
-                }
-
-                if (pair.getTo().equals(pair1.getTo())) {
+                if (p.to.equals(pair.from) || p.from.equals(pair.to) || p.to.equals(pair.to)) {
+                    // this link has neighbor
                     result.add(pair);
                 }
             }
         }
-
-        // B --+
-        //     |- A - X
-        // C --+
         return result;
+    }
+
+    void registerImplementsRelation(String from, String to) {
+        registerImplementsRelation(from, "", null, to);
     }
 
     @Data
     @AllArgsConstructor
-    public static class Pair {
+    public static class Pair implements Comparable<Pair> {
         private String from;
-        private String fromJavadoc;
         private String to;
+        private Relation relation;
+        private String fromJavadoc;
+        // 这个关系确定了哪些泛型类型
+        private List<String> genericTypes;
+
+        private String displayGenericTypes() {
+            if (genericTypes == null || genericTypes.isEmpty()) {
+                return "";
+            }
+
+            return String.join(",", genericTypes);
+        }
+
+        public String dotLabel() {
+            String displayGenericTypes = displayGenericTypes();
+            if (displayGenericTypes.isEmpty()) {
+                return fromJavadoc;
+            }
+
+            return fromJavadoc + " <" + displayGenericTypes + ">";
+        }
+
+        @Override
+        public int compareTo(Pair that) {
+            return to.compareTo(that.to) * 71 + from.compareTo(that.from);
+        }
+
+        public enum Relation {
+            Extends,
+            Implements;
+        }
+
+        @Override
+        public String toString() {
+            return from + "->" + to;
+        }
     }
 
 }
