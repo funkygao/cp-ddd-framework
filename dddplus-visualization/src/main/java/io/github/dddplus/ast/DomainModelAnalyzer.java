@@ -24,6 +24,7 @@ public class DomainModelAnalyzer {
     private Set<String> ignoredAnnotations = new HashSet<>(); // in simpleName
     private boolean rawSimilarity = false;
     private boolean disableCallGraph = false;
+    private boolean classHierarchyOnly = false;
     private List<Map<String, String>> keyModelPackageFixes = new ArrayList<>();
 
     public DomainModelAnalyzer scan(File... dirs) {
@@ -35,6 +36,11 @@ public class DomainModelAnalyzer {
         Map<String, String> fix = new HashMap<>();
         fix.put(fromPkg, toPkg);
         keyModelPackageFixes.add(fix);
+        return this;
+    }
+
+    public DomainModelAnalyzer classHierarchyOnly() {
+        this.classHierarchyOnly = true;
         return this;
     }
 
@@ -102,6 +108,9 @@ public class DomainModelAnalyzer {
             new FileWalker(actualFilter, (level, path, file) -> {
                 new ClassHierarchyAstNodeVisitor().visit(FileWalker.silentParse(file), model.getClassHierarchyReport());
             }).walkFrom(dir);
+            if (classHierarchyOnly) {
+                continue;
+            }
 
             // class method distribution
             log.debug("parsing {}", ClassMethodDistributionAstNodeVisitor.class.getSimpleName());
@@ -156,6 +165,10 @@ public class DomainModelAnalyzer {
             new FileWalker(actualFilter, (level, path, file) -> {
                 new KeyRelationAstNodeVisitor().visit(FileWalker.silentParse(file), model.getKeyRelationReport());
             }).walkFrom(dir);
+        }
+
+        if (classHierarchyOnly) {
+            return model;
         }
 
         // similarity
