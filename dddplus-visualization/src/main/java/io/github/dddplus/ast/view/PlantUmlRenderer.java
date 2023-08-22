@@ -6,6 +6,7 @@
 package io.github.dddplus.ast.view;
 
 import io.github.dddplus.ast.model.*;
+import io.github.dddplus.ast.parser.JavaParserUtil;
 import io.github.dddplus.ast.report.CoverageReport;
 import io.github.dddplus.dsl.KeyElement;
 import io.github.dddplus.dsl.KeyRelation;
@@ -141,18 +142,18 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
 
         appendFooter().end();
 
-        SourceStringReader reader = new SourceStringReader(content.toString());
-        final ByteArrayOutputStream os = new ByteArrayOutputStream();
-        reader.generateImage(os, new FileFormatOption(FileFormat.SVG));
-        try (OutputStream outputStream = new FileOutputStream(this.classDiagramSvgFilename)) {
-            os.writeTo(outputStream);
-            os.close();
+        if (classDiagramSvgFilename != null) {
+            SourceStringReader reader = new SourceStringReader(content.toString());
+            final ByteArrayOutputStream os = new ByteArrayOutputStream();
+            reader.generateImage(os, new FileFormatOption(FileFormat.SVG));
+            try (OutputStream outputStream = new FileOutputStream(this.classDiagramSvgFilename)) {
+                os.writeTo(outputStream);
+                os.close();
+            }
         }
 
         if (plantUmlFilename != null) {
-            try (FileWriter writer = new FileWriter(plantUmlFilename)) {
-                new BufferedWriter(writer).write(umlContent());
-            }
+            JavaParserUtil.dumpToFile(plantUmlFilename, umlContent());
         }
     }
 
