@@ -122,6 +122,10 @@ mvn io.github.dddplus:dddplus-maven-plugin:enforce \
     -DrootDir={your src dir}
 ```
 
+## Known Issues
+
+- reverse modeling assumes unique class names within a code repo
+
 ## Contribution
 
 You are welcome to contribute to the project with pull requests on GitHub.
