@@ -33,6 +33,10 @@ public class AggregateAnnotationParser {
                     entry.setName(nameExpr.getValue());
                     break;
 
+                case "problematical":
+                    entry.setProblematical(true);
+                    break;
+
                 case "root":
                     if (memberValuePair.getValue() instanceof ArrayInitializerExpr) {
                         ArrayInitializerExpr roots = (ArrayInitializerExpr) memberValuePair.getValue();

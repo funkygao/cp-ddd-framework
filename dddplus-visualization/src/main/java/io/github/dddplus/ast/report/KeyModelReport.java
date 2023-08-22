@@ -34,6 +34,24 @@ public class KeyModelReport {
         return rawModels.get(className);
     }
 
+    public void fixPackage(String fromPkg, String toPkg) {
+        if (!fromPkg.contains(".")) {
+            // fix a single entity pkg
+            String keyModelName = fromPkg;
+            KeyModelEntry entry = data.get(keyModelName);
+            if (entry != null) {
+                entry.setPackageName(toPkg);
+            }
+            return;
+        }
+
+        for (KeyModelEntry entry : data.values()) {
+            if (fromPkg.equals(entry.getPackageName())) {
+                entry.setPackageName(toPkg);
+            }
+        }
+    }
+
     public boolean hasKeyMethod(String declarationClazz, String methodName) {
         for (KeyModelEntry modelEntry : data.values()) {
             if (modelEntry.getClassName().equals(declarationClazz) && modelEntry.hasKeyMethod(methodName)) {
@@ -87,7 +105,7 @@ public class KeyModelReport {
     public List<KeyModelEntry> keyModelsOfPackage(String packageName) {
         List<KeyModelEntry> result = new ArrayList<>();
         for (KeyModelEntry entry : data.values()) {
-            if (entry.getPackageName().startsWith(packageName)) {
+            if (entry.getPackageName() != null && entry.getPackageName().startsWith(packageName)) {
                 result.add(entry);
             }
         }

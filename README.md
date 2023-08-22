@@ -23,7 +23,7 @@ Languages： English | [中文](README.zh-cn.md)
 
 ## What is DDDplus?
 
-DDDplus, originally cp-ddd-framework(cp means Central Platform：中台), is a lightweight DDD(Domain Driven Design) enhancement framework for forward/reverse business modeling, supporting complex system architecture evolution!
+DDDplus, formerly named cp-ddd-framework(cp means Central Platform：中台), is a lightweight DDD(Domain Driven Design) enhancement framework for forward/reverse business modeling, supporting complex system architecture evolution!
 
 >It captures DDD missing concepts and patches the building block. It empowers building domain model with forward and reverse modeling. It visualizes the complete domain knowledge from code. It connects frontline developers with (architect, product manager, business stakeholder, management team). It makes (analysis, design, design review, implementation, code review, test) a positive feedback closed-loop. It strengthens building extension oriented flexible software solution. It eliminates frequently encountered misunderstanding of DDD via thorough javadoc for each building block with detailed example.
 
@@ -69,11 +69,26 @@ Please check out the [《step by step guide》](doc/ReverseModelingGuide.md).
 ```xml
 <dependency>
     <groupId>io.github.dddplus</groupId>
-    <artifactId>dddplus-visualization</artifactId>
+    <artifactId>dddplus-spec</artifactId>
 </dependency>
 ```
 
 Annotate your code With [DSL](/dddplus-spec/src/main/java/io/github/dddplus/dsl), DDDplus will parse AST and render domain model in multiple views.
+
+To render the reverse model, you have 2 options:
+
+Option 1: use dddplus maven plugin
+
+```bash
+mvn io.github.dddplus:dddplus-maven-plugin:visualize \
+    -DrootDir=${colon separated source code dirs} \
+    -DpkgRef=${target package reference dot file} \
+    -DcallGraph=${target call graph dot flle} \
+    -DplantUml=${target business model in svg format} \
+    -DtextModel=${target business model in txt format}
+```
+
+Option 2: integrate with unit test
 
 ```java
 class ReverseModelingTest {
@@ -84,21 +99,16 @@ class ReverseModelingTest {
                         .scan("{your module root}")
                         .analyze();
         new PlantUmlRenderer()
-            .build(model)
             .classDiagramSvgFilename("model.svg") // structure/relations of your business model
+            .build(model)
             .render();
         new PlainTextRenderer()
-            .build(model)
             .targetFilename("model.txt") // new feature design starts from here, change it as you design
+            .build(model)
             .render();
         new CallGraphRenderer()
             .targetDotFilename("callgraph.dot") // the method call graph
-            .targetPackageCrossRefDotFile("pkgref.dot") // the package cross reference relationship
             .build(model)
-            .render();
-        new EncapsulationRenderer()
-            .build(model)
-            .targetFilename("encapsulation.txt") // did you have good encapsulation?
             .render();
     }
 }
@@ -107,7 +117,9 @@ class ReverseModelingTest {
 ### Architecture Guard
 
 ```bash
-mvn io.github.dddplus:dddplus-maven-plugin:enforce -DrootPackage={your pkg} -DrootDir={your src dir}
+mvn io.github.dddplus:dddplus-maven-plugin:enforce \
+    -DrootPackage={your pkg} \
+    -DrootDir={your src dir}
 ```
 
 ## Contribution

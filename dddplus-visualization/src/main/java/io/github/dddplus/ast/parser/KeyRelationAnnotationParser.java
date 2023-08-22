@@ -7,6 +7,7 @@ package io.github.dddplus.ast.parser;
 
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.expr.ClassExpr;
 import com.github.javaparser.ast.expr.MemberValuePair;
 import com.github.javaparser.ast.expr.NormalAnnotationExpr;
 import io.github.dddplus.ast.model.KeyRelationEntry;
@@ -57,11 +58,17 @@ public class KeyRelationAnnotationParser {
 
                     这需要处理一下，因为 KeyBehavior 注册时，entry.className 是 OrderLines，而不是 Order.OrderLines
                      */
-                    String rightClazz = AnnotationFieldParser.singleFieldValue(memberValuePair);
+                    ClassExpr classExpr = (ClassExpr) memberValuePair.getValue();
+                    String rightClazz = classExpr.getTypeAsString();
                     if (rightClazz.contains(".")) {
                         rightClazz = rightClazz.substring(rightClazz.lastIndexOf('.') + 1);
                     }
                     entry.setRightClass(rightClazz);
+                    entry.setRightClassPackageName(JavaParserUtil.packageOfKeyRelationRightClass(keyRelation, classExpr));
+                    if (entry.getRightClassPackageName().isEmpty()) {
+                        // 通过import没有找到right class，说明它们 same package
+                        entry.setRightClassPackageName(entry.getLeftClassPackageName());
+                    }
                     break;
             }
         }

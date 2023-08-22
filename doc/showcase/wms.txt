@@ -1,4 +1,4 @@
-标注覆盖率：Class(73/53.4%) Method(128/52.3%) Property(276/19.9%) Calls(558/11.0%) Statement(237)
+标注覆盖率：Class(73/54.8%) Method(128/53.9%) Property(276/21.0%) Calls(558/9.0%) Statement(237)
 大方法Top10
    ddd.plus.showcase.wms.application.service.ShippingAppService#shipOrder 31
    ddd.plus.showcase.wms.application.service.CheckingAppService#checkByOrder 30
@@ -9,7 +9,7 @@
    ddd.plus.showcase.wms.application.service.CheckingAppService#fulfillCarton 18
    ddd.plus.showcase.wms.domain.common.flow.handler.CartonFulfilledEventHandler#processMyEvent 14
    ddd.plus.showcase.wms.domain.carton.Carton#fulfill 13
-模型债：孤儿流程:3 相似类:7 聚合分布[类:(Mean:5.00 SD:3.96) 方法:(Mean:7.43 SD:8.98)]
+模型债：孤儿流程:3 相似类:7 聚合分布[问题聚合:0 类:(Mean:5.14 SD:4.22) 方法:(Mean:7.71 SD:9.38)]
 <<Aggregate: 出库复核任务>>
 Container 拣货容器.
    [属性]
@@ -30,7 +30,6 @@ ContainerItem 拣货容器里的商品和数量.
 ContainerItemBag
 Task 复核任务.
    [属性]
-   Lifecycle     TaskStatus
    Location      Platform
    [行为]
       claimedWith() 
@@ -56,6 +55,9 @@ TaskOfSkuPending The hidden class
    [行为]
       confirmQty() 
 TaskOrders
+TaskStatus 任务的生命周期.
+   [属性]
+   Structural    Accepted/已接收 Appending Claimed Finished
 <<Aggregate: 包裹>>
 Pack 包裹.
    [属性]
@@ -95,8 +97,8 @@ ContainerDiffItemBag
 <<Aggregate: 客户出库单>>
 Order 客户的出库单.
    [属性]
-   Referential   Carrier Consignee Supplier
-   Lifecycle     OrderStatus ProductionStatus
+   Referential   <color:Red>Carrier</color> <color:Red>Consignee</color> <color:Red>Supplier</color>
+   Lifecycle     ProductionStatus 订单状态
    Operational   OrderConstraint
    Contextual    WaybillNo/OFC随单下发
    [行为]
@@ -104,6 +106,7 @@ Order 客户的出库单.
       recommendPackQty() 推荐该订单使用几个包裹：Pack.
       ship() 
    [规则]
+      recommendPackQty() 推荐该订单使用几个包裹：Pack.
       totalExpectedQty() 
       recommendedPlatform() 该订单已经被推荐到哪一个复核台.
    [流程]
@@ -145,13 +148,13 @@ Carton 纸箱，它会成为包裹.
 CartonItem 纸箱里个某一种sku.
    [属性]
    Structural    sku
-   Referential   orderLineNo
+   Referential   <color:Red>orderLineNo</color>
    Quantity      checkedQty
 CartonItemBag
 CartonOrder
 Consumable 耗材，被放入纸箱，以便运输安全.
    [属性]
-   Structural    CartonNo OrderNo TaskNo
+   Structural    CartonNo OrderNo TaskNo/任务号
    Quantity      qty
    Location      Platform
 ConsumableBag
@@ -172,14 +175,14 @@ Sku 货品.
    Contextual    LotNo snList uniqueCode
 <<用户交互>>
 CheckingAppService
-   submitTask() 提交复核任务
-   recommendPlatformByTaskBacklog(taskNo) 提升拣货员去哪个复核台：按任务积压情况
-   recommendPlatformByOrder(orderNo) 提升拣货员去哪个复核台：按订单
-   recommendConsumable(cartonNo) 为任务的某个纸箱推荐耗材种类和数量
-   claimTask(containerNo) 复核员扫描容器领取复核任务.
-   checkBySku(qty,skuNo) 复核装箱一体化：按货品维度.
    checkByOrder(orderNo) 把一个出库单的所有货品一次性放到入参指定的纸箱：爆品订单复核
+   checkBySku(qty,skuNo) 复核装箱一体化：按货品维度.
+   claimTask(containerNo) 复核员扫描容器领取复核任务.
    fulfillCarton(cartonNo,consumables,orderNo) 复核员把拣货容器的货品放入箱，并使用耗材以便运输安全，该过程发现箱已满.
+   recommendConsumable(cartonNo) 为任务的某个纸箱推荐耗材种类和数量
+   recommendPlatformByOrder(orderNo) 提升拣货员去哪个复核台：按订单
+   recommendPlatformByTaskBacklog(taskNo) 提升拣货员去哪个复核台：按任务积压情况
+   submitTask() 提交复核任务
 FlowAutoExecutionConsumer
    on CartonFulfilledEvent 根据不同消息自动链式触发流程自动化执行
 ShippingAppService

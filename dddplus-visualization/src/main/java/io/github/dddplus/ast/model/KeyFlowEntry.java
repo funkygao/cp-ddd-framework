@@ -5,6 +5,7 @@
  */
 package io.github.dddplus.ast.model;
 
+import com.github.javaparser.Position;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -23,9 +24,13 @@ public class KeyFlowEntry {
     private List<String> args;
     private Set<String> realArguments;
     private String remark;
+    private Position position;
+    private String absolutePath;
     private boolean async = false;
     private boolean polymorphism = false;
     private boolean useRawArgs = false;
+    private boolean usecase = false;
+    private boolean nonPublic = false;
 
     public KeyFlowEntry(String className, String realMethodName, String javadoc) {
         this.className = className;
@@ -34,6 +39,18 @@ public class KeyFlowEntry {
         this.javadoc = javadoc;
 
         this.actor = "";
+    }
+
+    public String getSortedKey() {
+        if (usecase) {
+            return "_" + methodName; // usecase排在前面
+        }
+
+        if (nonPublic) {
+            return "~" + methodName; // 非public方法排在后面
+        }
+
+        return methodName;
     }
 
     public String actor() {
@@ -59,8 +76,25 @@ public class KeyFlowEntry {
         return !className.equals(actor);
     }
 
-    public String displayActualClass() {
+    public String plainDisplayActualClass() {
         if (!actor.equals(className)) {
+            return className;
+        }
+
+        return "";
+    }
+
+    public String umlDisplayActualClass() {
+        if (!actor.equals(className)) {
+            if (position != null && absolutePath != null) {
+                // [[http://www.google.com theLabel]]
+                // IDEA Settings:
+                // Build, Execution, Deployment | Debugger
+                // Allow unsigned requests, check it
+                return String.format("[[http://localhost:63342/api/file/%s:%d %s]]",
+                        absolutePath, position.line, className);
+            }
+
             return className;
         }
 

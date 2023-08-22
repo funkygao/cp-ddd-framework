@@ -76,7 +76,7 @@ class CallGraphAstNodeVisitor extends VoidVisitorAdapter<CallGraphReport> {
         try {
             ResolvedMethodDeclaration calleeMethodDeclaration = javaParserFacade.solve(methodReferenceExpr).getCorrespondingDeclaration();
             report.addPackageCrossRef(callerPackage, calleeMethodDeclaration.getPackageName());
-        } catch (Exception ignored) {
+        } catch (Throwable ignored) {
             log.error("method:{}, methodReferenceExpr:{} {}", methodName, methodReferenceExpr.toString(), ignored.getMessage());
         }
     }
@@ -89,21 +89,26 @@ class CallGraphAstNodeVisitor extends VoidVisitorAdapter<CallGraphReport> {
 
         final String methodName = methodCallExpr.getName().asString();
         Expression scope = methodCallExpr.getScope().orElse(null);
-        if (scope == null || scope instanceof SuperExpr) {
-            // 自己用自己，不出现在call graph
+        if (scope == null || scope instanceof SuperExpr
+                || scope instanceof FieldAccessExpr
+                || scope instanceof ObjectCreationExpr
+                || scope instanceof ThisExpr
+                || scope instanceof ClassExpr
+                || scope instanceof EnclosedExpr
+                || scope instanceof MethodCallExpr) {
             return;
         }
 
         SymbolReference<ResolvedMethodDeclaration> methodDeclaration;
         try {
             methodDeclaration = javaParserFacade.solve(methodCallExpr, true);
-        } catch (Exception ignored) {
-            log.warn("method:{} scope:{} {}", methodCallExpr.getNameAsString(), scope, ignored.getMessage());
+        } catch (Throwable ignored) {
+            log.debug("method:{} scope:{} {}", methodCallExpr.getNameAsString(), scope, ignored.getMessage());
             return;
         }
 
         if (!methodDeclaration.isSolved()) {
-            log.error("method:{} methodCallExpr:{} cannot be solved", methodCallExpr.getNameAsString(), methodCallExpr.toString());
+            log.debug("method:{} methodCallExpr:{} cannot be solved", methodCallExpr.getNameAsString(), methodCallExpr.toString());
             return;
         }
 
@@ -132,12 +137,15 @@ class CallGraphAstNodeVisitor extends VoidVisitorAdapter<CallGraphReport> {
         report.register(accessorClassName, accessorMethod.getNameAsString(),
                 finalDeclarationClazz, methodName);
 
-        String calleePackage = methodDeclaration.getCorrespondingDeclaration()
-                .getPackageName();
-        String callerPackage = JavaParserUtil.packageName(accessorClazz);
-        if (!callerPackage.equals(calleePackage)) {
-            report.addPackageCrossRef(callerPackage, calleePackage);
+        if (accessorClazz != null) {
+            String calleePackage = methodDeclaration.getCorrespondingDeclaration()
+                    .getPackageName();
+            String callerPackage = JavaParserUtil.packageName(accessorClazz);
+            if (!callerPackage.equals(calleePackage)) {
+                report.addPackageCrossRef(callerPackage, calleePackage);
+            }
         }
+
     }
 
 }

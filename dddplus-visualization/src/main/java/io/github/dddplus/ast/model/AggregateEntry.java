@@ -23,6 +23,8 @@ public class AggregateEntry {
      */
     private String packageName;
 
+    private boolean problematical;
+
     /**
      * {@link io.github.dddplus.model.IAggregateRoot} class name.
      */

@@ -9,7 +9,7 @@
  * <p>背景：好的业务模型不仅对产品架构、开发有重大意义，也能够快速的帮助客户分析管理上的不足、业务处理上的漏洞、不合理需求的悖论等.</p>
  * <p>目标：提供一套模型描述语言，从代码提炼精粹的业务知识，指导并约束模型和系统演进.</p>
  * <p>路径：明确业务中关键问题，跨越(架构约束，技术限制)等造成代码难以直观表达模型的问题，面向对象地抽取和修正，形成与正向模型正反馈闭环.</p>
- * <p>价值：通过逆向工程方法揭示代码实现里体现的核心领域问题，发现{@code essential problems}.</p>
+ * <p>价值：通过逆向工程方法揭示代码实现里体现的核心领域问题，发现{@code essential problems}：一方面关联代码实现，一方面关联通用语言.</p>
  * <p/>
  * <p>《架构整洁之道》中的定义：软件架构是指设计软件的人为软件赋予的形状。</p>
  * <p>DSL标注过程，是无技术约束的OO二次设计的过程，是re-shape your code过程，是architecture discovery过程.</p>
@@ -41,7 +41,6 @@
  *     <li>{@link io.github.dddplus.dsl.KeyRule}</li>
  *     <li>{@link io.github.dddplus.dsl.KeyBehavior}</li>
  *     <li>{@link io.github.dddplus.dsl.KeyFlow}</li>
- *     <li>{@link io.github.dddplus.dsl.KeyUsecase}</li>
  * </ul>
  * </li>
  * <li>类级：

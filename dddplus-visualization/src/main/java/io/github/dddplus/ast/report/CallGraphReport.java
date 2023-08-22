@@ -33,6 +33,11 @@ public class CallGraphReport {
     }
 
     public double callCoverage() {
+        if (calls == 0) {
+            // user might disable call graph
+            return 0;
+        }
+
         return parsedCalls * 100 / calls;
     }
 
@@ -80,10 +85,12 @@ public class CallGraphReport {
             return;
         }
 
+        // 被动注册：callee model method
         KeyModelEntry calleeModel = model.getKeyModelReport().keyModelEntryOfActor(calleeClazz);
         if (!calleeModel.hasKeyMethod(calleeMethod)) {
             calleeModel.registerMethodFodCallGraph(calleeMethod);
         }
+        // 被动注册：caller model method
         KeyModelEntry callerModel = model.getKeyModelReport().keyModelEntryOfActor(callerClazz);
         if (callerModel != null && !callerModel.hasKeyMethod(callerMethod)) {
             callerModel.registerMethodFodCallGraph(callerMethod);

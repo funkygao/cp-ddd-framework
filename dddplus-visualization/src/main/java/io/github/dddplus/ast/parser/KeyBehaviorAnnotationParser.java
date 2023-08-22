@@ -73,6 +73,10 @@ public class KeyBehaviorAnnotationParser {
                     entry.setRealArguments(JavaParserUtil.extractMethodArguments(methodDeclaration));
                     entry.setUseRawArgs(true);
                     break;
+
+                case "abstracted":
+                    entry.setAbstracted(true);
+                    break;
             }
         }
 

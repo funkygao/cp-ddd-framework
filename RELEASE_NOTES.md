@@ -1,3 +1,17 @@
+## Release Notes - DDDplus - 2.0.3
+
+* Feature
+   * 根据源代码AST分析，形成结构化数据，导出到sqlite数据库
+   * 生成原始的plantuml文件
+   * 可以修改实体所在的包
+   * KeyUsecase图里显示类的javadoc
+   * 业务字典，枚举类，也可以使用 KeyElement 进行标注
+   * PlantUML类图里，KeyFlow对应的文件可以点击，自动在IDEA中打开到对应位置
+
+* Bug Fix
+   * 逆向分析时，KeyRelation会把一个类放在了错误的package
+
+
 ## Release Notes - DDDplus - 2.0.2
 
 * Feature

@@ -5,10 +5,8 @@
  */
 package io.github.dddplus.ast.view;
 
-import com.google.common.collect.Sets;
-import io.github.dddplus.ast.model.ReverseEngineeringModel;
 import io.github.dddplus.ast.model.*;
-import io.github.dddplus.ast.report.ClassMethodReport;
+import io.github.dddplus.ast.parser.JavaParserUtil;
 import io.github.dddplus.ast.report.CoverageReport;
 import io.github.dddplus.dsl.KeyElement;
 import io.github.dddplus.dsl.KeyRelation;
@@ -16,10 +14,7 @@ import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.SourceStringReader;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.text.MessageFormat;
 import java.util.*;
 
@@ -53,12 +48,12 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
 
     // https://plantuml.com/zh/color
     private static final String COLOR_BEHAVIOR_PRODUCE_EVENT = "Violet";
-    private static final String COLOR_FLOW_ACTUAL_CLASS = "Olive";
+    private static final String COLOR_FLOW_REMARK = "Orchid";
 
     private String classDiagramSvgFilename;
+    private String plantUmlFilename;
 
     private final Map<KeyRelation.Type, String> connections;
-    private Set<KeyElement.Type> ignored;
     private ReverseEngineeringModel model;
     private final StringBuilder content = new StringBuilder();
     private String header;
@@ -67,7 +62,6 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
     private Direction direction;
     private Set<String> skinParams = new HashSet<>();
     private Set<String> notes = new TreeSet<>();
-    private boolean showNotLabeledElements = false;
     private boolean showCoverage = true;
 
     public PlantUmlRenderer() {
@@ -102,8 +96,8 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
         return this;
     }
 
-    public PlantUmlRenderer showNotLabeledElements() {
-        this.showNotLabeledElements = true;
+    public PlantUmlRenderer plantUmlFilename(String plantUmlFilename) {
+        this.plantUmlFilename = plantUmlFilename;
         return this;
     }
 
@@ -121,46 +115,45 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
     }
 
     @Override
-    public PlantUmlRenderer build(ReverseEngineeringModel model) {
-        return build(model, Sets.newHashSet());
+    public PlantUmlRenderer withModel(ReverseEngineeringModel model) {
+        this.model = model;
+        return this;
     }
 
-    public PlantUmlRenderer build(ReverseEngineeringModel model, Set<KeyElement.Type> ignored) {
-        this.model = model;
-        this.ignored = ignored;
-
+    @Override
+    public void render() throws IOException {
         start().appendDirection().appendSkinParam().appendTitle();
 
         if (showCoverage) {
             appendHeader();
         }
 
-        //addClassMethodReport();
         addNotes();
 
         // aggregates
-        append("package 逆向业务模型 {").append(NEWLINE);
+        append("package 业务模型层 {").append(NEWLINE);
         model.aggregates().forEach(a -> addAggregate(a));
         append(BRACE_CLOSE).append(NEWLINE);
 
-        //addSimilarities();
         addKeyUsecases();
         addOrphanKeyFlows();
         addKeyRelations();
         addKeyEvents();
 
         appendFooter().end();
-        return this;
-    }
 
-    @Override
-    public void render() throws IOException {
-        SourceStringReader reader = new SourceStringReader(content.toString());
-        final ByteArrayOutputStream os = new ByteArrayOutputStream();
-        reader.generateImage(os, new FileFormatOption(FileFormat.SVG));
-        try (OutputStream outputStream = new FileOutputStream(this.classDiagramSvgFilename)) {
-            os.writeTo(outputStream);
-            os.close();
+        if (classDiagramSvgFilename != null) {
+            SourceStringReader reader = new SourceStringReader(content.toString());
+            final ByteArrayOutputStream os = new ByteArrayOutputStream();
+            reader.generateImage(os, new FileFormatOption(FileFormat.SVG));
+            try (OutputStream outputStream = new FileOutputStream(this.classDiagramSvgFilename)) {
+                os.writeTo(outputStream);
+                os.close();
+            }
+        }
+
+        if (plantUmlFilename != null) {
+            JavaParserUtil.dumpToFile(plantUmlFilename, umlContent());
         }
     }
 
@@ -173,29 +166,6 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
         for (String note : notes) {
             append(TAB).append(note).append(NEWLINE);
         }
-        append("end note").append(NEWLINE).append(NEWLINE);
-        return this;
-    }
-
-    private PlantUmlRenderer addClassMethodReport() {
-        ClassMethodReport report = model.getClassMethodReport();
-        append("note as ClassMethodReportNote").append(NEWLINE);
-        append(String.format("  Class: annotated(%d) public(%d) deprecated(%d)",
-                model.annotatedModels(),
-                report.getClassInfo().getPublicClasses().size(),
-                report.getClassInfo().getDeprecatedClasses().size()
-                )).append(NEWLINE);
-        append(String.format("  Method: annotated(%d) public(%d) default(%d) private(%d) protected(%d) static(%d) deprecated(%d)",
-                model.annotatedMethods(),
-                report.getMethodInfo().getPublicMethods().size(),
-                report.getMethodInfo().getDefaultMethods().size(),
-                report.getMethodInfo().getPrivateMethods().size(),
-                report.getMethodInfo().getProtectedMethods().size(),
-                report.getMethodInfo().getStaticMethods().size(),
-                report.getMethodInfo().getDeprecatedMethods().size()
-                )).append(NEWLINE);
-        append(String.format("  Statements: %d", report.getStatementN()))
-                .append(NEWLINE);
         append("end note").append(NEWLINE).append(NEWLINE);
         return this;
     }
@@ -252,8 +222,12 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
 
     private PlantUmlRenderer writeKeyUsecaseClazzDefinition(String actor) {
         append("class ").append(actor);
+        String actorJavadoc = model.getKeyUsecaseReport().actorJavadoc(actor);
+        if (actorJavadoc != null && !actorJavadoc.isEmpty()) {
+            append(String.format(" <<(C,#9197DB) %s>> ", actorJavadoc));
+        }
         append(" {").append(NEWLINE);
-        for (KeyUsecaseEntry entry : model.getKeyUsecaseReport().actorKeyUsecases(actor)) {
+        for (KeyUsecaseEntry entry : model.getKeyUsecaseReport().sortedActorKeyUsecases(actor)) {
             append("    {method} ");
             if (!entry.displayOut().isEmpty()) {
                 append(entry.displayOut()).append(SPACE);
@@ -287,6 +261,12 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
             } else {
                 append(" <<(B,#9197DB)>> ");
             }
+        } else if (keyModelEntry.isEnumType()) {
+            if (keyModelEntry.hasJavadoc()) {
+                append(String.format(" <<(D,#9197DB) %s>> ", keyModelEntry.getJavadoc()));
+            } else {
+                append(" <<(D,#9197DB)>> ");
+            }
         } else {
             if (keyModelEntry.hasJavadoc()) {
                 append(String.format(" <<%s>> ", keyModelEntry.getJavadoc()));
@@ -295,23 +275,14 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
         append(" {").append(NEWLINE);
         if (!keyModelEntry.types().isEmpty()) {
             for (KeyElement.Type type : keyModelEntry.types()) {
-                if (ignored.contains(type)) {
-                    continue;
-                }
-
                 append(String.format("    __ %s __", type)).append(NEWLINE);
                 append("    {field} ").append(keyModelEntry.displayFieldByType(type)).append(NEWLINE);
-            }
-
-            if (showNotLabeledElements && !keyModelEntry.undefinedTypes().isEmpty()) {
-                append("    __ NotLabeled __").append(NEWLINE);
-                append("    {field} ").append(keyModelEntry.displayUndefinedTypes()).append(NEWLINE);
             }
         }
 
         if (!keyModelEntry.getKeyRuleEntries().isEmpty()) {
             append("    __ 规则 __").append(NEWLINE);
-            for (KeyRuleEntry entry : keyModelEntry.getKeyRuleEntries()) {
+            for (KeyRuleEntry entry : keyModelEntry.sortedKeyRuleEntries()) {
                 append("    {method} ");
                 append(entry.displayNameWithRemark())
                         .append(BRACKET_OPEN)
@@ -325,7 +296,7 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
 
         if (!keyModelEntry.getKeyBehaviorEntries().isEmpty()) {
             append("    __ 行为 __").append(NEWLINE);
-            for (KeyBehaviorEntry entry : keyModelEntry.getKeyBehaviorEntries()) {
+            for (KeyBehaviorEntry entry : keyModelEntry.sortedKeyBehaviorEntries()) {
                 append(TAB);
                 if (entry.isAsync()) {
                     append(" {abstract} ");
@@ -348,7 +319,7 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
 
         if (!keyModelEntry.getKeyFlowEntries().isEmpty()) {
             append("    __ 流程 __").append(NEWLINE);
-            for (KeyFlowEntry entry : keyModelEntry.getKeyFlowEntries()) {
+            for (KeyFlowEntry entry : keyModelEntry.sortedKeyFlowEntries()) {
                 append(TAB);
                 append(entry, keyModelEntry);
                 append(NEWLINE);
@@ -372,17 +343,27 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
             append(" {static} ");
         }
         append(" {method} ");
+        if (entry.isNonPublic()) {
+            append("- ");
+        }
+        if (entry.isUsecase()) {
+            append("+ ");
+        }
         append(entry.getMethodName())
                 .append(BRACKET_OPEN)
                 .append(entry.displayEffectiveArgs())
                 .append(BRACKET_CLOSE)
                 .append(SPACE)
                 .append(entry.getJavadoc());
-        if (keyModelEntry != null && !keyModelEntry.getClassName().equals(entry.displayActualClass())) {
+        if (entry.getRemark() != null && !entry.getRemark().isEmpty()) {
             append(SPACE)
-                    .append(MessageFormat.format(COLOR_TMPL_OPEN, COLOR_FLOW_ACTUAL_CLASS))
-                    .append(entry.displayActualClass()).append(SPACE)
+                    .append(MessageFormat.format(COLOR_TMPL_OPEN, COLOR_FLOW_REMARK))
+                    .append(entry.getRemark())
                     .append(COLOR_TMPL_CLOSE);
+        }
+        if (keyModelEntry != null && !keyModelEntry.getClassName().equals(entry.umlDisplayActualClass())) {
+            // 以IDEA url link形式展示实际类的位置：可点击
+            append(SPACE).append(entry.umlDisplayActualClass()).append(SPACE);
         }
         if (entry.produceEvent()) {
             append(MessageFormat.format(COLOR_TMPL_OPEN, COLOR_BEHAVIOR_PRODUCE_EVENT));
@@ -403,6 +384,8 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
         if (header != null && !header.isEmpty()) {
             append(header).append(NEWLINE);
         }
+        // legend
+        append("Legend R:聚合根 B:BehaviorOnly D:Dict C:Class E:Event").append(NEWLINE);
         CoverageReport report = model.coverageReport();
         append(String.format("公共类：%d，标注：%d，覆盖率：%.1f%%", report.getPublicClazzN(), report.getAnnotatedClazzN(), report.clazzCoverage()));
         append(NEWLINE);
@@ -461,24 +444,10 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
     }
 
     private PlantUmlRenderer addAggregate(AggregateEntry aggregate) {
-        append(MessageFormat.format(PACKAGE_TMPL, "Aggregate：" + aggregate.getName(), aggregate.getPackageName()));
+        append(MessageFormat.format(PACKAGE_TMPL, aggregate.getName(), aggregate.getPackageName()));
         append(SPACE).append(BRACE_OPEN).append(NEWLINE);
         for (KeyModelEntry clazz : aggregate.keyModels()) {
             append(TAB).writeClazzDefinition(clazz, aggregate.isRoot(clazz)).append(NEWLINE);
-        }
-        append(BRACE_CLOSE);
-        append(NEWLINE).append(NEWLINE);
-
-        return this;
-    }
-
-    private PlantUmlRenderer addSimilarities() {
-        append(MessageFormat.format(PACKAGE_TMPL, "相似度", "%"));
-        append(SPACE).append(BRACE_OPEN).append(NEWLINE);
-        for (SimilarityEntry entry : model.sortedSimilarities()) {
-            append(TAB).append(entry.getLeftClass()).append(" .. ").append(entry.getRightClass())
-                    .append(": ").append(String.format("%.0f", entry.getSimilarity()))
-                    .append(NEWLINE);
         }
         append(BRACE_CLOSE);
         append(NEWLINE).append(NEWLINE);
@@ -541,7 +510,7 @@ public class PlantUmlRenderer implements IModelRenderer<PlantUmlRenderer> {
             return this;
         }
 
-        append(MessageFormat.format(PACKAGE_TMPL, "交互", "UseCase"));
+        append(MessageFormat.format(PACKAGE_TMPL, "业务交互层", "UseCase"));
         append(SPACE).append(BRACE_OPEN).append(NEWLINE);
         for (String actor : model.getKeyUsecaseReport().getData().keySet()) {
             append(TAB).writeKeyUsecaseClazzDefinition(actor).append(NEWLINE);

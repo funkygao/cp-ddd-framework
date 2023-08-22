@@ -62,6 +62,11 @@ public @interface KeyFlow {
     Class[] produceEvent() default {};
 
     /**
+     * 该流程是否位于业务交互层.
+     */
+    boolean usecase() default false;
+
+    /**
      * 该行为执行过程是异步的.
      *
      * <p>这意味着内部状态变化可能不实时，可能最终一致.</p>

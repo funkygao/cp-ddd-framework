@@ -1,5 +1,7 @@
 # DSL标注代码教程
 
+>软件架构的终极⽬标，是⽤最⼩的⼈⼒成本来满⾜构建和维护该系统的需求 ─ 《架构整洁之道》
+>
 >没有领域模型设计的软件，工程师往往会过多的关注到技术问题上，而忽视了产品设计和业务的目标。
 >
 >领域建模对于商业软件来说是非常重要的一环，也是工程师消化行业领域知识的重要方法。
@@ -18,7 +20,9 @@ mvn io.github.dddplus:dddplus-maven-plugin:visualize \
     -DpkgRef=${包级别交叉调用报告输出到哪一个文件, dot格式} \
     -DcallGraph=${核心方法调用关系报告输出到哪一个文件, dot格式} \
     -DplantUml=${业务模型输出到哪一个文件, svg格式} \
-    -DtextModel=${业务模型输出到哪一个文件, txt格式}
+    -DtextModel=${业务模型输出到哪一个文件, txt格式} \
+    -DclassHierarchy=${类关系图, dot格式} \
+    -DclassHierarchyIgnoreParents={逗号分隔的忽略的父类名称，例如Serializable}
 ```
 
 例如：
@@ -30,7 +34,9 @@ mvn io.github.dddplus:dddplus-maven-plugin:visualize \
     -DpkgRef=doc/pkgref.dot \
     -DcallGraph=doc/callgraph.dot \
     -DplantUml=doc/myapp.svg \
-    -DtextModel=doc/myapp.txt
+    -DtextModel=doc/myapp.txt \
+    -DclassHierarchy=doc/classHierarchy.dot \
+    -DclassHierarchyIgnoreParents=Serializable
 ```
 
 执行后，就可以在doc目录下看到一些自动生成的报告。例如，在`doc/myapp.txt`文件，会看到：

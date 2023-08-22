@@ -53,6 +53,9 @@ class KeyUsecaseAstNodeVisitor extends VoidVisitorAdapter<KeyUsecaseReport> {
         AnnotationExpr annotationExpr = methodDeclaration.getAnnotationByClass(KeyUsecase.class).get();
         KeyUsecaseEntry entry = new KeyUsecaseAnnotationParser(methodDeclaration, className).parse(annotationExpr);
         report.register(entry);
+        if (report.actorJavadoc(className) == null) {
+            report.registerActorJavadoc(className, JavaParserUtil.javadocFirstLineOf(parentClass));
+        }
     }
 
 }

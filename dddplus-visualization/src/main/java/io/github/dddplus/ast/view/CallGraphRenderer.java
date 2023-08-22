@@ -8,11 +8,9 @@ package io.github.dddplus.ast.view;
 import io.github.dddplus.ast.model.CallGraphEntry;
 import io.github.dddplus.ast.model.PackageCrossRefEntry;
 import io.github.dddplus.ast.model.ReverseEngineeringModel;
+import io.github.dddplus.ast.parser.JavaParserUtil;
 import io.github.dddplus.ast.report.CallGraphReport;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -26,9 +24,15 @@ public class CallGraphRenderer implements IModelRenderer<CallGraphRenderer> {
     private CallGraphReport callGraphReport;
     private String targetCallGraphDotFile;
     private String targetPackageCrossRefDotFile;
+    private boolean edgeShowsCallerMethod = false;
 
     private String splines = null;
     private StringBuilder content = new StringBuilder();
+
+    public CallGraphRenderer edgeShowsCallerMethod() {
+        this.edgeShowsCallerMethod = true;
+        return this;
+    }
 
     public CallGraphRenderer targetCallGraphDotFile(String targetFile) {
         this.targetCallGraphDotFile = targetFile;
@@ -52,7 +56,7 @@ public class CallGraphRenderer implements IModelRenderer<CallGraphRenderer> {
     }
 
     @Override
-    public CallGraphRenderer build(ReverseEngineeringModel model) {
+    public CallGraphRenderer withModel(ReverseEngineeringModel model) {
         this.callGraphReport = model.getCallGraphReport();
         return this;
     }
@@ -78,10 +82,7 @@ public class CallGraphRenderer implements IModelRenderer<CallGraphRenderer> {
                 .renderEdges()
                 .append("}");
 
-        File file = new File(targetCallGraphDotFile);
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            writer.append(content);
-        }
+        JavaParserUtil.dumpToFile(targetCallGraphDotFile, content.toString());
     }
 
     private void renderPackageCrossRef() throws IOException {
@@ -97,11 +98,7 @@ public class CallGraphRenderer implements IModelRenderer<CallGraphRenderer> {
         }
         append("}");
 
-        File file = new File(targetPackageCrossRefDotFile);
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            writer.append(content);
-        }
-
+        JavaParserUtil.dumpToFile(targetPackageCrossRefDotFile, content.toString());
     }
 
     private CallGraphRenderer setupSkin() {
@@ -134,17 +131,26 @@ public class CallGraphRenderer implements IModelRenderer<CallGraphRenderer> {
     private CallGraphRenderer renderEdges() {
         Set<String> edges = new HashSet<>();
         for (CallGraphEntry entry : callGraphReport.sortedEntries()) {
-            // A的多个方法可能调用同一个callee：merge
-            String key = entry.getCallerClazz() + ":" + entry.calleeNode();
-            if (edges.contains(key)) {
-                continue;
+            if (!edgeShowsCallerMethod) {
+                // A的多个方法可能调用同一个callee：merge
+                String key = entry.getCallerClazz() + ":" + entry.calleeNode();
+                if (edges.contains(key)) {
+                    continue;
+                }
+                edges.add(key);
             }
-            edges.add(key);
 
-            append(TAB).append(entry.callerNode(callGraphReport))
+            String callerNode = entry.callerNode(callGraphReport);
+            append(TAB).append(callerNode)
                     .append(" -> ")
-                    .append(entry.calleeNode())
-                    .append(NEWLINE);
+                    .append(entry.calleeNode());
+            if (edgeShowsCallerMethod && !callerNode.contains(":")) {
+                append(" [label=\"")
+                        .append(entry.getCallerMethod())
+                        .append("\"];");
+            }
+            append(NEWLINE);
+
         }
         return this;
     }

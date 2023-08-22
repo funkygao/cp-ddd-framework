@@ -22,6 +22,7 @@
         <caliper.version>1.0-beta-2</caliper.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <javax.validation.version>2.0.1.Final</javax.validation.version>
+        <equalsverifier.version>3.15</equalsverifier.version>
     </properties>
 
     <dependencies>
@@ -105,6 +106,12 @@
             <groupId>org.mockito</groupId>
             <artifactId>mockito-inline</artifactId>
             <version>${mockito.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>nl.jqno.equalsverifier</groupId>
+            <artifactId>equalsverifier</artifactId>
+            <version>${equalsverifier.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>

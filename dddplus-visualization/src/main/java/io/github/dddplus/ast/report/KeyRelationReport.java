@@ -27,7 +27,8 @@ public class KeyRelationReport {
         // dup check
         for (KeyRelationEntry relationEntry : relationEntries) {
             if (relationEntry.sameAs(entry)) {
-                throw new RuntimeException(String.format("Dup Key Relation annotated with javadoc: %s/%s", relationEntry.getJavadoc(), entry.getJavadoc()));
+                throw new RuntimeException(String.format("Dup Key Relation: existed %s, new entry %s",
+                        relationEntry.toString(), entry.toString()));
             }
         }
 
@@ -35,15 +36,15 @@ public class KeyRelationReport {
 
         // auto register key model if necessary: for left and right clazz
         // for the right clazz
-        KeyModelEntry modelEntry = model.getKeyModelReport().getOrCreateKeyModelEntryForActor(entry.getRightClass());
-        if (modelEntry.getPackageName() == null || modelEntry.getPackageName().isEmpty()) {
-            modelEntry.setPackageName(entry.getLeftClassPackageName());
+        KeyModelEntry rightKeyModelEntry = model.getKeyModelReport().getOrCreateKeyModelEntryForActor(entry.getRightClass());
+        if (rightKeyModelEntry.getPackageName() == null || rightKeyModelEntry.getPackageName().isEmpty()) {
+            rightKeyModelEntry.setPackageName(entry.getRightClassPackageName());
         }
         // for the left clazz
-        modelEntry = model.getKeyModelReport().getOrCreateKeyModelEntryForActor(entry.getLeftClass());
-        if (modelEntry.getPackageName() == null || modelEntry.getPackageName().isEmpty()) {
-            modelEntry.setPackageName(entry.getLeftClassPackageName());
-            modelEntry.setJavadoc(entry.getJavadoc());
+        KeyModelEntry leftKeyModelEntry = model.getKeyModelReport().getOrCreateKeyModelEntryForActor(entry.getLeftClass());
+        if (leftKeyModelEntry.getPackageName() == null || leftKeyModelEntry.getPackageName().isEmpty()) {
+            leftKeyModelEntry.setPackageName(entry.getLeftClassPackageName());
+            leftKeyModelEntry.setJavadoc(entry.getJavadoc());
         }
         return this;
     }

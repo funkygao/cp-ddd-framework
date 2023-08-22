@@ -14,6 +14,8 @@ import java.util.*;
 
 @Getter
 public class KeyModelEntry {
+    private static final int propertiesPerLine = 5;
+
     private static final Set<String> EMPTY_SET = new HashSet();
     private static final Set<KeyPropertyEntry> EMPTY_PROPERTIES = new HashSet<>();
 
@@ -22,6 +24,9 @@ public class KeyModelEntry {
     private final String className;
     @Setter
     private String javadoc;
+    // 这个类是个枚举
+    @Setter
+    private boolean enumType = false;
 
     private final Map<KeyElement.Type, List<KeyPropertyEntry>> properties;
     private final Set<String> rawFields = new HashSet<>();
@@ -31,13 +36,30 @@ public class KeyModelEntry {
     private transient List<KeyFlowEntry> keyFlowEntries = new ArrayList<>();
 
     // 这些方法本来没有通过DSL标注，但call graph时被调用，为了图的完整性临时增加这些节点
-    private Set<String> methodsForCallGraph = new HashSet<>();
+    // TODO 这里没有处理方法重载：在一个类中定义多个同名的方法，但要求每个方法具有不同的参数的类型或参数的个数
+    private transient Set<String> methodsForCallGraph = new HashSet<>();
 
     public KeyModelEntry(String className) {
         this.className = className;
         this.properties = new TreeMap<>();
     }
 
+    public List<KeyBehaviorEntry> sortedKeyBehaviorEntries() {
+        Collections.sort(keyBehaviorEntries, Comparator.comparing(KeyBehaviorEntry::getMethodName));
+        return keyBehaviorEntries;
+    }
+
+    public List<KeyRuleEntry> sortedKeyRuleEntries() {
+        Collections.sort(keyRuleEntries, Comparator.comparing(KeyRuleEntry::getMethodName));
+        return keyRuleEntries;
+    }
+
+    public List<KeyFlowEntry> sortedKeyFlowEntries() {
+        Collections.sort(keyFlowEntries, Comparator.comparing(KeyFlowEntry::getSortedKey));
+        return keyFlowEntries;
+    }
+
+    // TODO 这里没有处理方法重载
     public boolean hasKeyMethod(String methodName) {
         for (KeyBehaviorEntry entry : keyBehaviorEntries) {
             if (entry.getRealMethodName().equals(methodName)) {
@@ -61,6 +83,7 @@ public class KeyModelEntry {
         methodsForCallGraph.add(methodName);
     }
 
+    // TODO 这里没有处理方法重载
     public Set<String> realKeyMethods() {
         Set<String> s = new TreeSet<>(methodsForCallGraph);
         for (KeyBehaviorEntry entry : keyBehaviorEntries) {
@@ -185,27 +208,19 @@ public class KeyModelEntry {
             return EMPTY_PROPERTIES;
         }
 
-        return new HashSet<>(propertiesOfType);
-    }
-
-    public String displayUndefinedTypes() {
-        List<KeyElement.Type> types = undefinedTypes();
-        if (types.isEmpty()) {
-            return "";
-        }
-
-        StringJoiner joiner = new StringJoiner(" ");
-        for (KeyElement.Type t : types) {
-            joiner.add(t.toString());
-        }
-        return joiner.toString();
+        return new TreeSet<>(propertiesOfType);
     }
 
     public String displayFieldByType(KeyElement.Type type) {
         Set<KeyPropertyEntry> propertyEntries = keyPropertiesByType(type);
-        Set<String> fields = new TreeSet<>();
+        List<String> fields = new ArrayList<>();
+        int n = 0;
         for (KeyPropertyEntry entry : propertyEntries) {
-            fields.add(entry.displayName());
+            fields.add(entry.displayName(type));
+            n++;
+            if (n % propertiesPerLine == 0) {
+                fields.add("\n");
+            }
         }
 
         return String.join(" ", fields);

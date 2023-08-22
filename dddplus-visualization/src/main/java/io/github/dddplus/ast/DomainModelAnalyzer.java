@@ -12,10 +12,7 @@ import io.github.dddplus.ast.model.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Domain model analyzer, generating {@link ReverseEngineeringModel}.
@@ -26,14 +23,34 @@ public class DomainModelAnalyzer {
     private double similarityThreshold = 25; // 25%
     private Set<String> ignoredAnnotations = new HashSet<>(); // in simpleName
     private boolean rawSimilarity = false;
+    private boolean disableCallGraph = false;
+    private boolean classHierarchyOnly = false;
+    private List<Map<String, String>> keyModelPackageFixes = new ArrayList<>();
 
     public DomainModelAnalyzer scan(File... dirs) {
         this.dirs = dirs;
         return this;
     }
 
+    public DomainModelAnalyzer fixKeyModelPackage(String fromPkg, String toPkg) {
+        Map<String, String> fix = new HashMap<>();
+        fix.put(fromPkg, toPkg);
+        keyModelPackageFixes.add(fix);
+        return this;
+    }
+
+    public DomainModelAnalyzer classHierarchyOnly() {
+        this.classHierarchyOnly = true;
+        return this;
+    }
+
     public DomainModelAnalyzer rawSimilarity() {
         this.rawSimilarity = true;
+        return this;
+    }
+
+    public DomainModelAnalyzer disableCallGraph() {
+        this.disableCallGraph = true;
         return this;
     }
 
@@ -87,6 +104,13 @@ public class DomainModelAnalyzer {
         FileWalker.Filter actualFilter = new ActualFilter(filter);
         for (File dir : dirs) {
             log.debug("enter dir: {}", dir.getAbsolutePath());
+
+            new FileWalker(actualFilter, (level, path, file) -> {
+                new ClassHierarchyAstNodeVisitor().visit(FileWalker.silentParse(file), model.getClassHierarchyReport());
+            }).walkFrom(dir);
+            if (classHierarchyOnly) {
+                continue;
+            }
 
             // class method distribution
             log.debug("parsing {}", ClassMethodDistributionAstNodeVisitor.class.getSimpleName());
@@ -143,6 +167,10 @@ public class DomainModelAnalyzer {
             }).walkFrom(dir);
         }
 
+        if (classHierarchyOnly) {
+            return model;
+        }
+
         // similarity
         log.debug("calculating key models similarity");
         JaccardModelSimilarity similarityAnalyzer = new JaccardModelSimilarity();
@@ -184,6 +212,15 @@ public class DomainModelAnalyzer {
                             .build();
                     model.addRawSimilarityEntry(entry);
                 }
+            }
+        }
+
+        if (!this.keyModelPackageFixes.isEmpty()) {
+            log.debug("fix key model packages");
+            for (Map<String, String> pair : this.keyModelPackageFixes) {
+                String fromPkg = pair.keySet().iterator().next();
+                String toPkg = pair.get(fromPkg);
+                model.getKeyModelReport().fixPackage(fromPkg, toPkg);
             }
         }
 
@@ -241,13 +278,15 @@ public class DomainModelAnalyzer {
         }
 
         // call graph
-        log.debug("call graph");
-        CallGraphAstNodeVisitor callGraphAstNodeVisitor = new CallGraphAstNodeVisitor(dirs);
-        for (File dir : dirs) {
-            log.debug("parsing {}", CallGraphAstNodeVisitor.class.getSimpleName());
-            new FileWalker(actualFilter, (level, path, file) -> {
-                callGraphAstNodeVisitor.visit(FileWalker.silentParse(file), model.getCallGraphReport());
-            }).walkFrom(dir);
+        if (!disableCallGraph) {
+            log.debug("call graph");
+            CallGraphAstNodeVisitor callGraphAstNodeVisitor = new CallGraphAstNodeVisitor(dirs);
+            for (File dir : dirs) {
+                log.debug("parsing {}", CallGraphAstNodeVisitor.class.getSimpleName());
+                new FileWalker(actualFilter, (level, path, file) -> {
+                    callGraphAstNodeVisitor.visit(FileWalker.silentParse(file), model.getCallGraphReport());
+                }).walkFrom(dir);
+            }
         }
 
         return model;

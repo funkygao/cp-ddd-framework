@@ -8,14 +8,12 @@ package io.github.dddplus.ast.report;
 import io.github.dddplus.ast.model.KeyUsecaseEntry;
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 @Data
 public class KeyUsecaseReport {
     private Map<String, List<KeyUsecaseEntry>> data = new TreeMap<>();
+    private Map<String, String> actorJavadoc = new HashMap<>();
 
     public void register(KeyUsecaseEntry entry) {
         if (!data.containsKey(entry.getClassName())) {
@@ -25,8 +23,18 @@ public class KeyUsecaseReport {
         data.get(entry.getClassName()).add(entry);
     }
 
-    public List<KeyUsecaseEntry> actorKeyUsecases(String actor) {
-        return data.get(actor);
+    public void registerActorJavadoc(String actor, String javadoc) {
+        actorJavadoc.put(actor, javadoc);
+    }
+
+    public String actorJavadoc(String actor) {
+        return actorJavadoc.get(actor);
+    }
+
+    public List<KeyUsecaseEntry> sortedActorKeyUsecases(String actor) {
+        List<KeyUsecaseEntry> entries = data.get(actor);
+        Collections.sort(entries, Comparator.comparing(KeyUsecaseEntry::getMethodName));
+        return entries;
     }
 
     public int methods() {

@@ -41,6 +41,11 @@ public @interface KeyElement {
     String name() default "";
 
     /**
+     * 使用javadoc作为属性名称.
+     */
+    boolean byJavadoc() default false;
+
+    /**
      * 该属性的名称是否根据类型来命名: 默认byName.
      *
      * <p>{@code String sku}，这样的属性是不能按类型来命名的: 无区分度</p>
@@ -52,6 +57,11 @@ public @interface KeyElement {
      * 补充说明.
      */
     String remark() default "";
+
+    /**
+     * 使用源代码的Javadoc作为补充说明.
+     */
+    boolean remarkFromJavadoc() default false;
 
     /**
      * 业务属性的分类.

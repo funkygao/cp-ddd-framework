@@ -51,7 +51,7 @@ public class Task extends BaseAggregateRoot<Task> implements IUnboundedDomainMod
     private TaskNo taskNo;
     private TaskMode taskMode;
     private Integer priority;
-    @KeyElement(types = KeyElement.Type.Lifecycle, byType = true)
+    @KeyRelation(whom = TaskStatus.class, type = KeyRelation.Type.Associate)
     private TaskStatus status;
 
     @KeyElement(types = KeyElement.Type.Location, byType = true)

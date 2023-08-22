@@ -5,6 +5,7 @@
  */
 package io.github.dddplus.ast.model;
 
+import io.github.dddplus.ast.model.dumper.sqlite.SqliteDumper;
 import io.github.dddplus.ast.report.*;
 import lombok.Getter;
 
@@ -29,6 +30,7 @@ public class ReverseEngineeringModel {
     private KeyUsecaseReport keyUsecaseReport = new KeyUsecaseReport();
     private KeyRelationReport keyRelationReport = new KeyRelationReport(this);
     private ClassMethodReport classMethodReport = new ClassMethodReport(this);
+    private ClassHierarchyReport classHierarchyReport = new ClassHierarchyReport();
     private ModelDebtReport modelDebtReport = new ModelDebtReport(this);
     private CallGraphReport callGraphReport = new CallGraphReport(this);
     private EncapsulationReport encapsulationReport = new EncapsulationReport();
@@ -90,6 +92,10 @@ public class ReverseEngineeringModel {
         report.setAnnotatedPropertyN(keyModelReport.propertiesN());
 
         return report;
+    }
+
+    public void dump(String sqliteDbFile) throws Exception {
+        new SqliteDumper(sqliteDbFile).dump(this);
     }
 
     /**

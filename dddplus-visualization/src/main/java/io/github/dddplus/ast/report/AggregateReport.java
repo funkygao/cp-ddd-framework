@@ -67,12 +67,17 @@ public class AggregateReport {
     AggregateDensity density() {
         List<Integer> modelsOfAggregate = new ArrayList<>();
         List<Integer> methodDensity = new ArrayList<>();
+        int problems = 0;
         for (AggregateEntry aggregateEntry : aggregateEntries) {
             modelsOfAggregate.add(aggregateEntry.modelsN());
             methodDensity.add(aggregateEntry.methodDensity());
+            if (aggregateEntry.isProblematical()) {
+                problems++;
+            }
         }
 
         AggregateDensity density = new AggregateDensity();
+        density.setProblems(problems);
         density.setModelsMean(new Mean().evaluate(toDoubleArray(modelsOfAggregate)));
         density.setModelsStandardDeviation(new StandardDeviation().evaluate(toDoubleArray(modelsOfAggregate)));
         density.setMethodDensityMean(new Mean().evaluate(toDoubleArray(methodDensity)));

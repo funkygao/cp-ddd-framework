@@ -1,0 +1,398 @@
+@startuml
+
+left to right direction
+
+skinparam linetype polyline
+
+header
+Legend R:聚合根 B:BehaviorOnly D:Dict C:Class E:Event
+公共类：73，标注：40，覆盖率：54.8%
+公共方法：128，标注：69，覆盖率：53.9%
+字段属性：276，标注：58，覆盖率：21.0%
+endheader
+
+note as Legend
+   note
+end note
+
+package 业务模型层 {
+package 客户出库单 <<ddd.plus.showcase.wms.domain.order>> {
+   class Order <<(R,#FF7700) 客户的出库单.>>  {
+    __ Referential __
+    {field} <color:Red>Carrier</color> <color:Red>Consignee</color> <color:Red>Supplier</color>
+    __ Lifecycle __
+    {field} ProductionStatus 订单状态
+    __ Operational __
+    {field} OrderConstraint
+    __ Contextual __
+    {field} WaybillNo/OFC随单下发
+    __ 规则 __
+    {method} recommendPackQty() 推荐该订单使用几个包裹：Pack.
+    {method} recommendedPlatform() 该订单已经被推荐到哪一个复核台.
+    {method} totalExpectedQty() 
+    __ 行为 __
+    {abstract}  {method} checkedBy(Operator) <color:Violet> -> OrderCheckedEvent </color>
+    {method} recommendPackQty() 推荐该订单使用几个包裹：Pack.
+    {method} ship() 
+    __ 流程 __
+    {method} - processMyEvent(OrderCheckedEvent)  [[http://localhost:63342/api/file//Users/gaopeng8/wms-ng/dddplus/dddplus-test/src/test/java/ddd/plus/showcase/wms/domain/common/flow/handler/OrderCheckedEventHandler.java:17 OrderCheckedEventHandler]] 
+   }
+
+   class OrderCartons <<(B,#9197DB)>>  {
+    __ 行为 __
+    {method} totalCartonizedQty() 该订单已经装箱的货品件数总和.
+   }
+
+   class OrderLine <<订单行.>>  {
+    __ Structural __
+    {field} OrderLineNo Sku
+    __ Quantity __
+    {field} qty/要货量 shortageQty/缺货量
+    __ 规则 __
+    {method} expectedQty/要货量-缺货量() 
+   }
+
+   class OrderLineBag <<(B,#9197DB)>>  {
+    __ 规则 __
+    {method} totalExpectedQty() 期望的总装箱货品件数.
+   }
+
+   class OrderOfPresale <<(B,#9197DB) 出库单的预售场景.>>  {
+    __ 规则 __
+    {method} isFinalPaid() 尾款已结清?
+   }
+
+   class OrderPacks <<(B,#9197DB)>>  {
+   }
+
+   class OrderTasks <<(B,#9197DB)>>  {
+   }
+
+   class OrderBag <<(B,#9197DB)>>  {
+    __ 规则 __
+    {method} consumableCostFirst() 
+    __ 行为 __
+    {method} canceledBag() 当前出库单集合里哪些已经在单据中心里被客户取消了.
+   }
+
+}
+
+package 包裹 <<ddd.plus.showcase.wms.domain.pack>> {
+   class Pack <<(R,#FF7700) 包裹.>>  {
+    __ Structural __
+    {field} OrderNo WaybillNo
+    __ Lifecycle __
+    {field} PackStatus
+    __ Contextual __
+    {field} cartonNo/包裹明细采集场景
+    __ Billing __
+    {field} totalVolume totalWeight
+    __ 行为 __
+    {method} fromCarton() 
+   }
+
+}
+
+package 复核报差异 <<ddd.plus.showcase.wms.domain.diff>> {
+   class ContainerDiff <<(R,#FF7700) 复核过程中发现的容器差异.>>  {
+    __ Structural __
+    {field} containerNo
+    __ Operational __
+    {field} reason
+    __ Location __
+    {field} platform
+    __ 行为 __
+    {method} register(DiffReason) 登记差异.
+   }
+
+   class ContainerDiffItem {
+    __ Structural __
+    {field} Sku
+   }
+
+   class ContainerDiffItemBag <<(B,#9197DB)>>  {
+   }
+
+}
+
+package 装箱 <<ddd.plus.showcase.wms.domain.carton>> {
+   class Carton <<(R,#FF7700) 纸箱，它会成为包裹.>>  {
+    __ Lifecycle __
+    {field} status
+    __ Operational __
+    {field} cartonizationRule
+    __ KPI __
+    {field} fulfillTime
+    __ Location __
+    {field} Platform
+    __ 规则 __
+    {method} cartonizationRule() 装箱规则，利用gateway延迟加载，规则也是规约.
+    __ 行为 __
+    {method} bindOrder() 
+    {method} deductConsumableInventory() 
+    {abstract}  {method} fulfill() 箱满了<color:Violet> -> CartonFulfilledEvent </color>
+    {method} installConsumables() 向纸箱添加耗材.
+    {method} transferFrom(CheckResult) 
+    __ 流程 __
+    {method} - processMyEvent(CartonFulfilledEvent)  [[http://localhost:63342/api/file//Users/gaopeng8/wms-ng/dddplus/dddplus-test/src/test/java/ddd/plus/showcase/wms/domain/common/flow/handler/CartonFulfilledEventHandler.java:17 CartonFulfilledEventHandler]] 
+    {method} - recommendFor(ICarton,ITask) 为纸箱推荐耗材 [[http://localhost:63342/api/file//Users/gaopeng8/wms-ng/dddplus/dddplus-test/src/test/java/ddd/plus/showcase/wms/domain/carton/ext/IConsumableExt.java:15 IConsumableExt]] 
+   }
+
+   class CartonItem <<纸箱里个某一种sku.>>  {
+    __ Structural __
+    {field} sku
+    __ Referential __
+    {field} <color:Red>orderLineNo</color>
+    __ Quantity __
+    {field} checkedQty
+   }
+
+   class CartonItemBag <<(B,#9197DB)>>  {
+   }
+
+   class CartonOrder <<(B,#9197DB)>>  {
+   }
+
+   class Consumable <<耗材，被放入纸箱，以便运输安全.>>  {
+    __ Structural __
+    {field} CartonNo OrderNo TaskNo/任务号
+    __ Quantity __
+    {field} qty
+    __ Location __
+    {field} Platform
+   }
+
+   class ConsumableBag <<(B,#9197DB)>>  {
+   }
+
+   class Pallet <<栈板，物流领域也称为托盘.>>  {
+    __ Structural __
+    {field} PalletNo TaskNo
+    __ 行为 __
+    {method} fulfill() 
+   }
+
+   class CartonBag <<(B,#9197DB)>>  {
+    __ 行为 __
+    {method} deductConsumableInventory() 
+    {method} fulfill() 
+    {method} putOnPallet() 
+   }
+
+}
+
+package 通用子域 <<ddd.plus.showcase.wms.domain.common>> {
+   class Sku <<货品.>>  {
+    __ Structural __
+    {field} Owner PackCode
+    __ Contextual __
+    {field} LotNo snList uniqueCode
+   }
+
+}
+
+package 出库复核任务 <<ddd.plus.showcase.wms.domain.task>> {
+   class Container <<拣货容器.>>  {
+    __ Operational __
+    {field} ContainerType
+    __ DCU __
+    {field} containerNo/扫描枪可扫
+   }
+
+   class ContainerBag <<(B,#9197DB)>>  {
+    __ 规则 __
+    {method} orderNoSet() 所有的出库单号.
+    {method} totalPendingQty() 
+    {method} totalQty() 该容器的总要货量.
+    {method} totalSku() 该容器的总商品种类(品数).
+    __ 行为 __
+    {method} confirmQty() 
+   }
+
+   class ContainerItem <<拣货容器里的商品和数量.>>  {
+    __ Structural __
+    {field} OrderLineNo Sku
+    __ Quantity __
+    {field} expectedQty givenQty pendingQty
+    __ 规则 __
+    {method} diffQty() 复核作业发现的差异数量.
+   }
+
+   class ContainerItemBag <<(B,#9197DB)>>  {
+    __ 规则 __
+    {method} totalPendingQty() 
+    {method} totalQty() 该容器的总货量.
+    {method} totalSku() 该容器的总商品种类(品数).
+   }
+
+   class Task <<(R,#FF7700) 复核任务.>>  {
+    __ Location __
+    {field} Platform
+    __ 规则 __
+    {method} isEmpty() 
+    {method} orderNoSet() 
+    {method} totalPendingQty() 
+    {method} totalQty() 
+    {method} totalSku() 
+    __ 行为 __
+    {method} claimedWith() 
+    {method} plan() 初始化时指定复核生产计划
+    {method} removeOrderLines() 
+   }
+
+   class TaskBag <<(B,#9197DB)>>  {
+    __ 规则 __
+    {method} platforms() 这些复核任务在哪些复核台.
+    {method} totalCheckedQty() 已复核货品总数
+    {method} totalPendingQty() 待复核货品总数
+    {method} totalQty() 总要货量.
+   }
+
+   class TaskCartons <<(B,#9197DB)>>  {
+    __ 行为 __
+    {method} contains(UniqueCode) 该任务下所有纸箱里是否已经有该唯一码
+   }
+
+   class TaskOfContainerPending <<(B,#9197DB)>>  {
+    __ 行为 __
+    {method} confirmQty() 
+   }
+
+   class TaskOfOrderPending <<(B,#9197DB)>>  {
+    __ 行为 __
+    {method} confirmQty() 
+   }
+
+   class TaskOfSkuPending <<(B,#9197DB) The hidden class>>  {
+    __ 行为 __
+    {method} confirmQty() 
+   }
+
+   class TaskOrders <<(B,#9197DB)>>  {
+   }
+
+   class TaskStatus <<(D,#9197DB) 任务的生命周期.>>  {
+    __ Structural __
+    {field} Accepted/已接收 Appending Claimed Finished
+   }
+
+}
+
+package 发货 <<ddd.plus.showcase.wms.domain.ship>> {
+   class OrderCarton <<一个订单的装车清单：纸箱维度.>>  {
+    __ Structural __
+    {field} OrderNo
+   }
+
+   class OrderLineManifest <<发货的订单行，货品维度.>>  {
+    __ Structural __
+    {field} OrderLineNo Sku
+   }
+
+   class ShipManifest <<(R,#FF7700) 一辆货车的装车清单.>>  {
+    __ Structural __
+    {field} Carrier
+    __ Lifecycle __
+    {field} shipStatus
+    __ Reserved __
+    {field} extInfo
+    __ 行为 __
+    {method} loadForOrder(CartonBag,Order) 为订单装车
+    {method} ship() 发货
+   }
+
+}
+
+}
+package 业务交互层 <<UseCase>> {
+   class CheckingAppService <<(C,#9197DB) 业务用例：人工复核.>>  {
+    {method} checkByOrder(orderNo) 把一个出库单的所有货品一次性放到入参指定的纸箱：爆品订单复核
+    {method} checkBySku(qty,skuNo) 复核装箱一体化：按货品维度.
+    {method} claimTask(containerNo) 复核员扫描容器领取复核任务.
+    {method} fulfillCarton(cartonNo,consumables,orderNo) 复核员把拣货容器的货品放入箱，并使用耗材以便运输安全，该过程发现箱已满.
+    {method} recommendConsumable(cartonNo) 为任务的某个纸箱推荐耗材种类和数量
+    {method} recommendPlatformByOrder(orderNo) 提升拣货员去哪个复核台：按订单
+    {method} recommendPlatformByTaskBacklog(taskNo) 提升拣货员去哪个复核台：按任务积压情况
+    {method} submitTask() 提交复核任务
+   }
+
+   class FlowAutoExecutionConsumer <<(C,#9197DB) 作业的流程自动化.>>  {
+    {method} onMessage() 根据不同消息自动链式触发流程自动化执行
+   }
+
+   class ShippingAppService <<(C,#9197DB) 业务用例：发货>>  {
+    {method} shipOrder() 整单发货.
+   }
+
+   class TaskSubmittedConsumer <<(C,#9197DB) 提交复核任务的MQ消费者.>>  {
+    {method} 消费接收复核任务(json) 
+   }
+
+}
+
+package 跨聚合复杂流程 <<Orphan Services>> {
+   
+   class ObFlowAutomator {
+    {method} orchestrate(IFlowAutomationEvent) 
+   }
+
+   
+}
+
+Order "1" *-- "1" OrderLineBag: HasOne
+Order o-- OrderPacks: Associate
+Order o-- OrderTasks: Associate
+Order o-- OrderCartons: Associate
+OrderLineBag "1" *-- "N" OrderLine: HasMany
+OrderOfPresale --|> Order: Contextual
+Pack --> Carton: From/Contextual 包裹明细采集
+ContainerDiff "1" *-- "1" ContainerDiffItemBag: HasOne
+ContainerDiffItem --|> OrderLine: BelongTo
+ContainerDiffItemBag "1" *-- "N" ContainerDiffItem: HasMany
+CartonItemBag "1" *-- "N" CartonItem: HasMany
+ConsumableBag "1" *-- "N" Consumable: HasMany
+Consumable --|> Sku: Extends
+Carton --|> Task: BelongTo
+Carton --|> Order: BelongTo
+Carton "1" *-- "1" CartonItemBag: HasOne
+Carton "1" *-- "1" ConsumableBag: HasOne
+Carton o-- CartonOrder: Associate
+Carton "1" *-- "1" Pallet: HasOne/Contextual 物理世界是属于关系
+ContainerItem --|> OrderLine: BelongTo
+TaskOfSkuPending --|> Task: Contextual
+TaskOfContainerPending --|> Task: Contextual
+ContainerItemBag "1" *-- "N" ContainerItem: HasMany
+Container "1" *-- "1" ContainerItemBag: HasOne
+TaskOfOrderPending --|> Task: Contextual
+Task o-- TaskStatus: Associate
+Task "1" *-- "1" ContainerBag: HasOne
+Task o-- TaskOrders: Associate
+Task o-- TaskCartons: Associate
+ContainerBag "1" *-- "N" Container: HasMany
+ShipManifest "1" *-- "N" OrderCarton: HasMany
+OrderCarton "1" *-- "N" OrderLineManifest: HasMany/Contextual 包裹明细采集
+OrderCarton --> Carton: From
+
+package 领域事件 <<events>> {
+   class OrderShippedEvent <<(E,#9197DB) E: >>  {
+   未标注生产者
+   }
+
+   class OrderCheckedEvent <<(E,#9197DB) E: >>  {
+   }
+
+   class CartonFulfilledEvent <<(E,#9197DB) E: >>  {
+   }
+
+   class TaskAcceptedEvent <<(E,#9197DB) E: >>  {
+   未标注生产者
+   }
+
+}
+
+footer
+generated by DDDplus
+endfooter
+
+
+@enduml

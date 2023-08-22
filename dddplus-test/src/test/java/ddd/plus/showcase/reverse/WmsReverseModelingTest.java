@@ -7,10 +7,7 @@ import io.github.dddplus.ast.FileWalker;
 import io.github.dddplus.ast.enforcer.AllowedAccessorsEnforcer;
 import io.github.dddplus.ast.enforcer.ExtensionMethodSignatureEnforcer;
 import io.github.dddplus.ast.model.ReverseEngineeringModel;
-import io.github.dddplus.ast.view.CallGraphRenderer;
-import io.github.dddplus.ast.view.EncapsulationRenderer;
-import io.github.dddplus.ast.view.PlainTextRenderer;
-import io.github.dddplus.ast.view.PlantUmlRenderer;
+import io.github.dddplus.ast.view.*;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -24,16 +21,18 @@ class WmsReverseModelingTest {
     private final File root = DomainModelAnalyzerTest.moduleRoot("dddplus-test");
 
     @Test
-    @Disabled // 手工按需可视化，无需集成到CI flow
     void visualizeDomainModel() throws IOException {
         ReverseEngineeringModel model = new DomainModelAnalyzer()
                 .scan(root)
+                .disableCallGraph()
                 .analyze(domainLayerFilter);
         new PlantUmlRenderer()
                 .direction(PlantUmlRenderer.Direction.TopToBottom)
                 .skinParamPolyline()
-                .build(model)
-                .classDiagramSvgFilename("../doc/showcase/wms.svg")
+                .withModel(model)
+                .appendNote("note")
+                .plantUmlFilename("../doc/showcase/wms.puml")
+                //.classDiagramSvgFilename("../doc/showcase/wms.svg")
                 .render();
     }
 
@@ -45,9 +44,25 @@ class WmsReverseModelingTest {
         new CallGraphRenderer()
                 .targetCallGraphDotFile("../doc/showcase/callgraph.dot")
                 .targetPackageCrossRefDotFile("../doc/showcase/pkgref.dot")
+                .edgeShowsCallerMethod()
                 .splines("polyline")
-                .build(model)
+                .withModel(model)
                 .render();
+        new ClassHierarchyRenderer()
+                .targetDotFile("../doc/showcase/classlayer.dot")
+                .withModel(model)
+                .ignoreParent("BaseDto")
+                .ignoreParent("Serializable")
+                .render();
+    }
+
+    @Test
+    void dumpModel() throws Exception {
+        ReverseEngineeringModel model = new DomainModelAnalyzer()
+                .scan(root)
+                .disableCallGraph()
+                .analyze(domainLayerFilter);
+        model.dump("../doc/model.db");
     }
 
     @Test
@@ -61,7 +76,7 @@ class WmsReverseModelingTest {
                 .direction(PlantUmlRenderer.Direction.TopToBottom)
                 .disableCoverage()
                 .skinParamPolyline()
-                .build(model)
+                .withModel(model)
                 .classDiagramSvgFilename("../doc/showcase/tech.svg")
                 .render();
     }
@@ -77,7 +92,7 @@ class WmsReverseModelingTest {
                 .showRawSimilarities()
                 .clustering()
                 .targetFilename("../doc/showcase/wms.txt")
-                .build(model)
+                .withModel(model)
                 .render();
     }
 
@@ -87,7 +102,7 @@ class WmsReverseModelingTest {
                 .scan(root)
                 .analyzeEncapsulation(domainLayerFilter);
         new EncapsulationRenderer()
-                .build(model)
+                .withModel(model)
                 .targetFilename("../doc/showcase/encapsulation.txt")
                 .render();
     }

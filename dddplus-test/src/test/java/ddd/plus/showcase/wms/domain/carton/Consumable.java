@@ -19,7 +19,8 @@ import java.math.BigDecimal;
 @KeyRelation(whom = Sku.class, type = KeyRelation.Type.Extends)
 @Getter(AccessLevel.PACKAGE)
 public class Consumable extends Sku {
-    @KeyElement(types = KeyElement.Type.Structural, byType = true)
+    // 任务号
+    @KeyElement(types = KeyElement.Type.Structural, byType = true, remarkFromJavadoc = true)
     private TaskNo taskNo;
     @KeyElement(types = KeyElement.Type.Structural, byType = true)
     private OrderNo orderNo;

@@ -5,6 +5,8 @@
  */
 package io.github.dddplus.ast.parser;
 
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
@@ -14,6 +16,7 @@ import com.google.common.collect.Lists;
 import io.github.dddplus.ast.model.KeyFlowEntry;
 import lombok.Getter;
 
+import java.nio.file.Path;
 import java.util.List;
 
 /**
@@ -52,6 +55,10 @@ public class KeyFlowAnnotationParser {
                     entry.setRemark(AnnotationFieldParser.singleFieldValue(memberValuePair));
                     break;
 
+                case "usecase":
+                    entry.setUsecase(true);
+                    break;
+
                 case "actor":
                     // Class[] actor，只是为了注解值是可选的，实际使用只会用1个
                     entry.setActor(AnnotationFieldParser.singleFieldValue(memberValuePair));
@@ -81,6 +88,21 @@ public class KeyFlowAnnotationParser {
             }
         }
 
+        entry.setNonPublic(!methodDeclaration.isPublic());
+        entry.setPosition(normalAnnotationExpr.getRange().get().begin);
+        setUpAbsolutePath(entry);
         return entry;
+    }
+
+    private void setUpAbsolutePath(KeyFlowEntry entry) {
+        ClassOrInterfaceDeclaration classDeclaration = methodDeclaration.findAncestor(ClassOrInterfaceDeclaration.class).orElse(null);
+        if (classDeclaration == null) {
+            return;
+        }
+
+        CompilationUnit compilationUnit = classDeclaration.findCompilationUnit().get();
+        Path sourcePath = compilationUnit.getStorage().get().getPath();
+        String absolutePath = sourcePath.toAbsolutePath().toString();
+        entry.setAbsolutePath(absolutePath);
     }
 }

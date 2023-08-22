@@ -5,16 +5,13 @@
  */
 package io.github.dddplus.ast.view;
 
-import io.github.dddplus.ast.model.ReverseEngineeringModel;
 import io.github.dddplus.ast.model.*;
+import io.github.dddplus.ast.parser.JavaParserUtil;
 import io.github.dddplus.ast.report.AggregateDensity;
 import io.github.dddplus.ast.report.CoverageReport;
 import io.github.dddplus.ast.report.ModelDebtReport;
 import io.github.dddplus.dsl.KeyElement;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
@@ -25,14 +22,12 @@ public class PlainTextRenderer implements IModelRenderer<PlainTextRenderer> {
     private String targetFilename;
 
     private boolean clustering = false;
-    private boolean showNotLabeledElements = false;
     private boolean showRawSimilarities = false;
 
     private final StringBuilder content = new StringBuilder();
     private ReverseEngineeringModel model;
 
     public PlainTextRenderer clustering() {
-        assureNotBuiltYet();
         this.clustering = true;
         return this;
     }
@@ -43,26 +38,9 @@ public class PlainTextRenderer implements IModelRenderer<PlainTextRenderer> {
     }
 
     @Override
-    public PlainTextRenderer build(ReverseEngineeringModel model) {
+    public PlainTextRenderer withModel(ReverseEngineeringModel model) {
         this.model = model;
-
-        appendCoverage();
-        appendModelDebt();
-        model.sortedAggregates().forEach(a -> addAggregate(a));
-        addKeyUsecases();
-        addOrphanKeyFlows();
-        addKeyEvents();
-        if (showRawSimilarities) {
-            addRawModelSimilarities();
-        }
-
         return this;
-    }
-
-    private void assureNotBuiltYet() {
-        if (model != null) {
-            throw new RuntimeException("Call me before build()");
-        }
     }
 
     private void addRawModelSimilarities() {
@@ -75,10 +53,17 @@ public class PlainTextRenderer implements IModelRenderer<PlainTextRenderer> {
 
     @Override
     public void render() throws IOException {
-        File file = new File(targetFilename);
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            writer.append(content);
+        appendCoverage();
+        appendModelDebt();
+        model.sortedAggregates().forEach(a -> addAggregate(a));
+        addKeyUsecases();
+        addOrphanKeyFlows();
+        addKeyEvents();
+        if (showRawSimilarities) {
+            addRawModelSimilarities();
         }
+
+        JavaParserUtil.dumpToFile(targetFilename, content.toString());
     }
 
     private PlainTextRenderer appendModelDebt() {
@@ -94,7 +79,8 @@ public class PlainTextRenderer implements IModelRenderer<PlainTextRenderer> {
         if (report.getRawSimilarModels() > 0) {
             append(String.format("相似类:%d ", report.getRawSimilarModels()));
         }
-        append(String.format("聚合分布[类:(Mean:%.2f SD:%.2f) 方法:(Mean:%.2f SD:%.2f)]",
+        append(String.format("聚合分布[问题聚合:%d 类:(Mean:%.2f SD:%.2f) 方法:(Mean:%.2f SD:%.2f)]",
+                density.getProblems(),
                 density.getModelsMean(),
                 density.getModelsStandardDeviation(),
                 density.getMethodDensityMean(),
@@ -127,12 +113,12 @@ public class PlainTextRenderer implements IModelRenderer<PlainTextRenderer> {
     private PlainTextRenderer addAggregate(AggregateEntry aggregate) {
         append("<<Aggregate: ").append(aggregate.getName()).append(">>").append(NEWLINE);
         for (KeyModelEntry clazz : aggregate.keyModels()) {
-            writeClazzDefinition(clazz, aggregate.isRoot(clazz));
+            writeClazzDefinition(clazz);
         }
         return this;
     }
 
-    private PlainTextRenderer writeClazzDefinition(KeyModelEntry keyModelEntry, boolean isAggregateRoot) {
+    private PlainTextRenderer writeClazzDefinition(KeyModelEntry keyModelEntry) {
         append(keyModelEntry.getClassName());
         if (keyModelEntry.hasJavadoc()) {
             append(SPACE).append(keyModelEntry.getJavadoc());
@@ -144,12 +130,6 @@ public class PlainTextRenderer implements IModelRenderer<PlainTextRenderer> {
             for (KeyElement.Type type : keyModelEntry.types()) {
                 append(TAB)
                         .append(String.format("%-13s %s", type, keyModelEntry.displayFieldByType(type)))
-                        .append(NEWLINE);
-            }
-
-            if (this.showNotLabeledElements && !keyModelEntry.undefinedTypes().isEmpty()) {
-                append(TAB)
-                        .append(String.format("%-13s %s", "-NotLabeled-", keyModelEntry.displayUndefinedTypes()))
                         .append(NEWLINE);
             }
         }
@@ -192,7 +172,7 @@ public class PlainTextRenderer implements IModelRenderer<PlainTextRenderer> {
                             .append(SPACE)
                             .append(entry.getJavadoc())
                             .append(SPACE)
-                            .append(entry.displayActualClass());
+                            .append(entry.plainDisplayActualClass());
                     if (entry.produceEvent()) {
                         append(String.format(" -> %s", entry.displayEvents()));
                     }
@@ -219,7 +199,7 @@ public class PlainTextRenderer implements IModelRenderer<PlainTextRenderer> {
 
     private PlainTextRenderer writeKeyUsecaseClazzDefinition(String actor) {
         append(actor).append(NEWLINE);
-        for (KeyUsecaseEntry entry : model.getKeyUsecaseReport().actorKeyUsecases(actor)) {
+        for (KeyUsecaseEntry entry : model.getKeyUsecaseReport().sortedActorKeyUsecases(actor)) {
             append(TAB);
             if (!entry.displayOut().isEmpty()) {
                 append(entry.displayOut()).append(SPACE);
@@ -241,14 +221,7 @@ public class PlainTextRenderer implements IModelRenderer<PlainTextRenderer> {
         return this;
     }
 
-    public PlainTextRenderer showNotLabeledElements() {
-        assureNotBuiltYet();
-        this.showNotLabeledElements = true;
-        return this;
-    }
-
     public PlainTextRenderer showRawSimilarities() {
-        assureNotBuiltYet();
         this.showRawSimilarities = true;
         return this;
     }
