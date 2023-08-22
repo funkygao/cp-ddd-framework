@@ -5,16 +5,13 @@
  */
 package io.github.dddplus.ast.view;
 
-import io.github.dddplus.ast.model.ReverseEngineeringModel;
 import io.github.dddplus.ast.model.*;
+import io.github.dddplus.ast.parser.JavaParserUtil;
 import io.github.dddplus.ast.report.AggregateDensity;
 import io.github.dddplus.ast.report.CoverageReport;
 import io.github.dddplus.ast.report.ModelDebtReport;
 import io.github.dddplus.dsl.KeyElement;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
@@ -66,10 +63,7 @@ public class PlainTextRenderer implements IModelRenderer<PlainTextRenderer> {
             addRawModelSimilarities();
         }
 
-        File file = new File(targetFilename);
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            writer.append(content);
-        }
+        JavaParserUtil.dumpToFile(targetFilename, content.toString());
     }
 
     private PlainTextRenderer appendModelDebt() {

@@ -8,11 +8,9 @@ package io.github.dddplus.ast.view;
 import io.github.dddplus.ast.model.CallGraphEntry;
 import io.github.dddplus.ast.model.PackageCrossRefEntry;
 import io.github.dddplus.ast.model.ReverseEngineeringModel;
+import io.github.dddplus.ast.parser.JavaParserUtil;
 import io.github.dddplus.ast.report.CallGraphReport;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -84,10 +82,7 @@ public class CallGraphRenderer implements IModelRenderer<CallGraphRenderer> {
                 .renderEdges()
                 .append("}");
 
-        File file = new File(targetCallGraphDotFile);
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            writer.append(content);
-        }
+        JavaParserUtil.dumpToFile(targetCallGraphDotFile, content.toString());
     }
 
     private void renderPackageCrossRef() throws IOException {
@@ -103,11 +98,7 @@ public class CallGraphRenderer implements IModelRenderer<CallGraphRenderer> {
         }
         append("}");
 
-        File file = new File(targetPackageCrossRefDotFile);
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            writer.append(content);
-        }
-
+        JavaParserUtil.dumpToFile(targetPackageCrossRefDotFile, content.toString());
     }
 
     private CallGraphRenderer setupSkin() {

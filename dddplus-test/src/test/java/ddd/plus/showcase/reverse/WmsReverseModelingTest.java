@@ -21,7 +21,6 @@ class WmsReverseModelingTest {
     private final File root = DomainModelAnalyzerTest.moduleRoot("dddplus-test");
 
     @Test
-    @Disabled // 手工按需可视化，无需集成到CI flow
     void visualizeDomainModel() throws IOException {
         ReverseEngineeringModel model = new DomainModelAnalyzer()
                 .scan(root)
@@ -31,8 +30,9 @@ class WmsReverseModelingTest {
                 .direction(PlantUmlRenderer.Direction.TopToBottom)
                 .skinParamPolyline()
                 .withModel(model)
+                .appendNote("note")
                 .plantUmlFilename("../doc/showcase/wms.puml")
-                .classDiagramSvgFilename("../doc/showcase/wms.svg")
+                //.classDiagramSvgFilename("../doc/showcase/wms.svg")
                 .render();
     }
 

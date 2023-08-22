@@ -15,6 +15,10 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.ClassExpr;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -51,6 +55,13 @@ public final class JavaParserUtil {
             }
 
             node = node.getParentNode().get();
+        }
+    }
+
+    public static void dumpToFile(String path, String content) throws IOException {
+        File file = new File(path);
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            writer.append(content);
         }
     }
 

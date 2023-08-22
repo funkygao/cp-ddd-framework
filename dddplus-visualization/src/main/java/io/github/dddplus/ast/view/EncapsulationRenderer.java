@@ -6,10 +6,9 @@
 package io.github.dddplus.ast.view;
 
 import io.github.dddplus.ast.model.ReverseEngineeringModel;
+import io.github.dddplus.ast.parser.JavaParserUtil;
 import io.github.dddplus.ast.report.EncapsulationReport;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 
 /**
@@ -32,9 +31,6 @@ public class EncapsulationRenderer implements IModelRenderer<EncapsulationRender
 
     @Override
     public void render() throws IOException {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(targetFilename))) {
-            writer.append(encapsulationReport.content());
-        }
-
+        JavaParserUtil.dumpToFile(targetFilename, encapsulationReport.content());
     }
 }

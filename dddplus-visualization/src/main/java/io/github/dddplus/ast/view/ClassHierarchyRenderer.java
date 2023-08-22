@@ -1,11 +1,9 @@
 package io.github.dddplus.ast.view;
 
 import io.github.dddplus.ast.model.ReverseEngineeringModel;
+import io.github.dddplus.ast.parser.JavaParserUtil;
 import io.github.dddplus.ast.report.ClassHierarchyReport;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 
 public class ClassHierarchyRenderer implements IModelRenderer<ClassHierarchyRenderer> {
@@ -53,10 +51,7 @@ public class ClassHierarchyRenderer implements IModelRenderer<ClassHierarchyRend
                 .renderEdges()
                 .append("}");
 
-        File file = new File(targetDotFile);
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            writer.append(content);
-        }
+        JavaParserUtil.dumpToFile(targetDotFile, content.toString());
     }
 
     private ClassHierarchyRenderer renderEdges() {
