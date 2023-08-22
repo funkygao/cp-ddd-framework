@@ -81,12 +81,14 @@ public class ClassHierarchyReport {
         }
 
         public String dotLabel() {
+            String javadoc = fromJavadoc.replaceAll("@", "")
+                    .replaceAll("\"", "");
             String displayGenericTypes = displayGenericTypes();
             if (displayGenericTypes.isEmpty()) {
-                return fromJavadoc;
+                return javadoc;
             }
 
-            return fromJavadoc + " <" + displayGenericTypes + ">";
+            return javadoc + " <" + displayGenericTypes + ">";
         }
 
         @Override
