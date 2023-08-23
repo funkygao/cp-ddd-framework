@@ -60,4 +60,15 @@ class ClassHierarchyReportTest {
         assertEquals(pairs.size(), 4);
     }
 
+    @Test
+    void register_dup() {
+        ClassHierarchyReport report = new ClassHierarchyReport();
+        // (from, to)相同，但fromJavadoc不同的场景
+        // 即：一个接口的两个实现类名称相同，但功能不同
+        report.registerImplementsRelation("StrategyIdentityMatcherServiceImpl", "验收策略身份处理器", null, "StrategyIdentityMatcherService");
+        report.registerImplementsRelation("StrategyIdentityMatcherServiceImpl", "上架策略身份处理器", null, "StrategyIdentityMatcherService");
+        assertEquals(2, report.getRelations().size());
+        assertEquals(2, report.displayRelations().size());
+    }
+
 }

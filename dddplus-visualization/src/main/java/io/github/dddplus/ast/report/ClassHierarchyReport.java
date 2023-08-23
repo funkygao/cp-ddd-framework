@@ -39,19 +39,19 @@ public class ClassHierarchyReport {
     public Set<Pair> displayRelations() {
         // 删除只有一层关系的Pair
         Set<Pair> result = new TreeSet<>();
-        for (Pair pair : relations) {
-            if (ignoreParentClass(pair.to)) {
+        for (Pair self : relations) {
+            if (ignoreParentClass(self.to)) {
                 continue;
             }
 
-            for (Pair p : relations) {
-                if (p.equals(pair) || ignoreParentClass(p.to)) {
+            for (Pair that : relations) {
+                if (that == self || ignoreParentClass(that.to)) {
                     continue;
                 }
 
-                if (p.to.equals(pair.from) || p.from.equals(pair.to) || p.to.equals(pair.to)) {
+                if (that.to.equals(self.from) || that.from.equals(self.to) || that.to.equals(self.to)) {
                     // this link has neighbor
-                    result.add(pair);
+                    result.add(self);
                 }
             }
         }
@@ -93,17 +93,21 @@ public class ClassHierarchyReport {
 
         @Override
         public int compareTo(Pair that) {
-            return to.compareTo(that.to) * 71 + from.compareTo(that.from);
+            int result = to.compareTo(that.to);
+            if (result != 0) {
+                return result;
+            }
+            result = from.compareTo(that.from);
+            if (result != 0) {
+                return result;
+            }
+            
+            return fromJavadoc.compareTo(that.fromJavadoc);
         }
 
         public enum Relation {
             Extends,
             Implements;
-        }
-
-        @Override
-        public String toString() {
-            return from + "->" + to;
         }
     }
 
