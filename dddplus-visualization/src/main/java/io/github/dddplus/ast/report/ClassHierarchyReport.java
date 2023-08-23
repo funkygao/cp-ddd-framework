@@ -101,7 +101,7 @@ public class ClassHierarchyReport {
             if (result != 0) {
                 return result;
             }
-            
+
             return fromJavadoc.compareTo(that.fromJavadoc);
         }
 
