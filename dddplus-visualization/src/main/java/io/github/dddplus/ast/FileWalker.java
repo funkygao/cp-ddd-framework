@@ -57,6 +57,8 @@ public class FileWalker {
             return StaticJavaParser.parse(file);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
+        } catch (Throwable ignored) {
+            throw new RuntimeException(file.getAbsolutePath(), ignored);
         }
     }
 

@@ -88,16 +88,19 @@ public class DomainModelAnalyzer {
 
     public ReverseEngineeringModel analyze(FileWalker.Filter filter) {
         ReverseEngineeringModel model = new ReverseEngineeringModel();
+
         // all the packages
         List<CompilationUnit> compilationUnits = new ArrayList<>();
-        for (File dir : dirs) {
-            new FileWalker(new DomainModelAnalyzer.ActualFilter(null), (level, path, file) -> {
-                compilationUnits.add(FileWalker.silentParse(file));
-            }).walkFrom(dir);
-        }
-        for (CompilationUnit cu : compilationUnits) {
-            for (PackageDeclaration packageDeclaration : cu.findAll(PackageDeclaration.class)) {
-                model.registerPackage(packageDeclaration.getNameAsString());
+        if (!classHierarchyOnly) {
+            for (File dir : dirs) {
+                new FileWalker(new DomainModelAnalyzer.ActualFilter(null), (level, path, file) -> {
+                    compilationUnits.add(FileWalker.silentParse(file));
+                }).walkFrom(dir);
+            }
+            for (CompilationUnit cu : compilationUnits) {
+                for (PackageDeclaration packageDeclaration : cu.findAll(PackageDeclaration.class)) {
+                    model.registerPackage(packageDeclaration.getNameAsString());
+                }
             }
         }
 
