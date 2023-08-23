@@ -9,8 +9,8 @@ import java.io.IOException;
 public class ClassHierarchyRenderer implements IModelRenderer<ClassHierarchyRenderer> {
     private ClassHierarchyReport report;
     private String targetDotFile;
-    private static final String extendsEdgeTpl = " [color=red fontsize=10 label=\"%s\"];";
-    private static final String implementsEdgeTpl = " [color=blue fontsize=10 style=dashed label=\"%s\"];";
+    private static final String extendsEdgeTpl = " [color=red fontsize=10 arrowsize=0.5 edgetooltip=\"%s\" label=\"%s\"];";
+    private static final String implementsEdgeTpl = " [color=blue fontsize=10 arrowhead=empty arrowsize=0.5 style=dashed edgetooltip=\"%s\" label=\"%s\"];";
 
     private StringBuilder content = new StringBuilder();
 
@@ -56,14 +56,17 @@ public class ClassHierarchyRenderer implements IModelRenderer<ClassHierarchyRend
 
     private ClassHierarchyRenderer renderEdges() {
         for (ClassHierarchyReport.Pair pair : report.displayRelations()) {
-            append(pair.getFrom()).append(" -> ").append(pair.getTo()).append(SPACE);
+            append("\"").append(pair.getFrom()).append("\"")
+                    .append(" -> ")
+                    .append("\"").append(pair.getTo()).append("\"")
+                    .append(SPACE);
             switch (pair.getRelation()) {
                 case Extends:
-                    append(String.format(extendsEdgeTpl, pair.dotLabel()));
+                    append(String.format(extendsEdgeTpl, pair.dotLabel(), pair.dotLabel()));
                     break;
 
                 case Implements:
-                    append(String.format(implementsEdgeTpl, pair.dotLabel()));
+                    append(String.format(implementsEdgeTpl, pair.dotLabel(), pair.dotLabel()));
                     break;
             }
             append(NEWLINE);
