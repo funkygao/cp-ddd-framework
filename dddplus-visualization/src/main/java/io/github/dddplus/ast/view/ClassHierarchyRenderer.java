@@ -9,8 +9,8 @@ import java.io.IOException;
 public class ClassHierarchyRenderer implements IModelRenderer<ClassHierarchyRenderer> {
     private ClassHierarchyReport report;
     private String targetDotFile;
-    private static final String extendsEdgeTpl = " [color=red label=\"%s\"];";
-    private static final String implementsEdgeTpl = " [color=blue style=dashed label=\"%s\"];";
+    private static final String extendsEdgeTpl = " [color=red fontsize=10 label=\"%s\"];";
+    private static final String implementsEdgeTpl = " [color=blue fontsize=10 style=dashed label=\"%s\"];";
 
     private StringBuilder content = new StringBuilder();
 
