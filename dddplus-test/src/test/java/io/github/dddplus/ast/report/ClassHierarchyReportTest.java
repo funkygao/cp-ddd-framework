@@ -71,4 +71,22 @@ class ClassHierarchyReportTest {
         assertEquals(2, report.displayRelations().size());
     }
 
+    @Test
+    void ignoreParents() {
+        ClassHierarchyReport report = new ClassHierarchyReport();
+        // a - b - c - d - e
+        report.registerExtendsRelation("a", "b");
+        report.registerExtendsRelation("b", "c");
+        report.registerExtendsRelation("c", "d");
+        report.registerExtendsRelation("d", "e");
+        assertEquals(4, report.displayRelations().size());
+        report.getIgnoredParentClasses().add("d");
+        // a - b - c
+        assertEquals(2, report.displayRelations().size());
+        report.getIgnoredParentClasses().clear();
+        assertEquals(4, report.displayRelations().size());
+        report.getIgnoredParentClasses().add("c");
+        assertEquals(0, report.displayRelations().size());
+    }
+
 }

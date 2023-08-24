@@ -12,16 +12,15 @@ public class ClassHierarchyReport {
 
     private Set<Pair> relations = new HashSet<>();
 
-    private boolean ignoreParentClass(String parentClass) {
-        return ignoredParentClasses.contains(parentClass);
+    private boolean ignored(Pair pair) {
+        return ignoredParentClasses.contains(pair.from) || ignoredParentClasses.contains(pair.to);
     }
 
     public void registerExtendsRelation(String from, String fromJavadoc, List<String> genericTypes, String to) {
-        if (ignoreParentClass(to)) {
-            return;
+        Pair pair = new Pair(from, to, Pair.Relation.Extends, fromJavadoc, genericTypes);
+        if (!ignored(pair)) {
+            relations.add(pair);
         }
-
-        relations.add(new Pair(from, to, Pair.Relation.Extends, fromJavadoc, genericTypes));
     }
 
     void registerExtendsRelation(String from, String to) {
@@ -29,23 +28,22 @@ public class ClassHierarchyReport {
     }
 
     public void registerImplementsRelation(String from, String fromJavadoc, List<String> genericTypes, String to) {
-        if (ignoreParentClass(to)) {
-            return;
+        Pair pair = new Pair(from, to, Pair.Relation.Implements, fromJavadoc, genericTypes);
+        if (!ignored(pair)) {
+            relations.add(pair);
         }
-
-        relations.add(new Pair(from, to, Pair.Relation.Implements, fromJavadoc, genericTypes));
     }
 
     public Set<Pair> displayRelations() {
         // 删除只有一层关系的Pair
         Set<Pair> result = new TreeSet<>();
         for (Pair self : relations) {
-            if (ignoreParentClass(self.to)) {
+            if (ignored(self)) {
                 continue;
             }
 
             for (Pair that : relations) {
-                if (that == self || ignoreParentClass(that.to)) {
+                if (that == self || ignored(that)) {
                     continue;
                 }
 
