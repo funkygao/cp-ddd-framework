@@ -4,118 +4,207 @@ node [fontname="Helvetica,Arial,sans-serif"]
 edge [fontname="Helvetica,Arial,sans-serif"]
 rankdir="LR"
 node [shape=box, height=0.25]
-edge [fontsize=10 arrowsize=0.5]
-"Carrier" -> "AbstractBusinessNo"  [edgetooltip="承运商. <String>" label="承运商. <String>"];
-"CartonNo" -> "AbstractBusinessNo"  [edgetooltip=" <String>" label=" <String>"];
-"Consignee" -> "AbstractBusinessNo"  [edgetooltip="收货人. <String>" label="收货人. <String>"];
-"Consignor" -> "AbstractBusinessNo"  [edgetooltip="发货人. <String>" label="发货人. <String>"];
-"LotNo" -> "AbstractBusinessNo"  [edgetooltip="货品的批次号. <String>" label="货品的批次号. <String>"];
-"Operator" -> "AbstractBusinessNo"  [edgetooltip="操作员. <String>" label="操作员. <String>"];
-"OrderLineNo" -> "AbstractBusinessNo"  [edgetooltip=" <String>" label=" <String>"];
-"OrderNo" -> "AbstractBusinessNo"  [edgetooltip=" <String>" label=" <String>"];
-"Owner" -> "AbstractBusinessNo"  [edgetooltip="货主. <String>" label="货主. <String>"];
-"PackCode" -> "AbstractBusinessNo"  [edgetooltip="货品的包装代码. <String>" label="货品的包装代码. <String>"];
-"PalletNo" -> "AbstractBusinessNo"  [edgetooltip="栈板. <String>" label="栈板. <String>"];
-"Platform" -> "AbstractBusinessNo"  [edgetooltip="复核台(操作台). <String>" label="复核台(操作台). <String>"];
-"Sku" -> "AbstractBusinessNo"  [edgetooltip="货品. <String>" label="货品. <String>"];
-"Supplier" -> "AbstractBusinessNo"  [edgetooltip="供应商. <String>" label="供应商. <String>"];
-"TaskNo" -> "AbstractBusinessNo"  [edgetooltip=" <String>" label=" <String>"];
-"UniqueCode" -> "AbstractBusinessNo"  [edgetooltip="货品的唯一码. <String>" label="货品的唯一码. <String>"];
-"Uuid" -> "AbstractBusinessNo"  [edgetooltip="通用的业务幂等对象. <String>" label="通用的业务幂等对象. <String>"];
-"WarehouseNo" -> "AbstractBusinessNo"  [edgetooltip="库房. <String>" label="库房. <String>"];
-"WaybillNo" -> "AbstractBusinessNo"  [edgetooltip="运单号. <String>" label="运单号. <String>"];
-"CartonFulfilledEventHandler" -> "AbstractEventHandler"  [edgetooltip=" <CartonFulfilledEvent>" label=" <CartonFulfilledEvent>"];
-"OrderCheckedEventHandler" -> "AbstractEventHandler"  [edgetooltip=" <OrderCheckedEvent>" label=" <OrderCheckedEvent>"];
-"TaskAcceptedEventHandler" -> "AbstractEventHandler"  [edgetooltip=" <TaskAcceptedEvent>" label=" <TaskAcceptedEvent>"];
-"CartonNotFull" -> "AbstractSpecification"  [edgetooltip=" <Carton>" label=" <Carton>"];
-"CartonizationRule" -> "AbstractSpecification"  [edgetooltip="装箱规则. <Carton>" label="装箱规则. <Carton>"];
-"OperatorCannotBePicker" -> "AbstractSpecification"  [edgetooltip="业务方明确提出：拣货人员不能自己完成复核任务，就像(出纳，会计)必须分离一样. <Task>" label="业务方明确提出：拣货人员不能自己完成复核任务，就像(出纳，会计)必须分离一样. <Task>"];
-"OrderIntegrity" -> "AbstractSpecification"  [edgetooltip="订单完整性规约. <Order>" label="订单完整性规约. <Order>"];
-"OrderNotCartonizedYet" -> "AbstractSpecification"  [edgetooltip=" <Order>" label=" <Order>"];
-"OrderNotFullyCartonized" -> "AbstractSpecification"  [edgetooltip=" <Order>" label=" <Order>"];
-"OrderShippingReady" -> "AbstractSpecification"  [edgetooltip=" <Order>" label=" <Order>"];
-"OrderUseOnePack" -> "AbstractSpecification"  [edgetooltip=" <Order>" label=" <Order>"];
-"OrderUsesManualCheckFlow" -> "AbstractSpecification"  [edgetooltip=" <Order>" label=" <Order>"];
-"TaskCanPerformChecking" -> "AbstractSpecification"  [edgetooltip=" <Task>" label=" <Task>"];
-"UniqueCodeConstraint" -> "AbstractSpecification"  [edgetooltip="一个任务下的唯一码不能重复. <Task>" label="一个任务下的唯一码不能重复. <Task>"];
-"CartonFullRequest" -> "ApiRequest"  [edgetooltip="操作员领取复核任务." label="操作员领取复核任务."];
-"CheckByOrderRequest" -> "ApiRequest"  [edgetooltip="" label=""];
-"CheckBySkuRequest" -> "ApiRequest"  [edgetooltip="" label=""];
-"ClaimTaskRequest" -> "ApiRequest"  [edgetooltip="操作员领取复核任务." label="操作员领取复核任务."];
-"RecommendConsumableRequest" -> "ApiRequest"  [edgetooltip="操作员领取复核任务." label="操作员领取复核任务."];
-"RecommendPlatformRequest" -> "ApiRequest"  [edgetooltip="推荐复核台请求." label="推荐复核台请求."];
-"ShipOrderRequest" -> "ApiRequest"  [edgetooltip="按单发货请求." label="按单发货请求."];
-"Carton" -> "BaseAggregateRoot"  [edgetooltip="纸箱，它会成为包裹. <Carton>" label="纸箱，它会成为包裹. <Carton>"];
-"Order" -> "BaseAggregateRoot"  [edgetooltip="客户的出库单. <Order>" label="客户的出库单. <Order>"];
-"Pack" -> "BaseAggregateRoot"  [edgetooltip="包裹. <Pack>" label="包裹. <Pack>"];
-"ShipManifest" -> "BaseAggregateRoot"  [edgetooltip="一辆货车的装车清单. <ShipManifest>" label="一辆货车的装车清单. <ShipManifest>"];
-"Task" -> "BaseAggregateRoot"  [edgetooltip="复核任务. <Task>" label="复核任务. <Task>"];
-"PledgePattern" -> "BasePattern"  [edgetooltip="仓内质押模式." label="仓内质押模式."];
-"PresalePattern" -> "BasePattern"  [edgetooltip="预售模式." label="预售模式."];
-"ContainerItemBagPending" -> "BoundedDomainModel"  [edgetooltip="待复核的货品集合. <ContainerItemBag>" label="待复核的货品集合. <ContainerItemBag>"];
-"OrderBagCanceled" -> "BoundedDomainModel"  [edgetooltip="被客户取消的订单集合. <OrderBag>" label="被客户取消的订单集合. <OrderBag>"];
-"OrderOfPresale" -> "BoundedDomainModel"  [edgetooltip="出库单的预售场景. <Order>" label="出库单的预售场景. <Order>"];
-"TaskOfContainerPending" -> "BoundedDomainModel"  [edgetooltip=" <Task>" label=" <Task>"];
-"TaskOfOrderPending" -> "BoundedDomainModel"  [edgetooltip=" <Task>" label=" <Task>"];
-"TaskOfSkuPending" -> "BoundedDomainModel"  [edgetooltip="The hidden class <Task>" label="The hidden class <Task>"];
-"OrderCartons" -> "HasMany"  [edgetooltip=" <Carton>" label=" <Carton>"];
-"OrderPacks" -> "HasMany"  [edgetooltip=" <Pack>" label=" <Pack>"];
-"OrderTasks" -> "HasMany"  [edgetooltip=" <Task>" label=" <Task>"];
-"TaskCartons" -> "HasMany"  [edgetooltip=" <Carton>" label=" <Carton>"];
-"TaskOrders" -> "HasMany"  [edgetooltip="针对关联关系显式建模. <Order>" label="针对关联关系显式建模. <Order>"];
-"CheckingAppService" -> "IApplicationService"  [arrowhead=empty style=dashed edgetooltip="业务用例：人工复核." label="业务用例：人工复核."];
-"ShippingAppService" -> "IApplicationService"  [arrowhead=empty style=dashed edgetooltip="业务用例：发货" label="业务用例：发货"];
-"ConsumableExtCostFirst" -> "IConsumableExt"  [arrowhead=empty style=dashed edgetooltip="" label=""];
-"ConsumableExtSpeedFirst" -> "IConsumableExt"  [arrowhead=empty style=dashed edgetooltip="" label=""];
-"ConfirmQtyHint" -> "IDirtyHint"  [arrowhead=empty style=dashed edgetooltip="" label=""];
-"OrderCheckedHint" -> "IDirtyHint"  [arrowhead=empty style=dashed edgetooltip="" label=""];
-"OrderShippedHint" -> "IDirtyHint"  [arrowhead=empty style=dashed edgetooltip="" label=""];
-"RemoveContainerItemsHint" -> "IDirtyHint"  [arrowhead=empty style=dashed edgetooltip="" label=""];
-"IConsumableExt" -> "IDomainExtension"  [edgetooltip="" label=""];
-"IOrderAllowShipExt" -> "IDomainExtension"  [edgetooltip="" label=""];
-"CartonItem" -> "IDomainModel"  [arrowhead=empty style=dashed edgetooltip="纸箱里个某一种sku." label="纸箱里个某一种sku."];
-"CheckResult" -> "IDomainModel"  [arrowhead=empty style=dashed edgetooltip="复核结果." label="复核结果."];
-"Container" -> "IDomainModel"  [arrowhead=empty style=dashed edgetooltip="拣货容器." label="拣货容器."];
-"ContainerDiffItem" -> "IDomainModel"  [arrowhead=empty style=dashed edgetooltip="" label=""];
-"ContainerItem" -> "IDomainModel"  [arrowhead=empty style=dashed edgetooltip="拣货容器里的商品和数量." label="拣货容器里的商品和数量."];
-"OrderCarton" -> "IDomainModel"  [arrowhead=empty style=dashed edgetooltip="一个订单的装车清单：纸箱维度." label="一个订单的装车清单：纸箱维度."];
-"OrderLine" -> "IDomainModel"  [arrowhead=empty style=dashed edgetooltip="订单行." label="订单行."];
-"OrderLineManifest" -> "IDomainModel"  [arrowhead=empty style=dashed edgetooltip="发货的订单行，货品维度." label="发货的订单行，货品维度."];
-"Pallet" -> "IDomainModel"  [arrowhead=empty style=dashed edgetooltip="栈板，物流领域也称为托盘." label="栈板，物流领域也称为托盘."];
-"CartonFulfilledEvent" -> "IFlowAutomationEvent"  [arrowhead=empty style=dashed edgetooltip="" label=""];
-"OrderCheckedEvent" -> "IFlowAutomationEvent"  [arrowhead=empty style=dashed edgetooltip="" label=""];
-"OrderShippedEvent" -> "IFlowAutomationEvent"  [arrowhead=empty style=dashed edgetooltip="" label=""];
-"TaskAcceptedEvent" -> "IFlowAutomationEvent"  [arrowhead=empty style=dashed edgetooltip="" label=""];
-"IInventoryGateway" -> "IGateway"  [edgetooltip="库存RPC防腐层." label="库存RPC防腐层."];
-"IMasterDataGateway" -> "IGateway"  [edgetooltip="主数据RPC防腐层." label="主数据RPC防腐层."];
-"IOrderGateway" -> "IGateway"  [edgetooltip="单据中心RPC的防腐层." label="单据中心RPC的防腐层."];
-"IRuleGateway" -> "IGateway"  [edgetooltip="规则中心RPC的防腐层." label="规则中心RPC的防腐层."];
-"CartonDirtyHint" -> "IMergeAwareDirtyHint"  [arrowhead=empty style=dashed edgetooltip=" <Long>" label=" <Long>"];
-"ShippedHint" -> "IMergeAwareDirtyHint"  [arrowhead=empty style=dashed edgetooltip=" <Long>" label=" <Long>"];
-"TaskDirtyHint" -> "IMergeAwareDirtyHint"  [arrowhead=empty style=dashed edgetooltip=" <Long>" label=" <Long>"];
-"OrderAllowShipExtPledge" -> "IOrderAllowShipExt"  [arrowhead=empty style=dashed edgetooltip="" label=""];
-"OrderAllowShipExtPresale" -> "IOrderAllowShipExt"  [arrowhead=empty style=dashed edgetooltip="" label=""];
-"ICartonRepository" -> "IRepository"  [edgetooltip="" label=""];
-"IOrderRepository" -> "IRepository"  [edgetooltip="" label=""];
-"IPackRepository" -> "IRepository"  [edgetooltip="" label=""];
-"IShipRepository" -> "IRepository"  [edgetooltip="" label=""];
-"ITaskRepository" -> "IRepository"  [edgetooltip="" label=""];
-"IUuidRepository" -> "IRepository"  [edgetooltip="" label=""];
-"Carton" -> "IUnboundedDomainModel"  [arrowhead=empty style=dashed edgetooltip="纸箱，它会成为包裹." label="纸箱，它会成为包裹."];
-"ContainerItemBag" -> "IUnboundedDomainModel"  [arrowhead=empty style=dashed edgetooltip="" label=""];
-"Order" -> "IUnboundedDomainModel"  [arrowhead=empty style=dashed edgetooltip="客户的出库单." label="客户的出库单."];
-"OrderBag" -> "IUnboundedDomainModel"  [arrowhead=empty style=dashed edgetooltip="" label=""];
-"Pack" -> "IUnboundedDomainModel"  [arrowhead=empty style=dashed edgetooltip="包裹." label="包裹."];
-"ShipManifest" -> "IUnboundedDomainModel"  [arrowhead=empty style=dashed edgetooltip="一辆货车的装车清单." label="一辆货车的装车清单."];
-"Task" -> "IUnboundedDomainModel"  [arrowhead=empty style=dashed edgetooltip="复核任务." label="复核任务."];
-"CartonBag" -> "ListBag"  [edgetooltip=" <Carton>" label=" <Carton>"];
-"CartonItemBag" -> "ListBag"  [edgetooltip=" <CartonItem>" label=" <CartonItem>"];
-"ConsumableBag" -> "ListBag"  [edgetooltip=" <Consumable>" label=" <Consumable>"];
-"ContainerBag" -> "ListBag"  [edgetooltip=" <Container>" label=" <Container>"];
-"ContainerDiffItemBag" -> "ListBag"  [edgetooltip=" <ContainerDiffItem>" label=" <ContainerDiffItem>"];
-"ContainerItemBag" -> "ListBag"  [edgetooltip=" <ContainerItem>" label=" <ContainerItem>"];
-"OrderLineBag" -> "ListBag"  [edgetooltip=" <OrderLine>" label=" <OrderLine>"];
-"PackBag" -> "ListBag"  [edgetooltip=" <Pack>" label=" <Pack>"];
-"TaskBag" -> "ListBag"  [edgetooltip="一些复核任务. <Task>" label="一些复核任务. <Task>"];
-"Consumable" -> "Sku"  [edgetooltip="耗材，被放入纸箱，以便运输安全." label="耗材，被放入纸箱，以便运输安全."];
+edge [fontsize=8 arrowsize=0.5]
+"Carrier
+承运商. <String>" -> "AbstractBusinessNo" 
+"CartonNo
+ <String>" -> "AbstractBusinessNo" 
+"Consignee
+收货人. <String>" -> "AbstractBusinessNo" 
+"Consignor
+发货人. <String>" -> "AbstractBusinessNo" 
+"LotNo
+货品的批次号. <String>" -> "AbstractBusinessNo" 
+"Operator
+操作员. <String>" -> "AbstractBusinessNo" 
+"OrderLineNo
+ <String>" -> "AbstractBusinessNo" 
+"OrderNo
+ <String>" -> "AbstractBusinessNo" 
+"Owner
+货主. <String>" -> "AbstractBusinessNo" 
+"PackCode
+货品的包装代码. <String>" -> "AbstractBusinessNo" 
+"PalletNo
+栈板. <String>" -> "AbstractBusinessNo" 
+"Platform
+复核台(操作台). <String>" -> "AbstractBusinessNo" 
+"Sku
+货品. <String>" -> "AbstractBusinessNo" 
+"Supplier
+供应商. <String>" -> "AbstractBusinessNo" 
+"TaskNo
+ <String>" -> "AbstractBusinessNo" 
+"UniqueCode
+货品的唯一码. <String>" -> "AbstractBusinessNo" 
+"Uuid
+通用的业务幂等对象. <String>" -> "AbstractBusinessNo" 
+"WarehouseNo
+库房. <String>" -> "AbstractBusinessNo" 
+"WaybillNo
+运单号. <String>" -> "AbstractBusinessNo" 
+"CartonFulfilledEventHandler
+ <CartonFulfilledEvent>" -> "AbstractEventHandler" 
+"OrderCheckedEventHandler
+ <OrderCheckedEvent>" -> "AbstractEventHandler" 
+"TaskAcceptedEventHandler
+ <TaskAcceptedEvent>" -> "AbstractEventHandler" 
+"CartonNotFull
+ <Carton>" -> "AbstractSpecification" 
+"CartonizationRule
+装箱规则. <Carton>" -> "AbstractSpecification" 
+"OperatorCannotBePicker
+业务方明确提出：拣货人员不能自己完成复核任务，就像(出纳，会计)必须分离一样. <Task>" -> "AbstractSpecification" 
+"OrderIntegrity
+订单完整性规约. <Order>" -> "AbstractSpecification" 
+"OrderNotCartonizedYet
+ <Order>" -> "AbstractSpecification" 
+"OrderNotFullyCartonized
+ <Order>" -> "AbstractSpecification" 
+"OrderShippingReady
+ <Order>" -> "AbstractSpecification" 
+"OrderUseOnePack
+ <Order>" -> "AbstractSpecification" 
+"OrderUsesManualCheckFlow
+ <Order>" -> "AbstractSpecification" 
+"TaskCanPerformChecking
+ <Task>" -> "AbstractSpecification" 
+"UniqueCodeConstraint
+一个任务下的唯一码不能重复. <Task>" -> "AbstractSpecification" 
+"CartonFullRequest
+操作员领取复核任务." -> "ApiRequest" 
+"CheckByOrderRequest" -> "ApiRequest" 
+"CheckBySkuRequest" -> "ApiRequest" 
+"ClaimTaskRequest
+操作员领取复核任务." -> "ApiRequest" 
+"RecommendConsumableRequest
+操作员领取复核任务." -> "ApiRequest" 
+"RecommendPlatformRequest
+推荐复核台请求." -> "ApiRequest" 
+"ShipOrderRequest
+按单发货请求." -> "ApiRequest" 
+"Carton
+纸箱，它会成为包裹. <Carton>" -> "BaseAggregateRoot" 
+"Order
+客户的出库单. <Order>" -> "BaseAggregateRoot" 
+"Pack
+包裹. <Pack>" -> "BaseAggregateRoot" 
+"ShipManifest
+一辆货车的装车清单. <ShipManifest>" -> "BaseAggregateRoot" 
+"Task
+复核任务. <Task>" -> "BaseAggregateRoot" 
+"PledgePattern
+仓内质押模式." -> "BasePattern" 
+"PresalePattern
+预售模式." -> "BasePattern" 
+"ContainerItemBagPending
+待复核的货品集合. <ContainerItemBag>" -> "BoundedDomainModel" 
+"OrderBagCanceled
+被客户取消的订单集合. <OrderBag>" -> "BoundedDomainModel" 
+"OrderOfPresale
+出库单的预售场景. <Order>" -> "BoundedDomainModel" 
+"TaskOfContainerPending
+ <Task>" -> "BoundedDomainModel" 
+"TaskOfOrderPending
+ <Task>" -> "BoundedDomainModel" 
+"TaskOfSkuPending
+The hidden class <Task>" -> "BoundedDomainModel" 
+"OrderCartons
+ <Carton>" -> "HasMany" 
+"OrderPacks
+ <Pack>" -> "HasMany" 
+"OrderTasks
+ <Task>" -> "HasMany" 
+"TaskCartons
+ <Carton>" -> "HasMany" 
+"TaskOrders
+针对关联关系显式建模. <Order>" -> "HasMany" 
+"CheckingAppService
+业务用例：人工复核." -> "IApplicationService"  [arrowhead=empty style=dashed]
+"ShippingAppService
+业务用例：发货" -> "IApplicationService"  [arrowhead=empty style=dashed]
+"ConsumableExtCostFirst" -> "IConsumableExt"  [arrowhead=empty style=dashed]
+"ConsumableExtSpeedFirst" -> "IConsumableExt"  [arrowhead=empty style=dashed]
+"ConfirmQtyHint" -> "IDirtyHint"  [arrowhead=empty style=dashed]
+"OrderCheckedHint" -> "IDirtyHint"  [arrowhead=empty style=dashed]
+"OrderShippedHint" -> "IDirtyHint"  [arrowhead=empty style=dashed]
+"RemoveContainerItemsHint" -> "IDirtyHint"  [arrowhead=empty style=dashed]
+"IConsumableExt" -> "IDomainExtension" 
+"IOrderAllowShipExt" -> "IDomainExtension" 
+"CartonItem
+纸箱里个某一种sku." -> "IDomainModel"  [arrowhead=empty style=dashed]
+"CheckResult
+复核结果." -> "IDomainModel"  [arrowhead=empty style=dashed]
+"Container
+拣货容器." -> "IDomainModel"  [arrowhead=empty style=dashed]
+"ContainerDiffItem" -> "IDomainModel"  [arrowhead=empty style=dashed]
+"ContainerItem
+拣货容器里的商品和数量." -> "IDomainModel"  [arrowhead=empty style=dashed]
+"OrderCarton
+一个订单的装车清单：纸箱维度." -> "IDomainModel"  [arrowhead=empty style=dashed]
+"OrderLine
+订单行." -> "IDomainModel"  [arrowhead=empty style=dashed]
+"OrderLineManifest
+发货的订单行，货品维度." -> "IDomainModel"  [arrowhead=empty style=dashed]
+"Pallet
+栈板，物流领域也称为托盘." -> "IDomainModel"  [arrowhead=empty style=dashed]
+"CartonFulfilledEvent" -> "IFlowAutomationEvent"  [arrowhead=empty style=dashed]
+"OrderCheckedEvent" -> "IFlowAutomationEvent"  [arrowhead=empty style=dashed]
+"OrderShippedEvent" -> "IFlowAutomationEvent"  [arrowhead=empty style=dashed]
+"TaskAcceptedEvent" -> "IFlowAutomationEvent"  [arrowhead=empty style=dashed]
+"IInventoryGateway
+库存RPC防腐层." -> "IGateway" 
+"IMasterDataGateway
+主数据RPC防腐层." -> "IGateway" 
+"IOrderGateway
+单据中心RPC的防腐层." -> "IGateway" 
+"IRuleGateway
+规则中心RPC的防腐层." -> "IGateway" 
+"CartonDirtyHint
+ <Long>" -> "IMergeAwareDirtyHint"  [arrowhead=empty style=dashed]
+"ShippedHint
+ <Long>" -> "IMergeAwareDirtyHint"  [arrowhead=empty style=dashed]
+"TaskDirtyHint
+ <Long>" -> "IMergeAwareDirtyHint"  [arrowhead=empty style=dashed]
+"OrderAllowShipExtPledge" -> "IOrderAllowShipExt"  [arrowhead=empty style=dashed]
+"OrderAllowShipExtPresale" -> "IOrderAllowShipExt"  [arrowhead=empty style=dashed]
+"ICartonRepository" -> "IRepository" 
+"IOrderRepository" -> "IRepository" 
+"IPackRepository" -> "IRepository" 
+"IShipRepository" -> "IRepository" 
+"ITaskRepository" -> "IRepository" 
+"IUuidRepository" -> "IRepository" 
+"Carton
+纸箱，它会成为包裹." -> "IUnboundedDomainModel"  [arrowhead=empty style=dashed]
+"ContainerItemBag" -> "IUnboundedDomainModel"  [arrowhead=empty style=dashed]
+"Order
+客户的出库单." -> "IUnboundedDomainModel"  [arrowhead=empty style=dashed]
+"OrderBag" -> "IUnboundedDomainModel"  [arrowhead=empty style=dashed]
+"Pack
+包裹." -> "IUnboundedDomainModel"  [arrowhead=empty style=dashed]
+"ShipManifest
+一辆货车的装车清单." -> "IUnboundedDomainModel"  [arrowhead=empty style=dashed]
+"Task
+复核任务." -> "IUnboundedDomainModel"  [arrowhead=empty style=dashed]
+"CartonBag
+ <Carton>" -> "ListBag" 
+"CartonItemBag
+ <CartonItem>" -> "ListBag" 
+"ConsumableBag
+ <Consumable>" -> "ListBag" 
+"ContainerBag
+ <Container>" -> "ListBag" 
+"ContainerDiffItemBag
+ <ContainerDiffItem>" -> "ListBag" 
+"ContainerItemBag
+ <ContainerItem>" -> "ListBag" 
+"OrderLineBag
+ <OrderLine>" -> "ListBag" 
+"PackBag
+ <Pack>" -> "ListBag" 
+"TaskBag
+一些复核任务. <Task>" -> "ListBag" 
+"Consumable
+耗材，被放入纸箱，以便运输安全." -> "Sku
+货品. <String>" 
 }

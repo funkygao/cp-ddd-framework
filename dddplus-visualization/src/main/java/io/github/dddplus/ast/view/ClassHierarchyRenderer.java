@@ -6,11 +6,12 @@ import io.github.dddplus.ast.report.ClassHierarchyReport;
 
 import java.io.IOException;
 
+import static io.github.dddplus.ast.report.ClassHierarchyReport.Pair.Relation.Implements;
+
 public class ClassHierarchyRenderer implements IModelRenderer<ClassHierarchyRenderer> {
     private ClassHierarchyReport report;
     private String targetDotFile;
-    private static final String extendsEdgeTpl = " [edgetooltip=\"%s\" label=\"%s\"];";
-    private static final String implementsEdgeTpl = " [arrowhead=empty style=dashed edgetooltip=\"%s\" label=\"%s\"];";
+    private static final String implementsEdgeStyle = "[arrowhead=empty style=dashed]";
 
     private StringBuilder content = new StringBuilder();
 
@@ -59,18 +60,12 @@ public class ClassHierarchyRenderer implements IModelRenderer<ClassHierarchyRend
 
     private ClassHierarchyRenderer renderEdges() {
         for (ClassHierarchyReport.Pair pair : report.displayRelations()) {
-            append("\"").append(pair.getFrom()).append("\"")
+            append("\"").append(pair.dotFrom()).append("\"")
                     .append(" -> ")
-                    .append("\"").append(pair.getTo()).append("\"")
+                    .append("\"").append(pair.dotTo()).append("\"")
                     .append(SPACE);
-            switch (pair.getRelation()) {
-                case Extends:
-                    append(String.format(extendsEdgeTpl, pair.dotLabel(), pair.dotLabel()));
-                    break;
-
-                case Implements:
-                    append(String.format(implementsEdgeTpl, pair.dotLabel(), pair.dotLabel()));
-                    break;
+            if (pair.getRelation() == Implements) {
+                append(SPACE).append(implementsEdgeStyle);
             }
             append(NEWLINE);
         }

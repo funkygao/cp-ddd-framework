@@ -17,7 +17,7 @@ public class ClassHierarchyReport {
     }
 
     public void registerExtendsRelation(String from, String fromJavadoc, List<String> genericTypes, String to) {
-        Pair pair = new Pair(from, to, Pair.Relation.Extends, fromJavadoc, genericTypes);
+        Pair pair = new Pair(this, from, to, Pair.Relation.Extends, fromJavadoc, genericTypes);
         if (!ignored(pair)) {
             relations.add(pair);
         }
@@ -28,7 +28,7 @@ public class ClassHierarchyReport {
     }
 
     public void registerImplementsRelation(String from, String fromJavadoc, List<String> genericTypes, String to) {
-        Pair pair = new Pair(from, to, Pair.Relation.Implements, fromJavadoc, genericTypes);
+        Pair pair = new Pair(this, from, to, Pair.Relation.Implements, fromJavadoc, genericTypes);
         if (!ignored(pair)) {
             relations.add(pair);
         }
@@ -63,6 +63,7 @@ public class ClassHierarchyReport {
     @Data
     @AllArgsConstructor
     public static class Pair implements Comparable<Pair> {
+        private ClassHierarchyReport report;
         private String from;
         private String to;
         private Relation relation;
@@ -78,7 +79,26 @@ public class ClassHierarchyReport {
             return String.join(",", genericTypes);
         }
 
-        public String dotLabel() {
+        public String dotFrom() {
+            String dotLabel = dotLabel();
+            if (dotLabel.isEmpty()) {
+                return from;
+            }
+
+            return from + "\n" + dotLabel;
+        }
+
+        public String dotTo() {
+            for (Pair pair : report.relations) {
+                if (to.equals(pair.from)) {
+                    return pair.dotFrom();
+                }
+            }
+
+            return to;
+        }
+
+        private String dotLabel() {
             String javadoc = fromJavadoc.replaceAll("@", "")
                     .replaceAll("\"", "");
             String displayGenericTypes = displayGenericTypes();
