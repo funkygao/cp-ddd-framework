@@ -9,8 +9,8 @@ import java.io.IOException;
 public class ClassHierarchyRenderer implements IModelRenderer<ClassHierarchyRenderer> {
     private ClassHierarchyReport report;
     private String targetDotFile;
-    private static final String extendsEdgeTpl = " [color=red fontsize=10 arrowsize=0.5 edgetooltip=\"%s\" label=\"%s\"];";
-    private static final String implementsEdgeTpl = " [color=blue fontsize=10 arrowhead=empty arrowsize=0.5 style=dashed edgetooltip=\"%s\" label=\"%s\"];";
+    private static final String extendsEdgeTpl = " [edgetooltip=\"%s\" label=\"%s\"];";
+    private static final String implementsEdgeTpl = " [arrowhead=empty style=dashed edgetooltip=\"%s\" label=\"%s\"];";
 
     private StringBuilder content = new StringBuilder();
 
@@ -45,9 +45,12 @@ public class ClassHierarchyRenderer implements IModelRenderer<ClassHierarchyRend
     public void render() throws IOException {
         append("digraph G {")
                 .append(NEWLINE)
-                .append(TAB).append("rankdir=LR;").append(NEWLINE)
-                .append(TAB).append("splines = polyline;").append(NEWLINE)
-                .append(TAB).append("node [shape=none];").append(NEWLINE)
+                .append("fontname=\"Helvetica,Arial,sans-serif\"\n" +
+                "node [fontname=\"Helvetica,Arial,sans-serif\"]\n" +
+                "edge [fontname=\"Helvetica,Arial,sans-serif\"]\n" +
+                "rankdir=\"LR\"\n" +
+                "node [shape=box, height=0.25]\n" +
+                "edge [fontsize=8 arrowsize=0.5]").append(NEWLINE)
                 .renderEdges()
                 .append("}");
 
