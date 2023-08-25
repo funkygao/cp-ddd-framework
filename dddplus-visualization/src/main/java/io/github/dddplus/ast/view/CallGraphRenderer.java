@@ -47,7 +47,7 @@ public class CallGraphRenderer implements IModelRenderer<CallGraphRenderer> {
     /**
      * 控制edge的线条布局.
      *
-     * @param splines ortho | spline | polyline
+     * @param splines ortho | spline | polyline | curved
      * @return
      */
     public CallGraphRenderer splines(String splines) {
