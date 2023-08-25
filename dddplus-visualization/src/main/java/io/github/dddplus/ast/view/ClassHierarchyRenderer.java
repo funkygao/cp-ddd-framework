@@ -47,11 +47,12 @@ public class ClassHierarchyRenderer implements IModelRenderer<ClassHierarchyRend
         append("digraph G {")
                 .append(NEWLINE)
                 .append("fontname=\"Helvetica,Arial,sans-serif\"\n" +
-                "node [fontname=\"Helvetica,Arial,sans-serif\"]\n" +
-                "edge [fontname=\"Helvetica,Arial,sans-serif\"]\n" +
-                "rankdir=\"LR\"\n" +
-                "node [shape=box, height=0.25]\n" +
-                "edge [fontsize=8 arrowsize=0.5]").append(NEWLINE)
+                        "node [fontname=\"Helvetica,Arial,sans-serif\"]\n" +
+                        "edge [fontname=\"Helvetica,Arial,sans-serif\"]\n" +
+                        "splines=curved\n" +
+                        "rankdir=\"LR\"\n" +
+                        "node [shape=box, height=0.25]\n" +
+                        "edge [fontsize=8 arrowsize=0.5]").append(NEWLINE)
                 .renderEdges()
                 .append("}");
 
