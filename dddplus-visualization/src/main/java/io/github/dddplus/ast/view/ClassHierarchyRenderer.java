@@ -11,12 +11,18 @@ import static io.github.dddplus.ast.report.ClassHierarchyReport.Pair.Relation.Im
 public class ClassHierarchyRenderer implements IModelRenderer<ClassHierarchyRenderer> {
     private ClassHierarchyReport report;
     private String targetDotFile;
+    private String splines = "curved";
     private static final String implementsEdgeStyle = "[arrowhead=empty style=dashed]";
 
     private StringBuilder content = new StringBuilder();
 
     public ClassHierarchyRenderer targetDotFile(String targetFile) {
         this.targetDotFile = targetFile;
+        return this;
+    }
+
+    public ClassHierarchyRenderer splines(String value) {
+        this.splines = value;
         return this;
     }
 
@@ -49,7 +55,7 @@ public class ClassHierarchyRenderer implements IModelRenderer<ClassHierarchyRend
                 .append("fontname=\"Helvetica,Arial,sans-serif\"\n" +
                         "node [fontname=\"Helvetica,Arial,sans-serif\"]\n" +
                         "edge [fontname=\"Helvetica,Arial,sans-serif\"]\n" +
-                        "splines=curved\n" +
+                        "splines=" + splines + "\n" +
                         "rankdir=\"LR\"\n" +
                         "node [shape=box, height=0.25]\n" +
                         "edge [fontsize=8 arrowsize=0.5]").append(NEWLINE)

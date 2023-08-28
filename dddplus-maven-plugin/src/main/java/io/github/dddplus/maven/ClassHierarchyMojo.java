@@ -31,6 +31,9 @@ public class ClassHierarchyMojo extends AbstractMojo {
     @Parameter(property = "targetFile", required = true)
     String targetFile;
 
+    @Parameter(property = "splines")
+    String splines = "curved";
+
     /**
      * Comma separated ignored parent classes.
      */
@@ -59,6 +62,7 @@ public class ClassHierarchyMojo extends AbstractMojo {
                     .withModel(model)
                     .ignores(ignoreParents.split(","))
                     .targetDotFile(targetFile)
+                    .splines(splines)
                     .render();
 
             getLog().info("Reverse Modeling Executed OK");
