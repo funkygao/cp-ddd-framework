@@ -25,7 +25,7 @@ class ClassHierarchyReportTest {
         report.registerExtendsRelation("2", "3");
         report.registerExtendsRelation("4", "5");
         Set<ClassHierarchyReport.Pair> pairs = report.displayRelations();
-        assertEquals(5, pairs.size());
+        assertEquals(6, pairs.size());
     }
 
     @Test
@@ -86,7 +86,7 @@ class ClassHierarchyReportTest {
         report.getIgnoredParentClasses().clear();
         assertEquals(4, report.displayRelations().size());
         report.getIgnoredParentClasses().add("c");
-        assertEquals(0, report.displayRelations().size());
+        assertEquals(2, report.displayRelations().size());
     }
 
 }

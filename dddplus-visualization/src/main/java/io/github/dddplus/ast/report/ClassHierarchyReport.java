@@ -35,13 +35,19 @@ public class ClassHierarchyReport {
     }
 
     public Set<Pair> displayRelations() {
-        // 删除只有一层关系的Pair
         Set<Pair> result = new TreeSet<>();
         for (Pair self : relations) {
             if (ignored(self)) {
                 continue;
             }
 
+            if (self.getRelation() == Pair.Relation.Extends) {
+                // 继承关系，都显示出来
+                result.add(self);
+                continue;
+            }
+
+            // 实现关系，则必须有多态才显示
             for (Pair that : relations) {
                 if (that == self || ignored(that)) {
                     continue;
@@ -71,7 +77,7 @@ public class ClassHierarchyReport {
         // 这个关系确定了哪些泛型类型
         private List<String> genericTypes;
 
-        private String displayGenericTypes() {
+        public String displayGenericTypes() {
             if (genericTypes == null || genericTypes.isEmpty()) {
                 return "";
             }
@@ -80,7 +86,7 @@ public class ClassHierarchyReport {
         }
 
         public String dotFrom() {
-            String dotLabel = dotLabel();
+            String dotLabel = description();
             if (dotLabel.isEmpty()) {
                 return from;
             }
@@ -98,15 +104,10 @@ public class ClassHierarchyReport {
             return to;
         }
 
-        private String dotLabel() {
+        private String description() {
             String javadoc = fromJavadoc.replaceAll("@", "")
                     .replaceAll("\"", "");
-            String displayGenericTypes = displayGenericTypes();
-            if (displayGenericTypes.isEmpty()) {
-                return javadoc;
-            }
-
-            return javadoc + " <" + displayGenericTypes + ">";
+            return javadoc;
         }
 
         @Override

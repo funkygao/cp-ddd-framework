@@ -6,13 +6,14 @@ import io.github.dddplus.ast.report.ClassHierarchyReport;
 
 import java.io.IOException;
 
+import static io.github.dddplus.ast.report.ClassHierarchyReport.Pair.Relation.Extends;
 import static io.github.dddplus.ast.report.ClassHierarchyReport.Pair.Relation.Implements;
 
 public class ClassHierarchyRenderer implements IModelRenderer<ClassHierarchyRenderer> {
     private ClassHierarchyReport report;
     private String targetDotFile;
     private String splines = "curved";
-    private static final String implementsEdgeStyle = "[arrowhead=empty style=dashed]";
+    private static final String implementsEdgeStyle = "[arrowhead=empty style=dashed label=\"%s\"]";
 
     private StringBuilder content = new StringBuilder();
 
@@ -69,10 +70,12 @@ public class ClassHierarchyRenderer implements IModelRenderer<ClassHierarchyRend
         for (ClassHierarchyReport.Pair pair : report.displayRelations()) {
             append("\"").append(pair.dotFrom()).append("\"")
                     .append(" -> ")
-                    .append("\"").append(pair.dotTo()).append("\"")
-                    .append(SPACE);
+                    .append("\"").append(pair.dotTo()).append("\"");
             if (pair.getRelation() == Implements) {
-                append(SPACE).append(implementsEdgeStyle);
+                append(SPACE).append(String.format(implementsEdgeStyle, pair.displayGenericTypes()));
+            }
+            if (pair.getRelation() == Extends) {
+                append(SPACE).append(String.format("[label=\"%s\"]", pair.displayGenericTypes()));
             }
             append(NEWLINE);
         }
