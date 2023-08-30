@@ -81,6 +81,17 @@ public class WebApplication {
 
 通过[DSL](/dddplus-spec/src/main/java/io/github/dddplus/dsl)在代码进行标注后，自动生成多视角视图。
 
+```bash
+mvn io.github.dddplus:dddplus-maven-plugin:model \
+    -DrootDir=${colon separated source code dirs} \
+    -DpkgRef=${target package reference dot file} \
+    -DcallGraph=${target call graph dot flle} \
+    -DplantUml=${target business model in svg format} \
+    -DtextModel=${target business model in txt format}
+```
+
+或者
+
 ```java
 class ReverseModelingTest {
     ReverseEngineeringModel model;

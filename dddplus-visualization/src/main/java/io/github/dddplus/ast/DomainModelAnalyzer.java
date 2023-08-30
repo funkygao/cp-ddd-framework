@@ -39,6 +39,9 @@ public class DomainModelAnalyzer {
         return this;
     }
 
+    /**
+     * 仅显示静态的类的多态层级关系.
+     */
     public DomainModelAnalyzer classHierarchyOnly() {
         this.classHierarchyOnly = true;
         return this;

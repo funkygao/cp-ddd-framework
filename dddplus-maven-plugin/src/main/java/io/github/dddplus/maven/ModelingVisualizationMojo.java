@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * 业务模型可视化.
  */
-@Mojo(name = "visualize", aggregator = true)
+@Mojo(name = "model", aggregator = true)
 public class ModelingVisualizationMojo extends AbstractMojo {
 
     /**
@@ -50,14 +50,6 @@ public class ModelingVisualizationMojo extends AbstractMojo {
     String sqliteDb;
     @Parameter(property = "fixModelPkg")
     String keyModelPkgFix;
-    @Parameter(property = "classHierarchy")
-    String classHierarchy;
-    /**
-     * Colon separated ignored parent classes.
-     */
-    @Parameter(property = "classHierarchyIgnoreParents")
-    String classHierarchyIgnoreParents;
-
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
@@ -124,17 +116,6 @@ public class ModelingVisualizationMojo extends AbstractMojo {
                         .withModel(model)
                         .showRawSimilarities()
                         .targetFilename(targetTextModel)
-                        .render();
-            }
-            if (classHierarchy != null) {
-                artifacts.add(classHierarchy);
-                if (classHierarchyIgnoreParents == null) {
-                    classHierarchyIgnoreParents = "";
-                }
-                new ClassHierarchyRenderer()
-                        .withModel(model)
-                        .ignores(classHierarchyIgnoreParents.split(","))
-                        .targetDotFile(classHierarchy)
                         .render();
             }
 

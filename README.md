@@ -80,7 +80,7 @@ To render the reverse model, you have 2 options:
 Option 1: use dddplus maven plugin
 
 ```bash
-mvn io.github.dddplus:dddplus-maven-plugin:visualize \
+mvn io.github.dddplus:dddplus-maven-plugin:model \
     -DrootDir=${colon separated source code dirs} \
     -DpkgRef=${target package reference dot file} \
     -DcallGraph=${target call graph dot flle} \

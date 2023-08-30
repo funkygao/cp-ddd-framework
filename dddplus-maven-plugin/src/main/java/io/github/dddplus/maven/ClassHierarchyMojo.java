@@ -17,9 +17,9 @@ import org.apache.maven.plugins.annotations.Parameter;
 import java.io.File;
 
 /**
- * 无需标注，类的层级结构可视化.
+ * 无需标注，类的多态结构可视化.
  */
-@Mojo(name = "clazz", aggregator = true)
+@Mojo(name = "polymorphism", aggregator = true)
 public class ClassHierarchyMojo extends AbstractMojo {
 
     /**
@@ -31,6 +31,9 @@ public class ClassHierarchyMojo extends AbstractMojo {
     @Parameter(property = "targetFile", required = true)
     String targetFile;
 
+    /**
+     * ortho | spline | polyline | curved
+     */
     @Parameter(property = "splines")
     String splines = "curved";
 
