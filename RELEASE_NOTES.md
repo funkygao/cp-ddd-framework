@@ -1,5 +1,8 @@
 ## Release Notes - DDDplus - 2.1.0
 
+* Feature
+   * 通过apache bcel库实现call graph
+
 ## Release Notes - DDDplus - 2.0.3
 
 * Feature

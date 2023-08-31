@@ -7,7 +7,6 @@ package io.github.dddplus.ast.model.dumper.sqlite;
 
 import io.github.dddplus.ast.model.*;
 import io.github.dddplus.ast.model.dumper.ModelDumper;
-import io.github.dddplus.ast.report.CallGraphReport;
 import io.github.dddplus.dsl.KeyElement;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -35,9 +34,7 @@ public class SqliteDumper implements ModelDumper {
         this.model = model;
         this.db = new SqliteHelper(sqliteDb);
 
-        prepareTables()
-                .dumpKeyElements()
-                .dumpCallGraph();
+        prepareTables().dumpKeyElements();
     }
 
     private SqliteDumper prepareTables() throws SQLException, ClassNotFoundException, IOException {
@@ -51,20 +48,6 @@ public class SqliteDumper implements ModelDumper {
         }
 
         db.executeUpdate(sql.toString());
-        return this;
-    }
-
-    private SqliteDumper dumpCallGraph() throws SQLException, ClassNotFoundException {
-        CallGraphReport callGraphReport = model.getCallGraphReport();
-        List<String> sqlList = new LinkedList<>();
-        for (CallGraphEntry entry : callGraphReport.sortedEntries()) {
-            String sql = String.format(CallgraphInsert,
-                    entry.getCallerClazz(), entry.getCallerMethod(),
-                    entry.getCalleeClazz(), entry.getCalleeMethod());
-            sqlList.add(sql);
-        }
-
-        db.executeUpdate(sqlList);
         return this;
     }
 

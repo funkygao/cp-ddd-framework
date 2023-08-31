@@ -1,0 +1,20 @@
+{
+   "ignore":{
+      "calleePackagesLike":[
+          ".jdbc.impl", ".enums", ".dto", ".dao", ".repo", ".mapper", 
+          "common.entity.result", "result.entity"
+      ],
+      "classSuffix":[
+          "Dao", "JsonUtil", "CommonUtil"
+      ],
+      "calleeMethods":[
+          "toString", "equals", "builder", "hashCode", "clone"
+      ],
+      "enumClazz":true
+   },
+   "include":{
+      "packagePrefixes":[
+         "com.jdwl."
+      ]
+   }
+}

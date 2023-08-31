@@ -9,10 +9,7 @@ import io.github.dddplus.ast.model.ReverseEngineeringModel;
 
 import java.io.IOException;
 
-interface IModelRenderer<T extends IModelRenderer> {
-    String SPACE = " ";
-    String TAB = SPACE + SPACE + SPACE;
-    String NEWLINE = System.getProperty("line.separator");
+interface IModelRenderer<T extends IModelRenderer> extends IRenderer {
 
     T withModel(ReverseEngineeringModel model);
 

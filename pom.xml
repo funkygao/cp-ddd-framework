@@ -116,7 +116,7 @@ under the License.
                         </group>
                         <group>
                             <title>Domain Knowledge Reverse Modeling</title>
-                            <packages>io.github.dddplus.ast*:io.github.dddplus.dsl:io.github.dddplus.sre</packages>
+                            <packages>io.github.dddplus.bce*:io.github.dddplus.ast*:io.github.dddplus.dsl:io.github.dddplus.sre</packages>
                         </group>
                         <group>
                             <title>Extension Oriented Framework</title>
