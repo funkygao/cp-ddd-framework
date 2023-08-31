@@ -32,7 +32,6 @@ public class ReverseEngineeringModel {
     private ClassMethodReport classMethodReport = new ClassMethodReport(this);
     private ClassHierarchyReport classHierarchyReport = new ClassHierarchyReport();
     private ModelDebtReport modelDebtReport = new ModelDebtReport(this);
-    private CallGraphReport callGraphReport = new CallGraphReport(this);
     private EncapsulationReport encapsulationReport = new EncapsulationReport();
     private Set<String> packages = new TreeSet<>();
 

@@ -15,12 +15,14 @@ import org.apache.bcel.generic.MethodGen;
 class ClassVisitor extends EmptyVisitor {
     private final JavaClass javaClass;
     private final CallGraphReport report;
+    private final CallGraphConfig config;
 
     private final ConstantPoolGen constantPool;
 
-    ClassVisitor(JavaClass jc, CallGraphReport r) {
+    ClassVisitor(JavaClass jc, CallGraphReport r, CallGraphConfig c) {
         javaClass = jc;
         report = r;
+        config = c;
         constantPool = new ConstantPoolGen(javaClass.getConstantPool());
     }
 
@@ -29,9 +31,6 @@ class ClassVisitor extends EmptyVisitor {
         jc.getConstantPool().accept(this);
 
         for (Method method : jc.getMethods()) {
-            /**
-             * will trigger {@link #visitJavaClass(JavaClass)}
-             */
             method.accept(this);
         }
     }
@@ -39,7 +38,7 @@ class ClassVisitor extends EmptyVisitor {
     @Override
     public void visitMethod(Method method) {
         MethodGen mg = new MethodGen(method, javaClass.getClassName(), constantPool);
-        new MethodVisitor(javaClass, mg, report)
+        new MethodVisitor(javaClass, mg, report, config)
                 .start();
     }
 

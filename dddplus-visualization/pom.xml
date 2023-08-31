@@ -38,6 +38,7 @@ under the License.
         <plantuml.verion>8059</plantuml.verion>
         <commons.math.version>3.6.1</commons.math.version>
         <sqlite.version>3.42.0.0</sqlite.version>
+        <gson.version>2.10.1</gson.version>
     </properties>
 
     <dependencies>
@@ -67,6 +68,11 @@ under the License.
             <groupId>org.apache.bcel</groupId>
             <artifactId>bcel</artifactId>
             <version>${bcel.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>${gson.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.javaparser</groupId>

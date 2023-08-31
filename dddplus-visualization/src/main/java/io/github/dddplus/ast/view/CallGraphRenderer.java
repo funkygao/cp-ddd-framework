@@ -6,8 +6,6 @@
 package io.github.dddplus.ast.view;
 
 import io.github.dddplus.ast.model.CallGraphEntry;
-import io.github.dddplus.ast.model.PackageCrossRefEntry;
-import io.github.dddplus.ast.model.ReverseEngineeringModel;
 import io.github.dddplus.ast.parser.JavaParserUtil;
 import io.github.dddplus.ast.report.CallGraphReport;
 
@@ -20,27 +18,15 @@ import java.util.Set;
 /**
  * DSL -> Reverse Engineering Model -> method call -> dot DSL.
  */
-public class CallGraphRenderer implements IModelRenderer<CallGraphRenderer> {
+public class CallGraphRenderer implements IRenderer {
     private CallGraphReport callGraphReport;
     private String targetCallGraphDotFile;
-    private String targetPackageCrossRefDotFile;
-    private boolean edgeShowsCallerMethod = false;
 
     private String splines = null;
     private StringBuilder content = new StringBuilder();
 
-    public CallGraphRenderer edgeShowsCallerMethod() {
-        this.edgeShowsCallerMethod = true;
-        return this;
-    }
-
     public CallGraphRenderer targetCallGraphDotFile(String targetFile) {
         this.targetCallGraphDotFile = targetFile;
-        return this;
-    }
-
-    public CallGraphRenderer targetPackageCrossRefDotFile(String targetFile) {
-        this.targetPackageCrossRefDotFile = targetFile;
         return this;
     }
 
@@ -55,21 +41,14 @@ public class CallGraphRenderer implements IModelRenderer<CallGraphRenderer> {
         return this;
     }
 
-    @Override
-    public CallGraphRenderer withModel(ReverseEngineeringModel model) {
-        this.callGraphReport = model.getCallGraphReport();
+    public CallGraphRenderer withReport(CallGraphReport report) {
+        this.callGraphReport = report;
         return this;
     }
 
-    @Override
     public void render() throws IOException {
         if (targetCallGraphDotFile != null) {
             renderCallGraph();
-        }
-
-        if (targetPackageCrossRefDotFile != null) {
-            content.setLength(0);
-            renderPackageCrossRef();
         }
     }
 
@@ -83,22 +62,6 @@ public class CallGraphRenderer implements IModelRenderer<CallGraphRenderer> {
                 .append("}");
 
         JavaParserUtil.dumpToFile(targetCallGraphDotFile, content.toString());
-    }
-
-    private void renderPackageCrossRef() throws IOException {
-        append("digraph G {")
-                .append(NEWLINE)
-                .setupSkin();
-        for (PackageCrossRefEntry entry : callGraphReport.getPackageCrossRefEntries()) {
-            append(TAB)
-                    .append("\"").append(entry.getCallerPackage()).append("\"")
-                    .append(" -> ")
-                    .append("\"").append(entry.getCalleePackage()).append("\"")
-                    .append(NEWLINE);
-        }
-        append("}");
-
-        JavaParserUtil.dumpToFile(targetPackageCrossRefDotFile, content.toString());
     }
 
     private CallGraphRenderer setupSkin() {
@@ -115,40 +78,45 @@ public class CallGraphRenderer implements IModelRenderer<CallGraphRenderer> {
 
     private CallGraphRenderer renderNodes() {
         for (CallGraphReport.Record calleeClazz : callGraphReport.calleeRecords()) {
-            append(TAB).append(calleeClazz.getClazz())
+            append(TAB).append("\"").append(calleeClazz.simpleClazzName()).append("\"")
                     .append(" [label=\"");
             List<String> list = new ArrayList<>();
-            list.add(String.format("<%s> %s", calleeClazz.getClazz(), calleeClazz.getClazz()));
+            list.add(String.format("<%s> %s", calleeClazz.simpleClazzName(), calleeClazz.simpleClazzName()));
             for (String method : calleeClazz.getMethods()) {
                 list.add(String.format("<%s> %s", method, method));
             }
             append(String.join("|", list));
             append("\"];").append(NEWLINE);
         }
+
+        for (CallGraphReport.Record callerClazz : callGraphReport.callerRecords()) {
+            append(TAB).append("\"").append(callerClazz.simpleClazzName()).append("\"")
+                    .append(" [label=\"");
+            List<String> list = new ArrayList<>();
+            list.add(String.format("<%s> %s", callerClazz.simpleClazzName(), callerClazz.simpleClazzName()));
+            for (String method : callerClazz.getMethods()) {
+                list.add(String.format("<%s> %s", method, method));
+            }
+            append(String.join("|", list));
+            append("\"];").append(NEWLINE);
+        }
+
         return this;
     }
 
     private CallGraphRenderer renderEdges() {
         Set<String> edges = new HashSet<>();
         for (CallGraphEntry entry : callGraphReport.sortedEntries()) {
-            if (!edgeShowsCallerMethod) {
-                // A的多个方法可能调用同一个callee：merge
-                String key = entry.getCallerClazz() + ":" + entry.calleeNode();
-                if (edges.contains(key)) {
-                    continue;
-                }
-                edges.add(key);
+            // A的多个方法可能调用同一个callee：merge
+            String key = entry.getCallerClazz() + ":" + entry.calleeNode();
+            if (edges.contains(key)) {
+                continue;
             }
+            edges.add(key);
 
-            String callerNode = entry.callerNode(callGraphReport);
-            append(TAB).append(callerNode)
-                    .append(" -> ")
+            String callerNode = entry.callerNode();
+            append(TAB).append(callerNode).append(" -> ")
                     .append(entry.calleeNode());
-            if (edgeShowsCallerMethod && !callerNode.contains(":")) {
-                append(" [label=\"")
-                        .append(entry.getCallerMethod())
-                        .append("\"];");
-            }
             append(NEWLINE);
 
         }

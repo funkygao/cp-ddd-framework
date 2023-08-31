@@ -18,7 +18,8 @@ import java.util.jar.JarFile;
 @Slf4j
 public class CallGraphParser {
 
-    public static void parse(String[] jarPaths, CallGraphReport report) throws IOException {
+    public static CallGraphReport parse(String[] jarPaths, CallGraphConfig config) throws IOException {
+        CallGraphReport report = new CallGraphReport();
         for (String jarPath : jarPaths) {
             File jarFile = new File(jarPath);
             if (!jarFile.exists()) {
@@ -36,10 +37,12 @@ public class CallGraphParser {
 
                     log.debug("parsing {}", jarEntry.getName());
                     ClassParser classParser = new ClassParser(jarPath, jarEntry.getName());
-                    new ClassVisitor(classParser.parse(), report)
+                    new ClassVisitor(classParser.parse(), report, config)
                             .start();
                 }
             }
         }
+
+        return report;
     }
 }

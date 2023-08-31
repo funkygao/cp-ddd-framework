@@ -5,35 +5,38 @@
  */
 package io.github.dddplus.bce;
 
+import io.github.dddplus.ast.model.CallGraphEntry;
 import io.github.dddplus.ast.report.CallGraphReport;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.generic.*;
 
 class MethodVisitor extends EmptyVisitor {
-    private final JavaClass javaClass;
-    private final MethodGen methodGen;
-    private final CallGraphReport report;
+    final JavaClass javaClass;
+    final MethodGen methodGen;
+    final CallGraphReport report;
+    final CallGraphConfig config;
 
-    private final ConstantPoolGen constantPoolGen;
+    final ConstantPoolGen constantPoolGen;
 
-    private final String callerClass;
-    private final String callerMethod;
+    final String callerPackage;
+    final String callerClass;
+    final String callerMethod;
 
-    private static final String methodStaticInit = "<clinit>";
-    private static final String methodConstructor = "<init>";
-
-    MethodVisitor(JavaClass jc, MethodGen m, CallGraphReport r) {
+    MethodVisitor(JavaClass jc, MethodGen m, CallGraphReport r, CallGraphConfig c) {
         javaClass = jc;
         methodGen = m;
         report = r;
+        config = c;
         constantPoolGen = methodGen.getConstantPool();
 
+        // cache
+        callerPackage = javaClass.getPackageName();
         callerClass = javaClass.getClassName();
         callerMethod = methodGen.getName();
     }
 
     void start() {
-        if (callerIgnored()) {
+        if (config.ignoreCaller(this)) {
             return;
         }
 
@@ -47,27 +50,13 @@ class MethodVisitor extends EmptyVisitor {
             InvokeInstruction invokeInstruction = (InvokeInstruction) instruction;
             String calleeMethod = invokeInstruction.getMethodName(constantPoolGen);
             String calleeClass = invokeInstruction.getClassName(constantPoolGen);
-            if (calleeClass.startsWith("java") || calleeMethod.equals(methodConstructor)
-                    || calleeMethod.equals(methodStaticInit)) {
+            CallGraphEntry callGraphEntry = new CallGraphEntry(callerClass, callerMethod, calleeClass, calleeMethod);
+            if (config.ignoreInvokeInstruction(this, invokeInstruction, callGraphEntry)) {
                 continue;
             }
 
-            report.register(callerClass, callerMethod, calleeClass, calleeMethod);
+            report.register(callGraphEntry);
         }
-    }
-
-    private boolean callerIgnored() {
-        if (javaClass.isEnum()) {
-            return true;
-        }
-        if (callerMethod.equals(methodConstructor)) {
-            return true;
-        }
-        if (methodGen.isAbstract() || methodGen.isNative()) {
-            return true;
-        }
-
-        return false;
     }
 
 }

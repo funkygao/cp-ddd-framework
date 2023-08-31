@@ -30,10 +30,6 @@ public class ModelingVisualizationMojo extends AbstractMojo {
     @Parameter(property = "rootDir", required = true)
     String rootDir;
 
-    @Parameter(property = "callGraph")
-    String targetCallGraph;
-    @Parameter(property = "pkgRef")
-    String targetPackageRef;
     @Parameter(property = "plantUml")
     String targetPlantUml;
     @Parameter(property = "plantUmlSrc")
@@ -69,9 +65,6 @@ public class ModelingVisualizationMojo extends AbstractMojo {
                     analyzer.fixKeyModelPackage(pkgPair[0], pkgPair[1]);
                 }
             }
-            if (targetCallGraph == null) {
-                analyzer.disableCallGraph();
-            }
             if (rawClassSimilarity) {
                 analyzer.rawSimilarity()
                         .similarityThreshold(similarityThreshold);
@@ -92,16 +85,6 @@ public class ModelingVisualizationMojo extends AbstractMojo {
                     artifacts.add(targetPlantUmlSrc);
                 }
                 renderer.render();
-            }
-            if (targetCallGraph != null) {
-                artifacts.add(targetCallGraph);
-                artifacts.add(targetPackageRef);
-                new CallGraphRenderer()
-                        .withModel(model)
-                        .targetCallGraphDotFile(targetCallGraph)
-                        .targetPackageCrossRefDotFile(targetPackageRef)
-                        .splines("polyline")
-                        .render();
             }
             if (targetEncapsulation != null) {
                 artifacts.add(targetEncapsulation);
