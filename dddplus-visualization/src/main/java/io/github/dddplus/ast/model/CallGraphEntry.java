@@ -16,15 +16,15 @@ public class CallGraphEntry {
     private String calleeClazz;
     private String calleeMethod;
 
-    private String simpleNameOfClazz(String className) {
+    private String dotNode(String className) {
         return className.replaceAll("\\.", "_");
     }
 
     public String callerNode() {
-        return simpleNameOfClazz(callerClazz) + ":" + callerMethod;
+        return dotNode(callerClazz) + ":" + callerMethod;
     }
 
     public String calleeNode() {
-        return simpleNameOfClazz(calleeClazz) + ":" + calleeMethod;
+        return dotNode(calleeClazz) + ":" + calleeMethod;
     }
 }

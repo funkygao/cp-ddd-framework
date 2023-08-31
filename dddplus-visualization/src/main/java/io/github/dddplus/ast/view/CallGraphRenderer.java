@@ -78,10 +78,10 @@ public class CallGraphRenderer implements IRenderer {
 
     private CallGraphRenderer renderNodes() {
         for (CallGraphReport.Record calleeClazz : callGraphReport.calleeRecords()) {
-            append(TAB).append("\"").append(calleeClazz.simpleClazzName()).append("\"")
+            append(TAB).append("\"").append(calleeClazz.dotNode()).append("\"")
                     .append(" [label=\"");
             List<String> list = new ArrayList<>();
-            list.add(String.format("<%s> %s", calleeClazz.simpleClazzName(), calleeClazz.simpleClazzName()));
+            list.add(String.format("<%s> %s", calleeClazz.dotNode(), calleeClazz.dotNode()));
             for (String method : calleeClazz.getMethods()) {
                 list.add(String.format("<%s> %s", method, method));
             }
@@ -90,10 +90,10 @@ public class CallGraphRenderer implements IRenderer {
         }
 
         for (CallGraphReport.Record callerClazz : callGraphReport.callerRecords()) {
-            append(TAB).append("\"").append(callerClazz.simpleClazzName()).append("\"")
+            append(TAB).append("\"").append(callerClazz.dotNode()).append("\"")
                     .append(" [label=\"");
             List<String> list = new ArrayList<>();
-            list.add(String.format("<%s> %s", callerClazz.simpleClazzName(), callerClazz.simpleClazzName()));
+            list.add(String.format("<%s> %s", callerClazz.dotNode(), callerClazz.dotNode()));
             for (String method : callerClazz.getMethods()) {
                 list.add(String.format("<%s> %s", method, method));
             }

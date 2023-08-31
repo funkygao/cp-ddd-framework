@@ -74,7 +74,7 @@ public class CallGraphReport {
             this.clazz = clazz;
         }
 
-        public String simpleClazzName() {
+        public String dotNode() {
             return clazz.replaceAll("\\.", "_");
         }
 
