@@ -34,8 +34,8 @@ public class ClassHierarchyMojo extends AbstractMojo {
     /**
      * ortho | spline | polyline | curved
      */
-    @Parameter(property = "splines")
-    String splines = "curved";
+    @Parameter(property = "splines", defaultValue = "curved")
+    String splines;
 
     /**
      * Comma separated ignored parent classes.

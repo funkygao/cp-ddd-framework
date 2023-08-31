@@ -42,8 +42,8 @@ public class CallGraphMojo extends AbstractMojo {
     /**
      * ortho | spline | polyline | curved
      */
-    @Parameter(property = "splines")
-    String splines = "curved";
+    @Parameter(property = "splines", defaultValue = "curved")
+    String splines;
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
