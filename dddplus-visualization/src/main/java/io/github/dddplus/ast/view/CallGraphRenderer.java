@@ -22,6 +22,7 @@ public class CallGraphRenderer implements IRenderer {
     private String splines = null;
     private StringBuilder content = new StringBuilder();
     private Map<String, Integer> calleeRefCounter = new HashMap<>();
+    private Map<String, Integer> calleeMethodRefCounter = new HashMap<>();
 
     public CallGraphRenderer targetCallGraphDotFile(String targetFile) {
         this.targetCallGraphDotFile = targetFile;
@@ -40,7 +41,15 @@ public class CallGraphRenderer implements IRenderer {
     }
 
     public List<String> topReferencedCallee(int k) {
-        List<Map.Entry<String, Integer>> sortedList = new ArrayList<>(calleeRefCounter.entrySet());
+        return topKByValue(calleeRefCounter, k);
+    }
+
+    public List<String> topReferencedCalleeMethods(int k) {
+        return topKByValue(calleeMethodRefCounter, k);
+    }
+
+    private List<String> topKByValue(Map<String, Integer> map, int k) {
+        List<Map.Entry<String, Integer>> sortedList = new ArrayList<>(map.entrySet());
         sortedList.sort(Comparator.comparing(Map.Entry::getValue, Comparator.reverseOrder()));
         List<String> result = new ArrayList<>(k);
         int n = 0;
@@ -139,18 +148,22 @@ public class CallGraphRenderer implements IRenderer {
             append(NEWLINE);
 
             // statistics
-            incrementCounter(entry.getCalleeClazz());
+            incrementCounter(entry.getCalleeClazz(), entry.getCalleeMethod());
         }
 
         return this;
     }
 
-    private void incrementCounter(String calleeClazz) {
+    private void incrementCounter(String calleeClazz, String calleeMethod) {
         if (!calleeRefCounter.containsKey(calleeClazz)) {
             calleeRefCounter.put(calleeClazz, 0);
         }
-
         calleeRefCounter.put(calleeClazz, 1 + calleeRefCounter.get(calleeClazz));
+
+        if (!calleeMethodRefCounter.containsKey(calleeMethod)) {
+            calleeMethodRefCounter.put(calleeMethod, 0);
+        }
+        calleeMethodRefCounter.put(calleeMethod, 1 + calleeMethodRefCounter.get(calleeMethod));
     }
 
     private CallGraphRenderer append(String s) {

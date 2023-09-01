@@ -65,6 +65,10 @@ public class CallGraphMojo extends AbstractMojo {
             for (String callee : renderer.topReferencedCallee(topCalleeN)) {
                 getLog().info(callee);
             }
+            getLog().info("Top referenced callee methods:");
+            for (String method : renderer.topReferencedCalleeMethods(topCalleeN)) {
+                getLog().info(method);
+            }
         } catch (Exception e) {
             throw new MojoExecutionException(e.getMessage(), e);
         }

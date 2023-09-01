@@ -195,7 +195,7 @@ public class CallGraphConfig implements Serializable {
                 callerPackagePatterns.add(FileSystems.getDefault().getPathMatcher("glob:" + regex));
             }
             callerMethodPatterns = new ArrayList<>(callerMethods.size());
-            for (String regex : callerPackages) {
+            for (String regex : callerMethods) {
                 callerMethodPatterns.add(FileSystems.getDefault().getPathMatcher("glob:" + regex));
             }
 
