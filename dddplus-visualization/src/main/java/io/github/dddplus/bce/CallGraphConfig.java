@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import io.github.dddplus.ast.model.CallGraphEntry;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.bcel.generic.InvokeInstruction;
 
 import java.io.FileNotFoundException;
@@ -17,6 +18,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Data
+@Slf4j
 public class CallGraphConfig implements Serializable {
     private static final String methodStaticInit = "<clinit>";
     private static final String methodConstructor = "<init>";
@@ -84,21 +86,26 @@ public class CallGraphConfig implements Serializable {
         }
 
         for (String c : ignore.classSuffix) {
-            if (calleeClass.endsWith("." + c)) {
+            if (calleeClass.endsWith(c)) {
                 return true;
             }
         }
 
-        if (calleeMethod.startsWith("get")) {
-            // getter
+        if (calleeMethod.equals(methodConstructor) || calleeMethod.equals(methodStaticInit)) {
             return true;
         }
-        if (calleeMethod.startsWith("set")) {
-            // setter
+        if (calleeMethod.contains("$") || calleeClass.contains("$")) {
+            // lambda
             return true;
         }
 
-        if (calleeMethod.equals(methodConstructor) || calleeMethod.equals(methodStaticInit)) {
+        int args = instruction.getArgumentTypes(m.constantPoolGen).length;
+        if (calleeMethod.startsWith("get") && args == 0) {
+            log.debug("getter ignored: {}.{} -> {}.{}", m.callerClass, m.callerMethod, calleeClass, calleeMethod);
+            return true;
+        }
+        if (calleeMethod.startsWith("set") && args == 1) {
+            log.debug("setter ignored: {}.{} -> {}.{}", m.callerClass, m.callerMethod, calleeClass, calleeMethod);
             return true;
         }
 
@@ -115,9 +122,7 @@ public class CallGraphConfig implements Serializable {
             }
         }
 
-        if (calleeMethod.contains("$") || calleeClass.contains("$")) {
-            return true;
-        }
+
 
         return false;
     }
