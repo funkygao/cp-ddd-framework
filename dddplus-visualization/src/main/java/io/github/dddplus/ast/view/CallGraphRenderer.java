@@ -71,14 +71,18 @@ public class CallGraphRenderer implements IRenderer {
             append(TAB).append(String.format("splines = %s;", splines)).append(NEWLINE);
         }
         append(TAB).append("node [shape=record];").append(NEWLINE);
-        append(TAB).append("edge [style = dashed, fontsize=10];").append(NEWLINE);
+        append(TAB).append("edge [style = dashed, arrowsize=0.4, fontsize=6];").append(NEWLINE);
         append(NEWLINE);
         return this;
     }
 
+    private CallGraphRenderer appendEscape(String s) {
+        return append("\"").append(s).append("\"");
+    }
+
     private CallGraphRenderer renderNodes() {
         for (CallGraphReport.Record calleeClazz : callGraphReport.calleeRecords()) {
-            append(TAB).append("\"").append(calleeClazz.dotNode()).append("\"")
+            append(TAB).appendEscape(calleeClazz.dotNode())
                     .append(" [label=\"");
             List<String> list = new ArrayList<>();
             list.add(String.format("<%s> %s", calleeClazz.dotNode(), calleeClazz.dotNode()));
@@ -90,7 +94,7 @@ public class CallGraphRenderer implements IRenderer {
         }
 
         for (CallGraphReport.Record callerClazz : callGraphReport.callerRecords()) {
-            append(TAB).append("\"").append(callerClazz.dotNode()).append("\"")
+            append(TAB).appendEscape(callerClazz.dotNode())
                     .append(" [label=\"");
             List<String> list = new ArrayList<>();
             list.add(String.format("<%s> %s", callerClazz.dotNode(), callerClazz.dotNode()));

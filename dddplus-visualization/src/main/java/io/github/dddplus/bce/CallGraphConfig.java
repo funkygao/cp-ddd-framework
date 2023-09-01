@@ -15,6 +15,10 @@ import org.apache.bcel.generic.InvokeInstruction;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.Serializable;
+import java.nio.file.FileSystems;
+import java.nio.file.PathMatcher;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -24,21 +28,24 @@ public class CallGraphConfig implements Serializable {
     private static final String methodConstructor = "<init>";
 
     private Ignore ignore;
-    private Include include;
+    private Accept accept;
+    private Boolean simpleClassName = false;
 
     public static CallGraphConfig fromFile(String filename) throws FileNotFoundException {
         Gson gson = new Gson();
         JsonReader reader = new JsonReader(new FileReader(filename));
-        return gson.fromJson(reader, CallGraphConfig.class);
+        CallGraphConfig config = gson.fromJson(reader, CallGraphConfig.class);
+        config.ignore.initialize();
+        return config;
     }
 
-    boolean ignoreCaller(MethodVisitor m) {
-        if (m.methodGen.isAbstract() || m.methodGen.isNative()) {
-            return true;
-        }
+    public boolean useSimpleClassName() {
+        return simpleClassName;
+    }
 
-        if (ignore.enumClazz && m.javaClass.isEnum()) {
-            // ignore all enum
+    private boolean builtinIgnoreCaller(MethodVisitor m) {
+        // caller method
+        if (m.callerMethod.contains("$") || m.callerClass.contains("$")) {
             return true;
         }
 
@@ -46,29 +53,53 @@ public class CallGraphConfig implements Serializable {
             return true;
         }
 
-        for (String suffix : ignore.classSuffix) {
-            if (m.callerClass.endsWith(suffix)) {
-                return true;
-            }
+        if (m.methodGen == null) {
+            // 判断结束
+            return false;
         }
 
-        for (String pkg : ignore.calleePackagesLike) {
-            if (m.callerPackage.contains(pkg)) {
-                return true;
-            }
-        }
-
-        if (m.callerMethod.contains("$") || m.callerClass.contains("$")) {
+        if (m.methodGen.isAbstract() || m.methodGen.isNative()) {
             return true;
         }
 
         return false;
     }
 
-    boolean ignoreInvokeInstruction(MethodVisitor m, InvokeInstruction instruction, CallGraphEntry callGraphEntry) {
+    boolean ignoreCaller(MethodVisitor m) {
+        if (builtinIgnoreCaller(m)) {
+            return true;
+        }
+
+        // caller package
+        if (ignore.ignoreCallerPackage(m.callerPackage)) {
+            return true;
+        }
+
+        if (ignore.ignoreCallerMethod(m.callerMethod)) {
+            return true;
+        }
+
+        // caller class
+        if (ignore.ignoreClass(m.callerClass)) {
+            return true;
+        }
+
+        if (m.methodGen == null) {
+            // 判断结束
+            return false;
+        }
+
+        if (ignore.enumClazz && m.javaClass.isEnum()) {
+            // ignore all enum
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean builtinIgnoreInvokeInstruction(MethodVisitor m, InvokeInstruction instruction, CallGraphEntry callGraphEntry) {
         final String calleeMethod = callGraphEntry.getCalleeMethod();
         final String calleeClass = callGraphEntry.getCalleeClazz();
-
         if (m.callerClass.equals(calleeClass)) {
             // 自己调用自己
             return true;
@@ -79,18 +110,6 @@ public class CallGraphConfig implements Serializable {
             return true;
         }
 
-        for (String s : ignore.calleeMethods) {
-            if (calleeMethod.equals(s)) {
-                return true;
-            }
-        }
-
-        for (String c : ignore.classSuffix) {
-            if (calleeClass.endsWith(c)) {
-                return true;
-            }
-        }
-
         if (calleeMethod.equals(methodConstructor) || calleeMethod.equals(methodStaticInit)) {
             return true;
         }
@@ -99,6 +118,11 @@ public class CallGraphConfig implements Serializable {
             return true;
         }
 
+        if (instruction == null) {
+            return false;
+        }
+
+        // getter/setter
         int args = instruction.getArgumentTypes(m.constantPoolGen).length;
         if (calleeMethod.startsWith("get") && args == 0) {
             log.debug("getter ignored: {}.{} -> {}.{}", m.callerClass, m.callerMethod, calleeClass, calleeMethod);
@@ -109,35 +133,134 @@ public class CallGraphConfig implements Serializable {
             return true;
         }
 
-        String calleePackage = callGraphEntry.getCalleeClazz().substring(0, callGraphEntry.getCalleeClazz().lastIndexOf("."));
-        for (String pkg : include.packagePrefixes) {
-            if (!calleePackage.startsWith(pkg)) {
-                return true;
-            }
+        return false;
+    }
+
+    boolean ignoreInvokeInstruction(MethodVisitor m, InvokeInstruction instruction, CallGraphEntry callGraphEntry) {
+        if (builtinIgnoreInvokeInstruction(m, instruction, callGraphEntry)) {
+            return true;
         }
 
-        for (String pkg : ignore.calleePackagesLike) {
-            if (calleePackage.contains(pkg)) {
-                return true;
-            }
+        // callee package
+        String calleePackage = callGraphEntry.getCalleeClazz().substring(0,
+                callGraphEntry.getCalleeClazz().lastIndexOf("."));
+        if (ignore.ignoreCalleePackage(calleePackage)) {
+            return true;
+        }
+        if (!accept.acceptPackage(calleePackage)) {
+            return true;
         }
 
+        // callee class
+        if (ignore.ignoreClass(callGraphEntry.getCalleeClazz())) {
+            return true;
+        }
 
+        // callee method
+        if (ignore.ignoreCalleeMethod(callGraphEntry.getCalleeMethod())) {
+            return true;
+        }
 
         return false;
     }
 
     @Data
     public static class Ignore implements Serializable {
-        private List<String> calleePackagesLike;
-        private List<String> classSuffix;
-        private List<String> calleeMethods;
+        private List<String> classes = new ArrayList<>(); // caller and callee classes
+        private List<String> callerPackages = new ArrayList<>();
+        private List<String> callerMethods = new ArrayList<>();
+        private List<String> calleePackages = new ArrayList<>();
+        private List<String> calleeMethods = new ArrayList<>();
         private Boolean enumClazz = true;
+
+        private transient List<PathMatcher> classPatterns;
+        private transient List<PathMatcher> callerPackagePatterns;
+        private transient List<PathMatcher> callerMethodPatterns;
+        private transient List<PathMatcher> calleePackagePatterns;
+        private transient List<PathMatcher> calleeMethodPatterns;
+
+        void initialize() {
+            classPatterns = new ArrayList<>(classes.size());
+            for (String regex : classes) {
+                if (!regex.contains("*")) {
+                    regex = "*" + regex;
+                }
+                classPatterns.add(FileSystems.getDefault().getPathMatcher("glob:" + regex));
+            }
+            callerPackagePatterns = new ArrayList<>(callerPackages.size());
+            for (String regex : callerPackages) {
+                if (!regex.contains("*")) {
+                    regex = "*" + regex + "*";
+                }
+                callerPackagePatterns.add(FileSystems.getDefault().getPathMatcher("glob:" + regex));
+            }
+            callerMethodPatterns = new ArrayList<>(callerMethods.size());
+            for (String regex : callerPackages) {
+                callerMethodPatterns.add(FileSystems.getDefault().getPathMatcher("glob:" + regex));
+            }
+
+            calleePackagePatterns = new ArrayList<>(calleePackages.size());
+            for (String regex : calleePackages) {
+                if (!regex.contains("*")) {
+                    regex = "*" + regex + "*";
+                }
+                calleePackagePatterns.add(FileSystems.getDefault().getPathMatcher("glob:" + regex));
+            }
+
+            calleeMethodPatterns = new ArrayList<>(calleeMethods.size());
+            for (String regex : calleeMethods) {
+                calleeMethodPatterns.add(FileSystems.getDefault().getPathMatcher("glob:" + regex));
+            }
+        }
+
+        boolean ignoreCallerPackage(String callerPackage) {
+            return match(callerPackagePatterns, callerPackage);
+        }
+
+        boolean ignoreCalleePackage(String calleePackage) {
+            return match(calleePackagePatterns, calleePackage);
+        }
+
+        boolean ignoreCalleeMethod(String calleeMethod) {
+            return match(calleeMethodPatterns, calleeMethod);
+        }
+
+        boolean ignoreCallerMethod(String callerMethod) {
+            return match(callerMethodPatterns, callerMethod);
+        }
+
+        boolean ignoreClass(String clazz) {
+            return match(classPatterns, clazz);
+        }
+
+        private boolean match(List<PathMatcher> patterns, String s) {
+            for (PathMatcher pattern : patterns) {
+                if (pattern.matches(Paths.get(s))) {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
     @Data
-    public static class Include implements Serializable {
-        private List<String> packagePrefixes;
+    public static class Accept implements Serializable {
+        private List<String> packagePrefixes = new ArrayList<>();
+
+        boolean acceptPackage(String pkgName) {
+            if (packagePrefixes.isEmpty()) {
+                return true;
+            }
+
+            // any match
+            for (String prefix : packagePrefixes) {
+                if (pkgName.startsWith(prefix)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 
 }

@@ -35,6 +35,18 @@ class MethodVisitor extends EmptyVisitor {
         callerMethod = methodGen.getName();
     }
 
+    MethodVisitor(String callerPackage, String callerClass, String callerMethod, CallGraphConfig c) {
+        this.callerPackage = callerPackage;
+        this.callerClass = callerClass;
+        this.callerMethod = callerMethod;
+        config = c;
+
+        javaClass = null;
+        methodGen = null;
+        report = null;
+        constantPoolGen = null;
+    }
+
     void start() {
         if (config.ignoreCaller(this)) {
             return;
@@ -50,7 +62,7 @@ class MethodVisitor extends EmptyVisitor {
             InvokeInstruction invokeInstruction = (InvokeInstruction) instruction;
             String calleeMethod = invokeInstruction.getMethodName(constantPoolGen);
             String calleeClass = invokeInstruction.getClassName(constantPoolGen);
-            CallGraphEntry callGraphEntry = new CallGraphEntry(callerClass, callerMethod, calleeClass, calleeMethod);
+            CallGraphEntry callGraphEntry = new CallGraphEntry(config, callerClass, callerMethod, calleeClass, calleeMethod);
             if (config.ignoreInvokeInstruction(this, invokeInstruction, callGraphEntry)) {
                 continue;
             }

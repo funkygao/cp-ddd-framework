@@ -6,6 +6,7 @@
 package io.github.dddplus.ast.report;
 
 import io.github.dddplus.ast.model.CallGraphEntry;
+import io.github.dddplus.bce.CallGraphConfig;
 import lombok.Data;
 
 import java.util.*;
@@ -15,7 +16,12 @@ import java.util.*;
  */
 @Data
 public class CallGraphReport {
+    private final CallGraphConfig config;
     private List<CallGraphEntry> entries = new ArrayList<>();
+
+    public CallGraphReport(CallGraphConfig config) {
+        this.config = config;
+    }
 
     public List<CallGraphEntry> sortedEntries() {
         Collections.sort(entries, Comparator.comparing(c -> c.getCallerClazz() + c.getCallerMethod()));
@@ -29,7 +35,7 @@ public class CallGraphReport {
             calleeClasses.add(entry.getCalleeClazz());
         }
         for (String calleeClass : calleeClasses) {
-            Record record = new Record(calleeClass);
+            Record record = new Record(calleeClass, config);
             for (CallGraphEntry entry : entries) {
                 if (!entry.getCalleeClazz().equals(calleeClass)) {
                     continue;
@@ -48,7 +54,7 @@ public class CallGraphReport {
             callerClasses.add(entry.getCallerClazz());
         }
         for (String callerClazz : callerClasses) {
-            Record record = new Record(callerClazz);
+            Record record = new Record(callerClazz, config);
             for (CallGraphEntry entry : entries) {
                 if (!entry.getCallerClazz().equals(callerClazz)) {
                     continue;
@@ -67,14 +73,20 @@ public class CallGraphReport {
 
     @Data
     public static class Record {
+        private final CallGraphConfig config;
         private final String clazz;
         private Set<String> methods = new HashSet<>();
 
-        Record(String clazz) {
+        Record(String clazz, CallGraphConfig config) {
             this.clazz = clazz;
+            this.config = config;
         }
 
         public String dotNode() {
+            if (config.useSimpleClassName()) {
+                return clazz.substring(clazz.lastIndexOf(".") + 1);
+            }
+
             return clazz.replaceAll("\\.", "_");
         }
 

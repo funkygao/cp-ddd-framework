@@ -19,7 +19,7 @@ import java.util.jar.JarFile;
 public class CallGraphParser {
 
     public static CallGraphReport parse(String[] jarPaths, CallGraphConfig config) throws IOException {
-        CallGraphReport report = new CallGraphReport();
+        CallGraphReport report = new CallGraphReport(config);
         for (String jarPath : jarPaths) {
             File jarFile = new File(jarPath);
             if (!jarFile.exists()) {

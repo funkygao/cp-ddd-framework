@@ -1,20 +1,26 @@
 {
+   "simpleClassName": true,
    "ignore":{
-      "calleePackagesLike":[
-          ".jdbc.impl", ".enums", ".dto", ".dao", ".repo", ".mapper", 
-          "common.entity.result", "result.entity"
-      ],
-      "classSuffix":[
+      "enumClazz":true,
+      "classes":[
           "Dao", "JsonUtil", "CommonUtil"
+      ],
+      "callerPackages":[
+         "*jdbc"
+      ],
+      "callerMethods":[
+      ],
+      "calleePackages":[
+          "*jdbc.impl*", ".enums", ".dto", ".dao", ".repo", ".mapper",
+          "common.entity.result", "result.entity"
       ],
       "calleeMethods":[
           "toString", "equals", "builder", "hashCode", "clone"
-      ],
-      "enumClazz":true
+      ]
    },
-   "include":{
+   "accept":{
       "packagePrefixes":[
-         "com.jdwl."
+         "io.git"
       ]
    }
 }

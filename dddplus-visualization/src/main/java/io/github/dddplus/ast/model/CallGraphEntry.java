@@ -5,19 +5,25 @@
  */
 package io.github.dddplus.ast.model;
 
+import io.github.dddplus.bce.CallGraphConfig;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
 public class CallGraphEntry {
-    private String callerClazz;
-    private String callerMethod;
-    private String calleeClazz;
-    private String calleeMethod;
+    private final CallGraphConfig config;
+    private final String callerClazz;
+    private final String callerMethod;
+    private final String calleeClazz;
+    private final String calleeMethod;
 
-    private String dotNode(String className) {
-        return className.replaceAll("\\.", "_");
+    private String dotNode(String fullName) {
+        if (config.useSimpleClassName()) {
+            return fullName.substring(fullName.lastIndexOf(".") + 1);
+        }
+
+        return fullName.replaceAll("\\.", "_");
     }
 
     public String callerNode() {
@@ -27,4 +33,5 @@ public class CallGraphEntry {
     public String calleeNode() {
         return dotNode(calleeClazz) + ":" + calleeMethod;
     }
+
 }

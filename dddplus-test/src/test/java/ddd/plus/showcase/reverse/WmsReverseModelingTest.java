@@ -10,6 +10,7 @@ import io.github.dddplus.ast.model.ReverseEngineeringModel;
 import io.github.dddplus.ast.view.EncapsulationRenderer;
 import io.github.dddplus.ast.view.PlainTextRenderer;
 import io.github.dddplus.ast.view.PlantUmlRenderer;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -21,6 +22,11 @@ class WmsReverseModelingTest {
     private final InfrastructureLayerFilter infrastructureLayerFilter = new InfrastructureLayerFilter();
     private final ShowcaseFilter showcaseFilter = new ShowcaseFilter();
     private final File root = DomainModelAnalyzerTest.moduleRoot("dddplus-test");
+
+    @BeforeEach
+    void setUp() {
+        System.setProperty("org.slf4j.simpleLogger.showShortLogName", "true");
+    }
 
     @Test
     void visualizeDomainModel() throws IOException {
