@@ -10,10 +10,7 @@ import io.github.dddplus.ast.parser.JavaParserUtil;
 import io.github.dddplus.ast.report.CallGraphReport;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * DSL -> Reverse Engineering Model -> method call -> dot DSL.
@@ -24,6 +21,7 @@ public class CallGraphRenderer implements IRenderer {
 
     private String splines = null;
     private StringBuilder content = new StringBuilder();
+    private Map<String, Integer> calleeRefCounter = new HashMap<>();
 
     public CallGraphRenderer targetCallGraphDotFile(String targetFile) {
         this.targetCallGraphDotFile = targetFile;
@@ -41,15 +39,32 @@ public class CallGraphRenderer implements IRenderer {
         return this;
     }
 
+    public List<String> topReferencedCallee(int k) {
+        List<Map.Entry<String, Integer>> sortedList = new ArrayList<>(calleeRefCounter.entrySet());
+        sortedList.sort(Comparator.comparing(Map.Entry::getValue, Comparator.reverseOrder()));
+        List<String> result = new ArrayList<>(k);
+        int n = 0;
+        for (Map.Entry<String, Integer> entry : sortedList) {
+            result.add(entry.getKey());
+            n++;
+            if (n == k) {
+                break;
+            }
+        }
+
+        return result;
+    }
+
     public CallGraphRenderer withReport(CallGraphReport report) {
         this.callGraphReport = report;
         return this;
     }
 
-    public void render() throws IOException {
+    public CallGraphRenderer render() throws IOException {
         if (targetCallGraphDotFile != null) {
             renderCallGraph();
         }
+        return this;
     }
 
     private void renderCallGraph() throws IOException {
@@ -123,8 +138,19 @@ public class CallGraphRenderer implements IRenderer {
                     .append(entry.calleeNode());
             append(NEWLINE);
 
+            // statistics
+            incrementCounter(entry.getCalleeClazz());
         }
+
         return this;
+    }
+
+    private void incrementCounter(String calleeClazz) {
+        if (!calleeRefCounter.containsKey(calleeClazz)) {
+            calleeRefCounter.put(calleeClazz, 0);
+        }
+
+        calleeRefCounter.put(calleeClazz, 1 + calleeRefCounter.get(calleeClazz));
     }
 
     private CallGraphRenderer append(String s) {

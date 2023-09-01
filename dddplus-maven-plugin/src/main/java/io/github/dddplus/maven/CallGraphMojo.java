@@ -39,6 +39,10 @@ public class CallGraphMojo extends AbstractMojo {
     @Parameter(property = "configFile", required = true)
     String configFile;
 
+    @Parameter(property = "topCalleeN", defaultValue = "10")
+    Integer topCalleeN;
+
+
     /**
      * ortho | spline | polyline | curved
      */
@@ -52,11 +56,15 @@ public class CallGraphMojo extends AbstractMojo {
             String[] jarFiles = jars.split(":");
             CallGraphReport report = CallGraphParser.parse(jarFiles,
                     CallGraphConfig.fromFile(configFile));
-            new CallGraphRenderer()
+            CallGraphRenderer renderer = new CallGraphRenderer()
                     .targetCallGraphDotFile(targetFile)
                     .splines(splines)
                     .withReport(report)
                     .render();
+            getLog().info("Top referenced callee classes:");
+            for (String callee : renderer.topReferencedCallee(topCalleeN)) {
+                getLog().info(callee);
+            }
         } catch (Exception e) {
             throw new MojoExecutionException(e.getMessage(), e);
         }
