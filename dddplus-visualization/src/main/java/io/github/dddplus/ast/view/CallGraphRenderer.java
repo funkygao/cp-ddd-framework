@@ -132,6 +132,7 @@ public class CallGraphRenderer implements IRenderer {
                     .append(" [label=\"");
             List<String> list = new ArrayList<>();
             list.add(String.format("<%s> %s", record.dotNode(), record.dotNode()));
+
             for (String method : record.getMethods()) {
                 list.add(String.format("<%s> %s", method, method));
             }

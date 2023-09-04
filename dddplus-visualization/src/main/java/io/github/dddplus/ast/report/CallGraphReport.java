@@ -78,7 +78,7 @@ public class CallGraphReport {
     public static class Record {
         private final CallGraphConfig config;
         private final String clazz;
-        private Set<String> methods = new HashSet<>();
+        private Set<String> methods = new TreeSet<>();
         private boolean invokeInterface = false;
 
         Record(String clazz, CallGraphConfig config) {
