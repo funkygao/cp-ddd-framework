@@ -6,17 +6,20 @@
 package io.github.dddplus.ast.model;
 
 import io.github.dddplus.bce.CallGraphConfig;
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 @Data
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CallGraphEntry {
     private final CallGraphConfig config;
     private final String callerClazz;
     private final String callerMethod;
     private final String calleeClazz;
     private final String calleeMethod;
+
+    private boolean invokeInterface = false;
+    private boolean invokeStatic = false;
 
     private String dotNode(String fullName) {
         if (config.useSimpleClassName()) {

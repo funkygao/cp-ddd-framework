@@ -40,6 +40,9 @@ public class CallGraphReport {
                 if (!entry.getCalleeClazz().equals(calleeClass)) {
                     continue;
                 }
+                if (entry.isInvokeInterface()) {
+                    record.invokeInterface = true;
+                }
                 record.getMethods().add(entry.getCalleeMethod());
             }
             records.add(record);
@@ -76,6 +79,7 @@ public class CallGraphReport {
         private final CallGraphConfig config;
         private final String clazz;
         private Set<String> methods = new HashSet<>();
+        private boolean invokeInterface = false;
 
         Record(String clazz, CallGraphConfig config) {
             this.clazz = clazz;

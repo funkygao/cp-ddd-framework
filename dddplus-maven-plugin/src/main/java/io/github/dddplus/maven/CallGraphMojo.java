@@ -42,7 +42,6 @@ public class CallGraphMojo extends AbstractMojo {
     @Parameter(property = "topCalleeN", defaultValue = "10")
     Integer topCalleeN;
 
-
     /**
      * ortho | spline | polyline | curved
      */
@@ -69,6 +68,7 @@ public class CallGraphMojo extends AbstractMojo {
             for (String method : renderer.topReferencedCalleeMethods(topCalleeN)) {
                 getLog().info(method);
             }
+            getLog().info(String.format("Now you can convert dot file to svg: dot -Tsvg %s -O", targetFile));
         } catch (Exception e) {
             throw new MojoExecutionException(e.getMessage(), e);
         }

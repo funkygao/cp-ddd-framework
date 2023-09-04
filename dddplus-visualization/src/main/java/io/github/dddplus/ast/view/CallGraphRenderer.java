@@ -114,7 +114,11 @@ public class CallGraphRenderer implements IRenderer {
                 list.add(String.format("<%s> %s", method, method));
             }
             append(String.join("|", list));
-            append("\"];").append(NEWLINE);
+            append("\"");
+            if (calleeClazz.isInvokeInterface()) {
+                append(" style=dashed");
+            }
+            append("];").append(NEWLINE);
         }
 
         for (CallGraphReport.Record callerClazz : callGraphReport.callerRecords()) {
