@@ -80,6 +80,7 @@ public class CallGraphRenderer implements IRenderer {
         append("digraph G {")
                 .append(NEWLINE)
                 .setupSkin()
+                .renderLegend()
                 .renderNodes()
                 .append(NEWLINE)
                 .renderEdges()
@@ -88,13 +89,18 @@ public class CallGraphRenderer implements IRenderer {
         JavaParserUtil.dumpToFile(targetCallGraphDotFile, content.toString());
     }
 
+    private CallGraphRenderer renderLegend() {
+        return this;
+    }
+
     private CallGraphRenderer setupSkin() {
         append(TAB).append("labelloc = \"t\";").append(NEWLINE);
         append(TAB).append("rankdir=LR;").append(NEWLINE);
         if (splines != null) {
             append(TAB).append(String.format("splines = %s;", splines)).append(NEWLINE);
         }
-        append(TAB).append("node [shape=record];").append(NEWLINE);
+        append(TAB).append("node [shape=Mrecord];").append(NEWLINE);
+        append(TAB).append(String.format("nodesep=%.1f;", callGraphReport.getConfig().getNodesep())).appendEscape(NEWLINE);
         append(TAB).append("edge [style = dashed, arrowsize=0.4, fontsize=6];").append(NEWLINE);
         append(NEWLINE);
         return this;

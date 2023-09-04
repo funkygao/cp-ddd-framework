@@ -1,5 +1,6 @@
 {
    "simpleClassName": true,
+   "nodesep": 1.5,
    "ignore":{
       "enumClazz":true,
       "classes":[
@@ -11,8 +12,7 @@
       "callerMethods":[
       ],
       "calleePackages":[
-          "*jdbc.impl*", ".enums", ".dto", ".dao", ".repo", ".mapper",
-          "common.entity.result", "result.entity"
+          "*jdbc.impl*", ".enums", ".dto", ".dao", ".repo", ".mapper"
       ],
       "calleeMethods":[
           "toString", "equals", "builder", "hashCode", "clone"

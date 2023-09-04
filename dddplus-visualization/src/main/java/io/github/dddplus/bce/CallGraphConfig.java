@@ -30,6 +30,7 @@ public class CallGraphConfig implements Serializable {
     private Ignore ignore;
     private Accept accept;
     private Boolean simpleClassName = false;
+    private Double nodesep = 1.5;
 
     public static CallGraphConfig fromFile(String filename) throws FileNotFoundException {
         Gson gson = new Gson();
