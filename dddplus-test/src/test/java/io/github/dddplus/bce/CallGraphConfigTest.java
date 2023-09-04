@@ -30,6 +30,8 @@ class CallGraphConfigTest {
         CallGraphEntry entry = new CallGraphEntry(config, "io.git.dddplus.jdbc.FooDao", "query", "io.git.dddplus.jdbc.impl.Bar", "bar");
         assertTrue(config.ignoreCaller(m));
         assertTrue(config.ignoreInvokeInstruction(m, null, entry));
+        assertTrue(config.isUseCaseLayerClass("org.git.dddplus.FooAppServiceImpl"));
+        assertFalse(config.isUseCaseLayerClass("FooListener"));
     }
 
 }

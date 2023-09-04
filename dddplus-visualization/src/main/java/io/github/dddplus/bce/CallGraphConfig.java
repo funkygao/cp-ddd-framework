@@ -30,18 +30,39 @@ public class CallGraphConfig implements Serializable {
     private Ignore ignore;
     private Accept accept;
     private Boolean simpleClassName = false;
-    private Double nodesep = 1.5;
+    private Double nodesep = 0.25;
+
+    private List<String> useCaseLayerClasses = new ArrayList<>();
+    private transient List<PathMatcher> useCaseLayerClassPatterns;
 
     public static CallGraphConfig fromFile(String filename) throws FileNotFoundException {
         Gson gson = new Gson();
         JsonReader reader = new JsonReader(new FileReader(filename));
         CallGraphConfig config = gson.fromJson(reader, CallGraphConfig.class);
-        config.ignore.initialize();
+        config.initialize();
         return config;
+    }
+
+    private void initialize() {
+        useCaseLayerClassPatterns = new ArrayList<>(useCaseLayerClasses.size());
+        for (String regex : useCaseLayerClasses) {
+            useCaseLayerClassPatterns.add(FileSystems.getDefault().getPathMatcher("glob:" + regex));
+        }
+
+        ignore.initialize();
     }
 
     public boolean useSimpleClassName() {
         return simpleClassName;
+    }
+
+    public boolean isUseCaseLayerClass(String className) {
+        for (PathMatcher matcher : useCaseLayerClassPatterns) {
+            if (matcher.matches(Paths.get(className))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean builtinIgnoreCaller(MethodVisitor m) {
