@@ -52,6 +52,11 @@ class MethodVisitor extends EmptyVisitor {
             return;
         }
 
+        if (methodGen.getInstructionList() == null) {
+            // e,g. abstract method
+            return;
+        }
+
         // 遍历该方法里的调用关系指令集
         for (InstructionHandle ih : methodGen.getInstructionList()) {
             Instruction instruction = ih.getInstruction();
