@@ -105,28 +105,26 @@ public class CallGraphRenderer implements IRenderer {
     }
 
     private CallGraphRenderer renderNodes() {
+        Map<String, CallGraphReport.Record> mergedNodes = new TreeMap<>();
         for (CallGraphReport.Record calleeClazz : callGraphReport.calleeRecords()) {
-            append(TAB).appendEscape(calleeClazz.dotNode())
-                    .append(" [label=\"");
-            List<String> list = new ArrayList<>();
-            list.add(String.format("<%s> %s", calleeClazz.dotNode(), calleeClazz.dotNode()));
-            for (String method : calleeClazz.getMethods()) {
-                list.add(String.format("<%s> %s", method, method));
+            mergedNodes.put(calleeClazz.getClazz(), calleeClazz);
+        }
+        for (CallGraphReport.Record callerClazz : callGraphReport.callerRecords()) {
+            if (mergedNodes.containsKey(callerClazz.getClazz())) {
+                mergedNodes.get(callerClazz.getClazz()).getMethods().addAll(callerClazz.getMethods());
+            } else {
+                mergedNodes.put(callerClazz.getClazz(), callerClazz);
             }
-            append(String.join("|", list));
-            append("\"");
-            if (calleeClazz.isInvokeInterface()) {
-                append(" style=dashed");
-            }
-            append("];").append(NEWLINE);
         }
 
-        for (CallGraphReport.Record callerClazz : callGraphReport.callerRecords()) {
-            append(TAB).appendEscape(callerClazz.dotNode())
+        // merged caller & callee by class name
+        for (String clazz : mergedNodes.keySet()) {
+            CallGraphReport.Record record = mergedNodes.get(clazz);
+            append(TAB).appendEscape(record.dotNode())
                     .append(" [label=\"");
             List<String> list = new ArrayList<>();
-            list.add(String.format("<%s> %s", callerClazz.dotNode(), callerClazz.dotNode()));
-            for (String method : callerClazz.getMethods()) {
+            list.add(String.format("<%s> %s", record.dotNode(), record.dotNode()));
+            for (String method : record.getMethods()) {
                 list.add(String.format("<%s> %s", method, method));
             }
             append(String.join("|", list));
