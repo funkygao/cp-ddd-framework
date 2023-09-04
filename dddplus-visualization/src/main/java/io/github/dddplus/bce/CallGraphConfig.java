@@ -43,7 +43,7 @@ public class CallGraphConfig implements Serializable {
         return config;
     }
 
-    private void initialize() {
+    void initialize() {
         useCaseLayerClassPatterns = new ArrayList<>(useCaseLayerClasses.size());
         for (String regex : useCaseLayerClasses) {
             useCaseLayerClassPatterns.add(FileSystems.getDefault().getPathMatcher("glob:" + regex));

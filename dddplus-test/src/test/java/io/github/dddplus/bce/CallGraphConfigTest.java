@@ -4,6 +4,7 @@ import io.github.dddplus.ast.model.CallGraphEntry;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -32,6 +33,9 @@ class CallGraphConfigTest {
         assertTrue(config.ignoreInvokeInstruction(m, null, entry));
         assertTrue(config.isUseCaseLayerClass("org.git.dddplus.FooAppServiceImpl"));
         assertFalse(config.isUseCaseLayerClass("FooListener"));
+        config.setUseCaseLayerClasses(Arrays.asList("*picking*AppService*"));
+        config.initialize();
+        assertTrue(config.isUseCaseLayerClass("com.foo.picking.application.task.PickingTaskAppServiceImpl"));
     }
 
 }
