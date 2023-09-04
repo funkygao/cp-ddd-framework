@@ -76,10 +76,6 @@ public class CallGraphConfig implements Serializable {
             return true;
         }
 
-        if (false && m.callerMethod.equals(methodConstructor)) {
-            return true;
-        }
-
         if (m.methodGen == null) {
             // 判断结束
             return false;

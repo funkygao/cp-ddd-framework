@@ -8,6 +8,7 @@ package io.github.dddplus.ast.view;
 import io.github.dddplus.ast.model.CallGraphEntry;
 import io.github.dddplus.ast.parser.JavaParserUtil;
 import io.github.dddplus.ast.report.CallGraphReport;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.IOException;
 import java.util.*;
@@ -40,26 +41,27 @@ public class CallGraphRenderer implements IRenderer {
         return this;
     }
 
-    public List<String> topReferencedCallee(int k) {
+    public List<Pair<String, Integer>> topReferencedCallee(int k) {
         return topKByValue(calleeRefCounter, k);
     }
 
-    public List<String> topReferencedCalleeMethods(int k) {
+    public List<Pair<String, Integer>> topReferencedCalleeMethods(int k) {
         return topKByValue(calleeMethodRefCounter, k);
     }
 
-    private List<String> topKByValue(Map<String, Integer> map, int k) {
+    private List<Pair<String, Integer>> topKByValue(Map<String, Integer> map, int k) {
         List<Map.Entry<String, Integer>> sortedList = new ArrayList<>(map.entrySet());
         sortedList.sort(Comparator.comparing(Map.Entry::getValue, Comparator.reverseOrder()));
-        List<String> result = new ArrayList<>(k);
+        List<Pair<String, Integer>> result = new ArrayList<>(k);
         int n = 0;
         for (Map.Entry<String, Integer> entry : sortedList) {
-            result.add(entry.getKey());
+            result.add(Pair.of(entry.getKey(), entry.getValue()));
             n++;
             if (n == k) {
                 break;
             }
         }
+
 
         return result;
     }

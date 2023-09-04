@@ -9,6 +9,7 @@ import io.github.dddplus.ast.report.CallGraphReport;
 import io.github.dddplus.ast.view.CallGraphRenderer;
 import io.github.dddplus.bce.CallGraphConfig;
 import io.github.dddplus.bce.CallGraphParser;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -61,12 +62,12 @@ public class CallGraphMojo extends AbstractMojo {
                     .withReport(report)
                     .render();
             getLog().info("Top referenced callee classes:");
-            for (String callee : renderer.topReferencedCallee(topCalleeN)) {
-                getLog().info(callee);
+            for (Pair<String, Integer> stat: renderer.topReferencedCallee(topCalleeN)) {
+                getLog().info(String.format("%s %d", stat.getLeft(), stat.getRight()));
             }
             getLog().info("Top referenced callee methods:");
-            for (String method : renderer.topReferencedCalleeMethods(topCalleeN)) {
-                getLog().info(method);
+            for (Pair<String, Integer> stat: renderer.topReferencedCalleeMethods(topCalleeN)) {
+                getLog().info(String.format("%s %d", stat.getLeft(), stat.getRight()));
             }
             getLog().info(String.format("Now you can convert dot file to svg: dot -Tsvg %s -O", targetFile));
         } catch (Exception e) {
