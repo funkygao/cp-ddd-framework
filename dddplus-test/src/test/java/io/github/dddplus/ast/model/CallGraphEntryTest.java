@@ -10,7 +10,8 @@ class CallGraphEntryTest {
     @Test
     void callerNode() {
         CallGraphConfig config = new CallGraphConfig();
-        config.setSimpleClassName(false);
+        config.initialize();
+        config.getStyle().setSimpleClassName(false);
         CallGraphEntry entry = new CallGraphEntry(config, "Caller", "m1", "Callee", "m2");
         assertEquals("Callee:m2", entry.calleeNode());
         assertEquals("Caller:m1", entry.callerNode());

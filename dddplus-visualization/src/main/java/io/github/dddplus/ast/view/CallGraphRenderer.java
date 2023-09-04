@@ -100,7 +100,7 @@ public class CallGraphRenderer implements IRenderer {
             append(TAB).append(String.format("splines = %s;", splines)).append(NEWLINE);
         }
         append(TAB).append("node [shape=Mrecord];").append(NEWLINE);
-        append(TAB).append(String.format("nodesep=%.1f;", callGraphReport.getConfig().getNodesep())).append(NEWLINE);
+        append(TAB).append(String.format("nodesep=%.1f;", callGraphReport.getConfig().nodesep())).append(NEWLINE);
         append(TAB).append("edge [style = dashed, arrowsize=0.4, fontsize=6];").append(NEWLINE);
         append(NEWLINE);
         return this;
@@ -137,6 +137,9 @@ public class CallGraphRenderer implements IRenderer {
             append("\"").append(NEWLINE);
             if (callGraphReport.getConfig().isUseCaseLayerClass(clazz)) {
                 append(" color=red");
+            }
+            if (callGraphReport.getConfig().isAclClass(clazz)) {
+                append(" color=green");
             }
             append("];").append(NEWLINE);
         }

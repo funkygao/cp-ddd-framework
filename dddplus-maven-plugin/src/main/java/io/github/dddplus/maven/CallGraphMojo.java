@@ -54,7 +54,7 @@ public class CallGraphMojo extends AbstractMojo {
         try {
             String[] jarFiles = jars.split(":");
             CallGraphReport report = CallGraphParser.parse(jarFiles,
-                    CallGraphConfig.fromFile(configFile));
+                    CallGraphConfig.fromJsonFile(configFile));
             CallGraphRenderer renderer = new CallGraphRenderer()
                     .targetCallGraphDotFile(targetFile)
                     .splines(splines)

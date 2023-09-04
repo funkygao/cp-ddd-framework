@@ -1,9 +1,14 @@
 {
-   "simpleClassName": true,
-   "useCaseLayerClasses": [
-      "*AppService*"
-   ],
-   "nodesep": 1.5,
+   "style":{
+       "simpleClassName": true,
+       "useCaseLayerClasses": [
+          "*AppService*"
+       ],
+       "aclClasses": [
+          "*stock.*"
+       ],
+       "nodesep": 1.5
+   },
    "ignore":{
       "enumClazz":true,
       "classes":[

@@ -10,7 +10,8 @@ class CallGraphReportTest {
     @Test
     void dotNode() {
         CallGraphConfig config = new CallGraphConfig();
-        config.setSimpleClassName(false);
+        config.initialize();
+        config.getStyle().setSimpleClassName(false);
         CallGraphReport.Record record = new CallGraphReport.Record("io.github.dddplus.Foo", config);
         record.addMethod("foo");
         record.addMethod("bar");

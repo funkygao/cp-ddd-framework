@@ -7,9 +7,13 @@ import io.github.dddplus.ast.FileWalker;
 import io.github.dddplus.ast.enforcer.AllowedAccessorsEnforcer;
 import io.github.dddplus.ast.enforcer.ExtensionMethodSignatureEnforcer;
 import io.github.dddplus.ast.model.ReverseEngineeringModel;
+import io.github.dddplus.ast.report.CallGraphReport;
+import io.github.dddplus.ast.view.CallGraphRenderer;
 import io.github.dddplus.ast.view.EncapsulationRenderer;
 import io.github.dddplus.ast.view.PlainTextRenderer;
 import io.github.dddplus.ast.view.PlantUmlRenderer;
+import io.github.dddplus.bce.CallGraphConfig;
+import io.github.dddplus.bce.CallGraphParser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -49,6 +53,21 @@ class WmsReverseModelingTest {
                 .scan(root)
                 .analyze(domainLayerFilter);
         model.dump("../doc/model.db");
+    }
+
+    @Test
+    @Disabled
+    void adhocTest() throws IOException {
+        String configFile = "";
+        String jars = "";
+        String targetFile = "../a.dot";
+        String[] jarFiles = jars.split(":");
+        CallGraphReport report = CallGraphParser.parse(jarFiles,
+                CallGraphConfig.fromJsonFile(configFile));
+        new CallGraphRenderer()
+                .targetCallGraphDotFile(targetFile)
+                .withReport(report)
+                .render();
     }
 
     @Test

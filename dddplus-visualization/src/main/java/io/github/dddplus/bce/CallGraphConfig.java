@@ -29,13 +29,9 @@ public class CallGraphConfig implements Serializable {
 
     private Ignore ignore;
     private Accept accept;
-    private Boolean simpleClassName = false;
-    private Double nodesep = 0.25;
+    private Style style;
 
-    private List<String> useCaseLayerClasses = new ArrayList<>();
-    private transient List<PathMatcher> useCaseLayerClassPatterns;
-
-    public static CallGraphConfig fromFile(String filename) throws FileNotFoundException {
+    public static CallGraphConfig fromJsonFile(String filename) throws FileNotFoundException {
         Gson gson = new Gson();
         JsonReader reader = new JsonReader(new FileReader(filename));
         CallGraphConfig config = gson.fromJson(reader, CallGraphConfig.class);
@@ -43,26 +39,35 @@ public class CallGraphConfig implements Serializable {
         return config;
     }
 
-    void initialize() {
-        useCaseLayerClassPatterns = new ArrayList<>(useCaseLayerClasses.size());
-        for (String regex : useCaseLayerClasses) {
-            useCaseLayerClassPatterns.add(FileSystems.getDefault().getPathMatcher("glob:" + regex));
+    public void initialize() {
+        if (style == null) {
+            style = new Style();
+        }
+        if (ignore == null) {
+            ignore = new Ignore();
+        }
+        if (accept == null) {
+            accept = new Accept();
         }
 
+        style.initialize();
         ignore.initialize();
     }
 
+    public double nodesep() {
+        return style.nodesep;
+    }
+
     public boolean useSimpleClassName() {
-        return simpleClassName;
+        return style.simpleClassName;
     }
 
     public boolean isUseCaseLayerClass(String className) {
-        for (PathMatcher matcher : useCaseLayerClassPatterns) {
-            if (matcher.matches(Paths.get(className))) {
-                return true;
-            }
-        }
-        return false;
+        return style.isUseCaseLayerClass(className);
+    }
+
+    public boolean isAclClass(String className) {
+        return style.isAclClass(className);
     }
 
     private boolean builtinIgnoreCaller(MethodVisitor m) {
@@ -71,7 +76,7 @@ public class CallGraphConfig implements Serializable {
             return true;
         }
 
-        if (m.callerMethod.equals(methodConstructor)) {
+        if (false && m.callerMethod.equals(methodConstructor)) {
             return true;
         }
 
@@ -185,6 +190,50 @@ public class CallGraphConfig implements Serializable {
 
         return false;
     }
+
+    @Data
+    public static class Style implements Serializable {
+        private Boolean simpleClassName = false;
+        private Double nodesep = 0.25;
+
+        private List<String> useCaseLayerClasses = new ArrayList<>();
+        private transient List<PathMatcher> useCaseLayerClassPatterns;
+        // Anti-Corruption Layer classes
+        private List<String> aclClasses = new ArrayList<>();
+        private transient List<PathMatcher> aclClassPatterns;
+
+        private void initialize() {
+            useCaseLayerClassPatterns = new ArrayList<>(useCaseLayerClasses.size());
+            for (String regex : useCaseLayerClasses) {
+                useCaseLayerClassPatterns.add(FileSystems.getDefault().getPathMatcher("glob:" + regex));
+            }
+            aclClassPatterns = new ArrayList<>(aclClasses.size());
+            for (String regex : aclClasses) {
+                aclClassPatterns.add(FileSystems.getDefault().getPathMatcher("glob:" + regex));
+            }
+        }
+
+        private boolean isUseCaseLayerClass(String className) {
+            for (PathMatcher matcher : useCaseLayerClassPatterns) {
+                if (matcher.matches(Paths.get(className))) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private  boolean isAclClass(String className) {
+            for (PathMatcher matcher : aclClassPatterns) {
+                if (matcher.matches(Paths.get(className))) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+    }
+
 
     @Data
     public static class Ignore implements Serializable {
