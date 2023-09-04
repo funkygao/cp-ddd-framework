@@ -86,6 +86,7 @@ public class CallGraphRenderer implements IRenderer {
                 .renderNodes()
                 .append(NEWLINE)
                 .renderEdges()
+                .renderUserDefinedEdges()
                 .append("}");
 
         JavaParserUtil.dumpToFile(targetCallGraphDotFile, content.toString());
@@ -169,6 +170,14 @@ public class CallGraphRenderer implements IRenderer {
             incrementCounter(entry.getCalleeClazz(), entry.getCalleeMethod());
         }
 
+        return this;
+    }
+
+    private CallGraphRenderer renderUserDefinedEdges() {
+        for (Pair<String, String> edge : callGraphReport.getConfig().userDefinedRelations()) {
+            append(TAB).append(edge.getLeft()).append(" -> ").append(edge.getRight())
+                    .append(NEWLINE);
+        }
         return this;
     }
 

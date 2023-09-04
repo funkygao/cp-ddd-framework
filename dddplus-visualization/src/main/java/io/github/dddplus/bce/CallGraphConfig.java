@@ -8,9 +8,11 @@ package io.github.dddplus.bce;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import io.github.dddplus.ast.model.CallGraphEntry;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.bcel.generic.InvokeInstruction;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -30,6 +32,7 @@ public class CallGraphConfig implements Serializable {
     private Ignore ignore;
     private Accept accept;
     private Style style;
+    private List<String> relations;
 
     public static CallGraphConfig fromJsonFile(String filename) throws FileNotFoundException {
         Gson gson = new Gson();
@@ -56,6 +59,20 @@ public class CallGraphConfig implements Serializable {
 
     public double nodesep() {
         return style.nodesep;
+    }
+
+    public List<Pair<String, String>> userDefinedRelations() {
+        List<Pair<String, String>> result = new ArrayList<>();
+        if (relations == null || relations.isEmpty()) {
+            return result;
+        }
+
+        for (String rel : relations) {
+            Edge edge = new Edge(rel);
+            result.add(Pair.of(edge.caller(), edge.callee()));
+        }
+
+        return result;
     }
 
     public boolean useSimpleClassName() {
@@ -230,6 +247,18 @@ public class CallGraphConfig implements Serializable {
         }
     }
 
+    @AllArgsConstructor
+    public static class Edge implements Serializable {
+        private final String relation;
+
+        public String caller() {
+            return relation.split(":")[0];
+        }
+
+        public String callee() {
+            return relation.split(":")[1];
+        }
+    }
 
     @Data
     public static class Ignore implements Serializable {

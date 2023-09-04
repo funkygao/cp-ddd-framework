@@ -30,5 +30,8 @@
       "packagePrefixes":[
          "io.git"
       ]
-   }
+   },
+   "relations": [
+      "a:b"
+   ]
 }
