@@ -26,6 +26,7 @@ public class CallGraphEntry {
             return fullName.substring(fullName.lastIndexOf(".") + 1);
         }
 
+        // dot语法不支持'.'作为node
         return fullName.replaceAll("\\.", "_");
     }
 
