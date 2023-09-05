@@ -1,0 +1,37 @@
+{
+   "style":{
+       "simpleClassName": true,
+       "useCaseLayerClasses": [
+          "*AppService*"
+       ],
+       "aclClasses": [
+          "*stock.*"
+       ],
+       "nodesep": 1.5
+   },
+   "ignore":{
+      "enumClazz":true,
+      "classes":[
+          "Dao", "JsonUtil", "CommonUtil"
+      ],
+      "callerPackages":[
+         "*jdbc"
+      ],
+      "callerMethods":[
+      ],
+      "calleePackages":[
+          "*jdbc.impl*", ".enums", ".dto", ".dao", ".repo", ".mapper"
+      ],
+      "calleeMethods":[
+          "toString", "equals", "builder", "hashCode", "clone"
+      ]
+   },
+   "accept":{
+      "packagePrefixes":[
+         "io.git"
+      ]
+   },
+   "relations": [
+      "a:b"
+   ]
+}

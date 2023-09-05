@@ -15,28 +15,20 @@ Annotation your code with DSL --> DDDplus maven plugin --> Your visualized busin
 ## 一、用dddplus-maven-plugin跑一遍代码
 
 ```bash
-mvn io.github.dddplus:dddplus-maven-plugin:visualize \
+mvn io.github.dddplus:dddplus-maven-plugin:model \
     -DrootDir=${冒号分隔的源代码目录名称} \
-    -DpkgRef=${包级别交叉调用报告输出到哪一个文件, dot格式} \
-    -DcallGraph=${核心方法调用关系报告输出到哪一个文件, dot格式} \
     -DplantUml=${业务模型输出到哪一个文件, svg格式} \
-    -DtextModel=${业务模型输出到哪一个文件, txt格式} \
-    -DclassHierarchy=${类关系图, dot格式} \
-    -DclassHierarchyIgnoreParents={逗号分隔的忽略的父类名称，例如Serializable}
+    -DtextModel=${业务模型输出到哪一个文件, txt格式}
 ```
 
 例如：
 ```bash
-mvn io.github.dddplus:dddplus-maven-plugin:visualize \
+mvn io.github.dddplus:dddplus-maven-plugin:model \
+    -DrootDir=application:domain:web \
     -DrawClassSimilarity=true \
     -DsimilarityThreshold=88 \
-    -DrootDir=application:domain:web \
-    -DpkgRef=doc/pkgref.dot \
-    -DcallGraph=doc/callgraph.dot \
     -DplantUml=doc/myapp.svg \
-    -DtextModel=doc/myapp.txt \
-    -DclassHierarchy=doc/classHierarchy.dot \
-    -DclassHierarchyIgnoreParents=Serializable
+    -DtextModel=doc/myapp.txt
 ```
 
 执行后，就可以在doc目录下看到一些自动生成的报告。例如，在`doc/myapp.txt`文件，会看到：

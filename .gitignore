@@ -11,6 +11,7 @@ target/
 .classpath
 .ekstazi
 .project
+*.jar
 .settings
 .checkstyle
 *.log

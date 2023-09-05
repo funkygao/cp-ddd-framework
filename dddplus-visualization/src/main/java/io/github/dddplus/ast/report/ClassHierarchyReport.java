@@ -12,16 +12,15 @@ public class ClassHierarchyReport {
 
     private Set<Pair> relations = new HashSet<>();
 
-    private boolean ignoreParentClass(String parentClass) {
-        return ignoredParentClasses.contains(parentClass);
+    private boolean ignored(Pair pair) {
+        return ignoredParentClasses.contains(pair.from) || ignoredParentClasses.contains(pair.to);
     }
 
     public void registerExtendsRelation(String from, String fromJavadoc, List<String> genericTypes, String to) {
-        if (ignoreParentClass(to)) {
-            return;
+        Pair pair = new Pair(this, from, to, Pair.Relation.Extends, fromJavadoc, genericTypes);
+        if (!ignored(pair)) {
+            relations.add(pair);
         }
-
-        relations.add(new Pair(from, to, Pair.Relation.Extends, fromJavadoc, genericTypes));
     }
 
     void registerExtendsRelation(String from, String to) {
@@ -29,29 +28,34 @@ public class ClassHierarchyReport {
     }
 
     public void registerImplementsRelation(String from, String fromJavadoc, List<String> genericTypes, String to) {
-        if (ignoreParentClass(to)) {
-            return;
+        Pair pair = new Pair(this, from, to, Pair.Relation.Implements, fromJavadoc, genericTypes);
+        if (!ignored(pair)) {
+            relations.add(pair);
         }
-
-        relations.add(new Pair(from, to, Pair.Relation.Implements, fromJavadoc, genericTypes));
     }
 
     public Set<Pair> displayRelations() {
-        // 删除只有一层关系的Pair
         Set<Pair> result = new TreeSet<>();
-        for (Pair pair : relations) {
-            if (ignoreParentClass(pair.to)) {
+        for (Pair self : relations) {
+            if (ignored(self)) {
                 continue;
             }
 
-            for (Pair p : relations) {
-                if (p.equals(pair) || ignoreParentClass(p.to)) {
+            if (self.getRelation() == Pair.Relation.Extends) {
+                // 继承关系，都显示出来
+                result.add(self);
+                continue;
+            }
+
+            // 实现关系，则必须有多态才显示
+            for (Pair that : relations) {
+                if (that == self || ignored(that)) {
                     continue;
                 }
 
-                if (p.to.equals(pair.from) || p.from.equals(pair.to) || p.to.equals(pair.to)) {
+                if (that.to.equals(self.from) || that.from.equals(self.to) || that.to.equals(self.to)) {
                     // this link has neighbor
-                    result.add(pair);
+                    result.add(self);
                 }
             }
         }
@@ -65,6 +69,7 @@ public class ClassHierarchyReport {
     @Data
     @AllArgsConstructor
     public static class Pair implements Comparable<Pair> {
+        private ClassHierarchyReport report;
         private String from;
         private String to;
         private Relation relation;
@@ -72,7 +77,7 @@ public class ClassHierarchyReport {
         // 这个关系确定了哪些泛型类型
         private List<String> genericTypes;
 
-        private String displayGenericTypes() {
+        public String displayGenericTypes() {
             if (genericTypes == null || genericTypes.isEmpty()) {
                 return "";
             }
@@ -80,30 +85,48 @@ public class ClassHierarchyReport {
             return String.join(",", genericTypes);
         }
 
-        public String dotLabel() {
-            String javadoc = fromJavadoc.replaceAll("@", "")
-                    .replaceAll("\"", "");
-            String displayGenericTypes = displayGenericTypes();
-            if (displayGenericTypes.isEmpty()) {
-                return javadoc;
+        public String dotFrom() {
+            String dotLabel = description();
+            if (dotLabel.isEmpty()) {
+                return from;
             }
 
-            return javadoc + " <" + displayGenericTypes + ">";
+            return from + "\n" + dotLabel;
+        }
+
+        public String dotTo() {
+            for (Pair pair : report.relations) {
+                if (to.equals(pair.from)) {
+                    return pair.dotFrom();
+                }
+            }
+
+            return to;
+        }
+
+        private String description() {
+            String javadoc = fromJavadoc.replaceAll("@", "")
+                    .replaceAll("\"", "");
+            return javadoc;
         }
 
         @Override
         public int compareTo(Pair that) {
-            return to.compareTo(that.to) * 71 + from.compareTo(that.from);
+            int result = to.compareTo(that.to);
+            if (result != 0) {
+                return result;
+            }
+            result = from.compareTo(that.from);
+            if (result != 0) {
+                return result;
+            }
+
+            return fromJavadoc.compareTo(that.fromJavadoc);
         }
 
         public enum Relation {
             Extends,
             Implements;
-        }
-
-        @Override
-        public String toString() {
-            return from + "->" + to;
         }
     }
 

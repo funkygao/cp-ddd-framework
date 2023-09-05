@@ -186,6 +186,9 @@ public final class JavaParserUtil {
 
         final String commentContent = comment.getContent();
         String[] lines = commentContent.split("\n");
+        if (lines.length == 0) {
+            return BLANK;
+        }
         int idx = 1;
         if (lines.length == 1) {
             idx = 0;

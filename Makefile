@@ -43,7 +43,7 @@ setver:
 	@echo mvn versions:commit
 
 visualize-showcase:
-	@mvn io.github.dddplus:dddplus-maven-plugin:visualize -DrootDir=./dddplus-test/src/test/java/ddd/plus/showcase/wms/ -DpkgRef=doc/showcase/pkgref.dot -DcallGraph=./doc/showcase/callgraph.dot -DplantUml=./doc/showcase/wms.svg -Dencapsulation=./doc/showcase/encapsulation.txt -DtextModel=./doc/showcase/wms.txt
+	@mvn io.github.dddplus:dddplus-maven-plugin:model -DrootDir=./dddplus-test/src/test/java/ddd/plus/showcase/wms/ -DplantUml=./doc/showcase/wms.svg -Dencapsulation=./doc/showcase/encapsulation.txt -DtextModel=./doc/showcase/wms.txt
 	@dot -Tsvg doc/showcase/callgraph.dot -o doc/showcase/callgraph.svg
 
 enforce-showcase:

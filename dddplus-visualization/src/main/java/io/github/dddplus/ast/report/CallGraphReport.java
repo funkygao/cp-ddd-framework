@@ -5,10 +5,8 @@
  */
 package io.github.dddplus.ast.report;
 
-import io.github.dddplus.ast.model.PackageCrossRefEntry;
-import io.github.dddplus.ast.model.ReverseEngineeringModel;
 import io.github.dddplus.ast.model.CallGraphEntry;
-import io.github.dddplus.ast.model.KeyModelEntry;
+import io.github.dddplus.bce.CallGraphConfig;
 import lombok.Data;
 
 import java.util.*;
@@ -18,35 +16,11 @@ import java.util.*;
  */
 @Data
 public class CallGraphReport {
-    private final ReverseEngineeringModel model;
+    private final CallGraphConfig config;
     private List<CallGraphEntry> entries = new ArrayList<>();
-    private Set<PackageCrossRefEntry> packageCrossRefEntries = new TreeSet<>();
-    private int calls = 0;
-    private int parsedCalls = 0;
 
-    public CallGraphReport(ReverseEngineeringModel model) {
-        this.model = model;
-    }
-
-    public boolean interestedInMethod(String declarationClazz, String methodName) {
-        return model.getKeyModelReport().hasKeyMethod(declarationClazz, methodName);
-    }
-
-    public double callCoverage() {
-        if (calls == 0) {
-            // user might disable call graph
-            return 0;
-        }
-
-        return parsedCalls * 100 / calls;
-    }
-
-    public void incrementCalls() {
-        calls++;
-    }
-
-    private void incrementParsedCalls() {
-        parsedCalls++;
+    public CallGraphReport(CallGraphConfig config) {
+        this.config = config;
     }
 
     public List<CallGraphEntry> sortedEntries() {
@@ -54,74 +28,74 @@ public class CallGraphReport {
         return entries;
     }
 
-    public boolean isKeyModel(String clazz) {
-        return model.getKeyModelReport().containsActor(clazz);
-    }
-
-    private Set<String> calleeClasses() {
-        Set<String> r = new TreeSet<>();
-        for (CallGraphEntry entry : entries) {
-            r.add(entry.getCalleeClazz());
-        }
-        return r;
-    }
-
     public Collection<Record> calleeRecords() {
         List<Record> records = new ArrayList<>();
-        for (String calleeClass : calleeClasses()) {
-            Record record = new Record(calleeClass);
-            record.addMethods(model.getKeyModelReport().keyModelEntryOfActor(calleeClass).realKeyMethods());
-
+        Set<String> calleeClasses = new TreeSet<>();
+        for (CallGraphEntry entry : entries) {
+            calleeClasses.add(entry.getCalleeClazz());
+        }
+        for (String calleeClass : calleeClasses) {
+            Record record = new Record(calleeClass, config);
+            for (CallGraphEntry entry : entries) {
+                if (!entry.getCalleeClazz().equals(calleeClass)) {
+                    continue;
+                }
+                if (entry.isInvokeInterface()) {
+                    record.invokeInterface = true;
+                }
+                record.getMethods().add(entry.getCalleeMethod());
+            }
             records.add(record);
         }
         return records;
     }
 
-    public void register(String callerClazz, String callerMethod, String calleeClazz, String calleeMethod) {
-        incrementParsedCalls();
-
-        if (!model.getKeyModelReport().containsActor(calleeClazz)) {
-            // 被调用的方法不是我们标注的，例如 BigDecimal::add
-            return;
+    public Collection<Record> callerRecords() {
+        List<Record> records = new ArrayList<>();
+        Set<String> callerClasses = new TreeSet<>();
+        for (CallGraphEntry entry : entries) {
+            callerClasses.add(entry.getCallerClazz());
         }
+        for (String callerClazz : callerClasses) {
+            Record record = new Record(callerClazz, config);
+            for (CallGraphEntry entry : entries) {
+                if (!entry.getCallerClazz().equals(callerClazz)) {
+                    continue;
+                }
 
-        // 被动注册：callee model method
-        KeyModelEntry calleeModel = model.getKeyModelReport().keyModelEntryOfActor(calleeClazz);
-        if (!calleeModel.hasKeyMethod(calleeMethod)) {
-            calleeModel.registerMethodFodCallGraph(calleeMethod);
+                record.addMethod(entry.getCallerMethod());
+            }
+            records.add(record);
         }
-        // 被动注册：caller model method
-        KeyModelEntry callerModel = model.getKeyModelReport().keyModelEntryOfActor(callerClazz);
-        if (callerModel != null && !callerModel.hasKeyMethod(callerMethod)) {
-            callerModel.registerMethodFodCallGraph(callerMethod);
-        }
-
-        entries.add(new CallGraphEntry(callerClazz, callerMethod, calleeClazz, calleeMethod));
+        return records;
     }
 
-    public void addPackageCrossRef(String callerPackage, String calleePackage) {
-        if (callerPackage.equals(calleePackage)) {
-            // only add cross packages relations
-            return;
-        }
-        if (!model.hasPackage(calleePackage) || !model.hasPackage(callerPackage)) {
-            return;
-        }
-
-        packageCrossRefEntries.add(new PackageCrossRefEntry(callerPackage, calleePackage));
+    public void register(CallGraphEntry entry) {
+        entries.add(entry);
     }
 
     @Data
     public static class Record {
+        private final CallGraphConfig config;
         private final String clazz;
-        private Set<String> methods = new HashSet<>();
+        private Set<String> methods = new TreeSet<>();
+        private boolean invokeInterface = false;
 
-        Record(String clazz) {
+        Record(String clazz, CallGraphConfig config) {
             this.clazz = clazz;
+            this.config = config;
         }
 
-        void addMethods(Set<String> methods) {
-            this.methods.addAll(methods);
+        public String dotNode() {
+            if (config.useSimpleClassName()) {
+                return clazz.substring(clazz.lastIndexOf(".") + 1);
+            }
+
+            return clazz.replaceAll("\\.", "_");
+        }
+
+        void addMethod(String method) {
+            this.methods.add(method);
         }
     }
 }

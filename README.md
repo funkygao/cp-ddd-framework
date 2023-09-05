@@ -75,43 +75,11 @@ Please check out the [《step by step guide》](doc/ReverseModelingGuide.md).
 
 Annotate your code With [DSL](/dddplus-spec/src/main/java/io/github/dddplus/dsl), DDDplus will parse AST and render domain model in multiple views.
 
-To render the reverse model, you have 2 options:
-
-Option 1: use dddplus maven plugin
-
 ```bash
-mvn io.github.dddplus:dddplus-maven-plugin:visualize \
+mvn io.github.dddplus:dddplus-maven-plugin:model \
     -DrootDir=${colon separated source code dirs} \
-    -DpkgRef=${target package reference dot file} \
-    -DcallGraph=${target call graph dot flle} \
     -DplantUml=${target business model in svg format} \
     -DtextModel=${target business model in txt format}
-```
-
-Option 2: integrate with unit test
-
-```java
-class ReverseModelingTest {
-    ReverseEngineeringModel model;
-    @Test
-    void visualizeDomainModel() {
-        model = new DomainModelAnalyzer()
-                        .scan("{your module root}")
-                        .analyze();
-        new PlantUmlRenderer()
-            .classDiagramSvgFilename("model.svg") // structure/relations of your business model
-            .build(model)
-            .render();
-        new PlainTextRenderer()
-            .targetFilename("model.txt") // new feature design starts from here, change it as you design
-            .build(model)
-            .render();
-        new CallGraphRenderer()
-            .targetDotFilename("callgraph.dot") // the method call graph
-            .build(model)
-            .render();
-    }
-}
 ```
 
 ### Architecture Guard
@@ -121,6 +89,10 @@ mvn io.github.dddplus:dddplus-maven-plugin:enforce \
     -DrootPackage={your pkg} \
     -DrootDir={your src dir}
 ```
+
+## Known Issues
+
+- reverse modeling assumes unique class names within a code repo
 
 ## Contribution
 

@@ -5,28 +5,37 @@
  */
 package io.github.dddplus.ast.model;
 
-import io.github.dddplus.ast.report.CallGraphReport;
-import lombok.AllArgsConstructor;
+import io.github.dddplus.bce.CallGraphConfig;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 @Data
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CallGraphEntry {
-    private String callerClazz;
-    private String callerMethod;
-    private String calleeClazz;
-    private String calleeMethod;
+    private final CallGraphConfig config;
+    private final String callerClazz;
+    private final String callerMethod;
+    private final String calleeClazz;
+    private final String calleeMethod;
 
-    public String callerNode(CallGraphReport report) {
-        if (report.isKeyModel(callerClazz)) {
-            return callerClazz + ":" + callerMethod;
+    private boolean invokeInterface = false;
+    private boolean invokeStatic = false;
+
+    private String dotNode(String fullName) {
+        if (config.useSimpleClassName()) {
+            return fullName.substring(fullName.lastIndexOf(".") + 1);
         }
 
-        return callerClazz;
+        // dot语法不支持'.'作为node
+        return fullName.replaceAll("\\.", "_");
+    }
 
+    public String callerNode() {
+        return dotNode(callerClazz) + ":" + callerMethod;
     }
 
     public String calleeNode() {
-        return calleeClazz + ":" + calleeMethod;
+        return dotNode(calleeClazz) + ":" + calleeMethod;
     }
+
 }
