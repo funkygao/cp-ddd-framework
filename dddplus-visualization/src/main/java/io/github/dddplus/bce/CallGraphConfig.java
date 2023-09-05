@@ -8,7 +8,6 @@ package io.github.dddplus.bce;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import io.github.dddplus.ast.model.CallGraphEntry;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.bcel.generic.InvokeInstruction;
@@ -68,7 +67,7 @@ public class CallGraphConfig implements Serializable {
         }
 
         for (String rel : relations) {
-            Edge edge = new Edge(rel);
+            Edge edge = new Edge(rel, useSimpleClassName());
             result.add(Pair.of(edge.caller(), edge.callee()));
         }
 
@@ -236,7 +235,7 @@ public class CallGraphConfig implements Serializable {
             return false;
         }
 
-        private  boolean isAclClass(String className) {
+        private boolean isAclClass(String className) {
             for (PathMatcher matcher : aclClassPatterns) {
                 if (matcher.matches(Paths.get(className))) {
                     return true;
@@ -247,16 +246,34 @@ public class CallGraphConfig implements Serializable {
         }
     }
 
-    @AllArgsConstructor
     public static class Edge implements Serializable {
-        private final String relation;
+        private final String caller;
+        private final String callee;
 
-        public String caller() {
-            return relation.split(":")[0];
+        private Edge(String relation, boolean useSimpleClassName) {
+            String[] parts = relation.split(":");
+            if (parts.length != 2) {
+                throw new RuntimeException("CallGraph config relations accepted format is caller:callee");
+            }
+            
+            caller = parts[0];
+            callee = parts[1];
+            if (useSimpleClassName) {
+                if (caller.contains(".")) {
+                    caller.substring(caller.lastIndexOf(".") + 1);
+                }
+                if (callee.contains(".")) {
+                    callee.substring(callee.lastIndexOf(".") + 1);
+                }
+            }
         }
 
-        public String callee() {
-            return relation.split(":")[1];
+        private String caller() {
+            return caller;
+        }
+
+        String callee() {
+            return callee;
         }
     }
 
