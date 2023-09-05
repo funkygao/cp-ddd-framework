@@ -1,7 +1,17 @@
 ## Release Notes - DDDplus - 2.1.0
 
 * Feature
-   * 通过apache bcel库实现call graph
+   * 通过apache bcel库实现完全非侵入式call graph图
+      * 提示哪些类和方法在关系图上可能被排除
+      * 支持用户自定义类关系
+   * 提供io.github.dddplus:dddplus-maven-plugin的三个功能
+      * 与IDEA内置的Call Hierarchy功能相比
+         * IDEA只能基于单个方法分析，DDDplus全局分析
+         * 提供配置驱动的噪音过滤机制，使得自动生成的关系图突出重点
+      * model 基于DDDplus DSL标注产生的逆向业务模型
+      * call 完全非侵入式基于字节码增强机制分析jar包生成类方法调用关系图
+      * polymorphism 完全非侵入式基于AST Parser自动生成具有多态的类关系图
+      * enforce DDDplus正向建模的架构约束强化工具
 
 ## Release Notes - DDDplus - 2.0.3
 
