@@ -138,7 +138,7 @@ public class CallGraphRenderer implements IRenderer {
                 list.add(String.format("<%s> %s", method, method));
             }
             append(String.join("|", list));
-            append("\"").append(NEWLINE);
+            append("\"");
             if (callGraphReport.getConfig().isUseCaseLayerClass(clazz)) {
                 append(" color=red");
             }

@@ -77,12 +77,12 @@ public class CallGraphReport {
 
     public boolean containsNode(@NonNull String clazzName) {
         for (Record node : callerRecords()) {
-            if (clazzName.equals(node.clazz)) {
+            if (node.sameAs(clazzName)) {
                 return true;
             }
         }
         for (Record node : calleeRecords()) {
-            if (clazzName.equals(node.clazz)) {
+            if (node.sameAs(clazzName)) {
                 return true;
             }
         }
@@ -96,6 +96,14 @@ public class CallGraphReport {
         private final String clazz;
         private Set<String> methods = new TreeSet<>();
         private boolean invokeInterface = false;
+
+        public boolean sameAs(String clazz) {
+            if (!config.useSimpleClassName()) {
+                return clazz.equals(this.clazz);
+            }
+
+            return this.clazz.contains(clazz);
+        }
 
         Record(String clazz, CallGraphConfig config) {
             this.clazz = clazz;
