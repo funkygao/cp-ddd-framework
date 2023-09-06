@@ -9,6 +9,7 @@ io.github.dddplus.ast.model.dumper.sqlite
 io.github.dddplus.ast.parser
 io.github.dddplus.ast.report
 io.github.dddplus.ast.view
+io.github.dddplus.bce
 io.github.dddplus.dsl
 io.github.dddplus.ext
 io.github.dddplus.maven
