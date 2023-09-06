@@ -82,6 +82,10 @@ public class CallGraphConfig implements Serializable {
         return style.isUseCaseLayerClass(className);
     }
 
+    public boolean isExternalDependentClass(String className) {
+        return style.isExternalClass(className);
+    }
+
     public boolean isAclClass(String className) {
         return style.isAclClass(className);
     }
@@ -217,6 +221,9 @@ public class CallGraphConfig implements Serializable {
         // Anti-Corruption Layer classes
         private List<String> aclClasses = new ArrayList<>();
         private transient List<PathMatcher> aclClassPatterns;
+        // 外部依赖包
+        private List<String> externalPackages = new ArrayList<>();
+        private transient List<PathMatcher> externalPackagePatterns;
 
         private void initialize() {
             useCaseLayerClassPatterns = new ArrayList<>(useCaseLayerClasses.size());
@@ -227,26 +234,32 @@ public class CallGraphConfig implements Serializable {
             for (String regex : aclClasses) {
                 aclClassPatterns.add(FileSystems.getDefault().getPathMatcher("glob:" + regex));
             }
+            externalPackagePatterns = new ArrayList<>(externalPackages.size());
+            for (String regex : externalPackages) {
+                externalPackagePatterns.add(FileSystems.getDefault().getPathMatcher("glob:" + regex));
+            }
+        }
+
+        private boolean matchClassPattern(List<PathMatcher> patterns, String className) {
+            for (PathMatcher matcher : patterns) {
+                if (matcher.matches(Paths.get(className))) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private boolean isExternalClass(String className) {
+            return matchClassPattern(externalPackagePatterns, className);
         }
 
         private boolean isUseCaseLayerClass(String className) {
-            for (PathMatcher matcher : useCaseLayerClassPatterns) {
-                if (matcher.matches(Paths.get(className))) {
-                    return true;
-                }
-            }
-
-            return false;
+            return matchClassPattern(useCaseLayerClassPatterns, className);
         }
 
         private boolean isAclClass(String className) {
-            for (PathMatcher matcher : aclClassPatterns) {
-                if (matcher.matches(Paths.get(className))) {
-                    return true;
-                }
-            }
-
-            return false;
+            return matchClassPattern(aclClassPatterns, className);
         }
     }
 

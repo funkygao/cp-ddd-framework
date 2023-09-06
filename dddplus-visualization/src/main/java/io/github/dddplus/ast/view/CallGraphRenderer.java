@@ -136,6 +136,9 @@ public class CallGraphRenderer implements IRenderer {
             if (callGraphReport.getConfig().isAclClass(clazz)) {
                 append(" color=green");
             }
+            if (callGraphReport.getConfig().isExternalDependentClass(clazz)) {
+                append(" color=blue");
+            }
             append("];").append(NEWLINE);
         }
 
