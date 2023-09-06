@@ -29,7 +29,7 @@ public class CallGraphReport {
         return entries;
     }
 
-    public Collection<Record> calleeRecords() {
+    private Collection<Record> calleeRecords() {
         List<Record> records = new ArrayList<>();
         Set<String> calleeClasses = new TreeSet<>();
         for (CallGraphEntry entry : entries) {
@@ -51,7 +51,7 @@ public class CallGraphReport {
         return records;
     }
 
-    public Collection<Record> callerRecords() {
+    private Collection<Record> callerRecords() {
         List<Record> records = new ArrayList<>();
         Set<String> callerClasses = new TreeSet<>();
         for (CallGraphEntry entry : entries) {
@@ -69,6 +69,22 @@ public class CallGraphReport {
             records.add(record);
         }
         return records;
+    }
+
+    public Map<String, Record> displayNodes() {
+        // merged caller & callee by class name
+        Map<String, CallGraphReport.Record> mergedNodes = new TreeMap<>();
+        for (CallGraphReport.Record calleeClazz : calleeRecords()) {
+            mergedNodes.put(calleeClazz.getClazz(), calleeClazz);
+        }
+        for (CallGraphReport.Record callerClazz : callerRecords()) {
+            if (mergedNodes.containsKey(callerClazz.getClazz())) {
+                mergedNodes.get(callerClazz.getClazz()).getMethods().addAll(callerClazz.getMethods());
+            } else {
+                mergedNodes.put(callerClazz.getClazz(), callerClazz);
+            }
+        }
+        return mergedNodes;
     }
 
     public void register(CallGraphEntry entry) {

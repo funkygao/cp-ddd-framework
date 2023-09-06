@@ -114,19 +114,7 @@ public class CallGraphRenderer implements IRenderer {
     }
 
     private CallGraphRenderer renderNodes() {
-        Map<String, CallGraphReport.Record> mergedNodes = new TreeMap<>();
-        for (CallGraphReport.Record calleeClazz : callGraphReport.calleeRecords()) {
-            mergedNodes.put(calleeClazz.getClazz(), calleeClazz);
-        }
-        for (CallGraphReport.Record callerClazz : callGraphReport.callerRecords()) {
-            if (mergedNodes.containsKey(callerClazz.getClazz())) {
-                mergedNodes.get(callerClazz.getClazz()).getMethods().addAll(callerClazz.getMethods());
-            } else {
-                mergedNodes.put(callerClazz.getClazz(), callerClazz);
-            }
-        }
-
-        // merged caller & callee by class name
+        Map<String, CallGraphReport.Record> mergedNodes = callGraphReport.displayNodes();
         for (String clazz : mergedNodes.keySet()) {
             CallGraphReport.Record record = mergedNodes.get(clazz);
             append(TAB).appendEscape(record.dotNode())
