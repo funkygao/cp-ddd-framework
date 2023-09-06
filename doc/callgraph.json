@@ -11,6 +11,7 @@
    },
    "ignore":{
       "enumClazz":true,
+      "classInnerCall": false,
       "classes":[
           "Dao", "JsonUtil", "CommonUtil", "InternalAopUtils", "BootstrapException", "StepsExecTemplate", "StepDef", "InterceptorDef",
           "BaseDecideStepsRouter", "DomainDef"

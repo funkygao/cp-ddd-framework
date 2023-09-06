@@ -139,7 +139,7 @@ public class CallGraphConfig implements Serializable {
     private boolean builtinIgnoreInvokeInstruction(MethodVisitor m, InvokeInstruction instruction, CallGraphEntry callGraphEntry) {
         final String calleeMethod = callGraphEntry.getCalleeMethod();
         final String calleeClass = callGraphEntry.getCalleeClazz();
-        if (m.callerClass.equals(calleeClass)) {
+        if (ignore.ignoreClassInnerCall() && m.callerClass.equals(calleeClass)) {
             // 自己调用自己
             return true;
         }
@@ -284,7 +284,8 @@ public class CallGraphConfig implements Serializable {
         private List<String> callerMethods = new ArrayList<>();
         private List<String> calleePackages = new ArrayList<>();
         private List<String> calleeMethods = new ArrayList<>();
-        private Boolean enumClazz = true;
+        private boolean enumClazz = true;
+        private boolean classInnerCall = true;
 
         private transient List<PathMatcher> classPatterns;
         private transient List<PathMatcher> callerPackagePatterns;
@@ -324,6 +325,10 @@ public class CallGraphConfig implements Serializable {
             for (String regex : calleeMethods) {
                 calleeMethodPatterns.add(FileSystems.getDefault().getPathMatcher("glob:" + regex));
             }
+        }
+
+        boolean ignoreClassInnerCall() {
+            return classInnerCall;
         }
 
         boolean ignoreCallerPackage(String callerPackage) {
