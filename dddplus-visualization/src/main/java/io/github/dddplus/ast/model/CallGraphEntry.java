@@ -21,6 +21,10 @@ public class CallGraphEntry {
     private boolean invokeInterface = false;
     private boolean invokeStatic = false;
 
+    public boolean isInnerClassCall() {
+        return calleeClazz.equals(callerClazz);
+    }
+
     private String dotNode(String fullName) {
         if (config.useSimpleClassName()) {
             return fullName.substring(fullName.lastIndexOf(".") + 1);

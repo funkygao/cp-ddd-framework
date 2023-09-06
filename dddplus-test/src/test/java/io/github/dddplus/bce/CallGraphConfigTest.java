@@ -19,7 +19,7 @@ class CallGraphConfigTest {
         }
 
         CallGraphConfig config = CallGraphConfig.fromJsonFile("../doc/callgraph.json");
-        assertTrue(config.getIgnore().getEnumClazz());
+        assertTrue(config.getIgnore().isEnumClazz());
         assertNotNull(config.getIgnore().getCalleeMethods());
         assertTrue(config.useSimpleClassName());
     }
@@ -36,6 +36,27 @@ class CallGraphConfigTest {
         config.getStyle().setUseCaseLayerClasses(Arrays.asList("*picking*AppService*"));
         config.initialize();
         assertTrue(config.isUseCaseLayerClass("com.foo.picking.application.task.PickingTaskAppServiceImpl"));
+    }
+
+    @Test
+    void edgeInfo() {
+        CallGraphConfig.Edge edge = new CallGraphConfig.Edge("a    ->   b   ", true);
+        assertEquals("a", edge.caller());
+        edge = new CallGraphConfig.Edge(" a.b.c.Foo    ->   Bar   ", true);
+        assertEquals("Foo", edge.caller());
+        assertEquals("Bar", edge.callee());
+
+        try {
+            new CallGraphConfig.Edge("a => b   ", true);
+            fail();
+        } catch (IllegalArgumentException expected) {
+        }
+        try {
+            new CallGraphConfig.Edge("a -> b -> c  ", true);
+            fail();
+        } catch (IllegalArgumentException expected) {
+        }
+
     }
 
 }

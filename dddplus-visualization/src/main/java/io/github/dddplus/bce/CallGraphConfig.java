@@ -82,8 +82,16 @@ public class CallGraphConfig implements Serializable {
         return style.isUseCaseLayerClass(className);
     }
 
+    public boolean isExternalDependentClass(String className) {
+        return style.isExternalClass(className);
+    }
+
     public boolean isAclClass(String className) {
         return style.isAclClass(className);
+    }
+
+    public boolean ignoreOrphanNodes() {
+        return ignore.orphanNodes;
     }
 
     private boolean builtinIgnoreCaller(MethodVisitor m) {
@@ -139,13 +147,13 @@ public class CallGraphConfig implements Serializable {
     private boolean builtinIgnoreInvokeInstruction(MethodVisitor m, InvokeInstruction instruction, CallGraphEntry callGraphEntry) {
         final String calleeMethod = callGraphEntry.getCalleeMethod();
         final String calleeClass = callGraphEntry.getCalleeClazz();
-        if (m.callerClass.equals(calleeClass)) {
+        if (ignore.ignoreClassInnerCall() && m.callerClass.equals(calleeClass)) {
             // 自己调用自己
             return true;
         }
 
         if (!callGraphEntry.getCalleeClazz().contains(".")) {
-            // 没有包名的类
+            // 没有包名的类 e,g. lambda
             return true;
         }
 
@@ -213,6 +221,9 @@ public class CallGraphConfig implements Serializable {
         // Anti-Corruption Layer classes
         private List<String> aclClasses = new ArrayList<>();
         private transient List<PathMatcher> aclClassPatterns;
+        // 外部依赖包
+        private List<String> externalPackages = new ArrayList<>();
+        private transient List<PathMatcher> externalPackagePatterns;
 
         private void initialize() {
             useCaseLayerClassPatterns = new ArrayList<>(useCaseLayerClasses.size());
@@ -223,52 +234,58 @@ public class CallGraphConfig implements Serializable {
             for (String regex : aclClasses) {
                 aclClassPatterns.add(FileSystems.getDefault().getPathMatcher("glob:" + regex));
             }
+            externalPackagePatterns = new ArrayList<>(externalPackages.size());
+            for (String regex : externalPackages) {
+                externalPackagePatterns.add(FileSystems.getDefault().getPathMatcher("glob:" + regex));
+            }
+        }
+
+        private boolean matchClassPattern(List<PathMatcher> patterns, String className) {
+            for (PathMatcher matcher : patterns) {
+                if (matcher.matches(Paths.get(className))) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private boolean isExternalClass(String className) {
+            return matchClassPattern(externalPackagePatterns, className);
         }
 
         private boolean isUseCaseLayerClass(String className) {
-            for (PathMatcher matcher : useCaseLayerClassPatterns) {
-                if (matcher.matches(Paths.get(className))) {
-                    return true;
-                }
-            }
-
-            return false;
+            return matchClassPattern(useCaseLayerClassPatterns, className);
         }
 
         private boolean isAclClass(String className) {
-            for (PathMatcher matcher : aclClassPatterns) {
-                if (matcher.matches(Paths.get(className))) {
-                    return true;
-                }
-            }
-
-            return false;
+            return matchClassPattern(aclClassPatterns, className);
         }
     }
 
     public static class Edge implements Serializable {
-        private final String caller;
-        private final String callee;
+        private String caller;
+        private String callee;
 
-        private Edge(String relation, boolean useSimpleClassName) {
-            String[] parts = relation.split(":");
+        Edge(String relation, boolean useSimpleClassName) {
+            String[] parts = relation.split("->");
             if (parts.length != 2) {
-                throw new RuntimeException("CallGraph config relations accepted format is caller:callee");
+                throw new IllegalArgumentException("CallGraph config relations accepted format: caller -> callee");
             }
-            
-            caller = parts[0];
-            callee = parts[1];
+
+            caller = parts[0].trim();
+            callee = parts[1].trim();
             if (useSimpleClassName) {
                 if (caller.contains(".")) {
-                    caller.substring(caller.lastIndexOf(".") + 1);
+                    caller = caller.substring(caller.lastIndexOf(".") + 1);
                 }
                 if (callee.contains(".")) {
-                    callee.substring(callee.lastIndexOf(".") + 1);
+                    callee = callee.substring(callee.lastIndexOf(".") + 1);
                 }
             }
         }
 
-        private String caller() {
+        String caller() {
             return caller;
         }
 
@@ -284,7 +301,9 @@ public class CallGraphConfig implements Serializable {
         private List<String> callerMethods = new ArrayList<>();
         private List<String> calleePackages = new ArrayList<>();
         private List<String> calleeMethods = new ArrayList<>();
-        private Boolean enumClazz = true;
+        private boolean enumClazz = true;
+        private boolean classInnerCall = false;
+        private boolean orphanNodes = true;
 
         private transient List<PathMatcher> classPatterns;
         private transient List<PathMatcher> callerPackagePatterns;
@@ -324,6 +343,10 @@ public class CallGraphConfig implements Serializable {
             for (String regex : calleeMethods) {
                 calleeMethodPatterns.add(FileSystems.getDefault().getPathMatcher("glob:" + regex));
             }
+        }
+
+        boolean ignoreClassInnerCall() {
+            return classInnerCall;
         }
 
         boolean ignoreCallerPackage(String callerPackage) {

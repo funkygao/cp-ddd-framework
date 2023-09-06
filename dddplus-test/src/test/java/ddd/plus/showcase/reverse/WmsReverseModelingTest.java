@@ -56,17 +56,17 @@ class WmsReverseModelingTest {
     }
 
     @Test
-    @Disabled
-    void adhocTest() throws IOException {
-        String configFile = "";
-        String jars = "";
-        String targetFile = "../a.dot";
+    void callGraphOfDddPlusRuntimeModule() throws IOException {
+        String configFile = "../doc/callgraph.json";
+        String jars = "../doc/assets/dddplus-runtime-2.1.1-SNAPSHOT.jar";
+        String targetFile = "../doc/dddplus-runtime.dot";
         String[] jarFiles = jars.split(":");
         CallGraphReport report = CallGraphParser.parse(jarFiles,
                 CallGraphConfig.fromJsonFile(configFile));
         new CallGraphRenderer()
                 .targetCallGraphDotFile(targetFile)
                 .withReport(report)
+                .splines("polyline")
                 .render();
     }
 

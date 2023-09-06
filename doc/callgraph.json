@@ -7,17 +7,21 @@
        "aclClasses": [
           "*stock.*"
        ],
-       "nodesep": 1.5
+       "nodesep": 0.2
    },
    "ignore":{
-      "enumClazz":true,
+      "enumClazz": true,
+      "classInnerCall": false,
+      "orphanNodes": true,
       "classes":[
-          "Dao", "JsonUtil", "CommonUtil"
+          "Dao", "JsonUtil", "CommonUtil", "InternalAopUtils", "BootstrapException", "StepsExecTemplate", "StepDef", "InterceptorDef",
+          "BaseDecideStepsRouter", "DomainDef"
       ],
       "callerPackages":[
          "*jdbc"
       ],
       "callerMethods":[
+         "equals"
       ],
       "calleePackages":[
           "*jdbc.impl*", ".enums", ".dto", ".dao", ".repo", ".mapper"
@@ -32,6 +36,6 @@
       ]
    },
    "relations": [
-      "a:b"
+      "a -> b"
    ]
 }

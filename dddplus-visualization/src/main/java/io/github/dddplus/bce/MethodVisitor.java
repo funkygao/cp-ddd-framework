@@ -85,30 +85,4 @@ class MethodVisitor extends EmptyVisitor {
         }
     }
 
-    @Override
-    public void visitINVOKEINTERFACE(INVOKEINTERFACE i) {
-        //  The `visitINVOKEINTERFACE` instruction is used to invoke an interface method dynamically at runtime.
-        //  It is similar to the `visitINVOKEVIRTUAL` instruction, but it is specifically designed to be used with methods of interfaces.
-        super.visitINVOKEINTERFACE(i);
-    }
-
-    @Override
-    public void visitINVOKESPECIAL(final INVOKESPECIAL obj) {
-        //  The `visitINVOKESPECIAL` instruction is used to invoke instance initialization methods, private methods, and superclass methods that are not overridden.
-        //  It is also used for some special method invocations, such as those related to constructors and the `super` keyword.
-        super.visitINVOKESPECIAL(obj);
-    }
-
-    @Override
-    public void visitINVOKESTATIC(final INVOKESTATIC obj) {
-        super.visitINVOKESTATIC(obj);
-    }
-
-    @Override
-    public void visitINVOKEVIRTUAL(final INVOKEVIRTUAL obj) {
-        // The `visitINVOKEVIRTUAL` instruction is used to invoke a virtual method on an object.
-        // It is typically used for methods that can be overridden by subclasses.
-        super.visitINVOKEVIRTUAL(obj);
-    }
-
 }

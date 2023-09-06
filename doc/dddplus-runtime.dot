@@ -1,0 +1,102 @@
+digraph G {
+   rankdir=LR;
+   splines = polyline;
+   node [shape=Mrecord];
+   nodesep=0.2;
+   edge [style=dashed, arrowsize=0.3, fontsize=6];
+
+   "DomainService" [label="<DomainService> DomainService|<domain> domain"];
+   "Extension" [label="<Extension> Extension|<code> code|<name> name"];
+   "Partner" [label="<Partner> Partner|<code> code|<name> name"];
+   "Pattern" [label="<Pattern> Pattern|<asResolver> asResolver|<code> code|<name> name|<priority> priority"];
+   "Router" [label="<Router> Router|<domain> domain|<name> name"];
+   "IIdentityResolver" [label="<IIdentityResolver> IIdentityResolver|<match> match"];
+   "IPolicy" [label="<IPolicy> IPolicy|<extensionCode> extensionCode"];
+   "BaseRouter" [label="<BaseRouter> BaseRouter|<defaultExtension> defaultExtension|<findExtension> findExtension|<firstExtension> firstExtension|<forEachExtension> forEachExtension"];
+   "DDD" [label="<DDD> DDD|<findSteps> findSteps|<firstExtension> firstExtension|<getStep> getStep|<usePolicy> usePolicy|<useRouter> useRouter"];
+   "ExtensionInvocationHandler" [label="<ExtensionInvocationHandler> ExtensionInvocationHandler|<createProxy> createProxy|<invoke> invoke|<invokeExtension> invokeExtension|<invokeExtensionMethod> invokeExtensionMethod"];
+   "IReducer" [label="<IReducer> IReducer|<allOf> allOf|<reduce> reduce|<shouldStop> shouldStop"];
+   "IStartupListener" [label="<IStartupListener> IStartupListener|<onStartComplete> onStartComplete"];
+   "IExtensionInterceptor" [label="<IExtensionInterceptor> IExtensionInterceptor|<afterInvocation> afterInvocation|<beforeInvocation> beforeInvocation"];
+   "DDDBootstrap" [label="<DDDBootstrap> DDDBootstrap|<onApplicationEvent> onApplicationEvent|<setApplicationContext> setApplicationContext"];
+   "DomainArtifacts" [label="<DomainArtifacts> DomainArtifacts|<export> export"];
+   "DomainServiceDef" [label="<DomainServiceDef> DomainServiceDef|<registerBean> registerBean"];
+   "ExtensionDef" [label="<ExtensionDef> ExtensionDef|<initialize> initialize|<prepare> prepare|<registerBean> registerBean"];
+   "IPrepareAware" [label="<IPrepareAware> IPrepareAware|<prepare> prepare"];
+   "IRegistryAware" [label="<IRegistryAware> IRegistryAware|<registerBean> registerBean"];
+   "InternalIndexer" [label="<InternalIndexer> InternalIndexer|<commitPartner> commitPartner|<extClazzOfPolicy> extClazzOfPolicy|<findDomainSteps> findDomainSteps|<findEffectiveExtensions> findEffectiveExtensions|<findRouter> findRouter|<getBaseRouterExtDeclaration> getBaseRouterExtDeclaration|<index> index|<postIndexing> postIndexing|<prepare> prepare|<registeredInterceptor> registeredInterceptor"];
+   "PartnerDef" [label="<PartnerDef> PartnerDef|<getExtension> getExtension|<initialize> initialize|<match> match|<prepare> prepare|<registerBean> registerBean|<registerExtensionDef> registerExtensionDef"];
+   "PatternDef" [label="<PatternDef> PatternDef|<extClazzSet> extClazzSet|<getExtension> getExtension|<initialize> initialize|<match> match|<registerBean> registerBean|<registerExtensionDef> registerExtensionDef"];
+   "PolicyDef" [label="<PolicyDef> PolicyDef|<getExtension> getExtension|<initialize> initialize|<policyName> policyName|<registerBean> registerBean|<registerExtensionDef> registerExtensionDef|<resolveExtClazz> resolveExtClazz"];
+   "RegistryFactory" [label="<RegistryFactory> RegistryFactory|<preparePlugins> preparePlugins|<register> register"];
+   "RouterDef" [label="<RouterDef> RouterDef|<registerBean> registerBean|<resolveExtClazz> resolveExtClazz"];
+
+   BaseRouter:findExtension -> InternalIndexer:registeredInterceptor
+   BaseRouter:findExtension -> ExtensionInvocationHandler:createProxy
+   BaseRouter:firstExtension -> BaseRouter:firstExtension
+   BaseRouter:firstExtension -> InternalIndexer:getBaseRouterExtDeclaration
+   BaseRouter:firstExtension -> BaseRouter:defaultExtension
+   BaseRouter:firstExtension -> BaseRouter:findExtension
+   BaseRouter:forEachExtension -> IReducer:allOf
+   BaseRouter:forEachExtension -> BaseRouter:forEachExtension
+   DDD:findSteps -> InternalIndexer:findDomainSteps
+   DDD:firstExtension -> DDD:firstExtension
+   DDD:firstExtension -> InternalIndexer:registeredInterceptor
+   DDD:firstExtension -> ExtensionInvocationHandler:createProxy
+   DDD:getStep -> DDD:findSteps
+   DDD:usePolicy -> InternalIndexer:extClazzOfPolicy
+   DDD:useRouter -> InternalIndexer:findRouter
+   ExtensionInvocationHandler:invoke -> InternalIndexer:findEffectiveExtensions
+   ExtensionInvocationHandler:invoke -> ExtensionInvocationHandler:invokeExtension
+   ExtensionInvocationHandler:invoke -> IReducer:shouldStop
+   ExtensionInvocationHandler:invoke -> IReducer:reduce
+   ExtensionInvocationHandler:invokeExtension -> IExtensionInterceptor:beforeInvocation
+   ExtensionInvocationHandler:invokeExtension -> ExtensionInvocationHandler:invokeExtensionMethod
+   ExtensionInvocationHandler:invokeExtension -> IExtensionInterceptor:afterInvocation
+   DDDBootstrap:onApplicationEvent -> IStartupListener:onStartComplete
+   DDDBootstrap:setApplicationContext -> RegistryFactory:register
+   DomainArtifacts:export -> PartnerDef:getExtension
+   DomainServiceDef:registerBean -> DomainService:domain
+   DomainServiceDef:registerBean -> InternalIndexer:index
+   ExtensionDef:initialize -> Extension:code
+   ExtensionDef:initialize -> Extension:name
+   ExtensionDef:prepare -> ExtensionDef:initialize
+   ExtensionDef:prepare -> InternalIndexer:prepare
+   ExtensionDef:registerBean -> InternalIndexer:index
+   InternalIndexer:commitPartner -> DomainArtifacts:export
+   InternalIndexer:findEffectiveExtensions -> PolicyDef:getExtension
+   InternalIndexer:findEffectiveExtensions -> PatternDef:match
+   InternalIndexer:findEffectiveExtensions -> PatternDef:getExtension
+   InternalIndexer:findEffectiveExtensions -> PartnerDef:getExtension
+   InternalIndexer:findEffectiveExtensions -> PartnerDef:match
+   InternalIndexer:index -> PolicyDef:registerExtensionDef
+   InternalIndexer:index -> PatternDef:registerExtensionDef
+   InternalIndexer:index -> PartnerDef:registerExtensionDef
+   InternalIndexer:index -> PolicyDef:policyName
+   InternalIndexer:postIndexing -> PatternDef:extClazzSet
+   PartnerDef:initialize -> Partner:code
+   PartnerDef:initialize -> Partner:name
+   PartnerDef:match -> IIdentityResolver:match
+   PartnerDef:prepare -> PartnerDef:initialize
+   PartnerDef:prepare -> InternalIndexer:prepare
+   PartnerDef:registerBean -> InternalIndexer:index
+   PatternDef:initialize -> Pattern:code
+   PatternDef:initialize -> Pattern:name
+   PatternDef:initialize -> Pattern:priority
+   PatternDef:initialize -> Pattern:asResolver
+   PatternDef:match -> IIdentityResolver:match
+   PatternDef:registerBean -> PatternDef:initialize
+   PatternDef:registerBean -> InternalIndexer:index
+   PolicyDef:getExtension -> IPolicy:extensionCode
+   PolicyDef:registerBean -> PolicyDef:initialize
+   PolicyDef:registerBean -> PolicyDef:resolveExtClazz
+   PolicyDef:registerBean -> InternalIndexer:index
+   RegistryFactory:preparePlugins -> IPrepareAware:prepare
+   RegistryFactory:register -> IRegistryAware:registerBean
+   RegistryFactory:register -> InternalIndexer:postIndexing
+   RouterDef:registerBean -> Router:domain
+   RouterDef:registerBean -> Router:name
+   RouterDef:registerBean -> RouterDef:resolveExtClazz
+   RouterDef:registerBean -> InternalIndexer:index
+   a -> b
+}

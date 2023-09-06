@@ -8,6 +8,7 @@ package io.github.dddplus.ast.view;
 import io.github.dddplus.ast.model.CallGraphEntry;
 import io.github.dddplus.ast.parser.JavaParserUtil;
 import io.github.dddplus.ast.report.CallGraphReport;
+import lombok.Getter;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.IOException;
@@ -24,6 +25,8 @@ public class CallGraphRenderer implements IRenderer {
     private StringBuilder content = new StringBuilder();
     private Map<String, Integer> calleeRefCounter = new HashMap<>();
     private Map<String, Integer> calleeMethodRefCounter = new HashMap<>();
+    @Getter
+    private int nodes, edges;
 
     public CallGraphRenderer targetCallGraphDotFile(String targetFile) {
         this.targetCallGraphDotFile = targetFile;
@@ -62,7 +65,6 @@ public class CallGraphRenderer implements IRenderer {
             }
         }
 
-
         return result;
     }
 
@@ -79,6 +81,7 @@ public class CallGraphRenderer implements IRenderer {
     }
 
     private void renderCallGraph() throws IOException {
+        callGraphReport.preRender();
         append("digraph G {")
                 .append(NEWLINE)
                 .setupSkin()
@@ -97,14 +100,13 @@ public class CallGraphRenderer implements IRenderer {
     }
 
     private CallGraphRenderer setupSkin() {
-        append(TAB).append("labelloc = \"t\";").append(NEWLINE);
         append(TAB).append("rankdir=LR;").append(NEWLINE);
         if (splines != null) {
             append(TAB).append(String.format("splines = %s;", splines)).append(NEWLINE);
         }
         append(TAB).append("node [shape=Mrecord];").append(NEWLINE);
         append(TAB).append(String.format("nodesep=%.1f;", callGraphReport.getConfig().nodesep())).append(NEWLINE);
-        append(TAB).append("edge [style = dashed, arrowsize=0.4, fontsize=6];").append(NEWLINE);
+        append(TAB).append("edge [style=dashed, arrowsize=0.3, fontsize=6];").append(NEWLINE);
         append(NEWLINE);
         return this;
     }
@@ -114,20 +116,9 @@ public class CallGraphRenderer implements IRenderer {
     }
 
     private CallGraphRenderer renderNodes() {
-        Map<String, CallGraphReport.Record> mergedNodes = new TreeMap<>();
-        for (CallGraphReport.Record calleeClazz : callGraphReport.calleeRecords()) {
-            mergedNodes.put(calleeClazz.getClazz(), calleeClazz);
-        }
-        for (CallGraphReport.Record callerClazz : callGraphReport.callerRecords()) {
-            if (mergedNodes.containsKey(callerClazz.getClazz())) {
-                mergedNodes.get(callerClazz.getClazz()).getMethods().addAll(callerClazz.getMethods());
-            } else {
-                mergedNodes.put(callerClazz.getClazz(), callerClazz);
-            }
-        }
-
-        // merged caller & callee by class name
+        Map<String, CallGraphReport.Record> mergedNodes = callGraphReport.displayNodes();
         for (String clazz : mergedNodes.keySet()) {
+            nodes++;
             CallGraphReport.Record record = mergedNodes.get(clazz);
             append(TAB).appendEscape(record.dotNode())
                     .append(" [label=\"");
@@ -138,12 +129,15 @@ public class CallGraphRenderer implements IRenderer {
                 list.add(String.format("<%s> %s", method, method));
             }
             append(String.join("|", list));
-            append("\"").append(NEWLINE);
+            append("\"");
             if (callGraphReport.getConfig().isUseCaseLayerClass(clazz)) {
                 append(" color=red");
             }
             if (callGraphReport.getConfig().isAclClass(clazz)) {
                 append(" color=green");
+            }
+            if (callGraphReport.getConfig().isExternalDependentClass(clazz)) {
+                append(" color=blue");
             }
             append("];").append(NEWLINE);
         }
@@ -154,11 +148,14 @@ public class CallGraphRenderer implements IRenderer {
     private CallGraphRenderer renderEdges() {
         Set<String> edges = new HashSet<>();
         for (CallGraphEntry entry : callGraphReport.sortedEntries()) {
+            this.edges++;
+
             // A的多个方法可能调用同一个callee：merge
             String key = entry.getCallerClazz() + ":" + entry.calleeNode();
             if (edges.contains(key)) {
                 continue;
             }
+
             edges.add(key);
 
             String callerNode = entry.callerNode();
@@ -175,9 +172,15 @@ public class CallGraphRenderer implements IRenderer {
 
     private CallGraphRenderer renderUserDefinedEdges() {
         for (Pair<String, String> edge : callGraphReport.getConfig().userDefinedRelations()) {
+            if (!callGraphReport.containsNode(edge.getLeft())
+                    || !callGraphReport.containsNode(edge.getRight())) {
+                continue;
+            }
+
             append(TAB).append(edge.getLeft()).append(" -> ").append(edge.getRight())
                     .append(NEWLINE);
         }
+        
         return this;
     }
 
