@@ -8,6 +8,7 @@ package io.github.dddplus.ast.report;
 import io.github.dddplus.ast.model.CallGraphEntry;
 import io.github.dddplus.bce.CallGraphConfig;
 import lombok.Data;
+import lombok.NonNull;
 
 import java.util.*;
 
@@ -72,6 +73,21 @@ public class CallGraphReport {
 
     public void register(CallGraphEntry entry) {
         entries.add(entry);
+    }
+
+    public boolean containsNode(@NonNull String clazzName) {
+        for (Record node : callerRecords()) {
+            if (clazzName.equals(node.clazz)) {
+                return true;
+            }
+        }
+        for (Record node : calleeRecords()) {
+            if (clazzName.equals(node.clazz)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Data

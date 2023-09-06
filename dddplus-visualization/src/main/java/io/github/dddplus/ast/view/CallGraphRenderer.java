@@ -175,6 +175,11 @@ public class CallGraphRenderer implements IRenderer {
 
     private CallGraphRenderer renderUserDefinedEdges() {
         for (Pair<String, String> edge : callGraphReport.getConfig().userDefinedRelations()) {
+            if (!callGraphReport.containsNode(edge.getLeft())
+                    || !callGraphReport.containsNode(edge.getRight())) {
+                continue;
+            }
+
             append(TAB).append(edge.getLeft()).append(" -> ").append(edge.getRight())
                     .append(NEWLINE);
         }

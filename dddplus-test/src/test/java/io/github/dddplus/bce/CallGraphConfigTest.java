@@ -38,4 +38,25 @@ class CallGraphConfigTest {
         assertTrue(config.isUseCaseLayerClass("com.foo.picking.application.task.PickingTaskAppServiceImpl"));
     }
 
+    @Test
+    void edgeInfo() {
+        CallGraphConfig.Edge edge = new CallGraphConfig.Edge("a    ->   b   ", true);
+        assertEquals("a", edge.caller());
+        edge = new CallGraphConfig.Edge(" a.b.c.Foo    ->   Bar   ", true);
+        assertEquals("Foo", edge.caller());
+        assertEquals("Bar", edge.callee());
+
+        try {
+            new CallGraphConfig.Edge("a => b   ", true);
+            fail();
+        } catch (IllegalArgumentException expected) {
+        }
+        try {
+            new CallGraphConfig.Edge("a -> b -> c  ", true);
+            fail();
+        } catch (IllegalArgumentException expected) {
+        }
+
+    }
+
 }

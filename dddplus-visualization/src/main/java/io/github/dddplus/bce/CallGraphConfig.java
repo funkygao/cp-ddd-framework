@@ -247,28 +247,28 @@ public class CallGraphConfig implements Serializable {
     }
 
     public static class Edge implements Serializable {
-        private final String caller;
-        private final String callee;
+        private String caller;
+        private String callee;
 
-        private Edge(String relation, boolean useSimpleClassName) {
-            String[] parts = relation.split(":");
+        Edge(String relation, boolean useSimpleClassName) {
+            String[] parts = relation.split("->");
             if (parts.length != 2) {
-                throw new RuntimeException("CallGraph config relations accepted format is caller:callee");
+                throw new IllegalArgumentException("CallGraph config relations accepted format is caller:callee");
             }
-            
-            caller = parts[0];
-            callee = parts[1];
+
+            caller = parts[0].trim();
+            callee = parts[1].trim();
             if (useSimpleClassName) {
                 if (caller.contains(".")) {
-                    caller.substring(caller.lastIndexOf(".") + 1);
+                    caller = caller.substring(caller.lastIndexOf(".") + 1);
                 }
                 if (callee.contains(".")) {
-                    callee.substring(callee.lastIndexOf(".") + 1);
+                    callee = callee.substring(callee.lastIndexOf(".") + 1);
                 }
             }
         }
 
-        private String caller() {
+        String caller() {
             return caller;
         }
 
