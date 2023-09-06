@@ -79,6 +79,7 @@ public class CallGraphRenderer implements IRenderer {
     }
 
     private void renderCallGraph() throws IOException {
+        callGraphReport.preRender();
         append("digraph G {")
                 .append(NEWLINE)
                 .setupSkin()
@@ -97,14 +98,13 @@ public class CallGraphRenderer implements IRenderer {
     }
 
     private CallGraphRenderer setupSkin() {
-        append(TAB).append("labelloc = \"t\";").append(NEWLINE);
         append(TAB).append("rankdir=LR;").append(NEWLINE);
         if (splines != null) {
             append(TAB).append(String.format("splines = %s;", splines)).append(NEWLINE);
         }
         append(TAB).append("node [shape=Mrecord];").append(NEWLINE);
         append(TAB).append(String.format("nodesep=%.1f;", callGraphReport.getConfig().nodesep())).append(NEWLINE);
-        append(TAB).append("edge [style = dashed, arrowsize=0.4, fontsize=6];").append(NEWLINE);
+        append(TAB).append("edge [style=dashed, arrowsize=0.3, fontsize=6];").append(NEWLINE);
         append(NEWLINE);
         return this;
     }

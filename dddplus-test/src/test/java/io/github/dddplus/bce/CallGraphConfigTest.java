@@ -19,7 +19,7 @@ class CallGraphConfigTest {
         }
 
         CallGraphConfig config = CallGraphConfig.fromJsonFile("../doc/callgraph.json");
-        assertTrue(config.getIgnore().getEnumClazz());
+        assertTrue(config.getIgnore().isEnumClazz());
         assertNotNull(config.getIgnore().getCalleeMethods());
         assertTrue(config.useSimpleClassName());
     }

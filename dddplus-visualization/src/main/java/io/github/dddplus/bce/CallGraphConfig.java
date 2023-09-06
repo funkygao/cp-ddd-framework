@@ -86,6 +86,10 @@ public class CallGraphConfig implements Serializable {
         return style.isAclClass(className);
     }
 
+    public boolean ignoreOrphanNodes() {
+        return ignore.orphanNodes;
+    }
+
     private boolean builtinIgnoreCaller(MethodVisitor m) {
         // caller method
         if (m.callerMethod.contains("$") || m.callerClass.contains("$")) {
@@ -285,7 +289,8 @@ public class CallGraphConfig implements Serializable {
         private List<String> calleePackages = new ArrayList<>();
         private List<String> calleeMethods = new ArrayList<>();
         private boolean enumClazz = true;
-        private boolean classInnerCall = true;
+        private boolean classInnerCall = false;
+        private boolean orphanNodes = true;
 
         private transient List<PathMatcher> classPatterns;
         private transient List<PathMatcher> callerPackagePatterns;

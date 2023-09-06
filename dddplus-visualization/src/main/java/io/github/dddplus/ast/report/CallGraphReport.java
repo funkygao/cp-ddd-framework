@@ -29,6 +29,35 @@ public class CallGraphReport {
         return entries;
     }
 
+    public CallGraphReport preRender() {
+        entries = effectiveEntries();
+        return this;
+    }
+
+    private List<CallGraphEntry> effectiveEntries() {
+        if (!config.ignoreOrphanNodes()) {
+            return entries;
+        }
+
+        List<CallGraphEntry> result = new ArrayList<>(entries.size());
+        for (int i = 0; i < entries.size(); i++) {
+            CallGraphEntry entry = entries.get(i);
+            if (!entry.isInnerClassCall()) {
+                result.add(entry);
+                continue;
+            }
+
+            for (int j = i + 1; j < entries.size(); j++) {
+                CallGraphEntry that = entries.get(j);
+                if (that.getCallerClazz().equals(entry.getCallerClazz()) && !that.isInnerClassCall()) {
+                    result.add(entry);
+                }
+            }
+        }
+
+        return result;
+    }
+
     private Collection<Record> calleeRecords() {
         List<Record> records = new ArrayList<>();
         Set<String> calleeClasses = new TreeSet<>();
@@ -84,6 +113,7 @@ public class CallGraphReport {
                 mergedNodes.put(callerClazz.getClazz(), callerClazz);
             }
         }
+
         return mergedNodes;
     }
 
@@ -113,17 +143,17 @@ public class CallGraphReport {
         private Set<String> methods = new TreeSet<>();
         private boolean invokeInterface = false;
 
-        public boolean sameAs(String clazz) {
+        Record(String clazz, CallGraphConfig config) {
+            this.clazz = clazz;
+            this.config = config;
+        }
+
+        boolean sameAs(String clazz) {
             if (!config.useSimpleClassName()) {
                 return clazz.equals(this.clazz);
             }
 
             return this.clazz.contains(clazz);
-        }
-
-        Record(String clazz, CallGraphConfig config) {
-            this.clazz = clazz;
-            this.config = config;
         }
 
         public String dotNode() {
