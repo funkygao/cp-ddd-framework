@@ -149,7 +149,7 @@ public class CallGraphConfig implements Serializable {
         }
 
         if (!callGraphEntry.getCalleeClazz().contains(".")) {
-            // 没有包名的类
+            // 没有包名的类 e,g. lambda
             return true;
         }
 
