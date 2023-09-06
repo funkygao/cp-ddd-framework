@@ -19,6 +19,7 @@
          "*jdbc"
       ],
       "callerMethods":[
+         "equals"
       ],
       "calleePackages":[
           "*jdbc.impl*", ".enums", ".dto", ".dao", ".repo", ".mapper"
