@@ -69,6 +69,7 @@ public class CallGraphMojo extends AbstractMojo {
             for (Pair<String, Integer> stat: renderer.topReferencedCalleeMethods(topCalleeN)) {
                 getLog().info(String.format("%s %d", stat.getLeft(), stat.getRight()));
             }
+            getLog().info(String.format("Rendered nodes:%d edges:%d", renderer.getNodes(), renderer.getEdges()));
             getLog().info(String.format("Now you can convert dot file to svg: dot -Tsvg %s -O", targetFile));
         } catch (Exception e) {
             throw new MojoExecutionException(e.getMessage(), e);
