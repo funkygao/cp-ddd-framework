@@ -253,7 +253,7 @@ public class CallGraphConfig implements Serializable {
         Edge(String relation, boolean useSimpleClassName) {
             String[] parts = relation.split("->");
             if (parts.length != 2) {
-                throw new IllegalArgumentException("CallGraph config relations accepted format is caller:callee");
+                throw new IllegalArgumentException("CallGraph config relations accepted format: caller -> callee");
             }
 
             caller = parts[0].trim();
