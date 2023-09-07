@@ -23,7 +23,7 @@ public class CallGraphRenderer implements IRenderer {
 
     private String splines = null;
     private StringBuilder content = new StringBuilder();
-    private Map<String, Integer> calleeRefCounter = new HashMap<>();
+    private Map<String, Set<String>> calleeRefCounter = new HashMap<>();
     private Map<String, Integer> calleeMethodRefCounter = new HashMap<>();
     @Getter
     private int nodes, edges;
@@ -45,15 +45,18 @@ public class CallGraphRenderer implements IRenderer {
     }
 
     public List<Pair<String, Integer>> topReferencedCallee(int k) {
-        return topKByValue(calleeRefCounter, k);
+        List<Map.Entry<String, Set<String>>> list = new ArrayList<>(calleeRefCounter.entrySet());
+        Collections.sort(list, (entry1, entry2) -> Integer.compare(entry2.getValue().size(), entry1.getValue().size()));
+        List<Pair<String, Integer>> result = new ArrayList<>(k);
+        for (Map.Entry<String, Set<String>> entry : list.subList(0, k)) {
+            result.add(Pair.of(entry.getKey(), entry.getValue().size()));
+        }
+
+        return result;
     }
 
     public List<Pair<String, Integer>> topReferencedCalleeMethods(int k) {
-        return topKByValue(calleeMethodRefCounter, k);
-    }
-
-    private List<Pair<String, Integer>> topKByValue(Map<String, Integer> map, int k) {
-        List<Map.Entry<String, Integer>> sortedList = new ArrayList<>(map.entrySet());
+        List<Map.Entry<String, Integer>> sortedList = new ArrayList<>(calleeMethodRefCounter.entrySet());
         sortedList.sort(Comparator.comparing(Map.Entry::getValue, Comparator.reverseOrder()));
         List<Pair<String, Integer>> result = new ArrayList<>(k);
         int n = 0;
@@ -164,7 +167,7 @@ public class CallGraphRenderer implements IRenderer {
             append(NEWLINE);
 
             // statistics
-            incrementCounter(entry.getCalleeClazz(), entry.getCalleeMethod());
+            incrementCounter(entry);
         }
 
         return this;
@@ -184,11 +187,13 @@ public class CallGraphRenderer implements IRenderer {
         return this;
     }
 
-    private void incrementCounter(String calleeClazz, String calleeMethod) {
+    private void incrementCounter(CallGraphEntry entry) {
+        String calleeClazz = entry.getCalleeClazz();
+        String calleeMethod = entry.getCalleeMethod();
         if (!calleeRefCounter.containsKey(calleeClazz)) {
-            calleeRefCounter.put(calleeClazz, 0);
+            calleeRefCounter.put(calleeClazz, new HashSet<>());
         }
-        calleeRefCounter.put(calleeClazz, 1 + calleeRefCounter.get(calleeClazz));
+        calleeRefCounter.get(calleeClazz).add(entry.getCallerClazz());
 
         if (!calleeMethodRefCounter.containsKey(calleeMethod)) {
             calleeMethodRefCounter.put(calleeMethod, 0);
