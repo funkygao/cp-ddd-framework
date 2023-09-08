@@ -136,6 +136,9 @@ public class CallGraphRenderer implements IRenderer {
             if (callGraphReport.getConfig().isUseCaseLayerClass(clazz)) {
                 append(" color=red");
             }
+            if (record.isInvokeInterface()) {
+                append(" style=dashed");
+            }
             if (callGraphReport.getConfig().isAclClass(clazz)) {
                 append(" color=green");
             }
