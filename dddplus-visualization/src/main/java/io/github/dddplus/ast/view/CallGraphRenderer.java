@@ -47,7 +47,10 @@ public class CallGraphRenderer implements IRenderer {
     public List<Pair<String, Integer>> topReferencedCallee(int k) {
         List<Map.Entry<String, Set<String>>> list = new ArrayList<>(calleeRefCounter.entrySet());
         Collections.sort(list, (entry1, entry2) -> Integer.compare(entry2.getValue().size(), entry1.getValue().size()));
-        List<Pair<String, Integer>> result = new ArrayList<>(k);
+        List<Pair<String, Integer>> result = new ArrayList<>(list.size());
+        if (k > list.size()) {
+            k = list.size();
+        }
         for (Map.Entry<String, Set<String>> entry : list.subList(0, k)) {
             result.add(Pair.of(entry.getKey(), entry.getValue().size()));
         }
@@ -58,14 +61,12 @@ public class CallGraphRenderer implements IRenderer {
     public List<Pair<String, Integer>> topReferencedCalleeMethods(int k) {
         List<Map.Entry<String, Integer>> sortedList = new ArrayList<>(calleeMethodRefCounter.entrySet());
         sortedList.sort(Comparator.comparing(Map.Entry::getValue, Comparator.reverseOrder()));
-        List<Pair<String, Integer>> result = new ArrayList<>(k);
-        int n = 0;
-        for (Map.Entry<String, Integer> entry : sortedList) {
+        List<Pair<String, Integer>> result = new ArrayList<>(sortedList.size());
+        if (k > sortedList.size()) {
+            k = sortedList.size();
+        }
+        for (Map.Entry<String, Integer> entry : sortedList.subList(0, k)) {
             result.add(Pair.of(entry.getKey(), entry.getValue()));
-            n++;
-            if (n == k) {
-                break;
-            }
         }
 
         return result;
@@ -190,7 +191,7 @@ public class CallGraphRenderer implements IRenderer {
         return this;
     }
 
-    private void incrementCounter(CallGraphEntry entry) {
+    void incrementCounter(CallGraphEntry entry) {
         String calleeClazz = entry.getCalleeClazz();
         String calleeMethod = entry.getCalleeMethod();
         if (!calleeRefCounter.containsKey(calleeClazz)) {

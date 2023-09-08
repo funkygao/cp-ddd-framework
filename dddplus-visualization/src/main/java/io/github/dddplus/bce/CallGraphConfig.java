@@ -22,6 +22,9 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Call Graph Configuration.
+ */
 @Data
 @Slf4j
 public class CallGraphConfig implements Serializable {

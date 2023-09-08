@@ -15,6 +15,9 @@ import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+/**
+ * Call Graph Parser with Apache BCEL.
+ */
 @Slf4j
 public class CallGraphParser {
 
