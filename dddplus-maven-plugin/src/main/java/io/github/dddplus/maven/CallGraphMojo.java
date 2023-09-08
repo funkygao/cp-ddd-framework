@@ -19,11 +19,12 @@ import org.apache.maven.plugins.annotations.Parameter;
 /**
  * 无需标注，类的调用关系图可视化.
  *
- * <p></p>
  * <ul>IDEA提供了 {@code [Navigate | Call Hierarchy]} 功能，但它有两个核心问题：
  * <li>它不能指定过滤条件，导致噪音过载</li>
  * <li>必须先选中一个具体的方法才能操作，而我们希望提供全局视角的调用关系图</li>
  * </ul>
+ *
+ * @see <a href="https://github.com/soot-oss/SootUp/">SootUp</a>
  */
 @Mojo(name = "call", aggregator = true)
 public class CallGraphMojo extends AbstractMojo {
