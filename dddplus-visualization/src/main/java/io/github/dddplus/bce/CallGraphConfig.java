@@ -309,6 +309,7 @@ public class CallGraphConfig implements Serializable {
         private boolean orphanNodes = true;
 
         private transient List<PathMatcher> classPatterns;
+        private transient List<PathMatcher> classExceptPatterns;
         private transient List<PathMatcher> callerPackagePatterns;
         private transient List<PathMatcher> callerMethodPatterns;
         private transient List<PathMatcher> calleePackagePatterns;
@@ -316,7 +317,18 @@ public class CallGraphConfig implements Serializable {
 
         void initialize() {
             classPatterns = new ArrayList<>(classes.size());
+            classExceptPatterns = new ArrayList<>();
             for (String regex : classes) {
+                if (regex.startsWith("!")) {
+                    // ignore except
+                    regex = regex.substring(1);
+                    if (!regex.contains("*")) {
+                        regex = "*" + regex;
+                    }
+                    classExceptPatterns.add(FileSystems.getDefault().getPathMatcher("glob:" + regex));
+                    continue;
+                }
+
                 if (!regex.contains("*")) {
                     regex = "*" + regex;
                 }
@@ -369,6 +381,10 @@ public class CallGraphConfig implements Serializable {
         }
 
         boolean ignoreClass(String clazz) {
+            if (match(classExceptPatterns, clazz)) {
+                return false;
+            }
+
             return match(classPatterns, clazz);
         }
 
