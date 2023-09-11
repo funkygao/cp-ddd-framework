@@ -94,12 +94,21 @@ public class CallGraphRenderer implements IRenderer {
                 .append(NEWLINE)
                 .renderEdges()
                 .renderUserDefinedEdges()
-                .append("}");
+                .append("}")
+                .append(NEWLINE).append(NEWLINE)
+                .renderConfigComment();
 
         JavaParserUtil.dumpToFile(targetCallGraphDotFile, content.toString());
     }
 
     private CallGraphRenderer renderLegend() {
+        return this;
+    }
+
+    private CallGraphRenderer renderConfigComment() {
+        append("/* ")
+                .append(callGraphReport.getConfig().jsonString())
+                .append(" */");
         return this;
     }
 

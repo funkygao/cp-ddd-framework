@@ -6,6 +6,7 @@
 package io.github.dddplus.bce;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import io.github.dddplus.ast.model.CallGraphEntry;
 import lombok.Data;
@@ -42,6 +43,10 @@ public class CallGraphConfig implements Serializable {
         CallGraphConfig config = gson.fromJson(reader, CallGraphConfig.class);
         config.initialize();
         return config;
+    }
+
+    public String jsonString() {
+        return new GsonBuilder().disableHtmlEscaping().create().toJson(this);
     }
 
     public void initialize() {

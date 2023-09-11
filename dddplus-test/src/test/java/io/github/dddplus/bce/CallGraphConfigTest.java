@@ -25,6 +25,14 @@ class CallGraphConfigTest {
     }
 
     @Test
+    void toJsonString() throws FileNotFoundException {
+        CallGraphConfig config = CallGraphConfig.fromJsonFile("../doc/callgraph.json");
+        String json = config.jsonString();
+        assertEquals("{\"ignore\":{\"classes\":[\"Dao\",\"JsonUtil\",\"CommonUtil\",\"InternalAopUtils\",\"BootstrapException\",\"StepsExecTemplate\",\"StepDef\",\"InterceptorDef\",\"BaseDecideStepsRouter\",\"DomainDef\"],\"callerPackages\":[\"*jdbc\"],\"callerMethods\":[\"equals\"],\"calleePackages\":[\"*jdbc.impl*\",\".enums\",\".dto\",\".dao\",\".repo\",\".mapper\"],\"calleeMethods\":[\"toString\",\"equals\",\"builder\",\"hashCode\",\"clone\"],\"enumClazz\":true,\"classInnerCall\":false,\"orphanNodes\":true},\"accept\":{\"packagePrefixes\":[\"io.git\"]},\"style\":{\"simpleClassName\":true,\"nodesep\":0.2,\"useCaseLayerClasses\":[\"*AppService*\"],\"aclClasses\":[\"*stock.*\"],\"externalPackages\":[]},\"relations\":[\"a -> b\"]}", config.jsonString());
+        assertFalse(json.contains("\n"));
+    }
+
+    @Test
     void ignoreCaller() throws FileNotFoundException {
         CallGraphConfig config = CallGraphConfig.fromJsonFile("../doc/callgraph.json");
         MethodVisitor m = new MethodVisitor("io.git.dddplus.jdbc", "io.git.dddplus.jdbc.FooDao", "query", config);
