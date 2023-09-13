@@ -30,7 +30,6 @@ public class JaccardModelSimilarity implements IKeyModelSimilarity {
         return jaccardSimilarity(model1.getRawFields(), model2.getRawFields()) * 100;
     }
 
-
     private double jaccardSimilarity(Set<String> set1, Set<String> set2) {
         if (set1.isEmpty() || set2.isEmpty()) {
             return 0;
