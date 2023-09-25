@@ -12,6 +12,9 @@ install:clean test
 test:clean
 	@mvn test -Ptest
 
+nondex:test
+	@mvn -pl dddplus-test edu.illinois:nondex-maven-plugin:2.1.1:nondex
+
 coverage:test
 	@mvn clean verify -Ptest
 	@open dddplus-test/target/site/jacoco-aggregate/index.html
