@@ -2,6 +2,7 @@
 # Generate call graph
 # PARAMS TO CHANGE: INPUT, DOT_PATH
 #---------------------------------------------------------------------------
+PROJECT_NAME           = WMS
 INPUT                  = dddplus-test/src/test/java/ddd/plus/showcase/wms/
 FILE_PATTERNS          = *.java
 RECURSIVE              = YES
