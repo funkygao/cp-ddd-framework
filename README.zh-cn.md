@@ -16,7 +16,7 @@
 
 <div align="center">
 
-Languages： [English](README.md) | 中文
+Languages： [English](README.md) | 中文 | [deepwiki](https://deepwiki.com/funkygao/cp-ddd-framework)
 </div>
 
 ----

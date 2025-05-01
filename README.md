@@ -16,7 +16,7 @@ A lightweight DDD(Domain Driven Design) enhancement framework for forward/revers
 
 <div align="center">
 
-Languages： English | [中文](README.zh-cn.md)
+Languages： English | [中文](README.zh-cn.md) | [deepwiki](https://deepwiki.com/funkygao/cp-ddd-framework)
 </div>
 
 ----
